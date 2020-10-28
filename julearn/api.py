@@ -19,7 +19,10 @@ def run_cross_validation(
         preprocess_confounds=['z_score'],
         hyperparameters=None,
         output_estimator=False, print_result=True,
-        cv_evaluation='repeat:5_nfolds:5', cv_model_selection='same',
+        cv_evaluation='repeat:5_nfolds:5',
+        cv_model_selection='same',
+        scoring=None,
+        pos_labels=None,
         seed=None):
 
     if seed is not None:
@@ -29,7 +32,7 @@ def run_cross_validation(
 
     # Interpret the input data and prepare it to be used with the library
     df_X_conf, y, confound_names = prepare_input_data(
-        X=X, y=y, confounds=confounds, df=data)
+        X=X, y=y, confounds=confounds, df=data, pos_labels=pos_labels)
 
     # Interpret preprocessing parameters
     preprocess_vars = prepare_preprocessing(
@@ -57,7 +60,8 @@ def run_cross_validation(
 
         pipeline = GridSearchCV(pipeline, hyper_params, cv=cv_inner)
 
-    scores = cross_val_score(pipeline, df_X_conf, y, cv=cv_outer)
+    scores = cross_val_score(pipeline, df_X_conf, y, cv=cv_outer,
+                             scoring=scoring)
     return scores
 
 

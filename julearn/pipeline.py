@@ -143,6 +143,12 @@ class ExtendedDataFramePipeline(BaseEstimator):
         X_conf_trans = self.transform_confounds(X)
         return self.dataframe_pipeline.predict(X_conf_trans)
 
+    def predict_proba(self, X):
+        # X = X.rename(columns=self.col_name_mapper_).copy()
+        X = self.recode_columns(X)
+        X_conf_trans = self.transform_confounds(X)
+        return self.dataframe_pipeline.predict_proba(X_conf_trans)
+
     def score(self, X, y):
         # X = X.rename(columns=self.col_name_mapper_).copy()
         X = self.recode_columns(X)

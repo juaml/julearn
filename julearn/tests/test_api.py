@@ -16,17 +16,60 @@ def test_simple_binary():
     df_iris = df_iris[df_iris['species'].isin(['setosa', 'virginica'])]
     X = ['sepal_length', 'sepal_width', 'petal_length']
     y = 'species'
-    actual = run_cross_validation(X=X, y=y, data=df_iris, model='svm', seed=42)
 
-    # Now do the same with scikit-learn
-    X = df_iris[X].values
-    y = df_iris[y].values
+    sk_X = df_iris[X].values
+    sk_y = df_iris[y].values
 
-    clf = make_pipeline(StandardScaler(), svm.SVC())
+    scorers = ['accuracy', 'balanced_accuracy']
+    for scoring in scorers:
+        actual = run_cross_validation(X=X, y=y, data=df_iris, model='svm',
+                                      seed=42, scoring=scoring)
 
-    np.random.seed(42)
-    cv = RepeatedKFold(n_splits=5, n_repeats=5)
-    expected = cross_val_score(clf, X, y, cv=cv)
+        # Now do the same with scikit-learn
+        clf = make_pipeline(StandardScaler(), svm.SVC())
 
-    assert len(actual) == len(expected)
-    assert all([a == b for a, b in zip(actual, expected)])
+        np.random.seed(42)
+        cv = RepeatedKFold(n_splits=5, n_repeats=5)
+        expected = cross_val_score(clf, sk_X, sk_y, cv=cv, scoring=scoring)
+
+        assert len(actual) == len(expected)
+        assert all([a == b for a, b in zip(actual, expected)])
+
+    # now let's try target-dependent scores
+    scorers = ['recall', 'precision', 'f1']
+    t_sk_y = (sk_y == 'setosa').astype(np.int)
+    for scoring in scorers:
+        actual = run_cross_validation(X=X, y=y, data=df_iris, model='svm',
+                                      seed=42, scoring=scoring,
+                                      pos_labels='setosa')
+
+        # Now do the same with scikit-learn
+        clf = make_pipeline(StandardScaler(), svm.SVC())
+
+        np.random.seed(42)
+        cv = RepeatedKFold(n_splits=5, n_repeats=5)
+
+        expected = cross_val_score(clf, sk_X, t_sk_y, cv=cv, scoring=scoring)
+
+        assert len(actual) == len(expected)
+        assert all([a == b for a, b in zip(actual, expected)])
+
+    # now let's try proba-dependent scores
+    scorers = ['roc_auc']
+    t_sk_y = (sk_y == 'setosa').astype(np.int)
+    for scoring in scorers:
+        model = svm.SVC(probability=True)
+        actual = run_cross_validation(X=X, y=y, data=df_iris, model=model,
+                                      seed=42, scoring=scoring,
+                                      pos_labels='setosa')
+
+        # Now do the same with scikit-learn
+        clf = make_pipeline(StandardScaler(), svm.SVC())
+
+        np.random.seed(42)
+        cv = RepeatedKFold(n_splits=5, n_repeats=5)
+
+        expected = cross_val_score(clf, sk_X, t_sk_y, cv=cv, scoring=scoring)
+
+        assert len(actual) == len(expected)
+        assert all([a == b for a, b in zip(actual, expected)])

@@ -58,7 +58,7 @@ def _validate_input_data(X, y, confounds, df):
             assert all(x in df.columns for x in confounds)
 
 
-def prepare_input_data(X, y, confounds, df):
+def prepare_input_data(X, y, confounds, df, pos_labels):
     _validate_input_data(X, y, confounds, df)
     # Declare them as None to avoid CI issues
     df_X_conf = None
@@ -101,6 +101,11 @@ def prepare_input_data(X, y, confounds, df):
         y = df.loc[:, y].copy()
         confound_names = confounds
 
+    if pos_labels is not None:
+        if not isinstance(pos_labels, list):
+            pos_labels = [pos_labels]
+        y = y.isin(pos_labels).astype(np.int)
+
     return df_X_conf, y, confound_names
 
 
@@ -130,7 +135,7 @@ def prepare_model(model, problem_type):
         model_name = model
         model = available_models[model][problem_type]
 
-    elif _is_valid_sklearn_transformer(model):
+    elif _is_valid_sklearn_model(model):
         model_name = model.__class__.__name__.lower()
     else:
         raise ValueError(f'Model must be a string or a scikit-learn compatible'
