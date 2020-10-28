@@ -1,13 +1,25 @@
 from sklearn.pipeline import Pipeline
 from sklearn.base import BaseEstimator
-from .compose_transformers import DataFrameTransformer
-from ..available_estimators.custom_transformers.basic_transformers import (
-    TargetPassThroughTransformer, PassThroughTransformer)
+
+from . transformers.dataframe import DataFrameTransformer
 
 
-def make_dataframe_pipeline(steps,
-                            default_returned_features='unknown',
-                            default_transform_column='continuous'):
+def create_pipeline(preprocess_steps_features,
+                    preprocess_transformer_target,
+                    preprocess_steps_confounds,
+                    model_tuple, confounds, categorical_features):
+
+    X_steps = list(preprocess_steps_features) + [model_tuple]
+    y_transformer = preprocess_transformer_target
+    pipeline = create_extended_pipeline(
+        X_steps, y_transformer, preprocess_steps_confounds, confounds,
+        categorical_features)
+    return pipeline
+
+
+def create_dataframe_pipeline(steps,
+                              default_returned_features='unknown',
+                              default_transform_column='continuous'):
     """Creates a Sklearn pipeline using the provided steps and wrapping all
     transformers into the DataFrameTransformer.
 
@@ -42,7 +54,7 @@ def make_dataframe_pipeline(steps,
             raise ValueError(f'step: {i_step} has a len of {len(i_step)}'
                              ', but should hve one between 2 and 4')
 
-        if (i_step == len(steps)-1) and (hasattr(estimator, 'predict')):
+        if (i_step == len(steps) - 1) and (hasattr(estimator, 'predict')):
             steps_ready_for_pipe.append([name, estimator])
         else:
             transformer = DataFrameTransformer(
@@ -55,45 +67,45 @@ def make_dataframe_pipeline(steps,
 
 
 class ExtendedDataFramePipeline(BaseEstimator):
+    """A class extending a Pipeline.
+    Added functionality:
+    1: handling target transforming and scoring against
+    this transformed target as ground truth.
+    2: handling confounds. Adds the confound as type to columns.
+    This allows the DataFrameTransformer inside of the dataframe_pipeline
+    to handle confounds properly.
+    3: Handling categorical features:
+    Adds categorical type to columns so that DataFrameTransformer inside
+    of the dataframe_pipline can handle categorical features properly.
 
+    column_types are added to the feature dataframe after each column using
+    the specified seperater. E.g. column `cheese` becomes
+    `cheese__:type:__confound`, when being in the confounds
+    and with a seperater of `__:type:__`
+
+
+    dataframe_pipeline : [type]
+        [description]
+    y_transformer : [type], optional
+        [description], by default TargetPassThroughTransformer()
+    confound_dataframe_pipeline : [type], optional
+        [description], by default PassThroughTransformer()
+    confounds : [type], optional
+        [description], by default None
+    categorical_features : [type], optional
+        [description], by default None
+    column_type_sep : str, optional
+        [description], by default '__:type:__'
+    return_trans_column_type : bool, optional
+        [description], by default False
+    """
     def __init__(self, dataframe_pipeline,
-                 y_transformer=TargetPassThroughTransformer(),
-                 confound_dataframe_pipeline=PassThroughTransformer(),
+                 y_transformer=None,
+                 confound_dataframe_pipeline=None,
                  confounds=None, categorical_features=None,
                  column_type_sep='__:type:__',
                  return_trans_column_type=False):
-        """A class extending a Pipline.
-        Added functionality:
-        1: handling target transforming and scoring against
-        this transformed target as ground truth.
-        2: handling confounds. Adds the confound as type to columns.
-        This allows the DataFrameTransformer inside of the dataframe_pipeline
-        to handle confounds properly.
-        3: Handling categorical features:
-        Adds categorical type to columns so that DataFrameTransformer inside
-        of the dataframe_pipline can handle categorical features properly.
 
-        column_types are added to the feature dataframe after each column using
-        the specified seperater. E.g. column `cheese` becomes
-        `cheese__:type:__confound`, when being in the confounds
-        and with a seperater of `__:type:__`
-
-
-        dataframe_pipeline : [type]
-            [description]
-        y_transformer : [type], optional
-            [description], by default TargetPassThroughTransformer()
-        confound_dataframe_pipeline : [type], optional
-            [description], by default PassThroughTransformer()
-        confounds : [type], optional
-            [description], by default None
-        categorical_features : [type], optional
-            [description], by default None
-        column_type_sep : str, optional
-            [description], by default '__:type:__'
-        return_trans_column_type : bool, optional
-            [description], by default False
-        """
         self.dataframe_pipeline = dataframe_pipeline
         self.y_transformer = y_transformer
         self.confound_dataframe_pipeline = confound_dataframe_pipeline
@@ -110,8 +122,17 @@ class ExtendedDataFramePipeline(BaseEstimator):
 
         # X = X.rename(columns=self.col_name_mapper_).copy()
         X = self.recode_columns(X)
-        X_conf_trans = self.fit_transform_confounds(X, y)
-        y_trans = self.y_transformer.fit_transform(X_conf_trans, y)
+
+        if self.confound_dataframe_pipeline is not None:
+            X_conf_trans = self.fit_transform_confounds(X, y)
+        else:
+            X_conf_trans = X
+
+        if self.y_transformer is not None:
+            y_trans = self.y_transformer.fit_transform(X_conf_trans, y)
+        else:
+            y_trans = y
+
         self.dataframe_pipeline.fit(X_conf_trans, y_trans)
 
         return self
@@ -126,7 +147,11 @@ class ExtendedDataFramePipeline(BaseEstimator):
         # X = X.rename(columns=self.col_name_mapper_).copy()
         X = self.recode_columns(X)
         X_conf_trans = self.transform_confounds(X)
-        y_true = self.y_transformer.fit_transform(X_conf_trans, y)
+
+        if self.y_transformer is not None:
+            y_true = self.y_transformer.fit_transform(X_conf_trans, y)
+        else:
+            y_true = y
         return self.dataframe_pipeline.score(X_conf_trans, y_true)
 
     def transform(self, X):
@@ -185,10 +210,8 @@ class ExtendedDataFramePipeline(BaseEstimator):
         return X.rename(columns=self.col_name_mapper_).copy()
 
 
-def make_ExtendedDataFrameTranfromer(X_steps,
-                                     y_transformer,
-                                     conf_steps,
-                                     confounds, categorical_features):
+def create_extended_pipeline(X_steps, y_transformer, conf_steps,
+                             confounds, categorical_features):
     """[summary]
 
     Parameters
@@ -218,13 +241,13 @@ def make_ExtendedDataFrameTranfromer(X_steps,
         A list of column_names which are the categorical features
         or the column_name of one categorical feature
     """
-    pipeline = make_dataframe_pipeline(X_steps)
+    pipeline = create_dataframe_pipeline(X_steps)
 
     # TODO validate conf_steps to only be unknown_same_type or same
     # and not 4 entries
-    confound_pipe = make_dataframe_pipeline(conf_steps,
-                                            default_returned_features='same',
-                                            default_transform_column='confound')
+    confound_pipe = create_dataframe_pipeline(
+        conf_steps, default_returned_features='same',
+        default_transform_column='confound')
 
     return ExtendedDataFramePipeline(dataframe_pipeline=pipeline,
                                      y_transformer=y_transformer,

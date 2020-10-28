@@ -6,7 +6,7 @@ from sklearn.linear_model import LinearRegression
 
 class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
     def __init__(
-        self, model_confound=LinearRegression(), confounds='use_suffix',
+        self, model_confound=None, confounds='use_suffix',
         threshold=None, suffix='__:type:__confound'
     ):
         """Model to regress out/remove confound
@@ -25,6 +25,8 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
                          Threshold under which all values are rounded to 0.
 
         """
+        if model_confound is None:
+            model_confound = LinearRegression()
         self.model_confound = model_confound
         self.confounds = confounds
         self.threshold = threshold
@@ -91,14 +93,12 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
     def split_into_X_confound(self, X):
         """splits the original X input into the reals features (X) and confound
         """
-
-        if type(X) == pd.DataFrame:
-
-            df_X = X.copy()
-        else:
+        if not isinstance(X, pd.DataFrame):
             raise ValueError(
-                'DataFrameConfoundRemover only supports DataFrames')
+                'DataFrameConfoundRemover only supports DataFrames as X')
 
+        df_X = X.copy()
+        ser_confound = None
         if self.confounds == 'use_suffix':
 
             self.detected_confounds_ = [column
@@ -137,7 +137,8 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
         This is done to prevent correlated rounding errors
         """
         if self.threshold is not None:
-            # Accounting for correlated rounding errors for very small residuals
+            # Accounting for correlated rounding errors for very small
+            # residuals
             residuals = residuals.applymap(
                 lambda x: 0 if abs(x) <= self.threshold else x
             )

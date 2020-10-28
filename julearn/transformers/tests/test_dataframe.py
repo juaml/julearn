@@ -1,11 +1,13 @@
-from julearn.components import DataFrameTransformer
-from julearn.available_estimators.custom_transformers import (
-    PassThroughTransformer)
-import pandas as pd
 import numpy as np
-from pandas.testing import assert_frame_equal
+import pandas as pd
+
 from numpy.testing import assert_array_equal
+from pandas.testing import assert_frame_equal
 from sklearn.decomposition import PCA
+
+from julearn.transformers import DataFrameTransformer
+from julearn.transformers.basic import PassThroughTransformer
+
 
 X = pd.DataFrame(dict(A=np.arange(10),
                       B=np.arange(10, 20),
