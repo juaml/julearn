@@ -2,8 +2,7 @@ import numpy as np
 from sklearn import svm
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import make_pipeline
-from sklearn.model_selection import (cross_val_score, RepeatedKFold,
-                                     GridSearchCV)
+from sklearn.model_selection import cross_val_score, RepeatedKFold
 from sklearn.preprocessing import LabelBinarizer
 from seaborn import load_dataset
 from julearn import run_cross_validation
