@@ -1,3 +1,4 @@
+from julearn.transformers.target import TargetTransfromerWrapper
 import pandas as pd
 import numpy as np
 from copy import deepcopy
@@ -245,12 +246,16 @@ def _prepare_preprocess_confounds(preprocess_conf):
 
 def _prepare_preprocess_y(preprocess_y):
     if preprocess_y is not None:
-        if preprocess_y not in available_target_transformers:
-            _valid_names = list(available_target_transformers.keys())
-            raise ValueError(
-                f'The specified target preprocessing ({preprocess_y}) is not '
-                f'available. Valid options are: {_valid_names}')
-        preprocess_y = available_target_transformers[preprocess_y]
+        if isinstance(preprocess_y, str):
+            if preprocess_y not in available_target_transformers:
+                _valid_names = list(available_target_transformers.keys())
+                raise ValueError(
+                    f'The specified target preprocessing ({preprocess_y}) is '
+                    f'not available. Valid options are: {_valid_names}')
+            preprocess_y = available_target_transformers[preprocess_y]
+        elif not isinstance(preprocess_y, TargetTransfromerWrapper):
+            raise ValueError(f'y preprocess must be a string or a '
+                             'TargetTransfromerWrapper instance')
     return preprocess_y
 
 
