@@ -121,7 +121,6 @@ class ExtendedDataFramePipeline(BaseEstimator):
 
         self.set_column_mappers(X)
 
-        # X = X.rename(columns=self.col_name_mapper_).copy()
         X = self.recode_columns(X)
 
         if self.confound_dataframe_pipeline is not None:
@@ -129,25 +128,26 @@ class ExtendedDataFramePipeline(BaseEstimator):
         else:
             X_conf_trans = X
 
-        y_true = self.transform_target(X_conf_trans, y)
+        if self.y_transformer is not None:
+            y_true = self.y_transformer.fit_transform(X, y)
+        else:
+            y_true = y
+
         self.dataframe_pipeline.fit(X_conf_trans, y_true)
 
         return self
 
     def predict(self, X):
-        # X = X.rename(columns=self.col_name_mapper_).copy()
         X = self.recode_columns(X)
         X_conf_trans = self.transform_confounds(X)
         return self.dataframe_pipeline.predict(X_conf_trans)
 
     def predict_proba(self, X):
-        # X = X.rename(columns=self.col_name_mapper_).copy()
         X = self.recode_columns(X)
         X_conf_trans = self.transform_confounds(X)
         return self.dataframe_pipeline.predict_proba(X_conf_trans)
 
     def score(self, X, y):
-        # X = X.rename(columns=self.col_name_mapper_).copy()
         X = self.recode_columns(X)
         X_conf_trans = self.transform_confounds(X)
         y_true = self.transform_target(X_conf_trans, y)
@@ -155,7 +155,6 @@ class ExtendedDataFramePipeline(BaseEstimator):
 
     def transform(self, X):
 
-        # X = X.rename(columns=self.col_name_mapper_).copy()
         X = self.recode_columns(X)
         X_conf_trans = self.transform_confounds(X)
         X_trans = self.dataframe_pipeline.transform(X_conf_trans)
@@ -180,7 +179,7 @@ class ExtendedDataFramePipeline(BaseEstimator):
 
     def transform_target(self, X=None, y=None):
         if self.y_transformer is not None:
-            y_true = self.y_transformer.fit_transform(X, y)
+            y_true = self.y_transformer.transform(X, y)
         else:
             y_true = y
         return y_true
