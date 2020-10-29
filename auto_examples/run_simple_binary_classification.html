@@ -1,0 +1,265 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple Binary Classification &#8212; JuLearn  documentation</title>
+    <link rel="stylesheet" href="../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
+    
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Examples" href="index.html" />
+    <link rel="shortcut icon" type="image/png" href="../_static/py.png" />
+    
+    <script type="text/javascript" src="../_static/copybutton.js"></script>
+    
+     
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Examples"
+             accesskey="P">previous</a> |</li>
+    <li><img src="../_static/py.png" alt=""
+             style="vertical-align: middle; margin-top: -1px"/></li>
+    <li><a href="https://www.python.org/">Python</a> &#187;</li>
+    
+    <a href="../index.html">JuLearn  documentation</a> &#187;
+    
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Examples</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Simple Binary Classification</a></li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-auto-examples-run-simple-binary-classification-py"><span class="std std-ref">here</span></a>     to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="simple-binary-classification">
+<span id="sphx-glr-auto-examples-run-simple-binary-classification-py"></span><h1>Simple Binary Classification<a class="headerlink" href="#simple-binary-classification" title="Permalink to this headline">¶</a></h1>
+<p>This example uses the ‘iris’ dataset and performs a simple binary
+classification using a Support Vector Machine classifier.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">seaborn</span> <span class="kn">import</span> <span class="n">load_dataset</span>
+<span class="kn">from</span> <span class="nn">julearn</span> <span class="kn">import</span> <span class="n">run_cross_validation</span>
+
+<span class="n">df_iris</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s1">&#39;iris&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The dataset has three kind of species. We will keep two to perform a binary
+classification.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">df_iris</span> <span class="o">=</span> <span class="n">df_iris</span><span class="p">[</span><span class="n">df_iris</span><span class="p">[</span><span class="s1">&#39;species&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s1">&#39;versicolor&#39;</span><span class="p">,</span> <span class="s1">&#39;virginica&#39;</span><span class="p">])]</span>
+</pre></div>
+</div>
+<p>As features, we will use the sepal length, width and petal length.
+We will try to predict the species.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;sepal_length&#39;</span><span class="p">,</span> <span class="s1">&#39;sepal_width&#39;</span><span class="p">,</span> <span class="s1">&#39;petal_length&#39;</span><span class="p">]</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a> <span class="o">=</span> <span class="s1">&#39;species&#39;</span>
+<span class="n">scores</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df_iris</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;svm&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[0.95 1.   0.85 0.9  0.95 0.85 0.95 0.95 0.9  0.9  0.7  1.   0.9  0.8
+ 1.   0.95 0.9  0.95 0.85 0.9  0.95 0.9  0.95 0.85 1.  ]
+</pre></div>
+</div>
+<p>Additionaly, we can choose to assess the performance of the model using
+different scoring functions.</p>
+<p>For example, we might have an unbalanced dataset:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">df_unbalanced</span> <span class="o">=</span> <span class="n">df_iris</span><span class="p">[</span><span class="mi">20</span><span class="p">:]</span>  <span class="c1"># drop the first 20 versicolor samples</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df_unbalanced</span><span class="p">[</span><span class="s1">&#39;species&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">())</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>virginica     50
+versicolor    30
+Name: species, dtype: int64
+</pre></div>
+</div>
+<p>If we compute the <cite>accuracy</cite>, we might not account for this imbalance. A more
+suitable metric is the <cite>balanced_accuracy</cite>. More information in scikit-learn:
+<a class="reference external" href="https://scikit-learn.org/stable/modules/model_evaluation.html#balanced-accuracy-score">Balanced Accuracy</a></p>
+<p>We will also set the random seed so we always split the data in the same way.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">scores</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df_unbalanced</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;svm&#39;</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="n">balanced_scores</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df_unbalanced</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;svm&#39;</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
+    <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;balanced_accuracy&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">balanced_scores</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.895
+0.8708886668886668
+</pre></div>
+</div>
+<p>Other kind of metrics allows us to evaluate how good our model is to detect
+specific targets. Suppose we want to create a model that correctly identifies
+the <cite>versicolor</cite> samples.</p>
+<p>Now we might want to evaluate the precision score, or the ratio of true
+positives (tp) over all positives (true and false positives). More
+information in scikit-learn: <a class="reference external" href="https://scikit-learn.org/stable/modules/model_evaluation.html#precission-score">Precision</a></p>
+<p>For this metric to work, we need to define which are our <cite>positive</cite> values.
+In this example, we are interested in detecting <cite>versicolor</cite>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">precission_scores</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df_unbalanced</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;svm&#39;</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
+    <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;precision&#39;</span><span class="p">,</span> <span class="n">pos_labels</span><span class="o">=</span><span class="s1">&#39;versicolor&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">precission_scores</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.9223333333333333
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  2.865 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-run-simple-binary-classification-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/705b4ebf65e1838e0dc960acb09a6111/run_simple_binary_classification.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">run_simple_binary_classification.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/a23ad8c193c7ad0d3ce5f93287a12ac2/run_simple_binary_classification.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">run_simple_binary_classification.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../index.html">Table of Contents</a></h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installing JuLearn</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">Reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Examples</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Simple Binary Classification</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/auto_examples/run_simple_binary_classification.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Examples"
+             >previous</a> |</li>
+    <li><img src="../_static/py.png" alt=""
+             style="vertical-align: middle; margin-top: -1px"/></li>
+    <li><a href="https://www.python.org/">Python</a> &#187;</li>
+    
+    <a href="../index.html">JuLearn  documentation</a> &#187;
+    
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Examples</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Simple Binary Classification</a></li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../copyright.html">Copyright</a> 2020, Authors of JuLearn.
+    <br />
+
+    The Python Software Foundation is a non-profit corporation.
+<a href="https://www.python.org/psf/donations/">Please donate.</a>
+<br />
+    <br />
+
+    Last updated on None.
+    
+    <br />
+
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.2.1.
+    </div>
+
+  </body>
+</html>
