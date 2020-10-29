@@ -11,6 +11,7 @@ from . transformers import (available_transformers,
                             available_target_transformers)
 from . metrics import get_extended_scorer
 
+
 def _validate_input_data(X, y, confounds, df):
 
     if df is None:
@@ -226,7 +227,7 @@ def _prepare_preprocess_confounds(preprocess_conf):
 
     returned_features = 'unknown_same_type'
     for step in preprocess_conf:
-        _,  returned_features = _get_confound_transformer(step)
+        _, returned_features = _get_confound_transformer(step)
 
         if returned_features == 'unknown':
             returned_features = 'unknown_same_type'
@@ -295,8 +296,10 @@ def prepare_cv(cv_outer, cv_inner):
 
     return cv_outer, cv_inner
 
+
 def prepare_scoring(estimator, score_name):
     return get_extended_scorer(estimator, score_name)
+
 
 def _create_preprocess_tuple(transformer):
     if type(transformer) == list:
