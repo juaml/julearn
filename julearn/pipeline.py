@@ -177,7 +177,7 @@ class ExtendedDataFramePipeline(BaseEstimator):
         else:
             return self.confound_dataframe_pipeline.transform(X)
 
-    def transform_target(self, X=None, y=None):
+    def transform_target(self, X, y):
         if self.y_transformer is not None:
             y_true = self.y_transformer.transform(X, y)
         else:
