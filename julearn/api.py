@@ -8,6 +8,7 @@ from . prepare import (prepare_input_data,
                        prepare_preprocessing,
                        prepare_scoring)
 from . pipeline import create_pipeline
+from . model_selection import wrap_search
 
 
 def run_cross_validation(
@@ -63,7 +64,8 @@ def run_cross_validation(
 
         # cross_validate
         if len(hyper_params) > 0:
-            pipeline = GridSearchCV(pipeline, hyper_params, cv=cv_inner)
+            pipeline = wrap_search(
+                GridSearchCV, pipeline, hyper_params, cv=cv_inner)
 
     scorer = prepare_scoring(pipeline, scoring)
     scores = cross_val_score(pipeline, df_X_conf, y, cv=cv_outer,
