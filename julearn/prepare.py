@@ -1,3 +1,4 @@
+from julearn.transformers.target import TargetTransfromerWrapper
 import pandas as pd
 import numpy as np
 from copy import deepcopy
@@ -8,10 +9,10 @@ from sklearn.model_selection import check_cv
 from . estimators import available_models
 from . transformers import (available_transformers,
                             available_target_transformers)
+from . scoring import get_extended_scorer
 
 
 def _validate_input_data(X, y, confounds, df):
-
     if df is None:
         # Case 1: we don't have a dataframe in df
 
@@ -58,7 +59,7 @@ def _validate_input_data(X, y, confounds, df):
             assert all(x in df.columns for x in confounds)
 
 
-def prepare_input_data(X, y, confounds, df):
+def prepare_input_data(X, y, confounds, df, pos_labels):
     _validate_input_data(X, y, confounds, df)
     # Declare them as None to avoid CI issues
     df_X_conf = None
@@ -101,6 +102,11 @@ def prepare_input_data(X, y, confounds, df):
         y = df.loc[:, y].copy()
         confound_names = confounds
 
+    if pos_labels is not None:
+        if not isinstance(pos_labels, list):
+            pos_labels = [pos_labels]
+        y = y.isin(pos_labels).astype(np.int)
+
     return df_X_conf, y, confound_names
 
 
@@ -130,7 +136,7 @@ def prepare_model(model, problem_type):
         model_name = model
         model = available_models[model][problem_type]
 
-    elif _is_valid_sklearn_transformer(model):
+    elif _is_valid_sklearn_model(model):
         model_name = model.__class__.__name__.lower()
     else:
         raise ValueError(f'Model must be a string or a scikit-learn compatible'
@@ -220,7 +226,7 @@ def _prepare_preprocess_confounds(preprocess_conf):
 
     returned_features = 'unknown_same_type'
     for step in preprocess_conf:
-        _,  returned_features = _get_confound_transformer(step)
+        _, returned_features = _get_confound_transformer(step)
 
         if returned_features == 'unknown':
             returned_features = 'unknown_same_type'
@@ -240,12 +246,19 @@ def _prepare_preprocess_confounds(preprocess_conf):
 
 def _prepare_preprocess_y(preprocess_y):
     if preprocess_y is not None:
-        if preprocess_y not in available_target_transformers:
-            _valid_names = list(available_target_transformers.keys())
-            raise ValueError(
-                f'The specified target preprocessing ({preprocess_y}) is not '
-                f'available. Valid options are: {_valid_names}')
-        preprocess_y = available_target_transformers[preprocess_y]
+        if isinstance(preprocess_y, str):
+            if preprocess_y not in available_target_transformers:
+                _valid_names = list(available_target_transformers.keys())
+                raise ValueError(
+                    f'The specified target preprocessing ({preprocess_y}) is '
+                    f'not available. Valid options are: {_valid_names}')
+            preprocess_y = available_target_transformers[preprocess_y]
+        elif not isinstance(preprocess_y, TargetTransfromerWrapper):
+            if _is_valid_sklearn_transformer(preprocess_y):
+                preprocess_y = TargetTransfromerWrapper(preprocess_y)
+            else:
+                raise ValueError(f'y preprocess must be a string or a '
+                                 'valid sklearn transformer instance')
     return preprocess_y
 
 
@@ -284,6 +297,10 @@ def prepare_cv(cv_outer, cv_inner):
         cv_inner = convert_to_cv(cv_inner)
 
     return cv_outer, cv_inner
+
+
+def prepare_scoring(estimator, score_name):
+    return get_extended_scorer(estimator, score_name)
 
 
 def _create_preprocess_tuple(transformer):

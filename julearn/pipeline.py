@@ -99,6 +99,7 @@ class ExtendedDataFramePipeline(BaseEstimator):
     return_trans_column_type : bool, optional
         [description], by default False
     """
+
     def __init__(self, dataframe_pipeline,
                  y_transformer=None,
                  confound_dataframe_pipeline=None,
@@ -128,12 +129,8 @@ class ExtendedDataFramePipeline(BaseEstimator):
         else:
             X_conf_trans = X
 
-        if self.y_transformer is not None:
-            y_trans = self.y_transformer.fit_transform(X_conf_trans, y)
-        else:
-            y_trans = y
-
-        self.dataframe_pipeline.fit(X_conf_trans, y_trans)
+        y_true = self.transform_target(X_conf_trans, y)
+        self.dataframe_pipeline.fit(X_conf_trans, y_true)
 
         return self
 
@@ -143,15 +140,17 @@ class ExtendedDataFramePipeline(BaseEstimator):
         X_conf_trans = self.transform_confounds(X)
         return self.dataframe_pipeline.predict(X_conf_trans)
 
+    def predict_proba(self, X):
+        # X = X.rename(columns=self.col_name_mapper_).copy()
+        X = self.recode_columns(X)
+        X_conf_trans = self.transform_confounds(X)
+        return self.dataframe_pipeline.predict_proba(X_conf_trans)
+
     def score(self, X, y):
         # X = X.rename(columns=self.col_name_mapper_).copy()
         X = self.recode_columns(X)
         X_conf_trans = self.transform_confounds(X)
-
-        if self.y_transformer is not None:
-            y_true = self.y_transformer.fit_transform(X_conf_trans, y)
-        else:
-            y_true = y
+        y_true = self.transform_target(X_conf_trans, y)
         return self.dataframe_pipeline.score(X_conf_trans, y_true)
 
     def transform(self, X):
@@ -178,6 +177,13 @@ class ExtendedDataFramePipeline(BaseEstimator):
             return X
         else:
             return self.confound_dataframe_pipeline.transform(X)
+
+    def transform_target(self, X=None, y=None):
+        if self.y_transformer is not None:
+            y_true = self.y_transformer.fit_transform(X, y)
+        else:
+            y_true = y
+        return y_true
 
     def fit_transform(self, X, y=None):
         self.fit(X, y)
