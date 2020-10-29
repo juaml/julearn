@@ -255,8 +255,11 @@ def _prepare_preprocess_y(preprocess_y):
                     f'not available. Valid options are: {_valid_names}')
             preprocess_y = available_target_transformers[preprocess_y]
         elif not isinstance(preprocess_y, TargetTransfromerWrapper):
-            raise ValueError(f'y preprocess must be a string or a '
-                             'TargetTransfromerWrapper instance')
+            if _is_valid_sklearn_transformer(preprocess_y):
+                preprocess_y = TargetTransfromerWrapper(preprocess_y)
+            else:
+                raise ValueError(f'y preprocess must be a string or a '
+                                 'valid sklearn transformer instance')
     return preprocess_y
 
 

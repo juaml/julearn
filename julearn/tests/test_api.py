@@ -89,7 +89,7 @@ def test_scoring_y_transformer():
 
     scorers = ['accuracy', 'balanced_accuracy']
     for scoring in scorers:
-        y_transformer = TargetTransfromerWrapper(LabelBinarizer())
+        y_transformer = LabelBinarizer()
         actual = run_cross_validation(
             X=X, y=y, data=df_iris, model='svm', preprocess_y=y_transformer,
             seed=42, scoring=scoring)
