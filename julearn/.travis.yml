@@ -1,0 +1,16 @@
+language: python
+python:
+- '3.6'
+install:
+- pip install -r requirements.txt
+- pip install sh
+script:
+- make -C docs/ html
+- touch docs/build/html/.nojekyll
+deploy:
+  - provider: pages:git
+    verbose: true
+    token: $GITHUB_TOKEN
+    edge: true
+    local_dir: ./docs/build/html/
+    keep_history: true

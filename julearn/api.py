@@ -25,6 +25,8 @@ def run_cross_validation(
         scoring=None,
         pos_labels=None,
         seed=None):
+    """ Run cross validation and score
+    """
 
     if seed is not None:
         # If a seed is passed, use it, otherwise do not do anything. User
