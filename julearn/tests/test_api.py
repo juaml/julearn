@@ -134,7 +134,7 @@ def test_tune_hyperparam():
     sk_y = df_iris[y].values
 
     scoring = 'accuracy'
-    hyperparameters = {'svm__C': [0, 0.01, 0.001]}
+    hyperparameters = {'svm__C': [0.01, 0.001]}
 
     actual = run_cross_validation(
         X=X, y=y, data=df_iris, model='svm', hyperparameters=hyperparameters,
@@ -146,7 +146,7 @@ def test_tune_hyperparam():
     cv_outer = RepeatedKFold(n_splits=5, n_repeats=5)
 
     clf = make_pipeline(StandardScaler(), svm.SVC())
-    gs = GridSearchCV(clf, {'svm__C': [0, 0.01, 0.001]}, cv=cv_inner)
+    gs = GridSearchCV(clf, {'svc__C': [0.01, 0.001]}, cv=cv_inner)
 
     expected = cross_val_score(gs, sk_X, sk_y, cv=cv_outer, scoring=scoring)
 
