@@ -144,9 +144,9 @@ def prepare_model(model, problem_type):
     return model_name, model
 
 
-def prepare_hyperparams(hyperparams, model_name):
+def prepare_hyperparams(hyperparams, pipeline, model_name):
 
-    def recode_param(param):
+    def rename_param(param):
         first, *rest = param.split('__')
 
         if first == 'features':
@@ -165,7 +165,18 @@ def prepare_hyperparams(hyperparams, model_name):
                 f'but was {first}')
         return '__'.join([new_first] + rest)
 
-    return {recode_param(param): val for param, val in hyperparams.items()}
+    to_tune = {}
+    for param, val in hyperparams.items():
+        # If we have more than 1 value, we will tune it. If not, it will
+        # be set in the model.
+        if hasattr(val, '__iter__') and not isinstance(val, str):
+            if len(val) > 1:
+                to_tune[rename_param(param)] = val
+            else:
+                pipeline.set_param(val)
+        else:
+            pipeline.set_params(**{rename_param(param): val})
+    return to_tune
 
 
 def prepare_preprocessing(preprocess_X, preprocess_y, preprocess_confounds):

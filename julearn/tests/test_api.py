@@ -8,6 +8,24 @@ from seaborn import load_dataset
 from julearn import run_cross_validation
 
 
+def _test_scoring(X, y, data, api_params, sklearn_model, scorers, sk_y=None):
+    sk_X = data[X].values
+    if sk_y is None:
+        sk_y = data[y].values
+
+    for scoring in scorers:
+        actual = run_cross_validation(
+            X=X, y=y, data=data, seed=42, scoring=scoring, **api_params)
+
+        np.random.seed(42)
+        cv = RepeatedKFold(n_splits=5, n_repeats=5)
+        expected = cross_val_score(sklearn_model, sk_X, sk_y, cv=cv,
+                                   scoring=scoring)
+
+        assert len(actual) == len(expected)
+        assert all([a == b for a, b in zip(actual, expected)])
+
+
 def test_simple_binary():
     """Test simple binary classification"""
     df_iris = load_dataset('iris')
@@ -17,62 +35,28 @@ def test_simple_binary():
     X = ['sepal_length', 'sepal_width', 'petal_length']
     y = 'species'
 
-    sk_X = df_iris[X].values
-    sk_y = df_iris[y].values
-
     scorers = ['accuracy', 'balanced_accuracy']
-    for scoring in scorers:
-        actual = run_cross_validation(X=X, y=y, data=df_iris, model='svm',
-                                      seed=42, scoring=scoring)
-
-        # Now do the same with scikit-learn
-        clf = make_pipeline(StandardScaler(), svm.SVC())
-
-        np.random.seed(42)
-        cv = RepeatedKFold(n_splits=5, n_repeats=5)
-        expected = cross_val_score(clf, sk_X, sk_y, cv=cv, scoring=scoring)
-
-        assert len(actual) == len(expected)
-        assert all([a == b for a, b in zip(actual, expected)])
+    api_params = {'model': 'svm'}
+    clf = make_pipeline(StandardScaler(), svm.SVC())
+    _test_scoring(X, y, data=df_iris, api_params=api_params, sklearn_model=clf,
+                  scorers=scorers)
 
     # now let's try target-dependent scores
     scorers = ['recall', 'precision', 'f1']
-    t_sk_y = (sk_y == 'setosa').astype(np.int)
-    for scoring in scorers:
-        actual = run_cross_validation(X=X, y=y, data=df_iris, model='svm',
-                                      seed=42, scoring=scoring,
-                                      pos_labels='setosa')
-
-        # Now do the same with scikit-learn
-        clf = make_pipeline(StandardScaler(), svm.SVC())
-
-        np.random.seed(42)
-        cv = RepeatedKFold(n_splits=5, n_repeats=5)
-
-        expected = cross_val_score(clf, sk_X, t_sk_y, cv=cv, scoring=scoring)
-
-        assert len(actual) == len(expected)
-        assert all([a == b for a, b in zip(actual, expected)])
+    sk_y = (df_iris[y].values == 'setosa').astype(np.int)
+    api_params = {'model': 'svm', 'pos_labels': 'setosa'}
+    clf = make_pipeline(StandardScaler(), svm.SVC())
+    _test_scoring(X, y, data=df_iris, api_params=api_params, sklearn_model=clf,
+                  scorers=scorers, sk_y=sk_y)
 
     # now let's try proba-dependent scores
     scorers = ['roc_auc']
-    t_sk_y = (sk_y == 'setosa').astype(np.int)
-    for scoring in scorers:
-        model = svm.SVC(probability=True)
-        actual = run_cross_validation(X=X, y=y, data=df_iris, model=model,
-                                      seed=42, scoring=scoring,
-                                      pos_labels='setosa')
-
-        # Now do the same with scikit-learn
-        clf = make_pipeline(StandardScaler(), svm.SVC())
-
-        np.random.seed(42)
-        cv = RepeatedKFold(n_splits=5, n_repeats=5)
-
-        expected = cross_val_score(clf, sk_X, t_sk_y, cv=cv, scoring=scoring)
-
-        assert len(actual) == len(expected)
-        assert all([a == b for a, b in zip(actual, expected)])
+    sk_y = (df_iris[y].values == 'setosa').astype(np.int)
+    model = svm.SVC(probability=True)
+    api_params = {'model': model, 'pos_labels': 'setosa'}
+    clf = make_pipeline(StandardScaler(), svm.SVC())
+    _test_scoring(X, y, data=df_iris, api_params=api_params, sklearn_model=clf,
+                  scorers=scorers, sk_y=sk_y)
 
 
 def test_scoring_y_transformer():
@@ -94,7 +78,7 @@ def test_scoring_y_transformer():
             seed=42, scoring=scoring)
 
         # Now do the same with scikit-learn
-        clf = make_pipeline(StandardScaler(), svm.SVC())
+        clf = make_pipeline(StandardScaler(), svm.SVC(probability=True))
 
         np.random.seed(42)
         cv = RepeatedKFold(n_splits=5, n_repeats=5)
@@ -102,3 +86,35 @@ def test_scoring_y_transformer():
 
         assert len(actual) == len(expected)
         assert all([a == b for a, b in zip(actual, expected)])
+
+
+def test_set_hyperparam():
+    """Test setting one hyperparmeter"""
+    df_iris = load_dataset('iris')
+
+    # keep only two species
+    df_iris = df_iris[df_iris['species'].isin(['setosa', 'virginica'])]
+    X = ['sepal_length', 'sepal_width', 'petal_length']
+    y = 'species'
+
+    sk_X = df_iris[X].values
+    sk_y = df_iris[y].values
+
+    scoring = 'roc_auc'
+    t_sk_y = (sk_y == 'setosa').astype(np.int)
+    hyperparameters = {'svm__probability': True}
+
+    actual = run_cross_validation(
+        X=X, y=y, data=df_iris, model='svm', hyperparameters=hyperparameters,
+        seed=42, scoring=scoring, pos_labels='setosa')
+
+    # Now do the same with scikit-learn
+    clf = make_pipeline(StandardScaler(), svm.SVC(probability=True))
+
+    np.random.seed(42)
+    cv = RepeatedKFold(n_splits=5, n_repeats=5)
+
+    expected = cross_val_score(clf, sk_X, t_sk_y, cv=cv, scoring=scoring)
+
+    assert len(actual) == len(expected)
+    assert all([a == b for a, b in zip(actual, expected)])
