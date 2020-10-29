@@ -56,10 +56,12 @@ def run_cross_validation(
 
     if hyperparameters is not None:
         # read_validate_user_parameters
-        hyper_params = prepare_hyperparams(hyperparameters, model_tuple[0])
-        # cross_validate
+        hyper_params = prepare_hyperparams(
+            hyperparameters, pipeline, model_tuple[0])
 
-        pipeline = GridSearchCV(pipeline, hyper_params, cv=cv_inner)
+        # cross_validate
+        if len(hyper_params) > 0:
+            pipeline = GridSearchCV(pipeline, hyper_params, cv=cv_inner)
 
     scorer = prepare_scoring(pipeline, scoring)
     scores = cross_val_score(pipeline, df_X_conf, y, cv=cv_outer,
