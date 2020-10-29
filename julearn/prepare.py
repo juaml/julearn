@@ -9,7 +9,7 @@ from sklearn.model_selection import check_cv
 from . estimators import available_models
 from . transformers import (available_transformers,
                             available_target_transformers)
-
+from . metrics import get_extended_scorer
 
 def _validate_input_data(X, y, confounds, df):
 
@@ -295,6 +295,8 @@ def prepare_cv(cv_outer, cv_inner):
 
     return cv_outer, cv_inner
 
+def prepare_scoring(estimator, score_name):
+    return get_extended_scorer(estimator, score_name)
 
 def _create_preprocess_tuple(transformer):
     if type(transformer) == list:
