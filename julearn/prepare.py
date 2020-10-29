@@ -9,11 +9,10 @@ from sklearn.model_selection import check_cv
 from . estimators import available_models
 from . transformers import (available_transformers,
                             available_target_transformers)
-from . metrics import get_extended_scorer
+from . scoring import get_extended_scorer
 
 
 def _validate_input_data(X, y, confounds, df):
-
     if df is None:
         # Case 1: we don't have a dataframe in df
 

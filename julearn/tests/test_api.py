@@ -6,7 +6,6 @@ from sklearn.model_selection import cross_val_score, RepeatedKFold
 from sklearn.preprocessing import LabelBinarizer
 from seaborn import load_dataset
 from julearn import run_cross_validation
-from julearn.transformers import TargetTransfromerWrapper
 
 
 def test_simple_binary():
