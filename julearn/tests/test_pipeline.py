@@ -145,7 +145,7 @@ def test_ExtendedDataFramePipeline_in_cv_no_error():
 
     my_pipe = ExtendedDataFramePipeline(
         my_pipe, y_transformer=y_transformer,
-        confound_dataframe_pipeline=my_confound_pipe,  confounds=['B'])
+        confound_dataframe_pipeline=my_confound_pipe, confounds=['B'])
 
     cross_validate(my_pipe, X.iloc[:, :-1], X.C)
 
@@ -191,3 +191,45 @@ def test_create_extended_dataframe_transformer():
     extended_pipe.predict(X.iloc[:, :-1])
     score = extended_pipe.score(X.iloc[:, :-1], X.C)
     assert score is not np.nan
+
+
+def test_access_steps_ExtendedDataFramePipeline():
+    steps = [('z_score', StandardScaler(), 'same'),
+             ('pca', PCA(), 'unknown'),
+             ('lr', LinearRegression())
+             ]
+
+    my_pipe = create_dataframe_pipeline(steps)
+    my_confound_pipe = create_dataframe_pipeline(
+        steps[0:1],
+        default_returned_features='same',
+        default_transform_column='confound')
+    y_transformer = TargetTransfromerWrapper(StandardScaler())
+
+    my_pipe = ExtendedDataFramePipeline(
+        my_pipe, y_transformer=y_transformer,
+        confound_dataframe_pipeline=my_confound_pipe, confounds=['B'])
+
+    assert (my_pipe.named_confound_steps.z_score
+            == my_pipe['confound_z_score']
+            == (my_pipe
+                .confound_dataframe_pipeline
+                .named_steps
+                .z_score)
+            )
+
+    assert (my_pipe.named_steps.pca
+            == my_pipe['pca']
+            == (my_pipe
+                .dataframe_pipeline
+                .named_steps
+                .pca)
+            )
+
+    assert (my_pipe.named_steps.lr
+            == my_pipe['lr']
+            == (my_pipe
+                .dataframe_pipeline
+                .named_steps
+                .lr)
+            )
