@@ -214,6 +214,24 @@ class ExtendedDataFramePipeline(BaseEstimator):
     def recode_columns(self, X):
         return X.rename(columns=self.col_name_mapper_).copy()
 
+    @property
+    def named_steps(self):
+        return self.dataframe_pipeline.named_steps
+
+    @property
+    def named_confound_steps(self):
+        return self.confound_dataframe_pipeline.named_steps
+
+    def __getitem__(self, item):
+
+        if item.startswith('confound__'):
+            item = '__'.join(item.split('confound__')[1:])
+            out = self.confound_dataframe_pipeline[item]
+        else:
+            out = self.dataframe_pipeline[item]
+
+        return out
+
 
 def create_extended_pipeline(X_steps, y_transformer, conf_steps,
                              confounds, categorical_features):
