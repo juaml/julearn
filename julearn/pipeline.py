@@ -129,7 +129,7 @@ class ExtendedDataFramePipeline(BaseEstimator):
             X_conf_trans = X
 
         if self.y_transformer is not None:
-            y_true = self.y_transformer.fit_transform(X, y)
+            y_true = self.y_transformer.fit_transform(X_conf_trans, y)
         else:
             y_true = y
 
