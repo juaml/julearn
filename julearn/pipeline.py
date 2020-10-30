@@ -225,7 +225,7 @@ class ExtendedDataFramePipeline(BaseEstimator):
     def __getitem__(self, item):
 
         if item.startswith('confound__'):
-            item = '__'.join(item.split('confound__')[1:])
+            item = item.replace('confound__', '')
             out = self.confound_dataframe_pipeline[item]
         else:
             out = self.dataframe_pipeline[item]
