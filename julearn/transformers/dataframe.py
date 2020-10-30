@@ -11,24 +11,40 @@ class DataFrameTransformer(TransformerMixin):
     def __init__(self, transformer, transform_column='all',
                  returned_features='unknown', column_type_sep='__:type:__',
                  **params):
-        """Similar to sklearns ColumnTransformer.
-        Applying one transformer to a set of columns specified
-        in transform_column. Additionally, one can proivide whether
-        the returned features are the same as before, a subset
-        or unknown (e.g. components). This allows the outputted DataFrame to
-        have the proper columns names.
+        """Similar to sklearns ColumnTransformer, it applies any transformer
+        to a set of columns specified by transform_column. 
+        But the transformers are not applied independetley to each column.
+        This wrapper also alwayes returns a pd.DataFrame instead of np.ndarray
+        The columns of the outputted pd.DataFrame are dependent on the 
+        returned_features argument. 
 
         Parameters
         ----------
-        transformer : sklearn TransformerMixin
-            A transformer which implements fit and transform
-        transform_column : str or [str]
-            Column names to which the transformer will be applied to.
-            All other columns will be passed through.
-        returned_features : bool
-            Boolen to say whether the same features are outputed as inputed.
-            This is important if smth like pca is
-            and the output can be differently from the input
+        transformer : sklearn.base.TransformerMixin
+            A transformer following sklearn standards.
+        transform_column : str or list[str]
+            This arguments decides which columns will be transformed by the 
+            transformer. One way is entering a list of valid column names of 
+            the pd.DataFrame you want to use. 
+            Another one is to use a valid column type. 
+            Column types are tagges you have to provide after the column name 
+            only seperated by the column_type_sep. 
+            Valid column types are: 'confound', 'continuous' and 'categorical'.
+            Furthermore, you can enter 'all' to transform all columns, 
+            `all_feature` to transform all columns excluding the confound 
+            or provide a list of valid column types. 
+        returned_features : str, optional
+            'unknown' leads to created column names,
+            'unknown_same_type' leads to created column names
+             with the same column type.
+            'same' leads copies the names from the original pd.DataFrame
+            'subset' leads to the columns being a subset of the original 
+             pd.DataFrame. This functionality needs the transformer to have a 
+             .get_support method following sklearn standards. 
+             , by default 'unknown'
+        column_type_sep : str, optional
+            The str by which the actual column name and the column type are 
+            seperated inside of the pd.DataFrame.columns
         """
 
         self.transformer = transformer
