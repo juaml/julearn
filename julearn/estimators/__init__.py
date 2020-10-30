@@ -1,1 +1,1 @@
-from . available_models import available_models
+from . available_models import list_models, get_model
