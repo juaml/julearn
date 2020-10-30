@@ -5,7 +5,12 @@ from . basic import PassThroughTransformer
 
 
 class TargetPassThroughTransformer(PassThroughTransformer):
+
     def __init__(self):
+        """A target transformer doing nothing.
+        It only returns the target as it is.
+
+        """
         super().__init__()
 
     def transform(self, X=None, y=None):
@@ -21,8 +26,10 @@ class TargetTransfromerWrapper(TransformerMixin):
     def __init__(self, transformer, **params):
         """Using a sklearn transformer and applying them to the target/y.
 
-        Args:
-            transformer ([type]): [description]
+        Parameters
+        ----------
+        transformer : sklearn.base.TransformerMixin
+            Any sklearn compatible transformer.
         """
         self.transformer = transformer
         self.transformer.set_params(**params)

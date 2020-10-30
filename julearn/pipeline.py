@@ -30,7 +30,14 @@ def create_dataframe_pipeline(steps,
         The first is always the name of the step as a str.
         Second the model/transformer following sklearns style.
         Third (optional) returned_features following DataFrameTransformer.
-        Firth (optional) transform_column follwing DataFrameTransformer.
+        Fourth (optional) transform_column follwing DataFrameTransformer.
+        The last tuple can be a tuple of (model_name, model).
+    default_returned_features : str, optional
+        When a step does not provide a returned_features/third entry,
+        this will provide the default for it.
+    default_transform_column : str, optional
+        When a step does not provide a returned_features/Fourth entry,
+        this will provide the default for it.
 
     Returns
     -------
@@ -67,7 +74,9 @@ def create_dataframe_pipeline(steps,
 
 
 class ExtendedDataFramePipeline(BaseEstimator):
-    """A class extending a Pipeline.
+    """A class creating a custom metamodel like a Pipeline.
+    In practice this should be created
+    using julearn.pipeline.create_extended_pipeline.
     Added functionality:
     1: handling target transforming and scoring against
     this transformed target as ground truth.
@@ -84,20 +93,27 @@ class ExtendedDataFramePipeline(BaseEstimator):
     and with a seperater of `__:type:__`
 
 
-    dataframe_pipeline : [type]
-        [description]
-    y_transformer : [type], optional
-        [description], by default TargetPassThroughTransformer()
-    confound_dataframe_pipeline : [type], optional
-        [description], by default PassThroughTransformer()
-    confounds : [type], optional
-        [description], by default None
-    categorical_features : [type], optional
-        [description], by default None
+    dataframe_pipeline : sklearn.pipeline.Pipeline
+        A pipeline working with dataframes and being able to handle confounds.
+        Should be created using julearn.pipeline.create_dataframe_pipeline.
+    y_transformer : julearn target_transformer, optional
+        Any transformer which can take the X and y to transform the y.
+        You can use julearn.transformers.target.TargetTransfromerWrapper to
+        convert most sklearn transformers to a target_transformer
+        , by default TargetPassThroughTransformer()
+    confound_dataframe_pipeline : sklearn.pipeline.Pipeline, optional
+        Similar to dataframe_pipeline, by default PassThroughTransformer()
+    confounds : list[str], optional
+        a list of column names which are confounds ,by default None
+    categorical_features : list[str], optional
+        a list of column names which are cateroical features,by default None
     column_type_sep : str, optional
-        [description], by default '__:type:__'
+        this seperater is used to change the column names internally and add
+        a column type after the actual column name
+        seperated by the column_type_sep, by default '__:type:__'
     return_trans_column_type : bool, optional
-        [description], by default False
+        whether to return transformed column names with the associated
+        column type, by default False
     """
 
     def __init__(self, dataframe_pipeline,
@@ -255,7 +271,8 @@ def create_extended_pipeline(X_steps, y_transformer, conf_steps,
         The first is always the name of the step as a str.
         Second the model/transformer following sklearns style.
         Third (optional) returned_features following DataFrameTransformer.
-        Firth (optional) transform_column follwing DataFrameTransformer.
+        Fourth (optional) transform_column follwing DataFrameTransformer.
+        The last tuple can be a tuple of (model_name, model).
 
     y_transformer : y_transform
         A transformer, which takes in X, y and outputs a transformed y.
