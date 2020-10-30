@@ -211,7 +211,7 @@ def test_access_steps_ExtendedDataFramePipeline():
         confound_dataframe_pipeline=my_confound_pipe, confounds=['B'])
 
     assert (my_pipe.named_confound_steps.z_score
-            == my_pipe['confound__z_score']
+            == my_pipe['confound_z_score']
             == (my_pipe
                 .confound_dataframe_pipeline
                 .named_steps
