@@ -184,6 +184,17 @@ class ExtendedDataFramePipeline(BaseEstimator):
             y_true = y
         return y_true
 
+    def preprocess(self, X, y):
+        if self.y_transformer is not None:
+            y_trans = self.y_transformer.fit_transform(X, y)
+        else:
+            y_trans = y
+
+        old_model = self.dataframe_pipeline.steps.pop()
+        X_trans = self.transform(X)
+        self.dataframe_pipeline.steps.append(old_model)
+        return X_trans, y_trans
+
     def fit_transform(self, X, y=None):
         self.fit(X, y)
         return self.transform(X)
@@ -222,15 +233,15 @@ class ExtendedDataFramePipeline(BaseEstimator):
     def named_confound_steps(self):
         return self.confound_dataframe_pipeline.named_steps
 
-    def __getitem__(self, item):
-
-        if item.startswith('confound__'):
-            item = item.replace('confound__', '')
-            out = self.confound_dataframe_pipeline[item]
+    def __getitem__(self, ind):
+        if not isinstance(ind, str):
+            raise ValueError('Indexing must be done using strings')
+        if ind.startswith('confound_'):
+            n_ind = ind.replace('confound_', '')
+            element = self.confound_dataframe_pipeline[n_ind]
         else:
-            out = self.dataframe_pipeline[item]
-
-        return out
+            element = self.dataframe_pipeline[ind]
+        return element
 
 
 def create_extended_pipeline(X_steps, y_transformer, conf_steps,

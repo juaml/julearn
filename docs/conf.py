@@ -14,6 +14,8 @@
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
+from sphinx_gallery.sorting import ExplicitOrder
+
 
 # -- Project information -----------------------------------------------------
 
@@ -69,7 +71,10 @@ intersphinx_mapping = {
 }
 
 sphinx_gallery_conf = {
-    'examples_dirs': ['../examples'],
+    'examples_dirs': ['../examples/basic', '../examples/advanced'],
+    'subsection_order': ExplicitOrder(['../examples/basic/',
+                                       '../examples/advanced/'
+                                       ]),
     'gallery_dirs': ['auto_examples'],
     'filename_pattern': '/(plot|run)_',
     'backreferences_dir': 'generated',
