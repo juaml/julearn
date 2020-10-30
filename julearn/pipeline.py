@@ -235,6 +235,14 @@ class ExtendedDataFramePipeline(BaseEstimator):
             element = self.dataframe_pipeline[ind]
         return element
 
+    @property
+    def named_steps(self):
+        return self.dataframe_pipeline.named_steps
+
+    @property
+    def named_confound_steps(self):
+        return self.confound_dataframe_pipeline.named_steps
+
 
 def create_extended_pipeline(X_steps, y_transformer, conf_steps,
                              confounds, categorical_features):
