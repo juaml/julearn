@@ -50,7 +50,7 @@ print(df_fmri['subject'].unique())
 
 ###############################################################################
 # We have data from parietal and frontal regions during 2 types of events
-# (_cue_ and _stim_) during 18 timepoints and for 14 subjects.
+# (*cue* and *stim*) during 18 timepoints and for 14 subjects.
 # Lets see how many samples we have for each condition
 
 print(df_fmri.groupby(['subject', 'timepoint', 'event', 'region']).count())
@@ -61,18 +61,18 @@ print(np.unique(df_fmri.groupby(
 # We have exactly one value per condition.
 #
 # Lets try to build a model, that given both parietal and frontal signal,
-# predicts if the event was a _cue_ or a _stim_.
+# predicts if the event was a *cue* or a *stim*.
 #
 # First we define our X and y variables.
 X = ['parietal', 'frontal']
 y = 'event'
 
 ###############################################################################
-# In order for this to work, both _parietal_ and _frontal_ must be columns.
-# We need to _pivot_ the table.
+# In order for this to work, both *parietal* and *frontal* must be columns.
+# We need to *pivot* the table.
 #
-# The values of _region_ will be the columns. The column _signal_ will be the
-# values. And the columns _subject_, _timepoint_ and _event_ will be the index
+# The values of *region* will be the columns. The column *signal* will be the
+# values. And the columns *subject*, *timepoint* and *event* will be the index
 df_fmri = df_fmri.pivot(
     index=['subject', 'timepoint', 'event'],
     columns='region',
@@ -89,7 +89,7 @@ print(scores.mean())
 
 ###############################################################################
 # This results indicate that we can decode the kind of event by looking at
-# the _parietal_ and _frontal_ signal. However, that claim is true only if we
+# the *parietal* and *frontal* signal. However, that claim is true only if we
 # have some data from the same subject already acquired.
 #
 # The problem is that we split the data randomly into 5 folds (default, see

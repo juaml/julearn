@@ -131,7 +131,7 @@ brain regions.</p>
 </pre></div>
 </div>
 <p>We have data from parietal and frontal regions during 2 types of events
-(_cue_ and _stim_) during 18 timepoints and for 14 subjects.
+(<em>cue</em> and <em>stim</em>) during 18 timepoints and for 14 subjects.
 Lets see how many samples we have for each condition</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">df_fmri</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;subject&#39;</span><span class="p">,</span> <span class="s1">&#39;timepoint&#39;</span><span class="p">,</span> <span class="s1">&#39;event&#39;</span><span class="p">,</span> <span class="s1">&#39;region&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">count</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">df_fmri</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span>
@@ -159,16 +159,16 @@ s9      17        stim  parietal       1
 </div>
 <p>We have exactly one value per condition.</p>
 <p>Lets try to build a model, that given both parietal and frontal signal,
-predicts if the event was a _cue_ or a _stim_.</p>
+predicts if the event was a <em>cue</em> or a <em>stim</em>.</p>
 <p>First we define our X and y variables.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;parietal&#39;</span><span class="p">,</span> <span class="s1">&#39;frontal&#39;</span><span class="p">]</span>
 <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a> <span class="o">=</span> <span class="s1">&#39;event&#39;</span>
 </pre></div>
 </div>
-<p>In order for this to work, both _parietal_ and _frontal_ must be columns.
-We need to _pivot_ the table.</p>
-<p>The values of _region_ will be the columns. The column _signal_ will be the
-values. And the columns _subject_, _timepoint_ and _event_ will be the index</p>
+<p>In order for this to work, both <em>parietal</em> and <em>frontal</em> must be columns.
+We need to <em>pivot</em> the table.</p>
+<p>The values of <em>region</em> will be the columns. The column <em>signal</em> will be the
+values. And the columns <em>subject</em>, <em>timepoint</em> and <em>event</em> will be the index</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">df_fmri</span> <span class="o">=</span> <span class="n">df_fmri</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span>
     <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;subject&#39;</span><span class="p">,</span> <span class="s1">&#39;timepoint&#39;</span><span class="p">,</span> <span class="s1">&#39;event&#39;</span><span class="p">],</span>
     <span class="n">columns</span><span class="o">=</span><span class="s1">&#39;region&#39;</span><span class="p">,</span>
@@ -188,7 +188,7 @@ values. And the columns _subject_, _timepoint_ and _event_ will be the index</p>
 </pre></div>
 </div>
 <p>This results indicate that we can decode the kind of event by looking at
-the _parietal_ and _frontal_ signal. However, that claim is true only if we
+the <em>parietal</em> and <em>frontal</em> signal. However, that claim is true only if we
 have some data from the same subject already acquired.</p>
 <p>The problem is that we split the data randomly into 5 folds (default, see
 :func:run_cross_validation). This means that data from one subject could be
@@ -260,7 +260,7 @@ how the SVM does this complex task.</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Preprocessed data with SVM decision funtion boundaries&#39;)
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.687 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.632 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-groupcv-inspect-svm-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/7044a9ca2d24b8ebf55c5bfbbc0a699f/plot_groupcv_inspect_svm.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_groupcv_inspect_svm.py</span></code></a></p>
