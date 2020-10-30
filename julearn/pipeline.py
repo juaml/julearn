@@ -75,7 +75,7 @@ def create_dataframe_pipeline(steps,
 
 class ExtendedDataFramePipeline(BaseEstimator):
     """A class creating a custom metamodel like a Pipeline.
-    In practice this should be created 
+    In practice this should be created
     using julearn.pipeline.create_extended_pipeline.
     Added functionality:
     1: handling target transforming and scoring against
@@ -98,7 +98,7 @@ class ExtendedDataFramePipeline(BaseEstimator):
         Should be created using julearn.pipeline.create_dataframe_pipeline.
     y_transformer : julearn target_transformer, optional
         Any transformer which can take the X and y to transform the y.
-        You can use julearn.transformers.target.TargetTransfromerWrapper to 
+        You can use julearn.transformers.target.TargetTransfromerWrapper to
         convert most sklearn transformers to a target_transformer
         , by default TargetPassThroughTransformer()
     confound_dataframe_pipeline : sklearn.pipeline.Pipeline, optional
@@ -109,10 +109,10 @@ class ExtendedDataFramePipeline(BaseEstimator):
         a list of column names which are cateroical features,by default None
     column_type_sep : str, optional
         this seperater is used to change the column names internally and add
-        a column type after the actual column name 
+        a column type after the actual column name
         seperated by the column_type_sep, by default '__:type:__'
     return_trans_column_type : bool, optional
-        whether to return transformed column names with the associated 
+        whether to return transformed column names with the associated
         column type, by default False
     """
 

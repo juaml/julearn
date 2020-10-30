@@ -2,16 +2,16 @@ from sklearn.metrics._scorer import check_scoring
 
 
 def get_extended_scorer(estimator, score_name):
-    """A function that can use an estimator and score_name to 
+    """A function that can use an estimator and score_name to
     create a scorer compatible with julearn.pipeline.ExtendedDataFramePipeline.
 
     Parameters
     ----------
     estimator : julearn.pipeline.ExtendedDataFramePipeline
-        A estimator with a .transform_confounds and .transform_target 
+        A estimator with a .transform_confounds and .transform_target
         method needed for scoring against a new ground truth
     score_name : str
-        The name of the score you want to use for scoring. 
+        The name of the score you want to use for scoring.
         All scores available in sklearn are compatible
 
     Returns
