@@ -1,5 +1,5 @@
 """
-Inspecting models
+Inspecting SVM models
 ============================
 
 This example uses the 'fmri' dataset, performs simple binary classification

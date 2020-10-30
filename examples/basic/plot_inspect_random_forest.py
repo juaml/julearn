@@ -1,6 +1,6 @@
 """
-Inspecting models
-============================
+Inspecting Random Forest models
+===============================
 
 This example uses the 'iris' dataset, performs simple binary classification
 using a Random Forest classifier and analyse the model.
