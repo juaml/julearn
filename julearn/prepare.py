@@ -6,13 +6,12 @@ from sklearn.model_selection import RepeatedKFold
 from sklearn.base import clone
 from sklearn.model_selection import check_cv
 
-from . estimators import available_models
-from . transformers import (available_transformers,
-                            available_target_transformers)
+from . estimators import get_model
+from . transformers import get_transformer
 from . scoring import get_extended_scorer
 
 
-def _validate_input_data(X, y, confounds, df):
+def _validate_input_data(X, y, confounds, df, groups):
     if df is None:
         # Case 1: we don't have a dataframe in df
 
@@ -59,11 +58,12 @@ def _validate_input_data(X, y, confounds, df):
             assert all(x in df.columns for x in confounds)
 
 
-def prepare_input_data(X, y, confounds, df, pos_labels):
-    _validate_input_data(X, y, confounds, df)
+def prepare_input_data(X, y, confounds, df, pos_labels, groups):
+    _validate_input_data(X, y, confounds, df, groups)
     # Declare them as None to avoid CI issues
     df_X_conf = None
     confound_names = None
+    df_groups = None
     if df is None:
         # creating df_X_conf
         if isinstance(X, np.ndarray):
@@ -91,6 +91,11 @@ def prepare_input_data(X, y, confounds, df, pos_labels):
         if isinstance(y, np.ndarray):
             y = pd.Series(y, name='y')
 
+        if groups is not None:
+            if isinstance(groups, np.ndarray):
+                columns = [f'group_{i}' for i in range(groups.shape[0])]
+                df_groups = pd.DataFrame(groups, columns=columns)
+
     else:
         X_conf_columns = deepcopy(X) if isinstance(X, list) else [X]
         if isinstance(confounds, list):
@@ -100,6 +105,8 @@ def prepare_input_data(X, y, confounds, df, pos_labels):
 
         df_X_conf = df.loc[:, X_conf_columns].copy()
         y = df.loc[:, y].copy()
+        if groups is not None:
+            df_groups = df.loc[:, groups].copy()
         confound_names = confounds
 
     if pos_labels is not None:
@@ -107,7 +114,7 @@ def prepare_input_data(X, y, confounds, df, pos_labels):
             pos_labels = [pos_labels]
         y = y.isin(pos_labels).astype(np.int)
 
-    return df_X_conf, y, confound_names
+    return df_X_conf, y, df_groups, confound_names
 
 
 def prepare_model(model, problem_type):
@@ -127,15 +134,8 @@ def prepare_model(model, problem_type):
 
     """
     if isinstance(model, str):
-        if model not in available_models:
-            available_model_names = list(available_models.keys())
-            raise ValueError(
-                f'The specified model ({model}) is not available. '
-                f'Valid options are: {available_model_names}')
-
         model_name = model
-        model = available_models[model][problem_type]
-
+        model = get_model(model_name, problem_type)
     elif _is_valid_sklearn_model(model):
         model_name = model.__class__.__name__.lower()
     else:
@@ -193,18 +193,6 @@ def _prepare_preprocess_X(preprocess_X):
     and default params for this list
     '''
 
-    for step in preprocess_X:
-        if type(step) == str:
-            if available_transformers.get(step) is None:
-                raise ValueError(f'{step} in preprocess_X is not'
-                                 'an available transformer')
-        else:
-            if _is_valid_sklearn_transformer(step) is False:
-                raise ValueError(f'{step} in preprocess has to be either'
-                                 'a string or a valid sklearn transformer'
-
-                                 )
-
     preprocess_X = [_create_preprocess_tuple(transformer)
                     for transformer in preprocess_X]
     return preprocess_X
@@ -213,13 +201,7 @@ def _prepare_preprocess_X(preprocess_X):
 def _get_confound_transformer(conf):
     returned_features = 'unknown_same_type'
     if isinstance(conf, str):
-        if conf in available_transformers:
-            conf, returned_features = available_transformers[conf]
-        else:
-            _valid_names = list(available_transformers.keys())
-            raise ValueError(
-                f'The specified confound preprocessing ({conf}) is '
-                f'not available. Valid options are: {_valid_names}')
+        conf, returned_features = get_transformer(conf)
     elif not _is_valid_sklearn_transformer(conf):
         raise ValueError(
             f'The specified confound preprocessing ({conf}) is not valid.'
@@ -258,12 +240,7 @@ def _prepare_preprocess_confounds(preprocess_conf):
 def _prepare_preprocess_y(preprocess_y):
     if preprocess_y is not None:
         if isinstance(preprocess_y, str):
-            if preprocess_y not in available_target_transformers:
-                _valid_names = list(available_target_transformers.keys())
-                raise ValueError(
-                    f'The specified target preprocessing ({preprocess_y}) is '
-                    f'not available. Valid options are: {_valid_names}')
-            preprocess_y = available_target_transformers[preprocess_y]
+            preprocess_y = get_transformer(preprocess_y, target=True)
         elif not isinstance(preprocess_y, TargetTransfromerWrapper):
             if _is_valid_sklearn_transformer(preprocess_y):
                 preprocess_y = TargetTransfromerWrapper(preprocess_y)
@@ -319,7 +296,7 @@ def _create_preprocess_tuple(transformer):
         return transformer
     elif type(transformer) == str:
         trans_name = transformer
-        trans, returned_features = available_transformers[transformer]
+        trans, returned_features = get_transformer(transformer)
     else:
         trans_name = transformer.__class__.__name__.lower()
         trans = clone(transformer)

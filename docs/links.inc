@@ -15,3 +15,6 @@
 .. _`Balanced Accuracy`: https://scikit-learn.org/stable/modules/model_evaluation.html#balanced-accuracy-score
 .. _`Precision`: https://scikit-learn.org/stable/modules/model_evaluation.html#precission-score
 .. _`Metrics`: https://scikit-learn.org/stable/modules/model_evaluation.html#classification-metrics
+.. _`Random Forest`: https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html
+.. _`Cross Validation`: https://scikit-learn.org/stable/modules/classes.html#module-sklearn.model_selection
+.. _`Standard Scaler`: https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html

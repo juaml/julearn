@@ -19,9 +19,10 @@ def run_cross_validation(
         preprocess_y=None,
         preprocess_confounds=['z_score'],
         hyperparameters=None,
-        output_estimator=False, print_result=True,
+        return_estimator=False, print_result=True,
         cv_evaluation='repeat:5_nfolds:5',
         cv_model_selection='same',
+        groups=None,
         scoring=None,
         pos_labels=None,
         seed=None):
@@ -34,8 +35,9 @@ def run_cross_validation(
         np.random.seed(seed)
 
     # Interpret the input data and prepare it to be used with the library
-    df_X_conf, y, confound_names = prepare_input_data(
-        X=X, y=y, confounds=confounds, df=data, pos_labels=pos_labels)
+    df_X_conf, y, df_groups, confound_names = prepare_input_data(
+        X=X, y=y, confounds=confounds, df=data, pos_labels=pos_labels,
+        groups=groups)
 
     # Interpret preprocessing parameters
     preprocess_vars = prepare_preprocessing(
@@ -67,8 +69,14 @@ def run_cross_validation(
 
     scorer = prepare_scoring(pipeline, scoring)
     scores = cross_val_score(pipeline, df_X_conf, y, cv=cv_outer,
-                             scoring=scorer)
-    return scores
+                             scoring=scorer, groups=df_groups)
+
+    out = scores
+    if return_estimator is True:
+        pipeline.fit(df_X_conf, y)
+        out = out, pipeline
+
+    return out
 
 
 def pprint_output(out):
