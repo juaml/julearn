@@ -135,12 +135,12 @@ class ExtendedDataFramePipeline(BaseEstimator):
         if self.categorical_features is None:
             self.categorical_features = []
 
-        self.set_column_mappers(X)
+        self._set_column_mappers(X)
 
-        X = self.recode_columns(X)
+        X = self._recode_columns(X)
 
         if self.confound_dataframe_pipeline is not None:
-            X_conf_trans = self.fit_transform_confounds(X, y)
+            X_conf_trans = self._fit_transform_confounds(X, y)
         else:
             X_conf_trans = X
 
@@ -154,23 +154,19 @@ class ExtendedDataFramePipeline(BaseEstimator):
         return self
 
     def predict(self, X):
-        X = self.recode_columns(X)
         X_conf_trans = self.transform_confounds(X)
         return self.dataframe_pipeline.predict(X_conf_trans)
 
     def predict_proba(self, X):
-        X = self.recode_columns(X)
         X_conf_trans = self.transform_confounds(X)
         return self.dataframe_pipeline.predict_proba(X_conf_trans)
 
     def score(self, X, y):
-        X = self.recode_columns(X)
         X_conf_trans = self.transform_confounds(X)
-        y_true = self.transform_target(X_conf_trans, y)
+        y_true = self.transform_target(X, y)
         return self.dataframe_pipeline.score(X_conf_trans, y_true)
 
     def transform(self, X):
-        X = self.recode_columns(X)
         X_conf_trans = self.transform_confounds(X)
         X_trans = self.dataframe_pipeline.transform(X_conf_trans)
         if not self.return_trans_column_type:
@@ -180,24 +176,17 @@ class ExtendedDataFramePipeline(BaseEstimator):
                        )
         return X_trans
 
-    def fit_transform_confounds(self, X, y):
-        if self.confounds is None:
-            return X
-        else:
-            return self.confound_dataframe_pipeline.fit_transform(X, y)
+    def transform_target(self, X, y):
+        X_conf_trans = self.transform_confounds(X)
+        y_true = self._transform_target(X_conf_trans, y)
+        return y_true
 
     def transform_confounds(self, X):
+        X = self._recode_columns(X)
         if self.confounds is None:
             return X
         else:
             return self.confound_dataframe_pipeline.transform(X)
-
-    def transform_target(self, X, y):
-        if self.y_transformer is not None:
-            y_true = self.y_transformer.transform(X, y)
-        else:
-            y_true = y
-        return y_true
 
     def preprocess(self, X, y):
         X_conf_trans = self.transform_confounds(X)
@@ -211,7 +200,21 @@ class ExtendedDataFramePipeline(BaseEstimator):
         self.fit(X, y)
         return self.transform(X)
 
-    def convert_column_name(self, col_name):
+    def _fit_transform_confounds(self, X, y):
+        X = self._recode_columns(X)
+        if self.confounds is None:
+            return X
+        else:
+            return self.confound_dataframe_pipeline.fit_transform(X, y)
+
+    def _transform_target(self, X, y):
+        if self.y_transformer is not None:
+            y_true = self.y_transformer.transform(X, y)
+        else:
+            y_true = y
+        return y_true
+
+    def _convert_column_name(self, col_name):
         confounds = [] if self.confounds is None else self.confounds
 
         if col_name in confounds:
@@ -223,8 +226,8 @@ class ExtendedDataFramePipeline(BaseEstimator):
 
         return out_col_name
 
-    def set_column_mappers(self, X):
-        self.col_name_mapper_ = {col_name: self.convert_column_name(col_name)
+    def _set_column_mappers(self, X):
+        self.col_name_mapper_ = {col_name: self._convert_column_name(col_name)
                                  for col_name in X.columns
                                  }
 
@@ -234,7 +237,7 @@ class ExtendedDataFramePipeline(BaseEstimator):
 
         }
 
-    def recode_columns(self, X):
+    def _recode_columns(self, X):
         return X.rename(columns=self.col_name_mapper_).copy()
 
     def __getitem__(self, ind):
