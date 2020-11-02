@@ -170,7 +170,6 @@ class ExtendedDataFramePipeline(BaseEstimator):
         return self.dataframe_pipeline.score(X_conf_trans, y_true)
 
     def transform(self, X):
-
         X = self.recode_columns(X)
         X_conf_trans = self.transform_confounds(X)
         X_trans = self.dataframe_pipeline.transform(X_conf_trans)
@@ -201,11 +200,8 @@ class ExtendedDataFramePipeline(BaseEstimator):
         return y_true
 
     def preprocess(self, X, y):
-        if self.y_transformer is not None:
-            y_trans = self.y_transformer.fit_transform(X, y)
-        else:
-            y_trans = y
-
+        X_conf_trans = self.transform_confounds(X)
+        y_trans = self.transform_target(X_conf_trans, y)
         old_model = self.dataframe_pipeline.steps.pop()
         X_trans = self.transform(X)
         self.dataframe_pipeline.steps.append(old_model)
