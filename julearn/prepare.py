@@ -16,24 +16,50 @@ def _validate_input_data(X, y, confounds, df, groups):
     if df is None:
         # Case 1: we don't have a dataframe in df
 
-        # X is either an ndarray or dataframe
-        assert isinstance(X, (np.ndarray, pd.DataFrame))
+        # X must be np.ndarray with at most 2d
+        if not isinstance(X, np.ndarray):
+            raise ValueError(
+                'X must be a numpy array if no dataframe is specified')
 
-        # X is bidimentional
-        assert X.ndim == 2
+        if X.ndim not in [1, 2]:
+            raise ValueError('X must be at most bi-dimentional')
 
-        # Same for y, but only one dimension
-        assert isinstance(y, (np.ndarray, pd.Series))
-        assert y.ndim == 1
+        # Y must be np.ndarray with 1 dimention
+        if not isinstance(y, np.ndarray):
+            raise ValueError(
+                'y must be a numpy array if no dataframe is specified')
+
+        if y.ndim != 1:
+            raise ValueError('y must be one-dimentional')
 
         # Same number of elements
-        assert X.shape[0] == y.shape[0]
+        if X.shape[0] != y.shape[0]:
+            raise ValueError(
+                'The number of samples in X do not match y '
+                '(X.shape[0] != y.shape[0]')
 
         if confounds is not None:
-            # Confounds is any kind of array or pandas object
-            assert isinstance(confounds, (np.ndarray, pd.DataFrame, pd.Series))
-            assert confounds.ndim in [1, 2]
-            assert confounds.shape[0] == y.shape[0]
+            if not isinstance(confounds, np.ndarray):
+                raise ValueError(
+                    'confounds must be a numpy array if no dataframe is '
+                    'specified')
+
+            if confounds.ndim not in [1, 2]:
+                raise ValueError('confounds must be at most bi-dimentional')
+
+            if X.shape[0] != confounds.shape[0]:
+                raise ValueError(
+                    'The number of samples in X do not match confounds '
+                    '(X.shape[0] != confounds.shape[0]')
+
+        if groups is not None:
+            if not isinstance(groups, np.ndarray):
+                raise ValueError(
+                    'groups must be a numpy array if no dataframe is '
+                    'specified')
+
+            if groups.ndim != 1:
+                raise ValueError('groups must be one-dimentional')
 
     else:
         # Case 2: we have a dataframe. X, y and confounds must be columns
@@ -67,35 +93,24 @@ def prepare_input_data(X, y, confounds, df, pos_labels, groups):
     df_groups = None
     if df is None:
         # creating df_X_conf
-        if isinstance(X, np.ndarray):
-            columns = [f'feature_{i}' for i in range(X.shape[0])]
-            df_X_conf = pd.DataFrame(X, columns=columns)
-        elif isinstance(X, pd.DataFrame):
-            df_X_conf = X.copy()
+        if X.ndim == 1:
+            X = X[:, None]
+        columns = [f'feature_{i}' for i in range(X.shape[1])]
+        df_X_conf = pd.DataFrame(X, columns=columns)
 
         # adding confounds to df_X_conf
-        if isinstance(confounds, (pd.Series, pd.DataFrame)):
-            # TODO: Merge the dataframe, keep the index. Use join/merge.
-            # Raise an error if it can't be merged.
-            if isinstance(confounds, pd.Series):
-                confound_names = confounds.name
-            else:
-                confound_names = confounds.columns
-            df_X_conf[confound_names] = confounds
-
-        elif isinstance(confounds, np.ndarray):
+        if confounds is not None:
+            if confounds.ndim == 1:
+                confounds = confounds[:, None]
             confound_names = [
-                f'confound_{i}' for i in range(confounds.shape[0])]
+                f'confound_{i}' for i in range(confounds.shape[1])]
             df_X_conf[confound_names] = confounds
 
         # creating a Series for y if not existent
-        if isinstance(y, np.ndarray):
-            y = pd.Series(y, name='y')
+        df_y = pd.Series(y, name='y')
 
         if groups is not None:
-            if isinstance(groups, np.ndarray):
-                columns = [f'group_{i}' for i in range(groups.shape[0])]
-                df_groups = pd.DataFrame(groups, columns=columns)
+            df_groups = pd.Series(groups, name='groups')
 
     else:
         X_conf_columns = deepcopy(X) if isinstance(X, list) else [X]
@@ -105,7 +120,7 @@ def prepare_input_data(X, y, confounds, df, pos_labels, groups):
             X_conf_columns.append(confounds)
 
         df_X_conf = df.loc[:, X_conf_columns].copy()
-        y = df.loc[:, y].copy()
+        df_y = df.loc[:, y].copy()
         if groups is not None:
             df_groups = df.loc[:, groups].copy()
         confound_names = confounds
@@ -113,9 +128,9 @@ def prepare_input_data(X, y, confounds, df, pos_labels, groups):
     if pos_labels is not None:
         if not isinstance(pos_labels, list):
             pos_labels = [pos_labels]
-        y = y.isin(pos_labels).astype(np.int)
+        df_y = df_y[df_y.isin(pos_labels)].astype(np.int)
 
-    return df_X_conf, y, df_groups, confound_names
+    return df_X_conf, df_y, df_groups, confound_names
 
 
 def prepare_model(model, problem_type):
