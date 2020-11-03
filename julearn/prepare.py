@@ -6,6 +6,8 @@ from sklearn.model_selection import RepeatedKFold, GridSearchCV
 from sklearn.base import clone
 from sklearn.model_selection import check_cv
 
+from warnings import warn
+
 from . estimators import get_model
 from . transformers import get_transformer
 from . scoring import get_extended_scorer
@@ -64,25 +66,56 @@ def _validate_input_data(X, y, confounds, df, groups):
     else:
         # Case 2: we have a dataframe. X, y and confounds must be columns
         # in the dataframe
-        assert isinstance(X, (str, list))
-        assert isinstance(y, str)
+        if not isinstance(X, (str, list)):
+            raise ValueError('X must be a string or list of strings')
+
+        if not isinstance(y, str):
+            raise ValueError('y must be a string')
 
         # Confounds can be a string, list or none
-        assert isinstance(confounds, (str, list, type(None)))
+        if not isinstance(confounds, (str, list, type(None))):
+            raise ValueError('If not None, confounds must be a string or list '
+                             'of strings')
 
-        assert isinstance(df, pd.DataFrame)
+        if not isinstance(groups, (str, type(None))):
+            raise ValueError('groups must be a string')
 
-        if isinstance(X, list):
-            assert all(Xi in df.columns for Xi in X)
-        else:
-            assert X in df.columns
+        if not isinstance(df, pd.DataFrame):
+            raise ValueError('df must be a pandas.DataFrame')
 
-        assert y in df.columns
+        if not isinstance(X, list):
+            X = [X]
+        missing_columns = [t_x for t_x in X if t_x not in df.columns]
+        if len(missing_columns) > 0:
+            raise ValueError(
+                'All elements of X must be in the dataframe. '
+                f'The following are missing: {missing_columns}')
 
-        if isinstance(confounds, str):
-            assert confounds in df.columns
-        elif isinstance(confounds, list):
-            assert all(x in df.columns for x in confounds)
+        if y not in df.columns:
+            raise ValueError(
+                f"Target '{y}' (y) is not a valid column in the dataframe")
+
+        if confounds is not None:
+            if not isinstance(confounds, list):
+                confounds = [confounds]
+            missing_columns = [
+                t_c for t_c in confounds if t_c not in df.columns]
+            if len(missing_columns) > 0:
+                raise ValueError(
+                    'All elements of confounds must be in the dataframe. '
+                    f'The following are missing: {missing_columns}')
+
+        if groups is not None:
+            if groups not in df.columns:
+                raise ValueError(f"Groups '{groups}' is not a valid column "
+                                 "in the dataframe")
+            if groups == y:
+                warn("y and groups are the same column")
+            if groups in X:
+                warn("groups is part of X")
+
+        if y in X:
+            warn("y is part of X")
 
 
 def prepare_input_data(X, y, confounds, df, pos_labels, groups):
@@ -114,10 +147,16 @@ def prepare_input_data(X, y, confounds, df, pos_labels, groups):
 
     else:
         X_conf_columns = deepcopy(X) if isinstance(X, list) else [X]
-        if isinstance(confounds, list):
-            X_conf_columns.extend(confounds)
-        elif isinstance(confounds, str):
-            X_conf_columns.append(confounds)
+        if confounds is not None:
+            if not isinstance(confounds, list):
+                confounds = [confounds]
+            overlapping = [t_c for t_c in confounds if t_c in X]
+            if len(overlapping) > 0:
+                warn(f'X contains the following confounds {overlapping}')
+            for t_c in confounds:
+                # This will add the confounds if not there already
+                if t_c not in X_conf_columns:
+                    X_conf_columns.append(t_c)
 
         df_X_conf = df.loc[:, X_conf_columns].copy()
         df_y = df.loc[:, y].copy()
@@ -128,7 +167,7 @@ def prepare_input_data(X, y, confounds, df, pos_labels, groups):
     if pos_labels is not None:
         if not isinstance(pos_labels, list):
             pos_labels = [pos_labels]
-        df_y = df_y[df_y.isin(pos_labels)].astype(np.int)
+        df_y = df_y.isin(pos_labels).astype(np.int)
 
     return df_X_conf, df_y, df_groups, confound_names
 
