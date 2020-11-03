@@ -14,8 +14,10 @@ from julearn import run_cross_validation
 
 def _compare_models(clf1, clf2):
     if isinstance(clf1, svm.SVC):
-        v1 = clf1.support_vectors_
-        v2 = clf2.support_vectors_
+        idx1 = np.argsort(clf1.support_)
+        v1 = clf1.support_vectors_[idx1]
+        idx2 = np.argsort(clf2.support_)
+        v2 = clf2.support_vectors_[idx2]
     else:
         raise NotImplementedError(
             f'Model comparison for {clf1} not yet implemented.')
