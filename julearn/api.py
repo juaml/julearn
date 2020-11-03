@@ -19,7 +19,7 @@ def run_cross_validation(
         preprocess_y=None,
         preprocess_confounds=['z_score'],
         return_estimator=False,
-        cv='repeat:5_nfolds:5',
+        cv=None,
         groups=None,
         scoring=None,
         pos_labels=None,
@@ -38,6 +38,9 @@ def run_cross_validation(
         # If a seed is passed, use it, otherwise do not do anything. User
         # might have set the seed outside of the library
         np.random.seed(seed)
+
+    if cv is None:
+        cv = 'repeat:5_nfolds:5'
 
     # Interpret the input data and prepare it to be used with the library
     df_X_conf, y, df_groups, confound_names = prepare_input_data(
