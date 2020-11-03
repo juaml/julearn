@@ -1,14 +1,13 @@
 import numpy as np
-from sklearn.model_selection import GridSearchCV, cross_val_score
+from sklearn.model_selection import cross_val_score
 
 from . prepare import (prepare_input_data,
                        prepare_model,
                        prepare_cv,
-                       prepare_hyperparams,
+                       prepare_model_selection,
                        prepare_preprocessing,
                        prepare_scoring)
 from . pipeline import create_pipeline
-from . model_selection import wrap_search
 
 
 def run_cross_validation(
@@ -19,15 +18,20 @@ def run_cross_validation(
         preprocess_X=['z_score'],
         preprocess_y=None,
         preprocess_confounds=['z_score'],
-        hyperparameters=None,
-        return_estimator=False, print_result=True,
-        cv_evaluation='repeat:5_nfolds:5',
-        cv_model_selection='same',
+        return_estimator=False,
+        cv='repeat:5_nfolds:5',
         groups=None,
         scoring=None,
         pos_labels=None,
+        model_selection=None,
         seed=None):
-    """ Run cross validation and score
+    """ Run cross validation and score.
+
+    Parameters
+    ----------
+    X : np.array or string
+        See https://juaml.github.io/julearn/input.html for details.
+        The
     """
 
     if seed is not None:
@@ -50,8 +54,7 @@ def run_cross_validation(
     model_tuple = prepare_model(model=model, problem_type=problem_type)
 
     # Prepare cross validation
-    cv_outer, cv_inner = prepare_cv(cv_outer=cv_evaluation,
-                                    cv_inner=cv_model_selection)
+    cv_outer = prepare_cv(cv)
 
     pipeline = create_pipeline(preprocess_X,
                                preprocess_y,
@@ -59,15 +62,9 @@ def run_cross_validation(
                                model_tuple, confounds,
                                categorical_features=None)
 
-    if hyperparameters is not None:
-        # read_validate_user_parameters
-        hyper_params = prepare_hyperparams(
-            hyperparameters, pipeline, model_tuple[0])
-
-        # cross_validate
-        if len(hyper_params) > 0:
-            pipeline = wrap_search(
-                GridSearchCV, pipeline, hyper_params, cv=cv_inner)
+    if model_selection is not None:
+        pipeline = prepare_model_selection(
+            model_selection, pipeline, model_tuple[0], cv_outer)
 
     scorer = prepare_scoring(pipeline, scoring)
     scores = cross_val_score(pipeline, df_X_conf, y, cv=cv_outer,

@@ -2,13 +2,14 @@ from julearn.transformers.target import TargetTransfromerWrapper
 import pandas as pd
 import numpy as np
 from copy import deepcopy
-from sklearn.model_selection import RepeatedKFold
+from sklearn.model_selection import RepeatedKFold, GridSearchCV
 from sklearn.base import clone
 from sklearn.model_selection import check_cv
 
 from . estimators import get_model
 from . transformers import get_transformer
 from . scoring import get_extended_scorer
+from . model_selection import wrap_search
 
 
 def _validate_input_data(X, y, confounds, df, groups):
@@ -144,7 +145,26 @@ def prepare_model(model, problem_type):
     return model_name, model
 
 
-def prepare_hyperparams(hyperparams, pipeline, model_name):
+def prepare_model_selection(msel_dict, pipeline, model_name, cv_outer):
+    hyperparameters = msel_dict.get('hyperparameters', None)
+    if hyperparameters is None:
+        raise ValueError("The 'hyperparameters' value must be specified for "
+                         "model selection.")
+    cv_inner = msel_dict.get('cv', None)
+    gs_scoring = msel_dict.get('scoring', None)
+
+    if cv_inner is None:
+        cv_inner = deepcopy(cv_outer)
+    hyper_params = _prepare_hyperparams(hyperparameters, pipeline, model_name)
+
+    if len(hyper_params) > 0:
+        pipeline = wrap_search(
+            GridSearchCV, pipeline, hyper_params, cv=cv_inner,
+            scoring=gs_scoring)
+    return pipeline
+
+
+def _prepare_hyperparams(hyperparams, pipeline, model_name):
 
     def rename_param(param):
         first, *rest = param.split('__')
@@ -250,18 +270,17 @@ def _prepare_preprocess_y(preprocess_y):
     return preprocess_y
 
 
-def prepare_cv(cv_outer, cv_inner):
-    """Generates an outer and inner cv using string compatible with
+def prepare_cv(cv):
+    """Generates an CV using string compatible with
     repeat:5_nfolds:5 where 5 can be exchange with any int.
     Alternatively, it can take in a valid cv splitter or int as
     in cross_validate in sklearn.
 
     Parameters
     ----------
-    cv_outer : int or str or cv_splitter
+    cv : int or str or cv_splitter
         [description]
-    cv_inner : int or str or cv_splitter
-        [description]
+
     """
 
     def parser(cv_string):
@@ -270,21 +289,12 @@ def prepare_cv(cv_outer, cv_inner):
                               for name in [n_repeats, n_folds]]
         return RepeatedKFold(n_splits=n_folds, n_repeats=n_repeats)
 
-    def convert_to_cv(cv):
-        try:
-            _cv = check_cv(cv)
-        except ValueError:
-            _cv = parser(cv)
+    try:
+        _cv = check_cv(cv)
+    except ValueError:
+        _cv = parser(cv)
 
-        return _cv
-
-    cv_outer = convert_to_cv(cv_outer)
-    if cv_inner == 'same':
-        cv_inner = deepcopy(cv_outer)
-    else:
-        cv_inner = convert_to_cv(cv_inner)
-
-    return cv_outer, cv_inner
+    return _cv
 
 
 def prepare_scoring(estimator, score_name):

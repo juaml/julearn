@@ -116,9 +116,10 @@ def test_set_hyperparam():
     scoring = 'roc_auc'
     t_sk_y = (sk_y == 'setosa').astype(np.int)
     hyperparameters = {'svm__probability': True}
+    model_selection = {'hyperparameters': hyperparameters}
 
     actual, actual_estimator = run_cross_validation(
-        X=X, y=y, data=df_iris, model='svm', hyperparameters=hyperparameters,
+        X=X, y=y, data=df_iris, model='svm', model_selection=model_selection,
         seed=42, scoring=scoring, pos_labels='setosa', return_estimator=True)
 
     # Now do the same with scikit-learn
@@ -152,9 +153,10 @@ def test_tune_hyperparam():
 
     scoring = 'accuracy'
     hyperparameters = {'svm__C': [0.01, 0.001]}
+    model_selection = {'hyperparameters': hyperparameters}
 
     actual, actual_estimator  = run_cross_validation(
-        X=X, y=y, data=df_iris, model='svm', hyperparameters=hyperparameters,
+        X=X, y=y, data=df_iris, model='svm', model_selection=model_selection,
         seed=42, scoring=scoring, return_estimator=True)
 
     # Now do the same with scikit-learn

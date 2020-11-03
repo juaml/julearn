@@ -33,7 +33,7 @@ y = 'species'
 
 ###############################################################################
 # We will use a Random Forest classifier. By setting `return_estimator=True`,
-# the :func:`run_cross_validation` function return the estimator fitted with
+# the :func:`.run_cross_validation` function return the estimator fitted with
 # all the data.
 
 scores, model_iris = run_cross_validation(X=X, y=y, data=df_iris, model='rf',
