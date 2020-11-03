@@ -34,9 +34,5 @@ jobs:
       run: |
         pytest -vv --cov=julearn --cov-report xml
     - name: 'Upload coverage to CodeCov'
-      uses: codecov/codecov-action@v1
-      with:
-        flags: unittests
-        file: ./coverage.xml
-        verbose: true
+      uses: codecov/codecov-action@master
       if: success() && matrix.python-version == 3.8
