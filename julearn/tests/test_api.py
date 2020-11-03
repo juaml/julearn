@@ -161,12 +161,46 @@ def test_tune_hyperparam():
 
     # Now do the same with scikit-learn
     np.random.seed(42)
-    cv_inner = RepeatedKFold(n_splits=5, n_repeats=5)
     cv_outer = RepeatedKFold(n_splits=5, n_repeats=5)
+    cv_inner = RepeatedKFold(n_splits=5, n_repeats=5)
 
     clf = make_pipeline(StandardScaler(), svm.SVC())
     gs = GridSearchCV(clf, {'svc__C': [0.01, 0.001]}, cv=cv_inner)
 
+    expected = cross_val_score(gs, sk_X, sk_y, cv=cv_outer, scoring=scoring)
+
+    assert len(actual) == len(expected)
+    assert all([a == b for a, b in zip(actual, expected)])
+
+    # Compare the models
+    clf1 = actual_estimator.best_estimator_.dataframe_pipeline.steps[-1][1]
+    clf2 = clone(gs).fit(sk_X, sk_y).best_estimator_.steps[-1][1]
+    _compare_models(clf1, clf2)
+
+    np.random.seed(42)
+    cv_outer = RepeatedKFold(n_splits=3, n_repeats=1)
+    cv_inner = RepeatedKFold(n_splits=3, n_repeats=1)
+
+    scoring = 'accuracy'
+    gs_scoring = 'f1'
+    hyperparameters = {'svm__C': [0.01, 0.001]}
+    model_selection = {'hyperparameters': hyperparameters,
+                       'scoring': gs_scoring,
+                       'cv': cv_inner}
+
+    actual, actual_estimator  = run_cross_validation(
+        X=X, y=y, data=df_iris, model='svm', model_selection=model_selection,
+        seed=42, scoring=scoring, return_estimator=True, pos_labels=['setosa'],
+        cv=cv_outer)
+
+    np.random.seed(42)
+    cv_outer = RepeatedKFold(n_splits=3, n_repeats=1)
+    cv_inner = RepeatedKFold(n_splits=3, n_repeats=1)
+
+    clf = make_pipeline(StandardScaler(), svm.SVC())
+    gs = GridSearchCV(clf, {'svc__C': [0.01, 0.001]}, cv=cv_inner,
+                      scoring=gs_scoring)
+    sk_y = (sk_y == 'setosa').astype(np.int)
     expected = cross_val_score(gs, sk_X, sk_y, cv=cv_outer, scoring=scoring)
 
     assert len(actual) == len(expected)
