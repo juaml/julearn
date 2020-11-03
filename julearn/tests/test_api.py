@@ -1,5 +1,7 @@
 import numpy as np
+from numpy.testing import assert_array_equal
 from sklearn import svm
+from sklearn.base import clone
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import make_pipeline
 from sklearn.model_selection import (cross_val_score,
@@ -10,14 +12,25 @@ from seaborn import load_dataset
 from julearn import run_cross_validation
 
 
+def _compare_models(clf1, clf2):
+    if isinstance(clf1, svm.SVC):
+        v1 = clf1.support_vectors_
+        v2 = clf2.support_vectors_
+    else:
+        raise NotImplementedError(
+            f'Model comparison for {clf1} not yet implemented.')
+    assert_array_equal(v1, v2)
+
+
 def _test_scoring(X, y, data, api_params, sklearn_model, scorers, sk_y=None):
     sk_X = data[X].values
     if sk_y is None:
         sk_y = data[y].values
 
     for scoring in scorers:
-        actual = run_cross_validation(
-            X=X, y=y, data=data, seed=42, scoring=scoring, **api_params)
+        actual, actual_estimator = run_cross_validation(
+            X=X, y=y, data=data, seed=42, scoring=scoring,
+            return_estimator=True, **api_params)
 
         np.random.seed(42)
         cv = RepeatedKFold(n_splits=5, n_repeats=5)
@@ -26,6 +39,11 @@ def _test_scoring(X, y, data, api_params, sklearn_model, scorers, sk_y=None):
 
         assert len(actual) == len(expected)
         assert all([a == b for a, b in zip(actual, expected)])
+
+        # Compare the models
+        clf1 = actual_estimator.dataframe_pipeline.steps[-1][1]
+        clf2 = clone(sklearn_model).fit(sk_X, sk_y).steps[-1][1]
+        _compare_models(clf1, clf2)
 
 
 def test_simple_binary():
@@ -62,6 +80,7 @@ def test_simple_binary():
 
 
 def test_scoring_y_transformer():
+    """Test scoring with y transformer"""
     df_iris = load_dataset('iris')
 
     # keep only two species
@@ -69,25 +88,15 @@ def test_scoring_y_transformer():
     X = ['sepal_length', 'sepal_width', 'petal_length']
     y = 'species'
 
-    sk_X = df_iris[X].values
+    # sk_X = df_iris[X].values
     sk_y = df_iris[y].values
+    clf = make_pipeline(StandardScaler(), svm.SVC(probability=True))
+    y_transformer = LabelBinarizer()
 
     scorers = ['accuracy', 'balanced_accuracy']
-    for scoring in scorers:
-        y_transformer = LabelBinarizer()
-        actual = run_cross_validation(
-            X=X, y=y, data=df_iris, model='svm', preprocess_y=y_transformer,
-            seed=42, scoring=scoring)
-
-        # Now do the same with scikit-learn
-        clf = make_pipeline(StandardScaler(), svm.SVC(probability=True))
-
-        np.random.seed(42)
-        cv = RepeatedKFold(n_splits=5, n_repeats=5)
-        expected = cross_val_score(clf, sk_X, sk_y, cv=cv, scoring=scoring)
-
-        assert len(actual) == len(expected)
-        assert all([a == b for a, b in zip(actual, expected)])
+    api_params = {'model': 'svm', 'preprocess_y': y_transformer}
+    _test_scoring(X, y, data=df_iris, api_params=api_params, sklearn_model=clf,
+                  scorers=scorers, sk_y=sk_y)
 
 
 def test_set_hyperparam():
@@ -106,9 +115,9 @@ def test_set_hyperparam():
     t_sk_y = (sk_y == 'setosa').astype(np.int)
     hyperparameters = {'svm__probability': True}
 
-    actual = run_cross_validation(
+    actual, actual_estimator = run_cross_validation(
         X=X, y=y, data=df_iris, model='svm', hyperparameters=hyperparameters,
-        seed=42, scoring=scoring, pos_labels='setosa')
+        seed=42, scoring=scoring, pos_labels='setosa', return_estimator=True)
 
     # Now do the same with scikit-learn
     clf = make_pipeline(StandardScaler(), svm.SVC(probability=True))
@@ -120,6 +129,11 @@ def test_set_hyperparam():
 
     assert len(actual) == len(expected)
     assert all([a == b for a, b in zip(actual, expected)])
+
+    # Compare the models
+    clf1 = actual_estimator.dataframe_pipeline.steps[-1][1]
+    clf2 = clone(clf).fit(sk_X, sk_y).steps[-1][1]
+    _compare_models(clf1, clf2)
 
 
 def test_tune_hyperparam():
@@ -137,9 +151,9 @@ def test_tune_hyperparam():
     scoring = 'accuracy'
     hyperparameters = {'svm__C': [0.01, 0.001]}
 
-    actual = run_cross_validation(
+    actual, actual_estimator  = run_cross_validation(
         X=X, y=y, data=df_iris, model='svm', hyperparameters=hyperparameters,
-        seed=42, scoring=scoring)
+        seed=42, scoring=scoring, return_estimator=True)
 
     # Now do the same with scikit-learn
     np.random.seed(42)
@@ -153,3 +167,8 @@ def test_tune_hyperparam():
 
     assert len(actual) == len(expected)
     assert all([a == b for a, b in zip(actual, expected)])
+
+    # Compare the models
+    clf1 = actual_estimator.best_estimator_.dataframe_pipeline.steps[-1][1]
+    clf2 = clone(gs).fit(sk_X, sk_y).best_estimator_.steps[-1][1]
+    _compare_models(clf1, clf2)
