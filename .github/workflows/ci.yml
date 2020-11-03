@@ -32,7 +32,7 @@ jobs:
         flake8 . --count  --show-source --statistics
     - name: Test with pytest
       run: |
-        pytest -vv --cov=julearn --cov-report xml
+        PYTHONPATH="." pytest --cov=julearn --cov-report xml -vv julearn/
     - name: 'Upload coverage to CodeCov'
-      uses: codecov/codecov-action@v1
-      if: success() && matrix.python-version == 3.6
+      uses: codecov/codecov-action@master
+      if: success() && matrix.python-version == 3.8
