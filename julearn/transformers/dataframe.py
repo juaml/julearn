@@ -7,7 +7,7 @@ from .. utils import raise_error
 
 class DataFrameTransformer(TransformerMixin):
 
-    column_types = ['confound', 'all', 'all_feature',
+    column_types = ['confound', 'all', 'all_features',
                     'continuous', 'categorical']
 
     def __init__(self, transformer, transform_column='all',
@@ -34,7 +34,7 @@ class DataFrameTransformer(TransformerMixin):
             only seperated by the column_type_sep.
             Valid column types are: `confound`, 'continuous' and 'categorical'.
             Furthermore, you can enter `all` to transform all columns,
-            `all_feature` to transform all columns excluding the confound
+            `all_features` to transform all columns excluding the confound
             or provide a list of valid column types.
 
 
@@ -58,7 +58,7 @@ class DataFrameTransformer(TransformerMixin):
 
     def fit(self, X, y=None):
         # TODO Validation missing
-        self.set_columns_to_transform(X)
+        self._set_columns_to_transform(X)
         X_transform = X.loc[:, self.transform_column_]
         self.transformer.fit(X_transform, y)
 
@@ -72,6 +72,7 @@ class DataFrameTransformer(TransformerMixin):
 
         X_transformed = pd.DataFrame(X_transformed,
                                      index=X_transform.index)
+        X_transformed.columns = X_transformed.columns.astype(str)
         if self.returned_features == 'same':
             X_transformed.columns = X_transform.columns
             df_out = pd.concat([X_transformed, X_rest],
@@ -97,10 +98,20 @@ class DataFrameTransformer(TransformerMixin):
             df_out = pd.concat([X_transformed, X_rest], axis=1)
 
         elif self.returned_features == 'unknown_same_type':
+
+            if (type(self.transform_column) == list) and (
+                    len(self.transform_column) > 1) or (
+                        self.transform_column in ['all', 'all_features']
+            ):
+
+                raise_error('You can only return same type, '
+                            'when all used columns have the same type '
+                            f'here the types are {self.transform_column}')
+
             transformer_name = self.transformer.__class__.__name__.lower()
             columns = [
                 f'{transformer_name}_component:{n_column}'
-                f'{self.column_type_sep}{self.get_column_type(column)}'
+                f'{self.column_type_sep}{self._get_column_type(column)}'
                 for n_column, column in enumerate(X_transformed.columns)]
 
             X_transformed.columns = columns
@@ -111,43 +122,6 @@ class DataFrameTransformer(TransformerMixin):
                         f'but was {self.returned_features}')
 
         return df_out
-
-    def set_columns_to_transform(self, X):
-
-        all_columns = X.columns.copy()
-        if type(self.transform_column) == str:
-            if self.transform_column in self.column_types:
-                self.transform_column_ = self.get_columns_of_type(
-                    all_columns, self.transform_column)
-            else:
-                self.transform_column_ = (X.loc[:, self.transform_column]
-                                          .columns.to_list())
-
-        else:
-            if (pd.Series([column in self.column_types
-                           for column in self.transform_column
-                           ]).all()):
-                self.transform_column_ = self.get_columns_of_types(
-                    X.columns, self.transform_column)
-            else:
-                self.transform_column_ = (X.loc[:, self.transform_column]
-                                          .columns.to_list()
-                                          )
-
-        if self.transform_column_ == []:
-            raise_error('There is not valid Column to transform '
-                        f'{self.transform_column} should be selected, '
-                        f'but is not valid for columns = {X.columns}')
-
-    def initialize_params(self, transformer):
-        """
-        Initializes the parameters of the transformer
-        for the DataFrameTransformer
-        """
-        transformer_params = transformer.get_params()
-
-        for param, val in transformer_params.items():
-            setattr(self, param, val)
 
     def get_params(self, deep=True):
         params = dict(transformer=self.transformer,
@@ -172,7 +146,44 @@ class DataFrameTransformer(TransformerMixin):
     def get_support(self, indices=False):
         self.transformer.get_support(indices=indices)
 
-    def get_column_type(self, column):
+    def _set_columns_to_transform(self, X):
+
+        all_columns = X.columns.copy()
+        if type(self.transform_column) == str:
+            if self.transform_column in self.column_types:
+                self.transform_column_ = self._get_columns_of_type(
+                    all_columns, self.transform_column)
+            else:
+                self.transform_column_ = (X.loc[:, self.transform_column]
+                                          .columns.to_list())
+
+        else:
+            if (pd.Series([column in self.column_types
+                           for column in self.transform_column
+                           ]).all()):
+                self.transform_column_ = self._get_columns_of_types(
+                    X.columns, self.transform_column)
+            else:
+                self.transform_column_ = (X.loc[:, self.transform_column]
+                                          .columns.to_list()
+                                          )
+
+        if self.transform_column_ == []:
+            raise_error('There is not valid Column to transform '
+                        f'{self.transform_column} should be selected, '
+                        f'but is not valid for columns = {X.columns}')
+
+    def _initialize_params(self, transformer):
+        """
+        Initializes the parameters of the transformer
+        for the DataFrameTransformer
+        """
+        transformer_params = transformer.get_params()
+
+        for param, val in transformer_params.items():
+            setattr(self, param, val)
+
+    def _get_column_type(self, column):
         column_type = column.split(self.column_type_sep)
 
         if len(column_type) != 2:
@@ -180,26 +191,26 @@ class DataFrameTransformer(TransformerMixin):
 
         return column_type[1]
 
-    def get_columns_of_type(self, columns, column_type):
+    def _get_columns_of_type(self, columns, column_type):
         if column_type == 'all':
             valid_columns = columns.to_list()
         elif column_type == 'all_features':
-
             valid_columns = [column
                              for column in columns
-                             if self.get_column_type(column) != 'confound'
+                             if self._get_column_type(column) != 'confound'
                              ]
+
         else:
             valid_columns = [column
                              for column in columns
-                             if self.get_column_type(column) == column_type
+                             if self._get_column_type(column) == column_type
                              ]
         return valid_columns
 
-    def get_columns_of_types(self, columns, column_types):
+    def _get_columns_of_types(self, columns, column_types):
         valid_columns = [valid_column
                          for column_type in column_types
-                         for valid_column in self.get_columns_of_type(
+                         for valid_column in self._get_columns_of_type(
                              columns, column_type)
                          ]
         return valid_columns
