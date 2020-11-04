@@ -93,11 +93,12 @@ print(scores.mean())
 # have some data from the same subject already acquired.
 #
 # The problem is that we split the data randomly into 5 folds (default, see
-# :func:run_cross_validation). This means that data from one subject could be
-# both in the training and the testing set. If this is the case, then the model
-# can learn the subjects' specific characteristics and apply it to the testing
-# set. Thus, it is not true that we can decode it for an unseen subject, but
-# for an unseen timepoint for a subject that for whom we already have data.
+# :func:`.run_cross_validation`). This means that data from one subject could
+# be both in the training and the testing set. If this is the case, then the
+# model can learn the subjects' specific characteristics and apply it to the
+# testing set. Thus, it is not true that we can decode it for an unseen
+# subject, but for an unseen timepoint for a subject that for whom we already
+# have data.
 #
 # To test for unseen subject, we need to make sure that all the data from each
 # subject is either on the training or the testing set, but not in both.
@@ -105,13 +106,13 @@ print(scores.mean())
 # We can use scikit-learn's GroupShuffleSplit (see `Cross Validation`_).
 # And specify which is the grouping column using the `group` parameter.
 #
-# By setting `return_estimator=True`, the :func:`run_cross_validation` function
-# return the estimator fitted with all the data. We will use this later to
-# do some analysis.
+# By setting `return_estimator=True`, the :func:`.run_cross_validation`
+# function return the estimator fitted with all the data. We will use this
+# later to do some analysis.
 cv = GroupShuffleSplit(n_splits=5, test_size=0.5, random_state=42)
 
 scores, model = run_cross_validation(X=X, y=y, data=df_fmri, model='svm',
-                                     cv_evaluation=cv, groups='subject',
+                                     cv=cv, groups='subject',
                                      return_estimator=True)
 print(scores.mean())
 
