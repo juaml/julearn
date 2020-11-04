@@ -9,7 +9,6 @@ from sklearn.preprocessing import StandardScaler
 
 from julearn.transformers import DataFrameTransformer
 from julearn.transformers.basic import PassThroughTransformer
-from julearn.transformers.confounds import DataFrameConfoundRemover
 
 X = pd.DataFrame(dict(A=np.arange(10),
                       B=np.arange(10, 20),
