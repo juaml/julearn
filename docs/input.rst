@@ -1,3 +1,5 @@
+.. include:: links.inc
+
 Input Data
 ==========
 
@@ -85,3 +87,4 @@ parameter:
 .. code-block:: python
 
     scores = run_cross_validation(X=X, y=y, confounds=confounds)
+

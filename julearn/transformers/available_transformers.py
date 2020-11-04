@@ -14,7 +14,7 @@ name : [sklearn transformer,
 """
 
 _available_transformers = {
-    'z_score': [StandardScaler(), 'same'],
+    'zscore': [StandardScaler(), 'same'],
     'pca': [PCA(), 'unknown'],
     'remove_confound': [
         DataFrameConfoundRemover(),
@@ -25,7 +25,7 @@ _available_transformers = {
 
 
 _available_target_transformers = {
-    'z_score': TargetTransfromerWrapper(StandardScaler()),
+    'zscore': TargetTransfromerWrapper(StandardScaler()),
     'passthrough': TargetPassThroughTransformer()
 
 }

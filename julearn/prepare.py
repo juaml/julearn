@@ -152,7 +152,7 @@ def prepare_input_data(X, y, confounds, df, pos_labels, groups):
         in the groups parameter).
     confound_names : str
         The name of the columns if df_X_conf that represent confounds.
-    =
+
     """
     logger.info('==== Input Data ====')
     _validate_input_data(X, y, confounds, df, groups)
