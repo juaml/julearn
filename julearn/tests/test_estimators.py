@@ -10,7 +10,7 @@ from sklearn.pipeline import make_pipeline
 
 from seaborn import load_dataset
 
-from julearn.utils import do_scoring_test
+from julearn.utils.testing import do_scoring_test
 
 
 _binary_estimators = {

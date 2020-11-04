@@ -3,6 +3,8 @@ from sklearn.ensemble import (RandomForestClassifier, RandomForestRegressor,
                               ExtraTreesClassifier, ExtraTreesRegressor)
 from sklearn.dummy import DummyClassifier, DummyRegressor
 
+from .. utils import raise_error
+
 _available_models = {
     'svm': {
         'regression': SVR,
@@ -34,12 +36,12 @@ def list_models():
 
 def get_model(name, problem_type):
     if name not in _available_models:
-        raise ValueError(
+        raise_error(
             f'The specified model ({name}) is not available. '
             f'Valid options are: {list(_available_models.keys())}')
 
     if problem_type not in _available_models[name]:
-        raise ValueError(
+        raise_error(
             f'The specified model ({name})) is not suitable for'
             f'{problem_type}')
 

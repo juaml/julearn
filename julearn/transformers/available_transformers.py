@@ -5,6 +5,7 @@ from sklearn.base import clone
 from . confounds import DataFrameConfoundRemover
 from . basic import PassThroughTransformer
 from . target import TargetTransfromerWrapper, TargetPassThroughTransformer
+from .. utils import raise_error
 
 """
 a dictionary containing all supported transformers
@@ -43,14 +44,14 @@ def get_transformer(name, target=False):
     out = None
     if target is False:
         if name not in _available_transformers:
-            raise ValueError(
+            raise_error(
                 f'The specified transformer ({name}) is not available. '
                 f'Valid options are: {list(_available_transformers.keys())}')
         trans, same = _available_transformers[name]
         out = clone(trans), same
     else:
         if name not in _available_target_transformers:
-            raise ValueError(
+            raise_error(
                 f'The specified target transformer ({name}) is not available. '
                 f'Valid options are: '
                 f'{list(_available_target_transformers.keys())}')

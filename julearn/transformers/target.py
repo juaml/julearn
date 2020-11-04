@@ -2,6 +2,7 @@ import pandas as pd
 from sklearn.base import TransformerMixin
 
 from . basic import PassThroughTransformer
+from .. utils import raise_error
 
 
 class TargetPassThroughTransformer(PassThroughTransformer):
@@ -76,4 +77,4 @@ class TargetTransfromerWrapper(TransformerMixin):
 
     def _validate_XY_input(self, X, y):
         if y is None:
-            raise ValueError('y should not be None when transforming it')
+            raise_error('y should not be None when transforming it')

@@ -3,6 +3,8 @@ import pandas as pd
 from sklearn.base import BaseEstimator, TransformerMixin, clone
 from sklearn.linear_model import LinearRegression
 
+from .. utils import raise_error
+
 
 class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
     def __init__(
@@ -94,7 +96,7 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
         """splits the original X input into the reals features (X) and confound
         """
         if not isinstance(X, pd.DataFrame):
-            raise ValueError(
+            raise_error(
                 'DataFrameConfoundRemover only supports DataFrames as X')
 
         df_X = X.copy()
@@ -106,8 +108,8 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
                                         if column.endswith(self.suffix)
                                         ]
             if self.detected_confounds_ == []:
-                raise ValueError(f'no confound was found using the suffix'
-                                 f'{self.suffix} in   the columns {X.columns}')
+                raise_error(f'no confound was found using the suffix'
+                            f'{self.suffix} in   the columns {X.columns}')
             if len(self.detected_confounds_) == 1:
                 self.multiple_confounds = False
                 self.detected_confounds_ = self.detected_confounds_[0]

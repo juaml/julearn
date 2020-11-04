@@ -261,8 +261,7 @@ def test_prepare_input_data_df():
         prepared = prepare_input_data(
             X=X, y=y, confounds=None, df=df, pos_labels=None, groups=None)
 
-    with pytest.raises(ValueError,
-                       match=r"y must be a string"):
+    with pytest.raises(ValueError, match=r"y must be a string"):
         X = columns[:5]
         y = ['bad']
         prepared = prepare_input_data(
@@ -277,16 +276,14 @@ def test_prepare_input_data_df():
         prepared = prepare_input_data(
             X=X, y=y, confounds=confounds, df=df, pos_labels=None, groups=None)
 
-    with pytest.raises(ValueError,
-                       match=r"groups must be a string"):
+    with pytest.raises(ValueError, match=r"groups must be a string"):
         X = columns[:5]
         y = columns[6]
         groups = 2
         prepared = prepare_input_data(
             X=X, y=y, confounds=None, df=df, pos_labels=None, groups=groups)
 
-    with pytest.raises(ValueError,
-                       match=r"df must be a pandas.DataFrame"):
+    with pytest.raises(ValueError, match=r"df must be a pandas.DataFrame"):
         X = columns[:5]
         y = columns[6]
         prepared = prepare_input_data(
@@ -297,8 +294,7 @@ def test_prepare_input_data_df():
     y = columns[6]
     groups = columns[7]
     confounds = columns[8:]
-    with pytest.raises(ValueError,
-                       match=r"missing: \['wrong'\]"):
+    with pytest.raises(ValueError, match=r"missing: \['wrong'\]"):
         prepared = prepare_input_data(
             X=X, y=y, confounds=confounds, df=df, pos_labels=None,
             groups=groups)
@@ -325,8 +321,7 @@ def test_prepare_input_data_df():
     y = columns[6]
     groups = None
     confounds = columns[8:] + ['wrong']
-    with pytest.raises(ValueError,
-                       match=r"missing: \['wrong'\]"):
+    with pytest.raises(ValueError, match=r"missing: \['wrong'\]"):
         prepared = prepare_input_data(
             X=X, y=y, confounds=confounds, df=df, pos_labels=None,
             groups=groups)
@@ -336,7 +331,7 @@ def test_prepare_input_data_df():
     # y in X
     X = columns[:5]
     y = columns[4]
-    with pytest.warns(UserWarning, match='y is part of X'):
+    with pytest.warns(RuntimeWarning, match='y is part of X'):
         prepared = prepare_input_data(
             X=X, y=y, confounds=None, df=df, pos_labels=None, groups=groups)
     _check_df_input(prepared, X=X, y=y, confounds=None, groups=groups, df=df)
@@ -345,7 +340,8 @@ def test_prepare_input_data_df():
     X = columns[:5]
     y = columns[6]
     groups = columns[6]
-    with pytest.warns(UserWarning, match='y and groups are the same column'):
+    with pytest.warns(RuntimeWarning,
+                      match='y and groups are the same column'):
         prepared = prepare_input_data(
             X=X, y=y, confounds=None, df=df, pos_labels=None, groups=groups)
         _check_df_input(prepared, X=X, y=y, confounds=None, groups=groups,
@@ -355,7 +351,7 @@ def test_prepare_input_data_df():
     X = columns[:5]
     y = columns[6]
     groups = columns[3]
-    with pytest.warns(UserWarning, match='groups is part of X'):
+    with pytest.warns(RuntimeWarning, match='groups is part of X'):
         prepared = prepare_input_data(
             X=X, y=y, confounds=None, df=df, pos_labels=None, groups=groups)
         _check_df_input(prepared, X=X, y=y, confounds=None, groups=groups,
@@ -367,7 +363,7 @@ def test_prepare_input_data_df():
     groups = None
     confounds = columns[4:9]
     overlapping = columns[4]
-    with pytest.warns(UserWarning, match=overlapping):
+    with pytest.warns(RuntimeWarning, match=overlapping):
         prepared = prepare_input_data(
             X=X, y=y, confounds=confounds, df=df, pos_labels=None,
             groups=groups)

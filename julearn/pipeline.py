@@ -2,6 +2,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.base import BaseEstimator
 
 from . transformers.dataframe import DataFrameTransformer
+from . utils import raise_error
 
 
 def create_pipeline(preprocess_steps_features,
@@ -58,8 +59,8 @@ def create_dataframe_pipeline(steps,
             name, estimator, returned_features, transform_column = step
 
         else:
-            raise ValueError(f'step: {i_step} has a len of {len(i_step)}'
-                             ', but should hve one between 2 and 4')
+            raise_error(f'step: {i_step} has a len of {len(i_step)}'
+                        ', but should hve one between 2 and 4')
 
         if (i_step == len(steps) - 1) and (hasattr(estimator, 'predict')):
             steps_ready_for_pipe.append([name, estimator])
@@ -239,7 +240,7 @@ class ExtendedDataFramePipeline(BaseEstimator):
 
     def __getitem__(self, ind):
         if not isinstance(ind, str):
-            raise ValueError('Indexing must be done using strings')
+            raise_error('Indexing must be done using strings')
         if ind.startswith('confound_'):
             n_ind = ind.replace('confound_', '')
             element = self.confound_dataframe_pipeline[n_ind]
