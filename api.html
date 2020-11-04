@@ -75,19 +75,153 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-julearn.api">
-<span id="reference"></span><h1>Reference<a class="headerlink" href="#module-julearn.api" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="reference">
+<h1>Reference<a class="headerlink" href="#reference" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-julearn.api">
+<span id="main-api-functions"></span><h2>Main API functions<a class="headerlink" href="#module-julearn.api" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
 <dt id="julearn.api.run_cross_validation">
-<code class="sig-prename descclassname">julearn.api.</code><code class="sig-name descname">run_cross_validation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">confounds</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">problem_type</span><span class="o">=</span><span class="default_value">'binary_classification'</span></em>, <em class="sig-param"><span class="n">preprocess_X</span><span class="o">=</span><span class="default_value">['z_score']</span></em>, <em class="sig-param"><span class="n">preprocess_y</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">preprocess_confounds</span><span class="o">=</span><span class="default_value">['z_score']</span></em>, <em class="sig-param"><span class="n">return_estimator</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">cv</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">groups</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scoring</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">pos_labels</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">model_selection</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.api.run_cross_validation" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">julearn.api.</code><code class="sig-name descname">run_cross_validation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">confounds</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">problem_type</span><span class="o">=</span><span class="default_value">'binary_classification'</span></em>, <em class="sig-param"><span class="n">preprocess_X</span><span class="o">=</span><span class="default_value">'zscore'</span></em>, <em class="sig-param"><span class="n">preprocess_y</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">preprocess_confounds</span><span class="o">=</span><span class="default_value">'zscore'</span></em>, <em class="sig-param"><span class="n">return_estimator</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">cv</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">groups</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scoring</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">pos_labels</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">model_selection</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.api.run_cross_validation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run cross validation and score.</p>
-<dl class="simple">
-<dt>X<span class="classifier">np.array or string</span></dt><dd><p>See <a class="reference external" href="https://juaml.github.io/julearn/input.html">https://juaml.github.io/julearn/input.html</a> for details.
-The</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>X</strong><span class="classifier">str, list(str) or numpy.array</span></dt><dd><p>The features to use.
+See <a class="reference external" href="https://juaml.github.io/julearn/input.html">https://juaml.github.io/julearn/input.html</a> for details.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">str or numpy.array</span></dt><dd><p>The targets to predict.
+See <a class="reference external" href="https://juaml.github.io/julearn/input.html">https://juaml.github.io/julearn/input.html</a> for details.</p>
+</dd>
+<dt><strong>model</strong><span class="classifier">str or scikit-learn compatible model.</span></dt><dd><p>If string, it will use one of the available models.
+See <code class="xref py py-mod docutils literal notranslate"><span class="pre">available_models</span></code>.</p>
+</dd>
+<dt><strong>data</strong><span class="classifier">pandas.DataFrame | None</span></dt><dd><p>DataFrame with the data (optional).
+See <a class="reference external" href="https://juaml.github.io/julearn/input.html">https://juaml.github.io/julearn/input.html</a> for details.</p>
+</dd>
+<dt><strong>confounds</strong><span class="classifier">str, list(str) or numpy.array | None</span></dt><dd><p>The confounds.
+See <a class="reference external" href="https://juaml.github.io/julearn/input.html">https://juaml.github.io/julearn/input.html</a> for details.</p>
+</dd>
+<dt><strong>problem_type</strong><span class="classifier">str</span></dt><dd><p>The kind of problem to model.</p>
+<p>Options are:</p>
+<ul class="simple">
+<li><p>“binary_classification”: Perform a binary classification
+in which the target (y) has only two posible classes (default).
+The parameter pos_labels can be used to convert a target with
+multiple_classes into binary.</p></li>
+<li><p>“multiclass_classification”: Performs a multiclass classification
+in which the target (y) has more than two possible values.</p></li>
+<li><p>“regression”. Perform a regression. The target (y) has to be
+ordinal at least.</p></li>
+</ul>
+</dd>
+<dt><strong>pos_labels</strong><span class="classifier">str, int, float or list | None</span></dt><dd><p>The labels to interpret as positive. If not None, every element from y
+will be converted to 1 if is equal or in pos_labels and to 0 if not.</p>
+</dd>
+<dt><strong>groups</strong><span class="classifier">str or numpy.array | None</span></dt><dd><p>The grouping labels in case a Group CV is used.
+See <a class="reference external" href="https://juaml.github.io/julearn/input.html">https://juaml.github.io/julearn/input.html</a> for details.</p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
 
+</div>
+<div class="section" id="model-functions">
+<h2>Model functions<a class="headerlink" href="#model-functions" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="julearn.estimators.list_models">
+<code class="sig-prename descclassname">julearn.estimators.</code><code class="sig-name descname">list_models</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#julearn.estimators.list_models" title="Permalink to this definition">¶</a></dt>
+<dd><p>List all the available model names</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="julearn.estimators.get_model">
+<code class="sig-prename descclassname">julearn.estimators.</code><code class="sig-name descname">get_model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">problem_type</span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.estimators.get_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>The model name</p>
+</dd>
+<dt><strong>problem_type</strong><span class="classifier">str</span></dt><dd><p>The type of problem. See <a class="reference internal" href="#julearn.api.run_cross_validation" title="julearn.api.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>out</strong><span class="classifier">scikit-learn compatible model</span></dt><dd><p>The model object.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="logging">
+<h2>Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="julearn.utils.configure_logging">
+<code class="sig-prename descclassname">julearn.utils.</code><code class="sig-name descname">configure_logging</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">level</span><span class="o">=</span><span class="default_value">'WARNING'</span></em>, <em class="sig-param"><span class="n">fname</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">overwrite</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">output_format</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.utils.configure_logging" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configure the logging functionality</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>level</strong><span class="classifier">int or string</span></dt><dd><p>The level of the messages to print. If string, it will be interpreted
+as elements of logging.
+Options are: [‘DEBUG’, ‘INFO’, ‘WARNING’, ‘ERROR’]. Defaults to
+‘WARNING’.</p>
+</dd>
+<dt><strong>fname</strong><span class="classifier">str, Path or None</span></dt><dd><p>Filename of the log to print to. If None, stdout is used.</p>
+</dd>
+<dt><strong>overwrite</strong><span class="classifier">bool | None</span></dt><dd><p>Overwrite the log file (if it exists). Otherwise, statements
+will be appended to the log (default). None is the same as False,
+but additionally raises a warning to notify the user that log
+entries will be appended.</p>
+</dd>
+<dt><strong>output_format</strong><span class="classifier">str</span></dt><dd><p>Format of the output messages. See the following for examples:</p>
+<blockquote>
+<div><p><a class="reference external" href="https://docs.python.org/dev/howto/logging.html">https://docs.python.org/dev/howto/logging.html</a></p>
+</div></blockquote>
+<p>e.g., “%(asctime)s - %(levelname)s - %(message)s”.</p>
+<p>Defaults to “%(asctime)s - %(name)s - %(levelname)s - %(message)s”</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="julearn.utils.warn">
+<code class="sig-prename descclassname">julearn.utils.</code><code class="sig-name descname">warn</code><span class="sig-paren">(</span><em class="sig-param">msg</em>, <em class="sig-param">category=&lt;class 'RuntimeWarning'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.utils.warn" title="Permalink to this definition">¶</a></dt>
+<dd><p>Warn, but first log it</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>msg</strong><span class="classifier">str</span></dt><dd><p>Warning message</p>
+</dd>
+<dt><strong>category</strong><span class="classifier">instance of Warning</span></dt><dd><p>The warning class. Defaults to <code class="docutils literal notranslate"><span class="pre">RuntimeWarning</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="julearn.utils.raise_error">
+<code class="sig-prename descclassname">julearn.utils.</code><code class="sig-name descname">raise_error</code><span class="sig-paren">(</span><em class="sig-param">msg</em>, <em class="sig-param">klass=&lt;class 'ValueError'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.utils.raise_error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Raise an error, but first log it</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>msg</strong><span class="classifier">str</span></dt><dd><p>Error message</p>
+</dd>
+<dt><strong>klass</strong><span class="classifier">class of the error to raise. Defaults to ValueError</span></dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
 </div>
 
 
@@ -102,7 +236,12 @@ The</p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installing JuLearn</a></li>
 <li class="toctree-l1"><a class="reference internal" href="input.html">Input Data</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Reference</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-julearn.api">Main API functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#model-functions">Model functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#logging">Logging</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Basic Examples</a></li>
 </ul>
 
