@@ -141,7 +141,6 @@ class DataFrameTransformer(TransformerMixin):
             if params.get(param) is not None:
                 setattr(self, param, params.pop(param))
         self.transformer.set_params(**params)
-        # self.initialize_params(self.transformer)
         return self
 
     def get_support(self, indices=False):
@@ -170,19 +169,9 @@ class DataFrameTransformer(TransformerMixin):
                                           )
 
         if self.transform_column_ == []:
-            raise_error('There is not valid Column to transform '
+            raise_error('There is not valid column to transform '
                         f'{self.transform_column} should be selected, '
                         f'but is not valid for columns = {X.columns}')
-
-    def _initialize_params(self, transformer):
-        """
-        Initializes the parameters of the transformer
-        for the DataFrameTransformer
-        """
-        transformer_params = transformer.get_params()
-
-        for param, val in transformer_params.items():
-            setattr(self, param, val)
 
     def _get_column_type(self, column):
         column_type = column.split(self.column_type_sep)

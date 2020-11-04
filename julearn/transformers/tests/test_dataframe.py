@@ -186,11 +186,23 @@ def test_pca_columns_of_type_return_unknown_or_unknown_same_type():
             assert_array_equal(X_trans.values, X_trans_df.values)
 
 
-def test_returned_feature_input():
+def test_error_returned_feature_input():
     trans_df = DataFrameTransformer(transformer=PassThroughTransformer(),
                                     transform_column='all',
                                     returned_features='WrongInput',
                                     )
 
     with pytest.raises(ValueError, match='returned_features can only be'):
+        trans_df.fit_transform(X)
+
+
+def test_error_no_matching_transform_column():
+
+    trans_df = DataFrameTransformer(transformer=PassThroughTransformer(),
+                                    transform_column='confound',
+                                    returned_features='same',
+                                    )
+
+    with pytest.raises(ValueError,
+                       match='There is not valid column to transform '):
         trans_df.fit_transform(X)
