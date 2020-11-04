@@ -40,10 +40,10 @@ def run_cross_validation(
     model : str or scikit-learn compatible model.
         If string, it will use one of the available models.
         See :mod:`.available_models`.
-    data : pandas.DataFrame
+    data : pandas.DataFrame | None
         DataFrame with the data (optional).
         See https://juaml.github.io/julearn/input.html for details.
-    confounds : str, list(str) or numpy.array
+    confounds : str, list(str) or numpy.array | None
         The confounds.
         See https://juaml.github.io/julearn/input.html for details.
     problem_type : str
@@ -60,10 +60,10 @@ def run_cross_validation(
         * "regression". Perform a regression. The target (y) has to be
           ordinal at least.
 
-    pos_labels : str, int, float or list
+    pos_labels : str, int, float or list | None
         The labels to interpret as positive. If not None, every element from y
         will be converted to 1 if is equal or in pos_labels and to 0 if not.
-    groups : str or numpy.array
+    groups : str or numpy.array | None
         The grouping labels in case a Group CV is used.
         See https://juaml.github.io/julearn/input.html for details.
 

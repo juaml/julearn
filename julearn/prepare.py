@@ -128,15 +128,15 @@ def prepare_input_data(X, y, confounds, df, pos_labels, groups):
     y : str or numpy.array
         The targets to predict.
         See https://juaml.github.io/julearn/input.html for details.
-    confounds : str, list(str) or numpy.array
+    confounds : str, list(str) or numpy.array | None
         The confounds.
         See https://juaml.github.io/julearn/input.html for details.
-    df : pandas.DataFrame with the data.
+    df : pandas.DataFrame with the data. | None
         See https://juaml.github.io/julearn/input.html for details.
-    pos_labels : str, int, float or list
+    pos_labels : str, int, float or list | None
         The labels to interpret as positive. If not None, every element from y
         will be converted to 1 if is equal or in pos_labels and to 0 if not.
-    groups : str or numpy.array
+    groups : str or numpy.array | None
         The grouping labels in case a Group CV is used.
         See https://juaml.github.io/julearn/input.html for details.
 
