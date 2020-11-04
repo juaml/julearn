@@ -17,9 +17,9 @@ def run_cross_validation(
         data=None,
         confounds=None,
         problem_type='binary_classification',
-        preprocess_X=['z_score'],
+        preprocess_X='zscore',
         preprocess_y=None,
-        preprocess_confounds=['z_score'],
+        preprocess_confounds='zscore',
         return_estimator=False,
         cv=None,
         groups=None,
@@ -27,13 +27,46 @@ def run_cross_validation(
         pos_labels=None,
         model_selection=None,
         seed=None):
-    """ Run cross validation and score.
+    """Run cross validation and score.
 
     Parameters
     ----------
-    X : np.array or string
+    X : str, list(str) or numpy.array
+        The features to use.
         See https://juaml.github.io/julearn/input.html for details.
-        The
+    y : str or numpy.array
+        The targets to predict.
+        See https://juaml.github.io/julearn/input.html for details.
+    model : str or scikit-learn compatible model.
+        If string, it will use one of the available models.
+        See :mod:`.available_models`.
+    data : pandas.DataFrame | None
+        DataFrame with the data (optional).
+        See https://juaml.github.io/julearn/input.html for details.
+    confounds : str, list(str) or numpy.array | None
+        The confounds.
+        See https://juaml.github.io/julearn/input.html for details.
+    problem_type : str
+        The kind of problem to model.
+
+        Options are:
+
+        * "binary_classification": Perform a binary classification
+          in which the target (y) has only two posible classes (default).
+          The parameter pos_labels can be used to convert a target with
+          multiple_classes into binary.
+        * "multiclass_classification": Performs a multiclass classification
+          in which the target (y) has more than two possible values.
+        * "regression". Perform a regression. The target (y) has to be
+          ordinal at least.
+
+    pos_labels : str, int, float or list | None
+        The labels to interpret as positive. If not None, every element from y
+        will be converted to 1 if is equal or in pos_labels and to 0 if not.
+    groups : str or numpy.array | None
+        The grouping labels in case a Group CV is used.
+        See https://juaml.github.io/julearn/input.html for details.
+
     """
 
     if seed is not None:

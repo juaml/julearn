@@ -21,7 +21,7 @@ X = pd.DataFrame(dict(A=np.arange(10),
 
 
 def test_create_dataframe_pipeline_all_steps_added():
-    steps = [('z_score', StandardScaler(), 'same'),
+    steps = [('zscore', StandardScaler(), 'same'),
              ('pca', PCA(), 'unknown'),
              ('lr', LinearRegression())]
     pipe = create_dataframe_pipeline(steps)
@@ -36,7 +36,7 @@ def test_create_dataframe_pipeline_steps_added_correctly():
     scaler = StandardScaler(with_mean=False)
     pca = PCA(n_components=3)
     lr = LinearRegression()
-    steps = [('z_score', scaler),
+    steps = [('zscore', scaler),
              ('pca', pca),
              ('linear_reg', lr)]
 
@@ -51,7 +51,7 @@ def test_create_dataframe_pipeline_steps_added_correctly():
 
 def test_create_dataframe_pipeline_returned_features_same():
 
-    steps = [('z_score', StandardScaler(), 'same')]
+    steps = [('zscore', StandardScaler(), 'same')]
     sklearn_pipe = make_pipeline(StandardScaler())
 
     my_pipe = create_dataframe_pipeline(steps)
@@ -63,7 +63,7 @@ def test_create_dataframe_pipeline_returned_features_same():
 
 
 def test_ExtendedDataFramePipeline_basics_Xpipeline_no_error():
-    steps = [('z_score', StandardScaler(), 'same'),
+    steps = [('zscore', StandardScaler(), 'same'),
              ('pca', PCA(), 'unknown'),
              ('lr', LinearRegression())
              ]
@@ -79,7 +79,7 @@ def test_ExtendedDataFramePipeline_basics_Xpipeline_no_error():
 
 
 def test_ExtendedDataFramePipeline_basics_conf_df_pipe_no_error():
-    steps = [('z_score', StandardScaler(), 'same'),
+    steps = [('zscore', StandardScaler(), 'same'),
              ('pca', PCA(), 'unknown'),
              ('lr', LinearRegression())
              ]
@@ -100,7 +100,7 @@ def test_ExtendedDataFramePipeline_basics_conf_df_pipe_no_error():
 
 
 def test_ExtendedDataFramePipeline_basics_y_transformer_no_error():
-    steps = [('z_score', StandardScaler(), 'same'),
+    steps = [('zscore', StandardScaler(), 'same'),
              ('pca', PCA(), 'unknown'),
              ('lr', LinearRegression())
              ]
@@ -117,7 +117,7 @@ def test_ExtendedDataFramePipeline_basics_y_transformer_no_error():
 
 def test_ExtendedDataFramePipeline_transform_with_categorical():
 
-    steps = [('z_score', StandardScaler(), 'same')]
+    steps = [('zscore', StandardScaler(), 'same')]
     sklearn_pipe = make_pipeline(StandardScaler())
 
     my_pipe = create_dataframe_pipeline(steps)
@@ -131,7 +131,7 @@ def test_ExtendedDataFramePipeline_transform_with_categorical():
 
 def test_ExtendedDataFramePipeline_in_cv_no_error():
 
-    steps = [('z_score', StandardScaler(), 'same'),
+    steps = [('zscore', StandardScaler(), 'same'),
              ('pca', PCA(), 'unknown'),
              ('lr', LinearRegression())
              ]
@@ -152,7 +152,7 @@ def test_ExtendedDataFramePipeline_in_cv_no_error():
 
 def test_ExtendedDataFramePipeline_with_confound_in_cv_no_error():
 
-    steps = [('z_score', StandardScaler(), 'same'),
+    steps = [('zscore', StandardScaler(), 'same'),
              ('pca', PCA(), 'unknown'),
              ('lr', LinearRegression())
              ]
@@ -173,11 +173,11 @@ def test_ExtendedDataFramePipeline_with_confound_in_cv_no_error():
 
 
 def test_create_extended_dataframe_transformer():
-    X_steps = [('z_score', StandardScaler(), 'same'),
+    X_steps = [('zscore', StandardScaler(), 'same'),
                ('pca', PCA(), 'unknown'),
                ('lr', LinearRegression())
                ]
-    conf_steps = [('z_score', StandardScaler())]
+    conf_steps = [('zscore', StandardScaler())]
     y_transformer = TargetTransfromerWrapper(StandardScaler())
     extended_pipe = create_extended_pipeline(
         X_steps=X_steps,
@@ -194,7 +194,7 @@ def test_create_extended_dataframe_transformer():
 
 
 def test_access_steps_ExtendedDataFramePipeline():
-    steps = [('z_score', StandardScaler(), 'same'),
+    steps = [('zscore', StandardScaler(), 'same'),
              ('pca', PCA(), 'unknown'),
              ('lr', LinearRegression())
              ]
@@ -210,12 +210,12 @@ def test_access_steps_ExtendedDataFramePipeline():
         my_pipe, y_transformer=y_transformer,
         confound_dataframe_pipeline=my_confound_pipe, confounds=['B'])
 
-    assert (my_pipe.named_confound_steps.z_score
-            == my_pipe['confound_z_score']
+    assert (my_pipe.named_confound_steps.zscore
+            == my_pipe['confound_zscore']
             == (my_pipe
                 .confound_dataframe_pipeline
                 .named_steps
-                .z_score)
+                .zscore)
             )
 
     assert (my_pipe.named_steps.pca
