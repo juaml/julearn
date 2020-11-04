@@ -93,6 +93,21 @@ cognitive control in context-dependent decision-making. Cerebral Cortex.</p>
 <span class="kn">from</span> <span class="nn">seaborn</span> <span class="kn">import</span> <span class="n">load_dataset</span>
 
 <span class="kn">from</span> <span class="nn">julearn</span> <span class="kn">import</span> <span class="n">run_cross_validation</span>
+<span class="kn">from</span> <span class="nn">julearn.utils</span> <span class="kn">import</span> <span class="n">configure_logging</span>
+</pre></div>
+</div>
+<p>Set the logging level to info to see extra information</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s1">&#39;INFO&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2020-11-04 11:00:24,861 - julearn - INFO - ===== Lib Versions =====
+2020-11-04 11:00:24,862 - julearn - INFO - numpy: 1.19.0
+2020-11-04 11:00:24,862 - julearn - INFO - scipy: 1.5.3
+2020-11-04 11:00:24,862 - julearn - INFO - sklearn: 0.23.2
+2020-11-04 11:00:24,862 - julearn - INFO - pandas: 1.1.4
+2020-11-04 11:00:24,862 - julearn - INFO - julearn: 0.1.dev0
+2020-11-04 11:00:24,862 - julearn - INFO - ========================
 </pre></div>
 </div>
 <div class="section" id="dealing-with-cross-validation-techinques">
@@ -184,7 +199,19 @@ values. And the columns <em>subject</em>, <em>timepoint</em> and <em>event</em> 
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.719897725268912
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2020-11-04 11:00:25,092 - julearn - INFO - Using default CV
+2020-11-04 11:00:25,092 - julearn - INFO - ==== Input Data ====
+2020-11-04 11:00:25,092 - julearn - INFO - Using dataframe as input
+2020-11-04 11:00:25,092 - julearn - INFO - Features: [&#39;parietal&#39;, &#39;frontal&#39;]
+2020-11-04 11:00:25,092 - julearn - INFO - Target: event
+2020-11-04 11:00:25,093 - julearn - INFO - ====================
+2020-11-04 11:00:25,093 - julearn - INFO -
+2020-11-04 11:00:25,094 - julearn - INFO - ====== Model ======
+2020-11-04 11:00:25,094 - julearn - INFO - Obtaining model by name: svm
+2020-11-04 11:00:25,094 - julearn - INFO - ===================
+2020-11-04 11:00:25,094 - julearn - INFO -
+2020-11-04 11:00:25,094 - julearn - INFO - CV interpeted as RepeatedKFold with 5 repetitions of 5 folds
+0.719897725268912
 </pre></div>
 </div>
 <p>This results indicate that we can decode the kind of event by looking at
@@ -213,7 +240,19 @@ later to do some analysis.</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.7210526315789474
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2020-11-04 11:00:25,645 - julearn - INFO - ==== Input Data ====
+2020-11-04 11:00:25,645 - julearn - INFO - Using dataframe as input
+2020-11-04 11:00:25,645 - julearn - INFO - Features: [&#39;parietal&#39;, &#39;frontal&#39;]
+2020-11-04 11:00:25,645 - julearn - INFO - Target: event
+2020-11-04 11:00:25,646 - julearn - INFO - Using subject as groups
+2020-11-04 11:00:25,646 - julearn - INFO - ====================
+2020-11-04 11:00:25,646 - julearn - INFO -
+2020-11-04 11:00:25,647 - julearn - INFO - ====== Model ======
+2020-11-04 11:00:25,647 - julearn - INFO - Obtaining model by name: svm
+2020-11-04 11:00:25,647 - julearn - INFO - ===================
+2020-11-04 11:00:25,647 - julearn - INFO -
+2020-11-04 11:00:25,647 - julearn - INFO - Using scikit-learn CV scheme GroupShuffleSplit(n_splits=5, random_state=42, test_size=0.5, train_size=None)
+0.7210526315789474
 </pre></div>
 </div>
 <p>After testing on independent subjects, we can now claim that given a new
@@ -261,7 +300,7 @@ how the SVM does this complex task.</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Preprocessed data with SVM decision funtion boundaries&#39;)
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.506 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.356 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-groupcv-inspect-svm-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/7044a9ca2d24b8ebf55c5bfbbc0a699f/plot_groupcv_inspect_svm.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_groupcv_inspect_svm.py</span></code></a></p>

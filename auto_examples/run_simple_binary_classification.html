@@ -86,8 +86,24 @@
 classification using a Support Vector Machine classifier.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">seaborn</span> <span class="kn">import</span> <span class="n">load_dataset</span>
 <span class="kn">from</span> <span class="nn">julearn</span> <span class="kn">import</span> <span class="n">run_cross_validation</span>
-
-<span class="n">df_iris</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s1">&#39;iris&#39;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">julearn.utils</span> <span class="kn">import</span> <span class="n">configure_logging</span>
+</pre></div>
+</div>
+<p>Set the logging level to info to see extra information</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s1">&#39;INFO&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2020-11-04 11:00:23,091 - julearn - INFO - ===== Lib Versions =====
+2020-11-04 11:00:23,092 - julearn - INFO - numpy: 1.19.0
+2020-11-04 11:00:23,092 - julearn - INFO - scipy: 1.5.3
+2020-11-04 11:00:23,092 - julearn - INFO - sklearn: 0.23.2
+2020-11-04 11:00:23,092 - julearn - INFO - pandas: 1.1.4
+2020-11-04 11:00:23,092 - julearn - INFO - julearn: 0.1.dev0
+2020-11-04 11:00:23,092 - julearn - INFO - ========================
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">df_iris</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s1">&#39;iris&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The dataset has three kind of species. We will keep two to perform a binary
@@ -105,8 +121,20 @@ We will try to predict the species.</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[0.85 0.95 1.   0.85 0.95 0.95 0.95 0.9  1.   0.85 0.9  0.95 0.9  0.85
- 1.   0.95 0.95 0.85 0.9  0.95 0.9  0.9  0.9  1.   0.85]
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2020-11-04 11:00:23,097 - julearn - INFO - Using default CV
+2020-11-04 11:00:23,097 - julearn - INFO - ==== Input Data ====
+2020-11-04 11:00:23,097 - julearn - INFO - Using dataframe as input
+2020-11-04 11:00:23,097 - julearn - INFO - Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2020-11-04 11:00:23,097 - julearn - INFO - Target: species
+2020-11-04 11:00:23,098 - julearn - INFO - ====================
+2020-11-04 11:00:23,098 - julearn - INFO -
+2020-11-04 11:00:23,099 - julearn - INFO - ====== Model ======
+2020-11-04 11:00:23,099 - julearn - INFO - Obtaining model by name: svm
+2020-11-04 11:00:23,099 - julearn - INFO - ===================
+2020-11-04 11:00:23,099 - julearn - INFO -
+2020-11-04 11:00:23,099 - julearn - INFO - CV interpeted as RepeatedKFold with 5 repetitions of 5 folds
+[0.85 0.95 0.95 0.85 1.   0.95 0.9  1.   1.   0.8  0.9  1.   1.   0.85
+ 0.9  0.85 1.   0.9  0.95 0.85 1.   0.85 0.9  0.9  0.9 ]
 </pre></div>
 </div>
 <p>Additionaly, we can choose to assess the performance of the model using
@@ -138,7 +166,33 @@ suitable metric is the <cite>balanced_accuracy</cite>. More information in sciki
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.895
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2020-11-04 11:00:23,526 - julearn - INFO - Setting random seed to 42
+2020-11-04 11:00:23,526 - julearn - INFO - Using default CV
+2020-11-04 11:00:23,526 - julearn - INFO - ==== Input Data ====
+2020-11-04 11:00:23,526 - julearn - INFO - Using dataframe as input
+2020-11-04 11:00:23,526 - julearn - INFO - Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2020-11-04 11:00:23,527 - julearn - INFO - Target: species
+2020-11-04 11:00:23,527 - julearn - INFO - ====================
+2020-11-04 11:00:23,527 - julearn - INFO -
+2020-11-04 11:00:23,528 - julearn - INFO - ====== Model ======
+2020-11-04 11:00:23,528 - julearn - INFO - Obtaining model by name: svm
+2020-11-04 11:00:23,528 - julearn - INFO - ===================
+2020-11-04 11:00:23,528 - julearn - INFO -
+2020-11-04 11:00:23,528 - julearn - INFO - CV interpeted as RepeatedKFold with 5 repetitions of 5 folds
+2020-11-04 11:00:23,937 - julearn - INFO - Setting random seed to 42
+2020-11-04 11:00:23,937 - julearn - INFO - Using default CV
+2020-11-04 11:00:23,937 - julearn - INFO - ==== Input Data ====
+2020-11-04 11:00:23,937 - julearn - INFO - Using dataframe as input
+2020-11-04 11:00:23,937 - julearn - INFO - Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2020-11-04 11:00:23,937 - julearn - INFO - Target: species
+2020-11-04 11:00:23,938 - julearn - INFO - ====================
+2020-11-04 11:00:23,938 - julearn - INFO -
+2020-11-04 11:00:23,938 - julearn - INFO - ====== Model ======
+2020-11-04 11:00:23,938 - julearn - INFO - Obtaining model by name: svm
+2020-11-04 11:00:23,939 - julearn - INFO - ===================
+2020-11-04 11:00:23,939 - julearn - INFO -
+2020-11-04 11:00:23,939 - julearn - INFO - CV interpeted as RepeatedKFold with 5 repetitions of 5 folds
+0.895
 0.8708886668886668
 </pre></div>
 </div>
@@ -157,10 +211,24 @@ In this example, we are interested in detecting <cite>versicolor</cite>.</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.9223333333333333
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2020-11-04 11:00:24,348 - julearn - INFO - Setting random seed to 42
+2020-11-04 11:00:24,349 - julearn - INFO - Using default CV
+2020-11-04 11:00:24,349 - julearn - INFO - ==== Input Data ====
+2020-11-04 11:00:24,349 - julearn - INFO - Using dataframe as input
+2020-11-04 11:00:24,349 - julearn - INFO - Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2020-11-04 11:00:24,349 - julearn - INFO - Target: species
+2020-11-04 11:00:24,350 - julearn - INFO - Setting the following as positive labels [&#39;versicolor&#39;]
+2020-11-04 11:00:24,350 - julearn - INFO - ====================
+2020-11-04 11:00:24,350 - julearn - INFO -
+2020-11-04 11:00:24,350 - julearn - INFO - ====== Model ======
+2020-11-04 11:00:24,351 - julearn - INFO - Obtaining model by name: svm
+2020-11-04 11:00:24,351 - julearn - INFO - ===================
+2020-11-04 11:00:24,351 - julearn - INFO -
+2020-11-04 11:00:24,351 - julearn - INFO - CV interpeted as RepeatedKFold with 5 repetitions of 5 folds
+0.9223333333333333
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.599 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.697 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-run-simple-binary-classification-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/705b4ebf65e1838e0dc960acb09a6111/run_simple_binary_classification.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">run_simple_binary_classification.py</span></code></a></p>
