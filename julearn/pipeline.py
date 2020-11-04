@@ -190,7 +190,7 @@ class ExtendedDataFramePipeline(BaseEstimator):
 
     def preprocess(self, X, y):
         old_model = self.dataframe_pipeline.steps.pop()
-        X_trans = self.transform(X, y)
+        X_trans = self.transform(X)
         y_trans = self.transform_target(X, y)
         self.dataframe_pipeline.steps.append(old_model)
         return X_trans, y_trans
