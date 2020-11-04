@@ -189,10 +189,9 @@ class ExtendedDataFramePipeline(BaseEstimator):
             return self.confound_dataframe_pipeline.transform(X)
 
     def preprocess(self, X, y):
-        X_conf_trans = self.transform_confounds(X)
-        y_trans = self.transform_target(X_conf_trans, y)
         old_model = self.dataframe_pipeline.steps.pop()
-        X_trans = self.transform(X)
+        X_trans = self.fit_transform(X, y)
+        y_trans = self.transform_target(X, y)
         self.dataframe_pipeline.steps.append(old_model)
         return X_trans, y_trans
 
