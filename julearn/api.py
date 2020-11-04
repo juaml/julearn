@@ -9,6 +9,8 @@ from . prepare import (prepare_input_data,
                        prepare_scoring)
 from . pipeline import create_pipeline
 
+from . utils import logger
+
 
 def run_cross_validation(
         X, y, model,
@@ -37,13 +39,15 @@ def run_cross_validation(
     if seed is not None:
         # If a seed is passed, use it, otherwise do not do anything. User
         # might have set the seed outside of the library
+        logger.info(f'Setting random seed to {seed}')
         np.random.seed(seed)
 
     if cv is None:
+        logger.info(f'Using default CV')
         cv = 'repeat:5_nfolds:5'
 
     # Interpret the input data and prepare it to be used with the library
-    df_X_conf, y, df_groups, confound_names = prepare_input_data(
+    df_X_conf, y, df_groups, _ = prepare_input_data(
         X=X, y=y, confounds=confounds, df=data, pos_labels=pos_labels,
         groups=groups)
 
@@ -79,53 +83,3 @@ def run_cross_validation(
         out = out, pipeline
 
     return out
-
-
-def pprint_output(out):
-    replication_dict = out["replication_dict"]
-
-    replication_dict["is_classification"] = (
-        "Classification"
-        if replication_dict["is_classification"]
-        else "Regression"
-    )
-
-    replication_dict = out["replication_dict"]
-
-    replication_dict["is_classification"] = (
-        "Classification"
-        if replication_dict["is_classification"]
-        else "Regression"
-    )
-    print(
-        """
-    ### Settings ###
-    This is a {is_classification} Problem\n
-
-    Using Features: {X}
-    Predicting Target: {y}
-    With Confounds : {confounds}
-
-    Cross-validation settings : repeats={n_repeats} & folds={n_folds}
-    Using Random Seed: {seed}
-
-    """.format(
-            **replication_dict
-        )
-    )
-
-    out["fold_wise_scores"] = [round(i, 2) for i in out["fold_wise_scores"]]
-
-    print(
-        """
-    ### Results ###
-    Over all Folds Score: Mean={mean_scores:.2f}, SD={std_scores:.2f}
-
-    Score per Fold:
-
-
-    {fold_wise_scores}
-    """.format(
-            **out
-        )
-    )

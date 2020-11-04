@@ -6,12 +6,11 @@ from sklearn.model_selection import RepeatedKFold, GridSearchCV
 from sklearn.base import clone
 from sklearn.model_selection import check_cv
 
-from warnings import warn
-
 from . estimators import get_model
 from . transformers import get_transformer
 from . scoring import get_extended_scorer
 from . model_selection import wrap_search
+from . utils import raise_error, warn, logger
 
 
 def _validate_input_data(X, y, confounds, df, groups):
@@ -20,79 +19,79 @@ def _validate_input_data(X, y, confounds, df, groups):
 
         # X must be np.ndarray with at most 2d
         if not isinstance(X, np.ndarray):
-            raise ValueError(
+            raise_error(
                 'X must be a numpy array if no dataframe is specified')
 
         if X.ndim not in [1, 2]:
-            raise ValueError('X must be at most bi-dimentional')
+            raise_error('X must be at most bi-dimentional')
 
         # Y must be np.ndarray with 1 dimention
         if not isinstance(y, np.ndarray):
-            raise ValueError(
+            raise_error(
                 'y must be a numpy array if no dataframe is specified')
 
         if y.ndim != 1:
-            raise ValueError('y must be one-dimentional')
+            raise_error('y must be one-dimentional')
 
         # Same number of elements
         if X.shape[0] != y.shape[0]:
-            raise ValueError(
+            raise_error(
                 'The number of samples in X do not match y '
                 '(X.shape[0] != y.shape[0]')
 
         if confounds is not None:
             if not isinstance(confounds, np.ndarray):
-                raise ValueError(
+                raise_error(
                     'confounds must be a numpy array if no dataframe is '
                     'specified')
 
             if confounds.ndim not in [1, 2]:
-                raise ValueError('confounds must be at most bi-dimentional')
+                raise_error('confounds must be at most bi-dimentional')
 
             if X.shape[0] != confounds.shape[0]:
-                raise ValueError(
+                raise_error(
                     'The number of samples in X do not match confounds '
                     '(X.shape[0] != confounds.shape[0]')
 
         if groups is not None:
             if not isinstance(groups, np.ndarray):
-                raise ValueError(
+                raise_error(
                     'groups must be a numpy array if no dataframe is '
                     'specified')
 
             if groups.ndim != 1:
-                raise ValueError('groups must be one-dimentional')
+                raise_error('groups must be one-dimentional')
 
     else:
         # Case 2: we have a dataframe. X, y and confounds must be columns
         # in the dataframe
         if not isinstance(X, (str, list)):
-            raise ValueError('X must be a string or list of strings')
+            raise_error('X must be a string or list of strings')
 
         if not isinstance(y, str):
-            raise ValueError('y must be a string')
+            raise_error('y must be a string')
 
         # Confounds can be a string, list or none
         if not isinstance(confounds, (str, list, type(None))):
-            raise ValueError('If not None, confounds must be a string or list '
-                             'of strings')
+            raise_error('If not None, confounds must be a string or list '
+                        'of strings')
 
         if not isinstance(groups, (str, type(None))):
-            raise ValueError('groups must be a string')
+            raise_error('groups must be a string')
 
         if not isinstance(df, pd.DataFrame):
-            raise ValueError('df must be a pandas.DataFrame')
+            raise_error('df must be a pandas.DataFrame')
 
         if not isinstance(X, list):
             X = [X]
         missing_columns = [t_x for t_x in X if t_x not in df.columns]
         if len(missing_columns) > 0:
-            raise ValueError(
+            raise_error(
                 'All elements of X must be in the dataframe. '
                 f'The following are missing: {missing_columns}')
 
         if y not in df.columns:
-            raise ValueError(
+            raise_error(
                 f"Target '{y}' (y) is not a valid column in the dataframe")
 
         if confounds is not None:
@@ -101,14 +100,14 @@ def _validate_input_data(X, y, confounds, df, groups):
             missing_columns = [
                 t_c for t_c in confounds if t_c not in df.columns]
             if len(missing_columns) > 0:
-                raise ValueError(
+                raise_error(
                     'All elements of confounds must be in the dataframe. '
                     f'The following are missing: {missing_columns}')
 
         if groups is not None:
             if groups not in df.columns:
-                raise ValueError(f"Groups '{groups}' is not a valid column "
-                                 "in the dataframe")
+                raise_error(f"Groups '{groups}' is not a valid column "
+                            "in the dataframe")
             if groups == y:
                 warn("y and groups are the same column")
             if groups in X:
@@ -119,15 +118,20 @@ def _validate_input_data(X, y, confounds, df, groups):
 
 
 def prepare_input_data(X, y, confounds, df, pos_labels, groups):
+    logger.info('==== Input Data ====')
     _validate_input_data(X, y, confounds, df, groups)
+
     # Declare them as None to avoid CI issues
     df_X_conf = None
     confound_names = None
     df_groups = None
     if df is None:
+        logger.info(f'Using numpy arrays as input')
         # creating df_X_conf
         if X.ndim == 1:
             X = X[:, None]
+        logger.info(f'# Samples: {X.shape[0]}')
+        logger.info(f'# Features: {X.shape[1]}')
         columns = [f'feature_{i}' for i in range(X.shape[1])]
         df_X_conf = pd.DataFrame(X, columns=columns)
 
@@ -135,6 +139,7 @@ def prepare_input_data(X, y, confounds, df, pos_labels, groups):
         if confounds is not None:
             if confounds.ndim == 1:
                 confounds = confounds[:, None]
+            logger.info(f'# Confounds: {X.shape[1]}')
             confound_names = [
                 f'confound_{i}' for i in range(confounds.shape[1])]
             df_X_conf[confound_names] = confounds
@@ -143,13 +148,18 @@ def prepare_input_data(X, y, confounds, df, pos_labels, groups):
         df_y = pd.Series(y, name='y')
 
         if groups is not None:
+            logger.info('Using groups')
             df_groups = pd.Series(groups, name='groups')
 
     else:
+        logger.info(f'Using dataframe as input')
+        logger.info(f'Features: {X}')
+        logger.info(f'Target: {y}')
         X_conf_columns = deepcopy(X) if isinstance(X, list) else [X]
         if confounds is not None:
             if not isinstance(confounds, list):
                 confounds = [confounds]
+            logger.info(f'Confounds: {confounds}')
             overlapping = [t_c for t_c in confounds if t_c in X]
             if len(overlapping) > 0:
                 warn(f'X contains the following confounds {overlapping}')
@@ -161,14 +171,17 @@ def prepare_input_data(X, y, confounds, df, pos_labels, groups):
         df_X_conf = df.loc[:, X_conf_columns].copy()
         df_y = df.loc[:, y].copy()
         if groups is not None:
+            logger.info(f'Using {groups} as groups')
             df_groups = df.loc[:, groups].copy()
         confound_names = confounds
 
     if pos_labels is not None:
         if not isinstance(pos_labels, list):
             pos_labels = [pos_labels]
+        logger.info(f'Setting the following as positive labels {pos_labels}')
         df_y = df_y.isin(pos_labels).astype(np.int)
-
+    logger.info('====================')
+    logger.info('')
     return df_X_conf, df_y, df_groups, confound_names
 
 
@@ -188,33 +201,53 @@ def prepare_model(model, problem_type):
         A tuple with the model name and object.
 
     """
+    logger.info('====== Model ======')
     if isinstance(model, str):
+        logger.info(f'Obtaining model by name: {model}')
         model_name = model
         model = get_model(model_name, problem_type)
     elif _is_valid_sklearn_model(model):
         model_name = model.__class__.__name__.lower()
+        logger.info(f'Using scikit-learn model: {model_name}')
     else:
-        raise ValueError(f'Model must be a string or a scikit-learn compatible'
-                         ' object.')
+        raise_error(
+            f'Model must be a string or a scikit-learn compatible object.')
+    logger.info('===================')
+    logger.info('')
     return model_name, model
 
 
 def prepare_model_selection(msel_dict, pipeline, model_name, cv_outer):
+    logger.info('= Model Parameters =')
     hyperparameters = msel_dict.get('hyperparameters', None)
     if hyperparameters is None:
-        raise ValueError("The 'hyperparameters' value must be specified for "
-                         "model selection.")
-    cv_inner = msel_dict.get('cv', None)
-    gs_scoring = msel_dict.get('scoring', None)
+        raise_error("The 'hyperparameters' value must be specified for "
+                    "model selection.")
 
-    if cv_inner is None:
-        cv_inner = deepcopy(cv_outer)
     hyper_params = _prepare_hyperparams(hyperparameters, pipeline, model_name)
 
     if len(hyper_params) > 0:
+        logger.info('Tunning hyperparameters using Grid Search')
+        logger.info('Hyperparameters:')
+        for k, v in hyper_params.items():
+            logger.info(f'\t{k}: {v}')
+        cv_inner = msel_dict.get('cv', None)
+        gs_scoring = msel_dict.get('scoring', None)
+        if cv_inner is None:
+            logger.info(
+                'Cross validating using same scheme as for model evaluation')
+            cv_inner = deepcopy(cv_outer)
+        else:
+            logger.info(f'Cross validating using {cv_inner}')
+            cv_inner = prepare_cv(cv_inner)
+
+        if gs_scoring is not None:
+            logger.info(f'Grid Search scoring: {gs_scoring}')
         pipeline = wrap_search(
             GridSearchCV, pipeline, hyper_params, cv=cv_inner,
             scoring=gs_scoring)
+    logger.info('====================')
+    logger.info('')
     return pipeline
 
 
@@ -233,7 +266,7 @@ def _prepare_hyperparams(hyperparams, pipeline, model_name):
             new_first = 'dataframe_pipeline__' + first
 
         else:
-            raise ValueError(
+            raise_error(
                 'Each element of the hyperparameters dict  has to start with '
                 f'"features__", "confounds__", "target__" or "{model_name}__" '
                 f'but was {first}')
@@ -247,6 +280,7 @@ def _prepare_hyperparams(hyperparams, pipeline, model_name):
             if len(val) > 1:
                 to_tune[rename_param(param)] = val
             else:
+                logger.info(f'Setting hyperparameter {val}')
                 pipeline.set_param(val)
         else:
             pipeline.set_params(**{rename_param(param): val})
@@ -277,7 +311,7 @@ def _get_confound_transformer(conf):
     if isinstance(conf, str):
         conf, returned_features = get_transformer(conf)
     elif not _is_valid_sklearn_transformer(conf):
-        raise ValueError(
+        raise_error(
             f'The specified confound preprocessing ({conf}) is not valid.'
             f'It has to be a string or sklearn transformer.')
     return conf, returned_features
@@ -319,8 +353,8 @@ def _prepare_preprocess_y(preprocess_y):
             if _is_valid_sklearn_transformer(preprocess_y):
                 preprocess_y = TargetTransfromerWrapper(preprocess_y)
             else:
-                raise ValueError(f'y preprocess must be a string or a '
-                                 'valid sklearn transformer instance')
+                raise_error(f'y preprocess must be a string or a '
+                            'valid sklearn transformer instance')
     return preprocess_y
 
 
@@ -341,10 +375,13 @@ def prepare_cv(cv):
         n_repeats, n_folds = cv_string.split('_')
         n_repeats, n_folds = [int(name.split(':')[-1])
                               for name in [n_repeats, n_folds]]
+        logger.info(f'CV interpeted as RepeatedKFold with {n_repeats} '
+                    f'repetitions of {n_folds} folds')
         return RepeatedKFold(n_splits=n_folds, n_repeats=n_repeats)
 
     try:
         _cv = check_cv(cv)
+        logger.info(f'Using scikit-learn CV scheme {_cv}')
     except ValueError:
         _cv = parser(cv)
 

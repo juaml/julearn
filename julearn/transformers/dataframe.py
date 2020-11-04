@@ -2,6 +2,8 @@ from copy import deepcopy
 import pandas as pd
 from sklearn.base import TransformerMixin
 
+from .. utils import raise_error
+
 
 class DataFrameTransformer(TransformerMixin):
 
@@ -82,8 +84,8 @@ class DataFrameTransformer(TransformerMixin):
                     self.transformer.get_support()]
                 df_out = pd.concat([X_transformed, X_rest], axis=1)
             else:
-                raise ValueError('You cannot use subset on a transformer'
-                                 'without a "get_support" attribute')
+                raise_error('You cannot use subset on a transformer'
+                            'without a "get_support" attribute')
         elif self.returned_features == 'unknown':
             transformer_name = self.transformer.__class__.__name__.lower()
             columns = [
@@ -105,9 +107,8 @@ class DataFrameTransformer(TransformerMixin):
             df_out = pd.concat([X_transformed, X_rest], axis=1)
 
         else:
-            raise ValueError('returned_features can only be '
-                             'same, unknown, subset, '
-                             f'but was {self.returned_features}')
+            raise_error('returned_features can only be same, unknown, subset, '
+                        f'but was {self.returned_features}')
 
         return df_out
 
@@ -134,10 +135,9 @@ class DataFrameTransformer(TransformerMixin):
                                           )
 
         if self.transform_column_ == []:
-            raise ValueError('There is not valid Column to transform '
-                             f'{self.transform_column} should be selected, '
-                             f'but is not valid for columns = {X.columns}'
-                             )
+            raise_error('There is not valid Column to transform '
+                        f'{self.transform_column} should be selected, '
+                        f'but is not valid for columns = {X.columns}')
 
     def initialize_params(self, transformer):
         """

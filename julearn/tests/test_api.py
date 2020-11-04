@@ -12,7 +12,7 @@ from seaborn import load_dataset
 import pytest
 
 from julearn import run_cross_validation
-from julearn.utils import do_scoring_test, compare_models
+from julearn.utils.testing import do_scoring_test, compare_models
 
 
 def test_simple_binary():

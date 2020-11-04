@@ -23,6 +23,12 @@ import seaborn as sns
 from seaborn import load_dataset
 
 from julearn import run_cross_validation
+from julearn.utils import configure_logging
+
+###############################################################################
+# Set the logging level to info to see extra information
+configure_logging(level='INFO')
+
 
 ###############################################################################
 # Dealing with Cross-Validation techinques
