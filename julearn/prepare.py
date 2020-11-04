@@ -197,8 +197,10 @@ def prepare_model(model, problem_type):
 
     Returns
     -------
-    out : tuple(str, model)
-        A tuple with the model name and object.
+    model_name : str
+        The model name
+    model : object
+        The model
 
     """
     logger.info('====== Model ======')
@@ -288,7 +290,10 @@ def _prepare_hyperparams(hyperparams, pipeline, model_name):
 
 
 def prepare_preprocessing(preprocess_X, preprocess_y, preprocess_confounds):
-
+    if not isinstance(preprocess_X, list):
+        preprocess_X = [preprocess_X]
+    if not isinstance(preprocess_confounds, list):
+        preprocess_confounds = [preprocess_confounds]
     preprocess_X = _prepare_preprocess_X(preprocess_X)
     preprocess_y = _prepare_preprocess_y(preprocess_y)
     preprocess_conf = _prepare_preprocess_confounds(preprocess_confounds)
