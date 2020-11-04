@@ -118,8 +118,9 @@ class DataFrameTransformer(TransformerMixin):
             df_out = pd.concat([X_transformed, X_rest], axis=1)
 
         else:
-            raise_error('returned_features can only be same, unknown, subset, '
-                        f'but was {self.returned_features}')
+            raise_error('returned_features can only be '
+                        'same, unknown,unknown_same_type, or subset'
+                        f' but was {self.returned_features}')
 
         return df_out
 
