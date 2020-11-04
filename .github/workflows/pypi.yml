@@ -16,12 +16,13 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: 3.8
+    - name: Get history and tags for SCM versioning to work
+      run: |
+        git fetch --prune --unshallow
+        git fetch --depth=1 origin +refs/tags/*:refs/tags/*
     - name: Install pep517
-      run: >-
-        python -m
-        pip install
-        pep517
-        --user
+      run: 
+        pip install pep517
     - name: Build a binary wheel and a source tarball
       run: >-
         python -m
