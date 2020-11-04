@@ -154,10 +154,11 @@ def test_pca_columns_of_type_return_unknown_or_unknown_same_type():
 
     for condition, columns in condition_columns:
         for returned_features in ['unknown', 'unknown_same_type']:
-            trans_df = DataFrameTransformer(transformer=PCA(),
-                                            transform_column=condition,
-                                            returned_features=returned_features,
-                                            )
+            trans_df = DataFrameTransformer(
+                transformer=PCA(),
+                transform_column=condition,
+                returned_features=returned_features,
+            )
 
             np.random.seed(42)
             if (returned_features == 'unknown_same_type') and (
