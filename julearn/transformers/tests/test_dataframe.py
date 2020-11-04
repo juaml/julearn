@@ -113,7 +113,8 @@ def test_scale_columns_of_type_return_same():
         ('categorical', all_columns[4:]),
         ('confound', all_columns[2:4]),
         (['continuous', 'categorical'], all_columns[:2] + all_columns[4:]),
-        (['confound', 'continuous'], all_columns[:4])
+        (['confound', 'continuous'], all_columns[:4]),
+        (all_columns[1:3], all_columns[1:3])
     )
 
     for condition, columns in condition_columns:
@@ -148,7 +149,8 @@ def test_pca_columns_of_type_return_unknown_or_unknown_same_type():
         ('categorical', all_columns[4:]),
         ('confound', all_columns[2:4]),
         (['continuous', 'categorical'], all_columns[:2] + all_columns[4:]),
-        (['confound', 'continuous'], all_columns[:4])
+        (['confound', 'continuous'], all_columns[:4]),
+        (all_columns[1:3], all_columns[1:3])
     )
 
     for condition, columns in condition_columns:
