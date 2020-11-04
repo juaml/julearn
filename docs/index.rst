@@ -11,6 +11,7 @@ Welcome to JuLearn's documentation!
    :caption: Contents:
 
    installation
+   input
    api
    auto_examples/index
 

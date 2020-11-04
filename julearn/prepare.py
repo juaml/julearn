@@ -2,60 +2,120 @@ from julearn.transformers.target import TargetTransfromerWrapper
 import pandas as pd
 import numpy as np
 from copy import deepcopy
-from sklearn.model_selection import RepeatedKFold
+from sklearn.model_selection import RepeatedKFold, GridSearchCV
 from sklearn.base import clone
 from sklearn.model_selection import check_cv
+
+from warnings import warn
 
 from . estimators import get_model
 from . transformers import get_transformer
 from . scoring import get_extended_scorer
+from . model_selection import wrap_search
 
 
 def _validate_input_data(X, y, confounds, df, groups):
     if df is None:
         # Case 1: we don't have a dataframe in df
 
-        # X is either an ndarray or dataframe
-        assert isinstance(X, (np.ndarray, pd.DataFrame))
+        # X must be np.ndarray with at most 2d
+        if not isinstance(X, np.ndarray):
+            raise ValueError(
+                'X must be a numpy array if no dataframe is specified')
 
-        # X is bidimentional
-        assert X.ndim == 2
+        if X.ndim not in [1, 2]:
+            raise ValueError('X must be at most bi-dimentional')
 
-        # Same for y, but only one dimension
-        assert isinstance(y, (np.ndarray, pd.Series))
-        assert y.ndim == 1
+        # Y must be np.ndarray with 1 dimention
+        if not isinstance(y, np.ndarray):
+            raise ValueError(
+                'y must be a numpy array if no dataframe is specified')
+
+        if y.ndim != 1:
+            raise ValueError('y must be one-dimentional')
 
         # Same number of elements
-        assert X.shape[0] == y.shape[0]
+        if X.shape[0] != y.shape[0]:
+            raise ValueError(
+                'The number of samples in X do not match y '
+                '(X.shape[0] != y.shape[0]')
 
         if confounds is not None:
-            # Confounds is any kind of array or pandas object
-            assert isinstance(confounds, (np.ndarray, pd.DataFrame, pd.Series))
-            assert confounds.ndim in [1, 2]
-            assert confounds.shape[0] == y.shape[0]
+            if not isinstance(confounds, np.ndarray):
+                raise ValueError(
+                    'confounds must be a numpy array if no dataframe is '
+                    'specified')
+
+            if confounds.ndim not in [1, 2]:
+                raise ValueError('confounds must be at most bi-dimentional')
+
+            if X.shape[0] != confounds.shape[0]:
+                raise ValueError(
+                    'The number of samples in X do not match confounds '
+                    '(X.shape[0] != confounds.shape[0]')
+
+        if groups is not None:
+            if not isinstance(groups, np.ndarray):
+                raise ValueError(
+                    'groups must be a numpy array if no dataframe is '
+                    'specified')
+
+            if groups.ndim != 1:
+                raise ValueError('groups must be one-dimentional')
 
     else:
         # Case 2: we have a dataframe. X, y and confounds must be columns
         # in the dataframe
-        assert isinstance(X, (str, list))
-        assert isinstance(y, str)
+        if not isinstance(X, (str, list)):
+            raise ValueError('X must be a string or list of strings')
+
+        if not isinstance(y, str):
+            raise ValueError('y must be a string')
 
         # Confounds can be a string, list or none
-        assert isinstance(confounds, (str, list, type(None)))
+        if not isinstance(confounds, (str, list, type(None))):
+            raise ValueError('If not None, confounds must be a string or list '
+                             'of strings')
 
-        assert isinstance(df, pd.DataFrame)
+        if not isinstance(groups, (str, type(None))):
+            raise ValueError('groups must be a string')
 
-        if isinstance(X, list):
-            assert all(Xi in df.columns for Xi in X)
-        else:
-            assert X in df.columns
+        if not isinstance(df, pd.DataFrame):
+            raise ValueError('df must be a pandas.DataFrame')
 
-        assert y in df.columns
+        if not isinstance(X, list):
+            X = [X]
+        missing_columns = [t_x for t_x in X if t_x not in df.columns]
+        if len(missing_columns) > 0:
+            raise ValueError(
+                'All elements of X must be in the dataframe. '
+                f'The following are missing: {missing_columns}')
 
-        if isinstance(confounds, str):
-            assert confounds in df.columns
-        elif isinstance(confounds, list):
-            assert all(x in df.columns for x in confounds)
+        if y not in df.columns:
+            raise ValueError(
+                f"Target '{y}' (y) is not a valid column in the dataframe")
+
+        if confounds is not None:
+            if not isinstance(confounds, list):
+                confounds = [confounds]
+            missing_columns = [
+                t_c for t_c in confounds if t_c not in df.columns]
+            if len(missing_columns) > 0:
+                raise ValueError(
+                    'All elements of confounds must be in the dataframe. '
+                    f'The following are missing: {missing_columns}')
+
+        if groups is not None:
+            if groups not in df.columns:
+                raise ValueError(f"Groups '{groups}' is not a valid column "
+                                 "in the dataframe")
+            if groups == y:
+                warn("y and groups are the same column")
+            if groups in X:
+                warn("groups is part of X")
+
+        if y in X:
+            warn("y is part of X")
 
 
 def prepare_input_data(X, y, confounds, df, pos_labels, groups):
@@ -66,45 +126,40 @@ def prepare_input_data(X, y, confounds, df, pos_labels, groups):
     df_groups = None
     if df is None:
         # creating df_X_conf
-        if isinstance(X, np.ndarray):
-            columns = [f'feature_{i}' for i in range(X.shape[0])]
-            df_X_conf = pd.DataFrame(X, columns=columns)
-        elif isinstance(X, pd.DataFrame):
-            df_X_conf = X.copy()
+        if X.ndim == 1:
+            X = X[:, None]
+        columns = [f'feature_{i}' for i in range(X.shape[1])]
+        df_X_conf = pd.DataFrame(X, columns=columns)
 
         # adding confounds to df_X_conf
-        if isinstance(confounds, (pd.Series, pd.DataFrame)):
-            # TODO: Merge the dataframe, keep the index. Use join/merge.
-            # Raise an error if it can't be merged.
-            if isinstance(confounds, pd.Series):
-                confound_names = confounds.name
-            else:
-                confound_names = confounds.columns
-            df_X_conf[confound_names] = confounds
-
-        elif isinstance(confounds, np.ndarray):
+        if confounds is not None:
+            if confounds.ndim == 1:
+                confounds = confounds[:, None]
             confound_names = [
-                f'confound_{i}' for i in range(confounds.shape[0])]
+                f'confound_{i}' for i in range(confounds.shape[1])]
             df_X_conf[confound_names] = confounds
 
         # creating a Series for y if not existent
-        if isinstance(y, np.ndarray):
-            y = pd.Series(y, name='y')
+        df_y = pd.Series(y, name='y')
 
         if groups is not None:
-            if isinstance(groups, np.ndarray):
-                columns = [f'group_{i}' for i in range(groups.shape[0])]
-                df_groups = pd.DataFrame(groups, columns=columns)
+            df_groups = pd.Series(groups, name='groups')
 
     else:
         X_conf_columns = deepcopy(X) if isinstance(X, list) else [X]
-        if isinstance(confounds, list):
-            X_conf_columns.extend(confounds)
-        elif isinstance(confounds, str):
-            X_conf_columns.append(confounds)
+        if confounds is not None:
+            if not isinstance(confounds, list):
+                confounds = [confounds]
+            overlapping = [t_c for t_c in confounds if t_c in X]
+            if len(overlapping) > 0:
+                warn(f'X contains the following confounds {overlapping}')
+            for t_c in confounds:
+                # This will add the confounds if not there already
+                if t_c not in X_conf_columns:
+                    X_conf_columns.append(t_c)
 
         df_X_conf = df.loc[:, X_conf_columns].copy()
-        y = df.loc[:, y].copy()
+        df_y = df.loc[:, y].copy()
         if groups is not None:
             df_groups = df.loc[:, groups].copy()
         confound_names = confounds
@@ -112,9 +167,9 @@ def prepare_input_data(X, y, confounds, df, pos_labels, groups):
     if pos_labels is not None:
         if not isinstance(pos_labels, list):
             pos_labels = [pos_labels]
-        y = y.isin(pos_labels).astype(np.int)
+        df_y = df_y.isin(pos_labels).astype(np.int)
 
-    return df_X_conf, y, df_groups, confound_names
+    return df_X_conf, df_y, df_groups, confound_names
 
 
 def prepare_model(model, problem_type):
@@ -144,7 +199,26 @@ def prepare_model(model, problem_type):
     return model_name, model
 
 
-def prepare_hyperparams(hyperparams, pipeline, model_name):
+def prepare_model_selection(msel_dict, pipeline, model_name, cv_outer):
+    hyperparameters = msel_dict.get('hyperparameters', None)
+    if hyperparameters is None:
+        raise ValueError("The 'hyperparameters' value must be specified for "
+                         "model selection.")
+    cv_inner = msel_dict.get('cv', None)
+    gs_scoring = msel_dict.get('scoring', None)
+
+    if cv_inner is None:
+        cv_inner = deepcopy(cv_outer)
+    hyper_params = _prepare_hyperparams(hyperparameters, pipeline, model_name)
+
+    if len(hyper_params) > 0:
+        pipeline = wrap_search(
+            GridSearchCV, pipeline, hyper_params, cv=cv_inner,
+            scoring=gs_scoring)
+    return pipeline
+
+
+def _prepare_hyperparams(hyperparams, pipeline, model_name):
 
     def rename_param(param):
         first, *rest = param.split('__')
@@ -250,18 +324,17 @@ def _prepare_preprocess_y(preprocess_y):
     return preprocess_y
 
 
-def prepare_cv(cv_outer, cv_inner):
-    """Generates an outer and inner cv using string compatible with
+def prepare_cv(cv):
+    """Generates an CV using string compatible with
     repeat:5_nfolds:5 where 5 can be exchange with any int.
     Alternatively, it can take in a valid cv splitter or int as
     in cross_validate in sklearn.
 
     Parameters
     ----------
-    cv_outer : int or str or cv_splitter
+    cv : int or str or cv_splitter
         [description]
-    cv_inner : int or str or cv_splitter
-        [description]
+
     """
 
     def parser(cv_string):
@@ -270,21 +343,12 @@ def prepare_cv(cv_outer, cv_inner):
                               for name in [n_repeats, n_folds]]
         return RepeatedKFold(n_splits=n_folds, n_repeats=n_repeats)
 
-    def convert_to_cv(cv):
-        try:
-            _cv = check_cv(cv)
-        except ValueError:
-            _cv = parser(cv)
+    try:
+        _cv = check_cv(cv)
+    except ValueError:
+        _cv = parser(cv)
 
-        return _cv
-
-    cv_outer = convert_to_cv(cv_outer)
-    if cv_inner == 'same':
-        cv_inner = deepcopy(cv_outer)
-    else:
-        cv_inner = convert_to_cv(cv_inner)
-
-    return cv_outer, cv_inner
+    return _cv
 
 
 def prepare_scoring(estimator, score_name):

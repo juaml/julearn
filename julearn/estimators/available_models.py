@@ -1,5 +1,5 @@
 from sklearn.svm import SVC, SVR
-from sklearn.ensemble import (RandomForestClassifier,  RandomForestRegressor,
+from sklearn.ensemble import (RandomForestClassifier, RandomForestRegressor,
                               ExtraTreesClassifier, ExtraTreesRegressor)
 from sklearn.dummy import DummyClassifier, DummyRegressor
 
