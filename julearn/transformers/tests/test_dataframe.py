@@ -193,4 +193,4 @@ def test_returned_feature_input():
                                     )
 
     with pytest.raises(ValueError, match='returned_features can only be'):
-        X_trans = trans_df.fit_transform(X)
+        trans_df.fit_transform(X)
