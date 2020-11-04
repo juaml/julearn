@@ -9,7 +9,7 @@ from sklearn.preprocessing import StandardScaler
 
 from julearn.transformers import DataFrameTransformer
 from julearn.transformers.basic import PassThroughTransformer
-
+from julearn.transformers.confounds import DataFrameConfoundRemover
 
 X = pd.DataFrame(dict(A=np.arange(10),
                       B=np.arange(10, 20),
@@ -206,3 +206,15 @@ def test_error_no_matching_transform_column():
     with pytest.raises(ValueError,
                        match='There is not valid column to transform '):
         trans_df.fit_transform(X)
+
+
+def test_error_returned_features_subset():
+
+    trans_df = DataFrameTransformer(transformer=PassThroughTransformer(),
+                                    transform_column='confound',
+                                    returned_features='subset',
+                                    )
+
+    with pytest.raises(ValueError,
+                       match='You cannot use subset on a transformer'):
+        trans_df.fit_transform(X_with_types)
