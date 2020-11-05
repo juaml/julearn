@@ -14,6 +14,9 @@ cognitive control in context-dependent decision-making. Cerebral Cortex.
 
 .. include:: ../links.inc
 """
+# Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
+#
+# License: AGPL
 import numpy as np
 
 from sklearn.model_selection import GroupShuffleSplit

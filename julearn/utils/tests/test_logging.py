@@ -1,3 +1,6 @@
+# Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
+#          Sami Hamdan <s.hamdan@fz-juelich.de>
+# License: AGPL
 from julearn.utils import logger, configure_logging, raise_error, warn
 from julearn.utils.logging import _close_handlers
 import pytest

@@ -1,3 +1,6 @@
+# Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
+#          Sami Hamdan <s.hamdan@fz-juelich.de>
+# License: AGPL
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 from sklearn.base import clone

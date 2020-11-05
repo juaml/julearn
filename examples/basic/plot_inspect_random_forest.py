@@ -7,6 +7,9 @@ using a Random Forest classifier and analyse the model.
 
 .. include:: ../links.inc
 """
+# Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
+#
+# License: AGPL
 import pandas as pd
 
 import matplotlib.pyplot as plt
