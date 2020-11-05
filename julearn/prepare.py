@@ -1,3 +1,6 @@
+# Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
+#          Sami Hamdan <s.hamdan@fz-juelich.de>
+# License: AGPL
 from julearn.transformers.target import TargetTransfromerWrapper
 import pandas as pd
 import numpy as np
