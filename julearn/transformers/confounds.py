@@ -52,16 +52,10 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
         """
 
         df_X, ser_confound = self._split_into_X_confound(X)
-        if type(X) == np.ndarray:
-            idx_kept = list(df_X.columns)
-            self.support_mask_ = np.zeros(len(X[0]), dtype=bool)
-            self.support_mask_[idx_kept] = True
-
-        else:
-            self.support_mask_ = pd.Series(False, index=X.columns,
-                                           dtype=bool)
-            self.support_mask_[df_X.columns] = True
-            self.support_mask_ = self.support_mask_.values
+        self.support_mask_ = pd.Series(False, index=X.columns,
+                                       dtype=bool)
+        self.support_mask_[df_X.columns] = True
+        self.support_mask_ = self.support_mask_.values
 
         def fit_confound_models(X):
             _model = clone(self.model_confound)

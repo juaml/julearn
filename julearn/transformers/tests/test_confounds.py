@@ -96,6 +96,7 @@ def test_confound_set_confounds():
 
     confounds_list = [
         'a__:type:__continuous',
+        ['a__:type:__continuous'],
         ['a__:type:__continuous', 'b__:type:__continuous'],
 
     ]
