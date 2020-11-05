@@ -26,4 +26,5 @@
 .. _`venv`: https://docs.python.org/3/tutorial/venv.html
 .. _`conda env`: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
 
+.. _`Github`: https://github.com/
 .. _`julearn Github`: https://github.com/juaml/julearn
