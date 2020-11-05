@@ -14,7 +14,7 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
         self, model_confound=None, confounds='use_suffix',
         threshold=None, suffix='__:type:__confound'
     ):
-        """Transformer which can use pd.DataFrames and remove the confounds 
+        """Transformer which can use pd.DataFrames and remove the confounds
         from the features by subtracting the predicted features
         given the confounds from the actual features.
 
