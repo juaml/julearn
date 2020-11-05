@@ -1,9 +1,9 @@
-.. JuLearn documentation master file, created by
+.. julearn documentation master file, created by
    sphinx-quickstart on Thu Oct 29 14:29:33 2020.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to JuLearn's documentation!
+Welcome to julearn's documentation!
 ===================================
 
 .. toctree::
@@ -16,6 +16,7 @@ Welcome to JuLearn's documentation!
    hyperparameters
    api
    auto_examples/index
+   contributing
 
 
 Indices and tables

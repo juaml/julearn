@@ -1,4 +1,4 @@
-# Julearn
+# julearn
 
 The Forschungszentrum Jülich Machine Learning Library
 

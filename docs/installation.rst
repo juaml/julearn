@@ -1,13 +1,13 @@
 .. include:: links.inc
 
-Installing JuLearn
+Installing julearn
 ==================
 
 
 Requirements
 ^^^^^^^^^^^^
 
-Julearn requires the following packages:
+julearn requires the following packages:
 
 * `Python`_ >= 3.6
 * `scikit-learn`_
