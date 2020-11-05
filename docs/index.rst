@@ -12,6 +12,8 @@ Welcome to JuLearn's documentation!
 
    installation
    input
+   pipeline
+   hyperparameters
    api
    auto_examples/index
 

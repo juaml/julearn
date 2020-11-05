@@ -44,7 +44,8 @@ Either way, we strongly recommend using virtual environments:
 Latest release
 --------------
 
-We have packaged our
+We have packaged julearn and published it in PyPi, so you can just install it
+with `pip`.
 
 .. code-block:: bash
 
@@ -61,6 +62,11 @@ First, make sure that you have all the dependencies installed:
 
     pip install -U scikit-learn pandas
 
+OR:
+.. code-block:: bash
+
+    conda install scikit-learn pandas
+
 
 Then, install julearn from TestPypi
 
@@ -73,3 +79,28 @@ Then, install julearn from TestPypi
 
 Local git repository (for developers)
 -------------------------------------
+First, make sure that you have all the dependencies installed:
+
+.. code-block:: bash
+
+    pip install -U scikit-learn pandas
+
+OR:
+
+.. code-block:: bash
+
+    conda install scikit-learn pandas
+
+Then, clone `julearn Github`_ repository in a folder of your choice:
+
+.. code-block:: bash
+
+    git clone https://github.com/juaml/julearn.git
+
+
+Finally, install in development mode:
+
+.. code-block:: bash
+
+    cd julearn
+    python setup.py develop

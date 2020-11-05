@@ -15,6 +15,11 @@ Model functions
 .. autofunction:: julearn.estimators.list_models
 .. autofunction:: julearn.estimators.get_model
 
+Transformer functions
+^^^^^^^^^^^^^^^^^^^^^
+
+.. autofunction:: julearn.transformers.list_transformers
+.. autofunction:: julearn.transformers.get_transformer
 
 Logging
 ^^^^^^^

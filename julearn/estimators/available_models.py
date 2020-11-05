@@ -30,7 +30,14 @@ _available_models = {
 
 
 def list_models():
-    """List all the available model names"""
+    """List all the available model names
+
+    Returns
+    -------
+    out : list(str)
+        A list will all the available model names.
+
+    """
     out = out = list(_available_models.keys)
     return out
 
