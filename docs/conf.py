@@ -19,8 +19,8 @@ from sphinx_gallery.sorting import ExplicitOrder
 
 # -- Project information -----------------------------------------------------
 
-project = 'JuLearn'
-copyright = '2020, Authors of JuLearn'
+project = 'julearn'
+copyright = '2020, Authors of julearn'
 author = 'Fede Raimondo'
 
 

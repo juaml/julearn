@@ -32,6 +32,19 @@ _available_target_transformers = {
 
 
 def list_transformers(target=False):
+    """List all the available transformers
+
+    Parameters
+    ----------
+    target : bool
+        If True, return a list of the target tranformers. If False (default),
+        return a list of features/confounds transformers.
+
+    Returns
+    -------
+    out : list(str)
+        A list will all the available transformer names.
+    """
     out = None
     if target is False:
         out = list(_available_transformers.keys())
@@ -41,6 +54,21 @@ def list_transformers(target=False):
 
 
 def get_transformer(name, target=False):
+    """Get a transfomer
+
+    Parameters
+    ----------
+    name : str
+        The transformer name
+    target : bool
+        If True, return a target tranformer. If False (default),
+        return a features/confounds transformers.
+
+    Returns
+    -------
+    out : scikit-learn compatible transformer
+        The transformer object.
+    """
     out = None
     if target is False:
         if name not in _available_transformers:

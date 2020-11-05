@@ -18,3 +18,12 @@
 .. _`Random Forest`: https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html
 .. _`Cross Validation`: https://scikit-learn.org/stable/modules/classes.html#module-sklearn.model_selection
 .. _`Standard Scaler`: https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html
+
+.. _`pandas`: https://pandas.pydata.org
+.. _`Python`: https://python.org
+.. _`seaborn`: https://seaborn.pydata.org
+
+.. _`venv`: https://docs.python.org/3/tutorial/venv.html
+.. _`conda env`: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
+
+.. _`julearn Github`: https://github.com/juaml/julearn
