@@ -1,8 +1,11 @@
+# Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
+#          Sami Hamdan <s.hamdan@fz-juelich.de>
+# License: AGPL
 from pathlib import Path
 import setuptools
 
 version = None
-with open(Path('julearn') / '__init__.py', 'r') as fid:
+with open(Path('julearn') / '_version.py', 'r') as fid:
     for line in (line.strip() for line in fid):
         if line.startswith('__version__'):
             version = line.split('=')[1].strip().strip('\'')

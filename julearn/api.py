@@ -1,3 +1,6 @@
+# Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
+#          Sami Hamdan <s.hamdan@fz-juelich.de>
+# License: AGPL
 import numpy as np
 from sklearn.model_selection import cross_val_score
 
@@ -17,9 +20,9 @@ def run_cross_validation(
         data=None,
         confounds=None,
         problem_type='binary_classification',
-        preprocess_X=['z_score'],
+        preprocess_X='zscore',
         preprocess_y=None,
-        preprocess_confounds=['z_score'],
+        preprocess_confounds='zscore',
         return_estimator=False,
         cv=None,
         groups=None,
@@ -27,13 +30,112 @@ def run_cross_validation(
         pos_labels=None,
         model_selection=None,
         seed=None):
-    """ Run cross validation and score.
+    """Run cross validation and score.
 
     Parameters
     ----------
-    X : np.array or string
+    X : str, list(str) or numpy.array
+        The features to use.
         See https://juaml.github.io/julearn/input.html for details.
-        The
+    y : str or numpy.array
+        The targets to predict.
+        See https://juaml.github.io/julearn/input.html for details.
+    model : str or scikit-learn compatible model.
+        If string, it will use one of the available models.
+        See :mod:`.available_models`.
+    data : pandas.DataFrame | None
+        DataFrame with the data (optional).
+        See https://juaml.github.io/julearn/input.html for details.
+    confounds : str, list(str) or numpy.array | None
+        The confounds.
+        See https://juaml.github.io/julearn/input.html for details.
+    problem_type : str
+        The kind of problem to model.
+
+        Options are:
+
+        * "binary_classification": Perform a binary classification
+          in which the target (y) has only two posible classes (default).
+          The parameter pos_labels can be used to convert a target with
+          multiple_classes into binary.
+        * "multiclass_classification": Performs a multiclass classification
+          in which the target (y) has more than two possible values.
+        * "regression". Perform a regression. The target (y) has to be
+          ordinal at least.
+
+    preprocess_X : str, scikit-learn compatible transformers or list | None
+        Transformer to apply to the features (X). If string, use one of the
+        available transformers. If list, each element can be a string or
+        scikit-learn compatible transformer. If None, no transformation
+        is applied.
+
+        Defaults to zscore (StandardScaler).
+
+        See https://juaml.github.io/julearn/pipeline.html for details.
+    preprocess_y : str or scikit-learn transformer | None
+        Transformer to apply to the target (y). If None, no transformation
+        is applied.
+
+        See https://juaml.github.io/julearn/pipeline.html for details.
+    preprocess_confounds : str, scikit-learn transformers or list | None
+        Transformer to apply to the features (X). If string, use one of the
+        available transformers. If list, each element can be a string or
+        scikit-learn compatible transformer. If None, no transformation
+        is applied.
+
+        Defaults to zscore (StandardScaler).
+
+        See https://juaml.github.io/julearn/pipeline.html for details.
+    return_estimator : bool
+        If True, it returns the estimator (pipeline) fitted on all the data.
+    cv : int, str or cross-validation generator | None
+        Cross-validation splitting strategy to use for model evaluation.
+
+        Options are:
+
+        * None: defaults to 5-fold, repeated 5 times.
+        * int: the number of folds in a `(Stratified)KFold`
+        * CV Splitter (see scikit-learn documentation on CV)
+        * An iterable yielding (train, test) splits as arrays of indices.
+
+    groups : str or numpy.array | None
+        The grouping labels in case a Group CV is used.
+        See https://juaml.github.io/julearn/input.html for details.
+    scoring : str | None
+        The scoring metric to use.
+        See https://scikit-learn.org/stable/modules/model_evaluation.html for
+        a comprehensive list of options. If None, use 'accuracy'.
+    pos_labels : str, int, float or list | None
+        The labels to interpret as positive. If not None, every element from y
+        will be converted to 1 if is equal or in pos_labels and to 0 if not.
+    model_selection : dict | None
+        If not None, this dictionary specifies the parameters to use for model
+        hyperparameters and selection of hyperparameters.
+
+        The dictionary can define the following keys:
+
+        * 'hyperparameters': A dictionary setting hyperparameters for each
+          step of the pipeline. If more than option is provided for at least
+          one hyperparameter, a GridSearch will be performed.
+        * 'cv': If GridSearch is going to be used, the cross-validation
+          splitting stategy to use. Defaults to same CV as for the model
+          evaluation.
+        * 'gs_scoring': If GridSearch is going to be used, the scoring metric
+          to evaluate the performance.
+
+        See https://juaml.github.io/julearn/hyperparameters.html for details.
+    seed : int | None
+        If not None, set the random seed before any operation. Usefull for
+        reproducibility.
+
+    Returns
+    -------
+    scores : np.ndarray
+        The fold-wise score.
+    estimator : object
+        The estimator, fitted on all the data (only if
+        ``return_estimator=True``)
+
     """
 
     if seed is not None:

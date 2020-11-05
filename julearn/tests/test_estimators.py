@@ -1,3 +1,6 @@
+# Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
+#          Sami Hamdan <s.hamdan@fz-juelich.de>
+# License: AGPL
 import numpy as np
 from sklearn.base import clone
 from sklearn.svm import SVC

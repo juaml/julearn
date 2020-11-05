@@ -1,3 +1,6 @@
+# Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
+#          Sami Hamdan <s.hamdan@fz-juelich.de>
+# License: AGPL
 from julearn.transformers.target import TargetTransfromerWrapper
 import pandas as pd
 import numpy as np
@@ -23,15 +26,15 @@ def _validate_input_data(X, y, confounds, df, groups):
                 'X must be a numpy array if no dataframe is specified')
 
         if X.ndim not in [1, 2]:
-            raise_error('X must be at most bi-dimentional')
+            raise_error('X must be at most bi-dimensional')
 
-        # Y must be np.ndarray with 1 dimention
+        # Y must be np.ndarray with 1 dimension
         if not isinstance(y, np.ndarray):
             raise_error(
                 'y must be a numpy array if no dataframe is specified')
 
         if y.ndim != 1:
-            raise_error('y must be one-dimentional')
+            raise_error('y must be one-dimensional')
 
         # Same number of elements
         if X.shape[0] != y.shape[0]:
@@ -46,7 +49,7 @@ def _validate_input_data(X, y, confounds, df, groups):
                     'specified')
 
             if confounds.ndim not in [1, 2]:
-                raise_error('confounds must be at most bi-dimentional')
+                raise_error('confounds must be at most bi-dimensional')
 
             if X.shape[0] != confounds.shape[0]:
                 raise_error(
@@ -60,7 +63,7 @@ def _validate_input_data(X, y, confounds, df, groups):
                     'specified')
 
             if groups.ndim != 1:
-                raise_error('groups must be one-dimentional')
+                raise_error('groups must be one-dimensional')
 
     else:
         # Case 2: we have a dataframe. X, y and confounds must be columns
@@ -118,6 +121,42 @@ def _validate_input_data(X, y, confounds, df, groups):
 
 
 def prepare_input_data(X, y, confounds, df, pos_labels, groups):
+    """ Prepare the input data and variables for the pipeline
+
+    Parameters
+    ----------
+    X : str, list(str) or numpy.array
+        The features to use.
+        See https://juaml.github.io/julearn/input.html for details.
+    y : str or numpy.array
+        The targets to predict.
+        See https://juaml.github.io/julearn/input.html for details.
+    confounds : str, list(str) or numpy.array | None
+        The confounds.
+        See https://juaml.github.io/julearn/input.html for details.
+    df : pandas.DataFrame with the data. | None
+        See https://juaml.github.io/julearn/input.html for details.
+    pos_labels : str, int, float or list | None
+        The labels to interpret as positive. If not None, every element from y
+        will be converted to 1 if is equal or in pos_labels and to 0 if not.
+    groups : str or numpy.array | None
+        The grouping labels in case a Group CV is used.
+        See https://juaml.github.io/julearn/input.html for details.
+
+    Returns
+    -------
+    df_X_conf : pandas.DataFrame
+        A dataframe with the features and confounds (if specified in the
+        confounds parameter) for each sample.
+    df_y : pandas.Series
+        A series with the y variable (target) for each sample.
+    df_groups : pandas.Series
+        A series with the grouping variable for each sample (if specified
+        in the groups parameter).
+    confound_names : str
+        The name of the columns if df_X_conf that represent confounds.
+
+    """
     logger.info('==== Input Data ====')
     _validate_input_data(X, y, confounds, df, groups)
 
@@ -197,8 +236,10 @@ def prepare_model(model, problem_type):
 
     Returns
     -------
-    out : tuple(str, model)
-        A tuple with the model name and object.
+    model_name : str
+        The model name
+    model : object
+        The model
 
     """
     logger.info('====== Model ======')
@@ -288,7 +329,10 @@ def _prepare_hyperparams(hyperparams, pipeline, model_name):
 
 
 def prepare_preprocessing(preprocess_X, preprocess_y, preprocess_confounds):
-
+    if not isinstance(preprocess_X, list):
+        preprocess_X = [preprocess_X]
+    if not isinstance(preprocess_confounds, list):
+        preprocess_confounds = [preprocess_confounds]
     preprocess_X = _prepare_preprocess_X(preprocess_X)
     preprocess_y = _prepare_preprocess_y(preprocess_y)
     preprocess_conf = _prepare_preprocess_confounds(preprocess_confounds)

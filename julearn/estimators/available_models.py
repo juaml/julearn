@@ -1,3 +1,6 @@
+# Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
+#          Sami Hamdan <s.hamdan@fz-juelich.de>
+# License: AGPL
 from sklearn.svm import SVC, SVR
 from sklearn.ensemble import (RandomForestClassifier, RandomForestRegressor,
                               ExtraTreesClassifier, ExtraTreesRegressor)
@@ -30,11 +33,34 @@ _available_models = {
 
 
 def list_models():
+    """List all the available model names
+
+    Returns
+    -------
+    out : list(str)
+        A list will all the available model names.
+
+    """
     out = out = list(_available_models.keys)
     return out
 
 
 def get_model(name, problem_type):
+    """Get a model
+
+    Parameters
+    ----------
+    name : str
+        The model name
+    problem_type : str
+        The type of problem. See :func:`.run_cross_validation`.
+
+    Returns
+    -------
+    out : scikit-learn compatible model
+        The model object.
+
+    """
     if name not in _available_models:
         raise_error(
             f'The specified model ({name}) is not available. '

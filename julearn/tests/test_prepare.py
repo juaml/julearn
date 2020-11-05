@@ -1,3 +1,6 @@
+# Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
+#          Sami Hamdan <s.hamdan@fz-juelich.de>
+# License: AGPL
 import numpy as np
 from numpy.testing import assert_array_equal
 import pandas as pd
@@ -150,21 +153,21 @@ def test_prepare_input_data_np():
 
     # Wrong number of dimensions
     with pytest.raises(ValueError,
-                       match=r"be at most bi-dimentional"):
+                       match=r"be at most bi-dimensional"):
         X = np.random.rand(4, 3, 2)
         y = np.random.rand(4)
         prepared = prepare_input_data(
             X=X, y=y, confounds=None, df=None, pos_labels=None, groups=None)
 
     with pytest.raises(ValueError,
-                       match=r"must be one-dimentional"):
+                       match=r"must be one-dimensional"):
         X = np.random.rand(4, 3)
         y = np.random.rand(4, 2)
         prepared = prepare_input_data(
             X=X, y=y, confounds=None, df=None, pos_labels=None, groups=None)
 
     with pytest.raises(ValueError,
-                       match=r"be at most bi-dimentional"):
+                       match=r"be at most bi-dimensional"):
         X = np.random.rand(4, 4)
         y = np.random.rand(4)
         confounds = np.random.rand(4, 2, 3)
@@ -173,7 +176,7 @@ def test_prepare_input_data_np():
             groups=None)
 
     with pytest.raises(ValueError,
-                       match=r"must be one-dimentional"):
+                       match=r"must be one-dimensional"):
         X = np.random.rand(4, 4)
         y = np.random.rand(4)
         groups = np.random.rand(4, 2, 3)
