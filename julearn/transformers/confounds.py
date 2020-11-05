@@ -39,7 +39,6 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
         suffix : str
             A suffix which can be used to automatically detect the confounds,
             default '__:type:__confound'
-
         """
         if model_confound is None:
             model_confound = LinearRegression()
