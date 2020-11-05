@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Reference &#8212; JuLearn  documentation</title>
+    <title>Reference &#8212; julearn  documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/pydoctheme.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/gallery.css" />
@@ -48,7 +48,7 @@
              style="vertical-align: middle; margin-top: -1px"/></li>
     <li><a href="https://www.python.org/">Python</a> &#187;</li>
     
-    <a href="index.html">JuLearn  documentation</a> &#187;
+    <a href="index.html">julearn  documentation</a> &#187;
     
 
         <li class="nav-item nav-item-this"><a href="">Reference</a></li>
@@ -114,11 +114,71 @@ in which the target (y) has more than two possible values.</p></li>
 ordinal at least.</p></li>
 </ul>
 </dd>
-<dt><strong>pos_labels</strong><span class="classifier">str, int, float or list | None</span></dt><dd><p>The labels to interpret as positive. If not None, every element from y
-will be converted to 1 if is equal or in pos_labels and to 0 if not.</p>
+<dt><strong>preprocess_X</strong><span class="classifier">str, scikit-learn compatible transformers or list | None</span></dt><dd><p>Transformer to apply to the features (X). If string, use one of the
+available transformers. If list, each element can be a string or
+scikit-learn compatible transformer. If None, no transformation
+is applied.</p>
+<p>Defaults to zscore (StandardScaler).</p>
+<p>See <a class="reference external" href="https://juaml.github.io/julearn/pipeline.html">https://juaml.github.io/julearn/pipeline.html</a> for details.</p>
+</dd>
+<dt><strong>preprocess_y</strong><span class="classifier">str or scikit-learn transformer | None</span></dt><dd><p>Transformer to apply to the target (y). If None, no transformation
+is applied.</p>
+<p>See <a class="reference external" href="https://juaml.github.io/julearn/pipeline.html">https://juaml.github.io/julearn/pipeline.html</a> for details.</p>
+</dd>
+<dt><strong>preprocess_confounds</strong><span class="classifier">str, scikit-learn transformers or list | None</span></dt><dd><p>Transformer to apply to the features (X). If string, use one of the
+available transformers. If list, each element can be a string or
+scikit-learn compatible transformer. If None, no transformation
+is applied.</p>
+<p>Defaults to zscore (StandardScaler).</p>
+<p>See <a class="reference external" href="https://juaml.github.io/julearn/pipeline.html">https://juaml.github.io/julearn/pipeline.html</a> for details.</p>
+</dd>
+<dt><strong>return_estimator</strong><span class="classifier">bool</span></dt><dd><p>If True, it returns the estimator (pipeline) fitted on all the data.</p>
+</dd>
+<dt><strong>cv</strong><span class="classifier">int, str or cross-validation generator | None</span></dt><dd><p>Cross-validation splitting strategy to use for model evaluation.</p>
+<p>Options are:</p>
+<ul class="simple">
+<li><p>None: defaults to 5-fold, repeated 5 times.</p></li>
+<li><p>int: the number of folds in a <cite>(Stratified)KFold</cite></p></li>
+<li><p>CV Splitter (see scikit-learn documentation on CV)</p></li>
+<li><p>An iterable yielding (train, test) splits as arrays of indices.</p></li>
+</ul>
 </dd>
 <dt><strong>groups</strong><span class="classifier">str or numpy.array | None</span></dt><dd><p>The grouping labels in case a Group CV is used.
 See <a class="reference external" href="https://juaml.github.io/julearn/input.html">https://juaml.github.io/julearn/input.html</a> for details.</p>
+</dd>
+<dt><strong>scoring</strong><span class="classifier">str | None</span></dt><dd><p>The scoring metric to use.
+See <a class="reference external" href="https://scikit-learn.org/stable/modules/model_evaluation.html">https://scikit-learn.org/stable/modules/model_evaluation.html</a> for
+a comprehensive list of options. If None, use ‘accuracy’.</p>
+</dd>
+<dt><strong>pos_labels</strong><span class="classifier">str, int, float or list | None</span></dt><dd><p>The labels to interpret as positive. If not None, every element from y
+will be converted to 1 if is equal or in pos_labels and to 0 if not.</p>
+</dd>
+<dt><strong>model_selection</strong><span class="classifier">dict | None</span></dt><dd><p>If not None, this dictionary specifies the parameters to use for model
+hyperparameters and selection of hyperparameters.</p>
+<p>The dictionary can define the following keys:</p>
+<ul class="simple">
+<li><p>‘hyperparameters’: A dictionary setting hyperparameters for each
+step of the pipeline. If more than option is provided for at least
+one hyperparameter, a GridSearch will be performed.</p></li>
+<li><p>‘cv’: If GridSearch is going to be used, the cross-validation
+splitting stategy to use. Defaults to same CV as for the model
+evaluation.</p></li>
+<li><p>‘gs_scoring’: If GridSearch is going to be used, the scoring metric
+to evaluate the performance.</p></li>
+</ul>
+<p>See <a class="reference external" href="https://juaml.github.io/julearn/hyperparameters.html">https://juaml.github.io/julearn/hyperparameters.html</a> for details.</p>
+</dd>
+<dt><strong>seed</strong><span class="classifier">int | None</span></dt><dd><p>If not None, set the random seed before any operation. Usefull for
+reproducibility.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>scores</strong><span class="classifier">np.ndarray</span></dt><dd><p>The fold-wise score.</p>
+</dd>
+<dt><strong>estimator</strong><span class="classifier">object</span></dt><dd><p>The estimator, fitted on all the data (only if
+<code class="docutils literal notranslate"><span class="pre">return_estimator=True</span></code>)</p>
 </dd>
 </dl>
 </dd>
@@ -132,6 +192,14 @@ See <a class="reference external" href="https://juaml.github.io/julearn/input.ht
 <dt id="julearn.estimators.list_models">
 <code class="sig-prename descclassname">julearn.estimators.</code><code class="sig-name descname">list_models</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#julearn.estimators.list_models" title="Permalink to this definition">¶</a></dt>
 <dd><p>List all the available model names</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>out</strong><span class="classifier">list(str)</span></dt><dd><p>A list will all the available model names.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -157,6 +225,54 @@ See <a class="reference external" href="https://juaml.github.io/julearn/input.ht
 </dd></dl>
 
 </div>
+<div class="section" id="transformer-functions">
+<h2>Transformer functions<a class="headerlink" href="#transformer-functions" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt id="julearn.transformers.list_transformers">
+<code class="sig-prename descclassname">julearn.transformers.</code><code class="sig-name descname">list_transformers</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">target</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.transformers.list_transformers" title="Permalink to this definition">¶</a></dt>
+<dd><p>List all the available transformers</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>target</strong><span class="classifier">bool</span></dt><dd><p>If True, return a list of the target tranformers. If False (default),
+return a list of features/confounds transformers.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>out</strong><span class="classifier">list(str)</span></dt><dd><p>A list will all the available transformer names.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="julearn.transformers.get_transformer">
+<code class="sig-prename descclassname">julearn.transformers.</code><code class="sig-name descname">get_transformer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">name</span></em>, <em class="sig-param"><span class="n">target</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.transformers.get_transformer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a transfomer</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>The transformer name</p>
+</dd>
+<dt><strong>target</strong><span class="classifier">bool</span></dt><dd><p>If True, return a target tranformer. If False (default),
+return a features/confounds transformers.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>out</strong><span class="classifier">scikit-learn compatible transformer</span></dt><dd><p>The transformer object.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<hr class="docutils" />
 <div class="section" id="logging">
 <h2>Logging<a class="headerlink" href="#logging" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
@@ -234,11 +350,12 @@ entries will be appended.</p>
 <h3><a href="index.html">Table of Contents</a></h3>
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installing JuLearn</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installing julearn</a></li>
 <li class="toctree-l1"><a class="reference internal" href="input.html">Input Data</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#module-julearn.api">Main API functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#model-functions">Model functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#transformer-functions">Transformer functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#logging">Logging</a></li>
 </ul>
 </li>
@@ -285,7 +402,7 @@ entries will be appended.</p>
              style="vertical-align: middle; margin-top: -1px"/></li>
     <li><a href="https://www.python.org/">Python</a> &#187;</li>
     
-    <a href="index.html">JuLearn  documentation</a> &#187;
+    <a href="index.html">julearn  documentation</a> &#187;
     
 
         <li class="nav-item nav-item-this"><a href="">Reference</a></li>
@@ -307,7 +424,7 @@ entries will be appended.</p>
       </ul>
     </div>  
     <div class="footer">
-    &copy; <a href="copyright.html">Copyright</a> 2020, Authors of JuLearn.
+    &copy; <a href="copyright.html">Copyright</a> 2020, Authors of julearn.
     <br />
 
     The Python Software Foundation is a non-profit corporation.

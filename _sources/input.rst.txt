@@ -3,7 +3,7 @@
 Input Data
 ==========
 
-Julearn supports two kinds of data input configuration. The function 
+julearn supports two kinds of data input configuration. The function 
 :func:`.run_cross_validation` takes as input the following variables:
 
 - `X`: Features
@@ -14,7 +14,7 @@ Julearn supports two kinds of data input configuration. The function
 - `groups`: Grouping variables to avoid data leakage in some cross-validation
    schemes. See `Cross Validation`_ for more information.
 
-Julearn interprets data using two kinds of combinations:
+julearn interprets data using two kinds of combinations:
 
 1. Using Pandas dataframes (recommended)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
