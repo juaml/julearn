@@ -20,6 +20,7 @@ Transformer functions
 
 .. autofunction:: julearn.transformers.list_transformers
 .. autofunction:: julearn.transformers.get_transformer
+
 =======
 
 Logging
