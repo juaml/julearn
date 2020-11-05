@@ -59,6 +59,7 @@ def run_cross_validation(
           in which the target (y) has more than two possible values.
         * "regression". Perform a regression. The target (y) has to be
           ordinal at least.
+
     preprocess_X : str, scikit-learn compatible transformers or list | None
         Transformer to apply to the features (X). If string, use one of the
         available transformers. If list, each element can be a string or

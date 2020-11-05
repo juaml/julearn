@@ -1,4 +1,4 @@
-__version__ = '0.1.dev0'
+from . _version import __version__
 
 from . import transformers
 from . api import run_cross_validation
