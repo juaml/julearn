@@ -51,7 +51,7 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
 
         """
 
-        df_X, ser_confound = self.split_into_X_confound(X)
+        df_X, ser_confound = self._split_into_X_confound(X)
         if type(X) == np.ndarray:
             idx_kept = list(df_X.columns)
             self.support_mask_ = np.zeros(len(X[0]), dtype=bool)
@@ -71,7 +71,8 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
                 _model.fit(ser_confound.values.reshape(-1, 1), X)
             return _model
 
-        self.models_confound_ = df_X.apply(fit_confound_models, axis=0)
+        self.models_confound_ = df_X.apply(fit_confound_models, axis=0,
+                                           result_type='reduce')
         return self
 
     def transform(self, X):
@@ -79,7 +80,7 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
 
 
         """
-        df_X, ser_confound = self.split_into_X_confound(X)
+        df_X, ser_confound = self._split_into_X_confound(X)
 
         conf_as_x = (
             ser_confound.values
@@ -93,7 +94,7 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
             columns=df_X.index,
         ).T
         residuals = df_X - df_X_prediction
-        return self.apply_threshold(residuals)
+        return self._apply_threshold(residuals)
 
     def get_support(self, indices=False):
         if indices:
@@ -101,7 +102,7 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
         else:
             return self.support_mask_
 
-    def split_into_X_confound(self, X):
+    def _split_into_X_confound(self, X):
         """splits the original X input into the reals features (X) and confound
         """
         if not isinstance(X, pd.DataFrame):
@@ -142,7 +143,7 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
 
         return df_X, ser_confound
 
-    def apply_threshold(self, residuals):
+    def _apply_threshold(self, residuals):
         """Rounds residuals to 0 when smaller than
         the previously described absolute threshold.
         This is done to prevent correlated rounding errors
