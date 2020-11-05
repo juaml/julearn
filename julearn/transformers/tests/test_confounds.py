@@ -38,53 +38,58 @@ def test__apply_threshold():
 
 
 def test_confound_auto_find_conf():
-    confounds = ['c__:type:__confound',
-                 'd__:type:__confound']
-    features = X.drop(columns=confounds).columns
 
-    for model_to_remove in [
-            LinearRegression(), RandomForestRegressor(n_estimators=5)]:
-        confound_remover = DataFrameConfoundRemover(
-            model_confound=model_to_remove)
+    for _X, confounds in [
+        [X.copy(), ['c__:type:__confound',
+                    'd__:type:__confound']],
+        [X.drop(columns='d__:type:__confound').copy(),
+         ['c__:type:__confound']]
+    ]:
+        features = _X.drop(columns=confounds).columns
 
-        np.random.seed(42)
+        for model_to_remove in [
+                LinearRegression(), RandomForestRegressor(n_estimators=5)]:
+            confound_remover = DataFrameConfoundRemover(
+                model_confound=model_to_remove)
 
-        df_cofound_removed = confound_remover.fit_transform(X)
-        np.random.seed(42)
-        confound_regressions = [
-            clone(model_to_remove).fit(X.loc[:, confounds],
-                                       X.loc[:, feature])
-            for feature in features
-        ]
+            np.random.seed(42)
 
-        df_confound_removed_manual = (X
-                                      .drop(columns=confounds)
-                                      .copy()
-                                      )
-        # Test that each model inside of the confound removal
-        # is the same as if we would have trained the same model
-        # in sklearn
-        for internal_model, confound_regression, feature in zip(
-                confound_remover.models_confound_,
-                confound_regressions,
-                features):
+            df_cofound_removed = confound_remover.fit_transform(_X)
+            np.random.seed(42)
+            confound_regressions = [
+                clone(model_to_remove).fit(_X.loc[:, confounds],
+                                           _X.loc[:, feature])
+                for feature in features
+            ]
 
-            manual_pred = confound_regression.predict(
-                X.loc[:, confounds])
-            df_confound_removed_manual[feature] = manual_pred
+            df_confound_removed_manual = (_X
+                                          .drop(columns=confounds)
+                                          .copy()
+                                          )
+            # Test that each model inside of the confound removal
+            # is the same as if we would have trained the same model
+            # in sklearn
+            for internal_model, confound_regression, feature in zip(
+                    confound_remover.models_confound_,
+                    confound_regressions,
+                    features):
 
-            assert_array_equal(
-                internal_model.predict(X.loc[:, confounds]),
-                manual_pred
-            )
-        df_confound_removed_manual = (X.drop(columns=confounds)
-                                      - df_confound_removed_manual)
+                manual_pred = confound_regression.predict(
+                    _X.loc[:, confounds])
+                df_confound_removed_manual[feature] = manual_pred
 
-        # After confound removal the confound should be removed
-        assert (df_cofound_removed.columns == X.drop(
-            columns=confounds).columns).all()
+                assert_array_equal(
+                    internal_model.predict(_X.loc[:, confounds]),
+                    manual_pred
+                )
+            df_confound_removed_manual = (_X.drop(columns=confounds)
+                                          - df_confound_removed_manual)
 
-        assert_frame_equal(df_cofound_removed, df_confound_removed_manual)
+            # After confound removal the confound should be removed
+            assert (df_cofound_removed.columns == _X.drop(
+                columns=confounds).columns).all()
+
+            assert_frame_equal(df_cofound_removed, df_confound_removed_manual)
 
 
 def test_confound_set_confounds():
