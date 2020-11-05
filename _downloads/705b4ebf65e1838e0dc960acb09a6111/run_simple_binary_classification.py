@@ -7,6 +7,9 @@ classification using a Support Vector Machine classifier.
 
 .. include:: ../links.inc
 """
+# Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
+#
+# License: AGPL
 from seaborn import load_dataset
 from julearn import run_cross_validation
 from julearn.utils import configure_logging
