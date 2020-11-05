@@ -141,8 +141,8 @@ If any of this fails, go back to :ref:`do_changes`
 *************************
 
 Now that you are happy with your contribution, just navigate to your fork
-of the julearn repository in `Github`_ and click on the *create pull request*
-button.
+of the julearn repository in `Github`_ and click on the *Compare & pull 
+request* button.
 
 Fill in the pull request message and you will be in contact with the julearn
 mantainers who will review your contribution. If they suggest any modification,
