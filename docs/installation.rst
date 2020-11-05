@@ -60,12 +60,13 @@ First, make sure that you have all the dependencies installed:
 
 .. code-block:: bash
 
-    pip install -U scikit-learn pandas
+    pip install -U scikit-learn pandas numpy
 
 OR:
+
 .. code-block:: bash
 
-    conda install scikit-learn pandas
+    conda install scikit-learn pandas numpy
 
 
 Then, install julearn from TestPypi
