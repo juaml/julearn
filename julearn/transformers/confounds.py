@@ -14,20 +14,31 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
         self, model_confound=None, confounds='use_suffix',
         threshold=None, suffix='__:type:__confound'
     ):
-        """Model to regress out/remove confound
-        by a given model from the features.
+        """Transformer which can use pd.DataFrames and remove the confounds 
+        from the features by subtracting the predicted features
+        given the confounds from the actual features.
 
         Parameters
         ----------
-        model_confound : [sklearn model]
-                         Model by which we predict X
-                         given the confound to later compute the residuals.
-        confounds   : [int, str]
-                         The indx in ndarray or
-                         the column name in a df of the confound.
-
-        threshold      : [float]
-                         Threshold under which all values are rounded to 0.
+        model_confound : sklearn.base.BaseEstimator
+            Model used to predict all features independentley
+            using the confounds as features. The predictions of these models
+            are then subtracted from each feature,
+            default LinearRegression()
+        confounds : list[str] or str
+            Either the  column name or column names of the confounds
+            Or 'use_suffix', which allows the model to automatically detect
+            the confounds given one suffix. All column names which end with
+            this suffix are interpreted as cofnounds,
+            default 'use_suffix'
+        threshold : float or None
+            All residual values after confound removal which fall under
+            the threshold will be set to 0.
+            None means that no threshold will be applied,
+            default None
+        suffix : str
+            A suffix which can be used to automatically detect the confounds,
+            default '__:type:__confound'
 
         """
         if model_confound is None:
@@ -45,12 +56,6 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
             self.multiple_confounds = False
 
     def fit(self, X, y=None):
-        """Modelling X given confound in the internal model.
-
-        Parameters
-
-        """
-
         df_X, ser_confound = self._split_into_X_confound(X)
         self.support_mask_ = pd.Series(False, index=X.columns,
                                        dtype=bool)
@@ -70,10 +75,6 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
         return self
 
     def transform(self, X):
-        """Cleaning/Subtracting the predicted X given the confound out of X.
-
-
-        """
         df_X, ser_confound = self._split_into_X_confound(X)
 
         conf_as_x = (
