@@ -95,6 +95,12 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
         residuals = df_X - df_X_prediction
         return self.apply_threshold(residuals)
 
+    def get_support(self, indices=False):
+        if indices:
+            return np.arange(len(self.support_mask_))[self.support_mask_]
+        else:
+            return self.support_mask_
+
     def split_into_X_confound(self, X):
         """splits the original X input into the reals features (X) and confound
         """
@@ -148,9 +154,3 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
                 lambda x: 0 if abs(x) <= self.threshold else x
             )
         return residuals
-
-    def get_support(self, indices=False):
-        if indices:
-            return np.arange(len(self.support_mask_))[self.support_mask_]
-        else:
-            return self.support_mask_
