@@ -178,7 +178,7 @@ def run_cross_validation(
 
     scorer = prepare_scoring(pipeline, scoring)
 
-    check_consistency(pipeline, preprocess_X, preprocess_y, 
+    check_consistency(pipeline, preprocess_X, preprocess_y,
                       preprocess_confounds, df_X_conf, y, cv, groups,
                       problem_type)
     scores = cross_val_score(pipeline, df_X_conf, y, cv=cv_outer,
