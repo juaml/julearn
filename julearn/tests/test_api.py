@@ -208,6 +208,10 @@ def test_consistency():
 
     cv = StratifiedKFold(2)
 
+    # No error for multiclass
+    _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
+                             problem_type='multiclass_classification')
+
     with pytest.raises(ValueError, match='not suitable for'):
         _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv)
 
