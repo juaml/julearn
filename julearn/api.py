@@ -9,7 +9,8 @@ from . prepare import (prepare_input_data,
                        prepare_cv,
                        prepare_model_selection,
                        prepare_preprocessing,
-                       prepare_scoring)
+                       prepare_scoring,
+                       check_consistency)
 from . pipeline import create_pipeline
 
 from . utils import logger
@@ -176,6 +177,10 @@ def run_cross_validation(
             model_selection, pipeline, model_tuple[0], cv_outer)
 
     scorer = prepare_scoring(pipeline, scoring)
+
+    check_consistency(pipeline, preprocess_X, preprocess_y, 
+                      preprocess_confounds, df_X_conf, y, cv, groups,
+                      problem_type)
     scores = cross_val_score(pipeline, df_X_conf, y, cv=cv_outer,
                              scoring=scorer, groups=df_groups)
 

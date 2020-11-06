@@ -8,6 +8,8 @@ from sklearn.base import clone
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import make_pipeline
 from sklearn.model_selection import (cross_val_score,
+                                     StratifiedKFold,
+                                     GroupKFold,
                                      RepeatedKFold,
                                      GridSearchCV)
 from sklearn.preprocessing import LabelBinarizer
@@ -196,3 +198,50 @@ def test_tune_hyperparam():
     clf1 = actual_estimator.best_estimator_.dataframe_pipeline.steps[-1][1]
     clf2 = clone(gs).fit(sk_X, sk_y).best_estimator_.steps[-1][1]
     compare_models(clf1, clf2)
+
+
+def test_consistency():
+    """Test for consistency in the parameters"""
+    df_iris = load_dataset('iris')
+    X = ['sepal_length', 'sepal_width', 'petal_length']
+    y = 'species'
+
+    cv = StratifiedKFold(2)
+
+    with pytest.raises(ValueError, match='not suitable for'):
+        _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv)
+
+    # no error with pos_labels
+    _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
+                             pos_labels='setosa')
+    with pytest.warns(RuntimeWarning, match='not suitable for'):
+        _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
+                                 preprocess_y='zscore')
+
+    # keep only two species
+    df_iris = df_iris[df_iris['species'].isin(['setosa', 'virginica'])]
+
+    # no error, no warning
+    _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv)
+
+    match = 'multiclass classification will be performed but only 2'
+    with pytest.warns(RuntimeWarning, match=match):
+        _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
+                                 problem_type='multiclass_classification')
+
+    # Groups parameters
+    df_iris = load_dataset('iris')
+    df_iris = df_iris[df_iris['species'].isin(['setosa', 'virginica'])]
+    df_iris['groups'] = np.random.randint(0, 3, len(df_iris))
+    X = ['sepal_length', 'sepal_width', 'petal_length']
+    y = 'species'
+    groups = 'groups'
+    match = 'groups was specified but the CV strategy'
+    with pytest.warns(RuntimeWarning, match=match):
+        _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
+                                 groups=groups)
+
+    # No warning:
+    cv = GroupKFold(2)
+    _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
+                             groups=groups)
