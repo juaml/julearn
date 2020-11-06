@@ -5,9 +5,11 @@ import numpy as np
 
 from sklearn import svm
 from sklearn.base import clone
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.pipeline import make_pipeline
 from sklearn.model_selection import (cross_val_score,
+                                     StratifiedKFold,
+                                     GroupKFold,
                                      RepeatedKFold,
                                      GridSearchCV)
 from sklearn.preprocessing import LabelBinarizer
@@ -196,3 +198,124 @@ def test_tune_hyperparam():
     clf1 = actual_estimator.best_estimator_.dataframe_pipeline.steps[-1][1]
     clf2 = clone(gs).fit(sk_X, sk_y).best_estimator_.steps[-1][1]
     compare_models(clf1, clf2)
+
+
+def test_consistency():
+    """Test for consistency in the parameters"""
+    df_iris = load_dataset('iris')
+    X = ['sepal_length', 'sepal_width', 'petal_length']
+    y = 'species'
+
+    cv = StratifiedKFold(2)
+
+    # Example 1: 3 classes, as strings
+
+    # No error for multiclass
+    _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
+                             problem_type='multiclass_classification')
+
+    # Error for binary
+    with pytest.raises(ValueError, match='not suitable for'):
+        _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv)
+
+    # no error with pos_labels
+    _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
+                             pos_labels='setosa')
+
+    # Warn with target transformer
+    with pytest.warns(RuntimeWarning, match='not suitable for'):
+        _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
+                                 preprocess_y='zscore')
+
+    # Error for regression
+    with pytest.raises(ValueError, match='not suitable for'):
+        _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
+                                 problem_type='regression')
+
+    # Warn for regression with pos_labels
+    match = 'but only 2 distinct values are defined'
+    with pytest.warns(RuntimeWarning, match=match):
+        _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
+                                 problem_type='regression',
+                                 pos_labels='setosa')
+
+    # Warn for regression with y_transformer
+    match = 'owever, a y transformer'
+    with pytest.warns(RuntimeWarning, match=match):
+        _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
+                                 problem_type='regression',
+                                 preprocess_y='zscore')
+
+    # Example 2: 2 classes, as strings
+    df_iris = df_iris[df_iris['species'].isin(['setosa', 'virginica'])]
+
+    # no error for binary
+    _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv)
+
+    # Warning for multiclass
+    match = 'multiclass classification will be performed but only 2'
+    with pytest.warns(RuntimeWarning, match=match):
+        _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
+                                 problem_type='multiclass_classification')
+
+    # Error for regression
+    with pytest.raises(ValueError, match='not suitable for'):
+        _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
+                                 problem_type='regression')
+
+    # Warn for regression with pos_labels
+    match = 'but only 2 distinct values are defined'
+    with pytest.warns(RuntimeWarning, match=match):
+        _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
+                                 problem_type='regression',
+                                 pos_labels='setosa')
+
+    # Exampe 3: 3 classes, as integers
+    df_iris = load_dataset('iris')
+    le = LabelEncoder()
+    df_iris['species'] = le.fit_transform(df_iris['species'].values)
+
+    # No error for multiclass
+    _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
+                             problem_type='multiclass_classification')
+
+    # Error for binary
+    with pytest.raises(ValueError, match='not suitable for'):
+        _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv)
+
+    # no error with pos_labels
+    _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
+                             pos_labels=2)
+
+    # Warn with target transformer
+    with pytest.warns(RuntimeWarning, match='not suitable for'):
+        _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
+                                 preprocess_y='zscore')
+
+    # no error for regression
+    _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
+                             problem_type='regression')
+
+    # Warn for regression with pos_labels
+    match = 'but only 2 distinct values are defined'
+    with pytest.warns(RuntimeWarning, match=match):
+        _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
+                                 problem_type='regression',
+                                 pos_labels=2)
+
+    # Groups parameters
+    df_iris = load_dataset('iris')
+    df_iris = df_iris[df_iris['species'].isin(['setosa', 'virginica'])]
+    df_iris['groups'] = np.random.randint(0, 3, len(df_iris))
+    X = ['sepal_length', 'sepal_width', 'petal_length']
+    y = 'species'
+    groups = 'groups'
+    match = 'groups was specified but the CV strategy'
+    with pytest.warns(RuntimeWarning, match=match):
+        _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
+                                 groups=groups)
+
+    # No warning:
+    cv = GroupKFold(2)
+    _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
+                             groups=groups)

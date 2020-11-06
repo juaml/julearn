@@ -5,6 +5,7 @@ from julearn.transformers.target import TargetTransfromerWrapper
 import pandas as pd
 import numpy as np
 from copy import deepcopy
+from sklearn import model_selection
 from sklearn.model_selection import RepeatedKFold, GridSearchCV
 from sklearn.base import clone
 from sklearn.model_selection import check_cv
@@ -218,6 +219,7 @@ def prepare_input_data(X, y, confounds, df, pos_labels, groups):
         if not isinstance(pos_labels, list):
             pos_labels = [pos_labels]
         logger.info(f'Setting the following as positive labels {pos_labels}')
+        # TODO: Warn if pos_labels are not in df_y
         df_y = df_y.isin(pos_labels).astype(np.int)
     logger.info('====================')
     logger.info('')
@@ -467,3 +469,62 @@ def _is_valid_sklearn_model(model):
             hasattr(model, 'predict') and
             hasattr(model, 'get_params') and
             hasattr(model, 'set_params'))
+
+
+def check_consistency(
+        pipeline, preprocess_X, preprocess_y, preprocess_confounds, df_X_conf,
+        y, cv, groups, problem_type):
+    """Check the consistency of the parameters/input"""
+
+    # Check problem type and the target.
+    n_classes = np.unique(y.values).shape[0]
+    if problem_type == 'binary_classification':
+        # If not exactly two classes:
+        if n_classes != 2:
+            if preprocess_y is None:
+                raise_error(
+                    f'The number of classes ({n_classes}) is not suitable for '
+                    'a binary classification. You can either specify '
+                    '``pos_labels``, a suitable y transformer or change the '
+                    'problem type.')
+            else:
+                warn(
+                    f'The number of classes ({n_classes}) is not suitable for '
+                    'a binary classification. However, a y transformer has '
+                    'been set.')
+    elif problem_type == 'multiclass_classification':
+        if n_classes == 2:
+            warn(
+                f'A multiclass classification will be performed but only 2 '
+                'classes are defined in y.')
+    else:
+        # Regression
+        is_numeric = np.issubdtype(y.values.dtype, np.number)
+        if not is_numeric:
+            if preprocess_y is None:
+                raise_error(
+                    f'The kind of values in y ({y.values.dtype}) is not '
+                    'suitable for a regression. You can either specify a '
+                    'suitable y transformer or change the problem type.')
+            else:
+                warn(
+                    f'The kind of values in y ({y.values.dtype}) is not '
+                    'suitable for a regression. However, a y transformer has '
+                    'been set.')
+        else:
+            n_classes = np.unique(y.values).shape[0]
+            if n_classes == 2:
+                warn(
+                    f'A regression will be performed but only 2 '
+                    'distinct values are defined in y.')
+    # Check groups and CV scheme
+    if groups is not None:
+        valid_instances = (
+            model_selection.GroupKFold,
+            model_selection.GroupShuffleSplit,
+            model_selection.LeaveOneGroupOut,
+            model_selection.LeavePGroupsOut
+        )
+        if not isinstance(cv, valid_instances):
+            warn('The parameter groups was specified but the CV strategy '
+                 'will not consider them.')
