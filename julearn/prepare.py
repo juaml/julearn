@@ -219,6 +219,7 @@ def prepare_input_data(X, y, confounds, df, pos_labels, groups):
         if not isinstance(pos_labels, list):
             pos_labels = [pos_labels]
         logger.info(f'Setting the following as positive labels {pos_labels}')
+        # TODO: Warn if pos_labels are not in df_y
         df_y = df_y.isin(pos_labels).astype(np.int)
     logger.info('====================')
     logger.info('')

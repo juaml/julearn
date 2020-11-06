@@ -239,6 +239,13 @@ def test_consistency():
                                  problem_type='regression',
                                  pos_labels='setosa')
 
+    # Warn for regression with y_transformer
+    match = 'owever, a y transformer'
+    with pytest.warns(RuntimeWarning, match=match):
+        _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
+                                 problem_type='regression',
+                                 preprocess_y='zscore')
+
     # Example 2: 2 classes, as strings
     df_iris = df_iris[df_iris['species'].isin(['setosa', 'virginica'])]
 
