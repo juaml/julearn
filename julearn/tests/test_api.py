@@ -5,7 +5,7 @@ import numpy as np
 
 from sklearn import svm
 from sklearn.base import clone
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.pipeline import make_pipeline
 from sklearn.model_selection import (cross_val_score,
                                      StratifiedKFold,
@@ -208,30 +208,93 @@ def test_consistency():
 
     cv = StratifiedKFold(2)
 
+    # Example 1: 3 classes, as strings
+
     # No error for multiclass
     _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
                              problem_type='multiclass_classification')
 
+    # Error for binary
     with pytest.raises(ValueError, match='not suitable for'):
         _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv)
 
     # no error with pos_labels
     _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
                              pos_labels='setosa')
+
+    # Warn with target transformer
     with pytest.warns(RuntimeWarning, match='not suitable for'):
         _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
                                  preprocess_y='zscore')
 
-    # keep only two species
+    # Error for regression
+    with pytest.raises(ValueError, match='not suitable for'):
+        _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
+                                 problem_type='regression')
+
+    # Warn for regression with pos_labels
+    match = 'but only 2 distinct values are defined'
+    with pytest.warns(RuntimeWarning, match=match):
+        _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
+                                 problem_type='regression',
+                                 pos_labels='setosa')
+
+    # Example 2: 2 classes, as strings
     df_iris = df_iris[df_iris['species'].isin(['setosa', 'virginica'])]
 
-    # no error, no warning
+    # no error for binary
     _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv)
 
+    # Warning for multiclass
     match = 'multiclass classification will be performed but only 2'
     with pytest.warns(RuntimeWarning, match=match):
         _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
                                  problem_type='multiclass_classification')
+
+    # Error for regression
+    with pytest.raises(ValueError, match='not suitable for'):
+        _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
+                                 problem_type='regression')
+
+    # Warn for regression with pos_labels
+    match = 'but only 2 distinct values are defined'
+    with pytest.warns(RuntimeWarning, match=match):
+        _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
+                                 problem_type='regression',
+                                 pos_labels='setosa')
+
+    # Exampe 3: 3 classes, as integers
+    df_iris = load_dataset('iris')
+    le = LabelEncoder()
+    df_iris['species'] = le.fit_transform(df_iris['species'].values)
+
+    # No error for multiclass
+    _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
+                             problem_type='multiclass_classification')
+
+    # Error for binary
+    with pytest.raises(ValueError, match='not suitable for'):
+        _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv)
+
+    # no error with pos_labels
+    _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
+                             pos_labels=2)
+
+    # Warn with target transformer
+    with pytest.warns(RuntimeWarning, match='not suitable for'):
+        _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
+                                 preprocess_y='zscore')
+
+    # no error for regression
+    _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
+                             problem_type='regression')
+
+    # Warn for regression with pos_labels
+    match = 'but only 2 distinct values are defined'
+    with pytest.warns(RuntimeWarning, match=match):
+        _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
+                                 problem_type='regression',
+                                 pos_labels=2)
 
     # Groups parameters
     df_iris = load_dataset('iris')

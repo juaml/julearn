@@ -496,8 +496,26 @@ def check_consistency(
             warn(
                 f'A multiclass classification will be performed but only 2 '
                 'classes are defined in y.')
-    # TODO: Check for regression
-
+    else:
+        # Regression
+        is_numeric = np.issubdtype(y.values.dtype, np.number)
+        if not is_numeric:
+            if preprocess_y is None:
+                raise_error(
+                    f'The kind of values in y ({y.values.dtype}) is not '
+                    'suitable for a regression. You can either specify a '
+                    'suitable y transformer or change the problem type.')
+            else:
+                warn(
+                    f'The kind of values in y ({y.values.dtype}) is not '
+                    'suitable for a regression. However, a y transformer has '
+                    'been set.')
+        else:
+            n_classes = np.unique(y.values).shape[0]
+            if n_classes == 2:
+                warn(
+                    f'A regression will be performed but only 2 '
+                    'distinct values are defined in y.')
     # Check groups and CV scheme
     if groups is not None:
         valid_instances = (
