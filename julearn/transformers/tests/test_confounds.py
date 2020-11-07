@@ -106,7 +106,7 @@ def test_confound_set_confounds():
 
             features = X.drop(columns=confounds).columns
             confound_remover = DataFrameConfoundRemover(
-                model_confound=model_to_remove, confounds=confounds)
+                model_confound=model_to_remove, confounds_match=confounds)
 
             np.random.seed(42)
             df_cofound_removed = confound_remover.fit_transform(X)
