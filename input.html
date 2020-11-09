@@ -110,6 +110,29 @@ dataframe (specified in <cite>df</cite>).</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">scores</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df_iris</span><span class="p">,</span> <span class="n">confounds</span><span class="o">=</span><span class="n">confounds</span><span class="p">)</span>
 </pre></div>
 </div>
+<div class="section" id="using-regular-expressions">
+<h3>Using regular expressions<a class="headerlink" href="#using-regular-expressions" title="Permalink to this headline">¶</a></h3>
+<p>It might be the case that the number of elements of X and confounds are too
+many to specify manually all the column names. For this purpose, julearn
+provides the option of using regular expressions to match columns names.</p>
+<p>In the previous example, we can pick both <code class="docutils literal notranslate"><span class="pre">sepal_width</span></code> and <code class="docutils literal notranslate"><span class="pre">sepal_length</span></code>
+by using <code class="docutils literal notranslate"><span class="pre">sepal_.*</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df_iris</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s1">&#39;iris&#39;</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;sepal_.*&#39;</span><span class="p">,</span> <span class="s1">&#39;petal_length&#39;</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="s1">&#39;species&#39;</span>
+<span class="n">confounds</span> <span class="o">=</span> <span class="s1">&#39;petal_width&#39;</span>
+</pre></div>
+</div>
+<p>Additionally, we also provide a way to select all the columns, except for the
+ones used for <code class="docutils literal notranslate"><span class="pre">y</span></code>, <code class="docutils literal notranslate"><span class="pre">confounds</span></code> and <code class="docutils literal notranslate"><span class="pre">groups</span></code>. That is, using X = [‘:’].</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df_iris</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s1">&#39;iris&#39;</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;:&#39;</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="s1">&#39;species&#39;</span>
+<span class="n">confounds</span> <span class="o">=</span> <span class="s1">&#39;petal_width&#39;</span>
+</pre></div>
+</div>
+<p>For more information, check python’s <a class="reference external" href="https://docs.python.org/3/library/re.html">Regular Expressions</a>.</p>
+</div>
 </div>
 <div class="section" id="using-numpy-arrays">
 <h2>2. Using Numpy arrays<a class="headerlink" href="#using-numpy-arrays" title="Permalink to this headline">¶</a></h2>
