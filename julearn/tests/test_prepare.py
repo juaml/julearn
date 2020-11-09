@@ -520,6 +520,24 @@ def test_pick_regexp():
 
     X = columns[:6]
     y = '_a3_b2_c7_'
+    confounds = columns[-3:-1]
+    groups = columns[-1]
+    prepared = prepare_input_data(X=[':'], y=y, confounds=confounds, df=df,
+                                  pos_labels=None, groups=groups)
+
+    df_X_conf, df_y, df_groups, confound_names = prepared
+
+    assert all([x in df_X_conf.columns for x in X])
+    assert all([x in df_X_conf.columns for x in confounds])
+    assert y not in df_X_conf.columns
+    assert groups not in df_X_conf.columns
+    assert df_y.name == y
+    assert df_groups.name == groups
+    assert len(confound_names) == 2
+    assert all([x in confound_names for x in confounds])
+
+    X = columns[:6]
+    y = '_a3_b2_c7_'
     confounds = columns[-3:]
     prepared = prepare_input_data(X=['_a_.*'], y=y, confounds='_a2_.*', df=df,
                                   pos_labels=None, groups=None)
