@@ -111,20 +111,17 @@ class ExtendedDataFramePipeline(BaseEstimator):
         a list of column names which are confounds ,by default None
     categorical_features : list[str], optional
         a list of column names which are cateroical features,by default None
-    column_type_sep : str, optional
-        this seperater is used to change the column names internally and add
-        a column type after the actual column name
-        seperated by the column_type_sep, by default '__:type:__'
     return_trans_column_type : bool, optional
         whether to return transformed column names with the associated
         column type, by default False
     """
 
+    column_type_sep = '__:type:__'
+
     def __init__(self, dataframe_pipeline,
                  y_transformer=None,
                  confound_dataframe_pipeline=None,
                  confounds=None, categorical_features=None,
-                 column_type_sep='__:type:__',
                  return_trans_column_type=False):
 
         self.dataframe_pipeline = dataframe_pipeline
@@ -132,7 +129,6 @@ class ExtendedDataFramePipeline(BaseEstimator):
         self.confound_dataframe_pipeline = confound_dataframe_pipeline
         self.confounds = confounds
         self.categorical_features = categorical_features
-        self.column_type_sep = column_type_sep
         self.return_trans_column_type = return_trans_column_type
 
     def fit(self, X, y=None):
