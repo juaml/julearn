@@ -18,6 +18,9 @@
 .. _`Random Forest`: https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html
 .. _`Cross Validation`: https://scikit-learn.org/stable/modules/classes.html#module-sklearn.model_selection
 .. _`Standard Scaler`: https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html
+.. _`Hyperparameter Tunning`: https://scikit-learn.org/stable/modules/grid_search.html
+.. _`GridSearchCV`: https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html#sklearn.model_selection.GridSearchCV
+.. _`RandomizedSearchCV`: https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.RandomizedSearchCV.html#sklearn.model_selection.RandomizedSearchCV
 
 .. _`pandas`: https://pandas.pydata.org
 .. _`Python`: https://python.org
@@ -28,3 +31,5 @@
 
 .. _`Github`: https://github.com/
 .. _`julearn Github`: https://github.com/juaml/julearn
+
+.. _`Wikipedia`: https://wikipedia.org
