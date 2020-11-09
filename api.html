@@ -81,7 +81,7 @@
 <span id="main-api-functions"></span><h2>Main API functions<a class="headerlink" href="#module-julearn.api" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
 <dt id="julearn.api.run_cross_validation">
-<code class="sig-prename descclassname">julearn.api.</code><code class="sig-name descname">run_cross_validation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">confounds</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">problem_type</span><span class="o">=</span><span class="default_value">'binary_classification'</span></em>, <em class="sig-param"><span class="n">preprocess_X</span><span class="o">=</span><span class="default_value">'zscore'</span></em>, <em class="sig-param"><span class="n">preprocess_y</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">preprocess_confounds</span><span class="o">=</span><span class="default_value">'zscore'</span></em>, <em class="sig-param"><span class="n">return_estimator</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">cv</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">groups</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scoring</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">pos_labels</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">model_selection</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.api.run_cross_validation" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">julearn.api.</code><code class="sig-name descname">run_cross_validation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">confounds</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">problem_type</span><span class="o">=</span><span class="default_value">'binary_classification'</span></em>, <em class="sig-param"><span class="n">preprocess_X</span><span class="o">=</span><span class="default_value">'zscore'</span></em>, <em class="sig-param"><span class="n">preprocess_y</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">preprocess_confounds</span><span class="o">=</span><span class="default_value">'zscore'</span></em>, <em class="sig-param"><span class="n">return_estimator</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">cv</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">groups</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scoring</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">pos_labels</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">model_params</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.api.run_cross_validation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run cross validation and score.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
@@ -153,18 +153,21 @@ a comprehensive list of options. If None, use ‘accuracy’.</p>
 <dt><strong>pos_labels</strong><span class="classifier">str, int, float or list | None</span></dt><dd><p>The labels to interpret as positive. If not None, every element from y
 will be converted to 1 if is equal or in pos_labels and to 0 if not.</p>
 </dd>
-<dt><strong>model_selection</strong><span class="classifier">dict | None</span></dt><dd><p>If not None, this dictionary specifies the parameters to use for model
-hyperparameters and selection of hyperparameters.</p>
+<dt><strong>model_params</strong><span class="classifier">dict | None</span></dt><dd><p>If not None, this dictionary specifies the model parameters to use</p>
 <p>The dictionary can define the following keys:</p>
 <ul class="simple">
-<li><p>‘hyperparameters’: A dictionary setting hyperparameters for each
-step of the pipeline. If more than option is provided for at least
-one hyperparameter, a GridSearch will be performed.</p></li>
-<li><p>‘cv’: If GridSearch is going to be used, the cross-validation
+<li><p>‘STEP__PARAMETER’: A value (or several) to be used as PARAMETER for
+STEP in the pipeline. Example: ‘svm__probability’: True will set
+the parameter ‘probability’ of the ‘svm’ model. If more than option
+is provided for at least one hyperparameter, a search will be
+performed.</p></li>
+<li><p>‘search’: The kind of search algorithm to use: ‘grid’ or ‘random’.</p></li>
+<li><p>‘cv’: If search is going to be used, the cross-validation
 splitting stategy to use. Defaults to same CV as for the model
 evaluation.</p></li>
-<li><p>‘gs_scoring’: If GridSearch is going to be used, the scoring metric
-to evaluate the performance.</p></li>
+<li><p>‘scoring’: If search is going to be used, the scoring metric to
+evaluate the performance.</p></li>
+<li><p>‘search_params’: Additional parameters for the search method.</p></li>
 </ul>
 <p>See <a class="reference external" href="https://juaml.github.io/julearn/hyperparameters.html">https://juaml.github.io/julearn/hyperparameters.html</a> for details.</p>
 </dd>

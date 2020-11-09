@@ -77,6 +77,74 @@
             
   <div class="section" id="hyperparameters">
 <h1>Hyperparameters<a class="headerlink" href="#hyperparameters" title="Permalink to this headline">¶</a></h1>
+<p>From <a class="reference external" href="https://wikipedia.org">Wikipedia</a>:
+“In machine learning, a hyperparameter is a parameter whose value is used to
+control the learning process. By contrast, the values of other parameters
+are derived via training.”</p>
+<div class="section" id="setting-hyperparameters">
+<h2>Setting Hyperparameters<a class="headerlink" href="#setting-hyperparameters" title="Permalink to this headline">¶</a></h2>
+<p>In julearn, we can set the hyperparameters using the <code class="docutils literal notranslate"><span class="pre">model_params</span></code> parameter
+in <a class="reference internal" href="api.html#julearn.api.run_cross_validation" title="julearn.api.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>.</p>
+<p>In order to specify a hyperparameter for a specific step of the pipeline, we
+need to prefix the parameter name with the step name, separated by double
+underscores (<code class="docutils literal notranslate"><span class="pre">__</span></code>). For example, if we want to specify the parameter
+<code class="docutils literal notranslate"><span class="pre">kernel='linear'</span></code> of the <em>svm</em> model, we need to do the following:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model_params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;svm__kernel&#39;</span><span class="p">:</span> <span class="s1">&#39;linear&#39;</span><span class="p">}</span>
+<span class="n">run_cross_validation</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;svm&#39;</span><span class="p">,</span> <span class="n">model_params</span><span class="o">=</span><span class="n">model_params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>TODO: Add doc for confound and y transformers hyperparameters</p>
+</div>
+<div class="section" id="tunning-hyperparameters">
+<h2>Tunning Hyperparameters<a class="headerlink" href="#tunning-hyperparameters" title="Permalink to this headline">¶</a></h2>
+<p>Another useful techinique is called <em>hyperparameter tunning</em>. This techinique
+is normally applied when we want to set the hyperparameters in a data driven
+way.</p>
+<p>In this case, we use yet another cross-validation scheme to split the training
+data and evaluate the best set of hyperparameters for our model.</p>
+<p>In julearn, hyperparameter tunning is enabled by giving more than one option
+for at least one hyperparameter.</p>
+<p>For example, obtaining the best regularization parameter (<code class="docutils literal notranslate"><span class="pre">C</span></code>) for the <em>svm</em>
+model can be done by testing several candidate values:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model_params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;svm__C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span>
+    <span class="s1">&#39;svm__kernel&#39;</span><span class="p">:</span> <span class="s1">&#39;linear&#39;</span><span class="p">}</span>
+<span class="n">run_cross_validation</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;svm&#39;</span><span class="p">,</span> <span class="n">model_params</span><span class="o">=</span><span class="n">model_params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In this case, since there are more than option for C, julearn will evaluate
+which is the best value. For the <code class="docutils literal notranslate"><span class="pre">kernel</span></code> parameter, there will be no search
+as <code class="docutils literal notranslate"><span class="pre">'linear'</span></code> is the only value specified.</p>
+<p>There are three more parameters that we can use to specify how the
+hyperparameter search will be done:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">search</span></code>: The kind of algorithm to apply. The value <code class="docutils literal notranslate"><span class="pre">'grid'</span></code> (default)
+will apply a <cite>GridSearchCV</cite>. The value <code class="docutils literal notranslate"><span class="pre">'random'</span></code> will use a
+<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.RandomizedSearchCV.html#sklearn.model_selection.RandomizedSearchCV">RandomizedSearchCV</a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cv</span></code>: The cross-validation scheme to use for the hyperparameter tunning.
+The default is to use the same scheme as for the model evaluation.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scoring</span></code>: The scoring metric to optimize.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">search_params</span></code>: Additional parameters for the search algorithm.</p></li>
+</ul>
+<p>The following examples performs a randomized search with 6 options for <cite>C</cite> and
+13 options for <code class="docutils literal notranslate"><span class="pre">gamma</span></code>. Testing all the combinations will require 78
+different evaluations. The randomised <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.RandomizedSearchCV.html#sklearn.model_selection.RandomizedSearchCV">RandomizedSearchCV</a> will not try them
+all, but a number specified in <code class="docutils literal notranslate"><span class="pre">n_iter</span></code>. In this case, we want to try 50
+random combinations.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model_params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;svm__C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span>
+    <span class="s1">&#39;svm__gamma&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1e-9</span><span class="p">,</span> <span class="mf">1e-8</span><span class="p">,</span> <span class="mf">1e-7</span><span class="p">,</span> <span class="mf">1e-6</span><span class="p">,</span> <span class="mf">1e-5</span><span class="p">,</span> <span class="mf">1e-4</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="mf">1e-2</span><span class="p">,</span> <span class="mf">1e-1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
+                   <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">1000</span><span class="p">],</span>
+    <span class="s1">&#39;svm__kernel&#39;</span><span class="p">:</span> <span class="s1">&#39;rbf&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;search&#39;</span><span class="p">:</span> <span class="s1">&#39;random&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;search_params&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;n_iter&#39;</span><span class="p">:</span> <span class="mi">50</span><span class="p">}</span>
+
+<span class="p">}</span>
+<span class="n">run_cross_validation</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;svm&#39;</span><span class="p">,</span> <span class="n">model_params</span><span class="o">=</span><span class="n">model_params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For more information, see scikit-learn’s <a class="reference external" href="https://scikit-learn.org/stable/modules/grid_search.html">Hyperparameter Tunning</a>.</p>
+</div>
 </div>
 
 
@@ -92,7 +160,11 @@
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installing julearn</a></li>
 <li class="toctree-l1"><a class="reference internal" href="input.html">Input Data</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pipeline.html">Extended Pipeline</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Hyperparameters</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Hyperparameters</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#setting-hyperparameters">Setting Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tunning-hyperparameters">Tunning Hyperparameters</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/index.html">Basic Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing to julearn</a></li>
