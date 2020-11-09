@@ -262,6 +262,40 @@ def prepare_model(model, problem_type):
 
 
 def prepare_model_params(msel_dict, pipeline, cv_outer):
+    """Prepare model parameters.
+
+    For each of the model parameters, determine if it can be directly set or
+    must be tuned using hyperparameter tunning.
+
+    Parameters
+    ----------
+    msel_dict : dict
+        A dictionary with the model selection parameters.The dictionary can
+        define the following keys:
+
+        * 'STEP__PARAMETER': A value (or several) to be used as PARAMETER for
+          STEP in the pipeline. Example: 'svm__probability': True will set
+          the parameter 'probability' of the 'svm' model. If more than option
+          is provided for at least one hyperparameter, a search will be
+          performed.
+        * 'search': The kind of search algorithm to use: 'grid' or 'random'.
+        * 'cv': If search is going to be used, the cross-validation
+          splitting stategy to use. Defaults to same CV as for the model
+          evaluation.
+        * 'scoring': If search is going to be used, the scoring metric to
+          evaluate the performance.
+        * 'search_params': Additional parameters for the search method.
+
+    pipeline : ExtendedDataframePipeline
+        The pipeline to apply/tune the hyperparameters
+    cv_outer : cross-validation generator
+        The cross validation generator used for model evaluation.
+
+    Returns
+    -------
+    pipeline : ExtendedDataframePipeline
+        The modified pipeline
+    """
     logger.info('= Model Parameters =')
 
     tunning_params = ['scoring', 'cv', 'search', 'search_params']
@@ -320,7 +354,25 @@ def prepare_model_params(msel_dict, pipeline, cv_outer):
 
 
 def _prepare_hyperparams(hyperparams, pipeline):
+    """Prepare model hyperparameters.
 
+    Either set the model hyperparameter or add it to the dictionary of
+    parameters to be tuned.
+
+    Parameters
+    ----------
+    hyperparams : dict
+        A dictionary with hyperparameters. The key must be like
+        'STEP__PARAMETER': A value (or several) to be used as PARAMETER for
+        STEP in the pipeline.
+    pipeline : ExtendedDataframePipeline
+        The pipeline to apply the hyperparameters
+
+    Returns
+    -------
+    to_tune : dict
+        The parameters that must be tuned.
+    """
     def rename_param(param, steps):
         first, *rest = param.split('__')
 
@@ -428,7 +480,7 @@ def _prepare_preprocess_y(preprocess_y):
 
 
 def prepare_cv(cv):
-    """Generates an CV using string compatible with
+    """Generates a CV using string compatible with
     repeat:5_nfolds:5 where 5 can be exchange with any int.
     Alternatively, it can take in a valid cv splitter or int as
     in cross_validate in sklearn.

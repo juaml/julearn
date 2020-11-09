@@ -114,14 +114,18 @@ def run_cross_validation(
 
         The dictionary can define the following keys:
 
-        * 'hyperparameters': A dictionary setting hyperparameters for each
-          step of the pipeline. If more than option is provided for at least
-          one hyperparameter, a GridSearch will be performed.
-        * 'cv': If GridSearch is going to be used, the cross-validation
+        * 'STEP__PARAMETER': A value (or several) to be used as PARAMETER for
+          STEP in the pipeline. Example: 'svm__probability': True will set
+          the parameter 'probability' of the 'svm' model. If more than option
+          is provided for at least one hyperparameter, a search will be
+          performed.
+        * 'search': The kind of search algorithm to use: 'grid' or 'random'.
+        * 'cv': If search is going to be used, the cross-validation
           splitting stategy to use. Defaults to same CV as for the model
           evaluation.
-        * 'gs_scoring': If GridSearch is going to be used, the scoring metric
-          to evaluate the performance.
+        * 'scoring': If search is going to be used, the scoring metric to
+          evaluate the performance.
+        * 'search_params': Additional parameters for the search method.
 
         See https://juaml.github.io/julearn/hyperparameters.html for details.
     seed : int | None
