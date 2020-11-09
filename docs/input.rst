@@ -37,7 +37,33 @@ And finally call :func:`.run_cross_validation` with the following parameters:
 
     scores = run_cross_validation(X=X, y=y, data=df_iris, confounds=confounds)
 
+Using regular expressions
+-------------------------
+It might be the case that the number of elements of X and confounds are too
+many to specify manually all the column names. For this purpose, julearn
+provides the option of using regular expressions to match columns names.
 
+In the previous example, we can pick both ``sepal_width`` and ``sepal_length``
+by using ``sepal_.*``.
+
+.. code-block:: python
+
+    df_iris = load_dataset('iris')
+    X = ['sepal_.*', 'petal_length']
+    y = 'species'
+    confounds = 'petal_width'
+
+Additionally, we also provide a way to select all the columns, except for the
+ones used for ``y``, ``confounds`` and ``groups``. That is, using X = [':'].
+
+.. code-block:: python
+
+    df_iris = load_dataset('iris')
+    X = [':']
+    y = 'species'
+    confounds = 'petal_width'
+
+For more information, check python's `Regular Expressions`_.
 
 2. Using Numpy arrays
 ^^^^^^^^^^^^^^^^^^^^^
