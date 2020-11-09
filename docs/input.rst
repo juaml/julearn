@@ -43,7 +43,7 @@ It might be the case that the number of elements of X and confounds are too
 many to specify manually all the column names. For this purpose, julearn
 provides the option of using regular expressions to match columns names.
 
-In the previous example, we can pick both ``sepal_width`` and ``sepal_width``
+In the previous example, we can pick both ``sepal_width`` and ``sepal_length``
 by using ``sepal_.*``.
 
 .. code-block:: python
