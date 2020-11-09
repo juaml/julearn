@@ -428,3 +428,35 @@ def test_prepare_model_params():
     assert 'dataframe_pipeline__svm__gamma' in pipeline.param_distributions
     assert 'dataframe_pipeline__svm__kernel' not in \
         pipeline.param_distributions
+
+    model_params = {'svm__kernel': 'linear', 'cv': 2}
+
+    pipeline = create_extended_pipeline(X_steps=X_steps, y_transformer=None,
+                                        conf_steps=None, confounds=None,
+                                        categorical_features=None)
+    with pytest.warns(RuntimeWarning, match='search CV was specified'):
+        pipeline = prepare_model_params(model_params, pipeline, cv_outer)
+
+    model_params = {'svm__kernel': 'linear', 'scoring': 'accuracy'}
+
+    pipeline = create_extended_pipeline(X_steps=X_steps, y_transformer=None,
+                                        conf_steps=None, confounds=None,
+                                        categorical_features=None)
+    with pytest.warns(RuntimeWarning, match='search scoring was specified'):
+        pipeline = prepare_model_params(model_params, pipeline, cv_outer)
+
+    model_params = {'svm__kernel': 'linear', 'search': 'grid'}
+
+    pipeline = create_extended_pipeline(X_steps=X_steps, y_transformer=None,
+                                        conf_steps=None, confounds=None,
+                                        categorical_features=None)
+    with pytest.warns(RuntimeWarning, match='search method was specified'):
+        pipeline = prepare_model_params(model_params, pipeline, cv_outer)
+
+    model_params = {'svm__C': [0, 1], 'search': 'wrong'}
+
+    pipeline = create_extended_pipeline(X_steps=X_steps, y_transformer=None,
+                                        conf_steps=None, confounds=None,
+                                        categorical_features=None)
+    with pytest.raises(ValueError, match='must be'):
+        pipeline = prepare_model_params(model_params, pipeline, cv_outer)
