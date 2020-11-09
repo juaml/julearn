@@ -6,7 +6,8 @@ import pandas as pd
 import numpy as np
 from copy import deepcopy
 from sklearn import model_selection
-from sklearn.model_selection import RepeatedKFold, GridSearchCV
+from sklearn.model_selection import (RepeatedKFold, GridSearchCV,
+                                     RandomizedSearchCV)
 from sklearn.base import clone
 from sklearn.model_selection import check_cv
 
@@ -260,73 +261,95 @@ def prepare_model(model, problem_type):
     return model_name, model
 
 
-def prepare_model_selection(msel_dict, pipeline, model_name, cv_outer):
+def prepare_model_params(msel_dict, pipeline, cv_outer):
     logger.info('= Model Parameters =')
-    hyperparameters = msel_dict.get('hyperparameters', None)
-    if hyperparameters is None:
-        raise_error("The 'hyperparameters' value must be specified for "
-                    "model selection.")
 
-    hyper_params = _prepare_hyperparams(hyperparameters, pipeline, model_name)
+    tunning_params = ['scoring', 'cv', 'search', 'search_params']
+
+    hyperparameters = {k: v for k, v in msel_dict.items()
+                       if k not in tunning_params}
+
+    hyper_params = _prepare_hyperparams(hyperparameters, pipeline)
 
     if len(hyper_params) > 0:
-        logger.info('Tunning hyperparameters using Grid Search')
+        cv_inner = msel_dict.get('cv', None)
+        scoring = msel_dict.get('scoring', None)
+        search = msel_dict.get('search', 'grid')
+        search_params = msel_dict.get('search_params', {})
+
+        logger.info('Tunning hyperparameters using {search}')
+        if search == 'grid':
+            search = GridSearchCV
+        elif search == 'random':
+            search = RandomizedSearchCV
+        else:
+            raise_error(f'Parameter "search" must be "grid" or "random"'
+                        f'(was {search})')
+
         logger.info('Hyperparameters:')
         for k, v in hyper_params.items():
             logger.info(f'\t{k}: {v}')
-        cv_inner = msel_dict.get('cv', None)
-        gs_scoring = msel_dict.get('scoring', None)
+
         if cv_inner is None:
             logger.info(
                 'Cross validating using same scheme as for model evaluation')
             cv_inner = deepcopy(cv_outer)
         else:
-            logger.info(f'Cross validating using {cv_inner}')
             cv_inner = prepare_cv(cv_inner)
 
-        if gs_scoring is not None:
-            logger.info(f'Grid Search scoring: {gs_scoring}')
+        search_params['cv'] = cv_inner
+        search_params['scoring'] = scoring
+        logger.info('Search Parameters:')
+        for k, v in search_params.items():
+            logger.info(f'\t{k}: {v}')
         pipeline = wrap_search(
-            GridSearchCV, pipeline, hyper_params, cv=cv_inner,
-            scoring=gs_scoring)
+            search, pipeline, hyper_params, **search_params)
+    else:
+        if 'cv' in msel_dict:
+            warn('Hyperparameter search CV was specified, but no '
+                 'hyperparameters to tune')
+        if 'scoring' in msel_dict:
+            warn('Hyperparameter search scoring was specified, but no '
+                 'hyperparameters to tune')
+        if 'search' in msel_dict:
+            warn('Hyperparameter search method was specified, but no '
+                 'hyperparameters to tune')
     logger.info('====================')
     logger.info('')
     return pipeline
 
 
-def _prepare_hyperparams(hyperparams, pipeline, model_name):
+def _prepare_hyperparams(hyperparams, pipeline):
 
-    def rename_param(param):
+    def rename_param(param, steps):
         first, *rest = param.split('__')
 
-        if first == 'features':
-            new_first = 'dataframe_pipeline'
+        if first in steps:
+            new_first = f'dataframe_pipeline__{first}'
         elif first == 'confounds':
             new_first = 'confound_dataframe_pipeline'
         elif first == 'target':
             new_first = 'y_transformer'
-        elif first == model_name:
-            new_first = 'dataframe_pipeline__' + first
-
         else:
             raise_error(
                 'Each element of the hyperparameters dict  has to start with '
-                f'"features__", "confounds__", "target__" or "{model_name}__" '
+                f'"confounds__", "target__" or any of "{steps}__" '
                 f'but was {first}')
         return '__'.join([new_first] + rest)
 
     to_tune = {}
+    steps = list(pipeline.named_steps.keys())
     for param, val in hyperparams.items():
         # If we have more than 1 value, we will tune it. If not, it will
         # be set in the model.
         if hasattr(val, '__iter__') and not isinstance(val, str):
             if len(val) > 1:
-                to_tune[rename_param(param)] = val
+                to_tune[rename_param(param, steps)] = val
             else:
                 logger.info(f'Setting hyperparameter {val}')
                 pipeline.set_param(val)
         else:
-            pipeline.set_params(**{rename_param(param): val})
+            pipeline.set_params(**{rename_param(param, steps): val})
     return to_tune
 
 
