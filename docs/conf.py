@@ -76,7 +76,7 @@ sphinx_gallery_conf = {
     'subsection_order': ExplicitOrder(['../examples/basic/',
                                        '../examples/advanced/'
                                        ]),
-    'gallery_dirs': ['auto_examples'],
+    'gallery_dirs': ['auto_examples/basic', 'auto_examples/advanced'],
     'filename_pattern': '/(plot|run)_',
     'backreferences_dir': 'generated',
 }

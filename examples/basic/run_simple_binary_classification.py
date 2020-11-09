@@ -5,7 +5,7 @@ Simple Binary Classification
 This example uses the 'iris' dataset and performs a simple binary
 classification using a Support Vector Machine classifier.
 
-.. include:: ../links.inc
+.. include:: ../../links.inc
 """
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #
