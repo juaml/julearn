@@ -88,10 +88,12 @@ def _validate_input_data_df(X, y, confounds, df, groups):
 
 def _validate_input_data_df_ext(X, y, confounds, df, groups):
     missing_columns = [t_x for t_x in X if t_x not in df.columns]
-    if len(missing_columns) > 0:
+    # In reality, this is not needed as the regexp match will fail
+    # Leaving it as additional check in case the regexp match changes
+    if len(missing_columns) > 0:  # no cover
         raise_error(
             'All elements of X must be in the dataframe. '
-            f'The following are missing: {missing_columns}')
+            f'The following are missing: {missing_columns}')  # no cover
 
     if y not in df.columns:
         raise_error(
@@ -100,10 +102,12 @@ def _validate_input_data_df_ext(X, y, confounds, df, groups):
     if confounds is not None:
         missing_columns = [
             t_c for t_c in confounds if t_c not in df.columns]
-        if len(missing_columns) > 0:
+        # In reality, this is not needed as the regexp match will fail
+        # Leaving it as additional check in case the regexp match changes
+        if len(missing_columns) > 0:  # no cover
             raise_error(
                 'All elements of confounds must be in the dataframe. '
-                f'The following are missing: {missing_columns}')
+                f'The following are missing: {missing_columns}')  # no cover
 
     if groups is not None:
         if groups not in df.columns:
