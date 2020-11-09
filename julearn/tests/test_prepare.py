@@ -223,7 +223,7 @@ def test_prepare_input_data_df():
     columns = [f'f_{x}' for x in range(data.shape[1])]
 
     # Test X (2d) + y
-    X = columns[:-1]
+    X = columns[:-2]
     y = columns[-1]
     df = pd.DataFrame(data=data, columns=columns)
 
@@ -340,7 +340,7 @@ def test_prepare_input_data_df():
     # y in X
     X = columns[:5]
     y = columns[4]
-    with pytest.warns(RuntimeWarning, match='y is part of X'):
+    with pytest.warns(RuntimeWarning, match='contains the target'):
         prepared = prepare_input_data(
             X=X, y=y, confounds=None, df=df, pos_labels=None, groups=groups)
     _check_df_input(prepared, X=X, y=y, confounds=None, groups=groups, df=df)
@@ -460,3 +460,91 @@ def test_prepare_model_params():
                                         categorical_features=None)
     with pytest.raises(ValueError, match='must be'):
         pipeline = prepare_model_params(model_params, pipeline, cv_outer)
+
+
+def test_pick_regexp():
+    """Test picking columns by regexp"""
+    data = np.random.rand(5, 10)
+    columns = [
+        '_a_b_c1_',
+        '_a_b_c2_',
+        '_a_b2_c3_',
+        '_a_b2_c4_',
+        '_a_b3_c5_',
+        '_a_b3_c6_',
+        '_a3_b2_c7_',
+        '_a2_b_c7_',
+        '_a2_b_c8_',
+        '_a2_b_c9_'
+    ]
+
+    X = columns[:-1]
+    y = columns[-1]
+    confounds = None
+    df = pd.DataFrame(data=data, columns=columns)
+
+    prepared = prepare_input_data(X=X, y=y, confounds=confounds, df=df,
+                                  pos_labels=None, groups=None)
+
+    df_X_conf, df_y, _, confound_names = prepared
+
+    assert all([x in df_X_conf.columns for x in X])
+    assert y not in df_X_conf.columns
+    assert df_y.name == y
+    assert len(confound_names) == 0
+
+    prepared = prepare_input_data(X=[':'], y=y, confounds=confounds, df=df,
+                                  pos_labels=None, groups=None)
+
+    df_X_conf, df_y, _, confound_names = prepared
+
+    assert all([x in df_X_conf.columns for x in X])
+    assert y not in df_X_conf.columns
+    assert df_y.name == y
+    assert len(confound_names) == 0
+
+    X = columns[:6]
+    y = '_a3_b2_c7_'
+    confounds = columns[-3:]
+    prepared = prepare_input_data(X=[':'], y=y, confounds=confounds, df=df,
+                                  pos_labels=None, groups=None)
+
+    df_X_conf, df_y, _, confound_names = prepared
+
+    assert all([x in df_X_conf.columns for x in X])
+    assert all([x in df_X_conf.columns for x in confounds])
+    assert y not in df_X_conf.columns
+    assert df_y.name == y
+    assert len(confound_names) == 3
+    assert all([x in confound_names for x in confounds])
+
+    X = columns[:6]
+    y = '_a3_b2_c7_'
+    confounds = columns[-3:]
+    prepared = prepare_input_data(X=['_a_.*'], y=y, confounds='_a2_.*', df=df,
+                                  pos_labels=None, groups=None)
+
+    df_X_conf, df_y, _, confound_names = prepared
+
+    assert all([x in df_X_conf.columns for x in X])
+    assert all([x in df_X_conf.columns for x in confounds])
+    assert y not in df_X_conf.columns
+    assert df_y.name == y
+    assert len(confound_names) == 3
+    assert all([x in confound_names for x in confounds])
+
+    X = columns[:6]
+    y = '_a3_b2_c7_'
+    confounds = columns[-3:]
+    prepared = prepare_input_data(X=['.*_b_.*', '.*a_b2_.*', '.*b3_.*'], y=y,
+                                  confounds='_a2_.*', df=df,
+                                  pos_labels=None, groups=None)
+
+    df_X_conf, df_y, _, confound_names = prepared
+
+    assert all([x in df_X_conf.columns for x in X])
+    assert all([x in df_X_conf.columns for x in confounds])
+    assert y not in df_X_conf.columns
+    assert df_y.name == y
+    assert len(confound_names) == 3
+    assert all([x in confound_names for x in confounds])

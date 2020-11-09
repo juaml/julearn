@@ -1,6 +1,7 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
+from julearn.utils.helper_functions import pick_columns
 from julearn.transformers.target import TargetTransfromerWrapper
 import pandas as pd
 import numpy as np
@@ -18,108 +19,103 @@ from . model_selection import wrap_search
 from . utils import raise_error, warn, logger
 
 
-def _validate_input_data(X, y, confounds, df, groups):
-    if df is None:
-        # Case 1: we don't have a dataframe in df
+def _validate_input_data_np(X, y, confounds, groups):
+    # X must be np.ndarray with at most 2d
+    if not isinstance(X, np.ndarray):
+        raise_error(
+            'X must be a numpy array if no dataframe is specified')
 
-        # X must be np.ndarray with at most 2d
-        if not isinstance(X, np.ndarray):
+    if X.ndim not in [1, 2]:
+        raise_error('X must be at most bi-dimensional')
+
+    # Y must be np.ndarray with 1 dimension
+    if not isinstance(y, np.ndarray):
+        raise_error(
+            'y must be a numpy array if no dataframe is specified')
+
+    if y.ndim != 1:
+        raise_error('y must be one-dimensional')
+
+    # Same number of elements
+    if X.shape[0] != y.shape[0]:
+        raise_error(
+            'The number of samples in X do not match y '
+            '(X.shape[0] != y.shape[0]')
+
+    if confounds is not None:
+        if not isinstance(confounds, np.ndarray):
             raise_error(
-                'X must be a numpy array if no dataframe is specified')
+                'confounds must be a numpy array if no dataframe is '
+                'specified')
 
-        if X.ndim not in [1, 2]:
-            raise_error('X must be at most bi-dimensional')
+        if confounds.ndim not in [1, 2]:
+            raise_error('confounds must be at most bi-dimensional')
 
-        # Y must be np.ndarray with 1 dimension
-        if not isinstance(y, np.ndarray):
+        if X.shape[0] != confounds.shape[0]:
             raise_error(
-                'y must be a numpy array if no dataframe is specified')
+                'The number of samples in X do not match confounds '
+                '(X.shape[0] != confounds.shape[0]')
 
-        if y.ndim != 1:
-            raise_error('y must be one-dimensional')
-
-        # Same number of elements
-        if X.shape[0] != y.shape[0]:
+    if groups is not None:
+        if not isinstance(groups, np.ndarray):
             raise_error(
-                'The number of samples in X do not match y '
-                '(X.shape[0] != y.shape[0]')
+                'groups must be a numpy array if no dataframe is '
+                'specified')
 
-        if confounds is not None:
-            if not isinstance(confounds, np.ndarray):
-                raise_error(
-                    'confounds must be a numpy array if no dataframe is '
-                    'specified')
+        if groups.ndim != 1:
+            raise_error('groups must be one-dimensional')
 
-            if confounds.ndim not in [1, 2]:
-                raise_error('confounds must be at most bi-dimensional')
 
-            if X.shape[0] != confounds.shape[0]:
-                raise_error(
-                    'The number of samples in X do not match confounds '
-                    '(X.shape[0] != confounds.shape[0]')
+def _validate_input_data_df(X, y, confounds, df, groups):
+    # in the dataframe
+    if not isinstance(X, (str, list)):
+        raise_error('X must be a string or list of strings')
 
-        if groups is not None:
-            if not isinstance(groups, np.ndarray):
-                raise_error(
-                    'groups must be a numpy array if no dataframe is '
-                    'specified')
+    if not isinstance(y, str):
+        raise_error('y must be a string')
 
-            if groups.ndim != 1:
-                raise_error('groups must be one-dimensional')
+    # Confounds can be a string, list or none
+    if not isinstance(confounds, (str, list, type(None))):
+        raise_error('If not None, confounds must be a string or list '
+                    'of strings')
 
-    else:
-        # Case 2: we have a dataframe. X, y and confounds must be columns
-        # in the dataframe
-        if not isinstance(X, (str, list)):
-            raise_error('X must be a string or list of strings')
+    if not isinstance(groups, (str, type(None))):
+        raise_error('groups must be a string')
 
-        if not isinstance(y, str):
-            raise_error('y must be a string')
+    if not isinstance(df, pd.DataFrame):
+        raise_error('df must be a pandas.DataFrame')
 
-        # Confounds can be a string, list or none
-        if not isinstance(confounds, (str, list, type(None))):
-            raise_error('If not None, confounds must be a string or list '
-                        'of strings')
 
-        if not isinstance(groups, (str, type(None))):
-            raise_error('groups must be a string')
+def _validate_input_data_df_ext(X, y, confounds, df, groups):
+    missing_columns = [t_x for t_x in X if t_x not in df.columns]
+    if len(missing_columns) > 0:
+        raise_error(
+            'All elements of X must be in the dataframe. '
+            f'The following are missing: {missing_columns}')
 
-        if not isinstance(df, pd.DataFrame):
-            raise_error('df must be a pandas.DataFrame')
+    if y not in df.columns:
+        raise_error(
+            f"Target '{y}' (y) is not a valid column in the dataframe")
 
-        if not isinstance(X, list):
-            X = [X]
-        missing_columns = [t_x for t_x in X if t_x not in df.columns]
+    if confounds is not None:
+        missing_columns = [
+            t_c for t_c in confounds if t_c not in df.columns]
         if len(missing_columns) > 0:
             raise_error(
-                'All elements of X must be in the dataframe. '
+                'All elements of confounds must be in the dataframe. '
                 f'The following are missing: {missing_columns}')
 
-        if y not in df.columns:
-            raise_error(
-                f"Target '{y}' (y) is not a valid column in the dataframe")
+    if groups is not None:
+        if groups not in df.columns:
+            raise_error(f"Groups '{groups}' is not a valid column "
+                        "in the dataframe")
+        if groups == y:
+            warn("y and groups are the same column")
+        if groups in X:
+            warn("groups is part of X")
 
-        if confounds is not None:
-            if not isinstance(confounds, list):
-                confounds = [confounds]
-            missing_columns = [
-                t_c for t_c in confounds if t_c not in df.columns]
-            if len(missing_columns) > 0:
-                raise_error(
-                    'All elements of confounds must be in the dataframe. '
-                    f'The following are missing: {missing_columns}')
-
-        if groups is not None:
-            if groups not in df.columns:
-                raise_error(f"Groups '{groups}' is not a valid column "
-                            "in the dataframe")
-            if groups == y:
-                warn("y and groups are the same column")
-            if groups in X:
-                warn("groups is part of X")
-
-        if y in X:
-            warn("y is part of X")
+    if y in X:
+        warn(f'List of features (X) contains the target {y}')
 
 
 def prepare_input_data(X, y, confounds, df, pos_labels, groups):
@@ -160,7 +156,6 @@ def prepare_input_data(X, y, confounds, df, pos_labels, groups):
 
     """
     logger.info('==== Input Data ====')
-    _validate_input_data(X, y, confounds, df, groups)
 
     # Declare them as None to avoid CI issues
     df_X_conf = None
@@ -168,6 +163,7 @@ def prepare_input_data(X, y, confounds, df, pos_labels, groups):
     df_groups = None
     if df is None:
         logger.info(f'Using numpy arrays as input')
+        _validate_input_data_np(X, y, confounds, groups)
         # creating df_X_conf
         if X.ndim == 1:
             X = X[:, None]
@@ -194,27 +190,42 @@ def prepare_input_data(X, y, confounds, df, pos_labels, groups):
 
     else:
         logger.info(f'Using dataframe as input')
+        _validate_input_data_df(X, y, confounds, df, groups)
         logger.info(f'Features: {X}')
         logger.info(f'Target: {y}')
-        X_conf_columns = deepcopy(X) if isinstance(X, list) else [X]
         if confounds is not None:
-            if not isinstance(confounds, list):
-                confounds = [confounds]
             logger.info(f'Confounds: {confounds}')
-            overlapping = [t_c for t_c in confounds if t_c in X]
-            if len(overlapping) > 0:
-                warn(f'X contains the following confounds {overlapping}')
-            for t_c in confounds:
-                # This will add the confounds if not there already
-                if t_c not in X_conf_columns:
-                    X_conf_columns.append(t_c)
+            X_confounds = pick_columns(confounds, df.columns)
+        else:
+            X_confounds = []
+
+        if X == [':']:
+            X_columns = [x for x in df.columns if x not in X_confounds
+                         and x != y]
+            if groups is not None:
+                X_columns = [x for x in X_columns if x not in groups]
+        else:
+            X_columns = pick_columns(X, df.columns)
+
+        logger.info(f'Expanded X: {X_columns}')
+        logger.info(f'Expanded Confounds: {X_confounds}')
+        _validate_input_data_df_ext(X_columns, y, X_confounds, df, groups)
+        X_conf_columns = X_columns
+
+        overlapping = [t_c for t_c in X_confounds if t_c in X]
+        if len(overlapping) > 0:
+            warn(f'X contains the following confounds {overlapping}')
+        for t_c in X_confounds:
+            # This will add the confounds if not there already
+            if t_c not in X_conf_columns:
+                X_conf_columns.append(t_c)
 
         df_X_conf = df.loc[:, X_conf_columns].copy()
         df_y = df.loc[:, y].copy()
         if groups is not None:
             logger.info(f'Using {groups} as groups')
             df_groups = df.loc[:, groups].copy()
-        confound_names = confounds
+        confound_names = X_confounds
 
     if pos_labels is not None:
         if not isinstance(pos_labels, list):

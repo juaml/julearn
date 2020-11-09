@@ -33,3 +33,5 @@
 .. _`julearn Github`: https://github.com/juaml/julearn
 
 .. _`Wikipedia`: https://wikipedia.org
+
+.. _`Regular Expressions`: https://docs.python.org/3/library/re.html
