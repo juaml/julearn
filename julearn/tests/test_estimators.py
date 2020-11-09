@@ -41,19 +41,17 @@ def test_binary_estimators():
 
     for t_mname, t_model_class in _binary_estimators.items():
         m_params = _binary_params.get(t_mname, {})
-        model_selection = None
+        model_params = None
         if len(m_params) > 0:
-            model_selection = {
-                'hyperparameters': {
-                    f'{t_mname}__{t_param}': t_value
-                    for t_param, t_value in m_params.items()
-                }
+            model_params = {
+                f'{t_mname}__{t_param}': t_value
+                for t_param, t_value in m_params.items()
             }
             t_model = t_model_class(**m_params)
         else:
             t_model = t_model_class()
         scorers = ['accuracy']
-        api_params = {'model': t_mname, 'model_selection': model_selection}
+        api_params = {'model': t_mname, 'model_params': model_params}
         clf = make_pipeline(StandardScaler(), clone(t_model))
         do_scoring_test(X, y, data=df_iris, api_params=api_params,
                         sklearn_model=clf, scorers=scorers)
@@ -62,7 +60,7 @@ def test_binary_estimators():
             scorers = ['recall', 'precision', 'f1']
             sk_y = (df_iris[y].values == 'setosa').astype(np.int)
             api_params = {'model': t_mname, 'pos_labels': 'setosa',
-                          'model_selection': model_selection}
+                          'model_params': model_params}
             clf = make_pipeline(StandardScaler(), clone(t_model))
             do_scoring_test(X, y, data=df_iris, api_params=api_params,
                             sklearn_model=clf,

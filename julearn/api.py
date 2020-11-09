@@ -7,7 +7,7 @@ from sklearn.model_selection import cross_val_score
 from . prepare import (prepare_input_data,
                        prepare_model,
                        prepare_cv,
-                       prepare_model_selection,
+                       prepare_model_params,
                        prepare_preprocessing,
                        prepare_scoring,
                        check_consistency)
@@ -29,7 +29,7 @@ def run_cross_validation(
         groups=None,
         scoring=None,
         pos_labels=None,
-        model_selection=None,
+        model_params=None,
         seed=None):
     """Run cross validation and score.
 
@@ -109,20 +109,23 @@ def run_cross_validation(
     pos_labels : str, int, float or list | None
         The labels to interpret as positive. If not None, every element from y
         will be converted to 1 if is equal or in pos_labels and to 0 if not.
-    model_selection : dict | None
-        If not None, this dictionary specifies the parameters to use for model
-        hyperparameters and selection of hyperparameters.
+    model_params : dict | None
+        If not None, this dictionary specifies the model parameters to use
 
         The dictionary can define the following keys:
 
-        * 'hyperparameters': A dictionary setting hyperparameters for each
-          step of the pipeline. If more than option is provided for at least
-          one hyperparameter, a GridSearch will be performed.
-        * 'cv': If GridSearch is going to be used, the cross-validation
+        * 'STEP__PARAMETER': A value (or several) to be used as PARAMETER for
+          STEP in the pipeline. Example: 'svm__probability': True will set
+          the parameter 'probability' of the 'svm' model. If more than option
+          is provided for at least one hyperparameter, a search will be
+          performed.
+        * 'search': The kind of search algorithm to use: 'grid' or 'random'.
+        * 'cv': If search is going to be used, the cross-validation
           splitting stategy to use. Defaults to same CV as for the model
           evaluation.
-        * 'gs_scoring': If GridSearch is going to be used, the scoring metric
-          to evaluate the performance.
+        * 'scoring': If search is going to be used, the scoring metric to
+          evaluate the performance.
+        * 'search_params': Additional parameters for the search method.
 
         See https://juaml.github.io/julearn/hyperparameters.html for details.
     seed : int | None
@@ -172,9 +175,8 @@ def run_cross_validation(
                                model_tuple, confounds,
                                categorical_features=None)
 
-    if model_selection is not None:
-        pipeline = prepare_model_selection(
-            model_selection, pipeline, model_tuple[0], cv_outer)
+    if model_params is not None:
+        pipeline = prepare_model_params(model_params, pipeline, cv_outer)
 
     scorer = prepare_scoring(pipeline, scoring)
 

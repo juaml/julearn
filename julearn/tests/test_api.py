@@ -11,7 +11,8 @@ from sklearn.model_selection import (cross_val_score,
                                      StratifiedKFold,
                                      GroupKFold,
                                      RepeatedKFold,
-                                     GridSearchCV)
+                                     GridSearchCV,
+                                     RandomizedSearchCV)
 from sklearn.preprocessing import LabelBinarizer
 from seaborn import load_dataset
 import pytest
@@ -87,22 +88,37 @@ def test_set_hyperparam():
 
     scoring = 'roc_auc'
     t_sk_y = (sk_y == 'setosa').astype(np.int)
-    hyperparameters = {'svm__probability': True}
 
-    with pytest.raises(ValueError,
-                       match=r"The 'hyperparameters' value must be"):
-        model_selection = {'cv': 5}
+    with pytest.warns(RuntimeWarning,
+                      match=r"Hyperparameter search CV"):
+        model_params = {'cv': 5}
         _, _ = run_cross_validation(
             X=X, y=y, data=df_iris, model='svm',
-            model_selection=model_selection,
-            seed=42, scoring=scoring, pos_labels='setosa',
+            model_params=model_params,
+            seed=42, scoring='accuracy', pos_labels='setosa',
+            return_estimator=True)
+    with pytest.warns(RuntimeWarning,
+                      match=r"Hyperparameter search method"):
+        model_params = {'search': 'grid'}
+        _, _ = run_cross_validation(
+            X=X, y=y, data=df_iris, model='svm',
+            model_params=model_params,
+            seed=42, scoring='accuracy', pos_labels='setosa',
             return_estimator=True)
 
-    model_selection = {'hyperparameters': hyperparameters}
+    with pytest.warns(RuntimeWarning,
+                      match=r"Hyperparameter search scoring"):
+        model_params = {'scoring': 'accuracy'}
+        _, _ = run_cross_validation(
+            X=X, y=y, data=df_iris, model='svm',
+            model_params=model_params,
+            seed=42, scoring='accuracy', pos_labels='setosa',
+            return_estimator=True)
 
+    model_params = {'svm__probability': True}
     actual, actual_estimator = run_cross_validation(
         X=X, y=y, data=df_iris, model='svm',
-        model_selection=model_selection,
+        model_params=model_params,
         seed=42, scoring=scoring, pos_labels='setosa',
         return_estimator=True)
 
@@ -141,10 +157,9 @@ def test_tune_hyperparam():
     cv_outer = RepeatedKFold(n_splits=2, n_repeats=1)
     cv_inner = RepeatedKFold(n_splits=2, n_repeats=1)
 
-    hyperparameters = {'svm__C': [0.01, 0.001]}
-    model_selection = {'hyperparameters': hyperparameters, 'cv': cv_inner}
+    model_params = {'svm__C': [0.01, 0.001], 'cv': cv_inner}
     actual, actual_estimator  = run_cross_validation(
-        X=X, y=y, data=df_iris, model='svm', model_selection=model_selection,
+        X=X, y=y, data=df_iris, model='svm', model_params=model_params,
         cv=cv_outer, scoring=scoring, return_estimator=True)
 
     # Now do the same with scikit-learn
@@ -165,19 +180,47 @@ def test_tune_hyperparam():
     clf2 = clone(gs).fit(sk_X, sk_y).best_estimator_.steps[-1][1]
     compare_models(clf1, clf2)
 
+    cv_outer = RepeatedKFold(n_splits=2, n_repeats=1)
+    cv_inner = RepeatedKFold(n_splits=2, n_repeats=1)
+
+    # Now randomized serach
+    model_params = {'svm__C': [0.01, 0.001], 'cv': cv_inner,
+                    'search': 'random', 'search_params': {'n_iter': 2}}
+    actual, actual_estimator  = run_cross_validation(
+        X=X, y=y, data=df_iris, model='svm', model_params=model_params,
+        cv=cv_outer, scoring=scoring, return_estimator=True)
+
+    # Now do the same with scikit-learn
+    np.random.seed(42)
+    cv_outer = RepeatedKFold(n_splits=2, n_repeats=1)
+    cv_inner = RepeatedKFold(n_splits=2, n_repeats=1)
+
+    clf = make_pipeline(StandardScaler(), svm.SVC())
+    gs = RandomizedSearchCV(clf, {'svc__C': [0.01, 0.001]}, cv=cv_inner,
+                            n_iter=2)
+
+    expected = cross_val_score(gs, sk_X, sk_y, cv=cv_outer, scoring=scoring)
+
+    assert len(actual) == len(expected)
+    assert all([a == b for a, b in zip(actual, expected)])
+
+    # Compare the models
+    clf1 = actual_estimator.best_estimator_.dataframe_pipeline.steps[-1][1]
+    clf2 = clone(gs).fit(sk_X, sk_y).best_estimator_.steps[-1][1]
+    compare_models(clf1, clf2)
+
     np.random.seed(42)
     cv_outer = RepeatedKFold(n_splits=3, n_repeats=1)
     cv_inner = RepeatedKFold(n_splits=3, n_repeats=1)
 
     scoring = 'accuracy'
     gs_scoring = 'f1'
-    hyperparameters = {'svm__C': [0.01, 0.001]}
-    model_selection = {'hyperparameters': hyperparameters,
-                       'scoring': gs_scoring,
-                       'cv': cv_inner}
+    model_params = {'svm__C': [0.01, 0.001],
+                    'scoring': gs_scoring,
+                    'cv': cv_inner}
 
     actual, actual_estimator  = run_cross_validation(
-        X=X, y=y, data=df_iris, model='svm', model_selection=model_selection,
+        X=X, y=y, data=df_iris, model='svm', model_params=model_params,
         seed=42, scoring=scoring, return_estimator=True, pos_labels=['setosa'],
         cv=cv_outer)
 
