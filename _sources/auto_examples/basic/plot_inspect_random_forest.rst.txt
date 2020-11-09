@@ -1,0 +1,205 @@
+.. only:: html
+
+    .. note::
+        :class: sphx-glr-download-link-note
+
+        Click :ref:`here <sphx_glr_download_auto_examples_basic_plot_inspect_random_forest.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_auto_examples_basic_plot_inspect_random_forest.py:
+
+
+Inspecting Random Forest models
+===============================
+
+This example uses the 'iris' dataset, performs simple binary classification
+using a Random Forest classifier and analyse the model.
+
+.. include:: ../../links.inc
+
+
+.. code-block:: default
+
+    # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
+    #
+    # License: AGPL
+    import pandas as pd
+
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from seaborn import load_dataset
+
+    from julearn import run_cross_validation
+    from julearn.utils import configure_logging
+
+
+
+
+
+
+
+
+Set the logging level to info to see extra information
+
+
+.. code-block:: default
+
+    configure_logging(level='INFO')
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+    2020-11-09 15:22:17,812 - julearn - INFO - ===== Lib Versions =====
+    2020-11-09 15:22:17,812 - julearn - INFO - numpy: 1.19.0
+    2020-11-09 15:22:17,813 - julearn - INFO - scipy: 1.5.4
+    2020-11-09 15:22:17,813 - julearn - INFO - sklearn: 0.23.2
+    2020-11-09 15:22:17,813 - julearn - INFO - pandas: 1.1.4
+    2020-11-09 15:22:17,813 - julearn - INFO - julearn: 0.1.dev0
+    2020-11-09 15:22:17,813 - julearn - INFO - ========================
+
+
+
+
+Random Forest variable importance
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+
+.. code-block:: default
+
+
+    df_iris = load_dataset('iris')
+
+
+
+
+
+
+
+
+The dataset has three kind of species. We will keep two to perform a binary
+classification.
+
+
+.. code-block:: default
+
+    df_iris = df_iris[df_iris['species'].isin(['versicolor', 'virginica'])]
+
+    X = ['sepal_length', 'sepal_width', 'petal_length']
+    y = 'species'
+
+
+
+
+
+
+
+
+
+We will use a Random Forest classifier. By setting `return_estimator=True`,
+the :func:`.run_cross_validation` function return the estimator fitted with
+all the data.
+
+
+.. code-block:: default
+
+
+    scores, model_iris = run_cross_validation(X=X, y=y, data=df_iris, model='rf',
+                                              return_estimator=True)
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+    2020-11-09 15:22:18,093 - julearn - INFO - Using default CV
+    2020-11-09 15:22:18,093 - julearn - INFO - ==== Input Data ====
+    2020-11-09 15:22:18,093 - julearn - INFO - Using dataframe as input
+    2020-11-09 15:22:18,093 - julearn - INFO - Features: ['sepal_length', 'sepal_width', 'petal_length']
+    2020-11-09 15:22:18,093 - julearn - INFO - Target: species
+    2020-11-09 15:22:18,093 - julearn - INFO - Expanded X: ['sepal_length', 'sepal_width', 'petal_length']
+    2020-11-09 15:22:18,093 - julearn - INFO - Expanded Confounds: []
+    2020-11-09 15:22:18,096 - julearn - INFO - ====================
+    2020-11-09 15:22:18,096 - julearn - INFO - 
+    2020-11-09 15:22:18,097 - julearn - INFO - ====== Model ======
+    2020-11-09 15:22:18,097 - julearn - INFO - Obtaining model by name: rf
+    2020-11-09 15:22:18,097 - julearn - INFO - ===================
+    2020-11-09 15:22:18,097 - julearn - INFO - 
+    2020-11-09 15:22:18,097 - julearn - INFO - CV interpeted as RepeatedKFold with 5 repetitions of 5 folds
+
+
+
+
+This type of classifier has an internal variable that can inform us on how
+_important_ is each of the features. Caution: read the proper scikit-learn
+documentation (`Random Forest`_)
+
+
+.. code-block:: default
+
+    rf = model_iris['rf']
+
+    to_plot = pd.DataFrame({
+        'variable': [x.replace('_', ' ') for x in X],
+        'importance': rf.feature_importances_
+    })
+
+    fig, ax = plt.subplots(1, 1, figsize=(6, 4))
+    sns.barplot(x='importance', y='variable', data=to_plot, ax=ax)
+    ax.set_title('Variable Importances for Random Forest Classifier')
+    fig.tight_layout()
+
+
+
+.. image:: /auto_examples/basic/images/sphx_glr_plot_inspect_random_forest_001.png
+    :alt: Variable Importances for Random Forest Classifier
+    :class: sphx-glr-single-img
+
+
+
+
+
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  5.292 seconds)
+
+
+.. _sphx_glr_download_auto_examples_basic_plot_inspect_random_forest.py:
+
+
+.. only :: html
+
+ .. container:: sphx-glr-footer
+    :class: sphx-glr-footer-example
+
+
+
+  .. container:: sphx-glr-download sphx-glr-download-python
+
+     :download:`Download Python source code: plot_inspect_random_forest.py <plot_inspect_random_forest.py>`
+
+
+
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
+
+     :download:`Download Jupyter notebook: plot_inspect_random_forest.ipynb <plot_inspect_random_forest.ipynb>`
+
+
+.. only:: html
+
+ .. rst-class:: sphx-glr-signature
+
+    `Gallery generated by Sphinx-Gallery <https://sphinx-gallery.github.io>`_

@@ -1,0 +1,495 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tunning Hyperparameters &#8212; julearn  documentation</title>
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/gallery-dataframe.css" />
+    
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Reference" href="../../api.html" />
+    <link rel="prev" title="Working with pandas" href="run_combine_pandas.html" />
+    <link rel="shortcut icon" type="image/png" href="../../_static/py.png" />
+    
+    <script type="text/javascript" src="../../_static/copybutton.js"></script>
+    
+     
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../api.html" title="Reference"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="run_combine_pandas.html" title="Working with pandas"
+             accesskey="P">previous</a> |</li>
+    <li><img src="../../_static/py.png" alt=""
+             style="vertical-align: middle; margin-top: -1px"/></li>
+    <li><a href="https://www.python.org/">Python</a> &#187;</li>
+    
+    <a href="../../index.html">julearn  documentation</a> &#187;
+    
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Advanced Examples</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Tunning Hyperparameters</a></li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-auto-examples-advanced-run-hyperparameter-tunning-py"><span class="std std-ref">here</span></a>     to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="tunning-hyperparameters">
+<span id="sphx-glr-auto-examples-advanced-run-hyperparameter-tunning-py"></span><h1>Tunning Hyperparameters<a class="headerlink" href="#tunning-hyperparameters" title="Permalink to this headline">¶</a></h1>
+<p>This example uses the ‘fmri’ dataset, performs simple binary classification
+using a Support Vector Machine classifier and analyse the model.</p>
+<div class="section" id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h2>
+<p>Waskom, M.L., Frank, M.C., Wagner, A.D. (2016). Adaptive engagement of
+cognitive control in context-dependent decision-making. Cerebral Cortex.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Authors: Federico Raimondo &lt;f.raimondo@fz-juelich.de&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># License: AGPL</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">seaborn</span> <span class="kn">import</span> <span class="n">load_dataset</span>
+
+<span class="kn">from</span> <span class="nn">julearn</span> <span class="kn">import</span> <span class="n">run_cross_validation</span>
+<span class="kn">from</span> <span class="nn">julearn.utils</span> <span class="kn">import</span> <span class="n">configure_logging</span>
+</pre></div>
+</div>
+<p>Set the logging level to info to see extra information</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s1">&#39;INFO&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2020-11-09 15:22:26,635 - julearn - INFO - ===== Lib Versions =====
+2020-11-09 15:22:26,635 - julearn - INFO - numpy: 1.19.0
+2020-11-09 15:22:26,636 - julearn - INFO - scipy: 1.5.4
+2020-11-09 15:22:26,636 - julearn - INFO - sklearn: 0.23.2
+2020-11-09 15:22:26,636 - julearn - INFO - pandas: 1.1.4
+2020-11-09 15:22:26,636 - julearn - INFO - julearn: 0.1.dev0
+2020-11-09 15:22:26,636 - julearn - INFO - ========================
+</pre></div>
+</div>
+<p>Set the random seed to always have the same example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Load the dataset</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">df_fmri</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s1">&#39;fmri&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df_fmri</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>  subject  timepoint event    region    signal
+0     s13         18  stim  parietal -0.017552
+1      s5         14  stim  parietal -0.080883
+2     s12         18  stim  parietal -0.081033
+3     s11         18  stim  parietal -0.046134
+4     s10         18  stim  parietal -0.037970
+</pre></div>
+</div>
+<p>Set the dataframe in the right format</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">df_fmri</span> <span class="o">=</span> <span class="n">df_fmri</span><span class="o">.</span><span class="n">pivot</span><span class="p">(</span>
+    <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;subject&#39;</span><span class="p">,</span> <span class="s1">&#39;timepoint&#39;</span><span class="p">,</span> <span class="s1">&#39;event&#39;</span><span class="p">],</span>
+    <span class="n">columns</span><span class="o">=</span><span class="s1">&#39;region&#39;</span><span class="p">,</span>
+    <span class="n">values</span><span class="o">=</span><span class="s1">&#39;signal&#39;</span><span class="p">)</span>
+
+<span class="n">df_fmri</span> <span class="o">=</span> <span class="n">df_fmri</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df_fmri</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>region subject  timepoint event   frontal  parietal
+0           s0          0   cue  0.007766 -0.006899
+1           s0          0  stim -0.021452 -0.039327
+2           s0          1   cue  0.016440  0.000300
+3           s0          1  stim -0.021054 -0.035735
+4           s0          2   cue  0.024296  0.033220
+</pre></div>
+</div>
+<p>Lets do a first attempt and use a linear SVM with the default parameters.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model_params</span></a> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;svm__kernel&#39;</span><span class="p">:</span> <span class="s1">&#39;linear&#39;</span><span class="p">}</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;frontal&#39;</span><span class="p">,</span> <span class="s1">&#39;parietal&#39;</span><span class="p">]</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a> <span class="o">=</span> <span class="s1">&#39;event&#39;</span>
+<span class="n">scores</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df_fmri</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;svm&#39;</span><span class="p">,</span>
+                              <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model_params</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model_params</span></a><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2020-11-09 15:22:26,664 - julearn - INFO - Using default CV
+2020-11-09 15:22:26,664 - julearn - INFO - ==== Input Data ====
+2020-11-09 15:22:26,664 - julearn - INFO - Using dataframe as input
+2020-11-09 15:22:26,664 - julearn - INFO - Features: [&#39;frontal&#39;, &#39;parietal&#39;]
+2020-11-09 15:22:26,664 - julearn - INFO - Target: event
+2020-11-09 15:22:26,664 - julearn - INFO - Expanded X: [&#39;frontal&#39;, &#39;parietal&#39;]
+2020-11-09 15:22:26,665 - julearn - INFO - Expanded Confounds: []
+2020-11-09 15:22:26,666 - julearn - INFO - ====================
+2020-11-09 15:22:26,666 - julearn - INFO -
+2020-11-09 15:22:26,666 - julearn - INFO - ====== Model ======
+2020-11-09 15:22:26,666 - julearn - INFO - Obtaining model by name: svm
+2020-11-09 15:22:26,667 - julearn - INFO - ===================
+2020-11-09 15:22:26,667 - julearn - INFO -
+2020-11-09 15:22:26,667 - julearn - INFO - CV interpeted as RepeatedKFold with 5 repetitions of 5 folds
+2020-11-09 15:22:26,667 - julearn - INFO - = Model Parameters =
+2020-11-09 15:22:26,668 - julearn - INFO - ====================
+2020-11-09 15:22:26,668 - julearn - INFO -
+0.5765508728619291
+</pre></div>
+</div>
+<p>The score is not so good. Lets try to see if there is an optimal
+regularization parameter (C) for the linear SVM.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model_params</span></a> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;svm__kernel&#39;</span><span class="p">:</span> <span class="s1">&#39;linear&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;svm__C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">],</span>
+    <span class="s1">&#39;cv&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>  <span class="c1"># CV=2 too speed up the example</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;frontal&#39;</span><span class="p">,</span> <span class="s1">&#39;parietal&#39;</span><span class="p">]</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a> <span class="o">=</span> <span class="s1">&#39;event&#39;</span>
+<span class="n">scores</span><span class="p">,</span> <span class="n">estimator</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df_fmri</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;svm&#39;</span><span class="p">,</span>
+                                         <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model_params</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model_params</span></a><span class="p">,</span>
+                                         <span class="n">return_estimator</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2020-11-09 15:22:27,229 - julearn - INFO - Using default CV
+2020-11-09 15:22:27,230 - julearn - INFO - ==== Input Data ====
+2020-11-09 15:22:27,230 - julearn - INFO - Using dataframe as input
+2020-11-09 15:22:27,230 - julearn - INFO - Features: [&#39;frontal&#39;, &#39;parietal&#39;]
+2020-11-09 15:22:27,230 - julearn - INFO - Target: event
+2020-11-09 15:22:27,230 - julearn - INFO - Expanded X: [&#39;frontal&#39;, &#39;parietal&#39;]
+2020-11-09 15:22:27,230 - julearn - INFO - Expanded Confounds: []
+2020-11-09 15:22:27,231 - julearn - INFO - ====================
+2020-11-09 15:22:27,231 - julearn - INFO -
+2020-11-09 15:22:27,232 - julearn - INFO - ====== Model ======
+2020-11-09 15:22:27,232 - julearn - INFO - Obtaining model by name: svm
+2020-11-09 15:22:27,232 - julearn - INFO - ===================
+2020-11-09 15:22:27,232 - julearn - INFO -
+2020-11-09 15:22:27,232 - julearn - INFO - CV interpeted as RepeatedKFold with 5 repetitions of 5 folds
+2020-11-09 15:22:27,232 - julearn - INFO - = Model Parameters =
+2020-11-09 15:22:27,233 - julearn - INFO - Tunning hyperparameters using {search}
+2020-11-09 15:22:27,233 - julearn - INFO - Hyperparameters:
+2020-11-09 15:22:27,233 - julearn - INFO -      dataframe_pipeline__svm__C: [0.01, 0.1]
+2020-11-09 15:22:27,233 - julearn - INFO - Using scikit-learn CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
+2020-11-09 15:22:27,234 - julearn - INFO - Search Parameters:
+2020-11-09 15:22:27,234 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
+2020-11-09 15:22:27,234 - julearn - INFO -      scoring: None
+2020-11-09 15:22:27,234 - julearn - INFO - ====================
+2020-11-09 15:22:27,234 - julearn - INFO -
+0.575591606418621
+</pre></div>
+</div>
+<p>This did not change much, lets explore other kernels too.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model_params</span></a> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;svm__kernel&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;linear&#39;</span><span class="p">,</span> <span class="s1">&#39;rbf&#39;</span><span class="p">,</span> <span class="s1">&#39;poly&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;svm__C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">],</span>
+    <span class="s1">&#39;cv&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>  <span class="c1"># CV=2 too speed up the example</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;frontal&#39;</span><span class="p">,</span> <span class="s1">&#39;parietal&#39;</span><span class="p">]</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a> <span class="o">=</span> <span class="s1">&#39;event&#39;</span>
+<span class="n">scores</span><span class="p">,</span> <span class="n">estimator</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df_fmri</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;svm&#39;</span><span class="p">,</span>
+                                         <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model_params</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model_params</span></a><span class="p">,</span>
+                                         <span class="n">return_estimator</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2020-11-09 15:22:30,059 - julearn - INFO - Using default CV
+2020-11-09 15:22:30,060 - julearn - INFO - ==== Input Data ====
+2020-11-09 15:22:30,060 - julearn - INFO - Using dataframe as input
+2020-11-09 15:22:30,060 - julearn - INFO - Features: [&#39;frontal&#39;, &#39;parietal&#39;]
+2020-11-09 15:22:30,060 - julearn - INFO - Target: event
+2020-11-09 15:22:30,060 - julearn - INFO - Expanded X: [&#39;frontal&#39;, &#39;parietal&#39;]
+2020-11-09 15:22:30,060 - julearn - INFO - Expanded Confounds: []
+2020-11-09 15:22:30,061 - julearn - INFO - ====================
+2020-11-09 15:22:30,061 - julearn - INFO -
+2020-11-09 15:22:30,062 - julearn - INFO - ====== Model ======
+2020-11-09 15:22:30,062 - julearn - INFO - Obtaining model by name: svm
+2020-11-09 15:22:30,062 - julearn - INFO - ===================
+2020-11-09 15:22:30,062 - julearn - INFO -
+2020-11-09 15:22:30,062 - julearn - INFO - CV interpeted as RepeatedKFold with 5 repetitions of 5 folds
+2020-11-09 15:22:30,062 - julearn - INFO - = Model Parameters =
+2020-11-09 15:22:30,062 - julearn - INFO - Tunning hyperparameters using {search}
+2020-11-09 15:22:30,062 - julearn - INFO - Hyperparameters:
+2020-11-09 15:22:30,062 - julearn - INFO -      dataframe_pipeline__svm__kernel: [&#39;linear&#39;, &#39;rbf&#39;, &#39;poly&#39;]
+2020-11-09 15:22:30,062 - julearn - INFO -      dataframe_pipeline__svm__C: [0.01, 0.1]
+2020-11-09 15:22:30,063 - julearn - INFO - Using scikit-learn CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
+2020-11-09 15:22:30,063 - julearn - INFO - Search Parameters:
+2020-11-09 15:22:30,063 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
+2020-11-09 15:22:30,063 - julearn - INFO -      scoring: None
+2020-11-09 15:22:30,063 - julearn - INFO - ====================
+2020-11-09 15:22:30,063 - julearn - INFO -
+0.7116487391994357
+</pre></div>
+</div>
+<p>It seems that we might have found a better model, but which one is it?</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">estimator</span><span class="o">.</span><span class="n">best_params_</span></a><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>{&#39;dataframe_pipeline__svm__C&#39;: 0.1, &#39;dataframe_pipeline__svm__kernel&#39;: &#39;rbf&#39;}
+</pre></div>
+</div>
+<p>Now that we know that a RBF kernel is better, lest test different <em>gamma</em>
+parameters.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model_params</span></a> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;svm__kernel&#39;</span><span class="p">:</span> <span class="s1">&#39;rbf&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;svm__C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">],</span>
+    <span class="s1">&#39;svm__gamma&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1e-2</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">],</span>
+    <span class="s1">&#39;cv&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>  <span class="c1"># CV=2 too speed up the example</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;frontal&#39;</span><span class="p">,</span> <span class="s1">&#39;parietal&#39;</span><span class="p">]</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a> <span class="o">=</span> <span class="s1">&#39;event&#39;</span>
+<span class="n">scores</span><span class="p">,</span> <span class="n">estimator</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df_fmri</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;svm&#39;</span><span class="p">,</span>
+                                         <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model_params</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model_params</span></a><span class="p">,</span>
+                                         <span class="n">return_estimator</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">estimator</span><span class="o">.</span><span class="n">best_params_</span></a><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2020-11-09 15:22:37,436 - julearn - INFO - Using default CV
+2020-11-09 15:22:37,437 - julearn - INFO - ==== Input Data ====
+2020-11-09 15:22:37,437 - julearn - INFO - Using dataframe as input
+2020-11-09 15:22:37,437 - julearn - INFO - Features: [&#39;frontal&#39;, &#39;parietal&#39;]
+2020-11-09 15:22:37,437 - julearn - INFO - Target: event
+2020-11-09 15:22:37,437 - julearn - INFO - Expanded X: [&#39;frontal&#39;, &#39;parietal&#39;]
+2020-11-09 15:22:37,437 - julearn - INFO - Expanded Confounds: []
+2020-11-09 15:22:37,438 - julearn - INFO - ====================
+2020-11-09 15:22:37,438 - julearn - INFO -
+2020-11-09 15:22:37,439 - julearn - INFO - ====== Model ======
+2020-11-09 15:22:37,439 - julearn - INFO - Obtaining model by name: svm
+2020-11-09 15:22:37,439 - julearn - INFO - ===================
+2020-11-09 15:22:37,439 - julearn - INFO -
+2020-11-09 15:22:37,439 - julearn - INFO - CV interpeted as RepeatedKFold with 5 repetitions of 5 folds
+2020-11-09 15:22:37,439 - julearn - INFO - = Model Parameters =
+2020-11-09 15:22:37,440 - julearn - INFO - Tunning hyperparameters using {search}
+2020-11-09 15:22:37,440 - julearn - INFO - Hyperparameters:
+2020-11-09 15:22:37,440 - julearn - INFO -      dataframe_pipeline__svm__C: [0.01, 0.1]
+2020-11-09 15:22:37,440 - julearn - INFO -      dataframe_pipeline__svm__gamma: [0.01, 0.001]
+2020-11-09 15:22:37,441 - julearn - INFO - Using scikit-learn CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
+2020-11-09 15:22:37,441 - julearn - INFO - Search Parameters:
+2020-11-09 15:22:37,441 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
+2020-11-09 15:22:37,441 - julearn - INFO -      scoring: None
+2020-11-09 15:22:37,441 - julearn - INFO - ====================
+2020-11-09 15:22:37,441 - julearn - INFO -
+0.47479104214424267
+{&#39;dataframe_pipeline__svm__C&#39;: 0.01, &#39;dataframe_pipeline__svm__gamma&#39;: 0.001}
+</pre></div>
+</div>
+<p>It seems that without tunning the gamma parameter we had a better accuracy.
+Let’s add the default value and see what happens.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model_params</span></a> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;svm__kernel&#39;</span><span class="p">:</span> <span class="s1">&#39;rbf&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;svm__C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">],</span>
+    <span class="s1">&#39;svm__gamma&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1e-2</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="s1">&#39;scale&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;cv&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>  <span class="c1"># CV=2 too speed up the example</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;frontal&#39;</span><span class="p">,</span> <span class="s1">&#39;parietal&#39;</span><span class="p">]</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a> <span class="o">=</span> <span class="s1">&#39;event&#39;</span>
+<span class="n">scores</span><span class="p">,</span> <span class="n">estimator</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df_fmri</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;svm&#39;</span><span class="p">,</span>
+                                         <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model_params</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model_params</span></a><span class="p">,</span>
+                                         <span class="n">return_estimator</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">estimator</span><span class="o">.</span><span class="n">best_params_</span></a><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2020-11-09 15:22:42,879 - julearn - INFO - Using default CV
+2020-11-09 15:22:42,879 - julearn - INFO - ==== Input Data ====
+2020-11-09 15:22:42,879 - julearn - INFO - Using dataframe as input
+2020-11-09 15:22:42,879 - julearn - INFO - Features: [&#39;frontal&#39;, &#39;parietal&#39;]
+2020-11-09 15:22:42,879 - julearn - INFO - Target: event
+2020-11-09 15:22:42,879 - julearn - INFO - Expanded X: [&#39;frontal&#39;, &#39;parietal&#39;]
+2020-11-09 15:22:42,879 - julearn - INFO - Expanded Confounds: []
+2020-11-09 15:22:42,881 - julearn - INFO - ====================
+2020-11-09 15:22:42,881 - julearn - INFO -
+2020-11-09 15:22:42,881 - julearn - INFO - ====== Model ======
+2020-11-09 15:22:42,881 - julearn - INFO - Obtaining model by name: svm
+2020-11-09 15:22:42,881 - julearn - INFO - ===================
+2020-11-09 15:22:42,881 - julearn - INFO -
+2020-11-09 15:22:42,882 - julearn - INFO - CV interpeted as RepeatedKFold with 5 repetitions of 5 folds
+2020-11-09 15:22:42,882 - julearn - INFO - = Model Parameters =
+2020-11-09 15:22:42,883 - julearn - INFO - Tunning hyperparameters using {search}
+2020-11-09 15:22:42,883 - julearn - INFO - Hyperparameters:
+2020-11-09 15:22:42,883 - julearn - INFO -      dataframe_pipeline__svm__C: [0.01, 0.1]
+2020-11-09 15:22:42,883 - julearn - INFO -      dataframe_pipeline__svm__gamma: [0.01, 0.001, &#39;scale&#39;]
+2020-11-09 15:22:42,883 - julearn - INFO - Using scikit-learn CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
+2020-11-09 15:22:42,883 - julearn - INFO - Search Parameters:
+2020-11-09 15:22:42,883 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
+2020-11-09 15:22:42,883 - julearn - INFO -      scoring: None
+2020-11-09 15:22:42,884 - julearn - INFO - ====================
+2020-11-09 15:22:42,884 - julearn - INFO -
+0.7074977958032092
+{&#39;dataframe_pipeline__svm__C&#39;: 0.1, &#39;dataframe_pipeline__svm__gamma&#39;: &#39;scale&#39;}
+</pre></div>
+</div>
+<p>So what was the best <code class="docutils literal notranslate"><span class="pre">gamma</span></code> in the end?</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">estimator</span><span class="o">.</span><span class="n">best_estimator_</span><span class="p">[</span><span class="s1">&#39;svm&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">_gamma</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.5
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  23.871 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-advanced-run-hyperparameter-tunning-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/6742466d411c3fb8bd327a899a507e98/run_hyperparameter_tunning.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">run_hyperparameter_tunning.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/fd3ca799d0b4830356046d4ec6d70baa/run_hyperparameter_tunning.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">run_hyperparameter_tunning.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../../index.html">Table of Contents</a></h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installing julearn</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../input.html">Input Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pipeline.html">Extended Pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../hyperparameters.html">Hyperparameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/index.html">Basic Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Advanced Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="run_combine_pandas.html">Working with pandas</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Tunning Hyperparameters</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing to julearn</a></li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/auto_examples/advanced/run_hyperparameter_tunning.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../api.html" title="Reference"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="run_combine_pandas.html" title="Working with pandas"
+             >previous</a> |</li>
+    <li><img src="../../_static/py.png" alt=""
+             style="vertical-align: middle; margin-top: -1px"/></li>
+    <li><a href="https://www.python.org/">Python</a> &#187;</li>
+    
+    <a href="../../index.html">julearn  documentation</a> &#187;
+    
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Advanced Examples</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Tunning Hyperparameters</a></li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../../copyright.html">Copyright</a> 2020, Authors of julearn.
+    <br />
+
+    The Python Software Foundation is a non-profit corporation.
+<a href="https://www.python.org/psf/donations/">Please donate.</a>
+<br />
+    <br />
+
+    Last updated on None.
+    
+    <br />
+
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.3.0.
+    </div>
+
+  </body>
+</html>
