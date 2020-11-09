@@ -294,9 +294,12 @@ def create_extended_pipeline(X_steps, y_transformer, conf_steps,
 
     # TODO validate conf_steps to only be unknown_same_type or same
     # and not 4 entries
-    confound_pipe = create_dataframe_pipeline(
-        conf_steps, default_returned_features='same',
-        default_transform_column='confound')
+    if conf_steps is not None:
+        confound_pipe = create_dataframe_pipeline(
+            conf_steps, default_returned_features='same',
+            default_transform_column='confound')
+    else:
+        confound_pipe = None
 
     return ExtendedDataFramePipeline(dataframe_pipeline=pipeline,
                                      y_transformer=y_transformer,

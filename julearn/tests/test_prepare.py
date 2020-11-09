@@ -5,9 +5,15 @@ import numpy as np
 from numpy.testing import assert_array_equal
 import pandas as pd
 
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import SVC
+from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
+
+from julearn.pipeline import create_extended_pipeline
+
 import pytest
 
-from julearn.prepare import prepare_input_data
+from julearn.prepare import prepare_input_data, prepare_model_params
 
 
 def _check_np_input(prepared, X, y, confounds, groups):
@@ -372,3 +378,53 @@ def test_prepare_input_data_df():
             groups=groups)
         _check_df_input(prepared, X=X, y=y, confounds=confounds, groups=groups,
                         df=df)
+
+
+def test_prepare_model_params():
+    X_steps = [('zscore', StandardScaler(), 'same'),
+               ('svm', SVC())]
+
+    cv_outer = 2
+    model_params = {'svm__kernel': 'linear'}
+
+    pipeline = create_extended_pipeline(X_steps=X_steps, y_transformer=None,
+                                        conf_steps=None, confounds=None,
+                                        categorical_features=None)
+    pipeline = prepare_model_params(model_params, pipeline, cv_outer)
+    assert pipeline['svm'].get_params()['kernel'] == 'linear'
+
+    model_params = {
+        'svm__C': [0.001, 0.01, 0.1, 1, 10, 100],
+        'svm__kernel': 'linear'}
+    pipeline = create_extended_pipeline(X_steps=X_steps, y_transformer=None,
+                                        conf_steps=None, confounds=None,
+                                        categorical_features=None)
+    pipeline = prepare_model_params(model_params, pipeline, cv_outer)
+
+    assert pipeline.__class__.__name__ == 'wrap_searcher'
+    assert pipeline.cv == 2
+    assert isinstance(pipeline, GridSearchCV)
+    assert 'dataframe_pipeline__svm__C' in pipeline.param_grid
+    assert 'dataframe_pipeline__svm__kernel' not in pipeline.param_grid
+
+    model_params = {
+        'svm__C': [0.001, 0.01, 0.1, 1, 10, 100],
+        'svm__gamma': [1e-9, 1e-8, 1e-7, 1e-6, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1,
+                       10, 100, 1000],
+        'svm__kernel': 'rbf',
+        'search': 'random',
+        'search_params': {'n_iter': 50},
+        'cv': 5
+    }
+    pipeline = create_extended_pipeline(X_steps=X_steps, y_transformer=None,
+                                        conf_steps=None, confounds=None,
+                                        categorical_features=None)
+    pipeline = prepare_model_params(model_params, pipeline, cv_outer)
+
+    assert pipeline.__class__.__name__ == 'wrap_searcher'
+    assert pipeline.cv.n_splits == 5
+    assert isinstance(pipeline, RandomizedSearchCV)
+    assert 'dataframe_pipeline__svm__C' in pipeline.param_distributions
+    assert 'dataframe_pipeline__svm__gamma' in pipeline.param_distributions
+    assert 'dataframe_pipeline__svm__kernel' not in \
+        pipeline.param_distributions

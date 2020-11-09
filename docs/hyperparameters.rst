@@ -73,11 +73,11 @@ random combinations.
 
     model_params = {
         'svm__C': [0.001, 0.01, 0.1, 1, 10, 100],
-        'svm_gamma': [1e-9, 1e-8, 1e-7, 1e-6, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1
-                      10, 100, 1000],
+        'svm__gamma': [1e-9, 1e-8, 1e-7, 1e-6, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1,
+                       10, 100, 1000],
         'svm__kernel': 'rbf',
         'search': 'random',
-        'search_params: {'n_iter': 50}
+        'search_params': {'n_iter': 50}
         
     }
     run_cross_validation(X, y, data=df, model='svm', model_params=model_params)
