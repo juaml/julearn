@@ -1,6 +1,6 @@
 """
 Inspecting SVM models
-============================
+=====================
 
 This example uses the 'fmri' dataset, performs simple binary classification
 using a Support Vector Machine classifier and analyse the model.
@@ -12,7 +12,7 @@ Waskom, M.L., Frank, M.C., Wagner, A.D. (2016). Adaptive engagement of
 cognitive control in context-dependent decision-making. Cerebral Cortex.
 
 
-.. include:: ../links.inc
+.. include:: ../../links.inc
 """
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #

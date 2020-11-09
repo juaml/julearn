@@ -14,8 +14,9 @@ Welcome to julearn's documentation!
    input
    pipeline
    hyperparameters
+   auto_examples/basic/index.rst
+   auto_examples/advanced/index.rst
    api
-   auto_examples/index
    contributing
 
 

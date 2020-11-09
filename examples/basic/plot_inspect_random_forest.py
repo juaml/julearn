@@ -5,7 +5,7 @@ Inspecting Random Forest models
 This example uses the 'iris' dataset, performs simple binary classification
 using a Random Forest classifier and analyse the model.
 
-.. include:: ../links.inc
+.. include:: ../../links.inc
 """
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #
