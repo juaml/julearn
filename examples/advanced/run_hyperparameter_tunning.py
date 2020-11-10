@@ -55,7 +55,7 @@ y = 'event'
 scores = run_cross_validation(X=X, y=y, data=df_fmri, model='svm',
                               model_params=model_params)
 
-print(scores.mean())
+print(scores['test_score'].mean())
 
 ###############################################################################
 # The score is not so good. Lets try to see if there is an optimal
@@ -70,7 +70,7 @@ scores, estimator = run_cross_validation(X=X, y=y, data=df_fmri, model='svm',
                                          model_params=model_params,
                                          return_estimator=True)
 
-print(scores.mean())
+print(scores['test_score'].mean())
 
 ###############################################################################
 # This did not change much, lets explore other kernels too.
@@ -84,7 +84,7 @@ scores, estimator = run_cross_validation(X=X, y=y, data=df_fmri, model='svm',
                                          model_params=model_params,
                                          return_estimator=True)
 
-print(scores.mean())
+print(scores['test_score'].mean())
 ###############################################################################
 # It seems that we might have found a better model, but which one is it?
 print(estimator.best_params_)
@@ -103,7 +103,7 @@ scores, estimator = run_cross_validation(X=X, y=y, data=df_fmri, model='svm',
                                          model_params=model_params,
                                          return_estimator=True)
 
-print(scores.mean())
+print(scores['test_score'].mean())
 print(estimator.best_params_)
 
 ###############################################################################
@@ -120,7 +120,7 @@ scores, estimator = run_cross_validation(X=X, y=y, data=df_fmri, model='svm',
                                          model_params=model_params,
                                          return_estimator=True)
 
-print(scores.mean())
+print(scores['test_score'].mean())
 print(estimator.best_params_)
 
 ###############################################################################

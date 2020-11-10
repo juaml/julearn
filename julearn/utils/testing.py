@@ -9,7 +9,7 @@ from sklearn.ensemble import (RandomForestClassifier,
 from sklearn.dummy import DummyClassifier
 
 from sklearn.base import clone
-from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import cross_validate
 
 from julearn import run_cross_validation
 from julearn.prepare import prepare_cv
@@ -46,19 +46,21 @@ def do_scoring_test(X, y, data, api_params, sklearn_model, scorers, cv=None,
     if sk_y is None:
         sk_y = data[y].values
 
+    np.random.seed(42)
+    actual, actual_estimator = run_cross_validation(
+        X=X, y=y, data=data, scoring=scorers, cv=cv,
+        return_estimator=True, **api_params)
+
+    np.random.seed(42)
+    sk_cv = prepare_cv(cv)
+    expected = cross_validate(sklearn_model, sk_X, sk_y, cv=sk_cv,
+                              scoring=scorers)
+
     for scoring in scorers:
-        np.random.seed(42)
-        actual, actual_estimator = run_cross_validation(
-            X=X, y=y, data=data, scoring=scoring, cv=cv,
-            return_estimator=True, **api_params)
-
-        np.random.seed(42)
-        sk_cv = prepare_cv(cv)
-        expected = cross_val_score(sklearn_model, sk_X, sk_y, cv=sk_cv,
-                                   scoring=scoring)
-
+        s_key = f'test_{scoring}'
         assert len(actual) == len(expected)
-        assert all([a == b for a, b in zip(actual, expected)])
+        assert len(actual[s_key]) == len(expected[s_key])
+        assert all([a == b for a, b in zip(actual[s_key], expected[s_key])])
 
         # Compare the models
         clf1 = actual_estimator.dataframe_pipeline.steps[-1][1]

@@ -94,7 +94,7 @@ df_fmri = df_fmri.reset_index()
 
 scores = run_cross_validation(X=X, y=y, data=df_fmri, model='svm')
 
-print(scores.mean())
+print(scores['test_score'].mean())
 
 ###############################################################################
 # This results indicate that we can decode the kind of event by looking at
@@ -123,7 +123,7 @@ cv = GroupShuffleSplit(n_splits=5, test_size=0.5, random_state=42)
 scores, model = run_cross_validation(X=X, y=y, data=df_fmri, model='svm',
                                      cv=cv, groups='subject',
                                      return_estimator=True)
-print(scores.mean())
+print(scores['test_score'].mean())
 
 ###############################################################################
 # After testing on independent subjects, we can now claim that given a new

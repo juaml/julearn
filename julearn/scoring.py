@@ -11,7 +11,7 @@ def get_extended_scorer(estimator, score_name):
     Parameters
     ----------
     estimator : julearn.pipeline.ExtendedDataFramePipeline
-        A estimator with a .transform_confounds and .transform_target
+        An estimator with a .transform_confounds and .transform_target
         method needed for scoring against a new ground truth
     score_name : str
         The name of the score you want to use for scoring.
@@ -19,7 +19,7 @@ def get_extended_scorer(estimator, score_name):
 
     Returns
     -------
-    sklearn scorer
+    extended_scorer : sklearn scorer
         A function with arguments: estimator, X, y .
         That returns a single score.
     """
