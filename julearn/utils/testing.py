@@ -8,7 +8,8 @@ from sklearn.ensemble import (RandomForestClassifier,
                               ExtraTreesClassifier)
 from sklearn.dummy import DummyClassifier
 from sklearn.gaussian_process import GaussianProcessClassifier
-from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import (LogisticRegression, RidgeClassifier,
+                                  RidgeClassifierCV, SGDClassifier)
 
 from sklearn.base import clone, TransformerMixin, BaseEstimator
 from sklearn.model_selection import cross_validate
@@ -35,7 +36,8 @@ def compare_models(clf1, clf2):
     elif isinstance(clf1, GaussianProcessClassifier):
         v1 =  clf1.base_estimator_.pi_
         v2 =  clf2.base_estimator_.pi_
-    elif isinstance(clf1, LogisticRegression):
+    elif isinstance(clf1, (LogisticRegression, RidgeClassifier,
+                           RidgeClassifierCV, SGDClassifier)):
         v1 =  clf1.coef_
         v2 =  clf2.coef_
     else:

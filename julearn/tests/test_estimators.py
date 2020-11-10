@@ -8,7 +8,10 @@ from sklearn.ensemble import (RandomForestClassifier,
                               ExtraTreesClassifier)
 from sklearn.dummy import DummyClassifier
 from sklearn.gaussian_process import GaussianProcessClassifier
-from sklearn.linear_model import LogisticRegression, LogisticRegressionCV
+from sklearn.linear_model import (LogisticRegression, LogisticRegressionCV,
+                                  LinearRegression, Ridge, RidgeClassifier,
+                                  RidgeCV, RidgeClassifierCV,
+                                  SGDRegressor, SGDClassifier)
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import make_pipeline
 
@@ -24,13 +27,17 @@ _binary_estimators = {
     'dummy': DummyClassifier,
     'gauss': GaussianProcessClassifier,
     'logreg': LogisticRegression,
-    'logregcv': LogisticRegressionCV
+    'logregcv': LogisticRegressionCV,
+    'ridge': RidgeClassifier,
+    'ridgecv': RidgeClassifierCV,
+    'sgd': SGDClassifier,
 }
 
 _binary_params = {
     'rf': {'n_estimators': 10},
     'et': {'n_estimators': 10},
-    'dummy': {'strategy': 'prior'}
+    'dummy': {'strategy': 'prior'},
+    'sgd': {'random_state': 2}
 }
 
 

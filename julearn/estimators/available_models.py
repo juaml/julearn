@@ -6,7 +6,10 @@ from sklearn.ensemble import (RandomForestClassifier, RandomForestRegressor,
                               ExtraTreesClassifier, ExtraTreesRegressor)
 from sklearn.gaussian_process import (GaussianProcessClassifier,
                                       GaussianProcessRegressor)
-from sklearn.linear_model import LogisticRegression, LogisticRegressionCV
+from sklearn.linear_model import (LogisticRegression, LogisticRegressionCV,
+                                  LinearRegression, Ridge, RidgeClassifier,
+                                  RidgeCV, RidgeClassifierCV,
+                                  SGDRegressor, SGDClassifier)
 from sklearn.dummy import DummyClassifier, DummyRegressor
 
 from .. utils import raise_error
@@ -44,6 +47,24 @@ _available_models = {
     'logregcv': {
         'binary_classification': LogisticRegressionCV,
         'multiclass_classification': LogisticRegressionCV,
+    },
+    'linreg': {
+        'regression': LinearRegression,
+    },
+    'ridge': {
+        'regression': Ridge,
+        'binary_classification': RidgeClassifier,
+        'multiclass_classification': RidgeClassifier,
+    },
+    'ridgecv': {
+        'regression': RidgeCV,
+        'binary_classification': RidgeClassifierCV,
+        'multiclass_classification': RidgeClassifierCV,
+    },
+    'sgd': {
+        'regression': SGDRegressor,
+        'binary_classification': SGDClassifier,
+        'multiclass_classification': SGDClassifier,
     }
 }
 
