@@ -2,7 +2,9 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 from sklearn.decomposition import PCA
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import (StandardScaler, RobustScaler, MaxAbsScaler,
+                                   MinMaxScaler, Normalizer,
+                                   QuantileTransformer, PowerTransformer)
 from sklearn.base import clone
 
 from . confounds import DataFrameConfoundRemover
@@ -22,6 +24,12 @@ _available_transformers = {
         DataFrameConfoundRemover(),
         'subset',
     ],
+    'scaler_robust': [RobustScaler(), 'same'],
+    'scaler_minmax': [MinMaxScaler(), 'same'],
+    'scaler_maxabs': [MaxAbsScaler(), 'same'],
+    'scaler_normalizer': [Normalizer(), 'same'],
+    'scaler_quantile': [QuantileTransformer(), 'same'],
+    'scaler_power': [PowerTransformer(), 'same']
 }
 
 
