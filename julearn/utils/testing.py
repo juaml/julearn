@@ -8,7 +8,7 @@ from sklearn.ensemble import (RandomForestClassifier,
                               ExtraTreesClassifier)
 from sklearn.dummy import DummyClassifier
 
-from sklearn.base import clone
+from sklearn.base import clone, TransformerMixin, BaseEstimator
 from sklearn.model_selection import cross_validate
 
 from julearn import run_cross_validation
@@ -66,3 +66,32 @@ def do_scoring_test(X, y, data, api_params, sklearn_model, scorers, cv=None,
         clf1 = actual_estimator.dataframe_pipeline.steps[-1][1]
         clf2 = clone(sklearn_model).fit(sk_X, sk_y).steps[-1][1]
         compare_models(clf1, clf2)
+
+
+class PassThroughTransformer(TransformerMixin, BaseEstimator):
+
+    def __init__(self):
+        pass
+
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        return X
+
+
+class TargetPassThroughTransformer(PassThroughTransformer):
+
+    def __init__(self):
+        """A target transformer doing nothing.
+        It only returns the target as it is.
+
+        """
+        super().__init__()
+
+    def transform(self, X=None, y=None):
+        return y
+
+    def fit_transform(self, X=None, y=None):
+        self.fit(X, y)
+        return self.transform(X, y)

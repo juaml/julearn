@@ -4,25 +4,7 @@
 import pandas as pd
 from sklearn.base import TransformerMixin
 
-from . basic import PassThroughTransformer
 from .. utils import raise_error
-
-
-class TargetPassThroughTransformer(PassThroughTransformer):
-
-    def __init__(self):
-        """A target transformer doing nothing.
-        It only returns the target as it is.
-
-        """
-        super().__init__()
-
-    def transform(self, X=None, y=None):
-        return y
-
-    def fit_transform(self, X=None, y=None):
-        self.fit(X, y)
-        return self.transform(X, y)
 
 
 class TargetTransfromerWrapper(TransformerMixin):
