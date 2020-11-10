@@ -35,3 +35,5 @@
 .. _`Wikipedia`: https://wikipedia.org
 
 .. _`Regular Expressions`: https://docs.python.org/3/library/re.html
+
+.. _`setuptools_scm`: https://github.com/pypa/setuptools_scm/
