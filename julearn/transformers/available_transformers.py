@@ -5,6 +5,10 @@ from sklearn.decomposition import PCA
 from sklearn.preprocessing import (StandardScaler, RobustScaler, MaxAbsScaler,
                                    MinMaxScaler, Normalizer,
                                    QuantileTransformer, PowerTransformer)
+from sklearn.feature_selection import (GenericUnivariateSelect,
+                                       SelectPercentile, SelectKBest,
+                                       SelectFdr, SelectFpr, SelectFwe,
+                                       VarianceThreshold)
 from sklearn.base import clone
 
 from . confounds import DataFrameConfoundRemover
@@ -18,18 +22,27 @@ name : [sklearn transformer,
 """
 
 _available_transformers = {
-    'zscore': [StandardScaler(), 'same'],
     'pca': [PCA(), 'unknown'],
     'remove_confound': [
         DataFrameConfoundRemover(),
         'subset',
     ],
+    # Scalers
+    'zscore': [StandardScaler(), 'same'],
     'scaler_robust': [RobustScaler(), 'same'],
     'scaler_minmax': [MinMaxScaler(), 'same'],
     'scaler_maxabs': [MaxAbsScaler(), 'same'],
     'scaler_normalizer': [Normalizer(), 'same'],
     'scaler_quantile': [QuantileTransformer(), 'same'],
-    'scaler_power': [PowerTransformer(), 'same']
+    'scaler_power': [PowerTransformer(), 'same'],
+    # Feature selection
+    'select_univariate': [GenericUnivariateSelect(), 'subset'],
+    'select_percentile': [SelectPercentile(), 'subset'],
+    'select_k': [SelectKBest(), 'subset'],
+    'select_fdr': [SelectFdr(), 'subset'],
+    'select_fpr': [SelectFpr(), 'subset'],
+    'select_fwe': [SelectFwe(), 'subset'],
+    'select_variance': [VarianceThreshold(), 'subset']
 }
 
 

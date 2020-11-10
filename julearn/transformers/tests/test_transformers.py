@@ -5,7 +5,10 @@ from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import (StandardScaler, RobustScaler, MaxAbsScaler,
                                    MinMaxScaler, Normalizer,
                                    QuantileTransformer, PowerTransformer)
-
+from sklearn.feature_selection import (GenericUnivariateSelect,
+                                       SelectPercentile, SelectKBest,
+                                       SelectFdr, SelectFpr, SelectFwe,
+                                       VarianceThreshold)
 from seaborn import load_dataset
 
 from julearn.utils.testing import do_scoring_test
@@ -19,10 +22,18 @@ _features_transformers = {
     'scaler_normalizer': Normalizer,
     'scaler_quantile': QuantileTransformer,
     'scaler_power': PowerTransformer,
+    'select_univariate': GenericUnivariateSelect,
+    'select_percentile': SelectPercentile,
+    'select_k': SelectKBest,
+    'select_fdr': SelectFdr,
+    'select_fpr': SelectFpr,
+    'select_fwe': SelectFwe,
+    'select_variance': VarianceThreshold
 }
 
 _transformer_params = {
-    'scaler_quantile': {'n_quantiles': 10}
+    'scaler_quantile': {'n_quantiles': 10},
+    'select_k': {'k': 2}
 }
 
 
