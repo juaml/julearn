@@ -18,6 +18,7 @@ Welcome to julearn's documentation!
    auto_examples/advanced/index.rst
    api
    contributing
+   maintaining
 
 
 Indices and tables
