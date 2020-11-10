@@ -524,8 +524,30 @@ def prepare_cv(cv):
     return _cv
 
 
-def prepare_scoring(estimator, score_name):
-    return get_extended_scorer(estimator, score_name)
+def prepare_scoring(estimator, scorers):
+    """Prepares the scikit-learn scorers to work with the
+    ExtendedDataFramePipeline
+
+    Parameters
+    ----------
+    estimator : julearn.pipeline.ExtendedDataFramePipeline
+        An estimator with a .transform_confounds and .transform_target
+        method needed for scoring against a new ground truth.
+    scorers : str or list(str)
+        A scorer name (or list of)
+
+    Returns
+    -------
+    s_dict : dict(string, scorer)
+        A dictionary with the corresponding scorers for each scorer name,
+        suitable for sklearn.model_selection.cross_validate.
+    """
+    if scorers is None:
+        return None
+    if not isinstance(scorers, list):
+        scorers = [scorers]
+    s_dict = {k: get_extended_scorer(estimator, k) for k in scorers}
+    return s_dict
 
 
 def _create_preprocess_tuple(transformer):

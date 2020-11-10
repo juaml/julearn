@@ -2,7 +2,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 import numpy as np
-from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import cross_validate
 
 from . prepare import (prepare_input_data,
                        prepare_model,
@@ -102,10 +102,11 @@ def run_cross_validation(
     groups : str or numpy.array | None
         The grouping labels in case a Group CV is used.
         See https://juaml.github.io/julearn/input.html for details.
-    scoring : str | None
+    scoring : str | list(str) | None
         The scoring metric to use.
         See https://scikit-learn.org/stable/modules/model_evaluation.html for
-        a comprehensive list of options. If None, use 'accuracy'.
+        a comprehensive list of options. If None, use the model's default
+        scorer.
     pos_labels : str, int, float or list | None
         The labels to interpret as positive. If not None, every element from y
         will be converted to 1 if is equal or in pos_labels and to 0 if not.
@@ -152,6 +153,9 @@ def run_cross_validation(
         logger.info(f'Using default CV')
         cv = 'repeat:5_nfolds:5'
 
+    # if scoring is None:
+    #     scoring = 'accuracy'
+
     # Interpret the input data and prepare it to be used with the library
     df_X_conf, y, df_groups, _ = prepare_input_data(
         X=X, y=y, confounds=confounds, df=data, pos_labels=pos_labels,
@@ -183,8 +187,8 @@ def run_cross_validation(
     check_consistency(pipeline, preprocess_X, preprocess_y,
                       preprocess_confounds, df_X_conf, y, cv, groups,
                       problem_type)
-    scores = cross_val_score(pipeline, df_X_conf, y, cv=cv_outer,
-                             scoring=scorer, groups=df_groups)
+    scores = cross_validate(pipeline, df_X_conf, y, cv=cv_outer,
+                            scoring=scorer, groups=df_groups)
 
     out = scores
     if return_estimator is True:

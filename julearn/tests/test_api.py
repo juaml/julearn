@@ -7,7 +7,7 @@ from sklearn import svm
 from sklearn.base import clone
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.pipeline import make_pipeline
-from sklearn.model_selection import (cross_val_score,
+from sklearn.model_selection import (cross_validate,
                                      StratifiedKFold,
                                      GroupKFold,
                                      RepeatedKFold,
@@ -128,10 +128,13 @@ def test_set_hyperparam():
     np.random.seed(42)
     cv = RepeatedKFold(n_splits=5, n_repeats=5)
 
-    expected = cross_val_score(clf, sk_X, t_sk_y, cv=cv, scoring=scoring)
+    expected = cross_validate(clf, sk_X, t_sk_y, cv=cv, scoring=[scoring])
 
     assert len(actual) == len(expected)
-    assert all([a == b for a, b in zip(actual, expected)])
+    assert len(actual['test_roc_auc']) == len(expected['test_roc_auc'])
+    assert all(
+        [a == b for a, b in
+            zip(actual['test_roc_auc'], expected['test_roc_auc'])])
 
     # Compare the models
     clf1 = actual_estimator.dataframe_pipeline.steps[-1][1]
@@ -170,10 +173,13 @@ def test_tune_hyperparam():
     clf = make_pipeline(StandardScaler(), svm.SVC())
     gs = GridSearchCV(clf, {'svc__C': [0.01, 0.001]}, cv=cv_inner)
 
-    expected = cross_val_score(gs, sk_X, sk_y, cv=cv_outer, scoring=scoring)
+    expected = cross_validate(gs, sk_X, sk_y, cv=cv_outer, scoring=[scoring])
 
     assert len(actual) == len(expected)
-    assert all([a == b for a, b in zip(actual, expected)])
+    assert len(actual['test_accuracy']) == len(expected['test_accuracy'])
+    assert all(
+        [a == b for a, b in
+            zip(actual['test_accuracy'], expected['test_accuracy'])])
 
     # Compare the models
     clf1 = actual_estimator.best_estimator_.dataframe_pipeline.steps[-1][1]
@@ -199,10 +205,13 @@ def test_tune_hyperparam():
     gs = RandomizedSearchCV(clf, {'svc__C': [0.01, 0.001]}, cv=cv_inner,
                             n_iter=2)
 
-    expected = cross_val_score(gs, sk_X, sk_y, cv=cv_outer, scoring=scoring)
+    expected = cross_validate(gs, sk_X, sk_y, cv=cv_outer, scoring=[scoring])
 
     assert len(actual) == len(expected)
-    assert all([a == b for a, b in zip(actual, expected)])
+    assert len(actual['test_accuracy']) == len(expected['test_accuracy'])
+    assert all(
+        [a == b for a, b in
+            zip(actual['test_accuracy'], expected['test_accuracy'])])
 
     # Compare the models
     clf1 = actual_estimator.best_estimator_.dataframe_pipeline.steps[-1][1]
@@ -232,10 +241,13 @@ def test_tune_hyperparam():
     gs = GridSearchCV(clf, {'svc__C': [0.01, 0.001]}, cv=cv_inner,
                       scoring=gs_scoring)
     sk_y = (sk_y == 'setosa').astype(np.int)
-    expected = cross_val_score(gs, sk_X, sk_y, cv=cv_outer, scoring=scoring)
+    expected = cross_validate(gs, sk_X, sk_y, cv=cv_outer, scoring=[scoring])
 
     assert len(actual) == len(expected)
-    assert all([a == b for a, b in zip(actual, expected)])
+    assert len(actual['test_accuracy']) == len(expected['test_accuracy'])
+    assert all(
+        [a == b for a, b in
+            zip(actual['test_accuracy'], expected['test_accuracy'])])
 
     # Compare the models
     clf1 = actual_estimator.best_estimator_.dataframe_pipeline.steps[-1][1]
