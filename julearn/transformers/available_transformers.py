@@ -6,8 +6,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.base import clone
 
 from . confounds import DataFrameConfoundRemover
-from . basic import PassThroughTransformer
-from . target import TargetTransfromerWrapper, TargetPassThroughTransformer
+from . target import TargetTransfromerWrapper
 from .. utils import raise_error
 
 """
@@ -23,14 +22,11 @@ _available_transformers = {
         DataFrameConfoundRemover(),
         'subset',
     ],
-    'passthrough': [PassThroughTransformer(), 'same']
 }
 
 
 _available_target_transformers = {
     'zscore': TargetTransfromerWrapper(StandardScaler()),
-    'passthrough': TargetPassThroughTransformer()
-
 }
 
 

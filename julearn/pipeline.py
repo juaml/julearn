@@ -103,10 +103,9 @@ class ExtendedDataFramePipeline(BaseEstimator):
     y_transformer : julearn target_transformer, optional
         Any transformer which can take the X and y to transform the y.
         You can use julearn.transformers.target.TargetTransfromerWrapper to
-        convert most sklearn transformers to a target_transformer
-        , by default TargetPassThroughTransformer()
+        convert most sklearn transformers to a target_transformer.
     confound_dataframe_pipeline : sklearn.pipeline.Pipeline, optional
-        Similar to dataframe_pipeline, by default PassThroughTransformer()
+        Similar to dataframe_pipeline.
     confounds : list[str], optional
         a list of column names which are confounds ,by default None
     categorical_features : list[str], optional

@@ -11,7 +11,7 @@ from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 
 from julearn.transformers import DataFrameTransformer
-from julearn.transformers.basic import PassThroughTransformer
+from julearn.utils.testing import PassThroughTransformer
 
 X = pd.DataFrame(dict(A=np.arange(10),
                       B=np.arange(10, 20),
