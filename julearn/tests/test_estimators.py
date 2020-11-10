@@ -7,7 +7,8 @@ from sklearn.svm import SVC
 from sklearn.ensemble import (RandomForestClassifier,
                               ExtraTreesClassifier)
 from sklearn.dummy import DummyClassifier
-
+from sklearn.gaussian_process import GaussianProcessClassifier
+from sklearn.linear_model import LogisticRegression, LogisticRegressionCV
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import make_pipeline
 
@@ -20,7 +21,10 @@ _binary_estimators = {
     'svm': SVC,
     'rf': RandomForestClassifier,
     'et': ExtraTreesClassifier,
-    'dummy': DummyClassifier
+    'dummy': DummyClassifier,
+    'gauss': GaussianProcessClassifier,
+    'logreg': LogisticRegression,
+    'logregcv': LogisticRegressionCV
 }
 
 _binary_params = {

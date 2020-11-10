@@ -7,6 +7,8 @@ from sklearn.svm import SVC
 from sklearn.ensemble import (RandomForestClassifier,
                               ExtraTreesClassifier)
 from sklearn.dummy import DummyClassifier
+from sklearn.gaussian_process import GaussianProcessClassifier
+from sklearn.linear_model import LogisticRegression
 
 from sklearn.base import clone, TransformerMixin, BaseEstimator
 from sklearn.model_selection import cross_validate
@@ -30,7 +32,12 @@ def compare_models(clf1, clf2):
         assert clf1._strategy == clf2._strategy
         assert_array_equal(clf1.class_prior_, clf2.class_prior_)
         assert_array_equal(clf1.classes_, clf2.classes_)
-
+    elif isinstance(clf1, GaussianProcessClassifier):
+        v1 =  clf1.base_estimator_.pi_
+        v2 =  clf2.base_estimator_.pi_
+    elif isinstance(clf1, LogisticRegression):
+        v1 =  clf1.coef_
+        v2 =  clf2.coef_
     else:
         raise NotImplementedError(
             f'Model comparison for {clf1} not yet implemented.')

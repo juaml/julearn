@@ -4,6 +4,9 @@
 from sklearn.svm import SVC, SVR
 from sklearn.ensemble import (RandomForestClassifier, RandomForestRegressor,
                               ExtraTreesClassifier, ExtraTreesRegressor)
+from sklearn.gaussian_process import (GaussianProcessClassifier,
+                                      GaussianProcessRegressor)
+from sklearn.linear_model import LogisticRegression, LogisticRegressionCV
 from sklearn.dummy import DummyClassifier, DummyRegressor
 
 from .. utils import raise_error
@@ -29,6 +32,19 @@ _available_models = {
         'binary_classification': DummyClassifier,
         'multiclass_classification': DummyClassifier,
     },
+    'gauss': {
+        'regression': GaussianProcessRegressor,
+        'binary_classification': GaussianProcessClassifier,
+        'multiclass_classification': GaussianProcessClassifier
+    },
+    'logreg': {
+        'binary_classification': LogisticRegression,
+        'multiclass_classification': LogisticRegression,
+    },
+    'logregcv': {
+        'binary_classification': LogisticRegressionCV,
+        'multiclass_classification': LogisticRegressionCV,
+    }
 }
 
 
