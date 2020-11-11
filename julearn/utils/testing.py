@@ -17,7 +17,8 @@ from sklearn.linear_model import (LogisticRegression,
                                   LinearRegression, Ridge, RidgeClassifier,
                                   RidgeCV, RidgeClassifierCV,
                                   SGDRegressor, SGDClassifier)
-
+from sklearn.naive_bayes import (BernoulliNB, CategoricalNB, ComplementNB,
+                                 GaussianNB, MultinomialNB)
 from sklearn.base import clone, TransformerMixin, BaseEstimator
 from sklearn.model_selection import cross_validate
 
@@ -65,9 +66,18 @@ def compare_models(clf1, clf2):
         v2 =  np.c_[clf2.L_, clf2.alpha_]
     elif isinstance(clf1, (LogisticRegression, RidgeClassifier,
                            RidgeClassifierCV, SGDClassifier, SGDRegressor,
-                           LinearRegression, Ridge, RidgeCV)):
+                           LinearRegression, Ridge, RidgeCV,
+                           BernoulliNB, ComplementNB, MultinomialNB)):
         v1 =  clf1.coef_
         v2 =  clf2.coef_
+    elif isinstance(clf1, CategoricalNB):
+        v1 = None
+        v2 = None
+        for c1, c2 in zip(clf1.coef_, clf2.coef_):
+            assert_array_equal(c1, c2)
+    elif isinstance(clf1, GaussianNB):
+        v1 =  clf1.sigma_
+        v2 =  clf2.sigma_
     elif isinstance(clf1, (AdaBoostClassifier, AdaBoostRegressor,
                            BaggingClassifier, BaggingRegressor)):
         est1 = clf1.estimators_

@@ -17,6 +17,8 @@ from sklearn.linear_model import (LogisticRegression, LogisticRegressionCV,
                                   LinearRegression, Ridge, RidgeClassifier,
                                   RidgeCV, RidgeClassifierCV,
                                   SGDRegressor, SGDClassifier)
+from sklearn.naive_bayes import (BernoulliNB, CategoricalNB, ComplementNB,
+                                 GaussianNB, MultinomialNB)
 from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import make_pipeline
 
@@ -38,7 +40,7 @@ _clf_estimators = {
     'sgd': SGDClassifier,
     'adaboost': AdaBoostClassifier,
     'bagging': BaggingClassifier,
-    'gradientboost': GradientBoostingClassifier
+    'gradientboost': GradientBoostingClassifier,
 }
 
 _clf_params = {
@@ -71,6 +73,67 @@ _reg_params = {
     'adaboost': {'random_state': 2},
     'bagging': {'random_state': 2}
 }
+
+_nb_estimators = {
+    'nb_bernoulli': BernoulliNB,
+    'nb_categorical': CategoricalNB,
+    'nb_complement': ComplementNB,
+    'nb_gaussian': GaussianNB,
+    'nb_multinomial': MultinomialNB,
+}
+
+_nb_params = {
+}
+
+
+def test_naive_bayes_estimators():
+    """Test all naive bayes estimators"""
+    df_iris = load_dataset('iris')
+
+    # keep only two species
+    df_binary = df_iris[df_iris['species'].isin(['setosa', 'virginica'])]
+    X = ['sepal_length', 'sepal_width', 'petal_length']
+    y = 'species'
+
+    for t_mname, t_model_class in _nb_estimators.items():
+        m_params = _nb_params.get(t_mname, {})
+        model_params = None
+        if len(m_params) > 0:
+            model_params = {
+                f'{t_mname}__{t_param}': t_value
+                for t_param, t_value in m_params.items()
+            }
+            t_model = t_model_class(**m_params)
+        else:
+            t_model = t_model_class()
+        t_df_binary = df_binary.copy(deep=True)
+        t_df = df_iris.copy(deep=True)
+        if t_mname in ['nb_categorical']:
+            t_df_binary[X] = t_df_binary[X] > t_df_binary[X].mean()
+            t_df[X] = t_df[X] > t_df[X].mean()
+        scorers = ['accuracy']
+        api_params = {'model': t_mname, 'model_params': model_params,
+                      'preprocess_X': None}
+        clf = make_pipeline(clone(t_model))
+        do_scoring_test(X, y, data=t_df_binary, api_params=api_params,
+                        sklearn_model=clf, scorers=scorers)
+        api_params = {'model': t_mname, 'model_params': model_params,
+                      'preprocess_X': None,
+                      'problem_type': 'multiclass_classification'}
+        clf = make_pipeline(clone(t_model))
+        do_scoring_test(X, y, data=t_df, api_params=api_params,
+                        sklearn_model=clf, scorers=scorers)
+        if t_mname not in ['nb_bernoulli']:
+            # now let's try target-dependent scores
+            scorers = ['recall', 'precision', 'f1']
+            sk_y = (t_df_binary[y].values == 'setosa').astype(np.int)
+            api_params = {'model': t_mname, 'pos_labels': 'setosa',
+                          'model_params': model_params,
+                          'preprocess_X': None}
+            clf = make_pipeline(clone(t_model))
+            do_scoring_test(X, y, data=t_df_binary, api_params=api_params,
+                            sklearn_model=clf,
+                            scorers=scorers, sk_y=sk_y)
 
 
 def test_binary_estimators():
@@ -134,16 +197,6 @@ def test_multiclass_estimators():
         clf = make_pipeline(StandardScaler(), clone(t_model))
         do_scoring_test(X, y, data=df_iris, api_params=api_params,
                         sklearn_model=clf, scorers=scorers)
-        if t_mname != 'dummy':
-            # now let's try target-dependent scores
-            scorers = ['recall', 'precision', 'f1']
-            sk_y = (df_iris[y].values == 'setosa').astype(np.int)
-            api_params = {'model': t_mname, 'pos_labels': 'setosa',
-                          'model_params': model_params}
-            clf = make_pipeline(StandardScaler(), clone(t_model))
-            do_scoring_test(X, y, data=df_iris, api_params=api_params,
-                            sklearn_model=clf,
-                            scorers=scorers, sk_y=sk_y)
 
 
 def test_regression_estimators():

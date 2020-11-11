@@ -14,6 +14,8 @@ from sklearn.linear_model import (LogisticRegression, LogisticRegressionCV,
                                   LinearRegression, Ridge, RidgeClassifier,
                                   RidgeCV, RidgeClassifierCV,
                                   SGDRegressor, SGDClassifier)
+from sklearn.naive_bayes import (BernoulliNB, CategoricalNB, ComplementNB,
+                                 GaussianNB, MultinomialNB)
 from sklearn.dummy import DummyClassifier, DummyRegressor
 
 from .. utils import raise_error
@@ -84,7 +86,27 @@ _available_models = {
         'regression': GradientBoostingRegressor,
         'binary_classification': GradientBoostingClassifier,
         'multiclass_classification': GradientBoostingClassifier,
-    }
+    },
+    'nb_bernoulli': {
+        'binary_classification': BernoulliNB,
+        'multiclass_classification': BernoulliNB,
+    },
+    'nb_categorical': {
+        'binary_classification': CategoricalNB,
+        'multiclass_classification': CategoricalNB,
+    },
+    'nb_complement': {
+        'binary_classification': ComplementNB,
+        'multiclass_classification': ComplementNB,
+    },
+    'nb_gaussian': {
+        'binary_classification': GaussianNB,
+        'multiclass_classification': GaussianNB,
+    },
+    'nb_multinomial': {
+        'binary_classification': MultinomialNB,
+        'multiclass_classification': MultinomialNB,
+    },
 }
 
 

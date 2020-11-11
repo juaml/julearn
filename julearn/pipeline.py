@@ -12,8 +12,10 @@ def create_pipeline(preprocess_steps_features,
                     preprocess_transformer_target,
                     preprocess_steps_confounds,
                     model_tuple, confounds, categorical_features):
-
-    X_steps = list(preprocess_steps_features) + [model_tuple]
+    X_steps = []
+    if preprocess_steps_features is not None:
+        X_steps = X_steps + list(preprocess_steps_features)
+    X_steps = X_steps + [model_tuple]
     y_transformer = preprocess_transformer_target
     pipeline = create_extended_pipeline(
         X_steps, y_transformer, preprocess_steps_confounds, confounds,
