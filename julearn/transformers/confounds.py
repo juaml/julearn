@@ -10,32 +10,47 @@ from .. utils import raise_error, pick_columns
 
 
 class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
-    def __init__(
-        self, model_confound=None, confounds_match='.*__:type:__confound',
-        threshold=None
-    ):
-        """Transformer which can use pd.DataFrames and remove the confounds
-        from the features by subtracting the predicted features
-        given the confounds from the actual features.
+    """Transformer which can use pd.DataFrames and remove the confounds
+    from the features by subtracting the predicted features
+    given the confounds from the actual features.
 
+    Attributes
+    ----------
+    model_confound : sklearn.base.BaseEstimator
+        Model used to predict all features independently using the confounds as
+        features. The predictions of these models are then subtracted from each
+        feature.
+    confounds_match : list[str] or str
+        A string representing a regular expression by which the confounds
+        can be detected from the column names.
+
+    threshold : float or None
+        All residual values after confound removal which fall under the
+        threshold will be set to 0. None means that no threshold will be
+        applied.
+    """
+
+    def __init__(self, model_confound=None,
+                 confounds_match='.*__:type:__confound',
+                 threshold=None):
+        """
         Parameters
         ----------
         model_confound : sklearn.base.BaseEstimator
-            Model used to predict all features independentley
+            Model used to predict all features independently
             using the confounds as features. The predictions of these models
-            are then subtracted from each feature,
-            default LinearRegression()
+            are then subtracted from each feature, defaults to
+            LinearRegression().
         confounds_match : list[str] or str
             A string representing a regular expression by which the confounds
             can be detected from the column names.
             You can use the exact column names or another regex.
-            The default follows the naming convention inside of julearn,
-            default '.*__:type:__*.'
+            The default follows the naming convention inside of julearn:
+            '.*__:type:__*.'
         threshold : float or None
-            All residual values after confound removal which fall under
-            the threshold will be set to 0.
-            None means that no threshold will be applied,
-            default None
+            All residual values after confound removal which fall under the
+            threshold will be set to 0.None (default) means that no threshold
+            will be applied.
         """
         if model_confound is None:
             model_confound = LinearRegression()
@@ -44,6 +59,19 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
         self.threshold = threshold
 
     def fit(self, X, y=None):
+        """Fit confound remover
+
+        Parameters
+        ----------
+        X : pandas.DataFrame
+            Training data
+        y : pandas.Series | None
+            Target values.
+
+        Returns
+        -------
+        self : returns an instance of self.
+        """
         df_X, ser_confound = self._split_into_X_confound(X)
         self.support_mask_ = pd.Series(False, index=X.columns,
                                        dtype=bool)
@@ -60,6 +88,18 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
         return self
 
     def transform(self, X):
+        """Removes confounds from data
+
+        Parameters
+        ----------
+        X : pandas.DataFrame
+            Data to be deconfounded
+
+        Returns
+        -------
+        out : pandas.DataFrame
+            Data without confounds
+        """
         df_X, df_confounds = self._split_into_X_confound(X)
         df_X_prediction = pd.DataFrame(
             [model.predict(df_confounds)
@@ -71,6 +111,18 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
         return self._apply_threshold(residuals)
 
     def get_support(self, indices=False):
+        """Get the support mask
+
+        Parameters
+        ----------
+        indices : bool
+            If true, return indexes
+
+        Returns
+        -------
+        support_mask : numpy.array
+            The support mask
+        """
         if indices:
             return np.arange(len(self.support_mask_))[self.support_mask_]
         else:

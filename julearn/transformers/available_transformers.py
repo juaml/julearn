@@ -2,8 +2,13 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 from sklearn.decomposition import PCA
-from sklearn.preprocessing import StandardScaler
-from sklearn.base import clone
+from sklearn.preprocessing import (StandardScaler, RobustScaler, MaxAbsScaler,
+                                   MinMaxScaler, Normalizer,
+                                   QuantileTransformer, PowerTransformer)
+from sklearn.feature_selection import (GenericUnivariateSelect,
+                                       SelectPercentile, SelectKBest,
+                                       SelectFdr, SelectFpr, SelectFwe,
+                                       VarianceThreshold)
 
 from . confounds import DataFrameConfoundRemover
 from . target import TargetTransfromerWrapper
@@ -16,17 +21,32 @@ name : [sklearn transformer,
 """
 
 _available_transformers = {
-    'zscore': [StandardScaler(), 'same'],
-    'pca': [PCA(), 'unknown'],
+    'pca': [PCA, 'unknown'],
     'remove_confound': [
-        DataFrameConfoundRemover(),
+        DataFrameConfoundRemover,
         'subset',
     ],
+    # Scalers
+    'zscore': [StandardScaler, 'same'],
+    'scaler_robust': [RobustScaler, 'same'],
+    'scaler_minmax': [MinMaxScaler, 'same'],
+    'scaler_maxabs': [MaxAbsScaler, 'same'],
+    'scaler_normalizer': [Normalizer, 'same'],
+    'scaler_quantile': [QuantileTransformer, 'same'],
+    'scaler_power': [PowerTransformer, 'same'],
+    # Feature selection
+    'select_univariate': [GenericUnivariateSelect, 'subset'],
+    'select_percentile': [SelectPercentile, 'subset'],
+    'select_k': [SelectKBest, 'subset'],
+    'select_fdr': [SelectFdr, 'subset'],
+    'select_fpr': [SelectFpr, 'subset'],
+    'select_fwe': [SelectFwe, 'subset'],
+    'select_variance': [VarianceThreshold, 'subset']
 }
 
 
 _available_target_transformers = {
-    'zscore': TargetTransfromerWrapper(StandardScaler()),
+    'zscore': StandardScaler,
 }
 
 
@@ -75,12 +95,13 @@ def get_transformer(name, target=False):
                 f'The specified transformer ({name}) is not available. '
                 f'Valid options are: {list(_available_transformers.keys())}')
         trans, same = _available_transformers[name]
-        out = clone(trans), same
+        out = trans(), same
     else:
         if name not in _available_target_transformers:
             raise_error(
                 f'The specified target transformer ({name}) is not available. '
                 f'Valid options are: '
                 f'{list(_available_target_transformers.keys())}')
-        out = clone(_available_target_transformers[name])
+        trans = _available_target_transformers[name]()
+        out = TargetTransfromerWrapper(trans)
     return out
