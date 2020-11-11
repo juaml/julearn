@@ -43,6 +43,39 @@
 
 .. _`Random Forest`: https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html
 .. _`RandomForestClassifier`: https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html
+.. _`RandomForestRegressor`: https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html
+.. _`ExtraTreesClassifier`: https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.ExtraTreesClassifier.html
+.. _`ExtraTreesRegressor`: https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.ExtraTreesRegressor.html
+.. _`AdaBoostClassifier`: https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.AdaBoostClassifier.html
+.. _`AdaBoostRegressor`: https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.AdaBoostRegressor.html
+.. _`BaggingClassifier`: https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.BaggingClassifier.html
+.. _`BaggingRegressor`: https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.BaggingRegressor.html
+.. _`GradientBoostingClassifier`: https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.GradientBoostingClassifier.html
+.. _`GradientBoostingRegressor`: https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.GradientBoostingRegressor.html
+
+.. _`GaussianProcessClassifier`: https://scikit-learn.org/stable/modules/generated/sklearn.gaussian_process.GaussianProcessClassifier.html
+.. _`GaussianProcessRegressor`: https://scikit-learn.org/stable/modules/generated/sklearn.gaussian_process.GaussianProcessRegressor.html
+
+.. _`LogisticRegression`: https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html
+.. _`LogisticRegressionCV`: https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegressionCV.html
+.. _`LinearRegression`: https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html
+.. _`RidgeClassifier`: https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.RidgeClassifier.html
+.. _`Ridge`: https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.Ridge.html
+.. _`RidgeClassifierCV`: https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.RidgeClassifierCV.html
+.. _`RidgeCV`: https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.RidgeCV.html
+.. _`SGDClassifier`: https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.SGDClassifier.html
+.. _`SGDRegressor`: https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.SGDRegressor.html
+
+
+.. _`BernoulliNB`: https://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.BernoulliNB.html
+.. _`CategoricalNB`: https://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.CategoricalNB.html
+.. _`ComplementNB`: https://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.ComplementNB.html
+.. _`GaussianNB`: https://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.GaussianNB.html
+.. _`MultinomialNB`: https://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.MultinomialNB.html
+
+
+.. _`DummyClassifier`: https://scikit-learn.org/stable/modules/generated/sklearn.dummy.DummyClassifier.html
+.. _`DummyRegressor`: https://scikit-learn.org/stable/modules/generated/sklearn.dummy.DummyRegressor.html
 
 
 .. _`GridSearchCV`: https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html#sklearn.model_selection.GridSearchCV

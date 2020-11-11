@@ -46,11 +46,11 @@ _available_models = {
         'binary_classification': GaussianProcessClassifier,
         'multiclass_classification': GaussianProcessClassifier
     },
-    'logreg': {
+    'logit': {
         'binary_classification': LogisticRegression,
         'multiclass_classification': LogisticRegression,
     },
-    'logregcv': {
+    'logitcv': {
         'binary_classification': LogisticRegressionCV,
         'multiclass_classification': LogisticRegressionCV,
     },
