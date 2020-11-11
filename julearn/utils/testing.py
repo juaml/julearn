@@ -11,7 +11,6 @@ from sklearn.ensemble import (RandomForestClassifier, RandomForestRegressor,
                               GradientBoostingClassifier,
                               GradientBoostingRegressor)
 from sklearn.dummy import DummyClassifier, DummyRegressor
-from sklearn.dummy import DummyClassifier, DummyRegressor
 from sklearn.gaussian_process import (GaussianProcessClassifier,
                                       GaussianProcessRegressor)
 from sklearn.linear_model import (LogisticRegression,
