@@ -28,3 +28,11 @@ Logging
 .. autofunction:: julearn.utils.configure_logging
 .. autofunction:: julearn.utils.warn
 .. autofunction:: julearn.utils.raise_error
+
+=======
+
+Classes
+^^^^^^^
+
+.. autoclass:: julearn.transformers.confounds.DataFrameConfoundRemover
+   :members: 
