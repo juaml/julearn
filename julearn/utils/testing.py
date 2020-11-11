@@ -26,7 +26,7 @@ from julearn import run_cross_validation
 from julearn.prepare import prepare_cv
 
 
-def compare_models(clf1, clf2):
+def compare_models(clf1, clf2):  # pragma: no cover
     if isinstance(clf1, (SVC, SVR)):
         idx1 = np.argsort(clf1.support_)
         v1 = clf1.support_vectors_[idx1]
@@ -85,7 +85,7 @@ def compare_models(clf1, clf2):
         est2 = clf2.estimators_
         v2 = np.array([x.feature_importances_ for x in est2])
     else:
-        raise NotImplementedError(
+        raise NotImplementedError(  
             f'Model comparison for {clf1} not yet implemented.')
     assert_array_equal(v1, v2)
 
