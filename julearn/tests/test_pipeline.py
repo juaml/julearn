@@ -176,16 +176,18 @@ def test_ExtendedDataFramePipeline_with_confound_in_cv_no_error():
 
 
 def test_create_extended_dataframe_transformer():
-    X_steps = [('zscore', StandardScaler(), 'same'),
-               ('pca', PCA(), 'unknown'),
-               ('lr', LinearRegression())
-               ]
+    preprocess_steps_feature = [('zscore', StandardScaler(), 'same'),
+                                ('pca', PCA(), 'unknown')
+                                ]
+
+    model = ('lr', LinearRegression())
     conf_steps = [('zscore', StandardScaler())]
     y_transformer = TargetTransfromerWrapper(StandardScaler())
     extended_pipe = create_extended_pipeline(
-        X_steps=X_steps,
-        y_transformer=y_transformer,
-        conf_steps=conf_steps,
+        preprocess_steps_features=preprocess_steps_feature,
+        preprocess_transformer_target=y_transformer,
+        preprocess_steps_confounds=conf_steps,
+        model=model,
         confounds='B',
         categorical_features=None
     )

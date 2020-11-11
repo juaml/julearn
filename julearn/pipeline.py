@@ -8,19 +8,6 @@ from . transformers.dataframe import DataFrameTransformer
 from . utils import raise_error
 
 
-def create_pipeline(preprocess_steps_features,
-                    preprocess_transformer_target,
-                    preprocess_steps_confounds,
-                    model_tuple, confounds, categorical_features):
-
-    X_steps = list(preprocess_steps_features) + [model_tuple]
-    y_transformer = preprocess_transformer_target
-    pipeline = create_extended_pipeline(
-        X_steps, y_transformer, preprocess_steps_confounds, confounds,
-        categorical_features)
-    return pipeline
-
-
 def create_dataframe_pipeline(steps,
                               default_returned_features='unknown',
                               default_transform_column='continuous'):
@@ -257,29 +244,33 @@ class ExtendedDataFramePipeline(BaseEstimator):
         return self.confound_dataframe_pipeline.named_steps
 
 
-def create_extended_pipeline(X_steps, y_transformer, conf_steps,
-                             confounds, categorical_features):
-    """[summary]
+def create_extended_pipeline(
+    preprocess_steps_features,
+    preprocess_transformer_target,
+    preprocess_steps_confounds,
+    model, confounds, categorical_features
+):
+    """
 
     Parameters
     ----------
-    X_steps : list[tuple]
+    preprocess_steps_feature: list[tuple]
         Is a list of tuples. Each tuple can contain 2-4 entries.
         The first is always the name of the step as a str.
         Second the model/transformer following sklearns style.
         Third (optional) returned_features following DataFrameTransformer.
         Fourth (optional) transform_column follwing DataFrameTransformer.
-        The last tuple can be a tuple of (model_name, model).
 
-    y_transformer : y_transform
+    preprocess_transformer_target : y_transform
         A transformer, which takes in X, y and outputs a transformed y.
 
-    conf_steps : list[tuple]
+    preprocess_steps_confounds : list[tuple]
         Is a list of tuples. Each tuple can contain 2-3 entries.
         The first is always the name of the step as a str.
         Second the transformer following sklearns style.
         Third (optional) returned_features following DataFrameTransformer,
         but they should only be `same` (default) or `unknown_same_type`.
+    model : tuple(str, sklearn.base.BaseEstimator)
 
     confounds : list[str] or str
         A list of column_names which are the confounds
@@ -289,19 +280,19 @@ def create_extended_pipeline(X_steps, y_transformer, conf_steps,
         A list of column_names which are the categorical features
         or the column_name of one categorical feature
     """
+    X_steps = list(preprocess_steps_features) + [model]
     pipeline = create_dataframe_pipeline(X_steps)
 
-    # TODO validate conf_steps to only be unknown_same_type or same
-    # and not 4 entries
-    if conf_steps is not None:
+    if preprocess_steps_confounds is not None:
         confound_pipe = create_dataframe_pipeline(
-            conf_steps, default_returned_features='same',
+            preprocess_steps_confounds, default_returned_features='same',
             default_transform_column='confound')
     else:
         confound_pipe = None
 
-    return ExtendedDataFramePipeline(dataframe_pipeline=pipeline,
-                                     y_transformer=y_transformer,
-                                     confound_dataframe_pipeline=confound_pipe,
-                                     confounds=confounds,
-                                     categorical_features=categorical_features)
+    return ExtendedDataFramePipeline(
+        dataframe_pipeline=pipeline,
+        y_transformer=preprocess_transformer_target,
+        confound_dataframe_pipeline=confound_pipe,
+        confounds=confounds,
+        categorical_features=categorical_features)

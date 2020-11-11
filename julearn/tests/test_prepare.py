@@ -381,24 +381,33 @@ def test_prepare_input_data_df():
 
 
 def test_prepare_model_params():
-    X_steps = [('zscore', StandardScaler(), 'same'),
-               ('svm', SVC())]
+    preprocess_steps_features = [('zscore', StandardScaler(), 'same'),
+                                 ]
+    model = ('svm', SVC())
 
     cv_outer = 2
     model_params = {'svm__kernel': 'linear'}
 
-    pipeline = create_extended_pipeline(X_steps=X_steps, y_transformer=None,
-                                        conf_steps=None, confounds=None,
-                                        categorical_features=None)
+    pipeline = create_extended_pipeline(
+        preprocess_steps_features=preprocess_steps_features,
+        preprocess_transformer_target=None,
+        preprocess_steps_confounds=None,
+        model=model,
+        confounds=None,
+        categorical_features=None)
     pipeline = prepare_model_params(model_params, pipeline, cv_outer)
     assert pipeline['svm'].get_params()['kernel'] == 'linear'
 
     model_params = {
         'svm__C': [0.001, 0.01, 0.1, 1, 10, 100],
         'svm__kernel': 'linear'}
-    pipeline = create_extended_pipeline(X_steps=X_steps, y_transformer=None,
-                                        conf_steps=None, confounds=None,
-                                        categorical_features=None)
+    pipeline = create_extended_pipeline(
+        preprocess_steps_features=preprocess_steps_features,
+        preprocess_transformer_target=None,
+        preprocess_steps_confounds=None,
+        model=model,
+        confounds=None,
+        categorical_features=None)
     pipeline = prepare_model_params(model_params, pipeline, cv_outer)
 
     assert pipeline.__class__.__name__ == 'wrap_searcher'
@@ -416,9 +425,13 @@ def test_prepare_model_params():
         'search_params': {'n_iter': 50},
         'cv': 5
     }
-    pipeline = create_extended_pipeline(X_steps=X_steps, y_transformer=None,
-                                        conf_steps=None, confounds=None,
-                                        categorical_features=None)
+    pipeline = create_extended_pipeline(
+        preprocess_steps_features=preprocess_steps_features,
+        preprocess_transformer_target=None,
+        preprocess_steps_confounds=None,
+        model=model,
+        confounds=None,
+        categorical_features=None)
     pipeline = prepare_model_params(model_params, pipeline, cv_outer)
 
     assert pipeline.__class__.__name__ == 'wrap_searcher'
@@ -431,33 +444,49 @@ def test_prepare_model_params():
 
     model_params = {'svm__kernel': 'linear', 'cv': 2}
 
-    pipeline = create_extended_pipeline(X_steps=X_steps, y_transformer=None,
-                                        conf_steps=None, confounds=None,
-                                        categorical_features=None)
+    pipeline = create_extended_pipeline(
+        preprocess_steps_features=preprocess_steps_features,
+        preprocess_transformer_target=None,
+        preprocess_steps_confounds=None,
+        model=model,
+        confounds=None,
+        categorical_features=None)
     with pytest.warns(RuntimeWarning, match='search CV was specified'):
         pipeline = prepare_model_params(model_params, pipeline, cv_outer)
 
     model_params = {'svm__kernel': 'linear', 'scoring': 'accuracy'}
 
-    pipeline = create_extended_pipeline(X_steps=X_steps, y_transformer=None,
-                                        conf_steps=None, confounds=None,
-                                        categorical_features=None)
+    pipeline = create_extended_pipeline(
+        preprocess_steps_features=preprocess_steps_features,
+        preprocess_transformer_target=None,
+        preprocess_steps_confounds=None,
+        model=model,
+        confounds=None,
+        categorical_features=None)
     with pytest.warns(RuntimeWarning, match='search scoring was specified'):
         pipeline = prepare_model_params(model_params, pipeline, cv_outer)
 
     model_params = {'svm__kernel': 'linear', 'search': 'grid'}
 
-    pipeline = create_extended_pipeline(X_steps=X_steps, y_transformer=None,
-                                        conf_steps=None, confounds=None,
-                                        categorical_features=None)
+    pipeline = create_extended_pipeline(
+        preprocess_steps_features=preprocess_steps_features,
+        preprocess_transformer_target=None,
+        preprocess_steps_confounds=None,
+        model=model,
+        confounds=None,
+        categorical_features=None)
     with pytest.warns(RuntimeWarning, match='search method was specified'):
         pipeline = prepare_model_params(model_params, pipeline, cv_outer)
 
     model_params = {'svm__C': [0, 1], 'search': 'wrong'}
 
-    pipeline = create_extended_pipeline(X_steps=X_steps, y_transformer=None,
-                                        conf_steps=None, confounds=None,
-                                        categorical_features=None)
+    pipeline = create_extended_pipeline(
+        preprocess_steps_features=preprocess_steps_features,
+        preprocess_transformer_target=None,
+        preprocess_steps_confounds=None,
+        model=model,
+        confounds=None,
+        categorical_features=None)
     with pytest.raises(ValueError, match='must be'):
         pipeline = prepare_model_params(model_params, pipeline, cv_outer)
 
