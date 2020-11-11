@@ -2,14 +2,17 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 import numpy as np
-from numpy.testing import assert_array_equal
-from sklearn.svm import SVC
-from sklearn.ensemble import (RandomForestClassifier,
-                              ExtraTreesClassifier)
-from sklearn.dummy import DummyClassifier
-from sklearn.gaussian_process import GaussianProcessClassifier
-from sklearn.linear_model import (LogisticRegression, RidgeClassifier,
-                                  RidgeClassifierCV, SGDClassifier)
+from numpy.testing import assert_array_equal, assert_array_almost_equal
+from sklearn.svm import SVC, SVR
+from sklearn.ensemble import (RandomForestClassifier, RandomForestRegressor,
+                              ExtraTreesClassifier, ExtraTreesRegressor)
+from sklearn.dummy import DummyClassifier, DummyRegressor
+from sklearn.gaussian_process import (GaussianProcessClassifier,
+                                      GaussianProcessRegressor)
+from sklearn.linear_model import (LogisticRegression, LogisticRegressionCV,
+                                  LinearRegression, Ridge, RidgeClassifier,
+                                  RidgeCV, RidgeClassifierCV,
+                                  SGDRegressor, SGDClassifier)
 
 from sklearn.base import clone, TransformerMixin, BaseEstimator
 from sklearn.model_selection import cross_validate
@@ -19,25 +22,44 @@ from julearn.prepare import prepare_cv
 
 
 def compare_models(clf1, clf2):
-    if isinstance(clf1, SVC):
+    if isinstance(clf1, (SVC, SVR)):
         idx1 = np.argsort(clf1.support_)
         v1 = clf1.support_vectors_[idx1]
         idx2 = np.argsort(clf2.support_)
         v2 = clf2.support_vectors_[idx2]
-    elif isinstance(clf1, (RandomForestClassifier, ExtraTreesClassifier)):
+    elif isinstance(clf1, (RandomForestClassifier, RandomForestRegressor,
+                           ExtraTreesClassifier, ExtraTreesRegressor)):
         v1 = clf1.feature_importances_
         v2 = clf1.feature_importances_
-    elif isinstance(clf1, DummyClassifier):
+    elif isinstance(clf1, (DummyClassifier, DummyRegressor)):
         v1 = None
         v2 = None
-        assert clf1._strategy == clf2._strategy
-        assert_array_equal(clf1.class_prior_, clf2.class_prior_)
-        assert_array_equal(clf1.classes_, clf2.classes_)
+        if hasattr(clf1, '_strategy'):
+            assert clf1._strategy == clf2._strategy
+        if hasattr(clf1, 'strategy'):
+            assert clf1.strategy == clf2.strategy
+        if hasattr(clf1, 'class_prior_'):
+            assert_array_equal(clf1.class_prior_, clf2.class_prior_)
+        if hasattr(clf1, 'constant_'):
+            assert clf1.constant_ == clf2.constant_
+        if hasattr(clf1, 'classes_'):
+            assert_array_equal(clf1.classes_, clf2.classes_)
     elif isinstance(clf1, GaussianProcessClassifier):
-        v1 =  clf1.base_estimator_.pi_
-        v2 =  clf2.base_estimator_.pi_
+        if hasattr(clf1.base_estimator_, 'estimators_'):
+            # Multiclass
+            est1 = clf1.base_estimator_.estimators_
+            v1 = np.array([x.pi_ for x in est1])
+            est2 = clf2.base_estimator_.estimators_
+            v2 = np.array([x.pi_ for x in est2])
+        else:
+            v1 =  clf1.base_estimator_.pi_
+            v2 =  clf2.base_estimator_.pi_
+    elif isinstance(clf1, GaussianProcessRegressor):
+        v1 =  np.c_[clf1.L_, clf1.alpha_]
+        v2 =  np.c_[clf2.L_, clf2.alpha_]
     elif isinstance(clf1, (LogisticRegression, RidgeClassifier,
-                           RidgeClassifierCV, SGDClassifier)):
+                           RidgeClassifierCV, SGDClassifier, SGDRegressor,
+                           LinearRegression, Ridge, RidgeCV)):
         v1 =  clf1.coef_
         v2 =  clf2.coef_
     else:
@@ -69,7 +91,7 @@ def do_scoring_test(X, y, data, api_params, sklearn_model, scorers, cv=None,
         s_key = f'test_{scoring}'
         assert len(actual) == len(expected)
         assert len(actual[s_key]) == len(expected[s_key])
-        assert all([a == b for a, b in zip(actual[s_key], expected[s_key])])
+        assert_array_almost_equal(actual[s_key], expected[s_key])
 
         # Compare the models
         clf1 = actual_estimator.dataframe_pipeline.steps[-1][1]
