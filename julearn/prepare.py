@@ -421,7 +421,7 @@ def _prepare_hyperparams(hyperparams, pipeline):
 
 
 def prepare_preprocessing(preprocess_X, preprocess_y, preprocess_confounds):
-    if not isinstance(preprocess_X, list):
+    if preprocess_X is not None and not isinstance(preprocess_X, list):
         preprocess_X = [preprocess_X]
     if not isinstance(preprocess_confounds, list):
         preprocess_confounds = [preprocess_confounds]
@@ -436,9 +436,9 @@ def _prepare_preprocess_X(preprocess_X):
     validates preprocess_X and returns a list of tuples accordingly
     and default params for this list
     '''
-
-    preprocess_X = [_create_preprocess_tuple(transformer)
-                    for transformer in preprocess_X]
+    if preprocess_X is not None:
+        preprocess_X = [_create_preprocess_tuple(transformer)
+                        for transformer in preprocess_X]
     return preprocess_X
 
 

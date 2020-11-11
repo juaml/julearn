@@ -13,6 +13,7 @@ Welcome to julearn's documentation!
    installation
    input
    pipeline
+   steps
    hyperparameters
    auto_examples/basic/index.rst
    auto_examples/advanced/index.rst

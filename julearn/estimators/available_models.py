@@ -3,7 +3,19 @@
 # License: AGPL
 from sklearn.svm import SVC, SVR
 from sklearn.ensemble import (RandomForestClassifier, RandomForestRegressor,
-                              ExtraTreesClassifier, ExtraTreesRegressor)
+                              ExtraTreesClassifier, ExtraTreesRegressor,
+                              AdaBoostClassifier, AdaBoostRegressor,
+                              BaggingClassifier, BaggingRegressor,
+                              GradientBoostingClassifier,
+                              GradientBoostingRegressor)
+from sklearn.gaussian_process import (GaussianProcessClassifier,
+                                      GaussianProcessRegressor)
+from sklearn.linear_model import (LogisticRegression, LogisticRegressionCV,
+                                  LinearRegression, Ridge, RidgeClassifier,
+                                  RidgeCV, RidgeClassifierCV,
+                                  SGDRegressor, SGDClassifier)
+from sklearn.naive_bayes import (BernoulliNB, CategoricalNB, ComplementNB,
+                                 GaussianNB, MultinomialNB)
 from sklearn.dummy import DummyClassifier, DummyRegressor
 
 from .. utils import raise_error
@@ -28,6 +40,72 @@ _available_models = {
         'regression': DummyRegressor,
         'binary_classification': DummyClassifier,
         'multiclass_classification': DummyClassifier,
+    },
+    'gauss': {
+        'regression': GaussianProcessRegressor,
+        'binary_classification': GaussianProcessClassifier,
+        'multiclass_classification': GaussianProcessClassifier
+    },
+    'logit': {
+        'binary_classification': LogisticRegression,
+        'multiclass_classification': LogisticRegression,
+    },
+    'logitcv': {
+        'binary_classification': LogisticRegressionCV,
+        'multiclass_classification': LogisticRegressionCV,
+    },
+    'linreg': {
+        'regression': LinearRegression,
+    },
+    'ridge': {
+        'regression': Ridge,
+        'binary_classification': RidgeClassifier,
+        'multiclass_classification': RidgeClassifier,
+    },
+    'ridgecv': {
+        'regression': RidgeCV,
+        'binary_classification': RidgeClassifierCV,
+        'multiclass_classification': RidgeClassifierCV,
+    },
+    'sgd': {
+        'regression': SGDRegressor,
+        'binary_classification': SGDClassifier,
+        'multiclass_classification': SGDClassifier,
+    },
+    'adaboost': {
+        'regression': AdaBoostRegressor,
+        'binary_classification': AdaBoostClassifier,
+        'multiclass_classification': AdaBoostClassifier,
+    },
+    'bagging': {
+        'regression': BaggingRegressor,
+        'binary_classification': BaggingClassifier,
+        'multiclass_classification': BaggingClassifier,
+    },
+    'gradientboost': {
+        'regression': GradientBoostingRegressor,
+        'binary_classification': GradientBoostingClassifier,
+        'multiclass_classification': GradientBoostingClassifier,
+    },
+    'nb_bernoulli': {
+        'binary_classification': BernoulliNB,
+        'multiclass_classification': BernoulliNB,
+    },
+    'nb_categorical': {
+        'binary_classification': CategoricalNB,
+        'multiclass_classification': CategoricalNB,
+    },
+    'nb_complement': {
+        'binary_classification': ComplementNB,
+        'multiclass_classification': ComplementNB,
+    },
+    'nb_gaussian': {
+        'binary_classification': GaussianNB,
+        'multiclass_classification': GaussianNB,
+    },
+    'nb_multinomial': {
+        'binary_classification': MultinomialNB,
+        'multiclass_classification': MultinomialNB,
     },
 }
 

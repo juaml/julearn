@@ -280,7 +280,10 @@ def create_extended_pipeline(
         A list of column_names which are the categorical features
         or the column_name of one categorical feature
     """
-    X_steps = list(preprocess_steps_features) + [model]
+    X_steps = (list(preprocess_steps_features) + [model]
+               if preprocess_steps_features is not None
+               else [model]
+               )
     pipeline = create_dataframe_pipeline(X_steps)
 
     if preprocess_steps_confounds is not None:

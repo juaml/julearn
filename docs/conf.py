@@ -80,3 +80,8 @@ sphinx_gallery_conf = {
     'filename_pattern': '/(plot|run)_',
     'backreferences_dir': 'generated',
 }
+
+
+autosummary_generate = True
+numpydoc_show_class_members = False
+autoclass_content = 'both'
