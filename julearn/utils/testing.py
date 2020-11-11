@@ -9,7 +9,7 @@ from sklearn.ensemble import (RandomForestClassifier, RandomForestRegressor,
 from sklearn.dummy import DummyClassifier, DummyRegressor
 from sklearn.gaussian_process import (GaussianProcessClassifier,
                                       GaussianProcessRegressor)
-from sklearn.linear_model import (LogisticRegression, LogisticRegressionCV,
+from sklearn.linear_model import (LogisticRegression,
                                   LinearRegression, Ridge, RidgeClassifier,
                                   RidgeCV, RidgeClassifierCV,
                                   SGDRegressor, SGDClassifier)
