@@ -3,6 +3,7 @@
 # License: AGPL
 import numpy as np
 import pandas as pd
+import pytest
 
 from numpy.testing import assert_array_equal
 from pandas.testing import assert_frame_equal
@@ -238,3 +239,6 @@ def test_access_steps_ExtendedDataFramePipeline():
                 .named_steps
                 .lr)
             )
+
+    with pytest.raises(ValueError, match='Indexing must be done '):
+        my_pipe[0]
