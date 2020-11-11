@@ -3,7 +3,11 @@
 # License: AGPL
 from sklearn.svm import SVC, SVR
 from sklearn.ensemble import (RandomForestClassifier, RandomForestRegressor,
-                              ExtraTreesClassifier, ExtraTreesRegressor)
+                              ExtraTreesClassifier, ExtraTreesRegressor,
+                              AdaBoostClassifier, AdaBoostRegressor,
+                              BaggingClassifier, BaggingRegressor,
+                              GradientBoostingClassifier,
+                              GradientBoostingRegressor)
 from sklearn.gaussian_process import (GaussianProcessClassifier,
                                       GaussianProcessRegressor)
 from sklearn.linear_model import (LogisticRegression, LogisticRegressionCV,
@@ -65,6 +69,21 @@ _available_models = {
         'regression': SGDRegressor,
         'binary_classification': SGDClassifier,
         'multiclass_classification': SGDClassifier,
+    },
+    'adaboost': {
+        'regression': AdaBoostRegressor,
+        'binary_classification': AdaBoostClassifier,
+        'multiclass_classification': AdaBoostClassifier,
+    },
+    'bagging': {
+        'regression': BaggingRegressor,
+        'binary_classification': BaggingClassifier,
+        'multiclass_classification': BaggingClassifier,
+    },
+    'gradientboost': {
+        'regression': GradientBoostingRegressor,
+        'binary_classification': GradientBoostingClassifier,
+        'multiclass_classification': GradientBoostingClassifier,
     }
 }
 

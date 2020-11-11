@@ -5,7 +5,12 @@ import numpy as np
 from numpy.testing import assert_array_equal, assert_array_almost_equal
 from sklearn.svm import SVC, SVR
 from sklearn.ensemble import (RandomForestClassifier, RandomForestRegressor,
-                              ExtraTreesClassifier, ExtraTreesRegressor)
+                              ExtraTreesClassifier, ExtraTreesRegressor,
+                              AdaBoostClassifier, AdaBoostRegressor,
+                              BaggingClassifier, BaggingRegressor,
+                              GradientBoostingClassifier,
+                              GradientBoostingRegressor)
+from sklearn.dummy import DummyClassifier, DummyRegressor
 from sklearn.dummy import DummyClassifier, DummyRegressor
 from sklearn.gaussian_process import (GaussianProcessClassifier,
                                       GaussianProcessRegressor)
@@ -28,7 +33,9 @@ def compare_models(clf1, clf2):
         idx2 = np.argsort(clf2.support_)
         v2 = clf2.support_vectors_[idx2]
     elif isinstance(clf1, (RandomForestClassifier, RandomForestRegressor,
-                           ExtraTreesClassifier, ExtraTreesRegressor)):
+                           ExtraTreesClassifier, ExtraTreesRegressor,
+                           GradientBoostingClassifier,
+                           GradientBoostingRegressor)):
         v1 = clf1.feature_importances_
         v2 = clf1.feature_importances_
     elif isinstance(clf1, (DummyClassifier, DummyRegressor)):
@@ -62,6 +69,12 @@ def compare_models(clf1, clf2):
                            LinearRegression, Ridge, RidgeCV)):
         v1 =  clf1.coef_
         v2 =  clf2.coef_
+    elif isinstance(clf1, (AdaBoostClassifier, AdaBoostRegressor,
+                           BaggingClassifier, BaggingRegressor)):
+        est1 = clf1.estimators_
+        v1 = np.array([x.feature_importances_ for x in est1])
+        est2 = clf2.estimators_
+        v2 = np.array([x.feature_importances_ for x in est2])
     else:
         raise NotImplementedError(
             f'Model comparison for {clf1} not yet implemented.')

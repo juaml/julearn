@@ -5,7 +5,11 @@ import numpy as np
 from sklearn.base import clone
 from sklearn.svm import SVC, SVR
 from sklearn.ensemble import (RandomForestClassifier, RandomForestRegressor,
-                              ExtraTreesClassifier, ExtraTreesRegressor)
+                              ExtraTreesClassifier, ExtraTreesRegressor,
+                              AdaBoostClassifier, AdaBoostRegressor,
+                              BaggingClassifier, BaggingRegressor,
+                              GradientBoostingClassifier,
+                              GradientBoostingRegressor)
 from sklearn.dummy import DummyClassifier, DummyRegressor
 from sklearn.gaussian_process import (GaussianProcessClassifier,
                                       GaussianProcessRegressor)
@@ -32,6 +36,9 @@ _clf_estimators = {
     'ridge': RidgeClassifier,
     'ridgecv': RidgeClassifierCV,
     'sgd': SGDClassifier,
+    'adaboost': AdaBoostClassifier,
+    'bagging': BaggingClassifier,
+    'gradientboost': GradientBoostingClassifier
 }
 
 _clf_params = {
@@ -51,13 +58,18 @@ _reg_estimators = {
     'ridge': Ridge,
     'ridgecv': RidgeCV,
     'sgd': SGDRegressor,
+    'adaboost': AdaBoostRegressor,
+    'bagging': BaggingRegressor,
+    'gradientboost': GradientBoostingRegressor
 }
 
 _reg_params = {
     'rf': {'n_estimators': 10},
     'et': {'n_estimators': 10},
     'dummy': {'strategy': 'mean'},
-    'sgd': {'random_state': 2}
+    'sgd': {'random_state': 2},
+    'adaboost': {'random_state': 2},
+    'bagging': {'random_state': 2}
 }
 
 
