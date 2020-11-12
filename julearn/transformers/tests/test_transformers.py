@@ -1,5 +1,6 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL
+from julearn.transformers.target import TargetTransfromerWrapper
 from sklearn import svm
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import (StandardScaler, RobustScaler, MaxAbsScaler,
@@ -11,7 +12,10 @@ from sklearn.feature_selection import (GenericUnivariateSelect,
                                        VarianceThreshold)
 from seaborn import load_dataset
 
+import pytest
+
 from julearn.utils.testing import do_scoring_test
+from julearn.transformers import list_transformers, get_transformer
 
 
 _features_transformers = {
@@ -61,3 +65,28 @@ def test_feature_transformers():
         clf = make_pipeline(tr, svm.SVC())
         do_scoring_test(X, y, data=df_iris, api_params=api_params,
                         sklearn_model=clf, scorers=scorers)
+
+
+def test_list_get_transformers():
+    """Test list and getting transformers"""
+    expected = list(_features_transformers.keys()) + ['pca', 'remove_confound']
+    actual = list_transformers()
+    diff = set(actual) ^ set(expected)
+    assert not diff
+
+    expected = _features_transformers['zscore']
+    actual, _ = get_transformer('zscore', target=False)
+
+    assert isinstance(actual, expected)
+
+    expected = _features_transformers['zscore']
+    actual = get_transformer('zscore', target=True)
+
+    assert isinstance(actual, TargetTransfromerWrapper)
+    assert isinstance(actual.transformer, expected)
+
+    with pytest.raises(ValueError, match="is not available"):
+        get_transformer('scaler_robust', target=True)
+
+    with pytest.raises(ValueError, match="is not available"):
+        get_transformer('wrong', target=False)
