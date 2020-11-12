@@ -24,7 +24,10 @@ from sklearn.pipeline import make_pipeline
 
 from seaborn import load_dataset
 
+import pytest
+
 from julearn.utils.testing import do_scoring_test
+from julearn.estimators import list_models, get_model
 
 
 _clf_estimators = {
@@ -223,3 +226,35 @@ def test_regression_estimators():
         clf = make_pipeline(StandardScaler(), clone(t_model))
         do_scoring_test(X, y, data=df_iris, api_params=api_params,
                         sklearn_model=clf, scorers=scorers)
+
+
+def test_list_get_models():
+    """Test list and getting models"""
+    expected = set(
+        list(_clf_estimators.keys()) + list(_nb_estimators.keys()) +
+        list(_reg_estimators.keys()))
+
+    actual = list_models()
+    diff = set(actual) ^ set(expected)
+    assert not diff
+
+    expected = _clf_estimators['dummy']
+    actual = get_model('dummy', 'binary_classification')
+
+    assert isinstance(actual, expected)
+
+    expected = _clf_estimators['dummy']
+    actual = get_model('dummy', 'multiclass_classification')
+
+    assert isinstance(actual, expected)
+
+    expected = _reg_estimators['dummy']
+    actual = get_model('dummy', 'regression')
+
+    assert isinstance(actual, expected)
+
+    with pytest.raises(ValueError, match="is not suitable for"):
+        get_model('linreg', 'binary_classification')
+
+    with pytest.raises(ValueError, match="is not available"):
+        get_model('wrong', 'binary_classification')

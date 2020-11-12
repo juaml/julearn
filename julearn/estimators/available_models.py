@@ -119,7 +119,7 @@ def list_models():
         A list will all the available model names.
 
     """
-    out = out = list(_available_models.keys)
+    out = list(_available_models.keys())
     return out
 
 
