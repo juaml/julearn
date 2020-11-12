@@ -22,6 +22,16 @@ X = pd.DataFrame(dict(A=np.arange(10),
                       B=np.arange(10, 20),
                       C=np.arange(30, 40)
                       ))
+y = pd.Series(np.arange(50, 60))
+
+X_with_types = pd.DataFrame({
+    'a__:type:__continuous': np.arange(10),
+    'b__:type:__continuous': np.arange(10, 20),
+    'c__:type:__confound': np.arange(30, 40),
+    'd__:type:__confound': np.arange(40, 50),
+    'e__:type:__categorical': np.arange(40, 50),
+    'f__:type:__categorical': np.arange(40, 50),
+})
 
 
 def test_create_dataframe_pipeline_all_steps_added():
@@ -242,3 +252,45 @@ def test_access_steps_ExtendedDataFramePipeline():
 
     with pytest.raises(ValueError, match='Indexing must be done '):
         my_pipe[0]
+
+
+def test_preprocess_all_ExtendedDataFramePipeline():
+    feature_steps = [('zscore', StandardScaler(), 'same'),
+                     ('pca', PCA(), 'unknown'),
+                     ]
+    model = ('lr', LinearRegression())
+
+    steps = feature_steps + [model]
+    confound_steps = [('zscore', StandardScaler(), 'same'),
+                      ('zscore_2', StandardScaler(), 'same')]
+
+    y_transformer = TargetTransfromerWrapper(StandardScaler())
+
+    feature_pipe = create_dataframe_pipeline(steps=feature_steps)
+    steps_pipe = create_dataframe_pipeline(steps=steps)
+    confounds_pipe = create_dataframe_pipeline(
+        steps=confound_steps,
+        default_returned_features='same',
+        default_transform_column='confound')
+
+    extended_pipe = ExtendedDataFramePipeline(
+        dataframe_pipeline=steps_pipe,
+        y_transformer=y_transformer,
+        confound_dataframe_pipeline=confounds_pipe,
+        confounds=['B'])
+
+    np.random.seed(42)
+    extended_pipe.fit(X, y)
+
+    np.random.seed(42)
+    X_recoded = extended_pipe._recode_columns(X.copy())
+    X_conf = confounds_pipe.fit_transform(X_recoded, y)
+    y_transformer.fit(X_conf, y)
+    y_trans = y_transformer.transform(X_conf, y)
+    X_trans = feature_pipe.fit_transform(X_conf, y_trans)
+
+    X_trans_preprocess, y_trans_preprocess = extended_pipe.preprocess(X, y)
+
+    X_trans_preprocess = extended_pipe._recode_columns(X_trans_preprocess)
+    assert_frame_equal(X_trans, X_trans_preprocess)
+    assert_array_equal(y_trans, y_trans_preprocess)

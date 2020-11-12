@@ -2,7 +2,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 from sklearn.pipeline import Pipeline
-from sklearn.base import BaseEstimator
+from sklearn.base import BaseEstimator, clone
 
 from . transformers.dataframe import DataFrameTransformer
 from . utils import raise_error
@@ -118,6 +118,19 @@ class ExtendedDataFramePipeline(BaseEstimator):
         self.return_trans_column_type = return_trans_column_type
 
     def fit(self, X, y=None):
+
+        self.dataframe_pipeline = clone(self.dataframe_pipeline)
+        self.confound_dataframe_pipeline = (
+            None
+            if self.confound_dataframe_pipeline is None
+            else clone(self.confound_dataframe_pipeline)
+        )
+        self.y_transformer = (
+            None
+            if self.y_transformer is None
+            else clone(self.y_transformer)
+        )
+
         if self.categorical_features is None:
             self.categorical_features = []
 
@@ -136,7 +149,6 @@ class ExtendedDataFramePipeline(BaseEstimator):
             y_true = y
 
         self.dataframe_pipeline.fit(X_conf_trans, y_true)
-
         return self
 
     def predict(self, X):
@@ -174,10 +186,36 @@ class ExtendedDataFramePipeline(BaseEstimator):
         else:
             return self.confound_dataframe_pipeline.transform(X)
 
-    def preprocess(self, X, y):
+    def preprocess(self, X, y, until=None):
+        # TODO incase no model at the end
         old_model = self.dataframe_pipeline.steps.pop()
-        X_trans = self.transform(X)
-        y_trans = self.transform_target(X, y)
+        if until is None:
+            X_trans = self.transform(X)
+            y_trans = self.transform_target(X, y)
+        else:
+            if self[until] is None:
+                raise_error(f'{until} is not a valid step')
+            elif until.startswidth('confound_'):
+                step_name = until.replace('confound_', '')
+                X_trans = self._transform_pipeline_until(
+                    pipeline=self.confound_dataframe_pipeline,
+                    step_name=step_name,
+                    X=X
+                )
+                y_trans = y.copy()
+
+            elif until.startswidth('target_'):
+                X_trans = self.transform_confounds(X)
+                y_trans = self.transform_target(X, y)
+            else:
+                X_trans = self.transform_confounds(X)
+                X_trans = self._transform_pipeline_until(
+                    pipeline=self.dataframe_pipeline,
+                    step_name=step_name,
+                    X=X_trans
+                )
+                y_trans = self.transform_target(X, y)
+
         self.dataframe_pipeline.steps.append(old_model)
         return X_trans, y_trans
 
@@ -234,6 +272,15 @@ class ExtendedDataFramePipeline(BaseEstimator):
         else:
             element = self.dataframe_pipeline[ind]
         return element
+
+    @staticmethod
+    def _transform_pipeline_until(pipeline, step_name, X):
+        X_transformed = X.copy()
+        for name, step in pipeline.steps:
+            X_transformed = step.transform(X_transformed)
+            if name == step_name:
+                break
+        return X_transformed
 
     @property
     def named_steps(self):
