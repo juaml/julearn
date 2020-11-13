@@ -307,7 +307,6 @@ def test_preprocess_until_ExtendedDataFramePipeline():
 
     y_transformer = TargetTransfromerWrapper(StandardScaler())
 
-    feature_pipe = create_dataframe_pipeline(steps=feature_steps)
     steps_pipe = create_dataframe_pipeline(steps=steps)
     confounds_pipe = create_dataframe_pipeline(
         steps=confound_steps,
