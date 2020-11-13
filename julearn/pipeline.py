@@ -195,7 +195,7 @@ class ExtendedDataFramePipeline(BaseEstimator):
         else:
             if self[until] is None:
                 raise_error(f'{until} is not a valid step')
-            elif until.startswidth('confound_'):
+            elif until.startswith('confound_'):
                 step_name = until.replace('confound_', '')
                 X_trans = self._transform_pipeline_until(
                     pipeline=self.confound_dataframe_pipeline,
@@ -204,14 +204,14 @@ class ExtendedDataFramePipeline(BaseEstimator):
                 )
                 y_trans = y.copy()
 
-            elif until.startswidth('target_'):
+            elif until.startswith('target_'):
                 X_trans = self.transform_confounds(X)
                 y_trans = self.transform_target(X, y)
             else:
                 X_trans = self.transform_confounds(X)
                 X_trans = self._transform_pipeline_until(
                     pipeline=self.dataframe_pipeline,
-                    step_name=step_name,
+                    step_name=until,
                     X=X_trans
                 )
                 y_trans = self.transform_target(X, y)
@@ -269,13 +269,15 @@ class ExtendedDataFramePipeline(BaseEstimator):
         if ind.startswith('confound_'):
             n_ind = ind.replace('confound_', '')
             element = self.confound_dataframe_pipeline[n_ind]
+        elif ind.startswith('target_'):
+            element = self.y_transformer
         else:
             element = self.dataframe_pipeline[ind]
         return element
 
-    @staticmethod
-    def _transform_pipeline_until(pipeline, step_name, X):
+    def _transform_pipeline_until(self, pipeline, step_name, X):
         X_transformed = X.copy()
+        X_transformed = self._recode_columns(X_transformed)
         for name, step in pipeline.steps:
             X_transformed = step.transform(X_transformed)
             if name == step_name:

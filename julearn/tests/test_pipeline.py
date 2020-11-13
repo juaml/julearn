@@ -285,8 +285,7 @@ def test_preprocess_all_ExtendedDataFramePipeline():
     np.random.seed(42)
     X_recoded = extended_pipe._recode_columns(X.copy())
     X_conf = confounds_pipe.fit_transform(X_recoded, y)
-    y_transformer.fit(X_conf, y)
-    y_trans = y_transformer.transform(X_conf, y)
+    y_trans = y_transformer.fit_transform(X_conf, y)
     X_trans = feature_pipe.fit_transform(X_conf, y_trans)
 
     X_trans_preprocess, y_trans_preprocess = extended_pipe.preprocess(X, y)
@@ -294,3 +293,68 @@ def test_preprocess_all_ExtendedDataFramePipeline():
     X_trans_preprocess = extended_pipe._recode_columns(X_trans_preprocess)
     assert_frame_equal(X_trans, X_trans_preprocess)
     assert_array_equal(y_trans, y_trans_preprocess)
+
+
+def test_preprocess_until_ExtendedDataFramePipeline():
+    feature_steps = [('zscore', StandardScaler(), 'same'),
+                     ('pca', PCA(), 'unknown'),
+                     ]
+    model = ('lr', LinearRegression())
+
+    steps = feature_steps + [model]
+    confound_steps = [('zscore', StandardScaler(), 'same'),
+                      ('zscore_2', StandardScaler(), 'same')]
+
+    y_transformer = TargetTransfromerWrapper(StandardScaler())
+
+    feature_pipe = create_dataframe_pipeline(steps=feature_steps)
+    steps_pipe = create_dataframe_pipeline(steps=steps)
+    confounds_pipe = create_dataframe_pipeline(
+        steps=confound_steps,
+        default_returned_features='same',
+        default_transform_column='confound')
+
+    extended_pipe = ExtendedDataFramePipeline(
+        dataframe_pipeline=steps_pipe,
+        y_transformer=y_transformer,
+        confound_dataframe_pipeline=confounds_pipe,
+        confounds=['B'])
+
+    np.random.seed(42)
+    extended_pipe.fit(X, y)
+
+    np.random.seed(42)
+    X_trans = extended_pipe._recode_columns(X.copy())
+    y_trans = y.copy()
+
+    for name, step, returns in confound_steps:
+
+        this_confounds_pipe = create_dataframe_pipeline(
+            steps=[(name, step, returns)],
+            default_returned_features='same',
+            default_transform_column='confound')
+        X_trans = this_confounds_pipe.fit_transform(X_trans)
+
+        X_trans_pipe, y_trans_pipe = extended_pipe.preprocess(
+            X, y, until='confound_' + name)
+
+        assert_frame_equal(X_trans, X_trans_pipe)
+        assert_array_equal(y_trans, y_trans_pipe)
+
+    X_trans_pipe, y_trans_pipe = extended_pipe.preprocess(
+        X, y, until='target_')
+    y_trans = y_transformer.fit_transform(X_trans, y_trans)
+    assert_frame_equal(X_trans, X_trans_pipe)
+    assert_array_equal(y_trans, y_trans_pipe)
+
+    for name, step, returns in feature_steps:
+
+        this_feature_pipe = create_dataframe_pipeline(
+            steps=[(name, step, returns)])
+        X_trans = this_feature_pipe.fit_transform(X_trans)
+
+        X_trans_pipe, y_trans_pipe = extended_pipe.preprocess(
+            X, y, until=name)
+
+        assert_frame_equal(X_trans, X_trans_pipe)
+        assert_array_equal(y_trans, y_trans_pipe)
