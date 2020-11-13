@@ -226,6 +226,26 @@ class ExtendedDataFramePipeline(BaseEstimator):
         self.fit(X, y)
         return self.transform(X)
 
+    @property
+    def named_steps(self):
+        return self.dataframe_pipeline.named_steps
+
+    @property
+    def named_confound_steps(self):
+        return self.confound_dataframe_pipeline.named_steps
+
+    def __getitem__(self, ind):
+        if not isinstance(ind, str):
+            raise_error('Indexing must be done using strings')
+        if ind.startswith('confound_'):
+            n_ind = ind.replace('confound_', '')
+            element = self.confound_dataframe_pipeline[n_ind]
+        elif ind.startswith('target_'):
+            element = self.y_transformer
+        else:
+            element = self.dataframe_pipeline[ind]
+        return element
+
     def _fit_transform_confounds(self, X, y):
         X = self._recode_columns(X)
         if self.confounds is None:
@@ -266,18 +286,6 @@ class ExtendedDataFramePipeline(BaseEstimator):
     def _recode_columns(self, X):
         return X.rename(columns=self.col_name_mapper_).copy()
 
-    def __getitem__(self, ind):
-        if not isinstance(ind, str):
-            raise_error('Indexing must be done using strings')
-        if ind.startswith('confound_'):
-            n_ind = ind.replace('confound_', '')
-            element = self.confound_dataframe_pipeline[n_ind]
-        elif ind.startswith('target_'):
-            element = self.y_transformer
-        else:
-            element = self.dataframe_pipeline[ind]
-        return element
-
     def _transform_pipeline_until(self, pipeline, step_name, X):
         X_transformed = X.copy()
         X_transformed = self._recode_columns(X_transformed)
@@ -286,14 +294,6 @@ class ExtendedDataFramePipeline(BaseEstimator):
             if name == step_name:
                 break
         return X_transformed
-
-    @property
-    def named_steps(self):
-        return self.dataframe_pipeline.named_steps
-
-    @property
-    def named_confound_steps(self):
-        return self.confound_dataframe_pipeline.named_steps
 
 
 def create_extended_pipeline(
