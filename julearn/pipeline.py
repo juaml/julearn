@@ -49,7 +49,7 @@ def create_dataframe_pipeline(steps,
             name, estimator, returned_features, transform_column = step
 
         else:
-            raise_error(f'step: {i_step} has a len of {len(i_step)}'
+            raise_error(f'step: {i_step} has a len of {n_arguments}'
                         ', but should hve one between 2 and 4')
 
         if (i_step == len(steps) - 1) and (hasattr(estimator, 'predict')):
@@ -193,9 +193,12 @@ class ExtendedDataFramePipeline(BaseEstimator):
             X_trans = self.transform(X)
             y_trans = self.transform_target(X, y)
         else:
-            if self[until] is None:
+            try:
+                self[until]
+            except KeyError:
                 raise_error(f'{until} is not a valid step')
-            elif until.startswith('confound_'):
+
+            if until.startswith('confound_'):
                 step_name = until.replace('confound_', '')
                 X_trans = self._transform_pipeline_until(
                     pipeline=self.confound_dataframe_pipeline,

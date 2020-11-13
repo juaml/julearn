@@ -76,6 +76,13 @@ def test_create_dataframe_pipeline_returned_features_same():
     assert_array_equal(X_trans.values, X_trans_sklearn)
 
 
+def test_create_dataframe_pipeline_invalid_step():
+
+    steps = [('zscore',)]
+    with pytest.raises(ValueError, match='step:'):
+        create_dataframe_pipeline(steps)
+
+
 def test_ExtendedDataFramePipeline_basics_Xpipeline_no_error():
     steps = [('zscore', StandardScaler(), 'same'),
              ('pca', PCA(), 'unknown'),
@@ -357,3 +364,6 @@ def test_preprocess_until_ExtendedDataFramePipeline():
 
         assert_frame_equal(X_trans, X_trans_pipe)
         assert_array_equal(y_trans, y_trans_pipe)
+
+    with pytest.raises(ValueError, match='banana_pie is not a valid'):
+        extended_pipe.preprocess(X, y, 'banana_pie')
