@@ -152,11 +152,12 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
 
         df_X = X.copy()
 
-        self.detected_confounds_ = pick_columns(
-            self.confounds_match, df_X.columns)
-        if self.detected_confounds_ == []:
-            raise_error('no confound was found using the suffix'
-                        f'{self.suffix} in   the columns {X.columns}')
+        try:
+            self.detected_confounds_ = pick_columns(
+                self.confounds_match, df_X.columns)
+        except ValueError:
+            raise_error('No confound was found using the regex:'
+                        f'{self.confounds_match} in   the columns {X.columns}')
         df_confounds = df_X.loc[:, self.detected_confounds_]
         df_X = df_X.drop(columns=self.detected_confounds_)
         return df_X, df_confounds

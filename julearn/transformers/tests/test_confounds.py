@@ -2,6 +2,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 import pandas as pd
+import pytest
 from pandas.testing import assert_frame_equal
 import numpy as np
 from numpy.testing import assert_array_equal
@@ -154,3 +155,17 @@ def test_return_confound():
     remover = DataFrameConfoundRemover(keep_confounds=True)
     X_trans = remover.fit_transform(X)
     assert_array_equal(X_trans.columns, X.columns)
+
+
+def test_no_confound_found():
+    _X = pd.DataFrame(dict(a=np.arange(10)))
+    remover = DataFrameConfoundRemover()
+    with pytest.raises(ValueError, match='No confound was found'):
+        remover.fit_transform(_X)
+
+
+def test_no_dataframe_provided():
+
+    remover = DataFrameConfoundRemover()
+    with pytest.raises(ValueError, match='DataFrameConfoundRemover only sup'):
+        remover.fit(X.values)
