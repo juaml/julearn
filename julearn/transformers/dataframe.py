@@ -29,7 +29,7 @@ class DataFrameTransformer(TransformerMixin):
         transformer : object
             A transformer following sklearn standards.
         transform_column : str, list(str), optional
-            These arguments decides which columns will be transformed by the 
+            These arguments decides which columns will be transformed by the
             transformer. One way is entering a list of valid column names of
             the pd.DataFrame you want to use.
             Another one is to use a valid column type.
@@ -46,7 +46,8 @@ class DataFrameTransformer(TransformerMixin):
             `same` leads copies the names from the original pd.DataFrame
             `subset` leads to the columns being a subset of the original
             pd.DataFrame. This functionality needs the transformer to have a
-            .get_support method following sklearn standards., by default 'unknown'
+            .get_support method following sklearn standards.
+            , by default 'unknown'
         column_type_sep : str, optional
             [description], by default '__:type:__'
         """
