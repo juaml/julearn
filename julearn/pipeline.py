@@ -2,25 +2,10 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 from sklearn.pipeline import Pipeline
-from sklearn.base import BaseEstimator
+from sklearn.base import BaseEstimator, clone
 
 from . transformers.dataframe import DataFrameTransformer
 from . utils import raise_error
-
-
-def create_pipeline(preprocess_steps_features,
-                    preprocess_transformer_target,
-                    preprocess_steps_confounds,
-                    model_tuple, confounds, categorical_features):
-    X_steps = []
-    if preprocess_steps_features is not None:
-        X_steps = X_steps + list(preprocess_steps_features)
-    X_steps = X_steps + [model_tuple]
-    y_transformer = preprocess_transformer_target
-    pipeline = create_extended_pipeline(
-        X_steps, y_transformer, preprocess_steps_confounds, confounds,
-        categorical_features)
-    return pipeline
 
 
 def create_dataframe_pipeline(steps,
@@ -64,7 +49,7 @@ def create_dataframe_pipeline(steps,
             name, estimator, returned_features, transform_column = step
 
         else:
-            raise_error(f'step: {i_step} has a len of {len(i_step)}'
+            raise_error(f'step: {i_step} has a len of {n_arguments}'
                         ', but should hve one between 2 and 4')
 
         if (i_step == len(steps) - 1) and (hasattr(estimator, 'predict')):
@@ -98,7 +83,8 @@ class ExtendedDataFramePipeline(BaseEstimator):
     `cheese__:type:__confound`, when being in the confounds
     and with a seperater of `__:type:__`
 
-
+    Parameters
+    ----------
     dataframe_pipeline : sklearn.pipeline.Pipeline
         A pipeline working with dataframes and being able to handle confounds.
         Should be created using julearn.pipeline.create_dataframe_pipeline.
@@ -133,6 +119,19 @@ class ExtendedDataFramePipeline(BaseEstimator):
         self.return_trans_column_type = return_trans_column_type
 
     def fit(self, X, y=None):
+
+        self.dataframe_pipeline = clone(self.dataframe_pipeline)
+        self.confound_dataframe_pipeline = (
+            None
+            if self.confound_dataframe_pipeline is None
+            else clone(self.confound_dataframe_pipeline)
+        )
+        self.y_transformer = (
+            None
+            if self.y_transformer is None
+            else clone(self.y_transformer)
+        )
+
         if self.categorical_features is None:
             self.categorical_features = []
 
@@ -151,7 +150,6 @@ class ExtendedDataFramePipeline(BaseEstimator):
             y_true = y
 
         self.dataframe_pipeline.fit(X_conf_trans, y_true)
-
         return self
 
     def predict(self, X):
@@ -189,16 +187,65 @@ class ExtendedDataFramePipeline(BaseEstimator):
         else:
             return self.confound_dataframe_pipeline.transform(X)
 
-    def preprocess(self, X, y):
+    def preprocess(self, X, y, until=None):
+        # TODO incase no model at the end
         old_model = self.dataframe_pipeline.steps.pop()
-        X_trans = self.transform(X)
-        y_trans = self.transform_target(X, y)
+        if until is None:
+            X_trans = self.transform(X)
+            y_trans = self.transform_target(X, y)
+        else:
+            try:
+                self[until]
+            except KeyError:
+                raise_error(f'{until} is not a valid step')
+
+            if until.startswith('confound_'):
+                step_name = until.replace('confound_', '')
+                X_trans = self._transform_pipeline_until(
+                    pipeline=self.confound_dataframe_pipeline,
+                    step_name=step_name,
+                    X=X
+                )
+                y_trans = y.copy()
+
+            elif until.startswith('target_'):
+                X_trans = self.transform_confounds(X)
+                y_trans = self.transform_target(X, y)
+            else:
+                X_trans = self.transform_confounds(X)
+                X_trans = self._transform_pipeline_until(
+                    pipeline=self.dataframe_pipeline,
+                    step_name=until,
+                    X=X_trans
+                )
+                y_trans = self.transform_target(X, y)
+
         self.dataframe_pipeline.steps.append(old_model)
         return X_trans, y_trans
 
     def fit_transform(self, X, y=None):
         self.fit(X, y)
         return self.transform(X)
+
+    @property
+    def named_steps(self):
+        return self.dataframe_pipeline.named_steps
+
+    @property
+    def named_confound_steps(self):
+        return self.confound_dataframe_pipeline.named_steps
+
+    def __getitem__(self, ind):
+        if not isinstance(ind, str):
+            raise_error('Indexing must be done using strings')
+        if ind.startswith('confound_'):
+            n_ind = ind.replace('confound_', '')
+            element = self.confound_dataframe_pipeline[n_ind]
+        elif ind.startswith('target_'):
+            element = self.y_transformer
+        else:
+            element = self.dataframe_pipeline[ind]
+        return element
 
     def _fit_transform_confounds(self, X, y):
         X = self._recode_columns(X)
@@ -240,48 +287,43 @@ class ExtendedDataFramePipeline(BaseEstimator):
     def _recode_columns(self, X):
         return X.rename(columns=self.col_name_mapper_).copy()
 
-    def __getitem__(self, ind):
-        if not isinstance(ind, str):
-            raise_error('Indexing must be done using strings')
-        if ind.startswith('confound_'):
-            n_ind = ind.replace('confound_', '')
-            element = self.confound_dataframe_pipeline[n_ind]
-        else:
-            element = self.dataframe_pipeline[ind]
-        return element
-
-    @property
-    def named_steps(self):
-        return self.dataframe_pipeline.named_steps
-
-    @property
-    def named_confound_steps(self):
-        return self.confound_dataframe_pipeline.named_steps
+    def _transform_pipeline_until(self, pipeline, step_name, X):
+        X_transformed = X.copy()
+        X_transformed = self._recode_columns(X_transformed)
+        for name, step in pipeline.steps:
+            X_transformed = step.transform(X_transformed)
+            if name == step_name:
+                break
+        return X_transformed
 
 
-def create_extended_pipeline(X_steps, y_transformer, conf_steps,
-                             confounds, categorical_features):
-    """[summary]
+def create_extended_pipeline(
+    preprocess_steps_features,
+    preprocess_transformer_target,
+    preprocess_steps_confounds,
+    model, confounds, categorical_features
+):
+    """
 
     Parameters
     ----------
-    X_steps : list[tuple]
+    preprocess_steps_feature: list[tuple]
         Is a list of tuples. Each tuple can contain 2-4 entries.
         The first is always the name of the step as a str.
         Second the model/transformer following sklearns style.
         Third (optional) returned_features following DataFrameTransformer.
         Fourth (optional) transform_column follwing DataFrameTransformer.
-        The last tuple can be a tuple of (model_name, model).
 
-    y_transformer : y_transform
+    preprocess_transformer_target : y_transform
         A transformer, which takes in X, y and outputs a transformed y.
 
-    conf_steps : list[tuple]
+    preprocess_steps_confounds : list[tuple]
         Is a list of tuples. Each tuple can contain 2-3 entries.
         The first is always the name of the step as a str.
         Second the transformer following sklearns style.
         Third (optional) returned_features following DataFrameTransformer,
         but they should only be `same` (default) or `unknown_same_type`.
+    model : tuple(str, sklearn.base.BaseEstimator)
 
     confounds : list[str] or str
         A list of column_names which are the confounds
@@ -291,19 +333,22 @@ def create_extended_pipeline(X_steps, y_transformer, conf_steps,
         A list of column_names which are the categorical features
         or the column_name of one categorical feature
     """
+    X_steps = (list(preprocess_steps_features) + [model]
+               if preprocess_steps_features is not None
+               else [model]
+               )
     pipeline = create_dataframe_pipeline(X_steps)
 
-    # TODO validate conf_steps to only be unknown_same_type or same
-    # and not 4 entries
-    if conf_steps is not None:
+    if preprocess_steps_confounds is not None:
         confound_pipe = create_dataframe_pipeline(
-            conf_steps, default_returned_features='same',
+            preprocess_steps_confounds, default_returned_features='same',
             default_transform_column='confound')
     else:
         confound_pipe = None
 
-    return ExtendedDataFramePipeline(dataframe_pipeline=pipeline,
-                                     y_transformer=y_transformer,
-                                     confound_dataframe_pipeline=confound_pipe,
-                                     confounds=confounds,
-                                     categorical_features=categorical_features)
+    return ExtendedDataFramePipeline(
+        dataframe_pipeline=pipeline,
+        y_transformer=preprocess_transformer_target,
+        confound_dataframe_pipeline=confound_pipe,
+        confounds=confounds,
+        categorical_features=categorical_features)

@@ -11,7 +11,7 @@ from . prepare import (prepare_input_data,
                        prepare_preprocessing,
                        prepare_scoring,
                        check_consistency)
-from . pipeline import create_pipeline
+from . pipeline import create_extended_pipeline
 
 from . utils import logger
 
@@ -173,11 +173,11 @@ def run_cross_validation(
     # Prepare cross validation
     cv_outer = prepare_cv(cv)
 
-    pipeline = create_pipeline(preprocess_X,
-                               preprocess_y,
-                               preprocess_confounds,
-                               model_tuple, confounds,
-                               categorical_features=None)
+    pipeline = create_extended_pipeline(preprocess_X,
+                                        preprocess_y,
+                                        preprocess_confounds,
+                                        model_tuple, confounds,
+                                        categorical_features=None)
 
     if model_params is not None:
         pipeline = prepare_model_params(model_params, pipeline, cv_outer)

@@ -3,6 +3,7 @@
 # License: AGPL
 import numpy as np
 import pandas as pd
+import pytest
 
 from numpy.testing import assert_array_equal
 from pandas.testing import assert_frame_equal
@@ -21,6 +22,16 @@ X = pd.DataFrame(dict(A=np.arange(10),
                       B=np.arange(10, 20),
                       C=np.arange(30, 40)
                       ))
+y = pd.Series(np.arange(50, 60))
+
+X_with_types = pd.DataFrame({
+    'a__:type:__continuous': np.arange(10),
+    'b__:type:__continuous': np.arange(10, 20),
+    'c__:type:__confound': np.arange(30, 40),
+    'd__:type:__confound': np.arange(40, 50),
+    'e__:type:__categorical': np.arange(40, 50),
+    'f__:type:__categorical': np.arange(40, 50),
+})
 
 
 def test_create_dataframe_pipeline_all_steps_added():
@@ -63,6 +74,13 @@ def test_create_dataframe_pipeline_returned_features_same():
 
     assert (X_trans.columns == X.columns).all()
     assert_array_equal(X_trans.values, X_trans_sklearn)
+
+
+def test_create_dataframe_pipeline_invalid_step():
+
+    steps = [('zscore',)]
+    with pytest.raises(ValueError, match='step:'):
+        create_dataframe_pipeline(steps)
 
 
 def test_ExtendedDataFramePipeline_basics_Xpipeline_no_error():
@@ -176,16 +194,18 @@ def test_ExtendedDataFramePipeline_with_confound_in_cv_no_error():
 
 
 def test_create_extended_dataframe_transformer():
-    X_steps = [('zscore', StandardScaler(), 'same'),
-               ('pca', PCA(), 'unknown'),
-               ('lr', LinearRegression())
-               ]
+    preprocess_steps_feature = [('zscore', StandardScaler(), 'same'),
+                                ('pca', PCA(), 'unknown')
+                                ]
+
+    model = ('lr', LinearRegression())
     conf_steps = [('zscore', StandardScaler())]
     y_transformer = TargetTransfromerWrapper(StandardScaler())
     extended_pipe = create_extended_pipeline(
-        X_steps=X_steps,
-        y_transformer=y_transformer,
-        conf_steps=conf_steps,
+        preprocess_steps_features=preprocess_steps_feature,
+        preprocess_transformer_target=y_transformer,
+        preprocess_steps_confounds=conf_steps,
+        model=model,
         confounds='B',
         categorical_features=None
     )
@@ -236,3 +256,114 @@ def test_access_steps_ExtendedDataFramePipeline():
                 .named_steps
                 .lr)
             )
+
+    with pytest.raises(ValueError, match='Indexing must be done '):
+        my_pipe[0]
+
+
+def test_preprocess_all_ExtendedDataFramePipeline():
+    feature_steps = [('zscore', StandardScaler(), 'same'),
+                     ('pca', PCA(), 'unknown'),
+                     ]
+    model = ('lr', LinearRegression())
+
+    steps = feature_steps + [model]
+    confound_steps = [('zscore', StandardScaler(), 'same'),
+                      ('zscore_2', StandardScaler(), 'same')]
+
+    y_transformer = TargetTransfromerWrapper(StandardScaler())
+
+    feature_pipe = create_dataframe_pipeline(steps=feature_steps)
+    steps_pipe = create_dataframe_pipeline(steps=steps)
+    confounds_pipe = create_dataframe_pipeline(
+        steps=confound_steps,
+        default_returned_features='same',
+        default_transform_column='confound')
+
+    extended_pipe = ExtendedDataFramePipeline(
+        dataframe_pipeline=steps_pipe,
+        y_transformer=y_transformer,
+        confound_dataframe_pipeline=confounds_pipe,
+        confounds=['B'])
+
+    np.random.seed(42)
+    extended_pipe.fit(X, y)
+
+    np.random.seed(42)
+    X_recoded = extended_pipe._recode_columns(X.copy())
+    X_conf = confounds_pipe.fit_transform(X_recoded, y)
+    y_trans = y_transformer.fit_transform(X_conf, y)
+    X_trans = feature_pipe.fit_transform(X_conf, y_trans)
+
+    X_trans_preprocess, y_trans_preprocess = extended_pipe.preprocess(X, y)
+
+    X_trans_preprocess = extended_pipe._recode_columns(X_trans_preprocess)
+    assert_frame_equal(X_trans, X_trans_preprocess)
+    assert_array_equal(y_trans, y_trans_preprocess)
+
+
+def test_preprocess_until_ExtendedDataFramePipeline():
+    feature_steps = [('zscore', StandardScaler(), 'same'),
+                     ('pca', PCA(), 'unknown'),
+                     ]
+    model = ('lr', LinearRegression())
+
+    steps = feature_steps + [model]
+    confound_steps = [('zscore', StandardScaler(), 'same'),
+                      ('zscore_2', StandardScaler(), 'same')]
+
+    y_transformer = TargetTransfromerWrapper(StandardScaler())
+
+    steps_pipe = create_dataframe_pipeline(steps=steps)
+    confounds_pipe = create_dataframe_pipeline(
+        steps=confound_steps,
+        default_returned_features='same',
+        default_transform_column='confound')
+
+    extended_pipe = ExtendedDataFramePipeline(
+        dataframe_pipeline=steps_pipe,
+        y_transformer=y_transformer,
+        confound_dataframe_pipeline=confounds_pipe,
+        confounds=['B'])
+
+    np.random.seed(42)
+    extended_pipe.fit(X, y)
+
+    np.random.seed(42)
+    X_trans = extended_pipe._recode_columns(X.copy())
+    y_trans = y.copy()
+
+    for name, step, returns in confound_steps:
+
+        this_confounds_pipe = create_dataframe_pipeline(
+            steps=[(name, step, returns)],
+            default_returned_features='same',
+            default_transform_column='confound')
+        X_trans = this_confounds_pipe.fit_transform(X_trans)
+
+        X_trans_pipe, y_trans_pipe = extended_pipe.preprocess(
+            X, y, until='confound_' + name)
+
+        assert_frame_equal(X_trans, X_trans_pipe)
+        assert_array_equal(y_trans, y_trans_pipe)
+
+    X_trans_pipe, y_trans_pipe = extended_pipe.preprocess(
+        X, y, until='target_')
+    y_trans = y_transformer.fit_transform(X_trans, y_trans)
+    assert_frame_equal(X_trans, X_trans_pipe)
+    assert_array_equal(y_trans, y_trans_pipe)
+
+    for name, step, returns in feature_steps:
+
+        this_feature_pipe = create_dataframe_pipeline(
+            steps=[(name, step, returns)])
+        X_trans = this_feature_pipe.fit_transform(X_trans)
+
+        X_trans_pipe, y_trans_pipe = extended_pipe.preprocess(
+            X, y, until=name)
+
+        assert_frame_equal(X_trans, X_trans_pipe)
+        assert_array_equal(y_trans, y_trans_pipe)
+
+    with pytest.raises(ValueError, match='banana_pie is not a valid'):
+        extended_pipe.preprocess(X, y, 'banana_pie')
