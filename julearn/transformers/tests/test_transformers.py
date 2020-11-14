@@ -74,7 +74,7 @@ def test_list_get_transformers():
     diff = set(actual) ^ set(expected)
     assert not diff
 
-    expected = ['zscore']
+    expected = ['zscore', 'remove_confound']
     actual = list_transformers(target=True)
     diff = set(actual) ^ set(expected)
     assert not diff
