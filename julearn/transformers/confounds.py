@@ -174,3 +174,35 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
                 lambda x: 0 if abs(x) <= self.threshold else x
             )
         return residuals
+
+
+class TargetConfoundRemover(TransformerMixin):
+
+    def __init__(self,
+                 model_confound=None,
+                 confounds_match='.*__:type:__confound',
+                 threshold=None):
+
+        self.model_confound = model_confound
+        self.confounds_match = confounds_match
+        self.threshold = threshold
+        self._confound_remover = DataFrameConfoundRemover(
+            model_confound=self.model_confound,
+            confounds_match=self.confounds_match,
+            threshold=self.threshold)
+
+    def fit(self, X, y):
+
+        Xy = X.copy()
+        Xy['y'] = y.copy()
+
+        self._confound_remover.fit(X=Xy)
+
+    def transform(self, X, y):
+        Xy = X.copy()
+        Xy['y'] = y.copy()
+        return self._confound_remover.transform(Xy)['y']
+
+    def fit_transform(self, X, y):
+        self.fit(X, y)
+        return self.transform(X, y)

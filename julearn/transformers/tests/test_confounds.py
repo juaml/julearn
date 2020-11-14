@@ -7,7 +7,8 @@ from pandas.testing import assert_frame_equal
 import numpy as np
 from numpy.testing import assert_array_equal
 
-from julearn.transformers.confounds import DataFrameConfoundRemover
+from julearn.transformers.confounds import (DataFrameConfoundRemover,
+                                            TargetConfoundRemover)
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.base import clone
@@ -169,3 +170,16 @@ def test_no_dataframe_provided():
     remover = DataFrameConfoundRemover()
     with pytest.raises(ValueError, match='DataFrameConfoundRemover only sup'):
         remover.fit(X.values)
+
+
+def test_TargetConfoundRemover():
+    target_remover = TargetConfoundRemover()
+    np.random.seed(42)
+    y_transformed = target_remover.fit_transform(X, y)
+    np.random.seed(42)
+    confounds = X.loc[:, ['c__:type:__confound', 'd__:type:__confound']]
+    y_pred = (LinearRegression()
+              .fit(confounds, y)
+              .predict(confounds)
+              )
+    assert_array_equal(y_transformed.values, y - y_pred)
