@@ -54,7 +54,7 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
             threshold will be set to 0.None (default) means that no threshold
             will be applied.
         keep_confounds : bool, optional
-            Whether you want to return the confound together with the confound 
+            Whether you want to return the confound together with the confound
             removed features, default is False
         """
         if model_confound is None:
