@@ -83,6 +83,8 @@
 
 
 .. _`pandas`: https://pandas.pydata.org
+.. _`pandas.DataFrame` : https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html
+
 .. _`Python`: https://python.org
 .. _`seaborn`: https://seaborn.pydata.org
 

@@ -18,18 +18,18 @@ class DataFrameTransformer(TransformerMixin):
                  **params):
         """Core class of julearn.
         Similar to sklearns ColumnTransformer, it applies any transformer
-        to a set of columns specified by transform_column.
-        But the transformers are not applied independetley to each column.
+        to a set of columns specified by transform_column.But the transformers
+        are not applied independetley to each column.
         This wrapper also alwayes returns a pd.DataFrame instead of np.ndarray
         The columns of the outputted pd.DataFrame are dependent on the
         returned_features argument.
 
         Parameters
         ----------
-        transformer : sklearn.base.TransformerMixin
+        transformer : object
             A transformer following sklearn standards.
-        transform_column : str or list[str]
-            This arguments decides which columns will be transformed by the
+        transform_column : str, list(str), optional
+            These arguments decides which columns will be transformed by the 
             transformer. One way is entering a list of valid column names of
             the pd.DataFrame you want to use.
             Another one is to use a valid column type.
@@ -38,19 +38,17 @@ class DataFrameTransformer(TransformerMixin):
             Valid column types are: `confound`, 'continuous' and 'categorical'.
             Furthermore, you can enter `all` to transform all columns,
             `all_features` to transform all columns excluding the confound
-            or provide a list of valid column types.
-
-
-
+            or provide a list of valid column types., by default 'all'
         returned_features : str, optional
             `unknown` leads to created column names,
             `unknown_same_type` leads to created column names
-             with the same column type.
+            with the same column type.
             `same` leads copies the names from the original pd.DataFrame
             `subset` leads to the columns being a subset of the original
-             pd.DataFrame. This functionality needs the transformer to have a
-             .get_support method following sklearn standards.
-             , by default `unknown`
+            pd.DataFrame. This functionality needs the transformer to have a
+            .get_support method following sklearn standards., by default 'unknown'
+        column_type_sep : str, optional
+            [description], by default '__:type:__'
         """
 
         self.transformer = transformer

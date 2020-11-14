@@ -83,7 +83,8 @@ class ExtendedDataFramePipeline(BaseEstimator):
     `cheese__:type:__confound`, when being in the confounds
     and with a seperater of `__:type:__`
 
-
+    Parameters
+    ----------
     dataframe_pipeline : sklearn.pipeline.Pipeline
         A pipeline working with dataframes and being able to handle confounds.
         Should be created using julearn.pipeline.create_dataframe_pipeline.
