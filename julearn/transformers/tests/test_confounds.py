@@ -148,3 +148,9 @@ def test_confound_set_confounds():
                 columns=confounds).columns).all()
 
             assert_frame_equal(df_cofound_removed, df_confound_removed_manual)
+
+
+def test_return_confound():
+    remover = DataFrameConfoundRemover(keep_confounds=True)
+    X_trans = remover.fit_transform(X)
+    assert_array_equal(X_trans.columns, X.columns)

@@ -32,7 +32,9 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
 
     def __init__(self, model_confound=None,
                  confounds_match='.*__:type:__confound',
-                 threshold=None):
+                 threshold=None,
+                 keep_confounds=False,
+                 ):
         """
         Parameters
         ----------
@@ -51,12 +53,16 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
             All residual values after confound removal which fall under the
             threshold will be set to 0.None (default) means that no threshold
             will be applied.
+        keep_confounds : bool, optional
+            Whether you want to return the confound together with the confound 
+            removed features, default is False
         """
         if model_confound is None:
             model_confound = LinearRegression()
         self.model_confound = model_confound
         self.confounds_match = confounds_match
         self.threshold = threshold
+        self.keep_confounds = keep_confounds
 
     def fit(self, X, y=None):
         """Fit confound remover
@@ -73,9 +79,12 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
         self : returns an instance of self.
         """
         df_X, ser_confound = self._split_into_X_confound(X)
-        self.support_mask_ = pd.Series(False, index=X.columns,
-                                       dtype=bool)
-        self.support_mask_[df_X.columns] = True
+        if self.keep_confounds:
+            self.support_mask_ = pd.Series(True, index=X.columns, dtype=bool)
+        else:
+            self.support_mask_ = pd.Series(False, index=X.columns,
+                                           dtype=bool)
+            self.support_mask_[df_X.columns] = True
         self.support_mask_ = self.support_mask_.values
 
         def fit_confound_models(X):
@@ -108,7 +117,13 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
             columns=df_X.index,
         ).T
         residuals = df_X - df_X_prediction
-        return self._apply_threshold(residuals)
+        df_out = self._apply_threshold(residuals)
+
+        if self.keep_confounds:
+            df_out[self.detected_confounds_] = X[self.detected_confounds_]
+            df_out = df_out.reindex(columns=X.columns)
+
+        return df_out
 
     def get_support(self, indices=False):
         """Get the support mask
@@ -140,7 +155,7 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
         self.detected_confounds_ = pick_columns(
             self.confounds_match, df_X.columns)
         if self.detected_confounds_ == []:
-            raise_error(f'no confound was found using the suffix'
+            raise_error('no confound was found using the suffix'
                         f'{self.suffix} in   the columns {X.columns}')
         df_confounds = df_X.loc[:, self.detected_confounds_]
         df_X = df_X.drop(columns=self.detected_confounds_)
