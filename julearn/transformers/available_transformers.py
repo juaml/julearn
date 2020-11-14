@@ -10,7 +10,7 @@ from sklearn.feature_selection import (GenericUnivariateSelect,
                                        SelectFdr, SelectFpr, SelectFwe,
                                        VarianceThreshold)
 
-from . confounds import DataFrameConfoundRemover
+from . confounds import DataFrameConfoundRemover, TargetConfoundRemover
 from . target import TargetTransfromerWrapper
 from .. utils import raise_error
 
@@ -47,6 +47,7 @@ _available_transformers = {
 
 _available_target_transformers = {
     'zscore': StandardScaler,
+    'remove_confound': [TargetConfoundRemover, 'same'],
 }
 
 

@@ -84,7 +84,10 @@ Confound Removal
      - Description
      - Class
    * - ``remove_confound``
-     - Removing mean and scale to unit variance
+     - removing confounds from features,
+       by subtracting the prediction of each feature given all confounds.
+       By default this is equal to "independently regressing out 
+       the confounds from the features" 
      - :class:`.DataFrameConfoundRemover`
 
 Decomposition
@@ -117,6 +120,21 @@ Target Scalers
      - Removing mean and scale to unit variance
      - `StandardScaler`_
 
+Target Confound Removal
+^^^^^^^^^^^^^^^^^^^^^^^
+.. list-table::
+   :widths: 30 80 40
+   :header-rows: 1
+
+   * - Name (str)
+     - Description
+     - Class
+   * - ``remove_confound``
+     - removing confounds from target,
+       by subtracting the prediction of the target given all confounds.
+       By default this is equal to "regressing out 
+       the confounds from the target"
+     - :class:`.TargetConfoundRemover`
 
 Models
 ------

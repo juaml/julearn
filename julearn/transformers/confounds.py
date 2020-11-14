@@ -28,6 +28,9 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
         All residual values after confound removal which fall under the
         threshold will be set to 0. None means that no threshold will be
         applied.
+    keep_confound : bool, optional
+        Whether to keep the confound after removing it from the features
+        or not, default False
     """
 
     def __init__(self, model_confound=None,
@@ -182,7 +185,25 @@ class TargetConfoundRemover(TransformerMixin):
                  model_confound=None,
                  confounds_match='.*__:type:__confound',
                  threshold=None):
+        """Transformer which can use pd.DataFrames and remove the confounds
+        from the target by subtracting the predicted target
+        given the confounds from the actual target.
 
+        Attributes
+        ----------
+        model_confound : object
+            Model used to predict the rategt using the confounds as
+            features. The predictions of these models are then subtracted
+            from the actual target, default is None. Meaning the use of
+            a LinearRegression.
+        confounds_match : list[str] or str
+            A string representing a regular expression by which the confounds
+            can be detected from the column names.
+        threshold : float or None
+            All residual values after confound removal which fall under the
+            threshold will be set to 0. None means that no threshold will be
+            applied.
+        """
         self.model_confound = model_confound
         self.confounds_match = confounds_match
         self.threshold = threshold

@@ -36,3 +36,5 @@ Classes
 
 .. autoclass:: julearn.transformers.confounds.DataFrameConfoundRemover
    :members: 
+.. autoclass:: julearn.transformers.confounds.TargetConfoundRemover
+   :members: 
