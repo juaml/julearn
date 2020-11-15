@@ -41,3 +41,7 @@ def pick_columns(regexes, columns):
             f'The following are missing: {unmatched}')
 
     return picks
+
+
+def change_column_type(column, new_type):
+    return '__:type:__'.join(column.split('__:type:__')[0:1] + [new_type])

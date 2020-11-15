@@ -3,9 +3,9 @@
 # License: AGPL
 from copy import deepcopy
 import pandas as pd
-from sklearn.base import TransformerMixin
+from sklearn.base import TransformerMixin, BaseEstimator
 
-from .. utils import raise_error
+from .. utils import raise_error, pick_columns, change_column_type
 
 
 class DataFrameTransformer(TransformerMixin):
@@ -47,6 +47,8 @@ class DataFrameTransformer(TransformerMixin):
             `subset` leads to the columns being a subset of the original
             pd.DataFrame. This functionality needs the transformer to have a
             .get_support method following sklearn standards.
+            `from_transformer` the outputted columns are already defined in
+            the transformer
             , by default 'unknown'
         column_type_sep : str, optional
             [description], by default '__:type:__'
@@ -118,6 +120,10 @@ class DataFrameTransformer(TransformerMixin):
 
             X_transformed.columns = columns
             df_out = pd.concat([X_transformed, X_rest], axis=1)
+
+        elif self.returned_features == 'from_transformer':
+            df_out = pd.concat([X_rest, X_transformed],
+                               axis=1)
 
         else:
             raise_error('returned_features can only be '
@@ -206,3 +212,20 @@ class DataFrameTransformer(TransformerMixin):
                              columns, column_type)
                          ]
         return valid_columns
+
+
+class ChangeColumnTypes(TransformerMixin, BaseEstimator):
+
+    def __init__(self, columns_match, new_type):
+        self.columns_match = columns_match
+        self.new_type = new_type
+
+    def fit(self, X, y=None):
+        self.detected_columns_ = pick_columns(self.columns_match, X.columns)
+        self.column_mapper_ = {col: change_column_type(col, self.new_type)
+                               for col in self.detected_columns_}
+        return self
+
+    def transform(self, X):
+
+        return X.copy().rename(columns=self.column_mapper_)
