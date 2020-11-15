@@ -10,7 +10,7 @@ from pandas.testing import assert_frame_equal
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 
-from julearn.transformers import DataFrameTransformer
+from julearn.transformers import DataFrameTransformer, ChangeColumnTypes
 from julearn.utils.testing import PassThroughTransformer
 
 X = pd.DataFrame(dict(A=np.arange(10),
@@ -222,3 +222,38 @@ def test_error_returned_features_subset():
     with pytest.raises(ValueError,
                        match='You cannot use subset on a transformer'):
         trans_df.fit_transform(X_with_types)
+
+
+def test_ChangeColumnTypes():
+    X_with_types_copy = X_with_types.copy()
+    X_with_types_changed = X_with_types_copy.copy()
+    X_with_types_changed.columns = ['a__:type:__continuous',
+                                    'b__:type:__continuous',
+                                    'c__:type:__continuous',
+                                    'd__:type:__continuous',
+                                    'e__:type:__categorical',
+                                    'f__:type:__categorical']
+    scales_both = DataFrameTransformer(
+        transformer=StandardScaler(),
+        returned_features='same',
+        transform_column=['continuous', 'confound'])
+    scales_continuous = DataFrameTransformer(
+        transformer=StandardScaler(),
+        returned_features='same',
+        transform_column=['continuous'])
+    change_types = DataFrameTransformer(
+        ChangeColumnTypes(columns_match='confound', new_type='continuous'),
+        returned_features='from_transformer'
+    )
+
+    X_trans = change_types.fit_transform(X_with_types_copy)
+    X_scaled_both = scales_both.fit_transform(X_with_types_copy)
+    X_scaled_trans = scales_continuous.fit_transform(X_trans)
+
+    assert_frame_equal(
+        X_trans.reindex(X_trans.columns.sort_values()),
+        X_with_types_changed.reindex(
+            X_with_types_changed.columns.sort_values()
+        )
+    )
+    assert_array_equal(X_scaled_both.values, X_scaled_trans.values)
