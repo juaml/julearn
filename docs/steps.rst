@@ -88,7 +88,7 @@ Confound Removal
        by subtracting the prediction of each feature given all confounds.
        By default this is equal to "independently regressing out 
        the confounds from the features" 
-     - :class:`.DataFrameConfoundRemover`
+     - :class:`.confounds.DataFrameConfoundRemover`
 
 Decomposition
 ^^^^^^^^^^^^^
