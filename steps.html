@@ -189,8 +189,11 @@ a pipeline by name.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">remove_confound</span></code></p></td>
-<td><p>Removing mean and scale to unit variance</p></td>
-<td><p><a class="reference internal" href="api.html#julearn.transformers.confounds.DataFrameConfoundRemover" title="julearn.transformers.confounds.DataFrameConfoundRemover"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrameConfoundRemover</span></code></a></p></td>
+<td><p>removing confounds from features,
+by subtracting the prediction of each feature given all confounds.
+By default this is equal to “independently regressing out
+the confounds from the features”</p></td>
+<td><p><a class="reference internal" href="api.html#julearn.transformers.confounds.DataFrameConfoundRemover" title="julearn.transformers.confounds.DataFrameConfoundRemover"><code class="xref py py-class docutils literal notranslate"><span class="pre">confounds.DataFrameConfoundRemover</span></code></a></p></td>
 </tr>
 </tbody>
 </table>
@@ -238,6 +241,31 @@ a pipeline by name.</p>
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">zscore</span></code></p></td>
 <td><p>Removing mean and scale to unit variance</p></td>
 <td><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html">StandardScaler</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="target-confound-removal">
+<h3>Target Confound Removal<a class="headerlink" href="#target-confound-removal" title="Permalink to this headline">¶</a></h3>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 53%" />
+<col style="width: 27%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name (str)</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Class</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">remove_confound</span></code></p></td>
+<td><p>removing confounds from target,
+by subtracting the prediction of the target given all confounds.
+By default this is equal to “regressing out
+the confounds from the target”</p></td>
+<td><p><a class="reference internal" href="api.html#julearn.transformers.confounds.TargetConfoundRemover" title="julearn.transformers.confounds.TargetConfoundRemover"><code class="xref py py-class docutils literal notranslate"><span class="pre">TargetConfoundRemover</span></code></a></p></td>
 </tr>
 </tbody>
 </table>

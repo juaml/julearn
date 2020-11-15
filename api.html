@@ -347,7 +347,7 @@ entries will be appended.</p>
 <h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="julearn.transformers.confounds.DataFrameConfoundRemover">
-<em class="property">class </em><code class="sig-prename descclassname">julearn.transformers.confounds.</code><code class="sig-name descname">DataFrameConfoundRemover</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model_confound</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">confounds_match</span><span class="o">=</span><span class="default_value">'.*__:type:__confound'</span></em>, <em class="sig-param"><span class="n">threshold</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.transformers.confounds.DataFrameConfoundRemover" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">julearn.transformers.confounds.</code><code class="sig-name descname">DataFrameConfoundRemover</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model_confound</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">confounds_match</span><span class="o">=</span><span class="default_value">'.*__:type:__confound'</span></em>, <em class="sig-param"><span class="n">threshold</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">keep_confounds</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.transformers.confounds.DataFrameConfoundRemover" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transformer which can use pd.DataFrames and remove the confounds
 from the features by subtracting the predicted features
 given the confounds from the actual features.</p>
@@ -364,6 +364,9 @@ can be detected from the column names.</p>
 <dt><strong>threshold</strong><span class="classifier">float or None</span></dt><dd><p>All residual values after confound removal which fall under the
 threshold will be set to 0. None means that no threshold will be
 applied.</p>
+</dd>
+<dt><strong>keep_confound</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether to keep the confound after removing it from the features
+or not, default False</p>
 </dd>
 </dl>
 </dd>
@@ -385,6 +388,9 @@ The default follows the naming convention inside of julearn:
 <dt><strong>threshold</strong><span class="classifier">float or None</span></dt><dd><p>All residual values after confound removal which fall under the
 threshold will be set to 0.None (default) means that no threshold
 will be applied.</p>
+</dd>
+<dt><strong>keep_confounds</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether you want to return the confound together with the confound
+removed features, default is False</p>
 </dd>
 </dl>
 </dd>
@@ -444,6 +450,57 @@ will be applied.</p>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>out</strong><span class="classifier">pandas.DataFrame</span></dt><dd><p>Data without confounds</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="julearn.transformers.confounds.TargetConfoundRemover">
+<em class="property">class </em><code class="sig-prename descclassname">julearn.transformers.confounds.</code><code class="sig-name descname">TargetConfoundRemover</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model_confound</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">confounds_match</span><span class="o">=</span><span class="default_value">'.*__:type:__confound'</span></em>, <em class="sig-param"><span class="n">threshold</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.transformers.confounds.TargetConfoundRemover" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transformer which can use pd.DataFrames and remove the confounds
+from the target by subtracting the predicted target
+given the confounds from the actual target.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>model_confound</strong><span class="classifier">object</span></dt><dd><p>Model used to predict the rategt using the confounds as
+features. The predictions of these models are then subtracted
+from the actual target, default is None. Meaning the use of
+a LinearRegression.</p>
+</dd>
+<dt><strong>confounds_match</strong><span class="classifier">list[str] or str</span></dt><dd><p>A string representing a regular expression by which the confounds
+can be detected from the column names.</p>
+</dd>
+<dt><strong>threshold</strong><span class="classifier">float or None</span></dt><dd><p>All residual values after confound removal which fall under the
+threshold will be set to 0. None means that no threshold will be
+applied.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="julearn.transformers.confounds.TargetConfoundRemover.fit_transform">
+<code class="sig-name descname">fit_transform</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">y</span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.transformers.confounds.TargetConfoundRemover.fit_transform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fit to data, then transform it.</p>
+<p>Fits transformer to X and y with optional parameters fit_params
+and returns a transformed version of X.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">{array-like, sparse matrix, dataframe} of shape                 (n_samples, n_features)</span></dt><dd></dd>
+<dt><strong>y</strong><span class="classifier">ndarray of shape (n_samples,), default=None</span></dt><dd><p>Target values.</p>
+</dd>
+<dt><strong>**fit_params</strong><span class="classifier">dict</span></dt><dd><p>Additional fit parameters.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>X_new</strong><span class="classifier">ndarray array of shape (n_samples, n_features_new)</span></dt><dd><p>Transformed array.</p>
 </dd>
 </dl>
 </dd>
