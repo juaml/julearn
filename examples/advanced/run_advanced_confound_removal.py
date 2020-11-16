@@ -72,7 +72,7 @@ typical_pipe.fit(df_features, target)
 # By providing a step name to the `until` argument of the
 # `preprocess` method we return the transformed X and y including to this step.
 # This output always includes the transformed
-# X and tranformed y as a tuple.
+# X and transformed y as a tuple.
 X_deconfounded, _ = typical_pipe.preprocess(
     df_features, target, until='remove_confound')
 print(X_deconfounded.head())
@@ -86,13 +86,13 @@ print(X_deconfounded.head())
 # features, but still want to keep the confound as a feature.
 # This would mean that the following pca would also use the confound
 # as a feature.
-# Let us have a closer look to the cofound remover in order to understand
+# Let us have a closer look to the confound remover in order to understand
 # how we could achieve such a task:
 #
 # .. autoclass:: julearn.transformers.DataFrameConfoundRemover
 
 ###############################################################################
-# As you can see above we can set the `keep_confouns` argument to True,
+# As you can see above we can set the `keep_confounds` argument to True,
 # if we want to keep the confounds.
 # Here is an example of how this can look like:
 
