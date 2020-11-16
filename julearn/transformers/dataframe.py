@@ -34,7 +34,7 @@ class DataFrameTransformer(TransformerMixin):
             the pd.DataFrame you want to use.
             Another one is to use a valid column type.
             Column types are tagges you have to provide after the column name
-            only seperated by the column_type_sep.
+            only separated by the column_type_sep.
             Valid column types are: `confound`, 'continuous' and 'categorical'.
             Furthermore, you can enter `all` to transform all columns,
             `all_features` to transform all columns excluding the confound

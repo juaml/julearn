@@ -217,7 +217,7 @@ Gaussian Processes
      - Multiclass
      - Regression
    * - ``gauss``
-     - Gausian Process
+     - Gaussian Process
      - `GaussianProcessClassifier`_ and `GaussianProcessRegressor`_
      - Y
      - Y

@@ -46,7 +46,7 @@ def test_create_dataframe_pipeline_all_steps_added():
 
 def test_create_dataframe_pipeline_steps_added_correctly():
     # test whether the steps are added
-    # and whether all the hyperparameters were transfered correctly
+    # and whether all the hyperparameters were transferred correctly
     scaler = StandardScaler(with_mean=False)
     pca = PCA(n_components=3)
     lr = LinearRegression()

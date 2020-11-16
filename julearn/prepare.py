@@ -280,7 +280,7 @@ def prepare_model_params(msel_dict, pipeline, cv_outer):
     """Prepare model parameters.
 
     For each of the model parameters, determine if it can be directly set or
-    must be tuned using hyperparameter tunning.
+    must be tuned using hyperparameter tuning.
 
     Parameters
     ----------
@@ -511,7 +511,7 @@ def prepare_cv(cv):
         n_repeats, n_folds = cv_string.split('_')
         n_repeats, n_folds = [int(name.split(':')[-1])
                               for name in [n_repeats, n_folds]]
-        logger.info(f'CV interpeted as RepeatedKFold with {n_repeats} '
+        logger.info(f'CV interpreted as RepeatedKFold with {n_repeats} '
                     f'repetitions of {n_folds} folds')
         return RepeatedKFold(n_splits=n_folds, n_repeats=n_repeats)
 

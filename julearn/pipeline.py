@@ -21,7 +21,7 @@ def create_dataframe_pipeline(steps,
         The first is always the name of the step as a str.
         Second the model/transformer following sklearns style.
         Third (optional) returned_features following DataFrameTransformer.
-        Fourth (optional) transform_column follwing DataFrameTransformer.
+        Fourth (optional) transform_column following DataFrameTransformer.
         The last tuple can be a tuple of (model_name, model).
     default_returned_features : str, optional
         When a step does not provide a returned_features/third entry,
@@ -50,7 +50,7 @@ def create_dataframe_pipeline(steps,
 
         else:
             raise_error(f'step: {i_step} has a len of {n_arguments}'
-                        ', but should hve one between 2 and 4')
+                        ', but should have one between 2 and 4')
 
         if (i_step == len(steps) - 1) and (hasattr(estimator, 'predict')):
             steps_ready_for_pipe.append([name, estimator])
@@ -79,9 +79,9 @@ class ExtendedDataFramePipeline(BaseEstimator):
     of the dataframe_pipline can handle categorical features properly.
 
     column_types are added to the feature dataframe after each column using
-    the specified seperater. E.g. column `cheese` becomes
+    the specified separator. E.g. column `cheese` becomes
     `cheese__:type:__confound`, when being in the confounds
-    and with a seperater of `__:type:__`
+    and with a separator of `__:type:__`
 
     Parameters
     ----------
@@ -188,7 +188,7 @@ class ExtendedDataFramePipeline(BaseEstimator):
             return self.confound_dataframe_pipeline.transform(X)
 
     def preprocess(self, X, y, until=None):
-        # TODO incase no model at the end
+        # TODO in case no model at the end
         old_model = self.dataframe_pipeline.steps.pop()
         if until is None:
             X_trans = self.transform(X)
@@ -312,7 +312,7 @@ def create_extended_pipeline(
         The first is always the name of the step as a str.
         Second the model/transformer following sklearns style.
         Third (optional) returned_features following DataFrameTransformer.
-        Fourth (optional) transform_column follwing DataFrameTransformer.
+        Fourth (optional) transform_column following DataFrameTransformer.
 
     preprocess_transformer_target : y_transform
         A transformer, which takes in X, y and outputs a transformed y.

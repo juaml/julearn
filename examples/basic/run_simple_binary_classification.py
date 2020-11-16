@@ -37,7 +37,7 @@ scores = run_cross_validation(X=X, y=y, data=df_iris, model='svm')
 print(scores['test_score'])
 
 ###############################################################################
-# Additionaly, we can choose to assess the performance of the model using
+# Additionally, we can choose to assess the performance of the model using
 # different scoring functions.
 #
 # For example, we might have an unbalanced dataset:

@@ -56,7 +56,7 @@ def run_cross_validation(
         Options are:
 
         * "binary_classification": Perform a binary classification
-          in which the target (y) has only two posible classes (default).
+          in which the target (y) has only two possible classes (default).
           The parameter pos_labels can be used to convert a target with
           multiple_classes into binary.
         * "multiclass_classification": Performs a multiclass classification
@@ -130,7 +130,7 @@ def run_cross_validation(
 
         See https://juaml.github.io/julearn/hyperparameters.html for details.
     seed : int | None
-        If not None, set the random seed before any operation. Usefull for
+        If not None, set the random seed before any operation. Useful for
         reproducibility.
 
     Returns
