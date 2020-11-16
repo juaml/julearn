@@ -143,7 +143,7 @@ def test_set_hyperparam():
 
 
 def test_tune_hyperparam():
-    """Test tunning one hyperparmeter"""
+    """Test tuning one hyperparmeter"""
     df_iris = load_dataset('iris')
 
     # keep only two species
@@ -189,7 +189,7 @@ def test_tune_hyperparam():
     cv_outer = RepeatedKFold(n_splits=2, n_repeats=1)
     cv_inner = RepeatedKFold(n_splits=2, n_repeats=1)
 
-    # Now randomized serach
+    # Now randomized search
     model_params = {'svm__C': [0.01, 0.001], 'cv': cv_inner,
                     'search': 'random', 'search_params': {'n_iter': 2}}
     actual, actual_estimator  = run_cross_validation(

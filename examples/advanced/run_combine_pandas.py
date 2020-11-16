@@ -21,7 +21,7 @@ from seaborn import load_dataset
 import pandas as pd
 
 ###############################################################################
-# One of the key elements that make julearn easy to use, is the posibility to
+# One of the key elements that make julearn easy to use, is the possibility to
 # work directly with pandas data frames. Also known as excel spreadsheets or
 # csv files.
 #
@@ -54,7 +54,7 @@ print(df_fmri.head())
 # ^^^^^^^^^^^^^^^^^^^^^^^^
 # We have seen this in other examples. If we want to use julearn, each feature
 # must be a columns. In order to use the signals from different regions as
-# features, we need to conver this dataframe from the long format to the wide
+# features, we need to convert this dataframe from the long format to the wide
 # format.
 #
 # We will use the ``pivot`` method.
@@ -125,7 +125,7 @@ df_fmri = df_fmri.reset_index()
 ###############################################################################
 # Reshaping data frames (more complex)
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-# Lets supose that our prediction target is now the *age* and we want to use
+# Lets suppose that our prediction target is now the *age* and we want to use
 # as features the frontal and parietal value during each event. For this
 # purpose, we need to convert the event values into columns. There are two
 # events: *cue* and *stim*. So this will result in 4 columns.

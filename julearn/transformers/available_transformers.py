@@ -74,7 +74,7 @@ def list_transformers(target=False):
 
 
 def get_transformer(name, target=False):
-    """Get a transfomer
+    """Get a transformer
 
     Parameters
     ----------

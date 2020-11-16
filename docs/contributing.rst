@@ -24,7 +24,7 @@ repository:
 1.2 Create a virtual environment
 ********************************
 
-This step can be ommited, but it is highly recommended, as the development
+This step can be omitted, but it is highly recommended, as the development
 version of julearn can interfere with the other versions that you might use in
 your projects.
 
@@ -102,7 +102,7 @@ relates to the issue.
 2.3 Do the changes
 ******************
 
-Simply use your prefered code editor to do the modifications you want.
+Simply use your preferred code editor to do the modifications you want.
 
 2.4 Commit and Push
 *******************
@@ -119,6 +119,18 @@ username.
 
 Before creating the pull request (PR), make sure that all the test pass and
 the documentation can be correctly built.
+
+To check the code style, run:
+
+.. code-block:: bash
+
+    flake8
+
+To run the spell check, run:
+
+.. code-block:: bash
+
+    codespell julearn/ docs/ examples/
 
 To run the test, execute:
 

@@ -160,4 +160,4 @@ YY, XX = np.meshgrid(yy, xx)
 xy = np.vstack([XX.ravel(), YY.ravel()]).T
 Z = clf.decision_function(xy).reshape(XX.shape)
 a = ax.contour(XX, YY, Z, colors='k', levels=[0], alpha=0.5, linestyles=['-'])
-ax.set_title('Preprocessed data with SVM decision funtion boundaries')
+ax.set_title('Preprocessed data with SVM decision function boundaries')

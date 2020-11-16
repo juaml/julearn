@@ -1,5 +1,5 @@
 """
-Tunning Hyperparameters
+Tuning Hyperparameters
 =======================
 
 This example uses the 'fmri' dataset, performs simple binary classification
@@ -107,7 +107,7 @@ print(scores['test_score'].mean())
 print(estimator.best_params_)
 
 ###############################################################################
-# It seems that without tunning the gamma parameter we had a better accuracy.
+# It seems that without tuning the gamma parameter we had a better accuracy.
 # Let's add the default value and see what happens.
 model_params = {
     'svm__kernel': 'rbf',
