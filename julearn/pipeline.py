@@ -11,7 +11,7 @@ from . utils import raise_error
 def create_dataframe_pipeline(steps,
                               default_returned_features='unknown',
                               default_transform_column='continuous'):
-    """Creates a Sklearn pipeline using the provided steps and wrapping all
+    """Creates a sklearn pipeline using the provided steps and wrapping all
     transformers into the DataFrameTransformer.
 
     Parameters
@@ -97,7 +97,7 @@ class ExtendedDataFramePipeline(BaseEstimator):
     confounds : list[str], optional
         a list of column names which are confounds ,by default None
     categorical_features : list[str], optional
-        a list of column names which are cateroical features,by default None
+        a list of column names which are categorical features,by default None
 
     """
 
@@ -329,13 +329,9 @@ def create_extended_pipeline(
         The first is always the name of the step as a str.
         Second the model/transformer following sklearns style.
         Third (optional) returned_features following DataFrameTransformer.
-<<<<<<< HEAD
-        defaults to 'unkown'
+        defaults to 'unknown'
         Fourth (optional) transform_column follwing DataFrameTransformer.
         defaults to 'continuous'
-=======
-        Fourth (optional) transform_column following DataFrameTransformer.
->>>>>>> main
 
     preprocess_transformer_target : y_transform
         A transformer, which takes in X, y and outputs a transformed y.
