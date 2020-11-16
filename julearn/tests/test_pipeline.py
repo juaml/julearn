@@ -370,3 +370,33 @@ def test_preprocess_until_ExtendedDataFramePipeline():
     with pytest.raises(ValueError, match='banana_pie is not a valid'):
         extended_pipe.preprocess(
             X, y, 'banana_pie', return_trans_column_type=True)
+
+
+def test_remove_column_types_ExtendedDataFramePipe():
+
+    feature_steps = [('zscore', StandardScaler(), 'same'),
+                     ('pca', PCA(), 'unknown'),
+                     ]
+    model = ('lr', LinearRegression())
+
+    steps = feature_steps + [model]
+    confound_steps = [('zscore', StandardScaler(), 'same'),
+                      ('zscore_2', StandardScaler(), 'same')]
+
+    y_transformer = TargetTransfromerWrapper(StandardScaler())
+
+    steps_pipe = create_dataframe_pipeline(steps=steps)
+    confounds_pipe = create_dataframe_pipeline(
+        steps=confound_steps,
+        default_returned_features='same',
+        default_transform_column='confound')
+
+    extended_pipe = ExtendedDataFramePipeline(
+        dataframe_pipeline=steps_pipe,
+        y_transformer=y_transformer,
+        confound_dataframe_pipeline=confounds_pipe,
+        confounds=['B'])
+
+    extended_pipe.fit(X, y)
+    X_removed = extended_pipe._remove_column_types(X_with_types)
+    assert (X_removed.columns == list('abcdef')).all()
