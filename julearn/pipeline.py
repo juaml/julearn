@@ -98,9 +98,7 @@ class ExtendedDataFramePipeline(BaseEstimator):
         a list of column names which are confounds ,by default None
     categorical_features : list[str], optional
         a list of column names which are cateroical features,by default None
-    return_trans_column_type : bool, optional
-        whether to return transformed column names with the associated
-        column type, by default False
+
     """
 
     column_type_sep = '__:type:__'
@@ -109,14 +107,13 @@ class ExtendedDataFramePipeline(BaseEstimator):
                  y_transformer=None,
                  confound_dataframe_pipeline=None,
                  confounds=None, categorical_features=None,
-                 return_trans_column_type=False):
+                 ):
 
         self.dataframe_pipeline = dataframe_pipeline
         self.y_transformer = y_transformer
         self.confound_dataframe_pipeline = confound_dataframe_pipeline
         self.confounds = confounds
         self.categorical_features = categorical_features
-        self.return_trans_column_type = return_trans_column_type
 
     def fit(self, X, y=None):
 
@@ -168,11 +165,6 @@ class ExtendedDataFramePipeline(BaseEstimator):
     def transform(self, X):
         X_conf_trans = self.transform_confounds(X)
         X_trans = self.dataframe_pipeline.transform(X_conf_trans)
-        if not self.return_trans_column_type:
-            X_trans = (X_trans
-                       .rename(columns=self.col_name_mapper_inverse_)
-                       .copy()
-                       )
         return X_trans
 
     def transform_target(self, X, y):
@@ -182,12 +174,28 @@ class ExtendedDataFramePipeline(BaseEstimator):
 
     def transform_confounds(self, X):
         X = self._recode_columns(X)
-        if self.confounds is None:
+        if self.confounds is None or self.confound_dataframe_pipeline is None:
             return X
         else:
             return self.confound_dataframe_pipeline.transform(X)
 
-    def preprocess(self, X, y, until=None):
+    def preprocess(self, X, y, until=None, return_trans_column_type=False):
+        """
+
+        Parameters
+        ----------
+        until : str, optional
+            the name of the transformer until which preprocess
+            should transform, by default None
+        return_trans_column_type : bool, optional
+            whether to return transformed column names with the associated
+            column type, by default False
+
+        Returns
+        -------
+        tuple(pd.DataFrame, pd.Series)
+            Features and target after preprocessing.
+        """
         # TODO incase no model at the end
         old_model = self.dataframe_pipeline.steps.pop()
         if until is None:
@@ -221,6 +229,8 @@ class ExtendedDataFramePipeline(BaseEstimator):
                 y_trans = self.transform_target(X, y)
 
         self.dataframe_pipeline.steps.append(old_model)
+        if not return_trans_column_type:
+            X_trans = self._remove_column_types(X_trans)
         return X_trans, y_trans
 
     def fit_transform(self, X, y=None):
@@ -278,12 +288,6 @@ class ExtendedDataFramePipeline(BaseEstimator):
                                  for col_name in X.columns
                                  }
 
-        self.col_name_mapper_inverse_ = {
-            val: key
-            for key, val in self.col_name_mapper_.items()
-
-        }
-
     def _recode_columns(self, X):
         return X.rename(columns=self.col_name_mapper_).copy()
 
@@ -295,6 +299,19 @@ class ExtendedDataFramePipeline(BaseEstimator):
             if name == step_name:
                 break
         return X_transformed
+
+    def _remove_column_types(self, X_trans):
+
+        inverse_col_name_mapper = {
+            col: col.split('__:type:__')[0]
+            for col in X_trans.columns
+        }
+        X_trans = (X_trans
+                   .rename(columns=inverse_col_name_mapper)
+                   .copy()
+                   )
+
+        return X_trans
 
 
 def create_extended_pipeline(
@@ -312,7 +329,9 @@ def create_extended_pipeline(
         The first is always the name of the step as a str.
         Second the model/transformer following sklearns style.
         Third (optional) returned_features following DataFrameTransformer.
+        defaults to 'unkown'
         Fourth (optional) transform_column follwing DataFrameTransformer.
+        defaults to 'continuous'
 
     preprocess_transformer_target : y_transform
         A transformer, which takes in X, y and outputs a transformed y.

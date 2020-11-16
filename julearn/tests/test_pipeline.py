@@ -147,7 +147,8 @@ def test_ExtendedDataFramePipeline_transform_with_categorical():
     X_trans_sklearn = sklearn_pipe.fit_transform(X.loc[:, ['A', 'B']])
 
     assert_array_equal(X_trans.loc[:, ['A', 'B']].values, X_trans_sklearn)
-    assert_frame_equal(X_trans.loc[:, ['C']], X.loc[:, ['C']])
+    assert_array_equal(X_trans.loc[:, ['C__:type:__categorical']].values,
+                       X.loc[:, ['C']].values)
 
 
 def test_ExtendedDataFramePipeline_in_cv_no_error():
@@ -295,7 +296,8 @@ def test_preprocess_all_ExtendedDataFramePipeline():
     y_trans = y_transformer.fit_transform(X_conf, y)
     X_trans = feature_pipe.fit_transform(X_conf, y_trans)
 
-    X_trans_preprocess, y_trans_preprocess = extended_pipe.preprocess(X, y)
+    X_trans_preprocess, y_trans_preprocess = extended_pipe.preprocess(
+        X, y, return_trans_column_type=True)
 
     X_trans_preprocess = extended_pipe._recode_columns(X_trans_preprocess)
     assert_frame_equal(X_trans, X_trans_preprocess)
@@ -342,13 +344,13 @@ def test_preprocess_until_ExtendedDataFramePipeline():
         X_trans = this_confounds_pipe.fit_transform(X_trans)
 
         X_trans_pipe, y_trans_pipe = extended_pipe.preprocess(
-            X, y, until='confound_' + name)
+            X, y, until='confound_' + name, return_trans_column_type=True)
 
         assert_frame_equal(X_trans, X_trans_pipe)
         assert_array_equal(y_trans, y_trans_pipe)
 
     X_trans_pipe, y_trans_pipe = extended_pipe.preprocess(
-        X, y, until='target_')
+        X, y, until='target_', return_trans_column_type=True)
     y_trans = y_transformer.fit_transform(X_trans, y_trans)
     assert_frame_equal(X_trans, X_trans_pipe)
     assert_array_equal(y_trans, y_trans_pipe)
@@ -360,10 +362,11 @@ def test_preprocess_until_ExtendedDataFramePipeline():
         X_trans = this_feature_pipe.fit_transform(X_trans)
 
         X_trans_pipe, y_trans_pipe = extended_pipe.preprocess(
-            X, y, until=name)
+            X, y, until=name, return_trans_column_type=True)
 
         assert_frame_equal(X_trans, X_trans_pipe)
         assert_array_equal(y_trans, y_trans_pipe)
 
     with pytest.raises(ValueError, match='banana_pie is not a valid'):
-        extended_pipe.preprocess(X, y, 'banana_pie')
+        extended_pipe.preprocess(
+            X, y, 'banana_pie', return_trans_column_type=True)

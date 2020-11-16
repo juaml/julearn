@@ -38,7 +38,7 @@ class DataFrameTransformer(TransformerMixin):
             Valid column types are: `confound`, 'continuous' and 'categorical'.
             Furthermore, you can enter `all` to transform all columns,
             `all_features` to transform all columns excluding the confound
-            or provide a list of valid column types., by default 'all'
+            or provide a list of valid column types, by default 'all'
         returned_features : str, optional
             `unknown` leads to created column names,
             `unknown_same_type` leads to created column names
