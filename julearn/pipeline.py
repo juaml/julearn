@@ -196,7 +196,7 @@ class ExtendedDataFramePipeline(BaseEstimator):
         tuple(pd.DataFrame, pd.Series)
             Features and target after preprocessing.
         """
-        # TODO incase no model at the end
+        # TODO in case no model at the end
         old_model = self.dataframe_pipeline.steps.pop()
         if until is None:
             X_trans = self.transform(X)
@@ -330,7 +330,7 @@ def create_extended_pipeline(
         Second the model/transformer following sklearns style.
         Third (optional) returned_features following DataFrameTransformer.
         defaults to 'unknown'
-        Fourth (optional) transform_column follwing DataFrameTransformer.
+        Fourth (optional) transform_column following DataFrameTransformer.
         defaults to 'continuous'
 
     preprocess_transformer_target : y_transform
