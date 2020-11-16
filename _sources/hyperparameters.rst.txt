@@ -26,16 +26,16 @@ underscores (``__``). For example, if we want to specify the parameter
 
 TODO: Add doc for confound and y transformers hyperparameters
 
-Tunning Hyperparameters
+Tuning Hyperparameters
 ***********************
-Another useful techinique is called *hyperparameter tunning*. This techinique
+Another useful technique is called *hyperparameter tuning*. This technique
 is normally applied when we want to set the hyperparameters in a data driven
 way. 
 
 In this case, we use yet another cross-validation scheme to split the training
 data and evaluate the best set of hyperparameters for our model.
 
-In julearn, hyperparameter tunning is enabled by giving more than one option
+In julearn, hyperparameter tuning is enabled by giving more than one option
 for at least one hyperparameter.
 
 For example, obtaining the best regularization parameter (``C``) for the *svm*
@@ -58,7 +58,7 @@ hyperparameter search will be done:
 * ``search``: The kind of algorithm to apply. The value ``'grid'`` (default)
   will apply a `GridSearchCV`. The value ``'random'`` will use a 
   `RandomizedSearchCV`_
-* ``cv``: The cross-validation scheme to use for the hyperparameter tunning.
+* ``cv``: The cross-validation scheme to use for the hyperparameter tuning.
   The default is to use the same scheme as for the model evaluation.
 * ``scoring``: The scoring metric to optimize.
 * ``search_params``: Additional parameters for the search algorithm.
@@ -83,6 +83,6 @@ random combinations.
     run_cross_validation(X, y, data=df, model='svm', model_params=model_params)
 
 
-For more information, see scikit-learn's `Hyperparameter Tunning`_.
+For more information, see scikit-learn's `Hyperparameter Tuning`_.
 
 

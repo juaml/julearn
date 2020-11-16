@@ -68,7 +68,7 @@ For more information, check python's `Regular Expressions`_.
 2. Using Numpy arrays
 ^^^^^^^^^^^^^^^^^^^^^
 This method allows `X`, `y`, `confounds` and groups to be specified as 
-n-dimensional arrays. In this case, the number of samples fo `X`, `y`,
+n-dimensional arrays. In this case, the number of samples for `X`, `y`,
 `confounds` and `groups` must match:
 
 .. code-block:: python
@@ -94,7 +94,7 @@ Additionally, `y` and `groups` must be one-dimensional:
     y.ndim == 1
     groups.ndim == 1
 
-The previous example can be also writen as numpy arrays:
+The previous example can be also written as numpy arrays:
 
 .. code-block:: python
 
@@ -107,7 +107,7 @@ The previous example can be also writen as numpy arrays:
     y = df_iris[target].values
     confounds = df_iris[confound_names].values
 
-And finally call :func:`.run_cross_validation` without specifing the `df`
+And finally call :func:`.run_cross_validation` without specifying the `df`
 parameter:
 
 .. code-block:: python

@@ -20,7 +20,7 @@ components and a Column Type System:
 
 - :class:`ExtendedDataFramePipeline` combines all the other components to
   create a coherent pipeline, which can be used inside of cross-validation.
-  You can use :func:`.create_extended_pipeline` as a convinience function to 
+  You can use :func:`.create_extended_pipeline` as a convenience function to 
   create an :class:`.ExtendedDataFramePipeline`.
 
   .. note::
@@ -33,7 +33,7 @@ components and a Column Type System:
   apply different transformers to different sets of columns
   inside of the DataFrame. The ExtendedDataFramePipeline uses such 
   DataFramePipelines to transform confounds, features and subsets of both 
-  seperatley. 
+  separately. 
 
 - :class:`DataFrameTransformer` takes in a normal scikit-learn compatible 
   transformer and returns one which can be applied to a subset of features and 
@@ -56,14 +56,14 @@ continuous variables/features, categorical variables/features and confounds.
   Therefore, users do not have to work with it directley.
   For example, by providing the confounds and categorical variables to the
   :class:`.ExtendedDataFramePipeline` it has all the information needed to 
-  apply the Column Type Sytem internally without any further input or changes
+  apply the Column Type System internally without any further input or changes
   to the `pandas.DataFrame`.
 
 How it works
 ^^^^^^^^^^^^
 Every `pandas.DataFrame`_ column has a column name. 
 Inside of Julearn we add another string containing the type of the column 
-seperated by our delimiter: '__:type:__' to the original column names. 
+separated by our delimiter: '__:type:__' to the original column names. 
 For example: 
 
   * We have the original columns :
