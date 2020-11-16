@@ -364,8 +364,15 @@ def test_preprocess_until_ExtendedDataFramePipeline():
         X_trans_pipe, y_trans_pipe = extended_pipe.preprocess(
             X, y, until=name, return_trans_column_type=True)
 
+        X_trans_pipe_types, y_trans_pipe_types = extended_pipe.preprocess(
+            X, y, until=name, return_trans_column_type=False)
+
         assert_frame_equal(X_trans, X_trans_pipe)
         assert_array_equal(y_trans, y_trans_pipe)
+
+        assert_array_equal(X_trans_pipe_types.values,
+                           X_trans_pipe_types.values)
+        assert_array_equal(y_trans_pipe_types, y_trans_pipe_types)
 
     with pytest.raises(ValueError, match='banana_pie is not a valid'):
         extended_pipe.preprocess(
