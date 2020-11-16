@@ -16,7 +16,7 @@
 .. _`Precision`: https://scikit-learn.org/stable/modules/model_evaluation.html#precission-score
 .. _`Metrics`: https://scikit-learn.org/stable/modules/model_evaluation.html#classification-metrics
 .. _`Cross Validation`: https://scikit-learn.org/stable/modules/classes.html#module-sklearn.model_selection
-.. _`Hyperparameter Tunning`: https://scikit-learn.org/stable/modules/grid_search.html
+.. _`Hyperparameter Tuning`: https://scikit-learn.org/stable/modules/grid_search.html
 
 .. _`Standard Scaler`: https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html
 .. _`StandardScaler`: https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html
