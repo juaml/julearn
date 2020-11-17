@@ -1,7 +1,7 @@
 .. include:: links.inc
 
 Maintaining julearn
-==================
+===================
 
 
 Versioning
