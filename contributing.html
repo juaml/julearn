@@ -129,7 +129,7 @@ after your pull request is merged, the issue is fixed/closed.</p>
 <p>In order to push into a repository, you will need to have push permissions.
 Github provides a way of doing this by forking (creating a copy) the repository
 into one under your Github user account in.</p>
-<p>Simply go to <a class="reference external" href="https://github.com/juaml/julearn">julearn Github</a>  and click on the <em>Fork</em> button on the top-right
+<p>Simply go to <a class="reference external" href="https://github.com/juaml/julearn">julearn Github</a>  and click on the ^Fork^ button on the top-right
 corner.</p>
 <p>Once you do this, there will be a <code class="docutils literal notranslate"><span class="pre">julearn</span></code> repository under your username.
 For example <code class="docutils literal notranslate"><span class="pre">fraimondo/julearn</span></code>.</p>
@@ -189,13 +189,66 @@ make html
 <div class="section" id="create-a-pull-request">
 <h3>2.5 Create a pull request<a class="headerlink" href="#create-a-pull-request" title="Permalink to this headline">¶</a></h3>
 <p>Now that you are happy with your contribution, just navigate to your fork
-of the julearn repository in <a class="reference external" href="https://github.com/">Github</a> and click on the <em>Compare &amp; pull
-request</em> button.</p>
+of the julearn repository in <a class="reference external" href="https://github.com/">Github</a> and click on the ^Compare &amp; pull
+request^ button.</p>
 <p>Fill in the pull request message and you will be in contact with the julearn
 mantainers who will review your contribution. If they suggest any modification,
 go back to <a class="reference internal" href="#do-changes"><span class="std std-ref">2.3 Do the changes</span></a>.</p>
 <p>Once everyone is happy, your modifications will be included in the development
 version and later on, in the release version.</p>
+</div>
+</div>
+<div class="section" id="writing-examples">
+<h2>3. Writing Examples<a class="headerlink" href="#writing-examples" title="Permalink to this headline">¶</a></h2>
+<p>Examples are run and displayed in HTML format using <a class="reference external" href="https://sphinx-gallery.github.io/stable/index.html">sphinx gallery</a>. There
+are two sub directories in the <code class="docutils literal notranslate"><span class="pre">examples</span></code> directory: <code class="docutils literal notranslate"><span class="pre">basic</span></code> and
+<code class="docutils literal notranslate"><span class="pre">advanced</span></code>. To add an example, just create a <code class="docutils literal notranslate"><span class="pre">.py</span></code> file that starts either
+with <code class="docutils literal notranslate"><span class="pre">plot_</span></code> or <code class="docutils literal notranslate"><span class="pre">run_</span></code>, dependending on whether the example generates a
+figure or not.</p>
+<p>The first lines of the example should be a python block comment with a title,
+a description of the example an the following include directive to be able to
+use the links.</p>
+<p>The format use for text is RST. Check the <a class="reference external" href="https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#inline-markup">sphinx RST reference</a> for more
+details.</p>
+<p>Example of the first lines:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Simple Binary Classification</span>
+<span class="sd">============================</span>
+
+<span class="sd">This example uses the &#39;iris&#39; dataset and performs a simple binary</span>
+<span class="sd">classification using a Support Vector Machine classifier.</span>
+
+<span class="sd">.. include:: ../../links.inc</span>
+<span class="sd">&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+<p>The rest of the script will be executed. as normal python code. In order to
+render the output and embed formatted text within the code, you need to add
+a 79 <code class="docutils literal notranslate"><span class="pre">#</span></code> (a full line) at the point in which you want to render and add text.
+Each line of text shall be preceded with <code class="docutils literal notranslate"><span class="pre">#</span></code>. The code that it’s not
+commented will be executed.</p>
+<p>The following example will create 3 texts and render the output between the
+texts.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">###############################################################################</span>
+<span class="c1"># Imports needed for the example</span>
+<span class="kn">from</span> <span class="nn">seaborn</span> <span class="kn">import</span> <span class="n">load_dataset</span>
+<span class="kn">from</span> <span class="nn">julearn</span> <span class="kn">import</span> <span class="n">run_cross_validation</span>
+<span class="kn">from</span> <span class="nn">julearn.utils</span> <span class="kn">import</span> <span class="n">configure_logging</span>
+
+<span class="c1">###############################################################################</span>
+<span class="n">df_iris</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s1">&#39;iris&#39;</span><span class="p">)</span>
+
+<span class="c1">###############################################################################</span>
+<span class="c1"># The dataset has three kind of species. We will keep two to perform a binary</span>
+<span class="c1"># classification.</span>
+<span class="n">df_iris</span> <span class="o">=</span> <span class="n">df_iris</span><span class="p">[</span><span class="n">df_iris</span><span class="p">[</span><span class="s1">&#39;species&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s1">&#39;versicolor&#39;</span><span class="p">,</span> <span class="s1">&#39;virginica&#39;</span><span class="p">])]</span>
+</pre></div>
+</div>
+<p>Finally, when the example is done, you can run as a normal python script.
+To generate the HTML, just build the docs:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> doc
+make html
+</pre></div>
 </div>
 </div>
 </div>
@@ -221,6 +274,7 @@ version and later on, in the release version.</p>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Contributing to julearn</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#setting-up-the-development-environment">1. Setting up the development environment</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#contributing-with-a-pull-request">2. Contributing with a pull request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#writing-examples">3. Writing Examples</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="maintaining.html">Maintaining julearn</a></li>
