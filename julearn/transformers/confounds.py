@@ -10,35 +10,15 @@ from .. utils import raise_error, pick_columns
 
 
 class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
-    """Transformer which can use pd.DataFrames and remove the confounds
-    from the features by subtracting the predicted features
-    given the confounds from the actual features.
-
-    Attributes
-    ----------
-    model_confound : sklearn.base.BaseEstimator
-        Model used to predict all features independently using the confounds as
-        features. The predictions of these models are then subtracted from each
-        feature.
-    confounds_match : list[str] or str
-        A string representing a regular expression by which the confounds
-        can be detected from the column names.
-
-    threshold : float or None
-        All residual values after confound removal which fall under the
-        threshold will be set to 0. None means that no threshold will be
-        applied.
-    keep_confound : bool, optional
-        Whether to keep the confound after removing it from the features
-        or not, default False
-    """
-
     def __init__(self, model_confound=None,
                  confounds_match='.*__:type:__confound',
                  threshold=None,
                  keep_confounds=False,
                  ):
-        """
+        """Transformer which can use pd.DataFrames and remove the confounds
+        from the features by subtracting the predicted features
+        given the confounds from the actual features.
+
         Parameters
         ----------
         model_confound : sklearn.base.BaseEstimator
