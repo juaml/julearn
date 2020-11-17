@@ -174,7 +174,7 @@ by changing the column names to:</p>
 <h2>ExtendedDataFramePipeline<a class="headerlink" href="#extendeddataframepipeline" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt id="julearn.pipeline.ExtendedDataFramePipeline">
-<em class="property">class </em><code class="sig-prename descclassname">julearn.pipeline.</code><code class="sig-name descname">ExtendedDataFramePipeline</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dataframe_pipeline</span></em>, <em class="sig-param"><span class="n">y_transformer</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">confound_dataframe_pipeline</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">confounds</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">categorical_features</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">return_trans_column_type</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.pipeline.ExtendedDataFramePipeline" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">julearn.pipeline.</code><code class="sig-name descname">ExtendedDataFramePipeline</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dataframe_pipeline</span></em>, <em class="sig-param"><span class="n">y_transformer</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">confound_dataframe_pipeline</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">confounds</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">categorical_features</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.pipeline.ExtendedDataFramePipeline" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class creating a custom metamodel like a Pipeline.
 In practice this should be created
 using julearn.pipeline.create_extended_pipeline.
@@ -205,10 +205,7 @@ convert most sklearn transformers to a target_transformer.</p>
 </dd>
 <dt><strong>confounds</strong><span class="classifier">list[str], optional</span></dt><dd><p>a list of column names which are confounds ,by default None</p>
 </dd>
-<dt><strong>categorical_features</strong><span class="classifier">list[str], optional</span></dt><dd><p>a list of column names which are cateroical features,by default None</p>
-</dd>
-<dt><strong>return_trans_column_type</strong><span class="classifier">bool, optional</span></dt><dd><p>whether to return transformed column names with the associated
-column type, by default False</p>
+<dt><strong>categorical_features</strong><span class="classifier">list[str], optional</span></dt><dd><p>a list of column names which are categorical features,by default None</p>
 </dd>
 </dl>
 </dd>
@@ -225,7 +222,9 @@ column type, by default False</p>
 The first is always the name of the step as a str.
 Second the model/transformer following sklearns style.
 Third (optional) returned_features following DataFrameTransformer.
-Fourth (optional) transform_column following DataFrameTransformer.</p>
+defaults to ‘unknown’
+Fourth (optional) transform_column following DataFrameTransformer.
+defaults to ‘continuous’</p>
 </dd>
 <dt><strong>preprocess_transformer_target</strong><span class="classifier">y_transform</span></dt><dd><p>A transformer, which takes in X, y and outputs a transformed y.</p>
 </dd>
@@ -253,7 +252,7 @@ or the column_name of one categorical feature</p>
 <dl class="py function">
 <dt id="julearn.pipeline.create_dataframe_pipeline">
 <code class="sig-prename descclassname">julearn.pipeline.</code><code class="sig-name descname">create_dataframe_pipeline</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">steps</span></em>, <em class="sig-param"><span class="n">default_returned_features</span><span class="o">=</span><span class="default_value">'unknown'</span></em>, <em class="sig-param"><span class="n">default_transform_column</span><span class="o">=</span><span class="default_value">'continuous'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.pipeline.create_dataframe_pipeline" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates a Sklearn pipeline using the provided steps and wrapping all
+<dd><p>Creates a sklearn pipeline using the provided steps and wrapping all
 transformers into the DataFrameTransformer.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -309,7 +308,7 @@ only separated by the column_type_sep.
 Valid column types are: <cite>confound</cite>, ‘continuous’ and ‘categorical’.
 Furthermore, you can enter <cite>all</cite> to transform all columns,
 <cite>all_features</cite> to transform all columns excluding the confound
-or provide a list of valid column types., by default ‘all’</p>
+or provide a list of valid column types, by default ‘all’</p>
 </dd>
 <dt><strong>returned_features</strong><span class="classifier">str, optional</span></dt><dd><p><cite>unknown</cite> leads to created column names,
 <cite>unknown_same_type</cite> leads to created column names

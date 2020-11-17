@@ -1,0 +1,502 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Confound Removal in Advanced Settings &#8212; julearn  documentation</title>
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pydoctheme.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/gallery-dataframe.css" />
+    
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Reference" href="../../api.html" />
+    <link rel="prev" title="Tuning Hyperparameters" href="run_hyperparameter_tuning.html" />
+    <link rel="shortcut icon" type="image/png" href="../../_static/py.png" />
+    
+    <script type="text/javascript" src="../../_static/copybutton.js"></script>
+    
+     
+
+  </head><body>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../api.html" title="Reference"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="run_hyperparameter_tuning.html" title="Tuning Hyperparameters"
+             accesskey="P">previous</a> |</li>
+    <li><img src="../../_static/py.png" alt=""
+             style="vertical-align: middle; margin-top: -1px"/></li>
+    <li><a href="https://www.python.org/">Python</a> &#187;</li>
+    
+    <a href="../../index.html">julearn  documentation</a> &#187;
+    
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Advanced Examples</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Confound Removal in Advanced Settings</a></li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>    
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-auto-examples-advanced-run-advanced-confound-removal-py"><span class="std std-ref">here</span></a>     to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="confound-removal-in-advanced-settings">
+<span id="sphx-glr-auto-examples-advanced-run-advanced-confound-removal-py"></span><h1>Confound Removal in Advanced Settings<a class="headerlink" href="#confound-removal-in-advanced-settings" title="Permalink to this headline">¶</a></h1>
+<p>In most cases confound removal is a simple operation.
+You regress out the confound from the features and only continue working with
+these new deconfounded features. This example will not focus on these
+typical cases. Instead, this will show how to keep the confounds and use
+them as additional features.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Authors: Sami Hamdan &lt;s.hamdan@fz-juelich.de&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># License: AGPL</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_diabetes.html#sklearn.datasets.load_diabetes" title="sklearn.datasets.load_diabetes" class="sphx-glr-backref-module-sklearn-datasets sphx-glr-backref-type-py-function"><span class="n">load_diabetes</span></a>  <span class="c1"># to load data</span>
+<span class="kn">from</span> <span class="nn">julearn.pipeline</span> <span class="kn">import</span> <span class="n">create_extended_pipeline</span>
+<span class="kn">from</span> <span class="nn">julearn.transformers</span> <span class="kn">import</span> <span class="p">(</span><span class="n">get_transformer</span><span class="p">,</span>
+                                  <a href="https://scikit-learn.org/stable/modules/generated/sklearn.base.TransformerMixin.html#sklearn.base.TransformerMixin" title="sklearn.base.TransformerMixin" class="sphx-glr-backref-module-sklearn-base sphx-glr-backref-type-py-class"><span class="n">DataFrameConfoundRemover</span></a><span class="p">,</span>
+                                  <a href="https://scikit-learn.org/stable/modules/generated/sklearn.base.TransformerMixin.html#sklearn.base.TransformerMixin" title="sklearn.base.TransformerMixin" class="sphx-glr-backref-module-sklearn-base sphx-glr-backref-type-py-class"><span class="n">ChangeColumnTypes</span></a><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">julearn.estimators</span> <span class="kn">import</span> <span class="n">get_model</span>
+
+
+<span class="c1"># load in the data</span>
+<span class="n">df_features</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_diabetes.html#sklearn.datasets.load_diabetes" title="sklearn.datasets.load_diabetes" class="sphx-glr-backref-module-sklearn-datasets sphx-glr-backref-type-py-function"><span class="n">load_diabetes</span></a><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">as_frame</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/travis/virtualenv/python3.6.7/lib/python3.6/importlib/_bootstrap.py:219: RuntimeWarning: numpy.ufunc size changed, may indicate binary incompatibility. Expected 192 from C header, got 216 from PyObject
+  return f(*args, **kwds)
+</pre></div>
+</div>
+<p>First, we can have a look at our features.
+You can see it includes
+Age, BMI, average blood pressure (bp) and 6 other measures from s1 to s6
+Furthermore, it includes sex which will be considered as a confound in
+this example.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Features: &#39;</span><span class="p">,</span> <span class="n">df_features</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Features:          age       sex       bmi  ...        s4        s5        s6
+0  0.038076  0.050680  0.061696  ... -0.002592  0.019908 -0.017646
+1 -0.001882 -0.044642 -0.051474  ... -0.039493 -0.068330 -0.092204
+2  0.085299  0.050680  0.044451  ... -0.002592  0.002864 -0.025930
+3 -0.089063 -0.044642 -0.011595  ...  0.034309  0.022692 -0.009362
+4  0.005383 -0.044642 -0.036385  ... -0.002592 -0.031991 -0.046641
+
+[5 rows x 10 columns]
+</pre></div>
+</div>
+<p>Second, we can have a look at the target</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Target: &#39;</span><span class="p">,</span> <span class="n">target</span><span class="o">.</span><span class="n">describe</span><span class="p">())</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Target:  count    442.000000
+mean     152.133484
+std       77.093005
+min       25.000000
+25%       87.000000
+50%      140.500000
+75%      211.500000
+max      346.000000
+Name: target, dtype: float64
+</pre></div>
+</div>
+<p>In the following we will explore different settings of confound removal
+using Julearns pipeline functionalities.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Everything, shown here is also possible in Julearns <cite>run_cross_validation</cite>
+function.</p>
+</div>
+<div class="section" id="confound-removal-typical-use-case">
+<h2>Confound Removal Typical Use Case<a class="headerlink" href="#confound-removal-typical-use-case" title="Permalink to this headline">¶</a></h2>
+<p>Here, we first deconfound the features.
+The confound is automatically dropped by the <cite>.DataFrameConfoundRemover</cite>.
+Afterwards, we will transform our features with a pca and run
+a lienar regression</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">typical_pipe</span> <span class="o">=</span> <span class="n">create_extended_pipeline</span><span class="p">(</span>
+    <span class="n">preprocess_steps_features</span><span class="o">=</span><span class="p">[</span>
+        <span class="p">(</span><span class="s1">&#39;remove_confound&#39;</span><span class="p">,</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.base.TransformerMixin.html#sklearn.base.TransformerMixin" title="sklearn.base.TransformerMixin" class="sphx-glr-backref-module-sklearn-base sphx-glr-backref-type-py-class"><span class="n">DataFrameConfoundRemover</span></a><span class="p">(),</span> <span class="s1">&#39;subset&#39;</span><span class="p">,</span> <span class="s1">&#39;all&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;pca&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">get_transformer</span><span class="p">(</span><span class="s1">&#39;pca&#39;</span><span class="p">))</span>
+    <span class="p">],</span>
+    <span class="n">preprocess_steps_confounds</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">preprocess_transformer_target</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;lr&#39;</span><span class="p">,</span> <span class="n">get_model</span><span class="p">(</span><span class="s1">&#39;linreg&#39;</span><span class="p">,</span> <span class="s1">&#39;regression&#39;</span><span class="p">)),</span>
+    <span class="n">confounds</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;sex&#39;</span><span class="p">],</span>
+    <span class="n">categorical_features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">typical_pipe</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df_features</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>ExtendedDataFramePipeline(categorical_features=[], confounds=[&#39;sex&#39;],
+                          dataframe_pipeline=Pipeline(steps=[(&#39;remove_confound&#39;,
+                                                              &lt;julearn.transformers.dataframe.DataFrameTransformer object at 0x7f572dd7a5c0&gt;),
+                                                             (&#39;pca&#39;,
+                                                              &lt;julearn.transformers.dataframe.DataFrameTransformer object at 0x7f572dd7a6d8&gt;),
+                                                             [&#39;lr&#39;,
+                                                              LinearRegression()]]))
+</pre></div>
+</div>
+<p>We can use the <cite>preprocess</cite> method of the <cite>.ExtendedDataFramePipeline</cite>
+to inspect the transformations/preprocessing steps of our pipeline.
+By providing a step name to the <cite>until</cite> argument of the
+<cite>preprocess</cite> method we return the transformed X and y including to this step.
+This output always includes the transformed
+X and transformed y as a tuple.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">X_deconfounded</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">typical_pipe</span><span class="o">.</span><span class="n">preprocess</span><span class="p">(</span>
+    <span class="n">df_features</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">until</span><span class="o">=</span><span class="s1">&#39;remove_confound&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">X_deconfounded</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>        age       bmi        bp  ...        s4        s5        s6
+0  0.029271  0.057228  0.009658  ... -0.019424  0.012311 -0.028194
+1  0.005874 -0.047538 -0.015569  ... -0.024667 -0.061637 -0.082913
+2  0.076494  0.039983 -0.017885  ... -0.019424 -0.004734 -0.036479
+3 -0.081307 -0.007659 -0.025897  ...  0.049135  0.029385 -0.000071
+4  0.013139 -0.032449  0.032632  ...  0.012234 -0.025299 -0.037349
+
+[5 rows x 9 columns]
+</pre></div>
+</div>
+<p>As you can see the confound <cite>sex</cite> was dropped and only the deconfounded
+features are used in the following pca.
+But what if you want to keep the confound in the feature space.</p>
+<p>For example, let’s assume that you want to do a pca on the deconfounded
+features, but still want to keep the confound as a feature.
+This would mean that the following pca would also use the confound
+as a feature.
+Let us have a closer look to the confound remover in order to understand
+how we could achieve such a task:</p>
+<dl class="py class">
+<dt id="julearn.transformers.DataFrameConfoundRemover">
+<em class="property">class </em><code class="sig-prename descclassname">julearn.transformers.</code><code class="sig-name descname">DataFrameConfoundRemover</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model_confound</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">confounds_match</span><span class="o">=</span><span class="default_value">'.*__:type:__confound'</span></em>, <em class="sig-param"><span class="n">threshold</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">keep_confounds</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.transformers.DataFrameConfoundRemover" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transformer which can use pd.DataFrames and remove the confounds
+from the features by subtracting the predicted features
+given the confounds from the actual features.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>model_confound</strong><span class="classifier">sklearn.base.BaseEstimator</span></dt><dd><p>Model used to predict all features independently
+using the confounds as features. The predictions of these models
+are then subtracted from each feature, defaults to
+LinearRegression().</p>
+</dd>
+<dt><strong>confounds_match</strong><span class="classifier">list[str] or str</span></dt><dd><p>A string representing a regular expression by which the confounds
+can be detected from the column names.
+You can use the exact column names or another regex.
+The default follows the naming convention inside of julearn:
+‘.*__:type:__*.’</p>
+</dd>
+<dt><strong>threshold</strong><span class="classifier">float or None</span></dt><dd><p>All residual values after confound removal which fall under the
+threshold will be set to 0.None (default) means that no threshold
+will be applied.</p>
+</dd>
+<dt><strong>keep_confounds</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether you want to return the confound together with the confound
+removed features, default is False</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<p>As you can see above we can set the <cite>keep_confounds</cite> argument to True,
+if we want to keep the confounds.
+Here is an example of how this can look like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">keep_confound_pipe</span> <span class="o">=</span> <span class="n">create_extended_pipeline</span><span class="p">(</span>
+    <span class="n">preprocess_steps_features</span><span class="o">=</span><span class="p">[</span>
+        <span class="p">(</span><span class="s1">&#39;remove_confound&#39;</span><span class="p">,</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.base.TransformerMixin.html#sklearn.base.TransformerMixin" title="sklearn.base.TransformerMixin" class="sphx-glr-backref-module-sklearn-base sphx-glr-backref-type-py-class"><span class="n">DataFrameConfoundRemover</span></a><span class="p">(</span>
+            <span class="n">keep_confounds</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="s1">&#39;subset&#39;</span><span class="p">,</span> <span class="s1">&#39;all&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;pca&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">get_transformer</span><span class="p">(</span><span class="s1">&#39;pca&#39;</span><span class="p">))</span>
+    <span class="p">],</span>
+    <span class="n">preprocess_steps_confounds</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">preprocess_transformer_target</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;lr&#39;</span><span class="p">,</span> <span class="n">get_model</span><span class="p">(</span><span class="s1">&#39;linreg&#39;</span><span class="p">,</span> <span class="s1">&#39;regression&#39;</span><span class="p">)),</span>
+    <span class="n">confounds</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;sex&#39;</span><span class="p">],</span>
+    <span class="n">categorical_features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">keep_confound_pipe</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df_features</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>ExtendedDataFramePipeline(categorical_features=[], confounds=[&#39;sex&#39;],
+                          dataframe_pipeline=Pipeline(steps=[(&#39;remove_confound&#39;,
+                                                              &lt;julearn.transformers.dataframe.DataFrameTransformer object at 0x7f572d512ef0&gt;),
+                                                             (&#39;pca&#39;,
+                                                              &lt;julearn.transformers.dataframe.DataFrameTransformer object at 0x7f572d512e48&gt;),
+                                                             [&#39;lr&#39;,
+                                                              LinearRegression()]]))
+</pre></div>
+</div>
+<p>As you can see this will keep the confound</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">X_deconfounded</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">keep_confound_pipe</span><span class="o">.</span><span class="n">preprocess</span><span class="p">(</span>
+    <span class="n">df_features</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">until</span><span class="o">=</span><span class="s1">&#39;remove_confound&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">X_deconfounded</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>        age       sex       bmi  ...        s4        s5        s6
+0  0.029271  0.050680  0.057228  ... -0.019424  0.012311 -0.028194
+1  0.005874 -0.044642 -0.047538  ... -0.024667 -0.061637 -0.082913
+2  0.076494  0.050680  0.039983  ... -0.019424 -0.004734 -0.036479
+3 -0.081307 -0.044642 -0.007659  ...  0.049135  0.029385 -0.000071
+4  0.013139 -0.044642 -0.032449  ...  0.012234 -0.025299 -0.037349
+
+[5 rows x 10 columns]
+</pre></div>
+</div>
+<p>Even after the pca the confound will still be present
+This is the case because by default transformers only transform continuous
+features (including features without a specified type)
+and the confound is of type confound.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">X_transformed</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">keep_confound_pipe</span><span class="o">.</span><span class="n">preprocess</span><span class="p">(</span><span class="n">df_features</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">X_transformed</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+
+<span class="c1"># This means that the resulting Linear Regression will use the deconfounded</span>
+<span class="c1"># features together with the confound to predict the target.</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>   pca_component:0  pca_component:1  ...  pca_component:8       sex
+0        -0.014050         0.075715  ...        -0.002330  0.050680
+1        -0.099883        -0.062830  ...         0.002074 -0.044642
+2        -0.029014         0.053253  ...        -0.002579  0.050680
+3         0.035164        -0.001321  ...        -0.003546 -0.044642
+4        -0.003952        -0.025446  ...        -0.000516 -0.044642
+
+[5 rows x 10 columns]
+</pre></div>
+</div>
+<p>Lastly, you can also use the confound as a normal feature after confound
+removal. To do so you can either add the confound(s) to the
+transformed_columns of the each following transformers
+which return the same columns or you can use the
+<cite>.ChangeColumnTypes</cite> to change the returned confounds
+to a continuous variable like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">confound_as_feature_pipe</span> <span class="o">=</span> <span class="n">create_extended_pipeline</span><span class="p">(</span>
+    <span class="n">preprocess_steps_features</span><span class="o">=</span><span class="p">[</span>
+        <span class="p">(</span><span class="s1">&#39;remove_confound&#39;</span><span class="p">,</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.base.TransformerMixin.html#sklearn.base.TransformerMixin" title="sklearn.base.TransformerMixin" class="sphx-glr-backref-module-sklearn-base sphx-glr-backref-type-py-class"><span class="n">DataFrameConfoundRemover</span></a><span class="p">(</span>
+            <span class="n">keep_confounds</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="s1">&#39;subset&#39;</span><span class="p">,</span> <span class="s1">&#39;all&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;change_column_types&#39;</span><span class="p">,</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.base.TransformerMixin.html#sklearn.base.TransformerMixin" title="sklearn.base.TransformerMixin" class="sphx-glr-backref-module-sklearn-base sphx-glr-backref-type-py-class"><span class="n">ChangeColumnTypes</span></a><span class="p">(</span><span class="s1">&#39;.*confound&#39;</span><span class="p">,</span> <span class="s1">&#39;continuous&#39;</span><span class="p">),</span>
+         <span class="s1">&#39;from_transformer&#39;</span><span class="p">,</span> <span class="s1">&#39;all&#39;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;pca&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">get_transformer</span><span class="p">(</span><span class="s1">&#39;pca&#39;</span><span class="p">))</span>
+    <span class="p">],</span>
+    <span class="n">preprocess_steps_confounds</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">preprocess_transformer_target</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;lr&#39;</span><span class="p">,</span> <span class="n">get_model</span><span class="p">(</span><span class="s1">&#39;linreg&#39;</span><span class="p">,</span> <span class="s1">&#39;regression&#39;</span><span class="p">)),</span>
+    <span class="n">confounds</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;sex&#39;</span><span class="p">],</span>
+    <span class="n">categorical_features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">confound_as_feature_pipe</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df_features</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>ExtendedDataFramePipeline(categorical_features=[], confounds=[&#39;sex&#39;],
+                          dataframe_pipeline=Pipeline(steps=[(&#39;remove_confound&#39;,
+                                                              &lt;julearn.transformers.dataframe.DataFrameTransformer object at 0x7f572ddddeb8&gt;),
+                                                             (&#39;change_column_types&#39;,
+                                                              &lt;julearn.transformers.dataframe.DataFrameTransformer object at 0x7f572ddddef0&gt;),
+                                                             (&#39;pca&#39;,
+                                                              &lt;julearn.transformers.dataframe.DataFrameTransformer object at 0x7f572dddde48&gt;),
+                                                             [&#39;lr&#39;,
+                                                              LinearRegression()]]))
+</pre></div>
+</div>
+<p>As you can see this will keep the confound and
+change its type to a continuous variable.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">X_deconfounded</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">confound_as_feature_pipe</span><span class="o">.</span><span class="n">preprocess</span><span class="p">(</span>
+    <span class="n">df_features</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">until</span><span class="o">=</span><span class="s1">&#39;change_column_types&#39;</span><span class="p">,</span>
+    <span class="n">return_trans_column_type</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">X_deconfounded</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>        age  sex__:type:__continuous       bmi  ...        s4        s5        s6
+0  0.029271                 0.050680  0.057228  ... -0.019424  0.012311 -0.028194
+1  0.005874                -0.044642 -0.047538  ... -0.024667 -0.061637 -0.082913
+2  0.076494                 0.050680  0.039983  ... -0.019424 -0.004734 -0.036479
+3 -0.081307                -0.044642 -0.007659  ...  0.049135  0.029385 -0.000071
+4  0.013139                -0.044642 -0.032449  ...  0.012234 -0.025299 -0.037349
+
+[5 rows x 10 columns]
+</pre></div>
+</div>
+<p>Because the confound is treated as a normal continuous feature
+after removal it will be transformed in the pca as well</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">X_transformed</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">confound_as_feature_pipe</span><span class="o">.</span><span class="n">preprocess</span><span class="p">(</span><span class="n">df_features</span><span class="p">,</span> <span class="n">target</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">X_transformed</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>   pca_component:0  pca_component:1  ...  pca_component:8  pca_component:9
+0        -0.014050         0.075715  ...        -0.008604        -0.002330
+1        -0.099883        -0.062830  ...         0.024022         0.002074
+2        -0.029014         0.053253  ...        -0.001197        -0.002579
+3         0.035164        -0.001321  ...        -0.006567        -0.003546
+4        -0.003952        -0.025446  ...         0.002095        -0.000516
+
+[5 rows x 10 columns]
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.574 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-advanced-run-advanced-confound-removal-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/f951a3a75fd9907ea44bb5d9254a5ab2/run_advanced_confound_removal.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">run_advanced_confound_removal.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/8c50a7992dd738636d7b394afda27520/run_advanced_confound_removal.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">run_advanced_confound_removal.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="../../index.html">Table of Contents</a></h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installing julearn</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../input.html">Input Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pipeline.html">Main Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../steps.html">Available Pipeline Steps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../hyperparameters.html">Hyperparameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/index.html">Basic Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Advanced Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="run_combine_pandas.html">Working with pandas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run_hyperparameter_tuning.html">Tuning Hyperparameters</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Confound Removal in Advanced Settings</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing to julearn</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maintaining.html">Maintaining julearn</a></li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/auto_examples/advanced/run_advanced_confound_removal.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>  
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../api.html" title="Reference"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="run_hyperparameter_tuning.html" title="Tuning Hyperparameters"
+             >previous</a> |</li>
+    <li><img src="../../_static/py.png" alt=""
+             style="vertical-align: middle; margin-top: -1px"/></li>
+    <li><a href="https://www.python.org/">Python</a> &#187;</li>
+    
+    <a href="../../index.html">julearn  documentation</a> &#187;
+    
+
+          <li class="nav-item nav-item-1"><a href="index.html" >Advanced Examples</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Confound Removal in Advanced Settings</a></li>
+    <li class="right">
+        
+
+    <div class="inline-search" style="display: none" role="search">
+        <form class="inline-search" action="../../search.html" method="get">
+          <input placeholder="Quick search" type="text" name="q" />
+          <input type="submit" value="Go" />
+          <input type="hidden" name="check_keywords" value="yes" />
+          <input type="hidden" name="area" value="default" />
+        </form>
+    </div>
+    <script type="text/javascript">$('.inline-search').show(0);</script>
+         |
+    </li>
+
+      </ul>
+    </div>  
+    <div class="footer">
+    &copy; <a href="../../copyright.html">Copyright</a> 2020, Authors of julearn.
+    <br />
+
+    The Python Software Foundation is a non-profit corporation.
+<a href="https://www.python.org/psf/donations/">Please donate.</a>
+<br />
+    <br />
+
+    Last updated on None.
+    
+    <br />
+
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.3.1.
+    </div>
+
+  </body>
+</html>
