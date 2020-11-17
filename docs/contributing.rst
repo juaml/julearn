@@ -179,7 +179,7 @@ The first lines of the example should be a python block comment with a title,
 a description of the example an the following include directive to be able to
 use the links.
 
-The format use for text is RST. Check the `sphinx RST reference` for more
+The format use for text is RST. Check the `sphinx RST reference`_ for more
 details.
 
 Example of the first lines:
