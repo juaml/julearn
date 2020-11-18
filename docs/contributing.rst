@@ -143,7 +143,7 @@ To build the docs:
 
 .. code-block:: bash
 
-    cd doc
+    cd docs
     make html
 
 To view the documentation, open `docs/_build/html/index.html`.
@@ -230,6 +230,6 @@ To generate the HTML, just build the docs:
 
 .. code-block:: bash
 
-    cd doc
+    cd docs
     make html
 
