@@ -60,13 +60,13 @@ Set the logging level to info to see extra information
 
  .. code-block:: none
 
-    2020-11-17 18:00:49,733 - julearn - INFO - ===== Lib Versions =====
-    2020-11-17 18:00:49,733 - julearn - INFO - numpy: 1.19.0
-    2020-11-17 18:00:49,733 - julearn - INFO - scipy: 1.5.4
-    2020-11-17 18:00:49,733 - julearn - INFO - sklearn: 0.23.2
-    2020-11-17 18:00:49,733 - julearn - INFO - pandas: 1.1.4
-    2020-11-17 18:00:49,733 - julearn - INFO - julearn: 0.1.0
-    2020-11-17 18:00:49,733 - julearn - INFO - ========================
+    2020-11-18 16:19:50,736 - julearn - INFO - ===== Lib Versions =====
+    2020-11-18 16:19:50,736 - julearn - INFO - numpy: 1.19.0
+    2020-11-18 16:19:50,736 - julearn - INFO - scipy: 1.5.4
+    2020-11-18 16:19:50,736 - julearn - INFO - sklearn: 0.23.2
+    2020-11-18 16:19:50,736 - julearn - INFO - pandas: 1.1.4
+    2020-11-18 16:19:50,736 - julearn - INFO - julearn: 0.1.0
+    2020-11-18 16:19:50,736 - julearn - INFO - ========================
 
 
 
@@ -170,23 +170,23 @@ Lets do a first attempt and use a linear SVM with the default parameters.
 
  .. code-block:: none
 
-    2020-11-17 18:00:49,764 - julearn - INFO - Using default CV
-    2020-11-17 18:00:49,765 - julearn - INFO - ==== Input Data ====
-    2020-11-17 18:00:49,765 - julearn - INFO - Using dataframe as input
-    2020-11-17 18:00:49,765 - julearn - INFO - Features: ['frontal', 'parietal']
-    2020-11-17 18:00:49,765 - julearn - INFO - Target: event
-    2020-11-17 18:00:49,765 - julearn - INFO - Expanded X: ['frontal', 'parietal']
-    2020-11-17 18:00:49,765 - julearn - INFO - Expanded Confounds: []
-    2020-11-17 18:00:49,766 - julearn - INFO - ====================
-    2020-11-17 18:00:49,766 - julearn - INFO - 
-    2020-11-17 18:00:49,767 - julearn - INFO - ====== Model ======
-    2020-11-17 18:00:49,767 - julearn - INFO - Obtaining model by name: svm
-    2020-11-17 18:00:49,767 - julearn - INFO - ===================
-    2020-11-17 18:00:49,767 - julearn - INFO - 
-    2020-11-17 18:00:49,767 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
-    2020-11-17 18:00:49,767 - julearn - INFO - = Model Parameters =
-    2020-11-17 18:00:49,768 - julearn - INFO - ====================
-    2020-11-17 18:00:49,768 - julearn - INFO - 
+    2020-11-18 16:19:50,761 - julearn - INFO - Using default CV
+    2020-11-18 16:19:50,761 - julearn - INFO - ==== Input Data ====
+    2020-11-18 16:19:50,761 - julearn - INFO - Using dataframe as input
+    2020-11-18 16:19:50,761 - julearn - INFO - Features: ['frontal', 'parietal']
+    2020-11-18 16:19:50,761 - julearn - INFO - Target: event
+    2020-11-18 16:19:50,761 - julearn - INFO - Expanded X: ['frontal', 'parietal']
+    2020-11-18 16:19:50,761 - julearn - INFO - Expanded Confounds: []
+    2020-11-18 16:19:50,762 - julearn - INFO - ====================
+    2020-11-18 16:19:50,762 - julearn - INFO - 
+    2020-11-18 16:19:50,763 - julearn - INFO - ====== Model ======
+    2020-11-18 16:19:50,763 - julearn - INFO - Obtaining model by name: svm
+    2020-11-18 16:19:50,763 - julearn - INFO - ===================
+    2020-11-18 16:19:50,763 - julearn - INFO - 
+    2020-11-18 16:19:50,763 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+    2020-11-18 16:19:50,763 - julearn - INFO - = Model Parameters =
+    2020-11-18 16:19:50,764 - julearn - INFO - ====================
+    2020-11-18 16:19:50,764 - julearn - INFO - 
     0.5765508728619291
 
 
@@ -206,7 +206,7 @@ regularization parameter (C) for the linear SVM.
     y = 'event'
     scores, estimator = run_cross_validation(X=X, y=y, data=df_fmri, model='svm',
                                              model_params=model_params,
-                                             return_estimator=True)
+                                             return_estimator='final')
 
     print(scores['test_score'].mean())
 
@@ -220,30 +220,30 @@ regularization parameter (C) for the linear SVM.
 
  .. code-block:: none
 
-    2020-11-17 18:00:50,312 - julearn - INFO - Using default CV
-    2020-11-17 18:00:50,313 - julearn - INFO - ==== Input Data ====
-    2020-11-17 18:00:50,313 - julearn - INFO - Using dataframe as input
-    2020-11-17 18:00:50,313 - julearn - INFO - Features: ['frontal', 'parietal']
-    2020-11-17 18:00:50,313 - julearn - INFO - Target: event
-    2020-11-17 18:00:50,313 - julearn - INFO - Expanded X: ['frontal', 'parietal']
-    2020-11-17 18:00:50,313 - julearn - INFO - Expanded Confounds: []
-    2020-11-17 18:00:50,314 - julearn - INFO - ====================
-    2020-11-17 18:00:50,314 - julearn - INFO - 
-    2020-11-17 18:00:50,314 - julearn - INFO - ====== Model ======
-    2020-11-17 18:00:50,314 - julearn - INFO - Obtaining model by name: svm
-    2020-11-17 18:00:50,314 - julearn - INFO - ===================
-    2020-11-17 18:00:50,314 - julearn - INFO - 
-    2020-11-17 18:00:50,314 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
-    2020-11-17 18:00:50,315 - julearn - INFO - = Model Parameters =
-    2020-11-17 18:00:50,315 - julearn - INFO - Tunning hyperparameters using {search}
-    2020-11-17 18:00:50,315 - julearn - INFO - Hyperparameters:
-    2020-11-17 18:00:50,316 - julearn - INFO -      dataframe_pipeline__svm__C: [0.01, 0.1]
-    2020-11-17 18:00:50,316 - julearn - INFO - Using scikit-learn CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
-    2020-11-17 18:00:50,316 - julearn - INFO - Search Parameters:
-    2020-11-17 18:00:50,316 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
-    2020-11-17 18:00:50,316 - julearn - INFO -      scoring: None
-    2020-11-17 18:00:50,316 - julearn - INFO - ====================
-    2020-11-17 18:00:50,316 - julearn - INFO - 
+    2020-11-18 16:19:51,257 - julearn - INFO - Using default CV
+    2020-11-18 16:19:51,257 - julearn - INFO - ==== Input Data ====
+    2020-11-18 16:19:51,257 - julearn - INFO - Using dataframe as input
+    2020-11-18 16:19:51,257 - julearn - INFO - Features: ['frontal', 'parietal']
+    2020-11-18 16:19:51,257 - julearn - INFO - Target: event
+    2020-11-18 16:19:51,257 - julearn - INFO - Expanded X: ['frontal', 'parietal']
+    2020-11-18 16:19:51,257 - julearn - INFO - Expanded Confounds: []
+    2020-11-18 16:19:51,258 - julearn - INFO - ====================
+    2020-11-18 16:19:51,258 - julearn - INFO - 
+    2020-11-18 16:19:51,258 - julearn - INFO - ====== Model ======
+    2020-11-18 16:19:51,258 - julearn - INFO - Obtaining model by name: svm
+    2020-11-18 16:19:51,258 - julearn - INFO - ===================
+    2020-11-18 16:19:51,258 - julearn - INFO - 
+    2020-11-18 16:19:51,258 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+    2020-11-18 16:19:51,259 - julearn - INFO - = Model Parameters =
+    2020-11-18 16:19:51,259 - julearn - INFO - Tunning hyperparameters using {search}
+    2020-11-18 16:19:51,259 - julearn - INFO - Hyperparameters:
+    2020-11-18 16:19:51,260 - julearn - INFO -      dataframe_pipeline__svm__C: [0.01, 0.1]
+    2020-11-18 16:19:51,260 - julearn - INFO - Using scikit-learn CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
+    2020-11-18 16:19:51,260 - julearn - INFO - Search Parameters:
+    2020-11-18 16:19:51,260 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
+    2020-11-18 16:19:51,260 - julearn - INFO -      scoring: None
+    2020-11-18 16:19:51,260 - julearn - INFO - ====================
+    2020-11-18 16:19:51,260 - julearn - INFO - 
     0.575591606418621
 
 
@@ -262,7 +262,7 @@ This did not change much, lets explore other kernels too.
     y = 'event'
     scores, estimator = run_cross_validation(X=X, y=y, data=df_fmri, model='svm',
                                              model_params=model_params,
-                                             return_estimator=True)
+                                             return_estimator='final')
 
     print(scores['test_score'].mean())
 
@@ -275,31 +275,31 @@ This did not change much, lets explore other kernels too.
 
  .. code-block:: none
 
-    2020-11-17 18:00:53,232 - julearn - INFO - Using default CV
-    2020-11-17 18:00:53,232 - julearn - INFO - ==== Input Data ====
-    2020-11-17 18:00:53,232 - julearn - INFO - Using dataframe as input
-    2020-11-17 18:00:53,232 - julearn - INFO - Features: ['frontal', 'parietal']
-    2020-11-17 18:00:53,232 - julearn - INFO - Target: event
-    2020-11-17 18:00:53,232 - julearn - INFO - Expanded X: ['frontal', 'parietal']
-    2020-11-17 18:00:53,233 - julearn - INFO - Expanded Confounds: []
-    2020-11-17 18:00:53,234 - julearn - INFO - ====================
-    2020-11-17 18:00:53,234 - julearn - INFO - 
-    2020-11-17 18:00:53,234 - julearn - INFO - ====== Model ======
-    2020-11-17 18:00:53,234 - julearn - INFO - Obtaining model by name: svm
-    2020-11-17 18:00:53,234 - julearn - INFO - ===================
-    2020-11-17 18:00:53,235 - julearn - INFO - 
-    2020-11-17 18:00:53,235 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
-    2020-11-17 18:00:53,235 - julearn - INFO - = Model Parameters =
-    2020-11-17 18:00:53,235 - julearn - INFO - Tunning hyperparameters using {search}
-    2020-11-17 18:00:53,235 - julearn - INFO - Hyperparameters:
-    2020-11-17 18:00:53,235 - julearn - INFO -      dataframe_pipeline__svm__kernel: ['linear', 'rbf', 'poly']
-    2020-11-17 18:00:53,235 - julearn - INFO -      dataframe_pipeline__svm__C: [0.01, 0.1]
-    2020-11-17 18:00:53,236 - julearn - INFO - Using scikit-learn CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
-    2020-11-17 18:00:53,236 - julearn - INFO - Search Parameters:
-    2020-11-17 18:00:53,236 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
-    2020-11-17 18:00:53,236 - julearn - INFO -      scoring: None
-    2020-11-17 18:00:53,236 - julearn - INFO - ====================
-    2020-11-17 18:00:53,236 - julearn - INFO - 
+    2020-11-18 16:19:53,737 - julearn - INFO - Using default CV
+    2020-11-18 16:19:53,737 - julearn - INFO - ==== Input Data ====
+    2020-11-18 16:19:53,737 - julearn - INFO - Using dataframe as input
+    2020-11-18 16:19:53,737 - julearn - INFO - Features: ['frontal', 'parietal']
+    2020-11-18 16:19:53,737 - julearn - INFO - Target: event
+    2020-11-18 16:19:53,737 - julearn - INFO - Expanded X: ['frontal', 'parietal']
+    2020-11-18 16:19:53,737 - julearn - INFO - Expanded Confounds: []
+    2020-11-18 16:19:53,738 - julearn - INFO - ====================
+    2020-11-18 16:19:53,738 - julearn - INFO - 
+    2020-11-18 16:19:53,738 - julearn - INFO - ====== Model ======
+    2020-11-18 16:19:53,738 - julearn - INFO - Obtaining model by name: svm
+    2020-11-18 16:19:53,738 - julearn - INFO - ===================
+    2020-11-18 16:19:53,738 - julearn - INFO - 
+    2020-11-18 16:19:53,739 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+    2020-11-18 16:19:53,739 - julearn - INFO - = Model Parameters =
+    2020-11-18 16:19:53,739 - julearn - INFO - Tunning hyperparameters using {search}
+    2020-11-18 16:19:53,739 - julearn - INFO - Hyperparameters:
+    2020-11-18 16:19:53,739 - julearn - INFO -      dataframe_pipeline__svm__kernel: ['linear', 'rbf', 'poly']
+    2020-11-18 16:19:53,739 - julearn - INFO -      dataframe_pipeline__svm__C: [0.01, 0.1]
+    2020-11-18 16:19:53,739 - julearn - INFO - Using scikit-learn CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
+    2020-11-18 16:19:53,739 - julearn - INFO - Search Parameters:
+    2020-11-18 16:19:53,739 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
+    2020-11-18 16:19:53,740 - julearn - INFO -      scoring: None
+    2020-11-18 16:19:53,740 - julearn - INFO - ====================
+    2020-11-18 16:19:53,740 - julearn - INFO - 
     0.7116487391994357
 
 
@@ -342,7 +342,7 @@ parameters.
     y = 'event'
     scores, estimator = run_cross_validation(X=X, y=y, data=df_fmri, model='svm',
                                              model_params=model_params,
-                                             return_estimator=True)
+                                             return_estimator='final')
 
     print(scores['test_score'].mean())
     print(estimator.best_params_)
@@ -357,31 +357,31 @@ parameters.
 
  .. code-block:: none
 
-    2020-11-17 18:01:00,374 - julearn - INFO - Using default CV
-    2020-11-17 18:01:00,374 - julearn - INFO - ==== Input Data ====
-    2020-11-17 18:01:00,374 - julearn - INFO - Using dataframe as input
-    2020-11-17 18:01:00,374 - julearn - INFO - Features: ['frontal', 'parietal']
-    2020-11-17 18:01:00,374 - julearn - INFO - Target: event
-    2020-11-17 18:01:00,374 - julearn - INFO - Expanded X: ['frontal', 'parietal']
-    2020-11-17 18:01:00,374 - julearn - INFO - Expanded Confounds: []
-    2020-11-17 18:01:00,375 - julearn - INFO - ====================
-    2020-11-17 18:01:00,375 - julearn - INFO - 
-    2020-11-17 18:01:00,376 - julearn - INFO - ====== Model ======
-    2020-11-17 18:01:00,376 - julearn - INFO - Obtaining model by name: svm
-    2020-11-17 18:01:00,376 - julearn - INFO - ===================
-    2020-11-17 18:01:00,376 - julearn - INFO - 
-    2020-11-17 18:01:00,376 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
-    2020-11-17 18:01:00,376 - julearn - INFO - = Model Parameters =
-    2020-11-17 18:01:00,377 - julearn - INFO - Tunning hyperparameters using {search}
-    2020-11-17 18:01:00,377 - julearn - INFO - Hyperparameters:
-    2020-11-17 18:01:00,377 - julearn - INFO -      dataframe_pipeline__svm__C: [0.01, 0.1]
-    2020-11-17 18:01:00,377 - julearn - INFO -      dataframe_pipeline__svm__gamma: [0.01, 0.001]
-    2020-11-17 18:01:00,377 - julearn - INFO - Using scikit-learn CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
-    2020-11-17 18:01:00,378 - julearn - INFO - Search Parameters:
-    2020-11-17 18:01:00,378 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
-    2020-11-17 18:01:00,378 - julearn - INFO -      scoring: None
-    2020-11-17 18:01:00,378 - julearn - INFO - ====================
-    2020-11-17 18:01:00,378 - julearn - INFO - 
+    2020-11-18 16:20:00,244 - julearn - INFO - Using default CV
+    2020-11-18 16:20:00,244 - julearn - INFO - ==== Input Data ====
+    2020-11-18 16:20:00,244 - julearn - INFO - Using dataframe as input
+    2020-11-18 16:20:00,244 - julearn - INFO - Features: ['frontal', 'parietal']
+    2020-11-18 16:20:00,244 - julearn - INFO - Target: event
+    2020-11-18 16:20:00,244 - julearn - INFO - Expanded X: ['frontal', 'parietal']
+    2020-11-18 16:20:00,244 - julearn - INFO - Expanded Confounds: []
+    2020-11-18 16:20:00,245 - julearn - INFO - ====================
+    2020-11-18 16:20:00,245 - julearn - INFO - 
+    2020-11-18 16:20:00,245 - julearn - INFO - ====== Model ======
+    2020-11-18 16:20:00,245 - julearn - INFO - Obtaining model by name: svm
+    2020-11-18 16:20:00,245 - julearn - INFO - ===================
+    2020-11-18 16:20:00,245 - julearn - INFO - 
+    2020-11-18 16:20:00,246 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+    2020-11-18 16:20:00,246 - julearn - INFO - = Model Parameters =
+    2020-11-18 16:20:00,247 - julearn - INFO - Tunning hyperparameters using {search}
+    2020-11-18 16:20:00,247 - julearn - INFO - Hyperparameters:
+    2020-11-18 16:20:00,247 - julearn - INFO -      dataframe_pipeline__svm__C: [0.01, 0.1]
+    2020-11-18 16:20:00,247 - julearn - INFO -      dataframe_pipeline__svm__gamma: [0.01, 0.001]
+    2020-11-18 16:20:00,247 - julearn - INFO - Using scikit-learn CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
+    2020-11-18 16:20:00,247 - julearn - INFO - Search Parameters:
+    2020-11-18 16:20:00,247 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
+    2020-11-18 16:20:00,247 - julearn - INFO -      scoring: None
+    2020-11-18 16:20:00,247 - julearn - INFO - ====================
+    2020-11-18 16:20:00,248 - julearn - INFO - 
     0.47479104214424267
     {'dataframe_pipeline__svm__C': 0.01, 'dataframe_pipeline__svm__gamma': 0.001}
 
@@ -403,7 +403,7 @@ Let's add the default value and see what happens.
     y = 'event'
     scores, estimator = run_cross_validation(X=X, y=y, data=df_fmri, model='svm',
                                              model_params=model_params,
-                                             return_estimator=True)
+                                             return_estimator='final')
 
     print(scores['test_score'].mean())
     print(estimator.best_params_)
@@ -418,31 +418,31 @@ Let's add the default value and see what happens.
 
  .. code-block:: none
 
-    2020-11-17 18:01:05,642 - julearn - INFO - Using default CV
-    2020-11-17 18:01:05,642 - julearn - INFO - ==== Input Data ====
-    2020-11-17 18:01:05,642 - julearn - INFO - Using dataframe as input
-    2020-11-17 18:01:05,642 - julearn - INFO - Features: ['frontal', 'parietal']
-    2020-11-17 18:01:05,642 - julearn - INFO - Target: event
-    2020-11-17 18:01:05,642 - julearn - INFO - Expanded X: ['frontal', 'parietal']
-    2020-11-17 18:01:05,642 - julearn - INFO - Expanded Confounds: []
-    2020-11-17 18:01:05,644 - julearn - INFO - ====================
-    2020-11-17 18:01:05,644 - julearn - INFO - 
-    2020-11-17 18:01:05,644 - julearn - INFO - ====== Model ======
-    2020-11-17 18:01:05,644 - julearn - INFO - Obtaining model by name: svm
-    2020-11-17 18:01:05,644 - julearn - INFO - ===================
-    2020-11-17 18:01:05,644 - julearn - INFO - 
-    2020-11-17 18:01:05,644 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
-    2020-11-17 18:01:05,645 - julearn - INFO - = Model Parameters =
-    2020-11-17 18:01:05,645 - julearn - INFO - Tunning hyperparameters using {search}
-    2020-11-17 18:01:05,645 - julearn - INFO - Hyperparameters:
-    2020-11-17 18:01:05,646 - julearn - INFO -      dataframe_pipeline__svm__C: [0.01, 0.1]
-    2020-11-17 18:01:05,646 - julearn - INFO -      dataframe_pipeline__svm__gamma: [0.01, 0.001, 'scale']
-    2020-11-17 18:01:05,646 - julearn - INFO - Using scikit-learn CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
-    2020-11-17 18:01:05,646 - julearn - INFO - Search Parameters:
-    2020-11-17 18:01:05,646 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
-    2020-11-17 18:01:05,646 - julearn - INFO -      scoring: None
-    2020-11-17 18:01:05,646 - julearn - INFO - ====================
-    2020-11-17 18:01:05,646 - julearn - INFO - 
+    2020-11-18 16:20:05,064 - julearn - INFO - Using default CV
+    2020-11-18 16:20:05,064 - julearn - INFO - ==== Input Data ====
+    2020-11-18 16:20:05,064 - julearn - INFO - Using dataframe as input
+    2020-11-18 16:20:05,064 - julearn - INFO - Features: ['frontal', 'parietal']
+    2020-11-18 16:20:05,065 - julearn - INFO - Target: event
+    2020-11-18 16:20:05,065 - julearn - INFO - Expanded X: ['frontal', 'parietal']
+    2020-11-18 16:20:05,065 - julearn - INFO - Expanded Confounds: []
+    2020-11-18 16:20:05,066 - julearn - INFO - ====================
+    2020-11-18 16:20:05,066 - julearn - INFO - 
+    2020-11-18 16:20:05,066 - julearn - INFO - ====== Model ======
+    2020-11-18 16:20:05,066 - julearn - INFO - Obtaining model by name: svm
+    2020-11-18 16:20:05,066 - julearn - INFO - ===================
+    2020-11-18 16:20:05,066 - julearn - INFO - 
+    2020-11-18 16:20:05,066 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+    2020-11-18 16:20:05,066 - julearn - INFO - = Model Parameters =
+    2020-11-18 16:20:05,067 - julearn - INFO - Tunning hyperparameters using {search}
+    2020-11-18 16:20:05,067 - julearn - INFO - Hyperparameters:
+    2020-11-18 16:20:05,067 - julearn - INFO -      dataframe_pipeline__svm__C: [0.01, 0.1]
+    2020-11-18 16:20:05,067 - julearn - INFO -      dataframe_pipeline__svm__gamma: [0.01, 0.001, 'scale']
+    2020-11-18 16:20:05,068 - julearn - INFO - Using scikit-learn CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
+    2020-11-18 16:20:05,068 - julearn - INFO - Search Parameters:
+    2020-11-18 16:20:05,068 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
+    2020-11-18 16:20:05,068 - julearn - INFO -      scoring: None
+    2020-11-18 16:20:05,068 - julearn - INFO - ====================
+    2020-11-18 16:20:05,068 - julearn - INFO - 
     0.7074977958032092
     {'dataframe_pipeline__svm__C': 0.1, 'dataframe_pipeline__svm__gamma': 'scale'}
 
@@ -473,7 +473,7 @@ So what was the best ``gamma`` in the end?
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  23.549 seconds)
+   **Total running time of the script:** ( 0 minutes  21.255 seconds)
 
 
 .. _sphx_glr_download_auto_examples_advanced_run_hyperparameter_tuning.py:

@@ -36,15 +36,6 @@ using a Random Forest classifier and analyse the model.
 
 
 
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    /home/travis/virtualenv/python3.6.7/lib/python3.6/importlib/_bootstrap.py:219: RuntimeWarning: numpy.ufunc size changed, may indicate binary incompatibility. Expected 192 from C header, got 216 from PyObject
-      return f(*args, **kwds)
-
 
 
 
@@ -65,13 +56,13 @@ Set the logging level to info to see extra information
 
  .. code-block:: none
 
-    2020-11-17 18:00:41,149 - julearn - INFO - ===== Lib Versions =====
-    2020-11-17 18:00:41,149 - julearn - INFO - numpy: 1.19.0
-    2020-11-17 18:00:41,149 - julearn - INFO - scipy: 1.5.4
-    2020-11-17 18:00:41,149 - julearn - INFO - sklearn: 0.23.2
-    2020-11-17 18:00:41,149 - julearn - INFO - pandas: 1.1.4
-    2020-11-17 18:00:41,149 - julearn - INFO - julearn: 0.1.0
-    2020-11-17 18:00:41,149 - julearn - INFO - ========================
+    2020-11-18 16:19:40,741 - julearn - INFO - ===== Lib Versions =====
+    2020-11-18 16:19:40,742 - julearn - INFO - numpy: 1.19.0
+    2020-11-18 16:19:40,742 - julearn - INFO - scipy: 1.5.4
+    2020-11-18 16:19:40,742 - julearn - INFO - sklearn: 0.23.2
+    2020-11-18 16:19:40,742 - julearn - INFO - pandas: 1.1.4
+    2020-11-18 16:19:40,742 - julearn - INFO - julearn: 0.1.0
+    2020-11-18 16:19:40,742 - julearn - INFO - ========================
 
 
 
@@ -112,16 +103,16 @@ classification.
 
 
 
-We will use a Random Forest classifier. By setting `return_estimator=True`,
-the :func:`.run_cross_validation` function return the estimator fitted with
-all the data.
+We will use a Random Forest classifier. By setting
+`return_estimator='final'`, the :func:`.run_cross_validation` function
+returns the estimator fitted with all the data.
 
 
 .. code-block:: default
 
 
     scores, model_iris = run_cross_validation(X=X, y=y, data=df_iris, model='rf',
-                                              return_estimator=True)
+                                              return_estimator='final')
 
 
 
@@ -133,20 +124,20 @@ all the data.
 
  .. code-block:: none
 
-    2020-11-17 18:00:41,725 - julearn - INFO - Using default CV
-    2020-11-17 18:00:41,725 - julearn - INFO - ==== Input Data ====
-    2020-11-17 18:00:41,725 - julearn - INFO - Using dataframe as input
-    2020-11-17 18:00:41,725 - julearn - INFO - Features: ['sepal_length', 'sepal_width', 'petal_length']
-    2020-11-17 18:00:41,725 - julearn - INFO - Target: species
-    2020-11-17 18:00:41,725 - julearn - INFO - Expanded X: ['sepal_length', 'sepal_width', 'petal_length']
-    2020-11-17 18:00:41,726 - julearn - INFO - Expanded Confounds: []
-    2020-11-17 18:00:41,728 - julearn - INFO - ====================
-    2020-11-17 18:00:41,728 - julearn - INFO - 
-    2020-11-17 18:00:41,728 - julearn - INFO - ====== Model ======
-    2020-11-17 18:00:41,729 - julearn - INFO - Obtaining model by name: rf
-    2020-11-17 18:00:41,729 - julearn - INFO - ===================
-    2020-11-17 18:00:41,729 - julearn - INFO - 
-    2020-11-17 18:00:41,729 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+    2020-11-18 16:19:40,746 - julearn - INFO - Using default CV
+    2020-11-18 16:19:40,746 - julearn - INFO - ==== Input Data ====
+    2020-11-18 16:19:40,746 - julearn - INFO - Using dataframe as input
+    2020-11-18 16:19:40,746 - julearn - INFO - Features: ['sepal_length', 'sepal_width', 'petal_length']
+    2020-11-18 16:19:40,746 - julearn - INFO - Target: species
+    2020-11-18 16:19:40,746 - julearn - INFO - Expanded X: ['sepal_length', 'sepal_width', 'petal_length']
+    2020-11-18 16:19:40,746 - julearn - INFO - Expanded Confounds: []
+    2020-11-18 16:19:40,747 - julearn - INFO - ====================
+    2020-11-18 16:19:40,748 - julearn - INFO - 
+    2020-11-18 16:19:40,748 - julearn - INFO - ====== Model ======
+    2020-11-18 16:19:40,748 - julearn - INFO - Obtaining model by name: rf
+    2020-11-18 16:19:40,748 - julearn - INFO - ===================
+    2020-11-18 16:19:40,748 - julearn - INFO - 
+    2020-11-18 16:19:40,748 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
 
 
 
@@ -172,8 +163,97 @@ documentation (`Random Forest`_)
 
 
 
+
 .. image:: /auto_examples/basic/images/sphx_glr_plot_inspect_random_forest_001.png
     :alt: Variable Importances for Random Forest Classifier
+    :class: sphx-glr-single-img
+
+
+
+
+
+However, some reviewers (including myself), might wander about the
+variability of the importance of these features. In the previous example
+all the feature importances were obtained by fitting on the entire dataset,
+while the performance was estimated using cross validation.
+
+By specifying `return_estimator='cv'`, we can get, for each fold, the fitted
+estimator.
+
+
+.. code-block:: default
+
+
+    scores = run_cross_validation(X=X, y=y, data=df_iris, model='rf',
+                                  return_estimator='cv')
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+    2020-11-18 16:19:44,698 - julearn - INFO - Using default CV
+    2020-11-18 16:19:44,698 - julearn - INFO - ==== Input Data ====
+    2020-11-18 16:19:44,699 - julearn - INFO - Using dataframe as input
+    2020-11-18 16:19:44,699 - julearn - INFO - Features: ['sepal_length', 'sepal_width', 'petal_length']
+    2020-11-18 16:19:44,699 - julearn - INFO - Target: species
+    2020-11-18 16:19:44,699 - julearn - INFO - Expanded X: ['sepal_length', 'sepal_width', 'petal_length']
+    2020-11-18 16:19:44,699 - julearn - INFO - Expanded Confounds: []
+    2020-11-18 16:19:44,701 - julearn - INFO - ====================
+    2020-11-18 16:19:44,702 - julearn - INFO - 
+    2020-11-18 16:19:44,702 - julearn - INFO - ====== Model ======
+    2020-11-18 16:19:44,702 - julearn - INFO - Obtaining model by name: rf
+    2020-11-18 16:19:44,702 - julearn - INFO - ===================
+    2020-11-18 16:19:44,702 - julearn - INFO - 
+    2020-11-18 16:19:44,703 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+
+
+
+
+Now we can obtain the feature importance for each estimator (CV fold)
+
+
+.. code-block:: default
+
+    to_plot = []
+    for i_fold, estimator in enumerate(scores['estimator']):
+        this_importances = pd.DataFrame({
+            'variable': [x.replace('_', ' ') for x in X],
+            'importance': estimator['rf'].feature_importances_,
+            'fold': i_fold
+        })
+        to_plot.append(this_importances)
+
+    to_plot = pd.concat(to_plot)
+
+
+
+
+
+
+
+
+Finally, we can plot the variable importances for each fold
+
+
+.. code-block:: default
+
+
+    fig, ax = plt.subplots(1, 1, figsize=(6, 4))
+    sns.swarmplot(x='importance', y='variable', data=to_plot, ax=ax)
+    ax.set_title('Distribution of variable Importances for Random Forest '
+                 'Classifier across folds')
+    fig.tight_layout()
+
+
+
+.. image:: /auto_examples/basic/images/sphx_glr_plot_inspect_random_forest_002.png
+    :alt: Distribution of variable Importances for Random Forest Classifier across folds
     :class: sphx-glr-single-img
 
 
@@ -183,7 +263,7 @@ documentation (`Random Forest`_)
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  4.680 seconds)
+   **Total running time of the script:** ( 0 minutes  8.070 seconds)
 
 
 .. _sphx_glr_download_auto_examples_basic_plot_inspect_random_forest.py:

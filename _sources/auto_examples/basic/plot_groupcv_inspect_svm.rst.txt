@@ -66,13 +66,13 @@ Set the logging level to info to see extra information
 
  .. code-block:: none
 
-    2020-11-17 18:00:47,553 - julearn - INFO - ===== Lib Versions =====
-    2020-11-17 18:00:47,553 - julearn - INFO - numpy: 1.19.0
-    2020-11-17 18:00:47,553 - julearn - INFO - scipy: 1.5.4
-    2020-11-17 18:00:47,553 - julearn - INFO - sklearn: 0.23.2
-    2020-11-17 18:00:47,553 - julearn - INFO - pandas: 1.1.4
-    2020-11-17 18:00:47,553 - julearn - INFO - julearn: 0.1.0
-    2020-11-17 18:00:47,553 - julearn - INFO - ========================
+    2020-11-18 16:19:48,902 - julearn - INFO - ===== Lib Versions =====
+    2020-11-18 16:19:48,903 - julearn - INFO - numpy: 1.19.0
+    2020-11-18 16:19:48,903 - julearn - INFO - scipy: 1.5.4
+    2020-11-18 16:19:48,903 - julearn - INFO - sklearn: 0.23.2
+    2020-11-18 16:19:48,903 - julearn - INFO - pandas: 1.1.4
+    2020-11-18 16:19:48,903 - julearn - INFO - julearn: 0.1.0
+    2020-11-18 16:19:48,903 - julearn - INFO - ========================
 
 
 
@@ -260,21 +260,21 @@ We will use a Support Vector Machine.
 
  .. code-block:: none
 
-    2020-11-17 18:00:48,159 - julearn - INFO - Using default CV
-    2020-11-17 18:00:48,160 - julearn - INFO - ==== Input Data ====
-    2020-11-17 18:00:48,160 - julearn - INFO - Using dataframe as input
-    2020-11-17 18:00:48,160 - julearn - INFO - Features: ['parietal', 'frontal']
-    2020-11-17 18:00:48,160 - julearn - INFO - Target: event
-    2020-11-17 18:00:48,160 - julearn - INFO - Expanded X: ['frontal', 'parietal']
-    2020-11-17 18:00:48,160 - julearn - INFO - Expanded Confounds: []
-    2020-11-17 18:00:48,161 - julearn - INFO - ====================
-    2020-11-17 18:00:48,161 - julearn - INFO - 
-    2020-11-17 18:00:48,162 - julearn - INFO - ====== Model ======
-    2020-11-17 18:00:48,162 - julearn - INFO - Obtaining model by name: svm
-    2020-11-17 18:00:48,162 - julearn - INFO - ===================
-    2020-11-17 18:00:48,162 - julearn - INFO - 
-    2020-11-17 18:00:48,162 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
-    0.719897725268912
+    2020-11-18 16:19:49,307 - julearn - INFO - Using default CV
+    2020-11-18 16:19:49,307 - julearn - INFO - ==== Input Data ====
+    2020-11-18 16:19:49,307 - julearn - INFO - Using dataframe as input
+    2020-11-18 16:19:49,307 - julearn - INFO - Features: ['parietal', 'frontal']
+    2020-11-18 16:19:49,307 - julearn - INFO - Target: event
+    2020-11-18 16:19:49,308 - julearn - INFO - Expanded X: ['frontal', 'parietal']
+    2020-11-18 16:19:49,308 - julearn - INFO - Expanded Confounds: []
+    2020-11-18 16:19:49,309 - julearn - INFO - ====================
+    2020-11-18 16:19:49,309 - julearn - INFO - 
+    2020-11-18 16:19:49,309 - julearn - INFO - ====== Model ======
+    2020-11-18 16:19:49,309 - julearn - INFO - Obtaining model by name: svm
+    2020-11-18 16:19:49,309 - julearn - INFO - ===================
+    2020-11-18 16:19:49,309 - julearn - INFO - 
+    2020-11-18 16:19:49,309 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+    0.719901251983777
 
 
 
@@ -297,7 +297,7 @@ subject is either on the training or the testing set, but not in both.
 We can use scikit-learn's GroupShuffleSplit (see `Cross Validation`_).
 And specify which is the grouping column using the `group` parameter.
 
-By setting `return_estimator=True`, the :func:`.run_cross_validation`
+By setting `return_estimator='final'`, the :func:`.run_cross_validation`
 function return the estimator fitted with all the data. We will use this
 later to do some analysis.
 
@@ -308,7 +308,7 @@ later to do some analysis.
 
     scores, model = run_cross_validation(X=X, y=y, data=df_fmri, model='svm',
                                          cv=cv, groups='subject',
-                                         return_estimator=True)
+                                         return_estimator='final')
     print(scores['test_score'].mean())
 
 
@@ -321,20 +321,20 @@ later to do some analysis.
 
  .. code-block:: none
 
-    2020-11-17 18:00:48,751 - julearn - INFO - ==== Input Data ====
-    2020-11-17 18:00:48,751 - julearn - INFO - Using dataframe as input
-    2020-11-17 18:00:48,751 - julearn - INFO - Features: ['parietal', 'frontal']
-    2020-11-17 18:00:48,751 - julearn - INFO - Target: event
-    2020-11-17 18:00:48,751 - julearn - INFO - Expanded X: ['frontal', 'parietal']
-    2020-11-17 18:00:48,752 - julearn - INFO - Expanded Confounds: []
-    2020-11-17 18:00:48,753 - julearn - INFO - Using subject as groups
-    2020-11-17 18:00:48,753 - julearn - INFO - ====================
-    2020-11-17 18:00:48,753 - julearn - INFO - 
-    2020-11-17 18:00:48,753 - julearn - INFO - ====== Model ======
-    2020-11-17 18:00:48,753 - julearn - INFO - Obtaining model by name: svm
-    2020-11-17 18:00:48,753 - julearn - INFO - ===================
-    2020-11-17 18:00:48,753 - julearn - INFO - 
-    2020-11-17 18:00:48,753 - julearn - INFO - Using scikit-learn CV scheme GroupShuffleSplit(n_splits=5, random_state=42, test_size=0.5, train_size=None)
+    2020-11-18 16:19:49,852 - julearn - INFO - ==== Input Data ====
+    2020-11-18 16:19:49,852 - julearn - INFO - Using dataframe as input
+    2020-11-18 16:19:49,852 - julearn - INFO - Features: ['parietal', 'frontal']
+    2020-11-18 16:19:49,852 - julearn - INFO - Target: event
+    2020-11-18 16:19:49,852 - julearn - INFO - Expanded X: ['frontal', 'parietal']
+    2020-11-18 16:19:49,852 - julearn - INFO - Expanded Confounds: []
+    2020-11-18 16:19:49,853 - julearn - INFO - Using subject as groups
+    2020-11-18 16:19:49,853 - julearn - INFO - ====================
+    2020-11-18 16:19:49,853 - julearn - INFO - 
+    2020-11-18 16:19:49,853 - julearn - INFO - ====== Model ======
+    2020-11-18 16:19:49,853 - julearn - INFO - Obtaining model by name: svm
+    2020-11-18 16:19:49,853 - julearn - INFO - ===================
+    2020-11-18 16:19:49,853 - julearn - INFO - 
+    2020-11-18 16:19:49,854 - julearn - INFO - Using scikit-learn CV scheme GroupShuffleSplit(n_splits=5, random_state=42, test_size=0.5, train_size=None)
     0.7210526315789474
 
 
@@ -423,7 +423,7 @@ how the SVM does this complex task.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  1.817 seconds)
+   **Total running time of the script:** ( 0 minutes  1.512 seconds)
 
 
 .. _sphx_glr_download_auto_examples_basic_plot_groupcv_inspect_svm.py:

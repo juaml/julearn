@@ -143,7 +143,7 @@ To build the docs:
 
 .. code-block:: bash
 
-    cd doc
+    cd docs
     make html
 
 To view the documentation, open `docs/_build/html/index.html`.
@@ -158,8 +158,8 @@ of the julearn repository in `Github`_ and click on the ^Compare & pull
 request^ button.
 
 Fill in the pull request message and you will be in contact with the julearn
-mantainers who will review your contribution. If they suggest any modification,
-go back to :ref:`do_changes`.
+manitainers who will review your contribution. If they suggest any
+modification, go back to :ref:`do_changes`.
 
 Once everyone is happy, your modifications will be included in the development
 version and later on, in the release version.
@@ -230,6 +230,6 @@ To generate the HTML, just build the docs:
 
 .. code-block:: bash
 
-    cd doc
+    cd docs
     make html
 

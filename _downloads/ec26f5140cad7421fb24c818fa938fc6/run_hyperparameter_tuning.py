@@ -68,7 +68,7 @@ X = ['frontal', 'parietal']
 y = 'event'
 scores, estimator = run_cross_validation(X=X, y=y, data=df_fmri, model='svm',
                                          model_params=model_params,
-                                         return_estimator=True)
+                                         return_estimator='final')
 
 print(scores['test_score'].mean())
 
@@ -82,7 +82,7 @@ X = ['frontal', 'parietal']
 y = 'event'
 scores, estimator = run_cross_validation(X=X, y=y, data=df_fmri, model='svm',
                                          model_params=model_params,
-                                         return_estimator=True)
+                                         return_estimator='final')
 
 print(scores['test_score'].mean())
 ###############################################################################
@@ -101,7 +101,7 @@ X = ['frontal', 'parietal']
 y = 'event'
 scores, estimator = run_cross_validation(X=X, y=y, data=df_fmri, model='svm',
                                          model_params=model_params,
-                                         return_estimator=True)
+                                         return_estimator='final')
 
 print(scores['test_score'].mean())
 print(estimator.best_params_)
@@ -118,7 +118,7 @@ X = ['frontal', 'parietal']
 y = 'event'
 scores, estimator = run_cross_validation(X=X, y=y, data=df_fmri, model='svm',
                                          model_params=model_params,
-                                         return_estimator=True)
+                                         return_estimator='final')
 
 print(scores['test_score'].mean())
 print(estimator.best_params_)

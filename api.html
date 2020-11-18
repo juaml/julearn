@@ -132,7 +132,14 @@ is applied.</p>
 <p>Defaults to zscore (StandardScaler).</p>
 <p>See <a class="reference external" href="https://juaml.github.io/julearn/pipeline.html">https://juaml.github.io/julearn/pipeline.html</a> for details.</p>
 </dd>
-<dt><strong>return_estimator</strong><span class="classifier">bool</span></dt><dd><p>If True, it returns the estimator (pipeline) fitted on all the data.</p>
+<dt><strong>return_estimator</strong><span class="classifier">str | None</span></dt><dd><p>Return the fitted estimator(s).
+Options are:</p>
+<ul class="simple">
+<li><p>‘final’: Return the estimator fitted on all the data.</p></li>
+<li><p>‘cv’: Return the all the estimator from each CV split, fitted on the
+training data.</p></li>
+<li><p>‘all’: Return all the estimators (final and cv).</p></li>
+</ul>
 </dd>
 <dt><strong>cv</strong><span class="classifier">int, str or cross-validation generator | None</span></dt><dd><p>Cross-validation splitting strategy to use for model evaluation.</p>
 <p>Options are:</p>
@@ -179,10 +186,13 @@ reproducibility.</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>scores</strong><span class="classifier">np.ndarray</span></dt><dd><p>The fold-wise score.</p>
+<dt><strong>scores</strong><span class="classifier">dict</span></dt><dd><p>The resulting scores (one key for each score specified). Additionally,
+a ‘fit_time’ key will be added. And, if <code class="docutils literal notranslate"><span class="pre">return_estimator='all'</span></code> or
+<code class="docutils literal notranslate"><span class="pre">return_estimator='cv'</span></code>, an ‘estimator’ key with the corresponding
+estimators fitted for each CV split.</p>
 </dd>
-<dt><strong>estimator</strong><span class="classifier">object</span></dt><dd><p>The estimator, fitted on all the data (only if
-<code class="docutils literal notranslate"><span class="pre">return_estimator=True</span></code>)</p>
+<dt><strong>final_estimator</strong><span class="classifier">object</span></dt><dd><p>The final estimator, fitted on all the data (only if
+<code class="docutils literal notranslate"><span class="pre">return_estimator='all'</span></code> or <code class="docutils literal notranslate"><span class="pre">return_estimator='final'</span></code>)</p>
 </dd>
 </dl>
 </dd>

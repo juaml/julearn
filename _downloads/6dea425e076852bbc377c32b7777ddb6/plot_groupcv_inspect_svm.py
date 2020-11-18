@@ -115,14 +115,14 @@ print(scores['test_score'].mean())
 # We can use scikit-learn's GroupShuffleSplit (see `Cross Validation`_).
 # And specify which is the grouping column using the `group` parameter.
 #
-# By setting `return_estimator=True`, the :func:`.run_cross_validation`
+# By setting `return_estimator='final'`, the :func:`.run_cross_validation`
 # function return the estimator fitted with all the data. We will use this
 # later to do some analysis.
 cv = GroupShuffleSplit(n_splits=5, test_size=0.5, random_state=42)
 
 scores, model = run_cross_validation(X=X, y=y, data=df_fmri, model='svm',
                                      cv=cv, groups='subject',
-                                     return_estimator=True)
+                                     return_estimator='final')
 print(scores['test_score'].mean())
 
 ###############################################################################
