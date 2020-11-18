@@ -158,8 +158,8 @@ of the julearn repository in `Github`_ and click on the ^Compare & pull
 request^ button.
 
 Fill in the pull request message and you will be in contact with the julearn
-mantainers who will review your contribution. If they suggest any modification,
-go back to :ref:`do_changes`.
+manitainers who will review your contribution. If they suggest any
+modification, go back to :ref:`do_changes`.
 
 Once everyone is happy, your modifications will be included in the development
 version and later on, in the release version.
