@@ -87,8 +87,16 @@ def run_cross_validation(
         Defaults to zscore (StandardScaler).
 
         See https://juaml.github.io/julearn/pipeline.html for details.
-    return_estimator : bool
-        If True, it returns the estimator (pipeline) fitted on all the data.
+    return_estimator : str | None
+        Return the fitted estimator(s).
+        Options are:
+
+        * 'final': Return the estimator fitted on all the data.
+        * 'cv': Return the all the estimator from each CV split, fitted on the
+          training data.
+        * 'all': Return all the estimators (final and cv).
+
+
     cv : int, str or cross-validation generator | None
         Cross-validation splitting strategy to use for model evaluation.
 
@@ -135,12 +143,14 @@ def run_cross_validation(
 
     Returns
     -------
-    scores : np.ndarray
-        The fold-wise score.
-    estimator : object
-        The estimator, fitted on all the data (only if
-        ``return_estimator=True``)
-
+    scores : dict
+        The resulting scores (one key for each score specified). Additionally,
+        a 'fit_time' key will be added. And, if ``return_estimator='all'`` or
+        ``return_estimator='cv'``, an 'estimator' key with the corresponding
+        estimators fitted for each CV split.
+    final_estimator : object
+        The final estimator, fitted on all the data (only if
+        ``return_estimator='all'`` or ``return_estimator='final'``)
     """
 
     if seed is not None:
@@ -187,11 +197,15 @@ def run_cross_validation(
     check_consistency(pipeline, preprocess_X, preprocess_y,
                       preprocess_confounds, df_X_conf, y, cv, groups,
                       problem_type)
+
+    cv_return_estimator = return_estimator in ['cv', 'all']
+
     scores = cross_validate(pipeline, df_X_conf, y, cv=cv_outer,
-                            scoring=scorer, groups=df_groups)
+                            scoring=scorer, groups=df_groups,
+                            return_estimator=cv_return_estimator)
 
     out = scores
-    if return_estimator is True:
+    if return_estimator in ['final', 'all']:
         pipeline.fit(df_X_conf, y)
         out = out, pipeline
 

@@ -96,7 +96,7 @@ def test_set_hyperparam():
             X=X, y=y, data=df_iris, model='svm',
             model_params=model_params,
             seed=42, scoring='accuracy', pos_labels='setosa',
-            return_estimator=True)
+            return_estimator='final')
     with pytest.warns(RuntimeWarning,
                       match=r"Hyperparameter search method"):
         model_params = {'search': 'grid'}
@@ -104,7 +104,7 @@ def test_set_hyperparam():
             X=X, y=y, data=df_iris, model='svm',
             model_params=model_params,
             seed=42, scoring='accuracy', pos_labels='setosa',
-            return_estimator=True)
+            return_estimator='final')
 
     with pytest.warns(RuntimeWarning,
                       match=r"Hyperparameter search scoring"):
@@ -113,14 +113,14 @@ def test_set_hyperparam():
             X=X, y=y, data=df_iris, model='svm',
             model_params=model_params,
             seed=42, scoring='accuracy', pos_labels='setosa',
-            return_estimator=True)
+            return_estimator='final')
 
     model_params = {'svm__probability': True}
     actual, actual_estimator = run_cross_validation(
         X=X, y=y, data=df_iris, model='svm',
         model_params=model_params,
         seed=42, scoring=scoring, pos_labels='setosa',
-        return_estimator=True)
+        return_estimator='final')
 
     # Now do the same with scikit-learn
     clf = make_pipeline(StandardScaler(), svm.SVC(probability=True))
@@ -163,7 +163,7 @@ def test_tune_hyperparam():
     model_params = {'svm__C': [0.01, 0.001], 'cv': cv_inner}
     actual, actual_estimator  = run_cross_validation(
         X=X, y=y, data=df_iris, model='svm', model_params=model_params,
-        cv=cv_outer, scoring=scoring, return_estimator=True)
+        cv=cv_outer, scoring=scoring, return_estimator='final')
 
     # Now do the same with scikit-learn
     np.random.seed(42)
@@ -194,7 +194,7 @@ def test_tune_hyperparam():
                     'search': 'random', 'search_params': {'n_iter': 2}}
     actual, actual_estimator  = run_cross_validation(
         X=X, y=y, data=df_iris, model='svm', model_params=model_params,
-        cv=cv_outer, scoring=scoring, return_estimator=True)
+        cv=cv_outer, scoring=scoring, return_estimator='final')
 
     # Now do the same with scikit-learn
     np.random.seed(42)
@@ -230,8 +230,8 @@ def test_tune_hyperparam():
 
     actual, actual_estimator  = run_cross_validation(
         X=X, y=y, data=df_iris, model='svm', model_params=model_params,
-        seed=42, scoring=scoring, return_estimator=True, pos_labels=['setosa'],
-        cv=cv_outer)
+        seed=42, scoring=scoring, return_estimator='final',
+        pos_labels=['setosa'], cv=cv_outer)
 
     np.random.seed(42)
     cv_outer = RepeatedKFold(n_splits=3, n_repeats=1)
@@ -374,3 +374,39 @@ def test_consistency():
     cv = GroupKFold(2)
     _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
                              groups=groups)
+
+
+def test_return_estimators():
+    """Test for consistency in the parameters"""
+    df_iris = load_dataset('iris')
+    df_iris = df_iris[df_iris['species'].isin(['setosa', 'virginica'])]
+    X = ['sepal_length', 'sepal_width', 'petal_length']
+    y = 'species'
+
+    cv = StratifiedKFold(2)
+
+    scores = run_cross_validation(X=X, y=y, data=df_iris, model='svm',
+                                  cv=cv, return_estimator=None)
+
+    assert isinstance(scores, dict)
+    assert 'estimator' not in scores
+
+    scores, final = run_cross_validation(X=X, y=y, data=df_iris, model='svm',
+                                         cv=cv, return_estimator='final')
+
+    assert isinstance(scores, dict)
+    assert 'estimator' not in scores
+    assert isinstance(final['svm'], svm.SVC)
+
+    scores = run_cross_validation(X=X, y=y, data=df_iris, model='svm',
+                                  cv=cv, return_estimator='cv')
+
+    assert isinstance(scores, dict)
+    assert 'estimator' in scores
+
+    scores, final = run_cross_validation(X=X, y=y, data=df_iris, model='svm',
+                                         cv=cv, return_estimator='all')
+
+    assert isinstance(scores, dict)
+    assert 'estimator' in scores
+    assert isinstance(final['svm'], svm.SVC)

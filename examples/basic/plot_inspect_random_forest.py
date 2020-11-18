@@ -40,12 +40,12 @@ y = 'species'
 
 
 ###############################################################################
-# We will use a Random Forest classifier. By setting `return_estimator=True`,
-# the :func:`.run_cross_validation` function return the estimator fitted with
-# all the data.
+# We will use a Random Forest classifier. By setting
+# `return_estimator='final'`, the :func:`.run_cross_validation` function
+# returns the estimator fitted with all the data.
 
 scores, model_iris = run_cross_validation(X=X, y=y, data=df_iris, model='rf',
-                                          return_estimator=True)
+                                          return_estimator='final')
 
 ###############################################################################
 # This type of classifier has an internal variable that can inform us on how
@@ -61,4 +61,38 @@ to_plot = pd.DataFrame({
 fig, ax = plt.subplots(1, 1, figsize=(6, 4))
 sns.barplot(x='importance', y='variable', data=to_plot, ax=ax)
 ax.set_title('Variable Importances for Random Forest Classifier')
+fig.tight_layout()
+
+###############################################################################
+# However, some reviewers (including myself), might wander about the
+# variability of the importance of these features. In the previous example
+# all the feature importances were obtained by fitting on the entire dataset,
+# while the performance was estimated using cross validation.
+#
+# By specifying `return_estimator='cv'`, we can get, for each fold, the fitted
+# estimator.
+
+scores = run_cross_validation(X=X, y=y, data=df_iris, model='rf',
+                              return_estimator='cv')
+
+###############################################################################
+# Now we can obtain the feature importance for each estimator (CV fold)
+to_plot = []
+for i_fold, estimator in enumerate(scores['estimator']):
+    this_importances = pd.DataFrame({
+        'variable': [x.replace('_', ' ') for x in X],
+        'importance': estimator['rf'].feature_importances_,
+        'fold': i_fold
+    })
+    to_plot.append(this_importances)
+
+to_plot = pd.concat(to_plot)
+
+###############################################################################
+# Finally, we can plot the variable importances for each fold
+
+fig, ax = plt.subplots(1, 1, figsize=(6, 4))
+sns.swarmplot(x='importance', y='variable', data=to_plot, ax=ax)
+ax.set_title('Distribution of variable Importances for Random Forest '
+             'Classifier across folds')
 fig.tight_layout()

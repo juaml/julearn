@@ -102,7 +102,7 @@ def do_scoring_test(X, y, data, api_params, sklearn_model, scorers, cv=None,
     np.random.seed(42)
     actual, actual_estimator = run_cross_validation(
         X=X, y=y, data=data, scoring=scorers, cv=cv,
-        return_estimator=True, **api_params)
+        return_estimator='final', **api_params)
 
     np.random.seed(42)
     sk_cv = prepare_cv(cv)
