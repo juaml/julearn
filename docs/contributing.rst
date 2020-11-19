@@ -107,7 +107,7 @@ Simply use your preferred code editor to do the modifications you want.
 2.4 Commit and Push
 ^^^^^^^^^^^^^^^^^^^
 
-This is the standard git worflow. Replace ``<USERNAME>>`` with your Github 
+This is the standard git workflow. Replace ``<USERNAME>>`` with your Github 
 username.
 
     # Add the files you created with ``git add``
