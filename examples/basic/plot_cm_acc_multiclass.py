@@ -35,30 +35,33 @@ train_iris, test_iris = train_test_split(df_iris, test_size=0.2,
 
 ###############################################################################
 # Perform multiclass classification as iris dataset contains 3 kinds of species
-scores, model_iris = run_cross_validation(X=X, y=y, data=train_iris, model='svm',
-                                          problem_type='multiclass_classification',
+scores, model_iris = run_cross_validation(X=X, y=y, data=train_iris,
+                                          model='svm',
+                                          problem_type='multiclass_'
+                                                       'classification',
                                           scoring=['accuracy'],
                                           return_estimator='final')
 
 ###############################################################################
 # Plot heatmap of accuracy over all repeats and CV splits
 n_repeats, n_splits = 5, 5
-repeats = [str(i + 1) for i in range(0,n_repeats)]
-splits = [str(i + 1) for i in range(0,n_splits)]
+repeats = [str(i + 1) for i in range(0, n_repeats)]
+splits = [str(i + 1) for i in range(0, n_splits)]
 test_acc = scores['test_accuracy'].reshape(n_repeats, n_splits)
+
 df_acc = pd.DataFrame(test_acc, columns=splits, index=repeats)
 df_acc.index.name = 'Repeats'
 df_acc.columns.name = 'K-fold splits'
 
-fig, ax = plt.subplots(1, 1, figsize=(10,7))
-sns.heatmap(df_acc, cmap="YlGnBu")
 sns.set(font_scale=1.2)
+fig, ax = plt.subplots(1, 1, figsize=(10, 7))
+sns.heatmap(df_acc, cmap="YlGnBu")
 plt.title('Cross-validation Accuracy')
 
+###############################################################################
 # plot confusion matrix for the test data as heatmap
 y_true = test_iris[y]
 y_pred = model_iris.predict(test_iris[X])
-print('y_pred', y_pred)
 cf_matrix = confusion_matrix(y_true, y_pred)
 
 cm = confusion_matrix(y_true, y_pred, labels=np.unique(y_true))
@@ -79,26 +82,6 @@ for i in range(nrows):
 cm = pd.DataFrame(cm, index=np.unique(y_true), columns=np.unique(y_true))
 cm.index.name = 'Actual'
 cm.columns.name = 'Predicted'
-fig, ax = plt.subplots(1, 1, figsize=(10,7))
+fig, ax = plt.subplots(1, 1, figsize=(10, 7))
 sns.heatmap(cm, cmap="YlGnBu", annot=annot, fmt='', ax=ax)
-sns.set(font_scale=1.2)
 plt.title('Confusion matrix')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
