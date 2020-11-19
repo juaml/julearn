@@ -141,6 +141,13 @@ def test_set_hyperparam():
     clf2 = clone(clf).fit(sk_X, sk_y).steps[-1][1]
     compare_models(clf1, clf2)
 
+    model_params = {'pca__n_components': 2}
+    actual, actual_estimator = run_cross_validation(
+        X=X, y=y, data=df_iris, preprocess_X=['zscore', 'pca'], model='svm',
+        model_params=model_params, seed=42, return_estimator='final')
+    pre_X, _ = actual_estimator.preprocess(df_iris[X], df_iris[y])
+    assert pre_X.shape[1] == 2
+
 
 def test_tune_hyperparam():
     """Test tuning one hyperparmeter"""
