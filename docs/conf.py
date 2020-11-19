@@ -15,7 +15,6 @@
 # sys.path.insert(0, os.path.abspath('.'))
 
 from sphinx_gallery.sorting import ExplicitOrder
-import sphinx_rtd_theme
 
 # -- Project information -----------------------------------------------------
 
