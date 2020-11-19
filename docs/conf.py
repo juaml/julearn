@@ -16,7 +16,6 @@
 
 from sphinx_gallery.sorting import ExplicitOrder
 
-
 # -- Project information -----------------------------------------------------
 
 project = 'julearn'
@@ -36,6 +35,7 @@ extensions = [
     'sphinx.ext.intersphinx',
     'sphinx.ext.mathjax',
     'sphinx_gallery.gen_gallery',
+    'sphinx_rtd_theme',
     'numpydoc'
 ]
 
@@ -53,7 +53,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'python_docs_theme'
+html_theme = 'sphinx_rtd_theme'
 
 html_sidebars = {
     '**': ['globaltoc.html', 'sourcelink.html', 'searchbox.html']
