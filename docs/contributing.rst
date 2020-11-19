@@ -148,6 +148,10 @@ To build the docs:
 
 To view the documentation, open `docs/_build/html/index.html`.
 
+In case you remove some files or change their filename you can run into 
+errors when using ``make html``. In this situation you can use ``make clean``
+to clean up the already build files and then rerun ``make html``. 
+
 If any of this fails, go back to :ref:`do_changes`
 
 2.5 Create a pull request
