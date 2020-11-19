@@ -24,6 +24,15 @@ underscores (``__``). For example, if we want to specify the parameter
     model_params = {'svm__kernel': 'linear'}
     run_cross_validation(X, y, data=df, model='svm', model_params=model_params)
 
+
+Another common example, setting the parameters for a PCA decomposition:
+
+.. code-block:: python
+
+    model_params = {'pca__n_components': 0.99}
+    run_cross_validation(X, y, data=df, preprocess_X=['zscore', 'pca'],
+                         model='svm', model_params=model_params)
+
 TODO: Add doc for confound and y transformers hyperparameters
 
 Tuning Hyperparameters
