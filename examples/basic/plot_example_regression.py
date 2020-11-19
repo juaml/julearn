@@ -87,7 +87,7 @@ plt.title('Cross-validation MAE')
 
 
 ###############################################################################
-# Let's plot the feature importance using the coefficents of the trained model
+# Let's plot the feature importance using the coefficients of the trained model
 
 features = pd.DataFrame({'Features': X, 'importance': model['ridge'].coef_})
 features.sort_values(by=['importance'], ascending=True, inplace=True)
