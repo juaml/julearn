@@ -130,7 +130,7 @@ def test_set_hyperparam():
 
     expected = cross_validate(clf, sk_X, t_sk_y, cv=cv, scoring=[scoring])
 
-    assert len(actual) == len(expected)
+    assert len(actual) == len(expected) + 2
     assert len(actual['test_roc_auc']) == len(expected['test_roc_auc'])
     assert all(
         [a == b for a, b in
@@ -182,7 +182,7 @@ def test_tune_hyperparam():
 
     expected = cross_validate(gs, sk_X, sk_y, cv=cv_outer, scoring=[scoring])
 
-    assert len(actual) == len(expected)
+    assert len(actual) == len(expected) + 2
     assert len(actual['test_accuracy']) == len(expected['test_accuracy'])
     assert all(
         [a == b for a, b in
@@ -214,7 +214,7 @@ def test_tune_hyperparam():
 
     expected = cross_validate(gs, sk_X, sk_y, cv=cv_outer, scoring=[scoring])
 
-    assert len(actual) == len(expected)
+    assert len(actual) == len(expected) + 2
     assert len(actual['test_accuracy']) == len(expected['test_accuracy'])
     assert all(
         [a == b for a, b in
@@ -250,7 +250,7 @@ def test_tune_hyperparam():
     sk_y = (sk_y == 'setosa').astype(np.int)
     expected = cross_validate(gs, sk_X, sk_y, cv=cv_outer, scoring=[scoring])
 
-    assert len(actual) == len(expected)
+    assert len(actual) == len(expected) + 2
     assert len(actual['test_accuracy']) == len(expected['test_accuracy'])
     assert all(
         [a == b for a, b in
