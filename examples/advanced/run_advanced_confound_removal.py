@@ -46,16 +46,12 @@ data['target'] = target
 # In the following we will explore different settings of confound removal
 # using Julearns pipeline functionalities.
 #
-# .. note::
-#  Everything, shown here is also possible in Julearns `run_cross_validation`
-#  function.
-#
 # Confound Removal Typical Use Case
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-# Here, we first confound removed the features.
-# The confound is automatically dropped by the `.DataFrameConfoundRemover`.
+# Here, we want to deconfound the features and not include the confound as a
+# feature into our last model.
 # Afterwards, we will transform our features with a pca and run
-# a linear regression
+# a linear regression.
 #
 feature_names = list(df_features.drop(columns='sex').columns)
 scores, model = run_cross_validation(
@@ -68,8 +64,8 @@ scores, model = run_cross_validation(
 # We can use the `preprocess` method of the `.ExtendedDataFramePipeline`
 # to inspect the transformations/preprocessing steps of the returned estimator.
 # By providing a step name to the `until` argument of the
-# `preprocess` method we return the transformed X and y up to (inclusive)
-# the provided step.
+# `preprocess` method we return the transformed X and y up to
+# the provided step (inclusive).
 # This output consists of a tuple containing the transformed X and y,
 X_deconfounded, _ = model.preprocess(
     df_features, target, until='remove_confound')
@@ -77,7 +73,8 @@ print(X_deconfounded.head())
 
 # As you can see the confound `sex` was dropped
 # and only the confound removed features are used in the following pca.
-# But what if you want to keep the confound in the feature space.
+# But what if you want to keep the confound after removal for
+# other transformations.
 #
 # For example, let's assume that you want to do a pca on the confound removed
 # feature, but want to keep the confound for the actual modelling step.
@@ -87,9 +84,9 @@ print(X_deconfounded.head())
 # .. autoclass:: julearn.transformers.DataFrameConfoundRemover
 
 ###############################################################################
-# Above you can see that we can set the `keep_confounds` argument to True.
-# This will keep the confounds after confound removal
-# Here is an example of how this can look like:
+# Above, you can see that we can set the `keep_confounds` argument to True.
+# This will keep the confounds after confound removal.
+# Here, is an example of how this can look like:
 
 scores, model = run_cross_validation(
     X=feature_names, y='target', data=data,
@@ -105,10 +102,10 @@ X_deconfounded, _ = model.preprocess(
 print(X_deconfounded.head())
 
 ###############################################################################
-# Even after the pca the confound will still be present
+# Even after the pca the confound will still be present.
 # This is the case because by default transformers only transform continuous
 # features (including features without a specified type)
-# and the confound is of type confound.
+# and ignore confounds and categorical variables.
 X_transformed, _ = model.preprocess(df_features, target)
 print(X_transformed.head())
 
@@ -118,7 +115,6 @@ print(X_transformed.head())
 ###############################################################################
 # Lastly, you can also use the confound as a normal feature after confound
 # removal. To do so you can either add the confound(s) to the
-# transformed_columns of the each following transformers
 # which return the same columns or you can use the
 # `.ChangeColumnTypes` to change the returned confounds
 # to a continuous variable like this:
@@ -126,9 +122,9 @@ scores, model = run_cross_validation(
     X=feature_names, y='target', data=data,
     confounds='sex', model='linreg', problem_type='regression',
     preprocess_X=['remove_confound',
-                  ('change_column_types',
+                  ['change_column_types',
                    ChangeColumnTypes('.*confound', 'continuous'),
-                   'from_transformer', 'all'),
+                   'from_transformer', 'all'],
                   'pca'],
     model_params=dict(remove_confound__keep_confounds=True),
     return_estimator='final')
