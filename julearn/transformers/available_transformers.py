@@ -11,6 +11,7 @@ from sklearn.feature_selection import (GenericUnivariateSelect,
                                        VarianceThreshold)
 
 from . confounds import DataFrameConfoundRemover, TargetConfoundRemover
+from . import ChangeColumnTypes
 from . target import TargetTransfromerWrapper
 from .. utils import raise_error
 
@@ -24,7 +25,7 @@ _available_transformers = {
     'pca': [PCA, 'unknown'],
     'remove_confound': [
         DataFrameConfoundRemover,
-        'subset',
+        'from_transformer',
     ],
     # Scalers
     'zscore': [StandardScaler, 'same'],
