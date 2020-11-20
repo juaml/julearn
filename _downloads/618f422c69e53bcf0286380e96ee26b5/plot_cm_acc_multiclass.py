@@ -8,7 +8,7 @@ heatmaps for cross-validation accuracies and plots confusion matrix
 for the test data.
 
 """
-# Authors: Shammi Moore <s.more@fz-juelich.de>
+# Authors: Shammi More <s.more@fz-juelich.de>
 #          Federico Raimondo <f.raimondo@fz-juelich.de>
 #
 # License: AGPL
