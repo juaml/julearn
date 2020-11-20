@@ -66,7 +66,8 @@ print(df_scores.head())
 
 df_accuracy = df_scores.set_index(
     ['repeat', 'fold'])['test_accuracy'].unstack()
-
+df_accuracy.index.name = 'Repeats'
+df_accuracy.columns.name = 'K-fold splits'
 print(df_accuracy)
 
 ###############################################################################

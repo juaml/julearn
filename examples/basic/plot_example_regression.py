@@ -6,6 +6,10 @@ This example uses the 'diabetes' data from sklearn datasets and performs
 a regression analysis using a Ridge Regression model.
 
 """
+# Authors: Shammi Moore <s.more@fz-juelich.de>
+#          Federico Raimondo <f.raimondo@fz-juelich.de>
+#
+# License: AGPL
 
 import pandas as pd
 import seaborn as sns
@@ -64,27 +68,41 @@ scores, model = run_cross_validation(X=X, y=y, data=train_diabetes,
                                      return_estimator='final',
                                      scoring='neg_mean_absolute_error')
 
+###############################################################################
+# The scores dictionary has all the values for each CV split. We can convert
+# this dictionary to a pandas dataframe for easier manipulation
+
+df_scores = pd.DataFrame(scores)
+
+###############################################################################
+# Since we are using the default CV schemes (5-fold CV repeated 5 times), we
+# can also add this information to the dataframe.
+n_repeats, n_folds = 5, 5
+df_scores['repeat'] = np.repeat(np.arange(n_repeats), n_folds)
+df_scores['fold'] = np.tile(np.arange(n_folds), n_repeats)
+
+print(df_scores.head())
+
 
 ###############################################################################
 # Mean value of mean absolute error across CV
-print((scores['test_neg_mean_absolute_error'] * -1).mean())
+print(df_scores['test_neg_mean_absolute_error'].mean() * -1)
 
 ###############################################################################
-# Plot heatmap of mean absolute error (MAE) over all repeats and CV splits
-n_repeats, n_splits = 5, 5
-repeats = [str(i + 1) for i in range(0, n_repeats)]
-splits = [str(i + 1) for i in range(0, n_splits)]
-test_mae = scores['test_neg_mean_absolute_error'] * -1
-test_mae = test_mae.reshape(n_repeats, n_splits)
+# Now we can get the MAE fold and repetition:
 
-df_mae = pd.DataFrame(test_mae, columns=splits, index=repeats)
+df_mae = df_scores.set_index(
+    ['repeat', 'fold'])['test_neg_mean_absolute_error'].unstack() * -1
 df_mae.index.name = 'Repeats'
 df_mae.columns.name = 'K-fold splits'
 
+print(df_mae)
+
+###############################################################################
+# Plot heatmap of mean absolute error (MAE) over all repeats and CV splits
 fig, ax = plt.subplots(1, 1, figsize=(10, 7))
 sns.heatmap(df_mae, cmap="YlGnBu")
 plt.title('Cross-validation MAE')
-
 
 ###############################################################################
 # Let's plot the feature importance using the coefficients of the trained model
