@@ -51,14 +51,6 @@ scores, model_iris = run_cross_validation(X=X, y=y, data=train_iris,
 # this dictionary to a pandas dataframe for easier manipulation
 
 df_scores = pd.DataFrame(scores)
-
-###############################################################################
-# Since we are using the default CV schemes (5-fold CV repeated 5 times), we
-# can also add this information to the dataframe.
-n_repeats, n_folds = 5, 5
-df_scores['repeat'] = np.repeat(np.arange(n_repeats), n_folds)
-df_scores['fold'] = np.tile(np.arange(n_folds), n_repeats)
-
 print(df_scores.head())
 
 ###############################################################################
