@@ -204,6 +204,15 @@ def run_cross_validation(
                             scoring=scorer, groups=df_groups,
                             return_estimator=cv_return_estimator)
 
+    n_repeats = getattr(cv_outer, 'n_repeats', 1)
+    n_folds = len(scores['fit_time']) // n_repeats
+
+    repeats = np.repeat(np.arange(n_repeats), n_folds)
+    folds = np.tile(np.arange(n_folds), n_repeats)
+
+    scores['repeat'] = repeats
+    scores['fold'] = folds
+
     out = scores
     if return_estimator in ['final', 'all']:
         pipeline.fit(df_X_conf, y)
