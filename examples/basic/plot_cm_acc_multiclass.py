@@ -8,6 +8,10 @@ heatmaps for cross-validation accuracies and plots confusion matrix
 for the test data.
 
 """
+# Authors: Shammi Moore <s.more@fz-juelich.de>
+#          Federico Raimondo <f.raimondo@fz-juelich.de>
+#
+# License: AGPL
 
 import pandas as pd
 import seaborn as sns
@@ -43,28 +47,46 @@ scores, model_iris = run_cross_validation(X=X, y=y, data=train_iris,
                                           return_estimator='final')
 
 ###############################################################################
+# The scores dictionary has all the values for each CV split. We can convert
+# this dictionary to a pandas dataframe for easier manipulation
+
+df_scores = pd.DataFrame(scores)
+
+###############################################################################
+# Since we are using the default CV schemes (5-fold CV repeated 5 times), we
+# can also add this information to the dataframe.
+n_repeats, n_folds = 5, 5
+df_scores['repeat'] = np.repeat(np.arange(n_repeats), n_folds)
+df_scores['fold'] = np.tile(np.arange(n_folds), n_repeats)
+
+print(df_scores.head())
+
+###############################################################################
+# Now we can get the accuracy per fold and repetition:
+
+df_accuracy = df_scores.set_index(
+    ['repeat', 'fold'])['test_accuracy'].unstack()
+
+print(df_accuracy)
+
+###############################################################################
 # Plot heatmap of accuracy over all repeats and CV splits
-n_repeats, n_splits = 5, 5
-repeats = [str(i + 1) for i in range(0, n_repeats)]
-splits = [str(i + 1) for i in range(0, n_splits)]
-test_acc = scores['test_accuracy'].reshape(n_repeats, n_splits)
-
-df_acc = pd.DataFrame(test_acc, columns=splits, index=repeats)
-df_acc.index.name = 'Repeats'
-df_acc.columns.name = 'K-fold splits'
-
 sns.set(font_scale=1.2)
 fig, ax = plt.subplots(1, 1, figsize=(10, 7))
-sns.heatmap(df_acc, cmap="YlGnBu")
+sns.heatmap(df_accuracy, cmap="YlGnBu")
 plt.title('Cross-validation Accuracy')
 
 ###############################################################################
-# plot confusion matrix for the test data as heatmap
+# We can also test our final model's accuracy and plot the confusion matrix
+# for the test data as an annotated heatmap
 y_true = test_iris[y]
 y_pred = model_iris.predict(test_iris[X])
-cf_matrix = confusion_matrix(y_true, y_pred)
-
 cm = confusion_matrix(y_true, y_pred, labels=np.unique(y_true))
+
+print(cm)
+###############################################################################
+# Now that we have our confusion matrix, let's build another matrix with
+# annotations.
 cm_sum = np.sum(cm, axis=1, keepdims=True)
 cm_perc = cm / cm_sum.astype(float) * 100
 annot = np.empty_like(cm).astype(str)
@@ -78,7 +100,9 @@ for i in range(nrows):
         else:
             s = cm_sum[i]
             annot[i, j] = '%.1f%%\n%d/%d' % (p, c, s)
-
+###############################################################################
+# Finally we create another dataframe with the confusion matrix and plot
+# the heatmap with annotations.
 cm = pd.DataFrame(cm, index=np.unique(y_true), columns=np.unique(y_true))
 cm.index.name = 'Actual'
 cm.columns.name = 'Predicted'
