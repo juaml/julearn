@@ -420,25 +420,33 @@ def _prepare_hyperparams(hyperparams, pipeline):
     return to_tune
 
 
-def prepare_preprocessing(preprocess_X, preprocess_y, preprocess_confounds):
+def prepare_preprocessing(preprocess_X, preprocess_y, preprocess_confounds,
+                          confounds):
     if preprocess_X is not None and not isinstance(preprocess_X, list):
         preprocess_X = [preprocess_X]
     if not isinstance(preprocess_confounds, list):
         preprocess_confounds = [preprocess_confounds]
-    preprocess_X = _prepare_preprocess_X(preprocess_X)
+    preprocess_X = _prepare_preprocess_X(preprocess_X, confounds)
     preprocess_y = _prepare_preprocess_y(preprocess_y)
     preprocess_conf = _prepare_preprocess_confounds(preprocess_confounds)
     return preprocess_X, preprocess_y, preprocess_conf
 
 
-def _prepare_preprocess_X(preprocess_X):
+def _prepare_preprocess_X(preprocess_X, confounds):
     '''
     validates preprocess_X and returns a list of tuples accordingly
     and default params for this list
     '''
-    if preprocess_X is not None:
+    if (preprocess_X is None) and (confounds is not None):
+        preprocess_X = [_create_preprocess_tuple('remove_confound')]
+
+    else:
         preprocess_X = [_create_preprocess_tuple(transformer)
                         for transformer in preprocess_X]
+        names, _, _, _ = zip(*preprocess_X)
+        if ('remove_confound' not in names) and (confounds is not None):
+            preprocess_X = ([(_create_preprocess_tuple('remove_confound'))]
+                            + preprocess_X)
     return preprocess_X
 
 
