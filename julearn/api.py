@@ -173,7 +173,7 @@ def run_cross_validation(
 
     # Interpret preprocessing parameters
     preprocess_vars = prepare_preprocessing(
-        preprocess_X, preprocess_y, preprocess_confounds
+        preprocess_X, preprocess_y, preprocess_confounds, confounds
     )
     preprocess_X, preprocess_y, preprocess_confounds = preprocess_vars
 
