@@ -99,6 +99,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#model-functions">Model functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#transformer-functions">Transformer functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#logging">Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">Cross-Validation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#classes">Classes</a></li>
 </ul>
 </li>
@@ -443,6 +444,77 @@ entries will be appended.</p>
 </dl>
 </dd>
 </dl>
+</dd></dl>
+
+</div>
+<hr class="docutils" />
+<div class="section" id="id1">
+<h2>Cross-Validation<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="julearn.model_selection.StratifiedBootstrap">
+<em class="property">class </em><code class="sig-prename descclassname">julearn.model_selection.</code><code class="sig-name descname">StratifiedBootstrap</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">n_splits</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="o">*</span></em>, <em class="sig-param"><span class="n">test_size</span><span class="o">=</span><span class="default_value">0.5</span></em>, <em class="sig-param"><span class="n">train_size</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">random_state</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.model_selection.StratifiedBootstrap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stratified Bootstrap cross-validation iterator</p>
+<p>Provides train/test indices using resampling with replacement, respecting
+the distribution of samples for each class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n_splits</strong><span class="classifier">int, default=5</span></dt><dd><p>Number of re-shuffling &amp; splitting iterations.</p>
+</dd>
+<dt><strong>test_size</strong><span class="classifier">float, int, default=0.2</span></dt><dd><p>If float, should be between 0.0 and 1.0 and represent the proportion
+of groups to include in the test split (rounded up). If int,
+represents the absolute number of test groups. If None, the value is
+set to the complement of the train size.
+The default will change in version 0.21. It will remain 0.2 only
+if <code class="docutils literal notranslate"><span class="pre">train_size</span></code> is unspecified, otherwise it will complement
+the specified <code class="docutils literal notranslate"><span class="pre">train_size</span></code>.</p>
+</dd>
+<dt><strong>train_size</strong><span class="classifier">float or int, default=None</span></dt><dd><p>If float, should be between 0.0 and 1.0 and represent the
+proportion of the groups to include in the train split. If
+int, represents the absolute number of train groups. If None,
+the value is automatically set to the complement of the test size.</p>
+</dd>
+<dt><strong>random_state</strong><span class="classifier">int or RandomState instance, default=None</span></dt><dd><p>Controls the randomness of the training and testing indices produced.
+Pass an int for reproducible output across multiple function calls.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="julearn.model_selection.StratifiedBootstrap.split">
+<code class="sig-name descname">split</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">groups</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.model_selection.StratifiedBootstrap.split" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate indices to split data into training and test set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_features)</span></dt><dd><p>Training data, where n_samples is the number of samples
+and n_features is the number of features.
+Note that providing <code class="docutils literal notranslate"><span class="pre">y</span></code> is sufficient to generate the splits and
+hence <code class="docutils literal notranslate"><span class="pre">np.zeros(n_samples)</span></code> may be used as a placeholder for
+<code class="docutils literal notranslate"><span class="pre">X</span></code> instead of actual training data.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">array-like of shape (n_samples,) or (n_samples, n_labels)</span></dt><dd><p>The target variable for supervised learning problems.
+Stratification is done based on the y labels.</p>
+</dd>
+<dt><strong>groups</strong><span class="classifier">object</span></dt><dd><p>Always ignored, exists for compatibility.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Yields</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>train</strong><span class="classifier">ndarray</span></dt><dd><p>The training set indices for that split.</p>
+</dd>
+<dt><strong>test</strong><span class="classifier">ndarray</span></dt><dd><p>The testing set indices for that split.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Randomized CV splitters may return different results for each call of
+split. You can make the results identical by setting <cite>random_state</cite>
+to an integer.</p>
+</dd></dl>
+
 </dd></dl>
 
 </div>
