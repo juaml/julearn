@@ -229,3 +229,22 @@ class ChangeColumnTypes(TransformerMixin, BaseEstimator):
     def transform(self, X):
 
         return X.copy().rename(columns=self.column_mapper_)
+
+
+class DropColumns(TransformerMixin, BaseEstimator):
+
+    def __init__(self, columns):
+        self.columns = self.columns
+
+    def fit(self, X, y=None):
+        self.support_mask_ = pd.Series(True, index=X.columns, dtype=bool)
+        try:
+            self.detected_columns_ = pick_columns(self.columns, X.columns)
+            self.support_mask_[self.detected_columns_] = False
+        except ValueError:
+            pass
+        self.support_mask_ = self.support_mask_.values
+        return self
+
+    def transform(self, X):
+        return X.drop(columns=self.detected_columns_)
