@@ -55,7 +55,7 @@ confound = 'petal_width'
 # difference. If the 95% CI is above 0 (or below), we can claim that the models
 # are different with p < 0.05.
 #
-# Lets use a boostrap CV. For time purposes we do 20 iterations, change the
+# Lets use a bootstrap CV. For time purposes we do 20 iterations, change the
 # number of bootstrap iterations to at least 2000 for a valid test.
 n_bootstrap = 20
 n_elements = len(df_iris)
@@ -90,7 +90,7 @@ df_cr = pd.DataFrame(scores_cr)
 df_cr['confounds'] = 'Removed'
 
 ###############################################################################
-# Now we conver the metrics to a column for easier seaborn plotting (convert
+# Now we convert the metrics to a column for easier seaborn plotting (convert
 # to long format)
 
 index = ['fold', 'confounds']
