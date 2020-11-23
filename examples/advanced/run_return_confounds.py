@@ -15,8 +15,7 @@ will discuss the options you have.
 #
 # License: AGPL
 from sklearn.datasets import load_diabetes  # to load data
-from julearn.pipeline import create_extended_pipeline
-from julearn.transformers import get_transformer, ChangeColumnTypes
+from julearn.transformers import ChangeColumnTypes
 from julearn import run_cross_validation
 
 
