@@ -265,8 +265,12 @@ def test_DropColumns():
     drop_columns = DropColumns(columns='.*__:type:__confound')
     X_trans = drop_columns.fit_transform(X_with_types)
 
+    kept_cols = X_with_types.columns[drop_columns.get_support()].to_list()
     assert_frame_equal(
         X_trans,
-        X_with_types.drop(
-            columns=['c__:type:__confound', 'd__:type:__confound'])
+        X_with_types[kept_cols]
     )
+    assert_frame_equal(
+        X_with_types.drop(
+            columns=['c__:type:__confound', 'd__:type:__confound']),
+        X_trans)
