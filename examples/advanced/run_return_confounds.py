@@ -5,7 +5,7 @@ Return Confounds in Confound Removal
 In most cases confound removal is a simple operation.
 You regress out the confound from the features and only continue working with
 these new confound removed features. This is also the default setting for
-julearn's `remove_confound`_ step. But sometimes you want to work with the
+julearn's `remove_confound` step. But sometimes you want to work with the
 confound even after removing it from the features. In this example, we
 will discuss the options you have.
 
