@@ -13,11 +13,12 @@ from sklearn.model_selection import cross_validate
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 
-from julearn.transformers import DataFrameTransformer, TargetTransfromerWrapper
+from julearn.transformers import (DataFrameTransformer,
+                                  TargetTransfromerWrapper,
+                                  DataFrameConfoundRemover)
 from julearn.pipeline import (ExtendedDataFramePipeline,
                               create_dataframe_pipeline,
                               create_extended_pipeline)
-
 X = pd.DataFrame(dict(A=np.arange(10),
                       B=np.arange(10, 20),
                       C=np.arange(30, 40)
@@ -407,3 +408,50 @@ def test_remove_column_types_ExtendedDataFramePipe():
     extended_pipe.fit(X, y)
     X_removed = extended_pipe._remove_column_types(X_with_types)
     assert (X_removed.columns == list('abcdef')).all()
+
+
+def test_create_exteneded_pipeline_confound_removal():
+    '''Test automatic drop of confounds at the end of the pipeline
+    '''
+    preprocess_steps_feature = [(
+        'remove_confound',
+        DataFrameConfoundRemover(),
+        'subset', 'all'),
+    ]
+    preprocess_steps_feature_keep_conf = [(
+        'remove_confound',
+        DataFrameConfoundRemover(keep_confounds=True),
+        'subset', 'all'),
+    ]
+
+    model = ('lr', LinearRegression())
+    conf_steps = [('zscore', StandardScaler())]
+    y_transformer = TargetTransfromerWrapper(StandardScaler())
+    extended_pipe = create_extended_pipeline(
+        preprocess_steps_features=preprocess_steps_feature,
+        preprocess_transformer_target=y_transformer,
+        preprocess_steps_confounds=conf_steps,
+        model=model,
+        confounds='B',
+        categorical_features=None
+    )
+
+    extended_pipe_keep_confound = create_extended_pipeline(
+        preprocess_steps_features=preprocess_steps_feature_keep_conf,
+        preprocess_transformer_target=y_transformer,
+        preprocess_steps_confounds=conf_steps,
+        model=model,
+        confounds='B',
+        categorical_features=None
+    )
+    np.random.seed(4242)
+    pred = (extended_pipe
+            .fit(X.iloc[:, :-1], X.C)
+            .predict(X.iloc[:, :-1]))
+
+    np.random.seed(4242)
+    pred_keep = (extended_pipe_keep_confound
+                 .fit(X.iloc[:, :-1], X.C)
+                 .predict(X.iloc[:, :-1]))
+
+    assert_array_equal(pred, pred_keep)
