@@ -11,7 +11,6 @@ from sklearn.feature_selection import (GenericUnivariateSelect,
                                        VarianceThreshold)
 
 from . confounds import DataFrameConfoundRemover, TargetConfoundRemover
-from . import ChangeColumnTypes
 from . target import TargetTransfromerWrapper
 from .. utils import raise_error
 

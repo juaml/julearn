@@ -437,8 +437,9 @@ def _prepare_preprocess_X(preprocess_X, confounds):
     validates preprocess_X and returns a list of tuples accordingly
     and default params for this list
     '''
-    if (preprocess_X is None) and (confounds is not None):
-        preprocess_X = [_create_preprocess_tuple('remove_confound')]
+    if preprocess_X is None:
+        if confounds is not None:
+            preprocess_X = [_create_preprocess_tuple('remove_confound')]
 
     else:
         preprocess_X = [_create_preprocess_tuple(transformer)
