@@ -10,7 +10,9 @@ from pandas.testing import assert_frame_equal
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 
-from julearn.transformers import DataFrameTransformer, ChangeColumnTypes
+from julearn.transformers import (DataFrameTransformer,
+                                  ChangeColumnTypes,
+                                  DropColumns)
 from julearn.utils.testing import PassThroughTransformer
 
 X = pd.DataFrame(dict(A=np.arange(10),
@@ -257,3 +259,14 @@ def test_ChangeColumnTypes():
         )
     )
     assert_array_equal(X_scaled_both.values, X_scaled_trans.values)
+
+
+def test_DropColumns():
+    drop_columns = DropColumns(columns='.*__:type:__confound')
+    X_trans = drop_columns.fit_transform(X_with_types)
+
+    assert_frame_equal(
+        X_trans,
+        X_with_types.drop(
+            columns=['c__:type:__confound', 'd__:type:__confound'])
+    )
