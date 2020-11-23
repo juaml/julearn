@@ -7,6 +7,11 @@ with and without confound removal using a Random Forest classifier.
 
 """
 
+# Authors: Shammi More <s.more@fz-juelich.de>
+#          Federico Raimondo <f.raimondo@fz-juelich.de>
+#
+# License: AGPL
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
