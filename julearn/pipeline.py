@@ -116,7 +116,6 @@ class ExtendedDataFramePipeline(BaseEstimator):
         self.categorical_features = categorical_features
 
     def fit(self, X, y=None):
-
         self.dataframe_pipeline = clone(self.dataframe_pipeline)
         self.confound_dataframe_pipeline = (
             None
@@ -135,7 +134,6 @@ class ExtendedDataFramePipeline(BaseEstimator):
         self._set_column_mappers(X)
 
         X = self._recode_columns(X)
-
         if self.confound_dataframe_pipeline is not None:
             X_conf_trans = self._fit_transform_confounds(X, y)
         else:
@@ -145,7 +143,6 @@ class ExtendedDataFramePipeline(BaseEstimator):
             y_true = self.y_transformer.fit_transform(X_conf_trans, y)
         else:
             y_true = y
-
         self.dataframe_pipeline.fit(X_conf_trans, y_true)
         return self
 
@@ -359,7 +356,10 @@ def create_extended_pipeline(
            'subset', 'all')] +
          [model])
         if preprocess_steps_features is not None
-        else [model]
+        else [(
+            'drop_confounds', DropColumns(columns='.*__:type:__confound'),
+            'subset', 'all'),
+            model]
     )
     pipeline = create_dataframe_pipeline(X_steps)
 

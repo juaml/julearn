@@ -94,6 +94,18 @@ def test_confound_auto_find_conf():
             assert_frame_equal(df_cofound_removed, df_confound_removed_manual)
 
 
+def test_ignore_feature_equal_confound():
+    X_feat_eq_conf = X.copy()
+    X_feat_eq_conf['c__:type:__continuous'] = X_feat_eq_conf[
+        'c__:type:__confound']
+
+    X_removed = DataFrameConfoundRemover().fit_transform(X_feat_eq_conf)
+
+    assert_frame_equal(
+        X_feat_eq_conf[['c__:type:__continuous']],
+        X_removed[['c__:type:__continuous']])
+
+
 def test_confound_set_confounds():
 
     confounds_list = [

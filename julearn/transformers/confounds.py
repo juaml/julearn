@@ -6,7 +6,7 @@ import pandas as pd
 from sklearn.base import BaseEstimator, TransformerMixin, clone
 from sklearn.linear_model import LinearRegression
 
-from .. utils import raise_error, pick_columns
+from .. utils import raise_error, pick_columns, logger
 
 
 class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
@@ -93,6 +93,12 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
             Data without confounds
         """
         df_X, df_confounds, df_feat_equal_conf = self._split_into_X_confound(X)
+        if df_feat_equal_conf.columns.to_list() != []:
+            logger.info(
+                f'{df_feat_equal_conf.columns.to_list()} are both '
+                'features and confounds. Therefore, confound removal will '
+                'ignore these features')
+
         df_X_prediction = pd.DataFrame(
             [model.predict(df_confounds)
              for model in self.models_confound_.values],
@@ -148,10 +154,14 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
                         f'{self.confounds_match} in   the columns {X.columns}')
         df_confounds = df_X.loc[:, self.detected_confounds_]
         df_X = df_X.drop(columns=self.detected_confounds_)
+
+        confounds_without_type = [
+            col.split('__:type:__')[0]
+            for col in self.detected_confounds_]
         feature_equal_conf = [
             col
             for col in df_X.columns.to_list()
-            if col in self.detected_confounds_
+            if col.split('__:type:__')[0] in confounds_without_type
 
         ]
         df_feature_equal_conf = df_X.loc[:, feature_equal_conf]
