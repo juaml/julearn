@@ -1,6 +1,6 @@
 """
-Confound Removal
-============================
+Confound Removal (model comparison)
+===================================
 
 This example uses the 'iris' dataset, performs simple binary classification
 with and without confound removal using a Random Forest classifier.
@@ -16,10 +16,10 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from seaborn import load_dataset
-from sklearn.model_selection import StratifiedKFold
 
 from julearn import run_cross_validation
 from julearn.utils import configure_logging
+from julearn.model_selection import StratifiedBootstrap
 
 ###############################################################################
 # Set the logging level to info to see extra information
@@ -44,91 +44,151 @@ y = 'species'
 confound = 'petal_width'
 
 ###############################################################################
-# Use stratified 10 fold CV
-cv = StratifiedKFold(n_splits=10, shuffle=True, random_state=200)
+# Doing hypothesis testing in ML is not that simple. If we were to used
+# classical frequentist statistics, we have the problem that using cross
+# validation, the samples are not independent and the population (train + test)
+# is always the same.
+#
+# If we want to compare two models, an alternative is to contrast, for each
+# fold, the performance gap between the models. If we combine that approach
+# with bootstrapping, we can then compare the confidence intervals of the
+# difference. If the 95% CI is above 0 (or below), we can claim that the models
+# are different with p < 0.05.
+#
+# Lets use a boostrap CV. For time purposes we do 20 iterations, change the
+# number of bootstrap iterations to at least 2000 for a valid test.
+n_bootstrap = 20
+n_elements = len(df_iris)
+cv = StratifiedBootstrap(n_splits=n_bootstrap, test_size=.3, random_state=42)
 
 ###############################################################################
 # First, we will train a model without performing confound removal on features
 # Note: confounds=None by default
 scores_ncr = run_cross_validation(X=X, y=y, data=df_iris, model='rf', cv=cv,
-                                  scoring='accuracy', return_estimator='cv',
+                                  scoring=['accuracy', 'roc_auc'],
+                                  return_estimator='cv',
                                   seed=200)
 
-###############################################################################
-# Accuracy for each fold
-print(scores_ncr['test_accuracy'])
 
 ###############################################################################
 # Next, we train a model after performing confound removal on the features
-# Note: we use the same random seed as before to create same CV splits
+# Note: we initialize the CV again to use the same folds as before
+cv = StratifiedBootstrap(n_splits=n_bootstrap, test_size=.3, random_state=42)
 scores_cr = run_cross_validation(X=X, y=y, confounds=confound, data=df_iris,
                                  model='rf', preprocess_X='remove_confound',
-                                 cv=cv, scoring='accuracy',
+                                 cv=cv, scoring=['accuracy', 'roc_auc'],
                                  return_estimator='cv',
                                  seed=200)
 
 ###############################################################################
-# Accuracy for each fold
-print(scores_cr['test_accuracy'])
+# Now we can compare the accuracies. We can combine the two outputs as
+# pandas dataframes
+df_ncr = pd.DataFrame(scores_ncr)
+df_ncr['confounds'] = 'Not Removed'
+
+df_cr = pd.DataFrame(scores_cr)
+df_cr['confounds'] = 'Removed'
 
 ###############################################################################
-# Let's compare CV accuracy for each fold across the two models
-# NCR: no confound removal
-# CVCR: Cross-validated confound removal
+# Now we conver the metrics to a column for easier seaborn plotting (convert
+# to long format)
 
-scores_df = pd.DataFrame({'NCR': scores_ncr['test_accuracy'],
-                          'CVCR': scores_cr['test_accuracy']})
-sns.set(style="darkgrid", font_scale=1.2)
-fig, ax = plt.subplots(1, 1, figsize=(7, 5))
-sns.boxplot(data=scores_df, width=0.3, palette="colorblind")
-sns.stripplot(data=scores_df, jitter=True, dodge=True, marker='o', alpha=0.6,
-              color='k')
-ax.set(ylabel='Accuracy', title='Model performance without and with confound '
-                                'removal')
-plt.savefig('1.png')
+index = ['fold', 'confounds']
+scorings = ['test_accuracy', 'test_roc_auc']
 
+df_ncr_metrics = df_ncr.set_index(index)[scorings].stack()
+df_ncr_metrics.index.names = ['fold', 'confounds', 'metric']
+df_ncr_metrics.name = 'value'
+
+df_cr_metrics = df_cr.set_index(index)[scorings].stack()
+df_cr_metrics.index.names = ['fold', 'confounds', 'metric']
+df_cr_metrics.name = 'value'
+
+df_metrics = pd.concat((df_ncr_metrics, df_cr_metrics))
+
+df_metrics = df_metrics.reset_index()
+print(df_metrics.head())
 
 ###############################################################################
-# Let's compare the importance of each feature in classification with and
-# without condound removal
+# And finally plot the results
+sns.catplot(x='confounds', y='value', col='metric', data=df_metrics,
+            kind='swarm')
+plt.tight_layout()
 
 ###############################################################################
-# Get feature importance for each CV fold for model trained without confound
-# removal (NCR)
+# While this plot allows us to see the mean performance values and compare
+# them, these samples are paired. In order to see if there is a systematic
+# difference, we need to check the distribution of differeces between the
+# the models.
+#
+# First we remove the column "confounds" from the index and make the difference
+# between the metrics
 
-ncr_to_plot = []
+df_cr_metrics = df_cr_metrics.reset_index().set_index(['fold', 'metric'])
+df_ncr_metrics = df_ncr_metrics.reset_index().set_index(['fold', 'metric'])
+
+df_diff_metrics = df_ncr_metrics['value'] - df_cr_metrics['value']
+df_diff_metrics = df_diff_metrics.reset_index()
+
+###############################################################################
+# Now we can finally plot the difference, setting the whiskers of the box plot
+# at 2.5 and 97.5 to see the 95% CI.
+sns.boxplot(x='metric', y='value', data=df_diff_metrics.reset_index(),
+            whis=[2.5, 97.5])
+plt.axhline(0, color='k', ls=':')
+plt.tight_layout()
+
+###############################################################################
+# We can see that while it seems that the accuracy and ROC AUC scores are
+# higher when confounds are not removed. We can not really claim (using this
+# test), that the models are different in terms of these metrics.
+#
+# Maybe the percentiles will be more accuracy with the proper amount of
+# bootstrap iterations?
+#
+#
+# But the main point of confound removal is for interpretability. Lets see
+# if there is a change in the feature importances.
+#
+# First, we need to collect the feature importances for each model, for each
+# fold.
+
+ncr_fi = []
 for i_fold, estimator in enumerate(scores_ncr['estimator']):
     this_importances = pd.DataFrame({
-        'features': [x.replace('_', ' ') for x in X],
-        'NCR': estimator['rf'].feature_importances_,
+        'feature': [x.replace('_', ' ') for x in X],
+        'importance': estimator['rf'].feature_importances_,
+        'confounds': 'Not Removed',
         'fold': i_fold
     })
-    ncr_to_plot.append(this_importances)
-ncr_to_plot = pd.concat(ncr_to_plot)
+    ncr_fi.append(this_importances)
+ncr_fi = pd.concat(ncr_fi)
 
-###############################################################################
-# Get feature importance for each CV fold for model trained with confound
-# removal on features (CVCR)
-
-cr_to_plot = []
+cr_fi = []
 for i_fold, estimator in enumerate(scores_cr['estimator']):
     this_importances = pd.DataFrame({
-        'features': [x.replace('_', ' ') for x in X],
-        'CVCR': estimator['rf'].feature_importances_,
+        'feature': [x.replace('_', ' ') for x in X],
+        'importance': estimator['rf'].feature_importances_,
+        'confounds': 'Removed',
         'fold': i_fold
     })
-    cr_to_plot.append(this_importances)
-cr_to_plot = pd.concat(cr_to_plot)
+    cr_fi.append(this_importances)
+cr_fi = pd.concat(cr_fi)
+
+feature_importance = pd.concat([cr_fi, ncr_fi])
 
 ###############################################################################
-# Combine both the dataframes (ncr_to_plot and cr_to_plot) for further plotting
+# We can now plot the importances
+sns.catplot(x='feature', y='importance', hue='confounds', dodge=True,
+            data=feature_importance, kind='swarm', s=3)
+plt.tight_layout()
 
-df = pd.merge(left=ncr_to_plot, right=cr_to_plot, how='inner')
-sns.set(style="darkgrid", font_scale=1.2)
-fig, ax1 = plt.subplots(figsize=(15, 10))
-tidy = df.melt(id_vars=['features', 'fold'])
-sns.swarmplot(x='value', y='features', hue='variable', data=tidy, ax=ax1,
-              size=8)
-ax1.set(xlabel='Importance', title='Feature importance without and with '
-                                   'confound removal')
-plt.savefig('2.png')
+###############################################################################
+# And check the differences in importances. We can now see that there is
+# a difference in importances.
+diff_fi = (cr_fi.set_index(['feature', 'fold'])['importance'] -
+           ncr_fi.set_index(['feature', 'fold'])['importance'])
+sns.boxplot(x='importance', y='feature', data=diff_fi.reset_index(),
+            whis=[2.5, 97.5])
+plt.axvline(0, color='k', ls=':')
+plt.tight_layout()
