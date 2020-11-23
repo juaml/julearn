@@ -6,7 +6,7 @@ This example uses the 'diabetes' data from sklearn datasets and performs
 a regression analysis using a Ridge Regression model.
 
 """
-# Authors: Shammi Moore <s.more@fz-juelich.de>
+# Authors: Shammi More <s.more@fz-juelich.de>
 #          Federico Raimondo <f.raimondo@fz-juelich.de>
 #
 # License: AGPL
