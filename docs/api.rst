@@ -31,6 +31,14 @@ Logging
 
 =======
 
+Cross-Validation
+^^^^^^^^^^^^^^^^
+
+.. autoclass:: julearn.model_selection.StratifiedBootstrap
+   :members: 
+
+=======
+
 Classes
 ^^^^^^^
 
