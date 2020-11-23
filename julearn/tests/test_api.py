@@ -3,6 +3,7 @@
 # License: AGPL
 import numpy as np
 
+from numpy.testing import assert_array_equal
 from sklearn import svm
 from sklearn.base import clone
 from sklearn.preprocessing import StandardScaler, LabelEncoder
@@ -168,7 +169,7 @@ def test_tune_hyperparam():
     cv_inner = RepeatedKFold(n_splits=2, n_repeats=1)
 
     model_params = {'svm__C': [0.01, 0.001], 'cv': cv_inner}
-    actual, actual_estimator  = run_cross_validation(
+    actual, actual_estimator = run_cross_validation(
         X=X, y=y, data=df_iris, model='svm', model_params=model_params,
         cv=cv_outer, scoring=scoring, return_estimator='final')
 
@@ -199,7 +200,7 @@ def test_tune_hyperparam():
     # Now randomized search
     model_params = {'svm__C': [0.01, 0.001], 'cv': cv_inner,
                     'search': 'random', 'search_params': {'n_iter': 2}}
-    actual, actual_estimator  = run_cross_validation(
+    actual, actual_estimator = run_cross_validation(
         X=X, y=y, data=df_iris, model='svm', model_params=model_params,
         cv=cv_outer, scoring=scoring, return_estimator='final')
 
@@ -235,7 +236,7 @@ def test_tune_hyperparam():
                     'scoring': gs_scoring,
                     'cv': cv_inner}
 
-    actual, actual_estimator  = run_cross_validation(
+    actual, actual_estimator = run_cross_validation(
         X=X, y=y, data=df_iris, model='svm', model_params=model_params,
         seed=42, scoring=scoring, return_estimator='final',
         pos_labels=['setosa'], cv=cv_outer)
@@ -417,3 +418,29 @@ def test_return_estimators():
     assert isinstance(scores, dict)
     assert 'estimator' in scores
     assert isinstance(final['svm'], svm.SVC)
+
+
+def test_confound_removal_no_explicit_removal():
+    df_iris = load_dataset('iris')
+    df_iris = df_iris[df_iris['species'].isin(['setosa', 'virginica'])]
+
+    X = ['sepal_length', 'sepal_width', 'petal_length']
+    conf = ['petal_width']
+    y = 'species'
+    scores_not_explicit = run_cross_validation(
+        X=X, y=y, model='svm',
+        confounds=conf, data=df_iris, seed=42)
+
+    scores_explicit = run_cross_validation(
+        X=X, y=y, confounds=conf, model='svm', data=df_iris,
+        preprocess_X=['remove_confound', 'zscore'], seed=42)
+
+    scores_explicit_z = run_cross_validation(
+        X=X, y=y, confounds=conf, model='svm', data=df_iris,
+        preprocess_X=['zscore'], seed=42)
+
+    assert_array_equal(scores_explicit['test_score'],
+                       scores_not_explicit['test_score'])
+
+    assert_array_equal(scores_explicit['test_score'],
+                       scores_explicit_z['test_score'])
