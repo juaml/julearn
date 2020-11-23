@@ -3,6 +3,7 @@
 # License: AGPL
 from copy import deepcopy
 import pandas as pd
+import numpy as np
 from sklearn.base import TransformerMixin, BaseEstimator
 
 from .. utils import raise_error, pick_columns, change_column_type
@@ -234,7 +235,7 @@ class ChangeColumnTypes(TransformerMixin, BaseEstimator):
 class DropColumns(TransformerMixin, BaseEstimator):
 
     def __init__(self, columns):
-        self.columns = self.columns
+        self.columns = columns
 
     def fit(self, X, y=None):
         self.support_mask_ = pd.Series(True, index=X.columns, dtype=bool)
@@ -242,9 +243,15 @@ class DropColumns(TransformerMixin, BaseEstimator):
             self.detected_columns_ = pick_columns(self.columns, X.columns)
             self.support_mask_[self.detected_columns_] = False
         except ValueError:
-            pass
+            self.detected_columns_ = []
         self.support_mask_ = self.support_mask_.values
         return self
 
     def transform(self, X):
         return X.drop(columns=self.detected_columns_)
+
+    def get_support(self, indices=False):
+        if indices:
+            return np.arange(len(self.support_mask_))[self.support_mask_]
+        else:
+            return self.support_mask_
