@@ -355,7 +355,8 @@ def create_extended_pipeline(
 
     X_steps = (
         (list(preprocess_steps_features) +
-         [('drop_confounds', DropColumns, 'subset', 'all')] +
+         [('drop_confounds', DropColumns(columns='.*__:type:__confound'),
+           'subset', 'all')] +
          [model])
         if preprocess_steps_features is not None
         else [model]
