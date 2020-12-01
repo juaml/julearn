@@ -14,7 +14,7 @@ class DataFrameTransformer(TransformerMixin):
     column_types = ['confound', 'all', 'all_features',
                     'continuous', 'categorical']
 
-    def __init__(self, transformer, transform_column='all',
+    def __init__(self, transformer, apply_to='all',
                  returned_features='unknown', column_type_sep='__:type:__',
                  **params):
         """Core class of julearn.
@@ -56,7 +56,7 @@ class DataFrameTransformer(TransformerMixin):
         """
 
         self.transformer = transformer
-        self.transform_column = transform_column
+        self.apply_to = apply_to
         self.returned_features = returned_features
         self.column_type_sep = column_type_sep
         self.set_params(**params)
@@ -104,14 +104,14 @@ class DataFrameTransformer(TransformerMixin):
 
         elif self.returned_features == 'unknown_same_type':
 
-            if (type(self.transform_column) == list) and (
-                    len(self.transform_column) > 1) or (
-                        self.transform_column in ['all', 'all_features']
+            if (type(self.apply_to) == list) and (
+                    len(self.apply_to) > 1) or (
+                        self.apply_to in ['all', 'all_features']
             ):
 
                 raise_error('You can only return same type, '
                             'when all used columns have the same type '
-                            f'here the types are {self.transform_column}')
+                            f'here the types are {self.apply_to}')
 
             transformer_name = self.transformer.__class__.__name__.lower()
             columns = [
@@ -135,7 +135,7 @@ class DataFrameTransformer(TransformerMixin):
 
     def get_params(self, deep=True):
         params = dict(transformer=self.transformer,
-                      transform_column=self.transform_column,
+                      apply_to=self.apply_to,
                       returned_features=self.returned_features,
                       column_type_sep=self.column_type_sep)
 
@@ -145,7 +145,7 @@ class DataFrameTransformer(TransformerMixin):
         return deepcopy(params) if deep else params
 
     def set_params(self, **params):
-        for param in ['transformer', 'transform_column',
+        for param in ['transformer', 'apply_to',
                       'returned_features', 'column_type_sep']:
             if params.get(param) is not None:
                 setattr(self, param, params.pop(param))
@@ -158,28 +158,28 @@ class DataFrameTransformer(TransformerMixin):
     def _set_columns_to_transform(self, X):
 
         all_columns = X.columns.copy()
-        if type(self.transform_column) == str:
-            if self.transform_column in self.column_types:
+        if type(self.apply_to) == str:
+            if self.apply_to in self.column_types:
                 self.transform_column_ = self._get_columns_of_type(
-                    all_columns, self.transform_column)
+                    all_columns, self.apply_to)
             else:
-                self.transform_column_ = (X.loc[:, self.transform_column]
+                self.transform_column_ = (X.loc[:, self.apply_to]
                                           .columns.to_list())
 
         else:
             if (pd.Series([column in self.column_types
-                           for column in self.transform_column
+                           for column in self.apply_to
                            ]).all()):
                 self.transform_column_ = self._get_columns_of_types(
-                    X.columns, self.transform_column)
+                    X.columns, self.apply_to)
             else:
-                self.transform_column_ = (X.loc[:, self.transform_column]
+                self.transform_column_ = (X.loc[:, self.apply_to]
                                           .columns.to_list()
                                           )
 
         if self.transform_column_ == []:
             raise_error('There is not valid column to transform '
-                        f'{self.transform_column} should be selected, '
+                        f'{self.apply_to} should be selected, '
                         f'but is not valid for columns = {X.columns}')
 
     def _get_column_type(self, column):

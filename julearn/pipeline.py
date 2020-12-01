@@ -57,7 +57,7 @@ def create_dataframe_pipeline(steps,
         else:
             transformer = DataFrameTransformer(
                 transformer=estimator,
-                transform_column=transform_column,
+                apply_to=transform_column,
                 returned_features=returned_features)
             steps_ready_for_pipe.append([name, transformer])
 

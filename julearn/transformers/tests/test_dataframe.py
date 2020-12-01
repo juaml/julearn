@@ -33,7 +33,7 @@ X_with_types = pd.DataFrame({
 def test_transform_all_return_same_passthrough():
 
     trans_df = DataFrameTransformer(transformer=PassThroughTransformer(),
-                                    transform_column='all',
+                                    apply_to='all',
                                     returned_features='same',
                                     )
 
@@ -44,7 +44,7 @@ def test_transform_all_return_same_passthrough():
 def test_all_return_unknown_passthrough():
 
     trans_df = DataFrameTransformer(transformer=PassThroughTransformer(),
-                                    transform_column='all',
+                                    apply_to='all',
                                     returned_features='unknown',
                                     )
 
@@ -58,7 +58,7 @@ def test_all_return_unknown_passthrough():
 def test_pca_transform_all():
     trans_df = DataFrameTransformer(transformer=PCA(n_components=2,
                                                     random_state=1),
-                                    transform_column='all',
+                                    apply_to='all',
                                     returned_features='unknown',
                                     )
 
@@ -82,7 +82,7 @@ def test_pca_transform_AB():
 
     trans_df = DataFrameTransformer(transformer=PCA(n_components=1,
                                                     random_state=1),
-                                    transform_column=['A', 'B'],
+                                    apply_to=['A', 'B'],
                                     returned_features='unknown',
                                     )
 
@@ -101,7 +101,7 @@ def test_pca_transform_continuous_return_unknown():
 
     trans_df = DataFrameTransformer(transformer=PCA(n_components=1,
                                                     random_state=1),
-                                    transform_column='continuous',
+                                    apply_to='continuous',
                                     returned_features='unknown',
                                     )
     trans_df.fit(X)
@@ -124,7 +124,7 @@ def test_scale_columns_of_type_return_same():
 
     for condition, columns in condition_columns:
         trans_df = DataFrameTransformer(transformer=StandardScaler(),
-                                        transform_column=condition,
+                                        apply_to=condition,
                                         returned_features='same',
                                         )
 
@@ -162,7 +162,7 @@ def test_pca_columns_of_type_return_unknown_or_unknown_same_type():
         for returned_features in ['unknown', 'unknown_same_type']:
             trans_df = DataFrameTransformer(
                 transformer=PCA(),
-                transform_column=condition,
+                apply_to=condition,
                 returned_features=returned_features,
             )
 
@@ -194,7 +194,7 @@ def test_pca_columns_of_type_return_unknown_or_unknown_same_type():
 
 def test_error_returned_feature_input():
     trans_df = DataFrameTransformer(transformer=PassThroughTransformer(),
-                                    transform_column='all',
+                                    apply_to='all',
                                     returned_features='WrongInput',
                                     )
 
@@ -205,7 +205,7 @@ def test_error_returned_feature_input():
 def test_error_no_matching_transform_column():
 
     trans_df = DataFrameTransformer(transformer=PassThroughTransformer(),
-                                    transform_column='confound',
+                                    apply_to='confound',
                                     returned_features='same',
                                     )
 
@@ -217,7 +217,7 @@ def test_error_no_matching_transform_column():
 def test_error_returned_features_subset():
 
     trans_df = DataFrameTransformer(transformer=PassThroughTransformer(),
-                                    transform_column='confound',
+                                    apply_to='confound',
                                     returned_features='subset',
                                     )
 
@@ -238,11 +238,11 @@ def test_ChangeColumnTypes():
     scales_both = DataFrameTransformer(
         transformer=StandardScaler(),
         returned_features='same',
-        transform_column=['continuous', 'confound'])
+        apply_to=['continuous', 'confound'])
     scales_continuous = DataFrameTransformer(
         transformer=StandardScaler(),
         returned_features='same',
-        transform_column=['continuous'])
+        apply_to=['continuous'])
     change_types = DataFrameTransformer(
         ChangeColumnTypes(columns_match='.*confound', new_type='continuous'),
         returned_features='from_transformer'
