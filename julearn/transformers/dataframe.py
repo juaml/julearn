@@ -22,7 +22,7 @@ class DataFrameTransformer(TransformerMixin):
     def __init__(self, transformer, apply_to=None,
                  returned_features=None,
                  **params):
-        """Transformer to wrap other transformers and apply and return a 
+        """Transformer to wrap other transformers and apply and return a
         DataFrame. Allows to apply the original transformer to only some of the
         columns from the DataFrame, while preserving other columns as they
         are. The returned output will be named using the information provided
@@ -32,7 +32,7 @@ class DataFrameTransformer(TransformerMixin):
         ----------
         transformer : object
             A transformer following sklearn standards.
-        apply_to : str, list(str), optional 
+        apply_to : str, list(str), optional
             decides which columns will be transformed.
             When providing a list of columns the transformer will be applied
             to these columns. Alternativley, users can provide a column type
@@ -49,7 +49,7 @@ class DataFrameTransformer(TransformerMixin):
               `subset`. Else the appropriate returned_feature is looked up
               in all available_transformers. Lastly, if its not an
               available_transformer it will be set to `unknown.
-              See https://juaml.github.io/julearn/available_steps.html 
+              See https://juaml.github.io/julearn/available_steps.html
               for details.
             * `unknown` leads to created column names,
             * `unknown_same_type` leads to created column names
@@ -177,7 +177,7 @@ class DataFrameTransformer(TransformerMixin):
         return valid_columns
 
     def _auto_set_returned_features(self):
-        """automatically set the returned_features argument based on the 
+        """automatically set the returned_features argument based on the
         used transformer
 
         Parameters

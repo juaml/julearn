@@ -18,7 +18,7 @@ def create_dataframe_pipeline(steps, apply_to=None):
         A list of steps. Each step is a tuple containing a name and transformer
         or estimator. For more information look at steps in:
         sklearn.pipeline.Pipeline
-    apply_to : str, list(str), optional 
+    apply_to : str, list(str), optional
         decides which columns will be transformed.
         For more information see:
         julearn.transformers.dataframe.DataFrameTransformer
@@ -306,17 +306,17 @@ def create_extended_pipeline(
     ----------
     preprocess_steps_feature: list[tuple]
         A list of steps. Each step contains a name and  transformer.
-        These transformers are applied to the complete feature space or a 
+        These transformers are applied to the complete feature space or a
         subset of it.
 
     preprocess_transformer_target : y_transform
         A transformer, which takes in X, y and outputs a transformed y.
-        Applied after preprocess_steps_confounds, but before 
+        Applied after preprocess_steps_confounds, but before
         preprocess_steps_feature
 
     preprocess_steps_confounds : list[tuple]
         A list of steps. Each step contains a name and  transformer.
-        These transformers are applied only to the confounds before 
+        These transformers are applied only to the confounds before
         transforming the target.
     model : tuple(str, obj)
         tuple of name and sklearn estimator
