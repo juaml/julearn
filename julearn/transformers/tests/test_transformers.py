@@ -17,6 +17,8 @@ import pytest
 from julearn.utils.testing import do_scoring_test
 from julearn.transformers import list_transformers, get_transformer
 
+from julearn.transformers.tmp_transformers import (
+    DropColumns, ChangeColumnTypes)
 
 _features_transformers = {
     'zscore': StandardScaler,
@@ -32,12 +34,17 @@ _features_transformers = {
     'select_fdr': SelectFdr,
     'select_fpr': SelectFpr,
     'select_fwe': SelectFwe,
-    'select_variance': VarianceThreshold
+    'select_variance': VarianceThreshold,
+    'drop_columns': DropColumns,
+    'change_column_types': ChangeColumnTypes
 }
 
 _transformer_params = {
     'scaler_quantile': {'n_quantiles': 10},
-    'select_k': {'k': 2}
+    'select_k': {'k': 2},
+    'drop_columns': {'columns': '.*__:type:__confounds'},
+    'change_column_types': {'columns_match': 'sepal_width',
+                            'new_type': 'continuous'}
 }
 
 
@@ -80,7 +87,7 @@ def test_list_get_transformers():
     assert not diff
 
     expected = _features_transformers['zscore']
-    actual, _ = get_transformer('zscore', target=False)
+    actual = get_transformer('zscore', target=False)
 
     assert isinstance(actual, expected)
 

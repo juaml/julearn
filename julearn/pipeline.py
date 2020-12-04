@@ -8,27 +8,20 @@ from . transformers.dataframe import DataFrameTransformer, DropColumns
 from . utils import raise_error
 
 
-def create_dataframe_pipeline(steps,
-                              default_returned_features='unknown',
-                              default_transform_column='continuous'):
+def create_dataframe_pipeline(steps, apply_to=None):
     """Creates a sklearn pipeline using the provided steps and wrapping all
     transformers into the DataFrameTransformer.
 
     Parameters
     ----------
-    steps : list[tuple, tuple ...]
-        Are a list of tuples. Each tuple can contain 2-4 entries.
-        The first is always the name of the step as a str.
-        Second the model/transformer following sklearns style.
-        Third (optional) returned_features following DataFrameTransformer.
-        Fourth (optional) transform_column following DataFrameTransformer.
-        The last tuple can be a tuple of (model_name, model).
-    default_returned_features : str, optional
-        When a step does not provide a returned_features/third entry,
-        this will provide the default for it.
-    default_transform_column : str, optional
-        When a step does not provide a returned_features/Fourth entry,
-        this will provide the default for it.
+    steps : list
+        A list of steps. Each step is a tuple containing a name and transformer
+        or estimator. For more information look at steps in:
+        sklearn.pipeline.Pipeline
+    apply_to : str, list(str), optional 
+        decides which columns will be transformed.
+        For more information see:
+        julearn.transformers.dataframe.DataFrameTransformer
 
     Returns
     -------
@@ -38,27 +31,17 @@ def create_dataframe_pipeline(steps,
     steps_ready_for_pipe = []
     for i_step, step in enumerate(steps):
 
-        n_arguments = len(step)
-        returned_features = default_returned_features
-        transform_column = default_transform_column
-        if n_arguments == 2:
-            name, estimator = step
-        elif n_arguments == 3:
-            name, estimator, returned_features = step
-        elif n_arguments == 4:
-            name, estimator, returned_features, transform_column = step
-
-        else:
-            raise_error(f'step: {i_step} has a len of {n_arguments}'
-                        ', but should have one between 2 and 4')
+        name, estimator = step
 
         if (i_step == len(steps) - 1) and (hasattr(estimator, 'predict')):
             steps_ready_for_pipe.append([name, estimator])
         else:
-            transformer = DataFrameTransformer(
-                transformer=estimator,
-                apply_to=transform_column,
-                returned_features=returned_features)
+            if isinstance(estimator, DataFrameTransformer):
+                transformer = estimator
+            else:
+                transformer = DataFrameTransformer(
+                    transformer=estimator,
+                    apply_to=apply_to)
             steps_ready_for_pipe.append([name, transformer])
 
     return Pipeline(steps=steps_ready_for_pipe)
@@ -322,25 +305,21 @@ def create_extended_pipeline(
     Parameters
     ----------
     preprocess_steps_feature: list[tuple]
-        Is a list of tuples. Each tuple can contain 2-4 entries.
-        The first is always the name of the step as a str.
-        Second the model/transformer following sklearns style.
-        Third (optional) returned_features following DataFrameTransformer.
-        defaults to 'unknown'
-        Fourth (optional) transform_column following DataFrameTransformer.
-        defaults to 'continuous'
+        A list of steps. Each step contains a name and  transformer.
+        These transformers are applied to the complete feature space or a 
+        subset of it.
 
     preprocess_transformer_target : y_transform
         A transformer, which takes in X, y and outputs a transformed y.
+        Applied after preprocess_steps_confounds, but before 
+        preprocess_steps_feature
 
     preprocess_steps_confounds : list[tuple]
-        Is a list of tuples. Each tuple can contain 2-3 entries.
-        The first is always the name of the step as a str.
-        Second the transformer following sklearns style.
-        Third (optional) returned_features following DataFrameTransformer,
-        but they should only be `same` (default) or `unknown_same_type`.
-    model : tuple(str, sklearn.base.BaseEstimator)
-
+        A list of steps. Each step contains a name and  transformer.
+        These transformers are applied only to the confounds before 
+        transforming the target.
+    model : tuple(str, obj)
+        tuple of name and sklearn estimator
     confounds : list[str] or str
         A list of column_names which are the confounds
         or the column_name of one confound
@@ -349,24 +328,24 @@ def create_extended_pipeline(
         A list of column_names which are the categorical features
         or the column_name of one categorical feature
     """
-
+    drop_confounds = DataFrameTransformer(
+        transformer=DropColumns(columns='.*__:type:__confound'),
+        apply_to='all')
     X_steps = (
         (list(preprocess_steps_features) +
-         [('drop_confounds', DropColumns(columns='.*__:type:__confound'),
-           'subset', 'all')] +
+         [('drop_confounds', drop_confounds)] +
          [model])
         if preprocess_steps_features is not None
         else [(
-            'drop_confounds', DropColumns(columns='.*__:type:__confound'),
-            'subset', 'all'),
+            'drop_confounds', drop_confounds),
             model]
     )
     pipeline = create_dataframe_pipeline(X_steps)
 
     if preprocess_steps_confounds is not None:
         confound_pipe = create_dataframe_pipeline(
-            preprocess_steps_confounds, default_returned_features='same',
-            default_transform_column='confound')
+            preprocess_steps_confounds,
+            apply_to='confound')
     else:
         confound_pipe = None
 
