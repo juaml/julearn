@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 from sklearn.base import TransformerMixin, BaseEstimator
 
-from .. utils import pick_columns, change_column_type, raise_error
+from .. utils import pick_columns, change_column_type
 
 
 class ChangeColumnTypes(TransformerMixin, BaseEstimator):
