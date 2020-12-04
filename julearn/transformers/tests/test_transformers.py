@@ -17,8 +17,6 @@ import pytest
 from julearn.utils.testing import do_scoring_test
 from julearn.transformers import list_transformers, get_transformer
 
-from julearn.transformers.tmp_transformers import (
-    DropColumns, ChangeColumnTypes)
 
 _features_transformers = {
     'zscore': StandardScaler,
