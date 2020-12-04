@@ -56,8 +56,8 @@ _available_target_transformers = {
 }
 
 _runtime_transformer_dict = {
-    transfomer: [returned_features, apply_to]
-    for _, (transfomer, returned_features, apply_to) in deepcopy(
+    transformer: [returned_features, apply_to]
+    for _, (transformer, returned_features, apply_to) in deepcopy(
         _available_transformers).items()
 }
 

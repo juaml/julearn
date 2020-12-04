@@ -26,7 +26,7 @@ class DataFrameTransformer(TransformerMixin):
         DataFrame. Allows to apply the original transformer to only some of the
         columns from the DataFrame, while preserving other columns as they
         are. The returned output will be named using the information provided
-        by teh returned_features argument and the inputted DataFrame
+        by the returned_features argument and the inputted DataFrame
 
         Parameters
         ----------
