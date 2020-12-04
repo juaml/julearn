@@ -35,16 +35,11 @@ _features_transformers = {
     'select_fpr': SelectFpr,
     'select_fwe': SelectFwe,
     'select_variance': VarianceThreshold,
-    'drop_columns': DropColumns,
-    'change_column_types': ChangeColumnTypes
 }
 
 _transformer_params = {
     'scaler_quantile': {'n_quantiles': 10},
     'select_k': {'k': 2},
-    'drop_columns': {'columns': '.*__:type:__confounds'},
-    'change_column_types': {'columns_match': 'sepal_width',
-                            'new_type': 'continuous'}
 }
 
 
@@ -76,7 +71,12 @@ def test_feature_transformers():
 
 def test_list_get_transformers():
     """Test list and getting transformers"""
-    expected = list(_features_transformers.keys()) + ['pca', 'remove_confound']
+    expected = list(_features_transformers.keys()) + [
+        'pca',
+        'remove_confound',
+        'drop_columns',
+        'change_column_types'
+    ]
     actual = list_transformers()
     diff = set(actual) ^ set(expected)
     assert not diff
