@@ -176,7 +176,6 @@ def run_cross_validation(
         preprocess_X, preprocess_y, preprocess_confounds, confounds
     )
     preprocess_X, preprocess_y, preprocess_confounds = preprocess_vars
-
     # Prepare the model
     model_tuple = prepare_model(model=model, problem_type=problem_type)
 

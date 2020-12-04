@@ -7,5 +7,6 @@ from . import target
 from . available_transformers import list_transformers, get_transformer
 
 from . confounds import DataFrameConfoundRemover, TargetConfoundRemover
-from . dataframe import DataFrameTransformer, ChangeColumnTypes, DropColumns
+from . dataframe import DataFrameTransformer
+from . tmp_transformers import DropColumns, ChangeColumnTypes
 from . target import TargetTransfromerWrapper

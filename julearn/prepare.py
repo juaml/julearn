@@ -444,7 +444,7 @@ def _prepare_preprocess_X(preprocess_X, confounds):
     else:
         preprocess_X = [_create_preprocess_tuple(transformer)
                         for transformer in preprocess_X]
-        names, _, _, _ = zip(*preprocess_X)
+        names, _, = zip(*preprocess_X)
         if ('remove_confound' not in names) and (confounds is not None):
             preprocess_X = ([(_create_preprocess_tuple('remove_confound'))]
                             + preprocess_X)
@@ -470,22 +470,12 @@ def _prepare_preprocess_confounds(preprocess_conf):
     if not isinstance(preprocess_conf, list):
         preprocess_conf = [preprocess_conf]
 
-    returned_features = 'unknown_same_type'
-    for step in preprocess_conf:
-        _, returned_features = _get_confound_transformer(step)
-
-        if returned_features == 'unknown':
-            returned_features = 'unknown_same_type'
-
     preprocess_conf = [
         # returned_features ignored
         _create_preprocess_tuple(transformer)
         for transformer in preprocess_conf
 
     ]
-    # replace returned_feature with what we got here
-    preprocess_conf = [step[:2] + (returned_features,) + (step[-1],)
-                       for step in preprocess_conf]
 
     return preprocess_conf
 
@@ -564,17 +554,12 @@ def _create_preprocess_tuple(transformer):
         return transformer
     elif type(transformer) == str:
         trans_name = transformer
-        trans, returned_features = get_transformer(transformer)
+        trans = get_transformer(transformer)
     else:
         trans_name = transformer.__class__.__name__.lower()
         trans = clone(transformer)
-        returned_features = 'unknown'
 
-    transform_columns = (['continuous', 'confound']
-                         if trans_name == 'remove_confound'
-                         else 'continuous')
-
-    return trans_name, trans, returned_features, transform_columns
+    return trans_name, trans
 
 
 def _is_valid_sklearn_transformer(transformer):

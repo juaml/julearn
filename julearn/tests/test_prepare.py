@@ -381,7 +381,7 @@ def test_prepare_input_data_df():
 
 
 def test_prepare_model_params():
-    preprocess_steps_features = [('zscore', StandardScaler(), 'same'),
+    preprocess_steps_features = [('zscore', StandardScaler()),
                                  ]
     model = ('svm', SVC())
 
