@@ -15,7 +15,7 @@ from sklearn.preprocessing import StandardScaler
 
 from julearn.transformers import (DataFrameTransformer,
                                   TargetTransfromerWrapper,
-                                  DataFrameConfoundRemover)
+                                  )
 from julearn.pipeline import (ExtendedDataFramePipeline,
                               create_dataframe_pipeline,
                               create_extended_pipeline)
