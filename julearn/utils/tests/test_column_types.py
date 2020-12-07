@@ -1,6 +1,7 @@
 from julearn.utils import pick_columns
 import pytest
 
+
 def test_pick_using_column_name():
     columns = ['conf_1', 'conf_2', 'feat_1', 'feat_2', 'Feat_3']
     regexes = ['conf_2', 'Feat_3']
