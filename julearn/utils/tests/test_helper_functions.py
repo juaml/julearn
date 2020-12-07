@@ -7,6 +7,11 @@ def test_pick_using_column_name():
 
     assert regexes == pick_columns(regexes, columns)
 
+    columns = ['Feat_3', 'conf_1', 'conf_2', 'feat_1', 'feat_2']
+    regexes = ['conf_2', 'Feat_3']
+
+    assert regexes == pick_columns(regexes, columns)
+
 
 def test_pick_using_regex_match():
     columns = ['conf_1', 'conf_2', 'feat_1', 'feat_2', 'Feat_3']

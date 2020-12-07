@@ -26,11 +26,16 @@ def pick_columns(regexes, columns):
     if not isinstance(regexes, list):
         regexes = [regexes]
 
-    picks = [
-        col
-        for col in columns
-        if any([re.search(exp, col) for exp in regexes])
-    ]
+    picks = []
+    for exp in regexes:
+        cols = [
+            col
+            for col in columns
+            if any([re.search(exp, col)])
+        ]
+        if len(cols) > 0:
+            picks.extend(cols)
+
     unmatched = []
     for exp in regexes:
         if not any([re.search(exp, col) for col in columns]):
