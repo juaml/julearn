@@ -1,8 +1,6 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
-from .tmp_transformers import DropColumns, ChangeColumnTypes
-from .. utils import raise_error
 from . dataframe import DropColumns, ChangeColumnTypes
 from .. utils import raise_error, warn
 from copy import deepcopy
@@ -16,9 +14,6 @@ from sklearn.feature_selection import (GenericUnivariateSelect,
                                        VarianceThreshold)
 from . confounds import DataFrameConfoundRemover, TargetConfoundRemover
 from . target import TargetTransfromerWrapper
-<< << << < HEAD
-== == == =
->>>>>> > 43cb09d4c3adf6661f8953e0436f7f6d1171d67b
 
 """
 a dictionary containing all supported transformers
@@ -28,7 +23,6 @@ name : [sklearn transformer,
 
 _available_transformers = {
     # Decomposition
-    << << << < HEAD
     'pca': [PCA, 'unknown'],
     # Scalers
     'zscore': [StandardScaler, 'same'],
@@ -53,32 +47,6 @@ _available_transformers = {
     ],
     'drop_columns': [DropColumns, 'subset'],
     'change_column_types': [ChangeColumnTypes, 'from_transformer']
-    == == == =
-    'pca': [PCA, 'unknown', 'continuous'],
-    # Scalers
-    'zscore': [StandardScaler, 'same', 'continuous'],
-    'scaler_robust': [RobustScaler, 'same', 'continuous'],
-    'scaler_minmax': [MinMaxScaler, 'same', 'continuous'],
-    'scaler_maxabs': [MaxAbsScaler, 'same', 'continuous'],
-    'scaler_normalizer': [Normalizer, 'same', 'continuous'],
-    'scaler_quantile': [QuantileTransformer, 'same', 'continuous'],
-    'scaler_power': [PowerTransformer, 'same', 'continuous'],
-    # Feature selection
-    'select_univariate': [GenericUnivariateSelect, 'subset', 'continuous'],
-    'select_percentile': [SelectPercentile, 'subset', 'continuous'],
-    'select_k': [SelectKBest, 'subset', 'continuous'],
-    'select_fdr': [SelectFdr, 'subset', 'continuous'],
-    'select_fpr': [SelectFpr, 'subset', 'continuous'],
-    'select_fwe': [SelectFwe, 'subset', 'continuous'],
-    'select_variance': [VarianceThreshold, 'subset', 'continuous'],
-    # DataFrame operations
-    'remove_confound': [
-        DataFrameConfoundRemover,
-        'from_transformer', ['continuous', 'confound']
-    ],
-    'drop_columns': [DropColumns, 'subset', 'all'],
-    'change_column_types': [ChangeColumnTypes, 'from_transformer', 'all']
-    >> >>>> > 43cb09d4c3adf6661f8953e0436f7f6d1171d67b
 }
 
 _available_transformers_reset = deepcopy(_available_transformers)
@@ -93,18 +61,10 @@ _available_target_transformers = {
     'remove_confound': [TargetConfoundRemover, 'same'],
 }
 
-<< << << < HEAD
 _dict_transformer_to_name = {transformer: name
                              for name, (transformer, apply_to) in deepcopy(
                                  _available_transformers).items()
                              }
-== == == =
-_runtime_transformer_dict = {
-    transformer: [returned_features, apply_to]
-    for _, (transformer, returned_features, apply_to) in deepcopy(
-        _available_transformers).items()
-}
->>>>>> > 43cb09d4c3adf6661f8953e0436f7f6d1171d67b
 
 
 def list_transformers(target=False):

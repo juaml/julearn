@@ -76,11 +76,7 @@ def test_list_get_transformers():
         'pca',
         'remove_confound',
         'drop_columns',
-        << << << < HEAD
         'change_column_types',
-        == == == =
-        'change_column_types'
-        >> >>>> > 43cb09d4c3adf6661f8953e0436f7f6d1171d67b
     ]
     actual = list_transformers()
     diff = set(actual) ^ set(expected)
