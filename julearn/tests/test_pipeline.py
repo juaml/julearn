@@ -9,13 +9,12 @@ from numpy.testing import assert_array_equal
 from pandas.testing import assert_frame_equal
 from sklearn.decomposition import PCA
 from sklearn.linear_model import LinearRegression
-from sklearn.model_selection import cross_validate
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 
-from julearn.transformers import (DataFrameTransformer,
-                                  TargetTransfromerWrapper,
-                                  )
+from julearn.transformers import (
+    TargetTransfromerWrapper, DataFrameConfoundRemover
+)
 from julearn.pipeline import (ExtendedDataFramePipeline,
                               create_dataframe_pipeline,
                               create_extended_pipeline)
@@ -33,16 +32,6 @@ X_with_types = pd.DataFrame({
     'e__:type:__categorical': np.arange(40, 50),
     'f__:type:__categorical': np.arange(40, 50),
 })
-
-
-def test_create_dataframe_pipeline_all_steps_added():
-    steps = [('zscore', StandardScaler()),
-             ('pca', PCA()),
-             ('lr', LinearRegression())]
-    pipe = create_dataframe_pipeline(steps)
-    isinstance(pipe.steps[0], DataFrameTransformer)
-    isinstance(pipe.steps[1], DataFrameTransformer)
-    isinstance(pipe.steps[2], LinearRegression)
 
 
 def test_create_dataframe_pipeline_steps_added_correctly():
@@ -77,67 +66,6 @@ def test_create_dataframe_pipeline_returned_features_same():
     assert_array_equal(X_trans.values, X_trans_sklearn)
 
 
-"""
-def test_create_dataframe_pipeline_invalid_step():
-
-    steps = [('zscore',)]
-    with pytest.raises(ValueError, match='step:'):
-        create_dataframe_pipeline(steps)
-"""
-
-
-def test_ExtendedDataFramePipeline_basics_Xpipeline_no_error():
-    steps = [('zscore', StandardScaler()),
-             ('pca', PCA()),
-             ('lr', LinearRegression())
-             ]
-
-    my_pipe = create_dataframe_pipeline(steps)
-    my_transformer_pipe = create_dataframe_pipeline(steps[:-1])
-    my_pipe = ExtendedDataFramePipeline(my_pipe)
-    my_transform_pipe = ExtendedDataFramePipeline(my_transformer_pipe)
-    my_pipe.fit(X.iloc[:, :-1], X.C)
-    my_pipe.score(X.iloc[:, :-1], X.C)
-
-    my_transform_pipe.fit_transform(X)
-
-
-def test_ExtendedDataFramePipeline_basics_conf_df_pipe_no_error():
-    steps = [('zscore', StandardScaler()),
-             ('pca', PCA()),
-             ('lr', LinearRegression())
-             ]
-
-    my_pipe = create_dataframe_pipeline(steps)
-    my_confound_pipe = create_dataframe_pipeline(
-        steps[0:1],
-        apply_to='confound')
-
-    my_pipe = ExtendedDataFramePipeline(
-        my_pipe,
-        confound_dataframe_pipeline=my_confound_pipe, confounds=['B'])
-
-    my_pipe.fit(X.iloc[:, :-1], X.C)
-    score = my_pipe.score(X.iloc[:, :-1], X.C)
-    assert score is not np.nan
-
-
-def test_ExtendedDataFramePipeline_basics_y_transformer_no_error():
-    steps = [('zscore', StandardScaler()),
-             ('pca', PCA()),
-             ('lr', LinearRegression())
-             ]
-
-    my_pipe = create_dataframe_pipeline(steps)
-    y_transformer = TargetTransfromerWrapper(StandardScaler())
-
-    my_pipe = ExtendedDataFramePipeline(
-        my_pipe, y_transformer=y_transformer)
-
-    my_pipe.fit(X.iloc[:, :-1], X.C)
-    my_pipe.score(X.iloc[:, :-1], X.C)
-
-
 def test_ExtendedDataFramePipeline_transform_with_categorical():
 
     steps = [('zscore', StandardScaler())]
@@ -151,47 +79,6 @@ def test_ExtendedDataFramePipeline_transform_with_categorical():
     assert_array_equal(X_trans.loc[:, ['A', 'B']].values, X_trans_sklearn)
     assert_array_equal(X_trans.loc[:, ['C__:type:__categorical']].values,
                        X.loc[:, ['C']].values)
-
-
-def test_ExtendedDataFramePipeline_in_cv_no_error():
-
-    steps = [('zscore', StandardScaler()),
-             ('pca', PCA()),
-             ('lr', LinearRegression())
-             ]
-
-    my_pipe = create_dataframe_pipeline(steps)
-    my_confound_pipe = create_dataframe_pipeline(
-        steps[0:1],
-        apply_to='confound')
-    y_transformer = TargetTransfromerWrapper(StandardScaler())
-
-    my_pipe = ExtendedDataFramePipeline(
-        my_pipe, y_transformer=y_transformer,
-        confound_dataframe_pipeline=my_confound_pipe, confounds=['B'])
-
-    cross_validate(my_pipe, X.iloc[:, :-1], X.C)
-
-
-def test_ExtendedDataFramePipeline_with_confound_in_cv_no_error():
-
-    steps = [('zscore', StandardScaler()),
-             ('pca', PCA()),
-             ('lr', LinearRegression())
-             ]
-
-    my_pipe = create_dataframe_pipeline(steps)
-    my_confound_pipe = create_dataframe_pipeline(
-        steps[:1],
-        apply_to='confound')
-    y_transformer = TargetTransfromerWrapper(StandardScaler())
-
-    my_pipe = ExtendedDataFramePipeline(
-        my_pipe, y_transformer=y_transformer,
-        confound_dataframe_pipeline=my_confound_pipe,
-        confounds='B')
-
-    cross_validate(my_pipe, X.iloc[:, :-1], X.C)
 
 
 def test_create_extended_dataframe_transformer():
@@ -405,19 +292,16 @@ def test_remove_column_types_ExtendedDataFramePipe():
     assert (X_removed.columns == list('abcdef')).all()
 
 
-"""
 def test_create_exteneded_pipeline_confound_removal():
     '''Test automatic drop of confounds at the end of the pipeline
-'''
+    '''
     preprocess_steps_feature = [(
         'remove_confound',
-        DataFrameConfoundRemover(),
-        'subset'),
+        DataFrameConfoundRemover()),
     ]
     preprocess_steps_feature_keep_conf = [(
         'remove_confound',
-        DataFrameConfoundRemover(keep_confounds=True),
-        'subset', 'all'),
+        DataFrameConfoundRemover(keep_confounds=True)),
     ]
 
     model = ('lr', LinearRegression())
@@ -451,4 +335,3 @@ def test_create_exteneded_pipeline_confound_removal():
                  .predict(X.iloc[:, :-1]))
 
     assert_array_equal(pred, pred_keep)
-"""
