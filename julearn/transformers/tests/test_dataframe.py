@@ -242,7 +242,7 @@ def test_ChangeColumnTypes():
         returned_features='same',
         transform_column=['continuous'])
     change_types = DataFrameTransformer(
-        ChangeColumnTypes(columns_match='confound', new_type='continuous'),
+        ChangeColumnTypes(columns_match='.*confound', new_type='continuous'),
         returned_features='from_transformer'
     )
 

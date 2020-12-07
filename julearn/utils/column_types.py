@@ -26,18 +26,23 @@ def pick_columns(regexes, columns):
     if not isinstance(regexes, list):
         regexes = [regexes]
 
-    picks = [
-        col
-        for col in columns
-        if any([re.search(exp, col) for exp in regexes])
-    ]
+    picks = []
+    for exp in regexes:
+        cols = [
+            col
+            for col in columns
+            if any([re.fullmatch(exp, col)])
+        ]
+        if len(cols) > 0:
+            picks.extend(cols)
+
     unmatched = []
     for exp in regexes:
-        if not any([re.search(exp, col) for col in columns]):
+        if not any([re.fullmatch(exp, col) for col in columns]):
             unmatched.append(exp)
     if len(unmatched) > 0:
         raise ValueError(
-            'All elements must be matched'
+            'All elements must be matched. '
             f'The following are missing: {unmatched}')
 
     return picks

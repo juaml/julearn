@@ -63,7 +63,9 @@ ones used for ``y``, ``confounds`` and ``groups``. That is, using X = [':'].
     y = 'species'
     confounds = 'petal_width'
 
-For more information, check python's `Regular Expressions`_.
+For more information, check python's `Regular Expressions`_. Keep in mind that 
+julearn uses `fullmatch`, so it requires that the regular expression matches
+the whole string and not part of it.
 
 2. Using Numpy arrays
 ^^^^^^^^^^^^^^^^^^^^^
