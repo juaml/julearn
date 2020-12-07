@@ -148,9 +148,15 @@ To build the docs:
 
 To view the documentation, open `docs/_build/html/index.html`.
 
+<<<<<<< HEAD
 In case you remove some files or change their filename you can run into
 errors when using ``make html``. In this situation you can use ``make clean``
 to clean up the already build files and then rerun ``make html``.
+=======
+In case you remove some files or change their filename you can run into 
+errors when using ``make html``. In this situation you can use ``make clean``
+to clean up the already build files and then rerun ``make html``. 
+>>>>>>> 43cb09d4c3adf6661f8953e0436f7f6d1171d67b
 
 If any of this fails, go back to :ref:`do_changes`
 

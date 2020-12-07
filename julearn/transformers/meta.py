@@ -3,11 +3,10 @@
 # License: AGPL
 from copy import deepcopy
 import pandas as pd
-import numpy as np
-from sklearn.base import TransformerMixin, BaseEstimator
+from sklearn.base import TransformerMixin
 
-from .. utils import (raise_error, pick_columns,
-                      change_column_type, get_column_type)
+from .. utils import (raise_error,
+                      get_column_type)
 
 from . available_transformers import _get_returned_features, _get_apply_to
 
