@@ -2,11 +2,11 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 from . import confounds
-from . import dataframe
 from . import target
-from . available_transformers import list_transformers, get_transformer
+from . available_transformers import (
+    list_transformers, get_transformer, register_transformer, reset_register)
 
 from . confounds import DataFrameConfoundRemover, TargetConfoundRemover
-from . dataframe import DataFrameTransformer
-from . tmp_transformers import DropColumns, ChangeColumnTypes
+from . meta import DataFrameWrapTransformer
+from . dataframe import DropColumns, ChangeColumnTypes
 from . target import TargetTransfromerWrapper

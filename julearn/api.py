@@ -130,7 +130,7 @@ def run_cross_validation(
           performed.
         * 'search': The kind of search algorithm to use: 'grid' or 'random'.
         * 'cv': If search is going to be used, the cross-validation
-          splitting stategy to use. Defaults to same CV as for the model
+          splitting strategy to use. Defaults to same CV as for the model
           evaluation.
         * 'scoring': If search is going to be used, the scoring metric to
           evaluate the performance.

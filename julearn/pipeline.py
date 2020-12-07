@@ -4,13 +4,13 @@
 from sklearn.pipeline import Pipeline
 from sklearn.base import BaseEstimator, clone
 
-from . transformers.dataframe import DataFrameTransformer, DropColumns
+from . transformers import DataFrameWrapTransformer, DropColumns
 from . utils import raise_error
 
 
 def create_dataframe_pipeline(steps, apply_to=None):
     """Creates a sklearn pipeline using the provided steps and wrapping all
-    transformers into the DataFrameTransformer.
+    transformers into the DataFrameWrapTransformer.
 
     Parameters
     ----------
@@ -21,12 +21,13 @@ def create_dataframe_pipeline(steps, apply_to=None):
     apply_to : str, list(str), optional
         decides which columns will be transformed.
         For more information see:
-        julearn.transformers.dataframe.DataFrameTransformer
+        julearn.transformers.dataframe.DataFrameWrapTransformer
 
     Returns
     -------
     sklearn.pipeline.Pipeline
-        A Pipline in which all entries are wrappend in a DataFrameTransformer.
+        A Pipline in which all entries are wrappend in a
+        DataFrameWrapTransformer.
     """
     steps_ready_for_pipe = []
     for i_step, step in enumerate(steps):
@@ -36,10 +37,10 @@ def create_dataframe_pipeline(steps, apply_to=None):
         if (i_step == len(steps) - 1) and (hasattr(estimator, 'predict')):
             steps_ready_for_pipe.append([name, estimator])
         else:
-            if isinstance(estimator, DataFrameTransformer):
+            if isinstance(estimator, DataFrameWrapTransformer):
                 transformer = estimator
             else:
-                transformer = DataFrameTransformer(
+                transformer = DataFrameWrapTransformer(
                     transformer=estimator,
                     apply_to=apply_to)
             steps_ready_for_pipe.append([name, transformer])
@@ -55,10 +56,10 @@ class ExtendedDataFramePipeline(BaseEstimator):
     1: handling target transforming and scoring against
     this transformed target as ground truth.
     2: handling confounds. Adds the confound as type to columns.
-    This allows the DataFrameTransformer inside of the dataframe_pipeline
+    This allows the DataFrameWrapTransformer inside of the dataframe_pipeline
     to handle confounds properly.
     3: Handling categorical features:
-    Adds categorical type to columns so that DataFrameTransformer inside
+    Adds categorical type to columns so that DataFrameWrapTransformer inside
     of the dataframe_pipline can handle categorical features properly.
 
     column_types are added to the feature dataframe after each column using
@@ -328,7 +329,7 @@ def create_extended_pipeline(
         A list of column_names which are the categorical features
         or the column_name of one categorical feature
     """
-    drop_confounds = DataFrameTransformer(
+    drop_confounds = DataFrameWrapTransformer(
         transformer=DropColumns(columns='.*__:type:__confound'),
         apply_to='all')
     X_steps = (

@@ -12,8 +12,8 @@ from sklearn.feature_selection import (GenericUnivariateSelect,
                                        VarianceThreshold)
 from . confounds import DataFrameConfoundRemover, TargetConfoundRemover
 from . target import TargetTransfromerWrapper
-from .. utils import raise_error
-from .tmp_transformers import DropColumns, ChangeColumnTypes
+from .. utils import raise_error, warn
+from . dataframe import DropColumns, ChangeColumnTypes
 
 """
 a dictionary containing all supported transformers
@@ -23,43 +23,48 @@ name : [sklearn transformer,
 
 _available_transformers = {
     # Decomposition
-    'pca': [PCA, 'unknown', 'continuous'],
+    'pca': [PCA, 'unknown'],
     # Scalers
-    'zscore': [StandardScaler, 'same', 'continuous'],
-    'scaler_robust': [RobustScaler, 'same', 'continuous'],
-    'scaler_minmax': [MinMaxScaler, 'same', 'continuous'],
-    'scaler_maxabs': [MaxAbsScaler, 'same', 'continuous'],
-    'scaler_normalizer': [Normalizer, 'same', 'continuous'],
-    'scaler_quantile': [QuantileTransformer, 'same', 'continuous'],
-    'scaler_power': [PowerTransformer, 'same', 'continuous'],
+    'zscore': [StandardScaler, 'same'],
+    'scaler_robust': [RobustScaler, 'same'],
+    'scaler_minmax': [MinMaxScaler, 'same'],
+    'scaler_maxabs': [MaxAbsScaler, 'same'],
+    'scaler_normalizer': [Normalizer, 'same'],
+    'scaler_quantile': [QuantileTransformer, 'same'],
+    'scaler_power': [PowerTransformer, 'same'],
     # Feature selection
-    'select_univariate': [GenericUnivariateSelect, 'subset', 'continuous'],
-    'select_percentile': [SelectPercentile, 'subset', 'continuous'],
-    'select_k': [SelectKBest, 'subset', 'continuous'],
-    'select_fdr': [SelectFdr, 'subset', 'continuous'],
-    'select_fpr': [SelectFpr, 'subset', 'continuous'],
-    'select_fwe': [SelectFwe, 'subset', 'continuous'],
-    'select_variance': [VarianceThreshold, 'subset', 'continuous'],
+    'select_univariate': [GenericUnivariateSelect, 'subset'],
+    'select_percentile': [SelectPercentile, 'subset'],
+    'select_k': [SelectKBest, 'subset'],
+    'select_fdr': [SelectFdr, 'subset'],
+    'select_fpr': [SelectFpr, 'subset'],
+    'select_fwe': [SelectFwe, 'subset'],
+    'select_variance': [VarianceThreshold, 'subset'],
     # DataFrame operations
     'remove_confound': [
         DataFrameConfoundRemover,
-        'from_transformer', ['continuous', 'confound']
+        'from_transformer'
     ],
-    'drop_columns': [DropColumns, 'subset', 'all'],
-    'change_column_types': [ChangeColumnTypes, 'from_transformer', 'all']
+    'drop_columns': [DropColumns, 'subset'],
+    'change_column_types': [ChangeColumnTypes, 'from_transformer']
 }
 
+_available_transformers_reset = deepcopy(_available_transformers)
+_apply_to_default_exceptions = {
+    'remove_confound': ['continuous', 'confound'],
+    'drop_columns': 'all',
+    'change_column_types': 'all'
+}
 
 _available_target_transformers = {
     'zscore': StandardScaler,
     'remove_confound': [TargetConfoundRemover, 'same'],
 }
 
-_runtime_transformer_dict = {
-    transformer: [returned_features, apply_to]
-    for _, (transformer, returned_features, apply_to) in deepcopy(
-        _available_transformers).items()
-}
+_dict_transformer_to_name = {transformer: name
+                             for name, (transformer, apply_to) in deepcopy(
+                                 _available_transformers).items()
+                             }
 
 
 def list_transformers(target=False):
@@ -119,15 +124,55 @@ def get_transformer(name, target=False, **params):
     return out
 
 
-def get_returned_features(transformer):
-    return _runtime_transformer_dict.get(transformer.__class__)[0]
+def _get_returned_features(transformer):
+    transformer_name = _dict_transformer_to_name.get(transformer.__class__)
+    returned_features = _available_transformers.get(transformer_name)[1]
+    if returned_features is None:
+        warn(f'The transformer {transformer_name} is not a registered '
+             'transformer. '
+             'Therefore, `returned_features` will be set to `unknown`.'
+             'In other words variable names cannot be preserved after this '
+             'transformer. If you want to change this use '
+             '`julearn.transformer.register_transformer` to register your'
+             'transformer'
+             )
+        return 'unknown'
+    else:
+        return returned_features
 
 
-def get_apply_to(transformer):
-    return _runtime_transformer_dict.get(transformer.__class__)[1]
+def _get_apply_to(transformer):
+    transformer_name = _dict_transformer_to_name.get(transformer.__class__)
+    if isinstance(transformer_name, str):
+
+        if (transformer_name.startswith('select')) and (
+                transformer_name in list_transformers()):
+            apply_to = 'all_features'
+
+        else:
+            apply_to = _apply_to_default_exceptions.get(transformer_name,
+                                                        'continuous')
+    else:
+        apply_to = 'continuous'
+
+    return apply_to
 
 
-def register_transformer(transformer,
-                         returned_features='same', apply_to='continuous'):
-    _runtime_transformer_dict[transformer.__class__] = [
-        returned_features, apply_to]
+def register_transformer(transformer_name, transformer,
+                         returned_features, apply_to):
+
+    if _available_transformers.get(transformer_name) is not None:
+        warn(f'The transformer_name `{transformer_name}` does already exist. '
+             'Therefore, you are overwriting this transformer.'
+             )
+    _available_transformers[transformer_name] = [transformer,
+                                                 _get_returned_features]
+
+    _dict_transformer_to_name[transformer.__class__] = transformer_name
+
+
+def reset_register():
+    global _available_transformers
+    _available_transformers = deepcopy(
+        _available_transformers_reset)
+    return _available_transformers

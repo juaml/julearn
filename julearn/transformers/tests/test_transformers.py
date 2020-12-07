@@ -15,7 +15,10 @@ from seaborn import load_dataset
 import pytest
 
 from julearn.utils.testing import do_scoring_test
-from julearn.transformers import list_transformers, get_transformer
+from julearn.transformers import (
+    list_transformers, get_transformer, reset_register)
+
+reset_register()
 
 
 _features_transformers = {
@@ -73,7 +76,7 @@ def test_list_get_transformers():
         'pca',
         'remove_confound',
         'drop_columns',
-        'change_column_types'
+        'change_column_types',
     ]
     actual = list_transformers()
     diff = set(actual) ^ set(expected)
