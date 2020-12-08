@@ -194,6 +194,10 @@ class DataFrameWrapTransformer(TransformerMixin):
             self.returned_features = _get_returned_features(
                 self.transformer)
 
+            if (self.apply_to == 'confound') and (
+                    self.returned_features == 'unknown'):
+                self.returned_features = 'unknown_same_type'
+
     def _auto_set_apply_to(self):
         if self.apply_to is None:
             self.apply_to = _get_apply_to(self.transformer)
