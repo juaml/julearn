@@ -17,7 +17,7 @@ In the same way as `seaborn`_ provides an abstraction of `matplotlib`_'s
 functionality aiming for powerful data visualization with minor coding, we 
 built julearn on top of `scikit-learn`_.
 
-This library provides users with the posibility of testing ML models directly
+This library provides users with the possibility of testing ML models directly
 from `pandas`_ dataframes, while keeping the flexibiliy of using
 `scikit-learn`_'s models.
 
