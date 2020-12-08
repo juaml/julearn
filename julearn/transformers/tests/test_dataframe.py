@@ -3,6 +3,7 @@
 # License: AGPL
 import numpy as np
 import pandas as pd
+import pytest
 
 from numpy.testing import assert_array_equal
 from pandas.testing import assert_frame_equal
@@ -11,6 +12,7 @@ from sklearn.preprocessing import StandardScaler
 from julearn.transformers import (DataFrameWrapTransformer,
                                   ChangeColumnTypes,
                                   DropColumns)
+from julearn.utils.testing import PassThroughTransformer
 X = pd.DataFrame(dict(A=np.arange(10),
                       B=np.arange(10, 20),
                       C=np.arange(30, 40)
@@ -26,13 +28,12 @@ X_with_types = pd.DataFrame({
 })
 
 
-"""
 def test_error_no_matching_transform_column():
 
     trans_df = DataFrameWrapTransformer(transformer=PassThroughTransformer(),
-                                    apply_to='confound',
-                                    returned_features='same',
-                                    )
+                                        apply_to='confound',
+                                        returned_features='same',
+                                        )
 
     with pytest.raises(ValueError,
                        match='There is not valid column to transform '):
@@ -42,15 +43,13 @@ def test_error_no_matching_transform_column():
 def test_error_returned_features_subset():
 
     trans_df = DataFrameWrapTransformer(transformer=PassThroughTransformer(),
-                                    apply_to='confound',
-                                    returned_features='subset',
-                                    )
+                                        apply_to='confound',
+                                        returned_features='subset',
+                                        )
 
     with pytest.raises(ValueError,
-                       match='You cannot use subset on a transformer'):
+                       match='You can only subset with a '):
         trans_df.fit_transform(X_with_types)
-
-"""
 
 
 def test_ChangeColumnTypes():
