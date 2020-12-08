@@ -36,6 +36,7 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx_gallery.gen_gallery',
     'sphinx_rtd_theme',
+    'sphinx_multiversion',
     'numpydoc'
 ]
 
@@ -56,7 +57,8 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 html_theme = 'sphinx_rtd_theme'
 
 html_sidebars = {
-    '**': ['globaltoc.html', 'sourcelink.html', 'searchbox.html']
+    '**': ['globaltoc.html', 'sourcelink.html', 'searchbox.html',
+           'versioning.html']
 }
 
 
@@ -85,3 +87,8 @@ sphinx_gallery_conf = {
 autosummary_generate = True
 numpydoc_show_class_members = False
 autoclass_content = 'both'
+
+# sphinx-multiversion options
+smv_tag_whitelist = r'^v\d+\.\d+.\d+$'
+smv_branch_whitelist = r'main'
+smv_released_pattern = r'^tags/v.*$'
