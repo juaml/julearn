@@ -21,18 +21,18 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
 
         Parameters
         ----------
-        model_confound : sklearn.base.BaseEstimator
-            Model used to predict all features independently
+        model_confound : obj
+            Sklearn compatible model used to predict all features independently
             using the confounds as features. The predictions of these models
             are then subtracted from each feature, defaults to
             LinearRegression().
-        confounds_match : list[str] or str
+        confounds_match : list(str) | str
             A string representing a regular expression by which the confounds
             can be detected from the column names.
             You can use the exact column names or another regex.
             The default follows the naming convention inside of julearn:
             '.*__:type:__*.'
-        threshold : float or None
+        threshold : float | None
             All residual values after confound removal which fall under the
             threshold will be set to 0.None (default) means that no threshold
             will be applied.
@@ -196,14 +196,14 @@ class TargetConfoundRemover(TransformerMixin):
         Attributes
         ----------
         model_confound : object
-            Model used to predict the rategt using the confounds as
+            Model used to predict the target using the confounds as
             features. The predictions of these models are then subtracted
             from the actual target, default is None. Meaning the use of
             a LinearRegression.
-        confounds_match : list[str] or str
+        confounds_match : list(str) | str
             A string representing a regular expression by which the confounds
             can be detected from the column names.
-        threshold : float or None
+        threshold : float | None
             All residual values after confound removal which fall under the
             threshold will be set to 0. None means that no threshold will be
             applied.
