@@ -55,6 +55,7 @@ _apply_to_default_exceptions = {
     'drop_columns': 'all',
     'change_column_types': 'all'
 }
+_apply_to_default_exceptions_reset = deepcopy(_apply_to_default_exceptions)
 
 _available_target_transformers = {
     'zscore': StandardScaler,
@@ -62,7 +63,7 @@ _available_target_transformers = {
 }
 
 _dict_transformer_to_name = {transformer: name
-                             for name, (transformer, apply_to) in deepcopy(
+                             for name, (transformer, apply_to) in (
                                  _available_transformers).items()
                              }
 
@@ -125,9 +126,9 @@ def get_transformer(name, target=False, **params):
 
 
 def _get_returned_features(transformer):
-    transformer_name = _dict_transformer_to_name.get(transformer.__class__)
-    returned_features = _available_transformers.get(transformer_name)[1]
-    if returned_features is None:
+    transformer_name = _dict_transformer_to_name.get(
+        transformer.__class__)
+    if transformer_name is None:
         warn(f'The transformer {transformer_name} is not a registered '
              'transformer. '
              'Therefore, `returned_features` will be set to `unknown`.'
@@ -136,17 +137,17 @@ def _get_returned_features(transformer):
              '`julearn.transformer.register_transformer` to register your'
              'transformer'
              )
-        return 'unknown'
+        returned_features = 'unknown'
     else:
-        return returned_features
+        _, returned_features = _available_transformers.get(transformer_name)
+    return returned_features
 
 
 def _get_apply_to(transformer):
-    transformer_name = _dict_transformer_to_name.get(transformer.__class__)
+    transformer_name = (_dict_transformer_to_name.get(transformer.__class__))
     if isinstance(transformer_name, str):
 
-        if (transformer_name.startswith('select')) and (
-                transformer_name in list_transformers()):
+        if (transformer_name.startswith('select')):
             apply_to = 'all_features'
 
         else:
@@ -158,21 +159,33 @@ def _get_apply_to(transformer):
     return apply_to
 
 
-def register_transformer(transformer_name, transformer,
+def register_transformer(transformer_name, transformer_cls,
                          returned_features, apply_to):
 
     if _available_transformers.get(transformer_name) is not None:
-        warn(f'The transformer_name `{transformer_name}` does already exist. '
+        warn(f'The transformer of name `{transformer_name}` does already exist. '
              'Therefore, you are overwriting this transformer.'
              )
-    _available_transformers[transformer_name] = [transformer,
-                                                 _get_returned_features]
+    _dict_transformer_to_name[transformer_cls] = transformer_name
 
-    _dict_transformer_to_name[transformer.__class__] = transformer_name
+    # TODO this is wrong
+    if apply_to != 'continuous':
+        _apply_to_default_exceptions[transformer_name] = apply_to
+
+    _available_transformers[transformer_name] = [
+        transformer_cls, returned_features]
 
 
 def reset_register():
     global _available_transformers
+    global _dict_transformer_to_name
+    global _apply_to_default_exceptions
     _available_transformers = deepcopy(
         _available_transformers_reset)
+
+    _dict_transformer_to_name = {transformer: name
+                                 for name, (transformer, apply_to) in (
+                                     _available_transformers).items()
+                                 }
+    _apply_to_default_exceptions = deepcopy(_apply_to_default_exceptions_reset)
     return _available_transformers
