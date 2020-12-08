@@ -182,7 +182,6 @@ def register_transformer(transformer_name, transformer_cls,
         Here, you can specify what features the transformer returns.
         The returned_features can be set to one of the following options:
 
-
             * 'same': leads copies the names from the original pd.DataFrame
             * 'subset': leads to the columns being a subset of the original
               pd.DataFrame. This functionality needs the transformer to have a
@@ -193,7 +192,7 @@ def register_transformer(transformer_name, transformer_cls,
             * 'unknown_same_type' leads to created column names
               with the same column type.
 
-    apply_to : str | list
+    apply_to : str | list(str)
         Defines to which columns the transformer is applyied to.
         For this julearn user specified 'columns_types' from the user.
         All other columns will be ignored by the transformer and kept as
