@@ -10,6 +10,7 @@ from sklearn.feature_selection import (GenericUnivariateSelect,
                                        SelectPercentile, SelectKBest,
                                        SelectFdr, SelectFpr, SelectFwe,
                                        VarianceThreshold)
+from sklearn.base import BaseEstimator, TransformerMixin
 from seaborn import load_dataset
 
 import pytest
@@ -166,3 +167,21 @@ def test_register_reset():
     assert get_transformer('passthrough').__class__ == PassThroughTransformer
     assert _get_apply_to(PassThroughTransformer()) == 'continuous'
     assert _get_returned_features(PassThroughTransformer()) == 'unknown'
+
+
+def test_register_class_no_default_params():
+
+    class fish(BaseEstimator, TransformerMixin):
+
+        def __init__(self, can_it_fly):
+            self.can_it_fly = can_it_fly
+
+        def fit(self, X, y=None):
+            return self
+
+        def transform(self, X):
+            return X
+
+    reset_register()
+    register_transformer('fish', fish, 'unknown', 'all')
+    get_transformer('fish', can_it_fly='dont_be_stupid')

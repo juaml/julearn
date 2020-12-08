@@ -167,7 +167,52 @@ def _get_apply_to(transformer):
 
 def register_transformer(transformer_name, transformer_cls,
                          returned_features, apply_to):
+    """Register a transformer to julearn.
+    This function allows you to add a transformer to julearn.
+    Afterwards, it behaves like every other julearn transformer and can
+    be refered to by name. E.g. you can use its name in `preprocess_X`
 
+    Parameters
+    ----------
+    transformer_name : str
+        Name by which the transformer will be referenced by
+    transformer_cls : object
+        The class by which the transformer can be initialized from.
+    returned_features : str
+        Here, you can specify what features the transformer returns.
+        The returned_features can be set to one of the following options:
+
+
+            * 'same': leads copies the names from the original pd.DataFrame
+            * 'subset': leads to the columns being a subset of the original
+              pd.DataFrame. This functionality needs the transformer to have a
+              .get_support method following sklearn standards.
+            * 'from_transformer': the outputted columns are already defined in
+              the transformer
+            * 'unknown' leads to created column names,
+            * 'unknown_same_type' leads to created column names
+              with the same column type.
+
+    apply_to : str | list
+        Defines to which columns the transformer is applyied to.
+        For this julearn user specified 'columns_types' from the user.
+        All other columns will be ignored by the transformer and kept as
+        they are.
+        apply_to can be set to one or multiple of the following options:
+
+            * 'all': The transformer is applied to all columns
+            * 'all_features': The transformer is applied to continuous and
+                categorical features.
+            * 'continuous': The transformer is only applied to continuous
+                features.
+            * 'categorical': The transformer is only applied to categorical
+                features.
+            * 'confound': The transformer is only applied to confounds.
+
+        As mentioned above you can combine these types.
+        E.g. ['continuous', 'confound'] would specify that your transformer
+        uses both the confounds and the continuous variables as input.
+    """
     if _available_transformers.get(transformer_name) is not None:
         warn(f'The transformer of name `{transformer_name}` does already '
              'exist. Therefore, you are overwriting this transformer.'
