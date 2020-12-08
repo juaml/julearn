@@ -21,11 +21,7 @@ def create_dataframe_pipeline(steps, apply_to=None):
     apply_to : str, list(str), optional
         decides which columns will be transformed.
         For more information see:
-<<<<<<< HEAD
         julearn.transformers.dataframe.DataFrameWrapTransformer
-=======
-        julearn.transformers.dataframe.DataFrameTransformer
->>>>>>> 43cb09d4c3adf6661f8953e0436f7f6d1171d67b
 
     Returns
     -------

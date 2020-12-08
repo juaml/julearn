@@ -168,7 +168,6 @@ def register_transformer(transformer_name, transformer_cls,
              )
     _dict_transformer_to_name[transformer_cls] = transformer_name
 
-    # TODO this is wrong
     if apply_to != 'continuous':
         _apply_to_default_exceptions[transformer_name] = apply_to
 

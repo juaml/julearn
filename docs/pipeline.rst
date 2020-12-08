@@ -95,5 +95,5 @@ DataFramePipeline
 .. autofunction:: julearn.pipeline.create_dataframe_pipeline
 
 DataFrameWrapTransformer
-********************
+************************
 .. autoclass:: julearn.transformers.DataFrameWrapTransformer

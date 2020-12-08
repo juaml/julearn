@@ -121,19 +121,19 @@ scores, model = run_cross_validation(
     X=feature_names, y='target', data=data,
     confounds='sex', model='linreg', problem_type='regression',
     preprocess_X=['remove_confound',
-                  ['change_column_types',
-                   ChangeColumnTypes('.*confound', 'continuous'),
-                   'from_transformer', 'all'],
+                  ChangeColumnTypes(
+                      '.*confound', 'continuous'),
                   'pca'],
     model_params=dict(remove_confound__keep_confounds=True),
-    return_estimator='final')
+    return_estimator='final'
+)
 
 
 ###############################################################################
 # As you can see this will keep the confound and
 # change its type to a continuous variable.
 X_deconfounded, _ = model.preprocess(
-    df_features, target, until='change_column_types',
+    df_features, target, until='changecolumntypes',
     return_trans_column_type=True)
 print(X_deconfounded.head())
 

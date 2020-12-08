@@ -47,11 +47,12 @@ class DataFrameWrapTransformer(TransformerMixin):
         returned_features : str, optional
             helps to name the transformed DataFrame accordingly.
             Using one of the following strings will lead to the noted behavior:
+
             * `None` here returned_features will be set automatically.
               If the transformer has a `.get_support` method it will be set to
               `subset`. Else the appropriate returned_feature is looked up
               in all available_transformers. Lastly, if its not an
-              available_transformer it will be set to `unknown.
+              available_transformer it will be set to `unknown`.
               See https://juaml.github.io/julearn/available_steps.html
               for details.
             * `unknown` leads to created column names,
@@ -63,6 +64,7 @@ class DataFrameWrapTransformer(TransformerMixin):
               .get_support method following sklearn standards.
             * `from_transformer` the outputted columns are already defined in
               the transformer
+
             , by default None
         """
 
