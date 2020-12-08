@@ -88,3 +88,12 @@ For example:
 ExtendedDataFramePipeline
 *************************
 .. autoclass:: julearn.pipeline.ExtendedDataFramePipeline
+.. autofunction:: julearn.pipeline.create_extended_pipeline
+
+DataFramePipeline
+*****************
+.. autofunction:: julearn.pipeline.create_dataframe_pipeline
+
+DataFrameWrapTransformer
+************************
+.. autoclass:: julearn.transformers.DataFrameWrapTransformer
