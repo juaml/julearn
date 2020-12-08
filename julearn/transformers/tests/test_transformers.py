@@ -149,3 +149,9 @@ def test_register_reset():
     reset_register()
     with pytest.raises(ValueError, match='The specified transformer'):
         get_transformer('passthrough')
+
+    register_transformer('passthrough', PassThroughTransformer,
+                         'unknown', 'continuous')
+    assert get_transformer('passthrough').__class__ == PassThroughTransformer
+    assert _get_apply_to(PassThroughTransformer()) == 'continuous'
+    assert _get_returned_features(PassThroughTransformer()) == 'unknown'

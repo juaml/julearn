@@ -388,22 +388,6 @@ def _prepare_hyperparams(hyperparams, pipeline):
     to_tune : dict
         The parameters that must be tuned.
     """
-    def rename_param(param, steps):
-        first, *rest = param.split('__')
-
-        if first in steps:
-            new_first = f'dataframe_pipeline__{first}'
-        elif first == 'confounds':
-            new_first = 'confound_dataframe_pipeline'
-        elif first == 'target':
-            new_first = 'y_transformer'
-        else:
-            raise_error(
-                'Each element of the hyperparameters dict  has to start with '
-                f'"confounds__", "target__" or any of "{steps}__" '
-                f'but was {first}')
-        return '__'.join([new_first] + rest)
-
     to_tune = {}
     # steps = list(pipeline.named_steps.keys())
     for param, val in hyperparams.items():
