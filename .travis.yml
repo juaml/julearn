@@ -8,7 +8,9 @@ install:
 - python setup.py install
 script:
 - make -C docs/ html
+before_deploy:
 - touch docs/_build/html/.nojekyll
+- cp docs/redirect.html docs/_build/html/index.html
 deploy:
   - provider: pages
     verbose: true
