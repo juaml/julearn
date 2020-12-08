@@ -12,7 +12,6 @@ from sklearn.preprocessing import StandardScaler
 from julearn.transformers import (DataFrameWrapTransformer,
                                   ChangeColumnTypes,
                                   DropColumns)
-from julearn.utils.testing import PassThroughTransformer
 X = pd.DataFrame(dict(A=np.arange(10),
                       B=np.arange(10, 20),
                       C=np.arange(30, 40)
@@ -30,7 +29,7 @@ X_with_types = pd.DataFrame({
 
 def test_error_no_matching_transform_column():
 
-    trans_df = DataFrameWrapTransformer(transformer=PassThroughTransformer(),
+    trans_df = DataFrameWrapTransformer(transformer=StandardScaler(),
                                         apply_to='confound',
                                         returned_features='same',
                                         )
@@ -42,7 +41,7 @@ def test_error_no_matching_transform_column():
 
 def test_error_returned_features_subset():
 
-    trans_df = DataFrameWrapTransformer(transformer=PassThroughTransformer(),
+    trans_df = DataFrameWrapTransformer(transformer=StandardScaler(),
                                         apply_to='confound',
                                         returned_features='subset',
                                         )

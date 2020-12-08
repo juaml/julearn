@@ -129,7 +129,7 @@ def _get_returned_features(transformer):
     transformer_name = _dict_transformer_to_name.get(
         transformer.__class__)
     if transformer_name is None:
-        warn(f'The transformer {transformer_name} is not a registered '
+        warn(f'The transformer {transformer} is not a registered '
              'transformer. '
              'Therefore, `returned_features` will be set to `unknown`.'
              'In other words variable names cannot be preserved after this '
@@ -154,6 +154,12 @@ def _get_apply_to(transformer):
             apply_to = _apply_to_default_exceptions.get(transformer_name,
                                                         'continuous')
     else:
+        warn(f'The transformer {transformer} is not a registered '
+             'transformer. '
+             'Therefore, `apply_to` will be set to `continuous`.'
+             'If you want to change this use '
+             '`julearn.transformer.register_transformer` to register your'
+             'transformer')
         apply_to = 'continuous'
 
     return apply_to

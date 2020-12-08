@@ -72,6 +72,7 @@ class DataFrameWrapTransformer(TransformerMixin):
         self.apply_to = apply_to
         self.returned_features = returned_features
         self.set_params(**params)
+        self._check_apply_to_returned_features()
 
     def fit(self, X, y=None):
         self._auto_set_returned_features()
@@ -201,6 +202,10 @@ class DataFrameWrapTransformer(TransformerMixin):
     def _auto_set_apply_to(self):
         if self.apply_to is None:
             self.apply_to = _get_apply_to(self.transformer)
+
+    def _check_apply_to_returned_features(self):
+        _get_apply_to(self.transformer)
+        _get_returned_features(self.transformer)
 
 
 def transform_dataframe(transformer, df, returned_features):

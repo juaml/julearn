@@ -11,10 +11,8 @@ from julearn.transformers import DataFrameWrapTransformer
 from julearn.transformers.meta import transform_dataframe
 
 from julearn.utils.testing import PassThroughTransformer
-from julearn.transformers.available_transformers import register_transformer
-
-
-register_transformer('passthrough', PassThroughTransformer(), 'same', 'all')
+from julearn.transformers.available_transformers import (
+    register_transformer, reset_register)
 
 
 X = pd.DataFrame(dict(A=np.arange(10),
@@ -33,6 +31,7 @@ X_with_types = pd.DataFrame({
 
 
 def test_transform_all_return_same_passthrough():
+    register_transformer('passthrough', PassThroughTransformer, 'same', 'all')
     trans_df = DataFrameWrapTransformer(transformer=PassThroughTransformer(),
                                         apply_to='all',
                                         returned_features='same',
@@ -40,10 +39,12 @@ def test_transform_all_return_same_passthrough():
 
     X_trans = trans_df.fit_transform(X)
     assert_frame_equal(X_trans, X)
+    reset_register()
 
 
 def test_all_return_unknown_passthrough():
 
+    register_transformer('passthrough', PassThroughTransformer, 'same', 'all')
     trans_df = DataFrameWrapTransformer(transformer=PassThroughTransformer(),
                                         apply_to='all',
                                         returned_features='unknown',
@@ -54,6 +55,7 @@ def test_all_return_unknown_passthrough():
     X_trans_same.columns = X.columns
     assert_array_equal(X_trans.values, X.values)
     assert_frame_equal(X_trans_same, X)
+    reset_register()
 
 
 def test_pca_transform_all():

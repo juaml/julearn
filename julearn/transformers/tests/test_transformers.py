@@ -115,25 +115,36 @@ def test__get_returned_features():
     for name, transformer in _features_transformers.items():
         returned_features = _get_returned_features(transformer())
         assert returned_features == _available_transformers[name][1]
-    with pytest.warns(RuntimeWarning, match='The transformer '):
+
+    with pytest.warns(RuntimeWarning, match=(
+            'is not a registered '
+            'transformer. '
+            'Therefore, `returned_features`')
+    ):
         returned_features = _get_returned_features(
-            TargetPassThroughTransformer)
+            TargetPassThroughTransformer())
 
     assert returned_features == 'unknown'
 
 
 def test__get_apply_to():
-    apply_to_pass = _get_apply_to(PassThroughTransformer())
     apply_to_confound = _get_apply_to(DataFrameConfoundRemover())
     apply_to_select = _get_apply_to(get_transformer('select_percentile'))
     apply_to_zscore = _get_apply_to(StandardScaler())
 
+    with pytest.warns(RuntimeWarning, match=(
+            'is not a registered '
+            'transformer. '
+            'Therefore, `apply_to`')
+    ):
+        apply_to_pass = _get_apply_to(PassThroughTransformer())
     assert apply_to_zscore == apply_to_pass == 'continuous'
     assert apply_to_confound == ['continuous', 'confound']
     assert apply_to_select == 'all_features'
 
 
 def test_register_reset():
+    reset_register()
     with pytest.raises(ValueError, match='The specified transformer'):
         get_transformer('passthrough')
 
