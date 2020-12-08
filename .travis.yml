@@ -9,14 +9,14 @@ install:
 script:
 - make -C docs/ html
 before_deploy:
-- touch docs/_build/html/.nojekyll
-- cp docs/redirect.html docs/_build/html/index.html
+- touch docs/_build/.nojekyll
+- cp docs/redirect.html docs/_build/index.html
 deploy:
   - provider: pages
     verbose: true
     token: $GITHUB_TOKEN
     edge: true
-    local_dir: ./docs/_build/html/
+    local_dir: ./docs/_build/
     keep_history: true
     on:
       branch: main
