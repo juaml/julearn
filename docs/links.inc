@@ -9,6 +9,9 @@
    nipy, NIPY, Nipy, etc...
 
 
+.. _`AML`: https://www.fz-juelich.de/inm/inm-7/EN/Forschung/Applied%20Machine%20Learning/_node.html
+.. _`INM-7`: https://www.fz-juelich.de/inm/inm-7/EN/Home/home_node.html
+
 .. sklearn
 
 .. _scikit-learn: https://scikit-learn.org/stable/
@@ -87,6 +90,7 @@
 
 .. _`Python`: https://python.org
 .. _`seaborn`: https://seaborn.pydata.org
+.. _`matplotlib`: https://matplotlib.org
 
 .. _`venv`: https://docs.python.org/3/tutorial/venv.html
 .. _`conda env`: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
