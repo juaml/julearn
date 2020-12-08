@@ -58,7 +58,7 @@ To do so you can set the following arguments in the
     transformers (:doc:`steps <steps>`).
     These are then applied in order to the features.
     By default most transformers are applied only to the continuous features.
-    For more information on this and how to modify this behavior see bellow.
+    For more information on this and how to modify this behavior see below.
 
     E.g. ['zscore', 'pca'] would mean that the (continuous) features are first
     z-standardized and then reduced using a principle component analysis.
@@ -192,7 +192,7 @@ added methods:
 
   * `preprocess`: a method to apply preprocessing steps of the pipeline to
     some data. Furthermore, the `until` argument can be used to
-    only preprocess upto a specific transformer.
+    only preprocess up to a specific transformer.
 
 
 Advanced Topics
