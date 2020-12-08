@@ -405,18 +405,18 @@ def _prepare_hyperparams(hyperparams, pipeline):
         return '__'.join([new_first] + rest)
 
     to_tune = {}
-    steps = list(pipeline.named_steps.keys())
+    # steps = list(pipeline.named_steps.keys())
     for param, val in hyperparams.items():
         # If we have more than 1 value, we will tune it. If not, it will
         # be set in the model.
         if hasattr(val, '__iter__') and not isinstance(val, str):
             if len(val) > 1:
-                to_tune[rename_param(param, steps)] = val
+                to_tune[param] = val
             else:
                 logger.info(f'Setting hyperparameter {val}')
                 pipeline.set_param(val)
         else:
-            pipeline.set_params(**{rename_param(param, steps): val})
+            pipeline.set_params(**{param: val})
     return to_tune
 
 

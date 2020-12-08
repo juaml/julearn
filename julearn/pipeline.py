@@ -222,6 +222,11 @@ class ExtendedDataFramePipeline(BaseEstimator):
         self.fit(X, y)
         return self.transform(X)
 
+    def set_params(self, **params):
+        super().set_params(**{self._rename_param(param): val
+                              for param, val in params.items()})
+        return self
+
     @ property
     def named_steps(self):
         return self.dataframe_pipeline.named_steps
@@ -241,6 +246,23 @@ class ExtendedDataFramePipeline(BaseEstimator):
         else:
             element = self.dataframe_pipeline[ind]
         return element
+
+    def _rename_param(self, param):
+        first, *rest = param.split('__')
+        steps = list(self.named_steps.keys())
+
+        if first in steps:
+            new_first = f'dataframe_pipeline__{first}'
+        elif first == 'confounds':
+            new_first = 'confound_dataframe_pipeline'
+        elif first == 'target':
+            new_first = 'y_transformer'
+        else:
+            raise_error(
+                'Each element of the hyperparameters dict  has to start with '
+                f'"confounds__", "target__" or any of "{steps}__" '
+                f'but was {first}')
+        return '__'.join([new_first] + rest)
 
     def _fit_transform_confounds(self, X, y):
         X = self._recode_columns(X)
