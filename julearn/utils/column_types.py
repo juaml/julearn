@@ -50,3 +50,7 @@ def pick_columns(regexes, columns):
 
 def change_column_type(column, new_type):
     return '__:type:__'.join(column.split('__:type:__')[0:1] + [new_type])
+
+
+def get_column_type(column):
+    return column.split('__:type:__')[1]

@@ -14,8 +14,16 @@ from seaborn import load_dataset
 
 import pytest
 
-from julearn.utils.testing import do_scoring_test
-from julearn.transformers import list_transformers, get_transformer
+from julearn.utils.testing import (do_scoring_test, PassThroughTransformer,
+                                   TargetPassThroughTransformer)
+from julearn.transformers import (
+    list_transformers, get_transformer, reset_register, register_transformer,
+    DataFrameConfoundRemover)
+from julearn.transformers.available_transformers import (
+    _get_returned_features, _get_apply_to,
+    _available_transformers)
+
+reset_register()
 
 
 _features_transformers = {
@@ -32,12 +40,12 @@ _features_transformers = {
     'select_fdr': SelectFdr,
     'select_fpr': SelectFpr,
     'select_fwe': SelectFwe,
-    'select_variance': VarianceThreshold
+    'select_variance': VarianceThreshold,
 }
 
 _transformer_params = {
     'scaler_quantile': {'n_quantiles': 10},
-    'select_k': {'k': 2}
+    'select_k': {'k': 2},
 }
 
 
@@ -69,7 +77,12 @@ def test_feature_transformers():
 
 def test_list_get_transformers():
     """Test list and getting transformers"""
-    expected = list(_features_transformers.keys()) + ['pca', 'remove_confound']
+    expected = list(_features_transformers.keys()) + [
+        'pca',
+        'remove_confound',
+        'drop_columns',
+        'change_column_types',
+    ]
     actual = list_transformers()
     diff = set(actual) ^ set(expected)
     assert not diff
@@ -80,7 +93,7 @@ def test_list_get_transformers():
     assert not diff
 
     expected = _features_transformers['zscore']
-    actual, _ = get_transformer('zscore', target=False)
+    actual = get_transformer('zscore', target=False)
 
     assert isinstance(actual, expected)
 
@@ -95,3 +108,61 @@ def test_list_get_transformers():
 
     with pytest.raises(ValueError, match="is not available"):
         get_transformer('wrong', target=False)
+
+
+def test__get_returned_features():
+
+    for name, transformer in _features_transformers.items():
+        returned_features = _get_returned_features(transformer())
+        assert returned_features == _available_transformers[name][1]
+
+    with pytest.warns(RuntimeWarning, match=(
+            'is not a registered '
+            'transformer. '
+            'Therefore, `returned_features`')
+    ):
+        returned_features = _get_returned_features(
+            TargetPassThroughTransformer())
+
+    assert returned_features == 'unknown'
+
+
+def test__get_apply_to():
+    apply_to_confound = _get_apply_to(DataFrameConfoundRemover())
+    apply_to_select = _get_apply_to(get_transformer('select_percentile'))
+    apply_to_zscore = _get_apply_to(StandardScaler())
+
+    with pytest.warns(RuntimeWarning, match=(
+            'is not a registered '
+            'transformer. '
+            'Therefore, `apply_to`')
+    ):
+        apply_to_pass = _get_apply_to(PassThroughTransformer())
+    assert apply_to_zscore == apply_to_pass == 'continuous'
+    assert apply_to_confound == ['continuous', 'confound']
+    assert apply_to_select == 'all_features'
+
+
+def test_register_reset():
+    reset_register()
+    with pytest.raises(ValueError, match='The specified transformer'):
+        get_transformer('passthrough')
+
+    register_transformer('passthrough', PassThroughTransformer,
+                         'same', 'all')
+    assert get_transformer('passthrough').__class__ == PassThroughTransformer
+    assert _get_apply_to(PassThroughTransformer()) == 'all'
+    assert _get_returned_features(PassThroughTransformer()) == 'same'
+
+    with pytest.warns(RuntimeWarning, match='The transformer of name '):
+        register_transformer('passthrough', PassThroughTransformer,
+                             'same', 'all')
+    reset_register()
+    with pytest.raises(ValueError, match='The specified transformer'):
+        get_transformer('passthrough')
+
+    register_transformer('passthrough', PassThroughTransformer,
+                         'unknown', 'continuous')
+    assert get_transformer('passthrough').__class__ == PassThroughTransformer
+    assert _get_apply_to(PassThroughTransformer()) == 'continuous'
+    assert _get_returned_features(PassThroughTransformer()) == 'unknown'

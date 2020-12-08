@@ -6,7 +6,7 @@ import pandas as pd
 from sklearn.base import BaseEstimator, TransformerMixin, clone
 from sklearn.linear_model import LinearRegression
 
-from .. utils import raise_error, pick_columns
+from .. utils import raise_error, pick_columns, logger
 
 
 class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
@@ -61,7 +61,7 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
         -------
         self : returns an instance of self.
         """
-        df_X, ser_confound = self._split_into_X_confound(X)
+        df_X, ser_confound, _ = self._split_into_X_confound(X)
         if self.keep_confounds:
             self.support_mask_ = pd.Series(True, index=X.columns, dtype=bool)
         else:
@@ -92,7 +92,13 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
         out : pandas.DataFrame
             Data without confounds
         """
-        df_X, df_confounds = self._split_into_X_confound(X)
+        df_X, df_confounds, df_feat_equal_conf = self._split_into_X_confound(X)
+        if df_feat_equal_conf.columns.to_list() != []:
+            logger.info(
+                f'{df_feat_equal_conf.columns.to_list()} are both '
+                'features and confounds. Therefore, confound removal will '
+                'ignore these features')
+
         df_X_prediction = pd.DataFrame(
             [model.predict(df_confounds)
              for model in self.models_confound_.values],
@@ -103,8 +109,13 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
         df_out = self._apply_threshold(residuals)
 
         if self.keep_confounds:
-            df_out[self.detected_confounds_] = X[self.detected_confounds_]
-            df_out = df_out.reindex(columns=X.columns)
+            df_out = pd.concat(
+                [df_out, df_confounds, df_feat_equal_conf], axis=1
+            ).reindex(columns=X.columns)
+        else:
+            df_out = pd.concat(
+                [df_out, df_feat_equal_conf], axis=1
+            ).reindex(columns=X.drop(columns=df_confounds.columns).columns)
 
         return df_out
 
@@ -143,7 +154,20 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
                         f'{self.confounds_match} in   the columns {X.columns}')
         df_confounds = df_X.loc[:, self.detected_confounds_]
         df_X = df_X.drop(columns=self.detected_confounds_)
-        return df_X, df_confounds
+
+        confounds_without_type = [
+            col.split('__:type:__')[0]
+            for col in self.detected_confounds_]
+        feature_equal_conf = [
+            col
+            for col in df_X.columns.to_list()
+            if col.split('__:type:__')[0] in confounds_without_type
+
+        ]
+        df_feature_equal_conf = df_X.loc[:, feature_equal_conf]
+        df_X = df_X.drop(columns=df_feature_equal_conf.columns)
+
+        return df_X, df_confounds, df_feature_equal_conf
 
     def _apply_threshold(self, residuals):
         """Rounds residuals to 0 when smaller than

@@ -381,7 +381,7 @@ def test_prepare_input_data_df():
 
 
 def test_prepare_model_params():
-    preprocess_steps_features = [('zscore', StandardScaler(), 'same'),
+    preprocess_steps_features = [('zscore', StandardScaler()),
                                  ]
     model = ('svm', SVC())
 
@@ -413,8 +413,8 @@ def test_prepare_model_params():
     assert pipeline.__class__.__name__ == 'wrap_searcher'
     assert pipeline.cv == 2
     assert isinstance(pipeline, GridSearchCV)
-    assert 'dataframe_pipeline__svm__C' in pipeline.param_grid
-    assert 'dataframe_pipeline__svm__kernel' not in pipeline.param_grid
+    assert 'svm__C' in pipeline.param_grid
+    assert 'svm__kernel' not in pipeline.param_grid
 
     model_params = {
         'svm__C': [0.001, 0.01, 0.1, 1, 10, 100],
@@ -437,9 +437,9 @@ def test_prepare_model_params():
     assert pipeline.__class__.__name__ == 'wrap_searcher'
     assert pipeline.cv.n_splits == 5
     assert isinstance(pipeline, RandomizedSearchCV)
-    assert 'dataframe_pipeline__svm__C' in pipeline.param_distributions
-    assert 'dataframe_pipeline__svm__gamma' in pipeline.param_distributions
-    assert 'dataframe_pipeline__svm__kernel' not in \
+    assert 'svm__C' in pipeline.param_distributions
+    assert 'svm__gamma' in pipeline.param_distributions
+    assert 'svm__kernel' not in \
         pipeline.param_distributions
 
     model_params = {'svm__kernel': 'linear', 'cv': 2}

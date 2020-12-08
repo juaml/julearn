@@ -291,6 +291,118 @@ def prepare_model_params(msel_dict, pipeline, cv_outer):
         * 'STEP__PARAMETER': A value (or several) to be used as PARAMETER for
           STEP in the pipeline. Example: 'svm__probability': True will set
           the parameter 'probability' of the 'svm' model. If more than option
+    def rename_param(param, steps):
+        first, *rest = param.split('__')
+
+        if first in steps:
+            new_first = f'dataframe_pipeline__{first}'
+        elif first == 'confounds':
+            new_first = 'confound_dataframe_pipeline'
+        elif first == 'target':
+            new_first = 'y_transformer'
+        else:
+            raise_error(
+                'Each element of the hyperparameters dict  has to start with '
+                f'"confounds__", "target__" or any of "{steps}__" '
+                f'but was {first}')
+        return '__'.join([new_first] + rest)
+
+    def rename_param(param, steps):
+        first, *rest = param.split('__')
+
+        if first in steps:
+            new_first = f'dataframe_pipeline__{first}'
+        elif first == 'confounds':
+            new_first = 'confound_dataframe_pipeline'
+        elif first == 'target':
+            new_first = 'y_transformer'
+        else:
+            raise_error(
+                'Each element of the hyperparameters dict  has to start with '
+                f'"confounds__", "target__" or any of "{steps}__" '
+                f'but was {first}')
+        return '__'.join([new_first] + rest)
+
+    def rename_param(param, steps):
+        first, *rest = param.split('__')
+
+        if first in steps:
+            new_first = f'dataframe_pipeline__{first}'
+        elif first == 'confounds':
+            new_first = 'confound_dataframe_pipeline'
+        elif first == 'target':
+            new_first = 'y_transformer'
+        else:
+            raise_error(
+                'Each element of the hyperparameters dict  has to start with '
+                f'"confounds__", "target__" or any of "{steps}__" '
+                f'but was {first}')
+        return '__'.join([new_first] + rest)
+
+    def rename_param(param, steps):
+        first, *rest = param.split('__')
+
+        if first in steps:
+            new_first = f'dataframe_pipeline__{first}'
+        elif first == 'confounds':
+            new_first = 'confound_dataframe_pipeline'
+        elif first == 'target':
+            new_first = 'y_transformer'
+        else:
+            raise_error(
+                'Each element of the hyperparameters dict  has to start with '
+                f'"confounds__", "target__" or any of "{steps}__" '
+                f'but was {first}')
+        return '__'.join([new_first] + rest)
+
+    def rename_param(param, steps):
+        first, *rest = param.split('__')
+
+        if first in steps:
+            new_first = f'dataframe_pipeline__{first}'
+        elif first == 'confounds':
+            new_first = 'confound_dataframe_pipeline'
+        elif first == 'target':
+            new_first = 'y_transformer'
+        else:
+            raise_error(
+                'Each element of the hyperparameters dict  has to start with '
+                f'"confounds__", "target__" or any of "{steps}__" '
+                f'but was {first}')
+        return '__'.join([new_first] + rest)
+
+    def rename_param(param, steps):
+        first, *rest = param.split('__')
+
+        if first in steps:
+            new_first = f'dataframe_pipeline__{first}'
+        elif first == 'confounds':
+            new_first = 'confound_dataframe_pipeline'
+        elif first == 'target':
+            new_first = 'y_transformer'
+        else:
+            raise_error(
+                'Each element of the hyperparameters dict  has to start with '
+                f'"confounds__", "target__" or any of "{steps}__" '
+                f'but was {first}')
+        return '__'.join([new_first] + rest)
+
+    def rename_param(param, steps):
+        first, *rest = param.split('__')
+
+        if first in steps:
+            new_first = f'dataframe_pipeline__{first}'
+        elif first == 'confounds':
+            new_first = 'confound_dataframe_pipeline'
+        elif first == 'target':
+            new_first = 'y_transformer'
+        else:
+            raise_error(
+                'Each element of the hyperparameters dict  has to start with '
+                f'"confounds__", "target__" or any of "{steps}__" '
+                f'but was {first}')
+        return '__'.join([new_first] + rest)
+
           is provided for at least one hyperparameter, a search will be
           performed.
         * 'search': The kind of search algorithm to use: 'grid' or 'random'.
@@ -388,69 +500,51 @@ def _prepare_hyperparams(hyperparams, pipeline):
     to_tune : dict
         The parameters that must be tuned.
     """
-    def rename_param(param, steps):
-        first, *rest = param.split('__')
-
-        if first in steps:
-            new_first = f'dataframe_pipeline__{first}'
-        elif first == 'confounds':
-            new_first = 'confound_dataframe_pipeline'
-        elif first == 'target':
-            new_first = 'y_transformer'
-        else:
-            raise_error(
-                'Each element of the hyperparameters dict  has to start with '
-                f'"confounds__", "target__" or any of "{steps}__" '
-                f'but was {first}')
-        return '__'.join([new_first] + rest)
-
     to_tune = {}
-    steps = list(pipeline.named_steps.keys())
+    # steps = list(pipeline.named_steps.keys())
     for param, val in hyperparams.items():
         # If we have more than 1 value, we will tune it. If not, it will
         # be set in the model.
         if hasattr(val, '__iter__') and not isinstance(val, str):
             if len(val) > 1:
-                to_tune[rename_param(param, steps)] = val
+                to_tune[param] = val
             else:
                 logger.info(f'Setting hyperparameter {val}')
                 pipeline.set_param(val)
         else:
-            pipeline.set_params(**{rename_param(param, steps): val})
+            pipeline.set_params(**{param: val})
     return to_tune
 
 
-def prepare_preprocessing(preprocess_X, preprocess_y, preprocess_confounds):
+def prepare_preprocessing(preprocess_X, preprocess_y, preprocess_confounds,
+                          confounds):
     if preprocess_X is not None and not isinstance(preprocess_X, list):
         preprocess_X = [preprocess_X]
     if not isinstance(preprocess_confounds, list):
         preprocess_confounds = [preprocess_confounds]
-    preprocess_X = _prepare_preprocess_X(preprocess_X)
+    preprocess_X = _prepare_preprocess_X(preprocess_X, confounds)
     preprocess_y = _prepare_preprocess_y(preprocess_y)
     preprocess_conf = _prepare_preprocess_confounds(preprocess_confounds)
     return preprocess_X, preprocess_y, preprocess_conf
 
 
-def _prepare_preprocess_X(preprocess_X):
+def _prepare_preprocess_X(preprocess_X, confounds):
     '''
     validates preprocess_X and returns a list of tuples accordingly
     and default params for this list
     '''
-    if preprocess_X is not None:
+    preprocess_X = None if preprocess_X == [] else preprocess_X
+    if preprocess_X is None:
+        if confounds is not None:
+            preprocess_X = [_create_preprocess_tuple('remove_confound')]
+    else:
         preprocess_X = [_create_preprocess_tuple(transformer)
                         for transformer in preprocess_X]
+        names, _, = zip(*preprocess_X)
+        if ('remove_confound' not in names) and (confounds is not None):
+            preprocess_X = ([(_create_preprocess_tuple('remove_confound'))]
+                            + preprocess_X)
     return preprocess_X
-
-
-def _get_confound_transformer(conf):
-    returned_features = 'unknown_same_type'
-    if isinstance(conf, str):
-        conf, returned_features = get_transformer(conf)
-    elif not _is_valid_sklearn_transformer(conf):
-        raise_error(
-            f'The specified confound preprocessing ({conf}) is not valid.'
-            f'It has to be a string or sklearn transformer.')
-    return conf, returned_features
 
 
 def _prepare_preprocess_confounds(preprocess_conf):
@@ -461,22 +555,11 @@ def _prepare_preprocess_confounds(preprocess_conf):
     if not isinstance(preprocess_conf, list):
         preprocess_conf = [preprocess_conf]
 
-    returned_features = 'unknown_same_type'
-    for step in preprocess_conf:
-        _, returned_features = _get_confound_transformer(step)
-
-        if returned_features == 'unknown':
-            returned_features = 'unknown_same_type'
-
     preprocess_conf = [
-        # returned_features ignored
         _create_preprocess_tuple(transformer)
         for transformer in preprocess_conf
 
     ]
-    # replace returned_feature with what we got here
-    preprocess_conf = [step[:2] + (returned_features,) + (step[-1],)
-                       for step in preprocess_conf]
 
     return preprocess_conf
 
@@ -555,17 +638,12 @@ def _create_preprocess_tuple(transformer):
         return transformer
     elif type(transformer) == str:
         trans_name = transformer
-        trans, returned_features = get_transformer(transformer)
+        trans = get_transformer(transformer)
     else:
         trans_name = transformer.__class__.__name__.lower()
         trans = clone(transformer)
-        returned_features = 'unknown'
 
-    transform_columns = (['continuous', 'confound']
-                         if trans_name == 'remove_confound'
-                         else 'continuous')
-
-    return trans_name, trans, returned_features, transform_columns
+    return trans_name, trans
 
 
 def _is_valid_sklearn_transformer(transformer):
