@@ -439,8 +439,19 @@ def test_confound_removal_no_explicit_removal():
         X=X, y=y, confounds=conf, model='svm', data=df_iris,
         preprocess_X=['zscore'], seed=42)
 
+    scores_not_explicit_no_preprocess = run_cross_validation(
+        X=X, y=y, confounds=conf, model='svm', data=df_iris,
+        preprocess_X=[], seed=42)
+
+    scores_explicit_no_preprocess = run_cross_validation(
+        X=X, y=y, confounds=conf, model='svm', data=df_iris,
+        preprocess_X=['remove_confound'], seed=42)
+
     assert_array_equal(scores_explicit['test_score'],
                        scores_not_explicit['test_score'])
 
     assert_array_equal(scores_explicit['test_score'],
                        scores_explicit_z['test_score'])
+
+    assert_array_equal(scores_explicit_no_preprocess['test_score'],
+                       scores_not_explicit_no_preprocess['test_score'])
