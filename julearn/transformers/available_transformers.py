@@ -170,7 +170,7 @@ def register_transformer(transformer_name, transformer_cls,
     """Register a transformer to julearn.
     This function allows you to add a transformer to julearn.
     Afterwards, it behaves like every other julearn transformer and can
-    be refered to by name. E.g. you can use its name in `preprocess_X`
+    be referred to by name. E.g. you can use its name in `preprocess_X`
 
     Parameters
     ----------
@@ -193,7 +193,7 @@ def register_transformer(transformer_name, transformer_cls,
               with the same column type.
 
     apply_to : str | list(str)
-        Defines to which columns the transformer is applyied to.
+        Defines to which columns the transformer is applied to.
         For this julearn user specified 'columns_types' from the user.
         All other columns will be ignored by the transformer and kept as
         they are.
