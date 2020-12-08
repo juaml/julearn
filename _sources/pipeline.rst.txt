@@ -35,11 +35,11 @@ components and a Column Type System:
   DataFramePipelines to transform confounds, features and subsets of both 
   separately. 
 
-- :class:`DataFrameTransformer` takes in a normal scikit-learn compatible 
+- :class:`DataFrameWrapTransformer` takes in a normal scikit-learn compatible 
   transformer and returns one which can be applied to a subset of features and 
   confounds of one `pandas.DataFrame`_. For the fit and transform methods it 
   always takes in a `pandas.DataFrame`_ and always returns one as well.  
-  The DataFramePipeline uses :class:`DataFrameTransformer`\s for each
+  The DataFramePipeline uses :class:`DataFrameWrapTransformer`\s for each
   transformer inside of it. 
 
 Column Type System
@@ -94,6 +94,6 @@ DataFramePipeline
 *****************
 .. autofunction:: julearn.pipeline.create_dataframe_pipeline
 
-DataFrameTransformer
-********************
-.. autoclass:: julearn.transformers.DataFrameTransformer
+DataFrameWrapTransformer
+************************
+.. autoclass:: julearn.transformers.DataFrameWrapTransformer
