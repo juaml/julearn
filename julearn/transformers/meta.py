@@ -37,7 +37,7 @@ class DataFrameWrapTransformer(TransformerMixin):
             A transformer following sklearn standards.
 
         apply_to : str | list(str) or None
-            Defines to which columns the transformer is applyied to.
+            Defines to which columns the transformer is applied to.
             For this julearn user specified 'columns_types' from the user.
             All other columns will be ignored by the transformer and kept as
             they are.
