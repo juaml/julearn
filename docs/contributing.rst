@@ -89,8 +89,16 @@ Replace ``fraimondo`` with your Github username.
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 All your modifications that address this issue will be placed in a new branch.
-Execute the following command, replacing ``<BRANCH_NAME>`` with a name that
-relates to the issue.
+First, make sure you have the latest commit in your local ``main`` branch.
+
+.. code-block:: bash
+
+    git checkout main
+    git pull --rebase origin main
+
+
+Then, execute the following command to create a new branch, replacing 
+``<BRANCH_NAME>`` with a name that relates to the issue.
 
 .. code-block:: bash
 
@@ -148,15 +156,9 @@ To build the docs:
 
 To view the documentation, open `docs/_build/html/index.html`.
 
-<<<<<<< HEAD
 In case you remove some files or change their filename you can run into
 errors when using ``make html``. In this situation you can use ``make clean``
 to clean up the already build files and then rerun ``make html``.
-=======
-In case you remove some files or change their filename you can run into 
-errors when using ``make html``. In this situation you can use ``make clean``
-to clean up the already build files and then rerun ``make html``. 
->>>>>>> 43cb09d4c3adf6661f8953e0436f7f6d1171d67b
 
 If any of this fails, go back to :ref:`do_changes`
 
