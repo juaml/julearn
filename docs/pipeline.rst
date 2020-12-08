@@ -2,7 +2,7 @@
 
 Understanding the pipeline
 ==========================
-Julearn aims to provide an user-friendley way to apply complex machine learning
+Julearn aims to provide an user-friendly way to apply complex machine learning
 pipelines.
 To do so julearn provides the :func:`.run_cross_validation` function.
 Here, users can specify and customize their pipeline,
@@ -22,9 +22,9 @@ When using :func:`.run_cross_validation` you have to answer at least
  2 questions first and then specify the according arguments properly:
 
   * What model do you want to use?
-    You can enter any model name from :doc:`steps <steps>`
+    You can enter any model name from :doc:`steps <steps>` 
     or use any scikit-learning compatible model into the `model`
-    argument from :func:`.run_cross_validation`
+    argument from :func:`.run_cross_validation` 
   * What problem type do you want to answer?
     In machine learning their are different problems you want to handle.
     Julearn supports `binary_classification`, `multiclass_classification`
@@ -51,11 +51,11 @@ the 3 preprocessing arguments for transforming the
 confounds, target and features respectively (in this order).
 
 To do so you can set the following arguments in the
-:func:`.run_cross_validation`:
+:func:`.run_cross_validation` :
 
   * preprocess_X: specifies how to transform the features.
     Here, you can enter the names or a list of the names of available
-    transformers (:doc:`steps <steps>`).
+    transformers (:doc:`steps <steps>` ).
     These are then applied in order to the features.
     By default most transformers are applied only to the continuous features.
     For more information on this and how to modify this behavior see below.
@@ -77,7 +77,7 @@ Example
 ^^^^^^^
 Assume we want not preprocess the confounds, zscore the transformer
 and then use a pca on the features before removing the confound from these
-features. All of these operations are included in the :doc:`steps <steps>`
+features. All of these operations are included in the :doc:`steps <steps>` 
 and can therefore be referred to by name.
 
 In other words we need to set:
@@ -125,10 +125,10 @@ More information
 
 As mentioned above julearn allows the user to specify to which variable/columns
 or variable/column types each transformer will be applied. To do so you
-can adjust the `apply_to` hyperperameter which is added to all transformers
+can adjust the `apply_to` hyperparameter which is added to all transformers
 used in `preprocess_X`. You can find such an example at #TODO
-and find more information on hyperperameter tuning in
-:doc:`hyperparamters <hyperparameters>`.
+and find more information on hyperparameter tuning in
+:doc:`hyperparameters <hyperparameters>` .
 
 
 The returned pipeline
@@ -152,7 +152,7 @@ These are the possible options:
           training data.
   * 'all': Return all the estimators (final and cv).
 
-These returned estimators are always :class:`.ExtendedDataFramePipeline`
+These returned estimators are always :class:`.ExtendedDataFramePipeline` 
 objects.Therefore, the next section will discuss how you can use
 a returned estimator.
 
@@ -174,7 +174,7 @@ The following methods work as in sklearn:
 Caveats ExtendedDataFramePipeline
 ---------------------------------
 
-In contrast to scikit-learn pipeliens :class:`.ExtendedDataFramePipeline`
+In contrast to scikit-learn pipelines :class:`.ExtendedDataFramePipeline`
 can change the ground truth (transform the target).
 This means that any any function which uses sklearn scorer functions instead of
 calling `.score()` on the :class:`.ExtendedDataFramePipeline` can give you
@@ -207,12 +207,12 @@ Column Type System
 Context
 ^^^^^^^
 To be able to discriminate between different types of variables Julearn
-uses a Column Type System. This system currently distinguies between 
+uses a Column Type System. This system currently distinguishes between 
 continuous variables/features, categorical variables/features and confounds.
 
 .. note::
   On most levels of Julearn this Column Type System is only used internally. 
-  Therefore, users do not have to work with it directley.
+  Therefore, users do not have to work with it directly.
   For example, by providing the confounds and categorical variables to the
   :class:`.ExtendedDataFramePipeline` it has all the information needed to 
   apply the Column Type System internally without any further input or changes
@@ -222,7 +222,7 @@ How it works
 ^^^^^^^^^^^^
 Every `pandas.DataFrame`_ column has a column name. 
 Inside of Julearn we add another string containing the type of the column 
-separated by our delimiter: '__:type:__' to the original column names. 
+separated by our delimiter: '\_\_\:type\:\_\_' to the original column names. 
 For example: 
 
   * We have the original columns :

@@ -46,3 +46,5 @@ Classes
    :members: 
 .. autoclass:: julearn.transformers.confounds.TargetConfoundRemover
    :members: 
+.. autoclass:: julearn.pipeline.ExtendedDataFramePipeline
+   :members:
