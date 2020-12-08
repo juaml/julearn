@@ -163,8 +163,8 @@ def register_transformer(transformer_name, transformer_cls,
                          returned_features, apply_to):
 
     if _available_transformers.get(transformer_name) is not None:
-        warn(f'The transformer of name `{transformer_name}` does already exist. '
-             'Therefore, you are overwriting this transformer.'
+        warn(f'The transformer of name `{transformer_name}` does already '
+             'exist. Therefore, you are overwriting this transformer.'
              )
     _dict_transformer_to_name[transformer_cls] = transformer_name
 
