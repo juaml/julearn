@@ -223,6 +223,26 @@ class ExtendedDataFramePipeline(BaseEstimator):
                               for param, val in params.items()})
         return self
 
+    def get_params(self, deep=True):
+        params = super().get_params(deep=deep)
+
+        def _rename_get(param):
+            first, *rest = param.split('__')
+            # if rest is empty then these are the actual parameters/pipelines
+            if rest != []:
+                if first == 'dataframe_pipeline':
+                    first = []
+                elif first == 'confound_dataframe_pipeline':
+                    first = ['confounds']
+                else:
+                    first = ['target']
+                return '__'.join(first + rest)
+            else:
+                return param
+
+        return {_rename_get(param): val
+                for param, val in params.items()}
+
     @ property
     def named_steps(self):
         return self.dataframe_pipeline.named_steps

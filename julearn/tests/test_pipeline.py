@@ -9,11 +9,12 @@ from numpy.testing import assert_array_equal
 from pandas.testing import assert_frame_equal
 from sklearn.decomposition import PCA
 from sklearn.linear_model import LinearRegression
+from sklearn.svm import SVR
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 
 from julearn.transformers import (
-    TargetTransfromerWrapper, DataFrameConfoundRemover
+    TargetTransfromerWrapper, DataFrameConfoundRemover, get_transformer
 )
 from julearn.pipeline import (ExtendedDataFramePipeline,
                               create_dataframe_pipeline,
@@ -335,3 +336,26 @@ def test_create_exteneded_pipeline_confound_removal():
                  .predict(X.iloc[:, :-1]))
 
     assert_array_equal(pred, pred_keep)
+
+
+def test_tune_params():
+    params = {'svm__kernel': 'linear',
+              'zscore__with_mean': True,
+              'confounds__zscore__with_mean': True,
+              'target__with_mean': True}
+
+    extended_pipe = create_extended_pipeline(
+        preprocess_steps_features=[('zscore', get_transformer('zscore'))],
+        preprocess_steps_confounds=[('zscore', get_transformer('zscore'))],
+        preprocess_transformer_target=get_transformer('zscore', target=True),
+        model=('svm', SVR()),
+        confounds=None,
+        categorical_features=None
+    )
+
+    extended_pipe.set_params(**params)
+    for param, val in params.items():
+        assert extended_pipe.get_params()[param] == val
+
+    with pytest.raises(ValueError, match='Each element of the'):
+        extended_pipe.set_params(cOnFouunds__zscore__with_mean=True)
