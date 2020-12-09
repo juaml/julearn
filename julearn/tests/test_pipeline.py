@@ -122,7 +122,7 @@ def test_access_steps_ExtendedDataFramePipeline():
         confound_dataframe_pipeline=my_confound_pipe, confounds=['B'])
 
     assert (my_pipe.named_confound_steps.zscore
-            == my_pipe['confound_zscore']
+            == my_pipe['confound__zscore']
             == (my_pipe
                 .confound_dataframe_pipeline
                 .named_steps
@@ -229,13 +229,13 @@ def test_preprocess_until_ExtendedDataFramePipeline():
         X_trans = this_confounds_pipe.fit_transform(X_trans)
 
         X_trans_pipe, y_trans_pipe = extended_pipe.preprocess(
-            X, y, until='confound_' + name, return_trans_column_type=True)
+            X, y, until='confound__' + name, return_trans_column_type=True)
 
         assert_frame_equal(X_trans, X_trans_pipe)
         assert_array_equal(y_trans, y_trans_pipe)
 
     X_trans_pipe, y_trans_pipe = extended_pipe.preprocess(
-        X, y, until='target_', return_trans_column_type=True)
+        X, y, until='target__', return_trans_column_type=True)
     y_trans = y_transformer.fit_transform(X_trans, y_trans)
     assert_frame_equal(X_trans, X_trans_pipe)
     assert_array_equal(y_trans, y_trans_pipe)
