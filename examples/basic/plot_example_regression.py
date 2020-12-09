@@ -69,21 +69,18 @@ scores, model = run_cross_validation(
     scoring='neg_mean_absolute_error')
 
 ###############################################################################
-# The scores dictionary has all the values for each CV split. We can convert
-# this dictionary to a pandas dataframe for easier manipulation
+# The scores dataframe has all the values for each CV split.
 
-df_scores = pd.DataFrame(scores)
-print(df_scores.head())
-
+print(scores.head())
 
 ###############################################################################
 # Mean value of mean absolute error across CV
-print(df_scores['test_neg_mean_absolute_error'].mean() * -1)
+print(scores['test_neg_mean_absolute_error'].mean() * -1)
 
 ###############################################################################
 # Now we can get the MAE fold and repetition:
 
-df_mae = df_scores.set_index(
+df_mae = scores.set_index(
     ['repeat', 'fold'])['test_neg_mean_absolute_error'].unstack() * -1
 df_mae.index.name = 'Repeats'
 df_mae.columns.name = 'K-fold splits'

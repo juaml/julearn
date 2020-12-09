@@ -15,6 +15,7 @@ from sklearn.model_selection import (cross_validate,
                                      GridSearchCV,
                                      RandomizedSearchCV)
 from sklearn.preprocessing import LabelBinarizer
+import pandas as pd
 from seaborn import load_dataset
 import pytest
 
@@ -131,7 +132,7 @@ def test_set_hyperparam():
 
     expected = cross_validate(clf, sk_X, t_sk_y, cv=cv, scoring=[scoring])
 
-    assert len(actual) == len(expected) + 2
+    assert len(actual.columns) == len(expected) + 2
     assert len(actual['test_roc_auc']) == len(expected['test_roc_auc'])
     assert all(
         [a == b for a, b in
@@ -184,7 +185,7 @@ def test_tune_hyperparam():
 
     expected = cross_validate(gs, sk_X, sk_y, cv=cv_outer, scoring=[scoring])
 
-    assert len(actual) == len(expected) + 2
+    assert len(actual.columns) == len(expected) + 2
     assert len(actual['test_accuracy']) == len(expected['test_accuracy'])
     assert all(
         [a == b for a, b in
@@ -217,7 +218,7 @@ def test_tune_hyperparam():
 
     expected = cross_validate(gs, sk_X, sk_y, cv=cv_outer, scoring=[scoring])
 
-    assert len(actual) == len(expected) + 2
+    assert len(actual.columns) == len(expected) + 2
     assert len(actual['test_accuracy']) == len(expected['test_accuracy'])
     assert all(
         [a == b for a, b in
@@ -253,7 +254,7 @@ def test_tune_hyperparam():
     sk_y = (sk_y == 'setosa').astype(np.int)
     expected = cross_validate(gs, sk_X, sk_y, cv=cv_outer, scoring=[scoring])
 
-    assert len(actual) == len(expected) + 2
+    assert len(actual.columns) == len(expected) + 2
     assert len(actual['test_accuracy']) == len(expected['test_accuracy'])
     assert all(
         [a == b for a, b in
@@ -398,26 +399,26 @@ def test_return_estimators():
     scores = run_cross_validation(X=X, y=y, data=df_iris, model='svm',
                                   cv=cv, return_estimator=None)
 
-    assert isinstance(scores, dict)
+    assert isinstance(scores, pd.DataFrame)
     assert 'estimator' not in scores
 
     scores, final = run_cross_validation(X=X, y=y, data=df_iris, model='svm',
                                          cv=cv, return_estimator='final')
 
-    assert isinstance(scores, dict)
+    assert isinstance(scores, pd.DataFrame)
     assert 'estimator' not in scores
     assert isinstance(final['svm'], svm.SVC)
 
     scores = run_cross_validation(X=X, y=y, data=df_iris, model='svm',
                                   cv=cv, return_estimator='cv')
 
-    assert isinstance(scores, dict)
+    assert isinstance(scores, pd.DataFrame)
     assert 'estimator' in scores
 
     scores, final = run_cross_validation(X=X, y=y, data=df_iris, model='svm',
                                          cv=cv, return_estimator='all')
 
-    assert isinstance(scores, dict)
+    assert isinstance(scores, pd.DataFrame)
     assert 'estimator' in scores
     assert isinstance(final['svm'], svm.SVC)
 

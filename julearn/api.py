@@ -3,6 +3,7 @@
 # License: AGPL
 import numpy as np
 from sklearn.model_selection import cross_validate
+import pandas as pd
 
 from . prepare import (prepare_input_data,
                        prepare_model,
@@ -208,7 +209,7 @@ def run_cross_validation(
     scores['repeat'] = repeats
     scores['fold'] = folds
 
-    out = scores
+    out = pd.DataFrame(scores)
     if return_estimator in ['final', 'all']:
         pipeline.fit(df_X_conf, y)
         out = out, pipeline
