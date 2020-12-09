@@ -81,11 +81,8 @@ scores_cr = run_cross_validation(
 ###############################################################################
 # Now we can compare the accuracies. We can combine the two outputs as
 # pandas dataframes
-df_ncr = pd.DataFrame(scores_ncr)
-df_ncr['confounds'] = 'Not Removed'
-
-df_cr = pd.DataFrame(scores_cr)
-df_cr['confounds'] = 'Removed'
+scores_ncr['confounds'] = 'Not Removed'
+scores_cr['confounds'] = 'Removed'
 
 ###############################################################################
 # Now we convert the metrics to a column for easier seaborn plotting (convert
@@ -94,11 +91,11 @@ df_cr['confounds'] = 'Removed'
 index = ['fold', 'confounds']
 scorings = ['test_accuracy', 'test_roc_auc']
 
-df_ncr_metrics = df_ncr.set_index(index)[scorings].stack()
+df_ncr_metrics = scores_ncr.set_index(index)[scorings].stack()
 df_ncr_metrics.index.names = ['fold', 'confounds', 'metric']
 df_ncr_metrics.name = 'value'
 
-df_cr_metrics = df_cr.set_index(index)[scorings].stack()
+df_cr_metrics = scores_cr.set_index(index)[scorings].stack()
 df_cr_metrics.index.names = ['fold', 'confounds', 'metric']
 df_cr_metrics.name = 'value'
 
