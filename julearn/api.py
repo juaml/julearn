@@ -140,11 +140,12 @@ def run_cross_validation(
 
     Returns
     -------
-    scores : dict
-        The resulting scores (one key for each score specified). Additionally,
-        a 'fit_time' key will be added. And, if ``return_estimator='all'`` or
-        ``return_estimator='cv'``, an 'estimator' key with the corresponding
-        estimators fitted for each CV split.
+    scores : pd.DataFrame
+        The resulting scores (one column for each score specified).
+        Additionally, a 'fit_time' column will be added.
+        And, if ``return_estimator='all'`` or
+        ``return_estimator='cv'``, an 'estimator' columns with the
+        corresponding estimators fitted for each CV split.
     final_estimator : object
         The final estimator, fitted on all the data (only if
         ``return_estimator='all'`` or ``return_estimator='final'``)
