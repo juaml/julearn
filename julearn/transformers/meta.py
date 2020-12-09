@@ -132,6 +132,12 @@ class DataFrameWrapTransformer(TransformerMixin):
     def get_support(self, indices=False):
         self.transformer.get_support(indices=indices)
 
+    def __repr__(self):
+        return (f'DataFrameWrapTransformer({self.transformer.__repr__()}, '
+                f'apply_to={self.apply_to}, '
+                f'return_features={self.returned_features}'
+                )
+
     def _set_columns_to_transform(self, X):
 
         all_columns = X.columns.copy()

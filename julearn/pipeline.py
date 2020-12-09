@@ -273,6 +273,24 @@ class ExtendedDataFramePipeline(BaseEstimator):
             element = self.dataframe_pipeline[ind]
         return element
 
+    def __repr__(self):
+        preprocess_X = clone(self.dataframe_pipeline).steps
+        model = preprocess_X.pop()
+
+        preprocess_X = None if preprocess_X == [] else preprocess_X
+        preprocess_target = self.y_transformer
+        preprocess_confounds = self.dataframe_pipeline
+
+        return f'''
+        ExtendedDataFramePipeline using:
+            * `model` = {model}
+            * `preprocess_X` = {preprocess_X}
+            * `preprocess_target` = {preprocess_target}
+            * `preprocess_confounds` = {preprocess_confounds}
+            * `confounds` = {self.confounds}
+            * `categorical_features` = {self.categorical_features}
+              '''
+
     def _rename_param(self, param):
         first, *rest = param.split('__')
         steps = list(self.named_steps.keys())
