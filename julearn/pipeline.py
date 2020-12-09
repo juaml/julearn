@@ -279,16 +279,16 @@ class ExtendedDataFramePipeline(BaseEstimator):
 
         preprocess_X = None if preprocess_X == [] else preprocess_X
         preprocess_target = self.y_transformer
-        preprocess_confounds = self.dataframe_pipeline
+        preprocess_confounds = self.confound_dataframe_pipeline
 
         return f'''
         ExtendedDataFramePipeline using:
-            * `model` = {model}
-            * `preprocess_X` = {preprocess_X}
-            * `preprocess_target` = {preprocess_target}
-            * `preprocess_confounds` = {preprocess_confounds}
-            * `confounds` = {self.confounds}
-            * `categorical_features` = {self.categorical_features}
+            * model = {model}
+            * preprocess_X = {preprocess_X}
+            * preprocess_target = {preprocess_target}
+            * preprocess_confounds = {preprocess_confounds}
+            * confounds = {self.confounds}
+            * categorical_features = {self.categorical_features}
               '''
 
     def _rename_param(self, param):

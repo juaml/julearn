@@ -359,3 +359,15 @@ def test_tune_params():
 
     with pytest.raises(ValueError, match='Each element of the'):
         extended_pipe.set_params(cOnFouunds__zscore__with_mean=True)
+
+
+def test_ExtendedDataFramePipeline___rpr__():
+    extended_pipe = create_extended_pipeline(
+        preprocess_steps_features=[('zscore', get_transformer('zscore'))],
+        preprocess_steps_confounds=[('zscore', get_transformer('zscore'))],
+        preprocess_transformer_target=get_transformer('zscore', target=True),
+        model=('svm', SVR()),
+        confounds=None,
+        categorical_features=None
+    )
+    extended_pipe.__repr__()
