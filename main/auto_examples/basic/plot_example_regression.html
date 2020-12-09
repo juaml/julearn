@@ -208,13 +208,13 @@ a regression analysis using a Ridge Regression model.</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2020-12-09 11:30:36,532 - julearn - INFO - ===== Lib Versions =====
-2020-12-09 11:30:36,532 - julearn - INFO - numpy: 1.16.4
-2020-12-09 11:30:36,532 - julearn - INFO - scipy: 1.5.4
-2020-12-09 11:30:36,532 - julearn - INFO - sklearn: 0.23.2
-2020-12-09 11:30:36,532 - julearn - INFO - pandas: 1.1.5
-2020-12-09 11:30:36,532 - julearn - INFO - julearn: 0.2.2.dev
-2020-12-09 11:30:36,532 - julearn - INFO - ========================
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2020-12-09 12:27:17,612 - julearn - INFO - ===== Lib Versions =====
+2020-12-09 12:27:17,612 - julearn - INFO - numpy: 1.16.4
+2020-12-09 12:27:17,613 - julearn - INFO - scipy: 1.5.4
+2020-12-09 12:27:17,613 - julearn - INFO - sklearn: 0.23.2
+2020-12-09 12:27:17,613 - julearn - INFO - pandas: 1.1.5
+2020-12-09 12:27:17,613 - julearn - INFO - julearn: 0.2.2.dev
+2020-12-09 12:27:17,613 - julearn - INFO - ========================
 </pre></div>
 </div>
 <p>load the diabetes data from sklearn as a pandas dataframe</p>
@@ -278,46 +278,44 @@ and y</p>
 </div>
 <p>Train a ridge regression model on train dataset and use mean absolute error
 for scoring</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">,</span> <span class="n">model</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">scores</span><span class="p">,</span> <span class="n">model</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
     <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">train_diabetes</span><span class="p">,</span> <span class="n">preprocess_X</span><span class="o">=</span><span class="s1">&#39;zscore&#39;</span><span class="p">,</span>
     <span class="n">problem_type</span><span class="o">=</span><span class="s1">&#39;regression&#39;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;ridge&#39;</span><span class="p">,</span> <span class="n">return_estimator</span><span class="o">=</span><span class="s1">&#39;final&#39;</span><span class="p">,</span>
     <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;neg_mean_absolute_error&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2020-12-09 11:30:36,895 - julearn - INFO - Using default CV
-2020-12-09 11:30:36,895 - julearn - INFO - ==== Input Data ====
-2020-12-09 11:30:36,895 - julearn - INFO - Using dataframe as input
-2020-12-09 11:30:36,895 - julearn - INFO - Features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
-2020-12-09 11:30:36,895 - julearn - INFO - Target: target
-2020-12-09 11:30:36,896 - julearn - INFO - Expanded X: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
-2020-12-09 11:30:36,896 - julearn - INFO - Expanded Confounds: []
-2020-12-09 11:30:36,897 - julearn - INFO - ====================
-2020-12-09 11:30:36,897 - julearn - INFO -
-2020-12-09 11:30:36,897 - julearn - INFO - ====== Model ======
-2020-12-09 11:30:36,897 - julearn - INFO - Obtaining model by name: ridge
-2020-12-09 11:30:36,897 - julearn - INFO - ===================
-2020-12-09 11:30:36,897 - julearn - INFO -
-2020-12-09 11:30:36,897 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2020-12-09 12:27:17,981 - julearn - INFO - Using default CV
+2020-12-09 12:27:17,981 - julearn - INFO - ==== Input Data ====
+2020-12-09 12:27:17,981 - julearn - INFO - Using dataframe as input
+2020-12-09 12:27:17,981 - julearn - INFO - Features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2020-12-09 12:27:17,982 - julearn - INFO - Target: target
+2020-12-09 12:27:17,982 - julearn - INFO - Expanded X: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2020-12-09 12:27:17,982 - julearn - INFO - Expanded Confounds: []
+2020-12-09 12:27:17,983 - julearn - INFO - ====================
+2020-12-09 12:27:17,983 - julearn - INFO -
+2020-12-09 12:27:17,983 - julearn - INFO - ====== Model ======
+2020-12-09 12:27:17,984 - julearn - INFO - Obtaining model by name: ridge
+2020-12-09 12:27:17,984 - julearn - INFO - ===================
+2020-12-09 12:27:17,984 - julearn - INFO -
+2020-12-09 12:27:17,984 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
 </pre></div>
 </div>
-<p>The scores dictionary has all the values for each CV split. We can convert
-this dictionary to a pandas dataframe for easier manipulation</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">df_scores</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">df_scores</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<p>The scores dataframe has all the values for each CV split.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>   fit_time  score_time  test_neg_mean_absolute_error  repeat  fold
-0  0.011777    0.007558                    -53.711774       0     0
-1  0.010936    0.007280                    -38.334731       0     1
-2  0.010787    0.007318                    -46.578596       0     2
-3  0.010809    0.007342                    -48.109208       0     3
-4  0.010931    0.007311                    -42.632269       0     4
+0  0.012445    0.008067                    -53.711774       0     0
+1  0.011847    0.007826                    -38.334731       0     1
+2  0.011550    0.007586                    -46.578596       0     2
+3  0.011819    0.007996                    -48.109208       0     3
+4  0.011552    0.007524                    -42.632269       0     4
 </pre></div>
 </div>
 <p>Mean value of mean absolute error across CV</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">df_scores</span><span class="p">[</span><span class="s1">&#39;test_neg_mean_absolute_error&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">*</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">[</span><span class="s1">&#39;test_neg_mean_absolute_error&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">*</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
@@ -325,7 +323,7 @@ this dictionary to a pandas dataframe for easier manipulation</p>
 </pre></div>
 </div>
 <p>Now we can get the MAE fold and repetition:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">df_mae</span> <span class="o">=</span> <span class="n">df_scores</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">df_mae</span> <span class="o">=</span> <span class="n">scores</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span>
     <span class="p">[</span><span class="s1">&#39;repeat&#39;</span><span class="p">,</span> <span class="s1">&#39;fold&#39;</span><span class="p">])[</span><span class="s1">&#39;test_neg_mean_absolute_error&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">unstack</span><span class="p">()</span> <span class="o">*</span> <span class="o">-</span><span class="mi">1</span>
 <span class="n">df_mae</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Repeats&#39;</span>
 <span class="n">df_mae</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;K-fold splits&#39;</span>
@@ -398,7 +396,7 @@ of true values vs predicted values</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>(10.75, 324.25, 10.75, 324.25)
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.367 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.420 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-basic-plot-example-regression-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/5d15362022e35d28ba40d25fd042f86e/plot_example_regression.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_example_regression.py</span></code></a></p>

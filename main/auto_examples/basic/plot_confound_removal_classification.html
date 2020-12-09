@@ -201,13 +201,13 @@ with and without confound removal using a Random Forest classifier.</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2020-12-09 11:30:38,014 - julearn - INFO - ===== Lib Versions =====
-2020-12-09 11:30:38,014 - julearn - INFO - numpy: 1.16.4
-2020-12-09 11:30:38,014 - julearn - INFO - scipy: 1.5.4
-2020-12-09 11:30:38,014 - julearn - INFO - sklearn: 0.23.2
-2020-12-09 11:30:38,014 - julearn - INFO - pandas: 1.1.5
-2020-12-09 11:30:38,014 - julearn - INFO - julearn: 0.2.2.dev
-2020-12-09 11:30:38,014 - julearn - INFO - ========================
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2020-12-09 12:27:19,141 - julearn - INFO - ===== Lib Versions =====
+2020-12-09 12:27:19,142 - julearn - INFO - numpy: 1.16.4
+2020-12-09 12:27:19,142 - julearn - INFO - scipy: 1.5.4
+2020-12-09 12:27:19,142 - julearn - INFO - sklearn: 0.23.2
+2020-12-09 12:27:19,142 - julearn - INFO - pandas: 1.1.5
+2020-12-09 12:27:19,142 - julearn - INFO - julearn: 0.2.2.dev
+2020-12-09 12:27:19,142 - julearn - INFO - ========================
 </pre></div>
 </div>
 <p>load the iris data from seaborn</p>
@@ -244,64 +244,61 @@ number of bootstrap iterations to at least 2000 for a valid test.</p>
 </div>
 <p>First, we will train a model without performing confound removal on features
 Note: confounds=None by default</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores_ncr</span></a> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">scores_ncr</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
     <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df_iris</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;rf&#39;</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span> <span class="n">preprocess_X</span><span class="o">=</span><span class="s1">&#39;zscore&#39;</span><span class="p">,</span>
     <span class="n">scoring</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">,</span> <span class="s1">&#39;roc_auc&#39;</span><span class="p">],</span> <span class="n">return_estimator</span><span class="o">=</span><span class="s1">&#39;cv&#39;</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2020-12-09 11:30:38,019 - julearn - INFO - Setting random seed to 200
-2020-12-09 11:30:38,019 - julearn - INFO - ==== Input Data ====
-2020-12-09 11:30:38,019 - julearn - INFO - Using dataframe as input
-2020-12-09 11:30:38,019 - julearn - INFO - Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2020-12-09 11:30:38,019 - julearn - INFO - Target: species
-2020-12-09 11:30:38,019 - julearn - INFO - Expanded X: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2020-12-09 11:30:38,019 - julearn - INFO - Expanded Confounds: []
-2020-12-09 11:30:38,020 - julearn - INFO - ====================
-2020-12-09 11:30:38,020 - julearn - INFO -
-2020-12-09 11:30:38,020 - julearn - INFO - ====== Model ======
-2020-12-09 11:30:38,020 - julearn - INFO - Obtaining model by name: rf
-2020-12-09 11:30:38,020 - julearn - INFO - ===================
-2020-12-09 11:30:38,020 - julearn - INFO -
-2020-12-09 11:30:38,021 - julearn - INFO - Using scikit-learn CV scheme StratifiedBootstrap(n_splits=20, random_state=42, test_size=0.3,
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2020-12-09 12:27:19,146 - julearn - INFO - Setting random seed to 200
+2020-12-09 12:27:19,146 - julearn - INFO - ==== Input Data ====
+2020-12-09 12:27:19,146 - julearn - INFO - Using dataframe as input
+2020-12-09 12:27:19,146 - julearn - INFO - Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2020-12-09 12:27:19,146 - julearn - INFO - Target: species
+2020-12-09 12:27:19,147 - julearn - INFO - Expanded X: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2020-12-09 12:27:19,147 - julearn - INFO - Expanded Confounds: []
+2020-12-09 12:27:19,147 - julearn - INFO - ====================
+2020-12-09 12:27:19,148 - julearn - INFO -
+2020-12-09 12:27:19,148 - julearn - INFO - ====== Model ======
+2020-12-09 12:27:19,148 - julearn - INFO - Obtaining model by name: rf
+2020-12-09 12:27:19,148 - julearn - INFO - ===================
+2020-12-09 12:27:19,148 - julearn - INFO -
+2020-12-09 12:27:19,148 - julearn - INFO - Using scikit-learn CV scheme StratifiedBootstrap(n_splits=20, random_state=42, test_size=0.3,
           train_size=None)
 </pre></div>
 </div>
 <p>Next, we train a model after performing confound removal on the features
 Note: we initialize the CV again to use the same folds as before</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cv</span> <span class="o">=</span> <span class="n">StratifiedBootstrap</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">n_bootstrap</span></a><span class="p">,</span> <span class="n">test_size</span><span class="o">=.</span><span class="mi">3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
-<a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores_cr</span></a> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+<span class="n">scores_cr</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
     <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span> <span class="n">confounds</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">confound</span></a><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df_iris</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;rf&#39;</span><span class="p">,</span>
     <span class="n">preprocess_X</span><span class="o">=</span><span class="s1">&#39;remove_confound&#39;</span><span class="p">,</span> <span class="n">preprocess_confounds</span><span class="o">=</span><span class="s1">&#39;zscore&#39;</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span>
     <span class="n">scoring</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">,</span> <span class="s1">&#39;roc_auc&#39;</span><span class="p">],</span> <span class="n">return_estimator</span><span class="o">=</span><span class="s1">&#39;cv&#39;</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2020-12-09 11:30:40,297 - julearn - INFO - Setting random seed to 200
-2020-12-09 11:30:40,297 - julearn - INFO - ==== Input Data ====
-2020-12-09 11:30:40,297 - julearn - INFO - Using dataframe as input
-2020-12-09 11:30:40,297 - julearn - INFO - Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2020-12-09 11:30:40,297 - julearn - INFO - Target: species
-2020-12-09 11:30:40,297 - julearn - INFO - Confounds: petal_width
-2020-12-09 11:30:40,298 - julearn - INFO - Expanded X: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2020-12-09 11:30:40,298 - julearn - INFO - Expanded Confounds: [&#39;petal_width&#39;]
-2020-12-09 11:30:40,298 - julearn - INFO - ====================
-2020-12-09 11:30:40,299 - julearn - INFO -
-2020-12-09 11:30:40,299 - julearn - INFO - ====== Model ======
-2020-12-09 11:30:40,299 - julearn - INFO - Obtaining model by name: rf
-2020-12-09 11:30:40,299 - julearn - INFO - ===================
-2020-12-09 11:30:40,299 - julearn - INFO -
-2020-12-09 11:30:40,299 - julearn - INFO - Using scikit-learn CV scheme StratifiedBootstrap(n_splits=20, random_state=42, test_size=0.3,
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2020-12-09 12:27:21,450 - julearn - INFO - Setting random seed to 200
+2020-12-09 12:27:21,450 - julearn - INFO - ==== Input Data ====
+2020-12-09 12:27:21,450 - julearn - INFO - Using dataframe as input
+2020-12-09 12:27:21,450 - julearn - INFO - Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2020-12-09 12:27:21,450 - julearn - INFO - Target: species
+2020-12-09 12:27:21,450 - julearn - INFO - Confounds: petal_width
+2020-12-09 12:27:21,450 - julearn - INFO - Expanded X: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2020-12-09 12:27:21,450 - julearn - INFO - Expanded Confounds: [&#39;petal_width&#39;]
+2020-12-09 12:27:21,451 - julearn - INFO - ====================
+2020-12-09 12:27:21,451 - julearn - INFO -
+2020-12-09 12:27:21,451 - julearn - INFO - ====== Model ======
+2020-12-09 12:27:21,451 - julearn - INFO - Obtaining model by name: rf
+2020-12-09 12:27:21,452 - julearn - INFO - ===================
+2020-12-09 12:27:21,452 - julearn - INFO -
+2020-12-09 12:27:21,452 - julearn - INFO - Using scikit-learn CV scheme StratifiedBootstrap(n_splits=20, random_state=42, test_size=0.3,
           train_size=None)
 </pre></div>
 </div>
 <p>Now we can compare the accuracies. We can combine the two outputs as
 pandas dataframes</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">df_ncr</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores_ncr</span></a><span class="p">)</span>
-<span class="n">df_ncr</span><span class="p">[</span><span class="s1">&#39;confounds&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Not Removed&#39;</span>
-
-<span class="n">df_cr</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores_cr</span></a><span class="p">)</span>
-<span class="n">df_cr</span><span class="p">[</span><span class="s1">&#39;confounds&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Removed&#39;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">scores_ncr</span><span class="p">[</span><span class="s1">&#39;confounds&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Not Removed&#39;</span>
+<span class="n">scores_cr</span><span class="p">[</span><span class="s1">&#39;confounds&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Removed&#39;</span>
 </pre></div>
 </div>
 <p>Now we convert the metrics to a column for easier seaborn plotting (convert
@@ -309,11 +306,11 @@ to long format)</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">index</span></a> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;fold&#39;</span><span class="p">,</span> <span class="s1">&#39;confounds&#39;</span><span class="p">]</span>
 <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scorings</span></a> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;test_accuracy&#39;</span><span class="p">,</span> <span class="s1">&#39;test_roc_auc&#39;</span><span class="p">]</span>
 
-<span class="n">df_ncr_metrics</span> <span class="o">=</span> <span class="n">df_ncr</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">index</span></a><span class="p">)[</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scorings</span></a><span class="p">]</span><span class="o">.</span><span class="n">stack</span><span class="p">()</span>
+<span class="n">df_ncr_metrics</span> <span class="o">=</span> <span class="n">scores_ncr</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">index</span></a><span class="p">)[</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scorings</span></a><span class="p">]</span><span class="o">.</span><span class="n">stack</span><span class="p">()</span>
 <span class="n">df_ncr_metrics</span><span class="o">.</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">index</span></a><span class="o">.</span><span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;fold&#39;</span><span class="p">,</span> <span class="s1">&#39;confounds&#39;</span><span class="p">,</span> <span class="s1">&#39;metric&#39;</span><span class="p">]</span>
 <span class="n">df_ncr_metrics</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;value&#39;</span>
 
-<span class="n">df_cr_metrics</span> <span class="o">=</span> <span class="n">df_cr</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">index</span></a><span class="p">)[</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scorings</span></a><span class="p">]</span><span class="o">.</span><span class="n">stack</span><span class="p">()</span>
+<span class="n">df_cr_metrics</span> <span class="o">=</span> <span class="n">scores_cr</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">index</span></a><span class="p">)[</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scorings</span></a><span class="p">]</span><span class="o">.</span><span class="n">stack</span><span class="p">()</span>
 <span class="n">df_cr_metrics</span><span class="o">.</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">index</span></a><span class="o">.</span><span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;fold&#39;</span><span class="p">,</span> <span class="s1">&#39;confounds&#39;</span><span class="p">,</span> <span class="s1">&#39;metric&#39;</span><span class="p">]</span>
 <span class="n">df_cr_metrics</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;value&#39;</span>
 
@@ -371,7 +368,7 @@ if there is a change in the feature importances.</p>
 <p>First, we need to collect the feature importances for each model, for each
 fold.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ncr_fi</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">i_fold</span></a><span class="p">,</span> <span class="n">estimator</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores_ncr</span></a><span class="p">[</span><span class="s1">&#39;estimator&#39;</span><span class="p">]):</span>
+<span class="k">for</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">i_fold</span></a><span class="p">,</span> <span class="n">estimator</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">scores_ncr</span><span class="p">[</span><span class="s1">&#39;estimator&#39;</span><span class="p">]):</span>
     <span class="n">this_importances</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
         <span class="s1">&#39;feature&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">],</span>
         <span class="s1">&#39;importance&#39;</span><span class="p">:</span> <span class="n">estimator</span><span class="p">[</span><span class="s1">&#39;rf&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">feature_importances_</span><span class="p">,</span>
@@ -382,7 +379,7 @@ fold.</p>
 <span class="n">ncr_fi</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">ncr_fi</span><span class="p">)</span>
 
 <span class="n">cr_fi</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">i_fold</span></a><span class="p">,</span> <span class="n">estimator</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores_cr</span></a><span class="p">[</span><span class="s1">&#39;estimator&#39;</span><span class="p">]):</span>
+<span class="k">for</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">i_fold</span></a><span class="p">,</span> <span class="n">estimator</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">scores_cr</span><span class="p">[</span><span class="s1">&#39;estimator&#39;</span><span class="p">]):</span>
     <span class="n">this_importances</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
         <span class="s1">&#39;feature&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">],</span>
         <span class="s1">&#39;importance&#39;</span><span class="p">:</span> <span class="n">estimator</span><span class="p">[</span><span class="s1">&#39;rf&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">feature_importances_</span><span class="p">,</span>
@@ -413,7 +410,7 @@ a difference in importances.</p>
 </pre></div>
 </div>
 <img alt="plot confound removal classification" class="sphx-glr-single-img" src="../../_images/sphx_glr_plot_confound_removal_classification_004.png" />
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  6.942 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  7.086 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-basic-plot-confound-removal-classification-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/a04a8d098f83972da74112b5a7f757ed/plot_confound_removal_classification.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_confound_removal_classification.py</span></code></a></p>
