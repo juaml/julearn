@@ -1,0 +1,322 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Hyperparameters &mdash; julearn  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="_static/gallery-dataframe.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Basic Examples" href="auto_examples/basic/index.html" />
+    <link rel="prev" title="Available Pipeline Steps" href="steps.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> julearn
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installing julearn</a></li>
+<li class="toctree-l1"><a class="reference internal" href="input.html">Input Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipeline.html">Understanding the pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipeline.html#advanced-topics">Advanced Topics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="steps.html">Available Pipeline Steps</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Hyperparameters</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#setting-hyperparameters">Setting Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tuning-hyperparameters">Tuning Hyperparameters</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="auto_examples/basic/index.html">Basic Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auto_examples/advanced/index.html">Advanced Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing to julearn</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maintaining.html">Maintaining julearn</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">julearn</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Hyperparameters</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/hyperparameters.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="hyperparameters">
+<h1>Hyperparameters<a class="headerlink" href="#hyperparameters" title="Permalink to this headline">¶</a></h1>
+<p>From <a class="reference external" href="https://wikipedia.org">Wikipedia</a>:
+“In machine learning, a hyperparameter is a parameter whose value is used to
+control the learning process. By contrast, the values of other parameters
+are derived via training.”</p>
+<div class="section" id="setting-hyperparameters">
+<h2>Setting Hyperparameters<a class="headerlink" href="#setting-hyperparameters" title="Permalink to this headline">¶</a></h2>
+<p>In julearn, we can set the hyperparameters using the <code class="docutils literal notranslate"><span class="pre">model_params</span></code> parameter
+in <a class="reference internal" href="api.html#julearn.api.run_cross_validation" title="julearn.api.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>.</p>
+<p>In order to specify a hyperparameter for a specific step of the pipeline, we
+need to prefix the parameter name with the step name, separated by double
+underscores (<code class="docutils literal notranslate"><span class="pre">__</span></code>). For example, if we want to specify the parameter
+<code class="docutils literal notranslate"><span class="pre">kernel='linear'</span></code> of the <em>svm</em> model, we need to do the following:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model_params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;svm__kernel&#39;</span><span class="p">:</span> <span class="s1">&#39;linear&#39;</span><span class="p">}</span>
+<span class="n">run_cross_validation</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;svm&#39;</span><span class="p">,</span> <span class="n">model_params</span><span class="o">=</span><span class="n">model_params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Another common example, setting the parameters for a PCA decomposition:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model_params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;pca__n_components&#39;</span><span class="p">:</span> <span class="mf">0.99</span><span class="p">}</span>
+<span class="n">run_cross_validation</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">preprocess_X</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;zscore&#39;</span><span class="p">,</span> <span class="s1">&#39;pca&#39;</span><span class="p">],</span>
+                     <span class="n">model</span><span class="o">=</span><span class="s1">&#39;svm&#39;</span><span class="p">,</span> <span class="n">model_params</span><span class="o">=</span><span class="n">model_params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>TODO: Add doc for confound and y transformers hyperparameters</p>
+</div>
+<div class="section" id="tuning-hyperparameters">
+<h2>Tuning Hyperparameters<a class="headerlink" href="#tuning-hyperparameters" title="Permalink to this headline">¶</a></h2>
+<p>Another useful technique is called <em>hyperparameter tuning</em>. This technique
+is normally applied when we want to set the hyperparameters in a data driven
+way.</p>
+<p>In this case, we use yet another cross-validation scheme to split the training
+data and evaluate the best set of hyperparameters for our model.</p>
+<p>In julearn, hyperparameter tuning is enabled by giving more than one option
+for at least one hyperparameter.</p>
+<p>For example, obtaining the best regularization parameter (<code class="docutils literal notranslate"><span class="pre">C</span></code>) for the <em>svm</em>
+model can be done by testing several candidate values:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model_params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;svm__C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span>
+    <span class="s1">&#39;svm__kernel&#39;</span><span class="p">:</span> <span class="s1">&#39;linear&#39;</span><span class="p">}</span>
+<span class="n">run_cross_validation</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;svm&#39;</span><span class="p">,</span> <span class="n">model_params</span><span class="o">=</span><span class="n">model_params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In this case, since there are more than option for C, julearn will evaluate
+which is the best value. For the <code class="docutils literal notranslate"><span class="pre">kernel</span></code> parameter, there will be no search
+as <code class="docutils literal notranslate"><span class="pre">'linear'</span></code> is the only value specified.</p>
+<p>There are three more parameters that we can use to specify how the
+hyperparameter search will be done:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">search</span></code>: The kind of algorithm to apply. The value <code class="docutils literal notranslate"><span class="pre">'grid'</span></code> (default)
+will apply a <cite>GridSearchCV</cite>. The value <code class="docutils literal notranslate"><span class="pre">'random'</span></code> will use a
+<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.RandomizedSearchCV.html#sklearn.model_selection.RandomizedSearchCV">RandomizedSearchCV</a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cv</span></code>: The cross-validation scheme to use for the hyperparameter tuning.
+The default is to use the same scheme as for the model evaluation.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scoring</span></code>: The scoring metric to optimize.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">search_params</span></code>: Additional parameters for the search algorithm.</p></li>
+</ul>
+<p>The following examples performs a randomized search with 6 options for <cite>C</cite> and
+13 options for <code class="docutils literal notranslate"><span class="pre">gamma</span></code>. Testing all the combinations will require 78
+different evaluations. The randomised <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.RandomizedSearchCV.html#sklearn.model_selection.RandomizedSearchCV">RandomizedSearchCV</a> will not try them
+all, but a number specified in <code class="docutils literal notranslate"><span class="pre">n_iter</span></code>. In this case, we want to try 50
+random combinations.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model_params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;svm__C&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.001</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">],</span>
+    <span class="s1">&#39;svm__gamma&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1e-9</span><span class="p">,</span> <span class="mf">1e-8</span><span class="p">,</span> <span class="mf">1e-7</span><span class="p">,</span> <span class="mf">1e-6</span><span class="p">,</span> <span class="mf">1e-5</span><span class="p">,</span> <span class="mf">1e-4</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="mf">1e-2</span><span class="p">,</span> <span class="mf">1e-1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
+                   <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">1000</span><span class="p">],</span>
+    <span class="s1">&#39;svm__kernel&#39;</span><span class="p">:</span> <span class="s1">&#39;rbf&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;search&#39;</span><span class="p">:</span> <span class="s1">&#39;random&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;search_params&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;n_iter&#39;</span><span class="p">:</span> <span class="mi">50</span><span class="p">}</span>
+
+<span class="p">}</span>
+<span class="n">run_cross_validation</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;svm&#39;</span><span class="p">,</span> <span class="n">model_params</span><span class="o">=</span><span class="n">model_params</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>For more information, see scikit-learn’s <a class="reference external" href="https://scikit-learn.org/stable/modules/grid_search.html">Hyperparameter Tuning</a>.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="auto_examples/basic/index.html" class="btn btn-neutral float-right" title="Basic Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="steps.html" class="btn btn-neutral float-left" title="Available Pipeline Steps" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Authors of julearn
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: v0.2.3
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Tags</dt>
+      <dd><a href="../v0.2.2/hyperparameters.html">v0.2.2</a></dd>
+      <dd><a href="hyperparameters.html">v0.2.3</a></dd>
+    </dl>
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="../main/hyperparameters.html">main</a></dd>
+    </dl>
+  </div>
+</div>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
