@@ -45,7 +45,7 @@ setuptools.setup(
         version_scheme="python-simplified-semver",
         local_scheme="node-and-date",
         write_to="julearn/_version.py",
-        write_to_template="__version__ = '{version}'"
+        write_to_template="__version__ = '{version}'\n"
     ),
     setup_requires=['setuptools_scm'],
 )
