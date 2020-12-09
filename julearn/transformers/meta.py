@@ -29,43 +29,52 @@ class DataFrameWrapTransformer(TransformerMixin):
         DataFrame. Allows to apply the original transformer to only some of the
         columns from the DataFrame, while preserving other columns as they
         are. The returned output will be named using the information provided
-        by the returned_features argument and the inputted DataFrame
+        by the 'returned_features' argument and the inputted DataFrame
 
         Parameters
         ----------
         transformer : object
             A transformer following sklearn standards.
-        apply_to : str, list(str), optional
-            decides which columns will be transformed.
-            When providing a list of columns the transformer will be applied
-            to these columns. Alternativley, users can provide a column type
-            or list of valid column types which should be transformed.
-            Valid column types are: `confound`, 'continuous' and 'categorical'.
-            Furthermore, you can enter `all` to transform all columns,
-            `all_features` to transform all columns excluding the confound
-            or provide a list of valid column types, by default auto
-        returned_features : str, optional
+
+        apply_to : str | list(str) or None
+            Defines to which columns the transformer is applied to.
+            For this julearn user specified 'columns_types' from the user.
+            All other columns will be ignored by the transformer and kept as
+            they are.
+            apply_to can be set to one or multiple of the following options:
+
+                * 'all': The transformer is applied to all columns
+                * 'all_features': The transformer is applied to continuous and
+                    categorical features.
+                * 'continuous': The transformer is only applied to continuous
+                    features.
+                * 'categorical': The transformer is only applied to categorical
+                    features.
+                * 'confound': The transformer is only applied to confounds.
+
+            As mentioned above you can combine these types.
+            E.g. ['continuous', 'confound'] would specify that your transformer
+            uses both the confounds and the continuous variables as input.
+
+        returned_features : str | None
             helps to name the transformed DataFrame accordingly.
             Using one of the following strings will lead to the noted behavior:
 
-            * `None` here returned_features will be set automatically.
-              If the transformer has a `.get_support` method it will be set to
-              `subset`. Else the appropriate returned_feature is looked up
-              in all available_transformers. Lastly, if its not an
-              available_transformer it will be set to `unknown`.
-              See https://juaml.github.io/julearn/available_steps.html
-              for details.
-            * `unknown` leads to created column names,
-            * `unknown_same_type` leads to created column names
-              with the same column type.
-            * `same` leads copies the names from the original pd.DataFrame
-            * `subset` leads to the columns being a subset of the original
+            * 'None': here returned_features will be set automatically using
+                information which is registered in julearn.
+                This should also be considered as the default option for any
+                user and only set otherwise in very specific use cases
+
+            * 'same': leads copies the names from the original pd.DataFrame
+            * 'subset': leads to the columns being a subset of the original
               pd.DataFrame. This functionality needs the transformer to have a
               .get_support method following sklearn standards.
-            * `from_transformer` the outputted columns are already defined in
+            * 'from_transformer': the outputted columns are already defined in
               the transformer
+            * 'unknown' leads to created column names,
+            * 'unknown_same_type' leads to created column names
+              with the same column type.
 
-            , by default None
         """
 
         self.transformer = transformer

@@ -100,9 +100,12 @@ def do_scoring_test(X, y, data, api_params, sklearn_model, scorers, cv=None,
         sk_y = data[y].values
 
     np.random.seed(42)
+    params_dict = {k: v for k, v in api_params.items()}
+    if 'preprocess_X' not in params_dict:
+        params_dict['preprocess_X'] = 'zscore'
     actual, actual_estimator = run_cross_validation(
         X=X, y=y, data=data, scoring=scorers, cv=cv,
-        return_estimator='final', **api_params)
+        return_estimator='final', **params_dict)
 
     np.random.seed(42)
     sk_cv = prepare_cv(cv)

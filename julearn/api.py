@@ -21,9 +21,9 @@ def run_cross_validation(
         data=None,
         confounds=None,
         problem_type='binary_classification',
-        preprocess_X='zscore',
+        preprocess_X=None,
         preprocess_y=None,
-        preprocess_confounds='zscore',
+        preprocess_confounds=None,
         return_estimator=False,
         cv=None,
         groups=None,
@@ -67,26 +67,22 @@ def run_cross_validation(
     preprocess_X : str, scikit-learn compatible transformers or list | None
         Transformer to apply to the features (X). If string, use one of the
         available transformers. If list, each element can be a string or
-        scikit-learn compatible transformer. If None, no transformation
-        is applied.
+        scikit-learn compatible transformer. If None (default), no
+        transformation is applied.
 
-        Defaults to zscore (StandardScaler).
-
-        See https://juaml.github.io/julearn/pipeline.html for details.
+        See documentation for details.
     preprocess_y : str or scikit-learn transformer | None
-        Transformer to apply to the target (y). If None, no transformation
-        is applied.
+        Transformer to apply to the target (y). If None (default), no
+        transformation is applied.
 
-        See https://juaml.github.io/julearn/pipeline.html for details.
+        See documentation for details.
     preprocess_confounds : str, scikit-learn transformers or list | None
         Transformer to apply to the features (X). If string, use one of the
         available transformers. If list, each element can be a string or
-        scikit-learn compatible transformer. If None, no transformation
-        is applied.
+        scikit-learn compatible transformer. If None (default), no
+        transformation is applied.
 
-        Defaults to zscore (StandardScaler).
-
-        See https://juaml.github.io/julearn/pipeline.html for details.
+        See documentation for details.
     return_estimator : str | None
         Return the fitted estimator(s).
         Options are:

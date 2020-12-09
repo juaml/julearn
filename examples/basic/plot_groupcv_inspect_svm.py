@@ -92,7 +92,8 @@ df_fmri = df_fmri.reset_index()
 ###############################################################################
 # We will use a Support Vector Machine.
 
-scores = run_cross_validation(X=X, y=y, data=df_fmri, model='svm')
+scores = run_cross_validation(X=X, y=y, preprocess_X='zscore', data=df_fmri,
+                              model='svm')
 
 print(scores['test_score'].mean())
 
@@ -120,9 +121,9 @@ print(scores['test_score'].mean())
 # later to do some analysis.
 cv = GroupShuffleSplit(n_splits=5, test_size=0.5, random_state=42)
 
-scores, model = run_cross_validation(X=X, y=y, data=df_fmri, model='svm',
-                                     cv=cv, groups='subject',
-                                     return_estimator='final')
+scores, model = run_cross_validation(
+    X=X, y=y, data=df_fmri, model='svm', preprocess_X='zscore', cv=cv,
+    groups='subject', return_estimator='final')
 print(scores['test_score'].mean())
 
 ###############################################################################

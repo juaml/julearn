@@ -44,8 +44,9 @@ y = 'species'
 # `return_estimator='final'`, the :func:`.run_cross_validation` function
 # returns the estimator fitted with all the data.
 
-scores, model_iris = run_cross_validation(X=X, y=y, data=df_iris, model='rf',
-                                          return_estimator='final')
+scores, model_iris = run_cross_validation(
+    X=X, y=y, data=df_iris, model='rf', preprocess_X='zscore',
+    return_estimator='final')
 
 ###############################################################################
 # This type of classifier has an internal variable that can inform us on how
@@ -72,8 +73,9 @@ fig.tight_layout()
 # By specifying `return_estimator='cv'`, we can get, for each fold, the fitted
 # estimator.
 
-scores = run_cross_validation(X=X, y=y, data=df_iris, model='rf',
-                              return_estimator='cv')
+scores = run_cross_validation(
+    X=X, y=y, data=df_iris, model='rf',  preprocess_X='zscore',
+    return_estimator='cv')
 
 ###############################################################################
 # Now we can obtain the feature importance for each estimator (CV fold)

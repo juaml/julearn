@@ -18,7 +18,7 @@ def create_dataframe_pipeline(steps, apply_to=None):
         A list of steps. Each step is a tuple containing a name and transformer
         or estimator. For more information look at steps in:
         sklearn.pipeline.Pipeline
-    apply_to : str, list(str), optional
+    apply_to : str | list(str) or None
         decides which columns will be transformed.
         For more information see:
         julearn.transformers.dataframe.DataFrameWrapTransformer
@@ -49,39 +49,49 @@ def create_dataframe_pipeline(steps, apply_to=None):
 
 
 class ExtendedDataFramePipeline(BaseEstimator):
-    """A class creating a custom metamodel like a Pipeline.
-    In practice this should be created
-    using julearn.pipeline.create_extended_pipeline.
-    Added functionality:
-    1: handling target transforming and scoring against
-    this transformed target as ground truth.
-    2: handling confounds. Adds the confound as type to columns.
-    This allows the DataFrameWrapTransformer inside of the dataframe_pipeline
-    to handle confounds properly.
-    3: Handling categorical features:
-    Adds categorical type to columns so that DataFrameWrapTransformer inside
-    of the dataframe_pipline can handle categorical features properly.
+    """A class creating a custom metamodel like a Pipeline. In practice this
+    should be created using :ref:julearn.pipeline.create_extended_pipeline.
+    There are multiple caveats of creating such a pipline without using
+    that function. Compared to an usual scikit-learn pipeline, this have added
+    functionalities:
+
+        * Handling transformations of the target:
+            The target can be changed. Importantly this transformed target will
+            be considered the ground truth to score against.
+            Note: if you want to score this pipeline with an external function.
+            You have to consider that the scorer needs to be an exteded_scorer.
+
+        * Handling confounds:
+            Adds the confound as type to columns.
+            This allows the DataFrameWrapTransformer inside of the
+            dataframe_pipeline to handle confounds properly.
+
+        * Handling categorical features:
+            Adds categorical type to columns so that DataFrameWrapTransformer
+            inside of the dataframe_pipline can handle categorical features
+            properly.
 
     column_types are added to the feature dataframe after each column using
-    the specified separator. E.g. column `cheese` becomes
-    `cheese__:type:__confound`, when being in the confounds
-    and with a separator of `__:type:__`
+    the specified separator.
+    E.g. column ``age`` becomes ``age__:type:__confound``.
 
     Parameters
     ----------
-    dataframe_pipeline : sklearn.pipeline.Pipeline
+    dataframe_pipeline : obj
         A pipeline working with dataframes and being able to handle confounds.
         Should be created using julearn.pipeline.create_dataframe_pipeline.
-    y_transformer : julearn target_transformer, optional
+
+    y_transformer : obj or None
         Any transformer which can take the X and y to transform the y.
         You can use julearn.transformers.target.TargetTransfromerWrapper to
         convert most sklearn transformers to a target_transformer.
-    confound_dataframe_pipeline : sklearn.pipeline.Pipeline, optional
+
+    confound_dataframe_pipeline : obj or None
         Similar to dataframe_pipeline.
-    confounds : list[str], optional
-        a list of column names which are confounds ,by default None
-    categorical_features : list[str], optional
-        a list of column names which are categorical features,by default None
+    confounds : list(str) or None
+        List of column names which are confounds (defaults to None).
+    categorical_features : list(str), optional
+        List of column names which are categorical features (defaults to None).
 
     """
 
@@ -165,10 +175,10 @@ class ExtendedDataFramePipeline(BaseEstimator):
 
         Parameters
         ----------
-        until : str, optional
+        until : str or None
             the name of the transformer until which preprocess
             should transform, by default None
-        return_trans_column_type : bool, optional
+        return_trans_column_type : bool or None
             whether to return transformed column names with the associated
             column type, by default False
 
@@ -347,27 +357,28 @@ def create_extended_pipeline(
 
     Parameters
     ----------
-    preprocess_steps_feature: list[tuple]
+    preprocess_steps_feature: list(tuple)
         A list of steps. Each step contains a name and  transformer.
         These transformers are applied to the complete feature space or a
-        subset of it.
+        subset of it. For more information look at steps in:
+        sklearn.pipeline.Pipeline
 
     preprocess_transformer_target : y_transform
         A transformer, which takes in X, y and outputs a transformed y.
         Applied after preprocess_steps_confounds, but before
         preprocess_steps_feature
 
-    preprocess_steps_confounds : list[tuple]
+    preprocess_steps_confounds : list(tuple)
         A list of steps. Each step contains a name and  transformer.
         These transformers are applied only to the confounds before
         transforming the target.
     model : tuple(str, obj)
         tuple of name and sklearn estimator
-    confounds : list[str] or str
+    confounds : list(str) or str
         A list of column_names which are the confounds
         or the column_name of one confound
 
-    categorical_features : list[str] or str
+    categorical_features : list(str) or str
         A list of column_names which are the categorical features
         or the column_name of one categorical feature
     """
