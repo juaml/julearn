@@ -40,7 +40,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Confound Removal (model comparison)" href="plot_confound_removal_classification.html" />
-    <link rel="prev" title="Multiclass Classification" href="plot_cm_acc_multiclass.html" /> 
+    <link rel="prev" title="Inspecting SVM models" href="plot_groupcv_inspect_svm.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -89,14 +89,15 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installing julearn</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../input.html">Input Data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../pipeline.html">Main Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pipeline.html">Understanding the pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pipeline.html#advanced-topics">Advanced Topics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../steps.html">Available Pipeline Steps</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../hyperparameters.html">Hyperparameters</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Basic Examples</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="run_simple_binary_classification.html">Simple Binary Classification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_inspect_random_forest.html">Inspecting Random Forest models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_groupcv_inspect_svm.html">Inspecting SVM models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_cm_acc_multiclass.html">Multiclass Classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_groupcv_inspect_svm.html">Inspecting SVM models</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Regression Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_confound_removal_classification.html">Confound Removal (model comparison)</a></li>
 </ul>
@@ -207,13 +208,13 @@ a regression analysis using a Ridge Regression model.</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2020-12-08 17:16:37,973 - julearn - INFO - ===== Lib Versions =====
-2020-12-08 17:16:37,973 - julearn - INFO - numpy: 1.16.4
-2020-12-08 17:16:37,973 - julearn - INFO - scipy: 1.5.4
-2020-12-08 17:16:37,973 - julearn - INFO - sklearn: 0.23.2
-2020-12-08 17:16:37,973 - julearn - INFO - pandas: 1.1.5
-2020-12-08 17:16:37,973 - julearn - INFO - julearn: 0.1.0
-2020-12-08 17:16:37,973 - julearn - INFO - ========================
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2020-12-09 10:38:22,967 - julearn - INFO - ===== Lib Versions =====
+2020-12-09 10:38:22,967 - julearn - INFO - numpy: 1.16.4
+2020-12-09 10:38:22,967 - julearn - INFO - scipy: 1.5.4
+2020-12-09 10:38:22,967 - julearn - INFO - sklearn: 0.23.2
+2020-12-09 10:38:22,967 - julearn - INFO - pandas: 1.1.5
+2020-12-09 10:38:22,967 - julearn - INFO - julearn: 0.1.0
+2020-12-09 10:38:22,967 - julearn - INFO - ========================
 </pre></div>
 </div>
 <p>load the diabetes data from sklearn as a pandas dataframe</p>
@@ -277,27 +278,27 @@ and y</p>
 </div>
 <p>Train a ridge regression model on train dataset and use mean absolute error
 for scoring</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">,</span> <span class="n">model</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">train_diabetes</span><span class="p">,</span>
-                                     <span class="n">problem_type</span><span class="o">=</span><span class="s1">&#39;regression&#39;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;ridge&#39;</span><span class="p">,</span>
-                                     <span class="n">return_estimator</span><span class="o">=</span><span class="s1">&#39;final&#39;</span><span class="p">,</span>
-                                     <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;neg_mean_absolute_error&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">,</span> <span class="n">model</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">train_diabetes</span><span class="p">,</span> <span class="n">preprocess_X</span><span class="o">=</span><span class="s1">&#39;zscore&#39;</span><span class="p">,</span>
+    <span class="n">problem_type</span><span class="o">=</span><span class="s1">&#39;regression&#39;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;ridge&#39;</span><span class="p">,</span> <span class="n">return_estimator</span><span class="o">=</span><span class="s1">&#39;final&#39;</span><span class="p">,</span>
+    <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;neg_mean_absolute_error&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2020-12-08 17:16:38,350 - julearn - INFO - Using default CV
-2020-12-08 17:16:38,350 - julearn - INFO - ==== Input Data ====
-2020-12-08 17:16:38,350 - julearn - INFO - Using dataframe as input
-2020-12-08 17:16:38,350 - julearn - INFO - Features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
-2020-12-08 17:16:38,350 - julearn - INFO - Target: target
-2020-12-08 17:16:38,351 - julearn - INFO - Expanded X: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
-2020-12-08 17:16:38,351 - julearn - INFO - Expanded Confounds: []
-2020-12-08 17:16:38,352 - julearn - INFO - ====================
-2020-12-08 17:16:38,352 - julearn - INFO -
-2020-12-08 17:16:38,352 - julearn - INFO - ====== Model ======
-2020-12-08 17:16:38,352 - julearn - INFO - Obtaining model by name: ridge
-2020-12-08 17:16:38,352 - julearn - INFO - ===================
-2020-12-08 17:16:38,352 - julearn - INFO -
-2020-12-08 17:16:38,352 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2020-12-09 10:38:23,342 - julearn - INFO - Using default CV
+2020-12-09 10:38:23,342 - julearn - INFO - ==== Input Data ====
+2020-12-09 10:38:23,342 - julearn - INFO - Using dataframe as input
+2020-12-09 10:38:23,343 - julearn - INFO - Features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2020-12-09 10:38:23,343 - julearn - INFO - Target: target
+2020-12-09 10:38:23,343 - julearn - INFO - Expanded X: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2020-12-09 10:38:23,343 - julearn - INFO - Expanded Confounds: []
+2020-12-09 10:38:23,344 - julearn - INFO - ====================
+2020-12-09 10:38:23,345 - julearn - INFO -
+2020-12-09 10:38:23,345 - julearn - INFO - ====== Model ======
+2020-12-09 10:38:23,345 - julearn - INFO - Obtaining model by name: ridge
+2020-12-09 10:38:23,345 - julearn - INFO - ===================
+2020-12-09 10:38:23,345 - julearn - INFO -
+2020-12-09 10:38:23,345 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
 </pre></div>
 </div>
 <p>The scores dictionary has all the values for each CV split. We can convert
@@ -308,11 +309,11 @@ this dictionary to a pandas dataframe for easier manipulation</p>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>   fit_time  score_time  test_neg_mean_absolute_error  repeat  fold
-0  0.013252    0.008053                    -45.619499       0     0
-1  0.012619    0.007916                    -40.069682       0     1
-2  0.012896    0.008034                    -48.621055       0     2
-3  0.012448    0.007738                    -46.203716       0     3
-4  0.012448    0.007683                    -46.346746       0     4
+0  0.012886    0.008022                    -53.711774       0     0
+1  0.011697    0.007857                    -38.334731       0     1
+2  0.011797    0.007906                    -46.578596       0     2
+3  0.011640    0.007802                    -48.109208       0     3
+4  0.011821    0.007830                    -42.632269       0     4
 </pre></div>
 </div>
 <p>Mean value of mean absolute error across CV</p>
@@ -320,7 +321,7 @@ this dictionary to a pandas dataframe for easier manipulation</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>45.22385753155672
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>45.94450832287054
 </pre></div>
 </div>
 <p>Now we can get the MAE fold and repetition:</p>
@@ -335,11 +336,11 @@ this dictionary to a pandas dataframe for easier manipulation</p>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>K-fold splits          0          1          2          3          4
 Repeats
-0              45.619499  40.069682  48.621055  46.203716  46.346746
-1              45.389664  41.901156  47.601285  43.402617  44.253481
-2              49.017732  45.536639  45.573113  44.745752  43.573580
-3              48.704998  41.536286  41.637120  42.755087  52.889002
-4              44.040691  48.494648  41.676229  37.597426  53.409236
+0              53.711774  38.334731  46.578596  48.109208  42.632269
+1              46.110360  49.273373  45.245755  48.425018  41.661824
+2              45.176249  50.034589  48.108842  39.433303  44.937370
+3              46.238680  39.120725  48.266876  46.853780  48.097210
+4              45.943724  43.651725  41.527743  47.429889  53.709096
 </pre></div>
 </div>
 <p>Plot heatmap of mean absolute error (MAE) over all repeats and CV splits</p>
@@ -394,10 +395,10 @@ of true values vs predicted values</p>
 </div>
 <img alt="Actual vs Predicted" class="sphx-glr-single-img" src="../../_images/sphx_glr_plot_example_regression_004.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>(9.2, 356.8, 9.2, 356.8)
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>(10.75, 324.25, 10.75, 324.25)
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.511 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.475 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-basic-plot-example-regression-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/5d15362022e35d28ba40d25fd042f86e/plot_example_regression.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_example_regression.py</span></code></a></p>
@@ -420,7 +421,7 @@ of true values vs predicted values</p>
         <a href="plot_confound_removal_classification.html" class="btn btn-neutral float-right" title="Confound Removal (model comparison)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="plot_cm_acc_multiclass.html" class="btn btn-neutral float-left" title="Multiclass Classification" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="plot_groupcv_inspect_svm.html" class="btn btn-neutral float-left" title="Inspecting SVM models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

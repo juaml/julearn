@@ -67,13 +67,13 @@ Set the logging level to info to see extra information
 
  .. code-block:: none
 
-    2020-12-08 17:16:37,973 - julearn - INFO - ===== Lib Versions =====
-    2020-12-08 17:16:37,973 - julearn - INFO - numpy: 1.16.4
-    2020-12-08 17:16:37,973 - julearn - INFO - scipy: 1.5.4
-    2020-12-08 17:16:37,973 - julearn - INFO - sklearn: 0.23.2
-    2020-12-08 17:16:37,973 - julearn - INFO - pandas: 1.1.5
-    2020-12-08 17:16:37,973 - julearn - INFO - julearn: 0.1.0
-    2020-12-08 17:16:37,973 - julearn - INFO - ========================
+    2020-12-09 10:38:22,967 - julearn - INFO - ===== Lib Versions =====
+    2020-12-09 10:38:22,967 - julearn - INFO - numpy: 1.16.4
+    2020-12-09 10:38:22,967 - julearn - INFO - scipy: 1.5.4
+    2020-12-09 10:38:22,967 - julearn - INFO - sklearn: 0.23.2
+    2020-12-09 10:38:22,967 - julearn - INFO - pandas: 1.1.5
+    2020-12-09 10:38:22,967 - julearn - INFO - julearn: 0.1.0
+    2020-12-09 10:38:22,967 - julearn - INFO - ========================
 
 
 
@@ -206,10 +206,10 @@ for scoring
 
 .. code-block:: default
 
-    scores, model = run_cross_validation(X=X, y=y, data=train_diabetes,
-                                         problem_type='regression', model='ridge',
-                                         return_estimator='final',
-                                         scoring='neg_mean_absolute_error')
+    scores, model = run_cross_validation(
+        X=X, y=y, data=train_diabetes, preprocess_X='zscore',
+        problem_type='regression', model='ridge', return_estimator='final',
+        scoring='neg_mean_absolute_error')
 
 
 
@@ -221,20 +221,20 @@ for scoring
 
  .. code-block:: none
 
-    2020-12-08 17:16:38,350 - julearn - INFO - Using default CV
-    2020-12-08 17:16:38,350 - julearn - INFO - ==== Input Data ====
-    2020-12-08 17:16:38,350 - julearn - INFO - Using dataframe as input
-    2020-12-08 17:16:38,350 - julearn - INFO - Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2020-12-08 17:16:38,350 - julearn - INFO - Target: target
-    2020-12-08 17:16:38,351 - julearn - INFO - Expanded X: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2020-12-08 17:16:38,351 - julearn - INFO - Expanded Confounds: []
-    2020-12-08 17:16:38,352 - julearn - INFO - ====================
-    2020-12-08 17:16:38,352 - julearn - INFO - 
-    2020-12-08 17:16:38,352 - julearn - INFO - ====== Model ======
-    2020-12-08 17:16:38,352 - julearn - INFO - Obtaining model by name: ridge
-    2020-12-08 17:16:38,352 - julearn - INFO - ===================
-    2020-12-08 17:16:38,352 - julearn - INFO - 
-    2020-12-08 17:16:38,352 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+    2020-12-09 10:38:23,342 - julearn - INFO - Using default CV
+    2020-12-09 10:38:23,342 - julearn - INFO - ==== Input Data ====
+    2020-12-09 10:38:23,342 - julearn - INFO - Using dataframe as input
+    2020-12-09 10:38:23,343 - julearn - INFO - Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2020-12-09 10:38:23,343 - julearn - INFO - Target: target
+    2020-12-09 10:38:23,343 - julearn - INFO - Expanded X: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2020-12-09 10:38:23,343 - julearn - INFO - Expanded Confounds: []
+    2020-12-09 10:38:23,344 - julearn - INFO - ====================
+    2020-12-09 10:38:23,345 - julearn - INFO - 
+    2020-12-09 10:38:23,345 - julearn - INFO - ====== Model ======
+    2020-12-09 10:38:23,345 - julearn - INFO - Obtaining model by name: ridge
+    2020-12-09 10:38:23,345 - julearn - INFO - ===================
+    2020-12-09 10:38:23,345 - julearn - INFO - 
+    2020-12-09 10:38:23,345 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
 
 
 
@@ -261,11 +261,11 @@ this dictionary to a pandas dataframe for easier manipulation
  .. code-block:: none
 
        fit_time  score_time  test_neg_mean_absolute_error  repeat  fold
-    0  0.013252    0.008053                    -45.619499       0     0
-    1  0.012619    0.007916                    -40.069682       0     1
-    2  0.012896    0.008034                    -48.621055       0     2
-    3  0.012448    0.007738                    -46.203716       0     3
-    4  0.012448    0.007683                    -46.346746       0     4
+    0  0.012886    0.008022                    -53.711774       0     0
+    1  0.011697    0.007857                    -38.334731       0     1
+    2  0.011797    0.007906                    -46.578596       0     2
+    3  0.011640    0.007802                    -48.109208       0     3
+    4  0.011821    0.007830                    -42.632269       0     4
 
 
 
@@ -287,7 +287,7 @@ Mean value of mean absolute error across CV
 
  .. code-block:: none
 
-    45.22385753155672
+    45.94450832287054
 
 
 
@@ -317,11 +317,11 @@ Now we can get the MAE fold and repetition:
 
     K-fold splits          0          1          2          3          4
     Repeats                                                             
-    0              45.619499  40.069682  48.621055  46.203716  46.346746
-    1              45.389664  41.901156  47.601285  43.402617  44.253481
-    2              49.017732  45.536639  45.573113  44.745752  43.573580
-    3              48.704998  41.536286  41.637120  42.755087  52.889002
-    4              44.040691  48.494648  41.676229  37.597426  53.409236
+    0              53.711774  38.334731  46.578596  48.109208  42.632269
+    1              46.110360  49.273373  45.245755  48.425018  41.661824
+    2              45.176249  50.034589  48.108842  39.433303  44.937370
+    3              46.238680  39.120725  48.266876  46.853780  48.097210
+    4              45.943724  43.651725  41.527743  47.429889  53.709096
 
 
 
@@ -430,14 +430,14 @@ of true values vs predicted values
  .. code-block:: none
 
 
-    (9.2, 356.8, 9.2, 356.8)
+    (10.75, 324.25, 10.75, 324.25)
 
 
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  1.511 seconds)
+   **Total running time of the script:** ( 0 minutes  1.475 seconds)
 
 
 .. _sphx_glr_download_auto_examples_basic_plot_example_regression.py:

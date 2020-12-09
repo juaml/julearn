@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Main Components &mdash; julearn  documentation</title>
+  <title>Understanding the pipeline &mdash; julearn  documentation</title>
   
 
   
@@ -89,16 +89,32 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installing julearn</a></li>
 <li class="toctree-l1"><a class="reference internal" href="input.html">Input Data</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Main Components</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Understanding the pipeline</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#model-problem-type">Model &amp; Problem Type</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#preprocessing">Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#concepts">Concepts</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#example">Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#more-information">More information</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#the-returned-pipeline">The returned pipeline</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#returning-the-extended-pipeline">Returning the (extended) pipeline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#extendeddataframepipeline">ExtendedDataFramePipeline</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#where-extendeddataframepipeline-behave-as-usual">Where ExtendedDataFramePipeline behave as usual</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#caveats-extendeddataframepipeline">Caveats ExtendedDataFramePipeline</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#additional-functionality">Additional functionality</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#advanced-topics">Advanced Topics</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#column-type-system">Column Type System</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#context">Context</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#how-it-works">How it works</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#extendeddataframepipeline">ExtendedDataFramePipeline</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#dataframepipeline">DataFramePipeline</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#dataframewraptransformer">DataFrameWrapTransformer</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="steps.html">Available Pipeline Steps</a></li>
@@ -154,7 +170,7 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Main Components</li>
+      <li>Understanding the pipeline</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -173,60 +189,216 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="main-components">
-<h1>Main Components<a class="headerlink" href="#main-components" title="Permalink to this headline">¶</a></h1>
-<p>Julearn aims to provide an user-friendley <a class="reference internal" href="api.html"><span class="doc">api</span></a>.
-In order to use this api you do not need to understand the internals
-of julearn.  Still, for some usecases it might be beneficial to use the
-internal classes of Julearn to customize your machine learning pipeline even
-more. This page gives you and overview and introduction to the internal
-structure of Julearn and provides a way how to use it as an advanced api for
-machine learning.</p>
-<div class="section" id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
-<p>Julearn is based on <a class="reference external" href="https://scikit-learn.org/stable/">scikit-learn</a> , but adds functionality
-to deal with confounds and transform the ground truth (the target) inside of
-cross-validaton. To deal with these problems we created the following key
-components and a Column Type System:</p>
-<ul>
-<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtendedDataFramePipeline</span></code> combines all the other components to
-create a coherent pipeline, which can be used inside of cross-validation.
-You can use <a class="reference internal" href="#julearn.pipeline.create_extended_pipeline" title="julearn.pipeline.create_extended_pipeline"><code class="xref py py-func docutils literal notranslate"><span class="pre">create_extended_pipeline()</span></code></a> as a convenience function to
-create an <a class="reference internal" href="#julearn.pipeline.ExtendedDataFramePipeline" title="julearn.pipeline.ExtendedDataFramePipeline"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtendedDataFramePipeline</span></code></a>.</p>
+  <div class="section" id="understanding-the-pipeline">
+<h1>Understanding the pipeline<a class="headerlink" href="#understanding-the-pipeline" title="Permalink to this headline">¶</a></h1>
+<p>Julearn aims to provide an user-friendly way to apply complex machine learning
+pipelines.
+To do so julearn provides the <a class="reference internal" href="api.html#julearn.api.run_cross_validation" title="julearn.api.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> function.
+Here, users can specify and customize their pipeline,
+how should be fitted and evaluated.
+Furthermore, this function allows you to return the
+complete and fitted pipeline to use it on other data.
+In this part of the documentation we will have a closer look to these
+features of julearn and how you can use them.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>When using customized scorerers together with the
-<a class="reference internal" href="#julearn.pipeline.ExtendedDataFramePipeline" title="julearn.pipeline.ExtendedDataFramePipeline"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtendedDataFramePipeline</span></code></a> you need to use Julearn’s
-<code class="xref py py-func docutils literal notranslate"><span class="pre">get_extended_scorer()</span></code>.</p>
+<p>You should have read the <a class="reference internal" href="input.html"><span class="doc">input</span></a> section before.</p>
 </div>
-</li>
-<li><p>DataFramePipeline created using <a class="reference internal" href="#julearn.pipeline.create_dataframe_pipeline" title="julearn.pipeline.create_dataframe_pipeline"><code class="xref py py-func docutils literal notranslate"><span class="pre">create_dataframe_pipeline()</span></code></a>.
-A sklearn pipeline which can be used with <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html">pandas.DataFrame</a> and is able to
-apply different transformers to different sets of columns
-inside of the DataFrame. The ExtendedDataFramePipeline uses such
-DataFramePipelines to transform confounds, features and subsets of both
-separately.</p></li>
-<li><p><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrameWrapTransformer</span></code> takes in a normal scikit-learn compatible
-transformer and returns one which can be applied to a subset of features and
-confounds of one <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html">pandas.DataFrame</a>. For the fit and transform methods it
-always takes in a <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html">pandas.DataFrame</a> and always returns one as well.
-The DataFramePipeline uses <code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrameWrapTransformer</span></code>s for each
-transformer inside of it.</p></li>
+<div class="section" id="model-problem-type">
+<h2>Model &amp; Problem Type<a class="headerlink" href="#model-problem-type" title="Permalink to this headline">¶</a></h2>
+<dl>
+<dt>When using <a class="reference internal" href="api.html#julearn.api.run_cross_validation" title="julearn.api.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> you have to answer at least</dt><dd><p>2 questions first and then specify the according arguments properly:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>What model do you want to use?
+You can enter any model name from <a class="reference internal" href="steps.html"><span class="doc">steps</span></a>
+or use any scikit-learning compatible model into the <cite>model</cite>
+argument from <a class="reference internal" href="api.html#julearn.api.run_cross_validation" title="julearn.api.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a></p></li>
+<li><p>What problem type do you want to answer?
+In machine learning their are different problems you want to handle.
+Julearn supports <code class="docutils literal notranslate"><span class="pre">binary_classification</span></code>, <code class="docutils literal notranslate"><span class="pre">multiclass_classification</span></code>
+and <code class="docutils literal notranslate"><span class="pre">regression</span></code> problems. You shout set <code class="docutils literal notranslate"><span class="pre">problem_type</span></code> to one of these
+3 problem typed. By default, julearn uses the <code class="docutils literal notranslate"><span class="pre">binary_classification</span></code>
+type.</p></li>
 </ul>
+</div></blockquote>
+</dd>
+</dl>
+<p>What model do you want to use and what problem type do you want to use
+machine learning on.</p>
 </div>
+<div class="section" id="preprocessing">
+<h2>Preprocessing<a class="headerlink" href="#preprocessing" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="concepts">
+<h3>Concepts<a class="headerlink" href="#concepts" title="Permalink to this headline">¶</a></h3>
+<p>By default users do not have to specify how to preprocess their data.
+In this case, julearn automatically standardizes the continuous features,
+the confounds and removes existing confound from the continuous features.</p>
+<p>But users can configure <a class="reference internal" href="api.html#julearn.api.run_cross_validation" title="julearn.api.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> by specifying
+the 3 preprocessing arguments for transforming the
+confounds, target and features respectively (in this order).</p>
+<p>To do so you can set the following arguments in the
+<a class="reference internal" href="api.html#julearn.api.run_cross_validation" title="julearn.api.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> :</p>
+<blockquote>
+<div><ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">preprocess_X</span></code>: specifies how to transform the features.
+Here, you can enter the names or a list of the names of available
+transformers (<a class="reference internal" href="steps.html"><span class="doc">steps</span></a> ).
+These are then applied in order to the features.
+By default most transformers are applied only to the continuous features.
+For more information on this and how to modify this behavior see below.</p>
+<p>E.g. <code class="docutils literal notranslate"><span class="pre">['zscore',</span> <span class="pre">'pca']</span></code> would mean that the (continuous) features are
+first z-standardized and then reduced using a principle component analysis.
+By default features will will not be preprocessed and confound removed in
+case a confound was specified.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">preprocess_y</span></code>: specifies how to transform the target.
+Currently, this is limited to one available transformer.
+By default no preprocessing is applied.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">preprocess_confounds</span></code>: specifies how to transform the confounds.
+Here, you use the same lists of available transformers as in
+<code class="docutils literal notranslate"><span class="pre">preprocess_X</span></code>. By default confounds will not be preprocessed.</p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="example">
+<h3>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h3>
+<p>Assume we want not preprocess the confounds, zscore the transformer
+and then use a pca on the features before removing the confound from these
+features. All of these operations are included in the <a class="reference internal" href="steps.html"><span class="doc">steps</span></a>
+and can therefore be referred to by name.</p>
+<dl class="simple">
+<dt>In other words we need to set:</dt><dd><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">preprocess_target</span> <span class="pre">=</span> <span class="pre">'zscore'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">preprocess_X</span> <span class="pre">=</span> <span class="pre">['pca',</span> <span class="pre">'remove_confound']</span></code></p></li>
+</ul>
+</dd>
+</dl>
+<p>Additionally, we know that we are facing a multiclass_classification problem
+and want to use a svm model.
+Put together with an example from the <a class="reference internal" href="input.html"><span class="doc">input</span></a> the code looks
+like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">seaborn</span> <span class="kn">import</span> <span class="n">load_dataset</span>
+<span class="kn">from</span> <span class="nn">julearn</span> <span class="kn">import</span> <span class="n">run_cross_validation</span>
+
+<span class="n">df_iris</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s1">&#39;iris&#39;</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;sepal_length&#39;</span><span class="p">,</span> <span class="s1">&#39;sepal_width&#39;</span><span class="p">,</span> <span class="s1">&#39;petal_length&#39;</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="s1">&#39;species&#39;</span>
+<span class="n">confounds</span> <span class="o">=</span> <span class="s1">&#39;petal_width</span>
+
+<span class="n">preprocess_confounds</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">preprocess_target</span> <span class="o">=</span> <span class="s1">&#39;zscore&#39;</span>
+<span class="n">preprocess_X</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;pca&#39;</span><span class="p">,</span> <span class="s1">&#39;remove_confound&#39;</span><span class="p">]</span>
+<span class="n">run_cross_validation</span><span class="p">(</span>
+  <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df_iris</span><span class="p">,</span> <span class="n">confounds</span><span class="o">=</span><span class="n">confounds</span><span class="p">,</span>
+  <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="o">=</span><span class="s1">&#39;svm&#39;</span><span class="p">,</span> <span class="n">problem_type</span><span class="o">=</span><span class="s1">&#39;multiclass_classification&#39;</span>
+  <span class="n">preprocess_X</span><span class="o">=</span><span class="n">preprocess_X</span><span class="p">,</span>
+  <span class="n">preprocess_confounds</span><span class="o">=</span><span class="n">preprocess_confounds</span><span class="p">,</span>
+  <span class="n">preprocess_target</span><span class="o">=</span><span class="n">preprocess_target</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Instead of using the name of the available transformers you can also use
+scikit-learn compatible transformers.
+But it is recommended to register your own transformers first.
+For more information see (#TODO)</p>
+</div>
+</div>
+<div class="section" id="more-information">
+<h3>More information<a class="headerlink" href="#more-information" title="Permalink to this headline">¶</a></h3>
+<p>As mentioned above julearn allows the user to specify to which variable/columns
+or variable/column types each transformer will be applied. To do so you
+can adjust the <code class="docutils literal notranslate"><span class="pre">apply_to</span></code> hyperparameter which is added to all transformers
+used in <code class="docutils literal notranslate"><span class="pre">preprocess_X</span></code>. You can find such an example at #TODO
+and find more information on hyperparameter tuning in
+<a class="reference internal" href="hyperparameters.html"><span class="doc">hyperparameters</span></a> .</p>
+</div>
+</div>
+<div class="section" id="the-returned-pipeline">
+<h2>The returned pipeline<a class="headerlink" href="#the-returned-pipeline" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="api.html#julearn.api.run_cross_validation" title="julearn.api.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> uses all the information mentioned above
+to create one <a class="reference internal" href="api.html#julearn.pipeline.ExtendedDataFramePipeline" title="julearn.pipeline.ExtendedDataFramePipeline"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtendedDataFramePipeline</span></code></a> which is then used for
+cross_validation. Additionally, it can return the fitted pipeline for other
+application. E.g. you could want to test the pipeline on one additional
+test set. But how can you do that?</p>
+<div class="section" id="returning-the-extended-pipeline">
+<h3>Returning the (extended) pipeline<a class="headerlink" href="#returning-the-extended-pipeline" title="Permalink to this headline">¶</a></h3>
+<p>There are multiple options which you can use to return the pipeline(s).
+For all of them you have to set the <cite>return_estimator</cite>.
+These are the possible options:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>None: Does not return any estimator</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'final'</span></code>: Return the estimator fitted on all the data.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'cv'</span></code>: Return the all the estimator from each CV split, fitted on the
+training data.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'all'</span></code>: Return all the estimators (final and cv).</p></li>
+</ul>
+</div></blockquote>
+<p>These returned estimators are always <a class="reference internal" href="api.html#julearn.pipeline.ExtendedDataFramePipeline" title="julearn.pipeline.ExtendedDataFramePipeline"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtendedDataFramePipeline</span></code></a>
+objects.Therefore, the next section will discuss how you can use
+a returned estimator.</p>
+</div>
+<div class="section" id="extendeddataframepipeline">
+<h3>ExtendedDataFramePipeline<a class="headerlink" href="#extendeddataframepipeline" title="Permalink to this headline">¶</a></h3>
+<p>The <a class="reference internal" href="api.html#julearn.pipeline.ExtendedDataFramePipeline" title="julearn.pipeline.ExtendedDataFramePipeline"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtendedDataFramePipeline</span></code></a> has the same basic functionality as
+all scikit-learn pipelines or estimators, but also has some caveats.</p>
+<div class="section" id="where-extendeddataframepipeline-behave-as-usual">
+<h4>Where ExtendedDataFramePipeline behave as usual<a class="headerlink" href="#where-extendeddataframepipeline-behave-as-usual" title="Permalink to this headline">¶</a></h4>
+<p>The following methods work as in sklearn:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">.fit()</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.predict()</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.score()</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.predict_proba()</span></code></p></li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="caveats-extendeddataframepipeline">
+<h4>Caveats ExtendedDataFramePipeline<a class="headerlink" href="#caveats-extendeddataframepipeline" title="Permalink to this headline">¶</a></h4>
+<p>In contrast to scikit-learn pipelines <a class="reference internal" href="api.html#julearn.pipeline.ExtendedDataFramePipeline" title="julearn.pipeline.ExtendedDataFramePipeline"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtendedDataFramePipeline</span></code></a>
+can change the ground truth (transform the target).
+This means that any any function which uses sklearn scorer functions instead of
+calling <code class="docutils literal notranslate"><span class="pre">.score()</span></code> on the <a class="reference internal" href="api.html#julearn.pipeline.ExtendedDataFramePipeline" title="julearn.pipeline.ExtendedDataFramePipeline"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtendedDataFramePipeline</span></code></a> can give you
+the wrong output without <strong>any warning</strong>.
+For example <cite>cross_validate</cite> function of sklearn when using another scorer.</p>
+<p>If you want to use such functions, you can follow this example (#TODO) which
+shows how to use julearns <code class="docutils literal notranslate"><span class="pre">extended_scorer</span></code> instead</p>
+</div>
+<div class="section" id="additional-functionality">
+<h4>Additional functionality<a class="headerlink" href="#additional-functionality" title="Permalink to this headline">¶</a></h4>
+<p>Furthermore, <a class="reference internal" href="api.html#julearn.pipeline.ExtendedDataFramePipeline" title="julearn.pipeline.ExtendedDataFramePipeline"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtendedDataFramePipeline</span></code></a>  have the following
+added methods:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">preprocess</span></code>: a method to apply preprocessing steps of the pipeline to
+some data. Furthermore, the <code class="docutils literal notranslate"><span class="pre">until</span></code> argument can be used to
+only preprocess up to a specific transformer.</p></li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="advanced-topics">
+<h1>Advanced Topics<a class="headerlink" href="#advanced-topics" title="Permalink to this headline">¶</a></h1>
+<p>The following sections are advanced topic which do not need to be read
+for a lot of usecases, but still provide some context for those who want it.</p>
 <div class="section" id="column-type-system">
 <h2>Column Type System<a class="headerlink" href="#column-type-system" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="context">
 <h3>Context<a class="headerlink" href="#context" title="Permalink to this headline">¶</a></h3>
 <p>To be able to discriminate between different types of variables Julearn
-uses a Column Type System. This system currently distinguies between
+uses a Column Type System. This system currently distinguishes between
 continuous variables/features, categorical variables/features and confounds.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>On most levels of Julearn this Column Type System is only used internally.
-Therefore, users do not have to work with it directley.
+Therefore, users do not have to work with it directly.
 For example, by providing the confounds and categorical variables to the
-<a class="reference internal" href="#julearn.pipeline.ExtendedDataFramePipeline" title="julearn.pipeline.ExtendedDataFramePipeline"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtendedDataFramePipeline</span></code></a> it has all the information needed to
+<a class="reference internal" href="api.html#julearn.pipeline.ExtendedDataFramePipeline" title="julearn.pipeline.ExtendedDataFramePipeline"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtendedDataFramePipeline</span></code></a> it has all the information needed to
 apply the Column Type System internally without any further input or changes
 to the <cite>pandas.DataFrame</cite>.</p>
 </div>
@@ -235,15 +407,15 @@ to the <cite>pandas.DataFrame</cite>.</p>
 <h3>How it works<a class="headerlink" href="#how-it-works" title="Permalink to this headline">¶</a></h3>
 <p>Every <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html">pandas.DataFrame</a> column has a column name.
 Inside of Julearn we add another string containing the type of the column
-separated by our delimiter: ‘__:type:__’ to the original column names.
+separated by our delimiter: <code class="docutils literal notranslate"><span class="pre">'__:type:__'</span></code> to the original column names.
 For example:</p>
 <blockquote>
 <div><ul>
 <li><p>We have the original columns :</p>
 <ul class="simple">
-<li><p>‘Intelligence’</p></li>
-<li><p>‘Age’</p></li>
-<li><p>‘LikesEvoks’</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Intelligence'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Age'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'LikesEvoks'</span></code></p></li>
 </ul>
 </li>
 <li><p>We know:</p>
@@ -258,172 +430,15 @@ Either someone likes Evoks or not.</p></li>
 by changing the column names to:</p>
 <blockquote>
 <div><ul class="simple">
-<li><p>‘Intelligence__:type:__continuous’</p></li>
-<li><p>‘Age__:type:__confound’</p></li>
-<li><p>‘LikesEvoks__:type:__categorical’</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Intelligence__:type:__continuous'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'Age__:type:__confound'</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">'LikesEvoks__:type:__categorical'</span></code></p></li>
 </ul>
 </div></blockquote>
 </li>
 </ul>
 </div></blockquote>
 </div>
-</div>
-<div class="section" id="extendeddataframepipeline">
-<h2>ExtendedDataFramePipeline<a class="headerlink" href="#extendeddataframepipeline" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt id="julearn.pipeline.ExtendedDataFramePipeline">
-<em class="property">class </em><code class="sig-prename descclassname">julearn.pipeline.</code><code class="sig-name descname">ExtendedDataFramePipeline</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dataframe_pipeline</span></em>, <em class="sig-param"><span class="n">y_transformer</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">confound_dataframe_pipeline</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">confounds</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">categorical_features</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.pipeline.ExtendedDataFramePipeline" title="Permalink to this definition">¶</a></dt>
-<dd><p>A class creating a custom metamodel like a Pipeline.
-In practice this should be created
-using julearn.pipeline.create_extended_pipeline.
-Added functionality:
-1: handling target transforming and scoring against
-this transformed target as ground truth.
-2: handling confounds. Adds the confound as type to columns.
-This allows the DataFrameWrapTransformer inside of the dataframe_pipeline
-to handle confounds properly.
-3: Handling categorical features:
-Adds categorical type to columns so that DataFrameWrapTransformer inside
-of the dataframe_pipline can handle categorical features properly.</p>
-<p>column_types are added to the feature dataframe after each column using
-the specified separator. E.g. column <cite>cheese</cite> becomes
-<cite>cheese__:type:__confound</cite>, when being in the confounds
-and with a separator of <cite>__:type:__</cite></p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>dataframe_pipeline</strong><span class="classifier">sklearn.pipeline.Pipeline</span></dt><dd><p>A pipeline working with dataframes and being able to handle confounds.
-Should be created using julearn.pipeline.create_dataframe_pipeline.</p>
-</dd>
-<dt><strong>y_transformer</strong><span class="classifier">julearn target_transformer, optional</span></dt><dd><p>Any transformer which can take the X and y to transform the y.
-You can use julearn.transformers.target.TargetTransfromerWrapper to
-convert most sklearn transformers to a target_transformer.</p>
-</dd>
-<dt><strong>confound_dataframe_pipeline</strong><span class="classifier">sklearn.pipeline.Pipeline, optional</span></dt><dd><p>Similar to dataframe_pipeline.</p>
-</dd>
-<dt><strong>confounds</strong><span class="classifier">list[str], optional</span></dt><dd><p>a list of column names which are confounds ,by default None</p>
-</dd>
-<dt><strong>categorical_features</strong><span class="classifier">list[str], optional</span></dt><dd><p>a list of column names which are categorical features,by default None</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt id="julearn.pipeline.create_extended_pipeline">
-<code class="sig-prename descclassname">julearn.pipeline.</code><code class="sig-name descname">create_extended_pipeline</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">preprocess_steps_features</span></em>, <em class="sig-param"><span class="n">preprocess_transformer_target</span></em>, <em class="sig-param"><span class="n">preprocess_steps_confounds</span></em>, <em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">confounds</span></em>, <em class="sig-param"><span class="n">categorical_features</span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.pipeline.create_extended_pipeline" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>preprocess_steps_feature: list[tuple]</strong></dt><dd><p>A list of steps. Each step contains a name and  transformer.
-These transformers are applied to the complete feature space or a
-subset of it.</p>
-</dd>
-<dt><strong>preprocess_transformer_target</strong><span class="classifier">y_transform</span></dt><dd><p>A transformer, which takes in X, y and outputs a transformed y.
-Applied after preprocess_steps_confounds, but before
-preprocess_steps_feature</p>
-</dd>
-<dt><strong>preprocess_steps_confounds</strong><span class="classifier">list[tuple]</span></dt><dd><p>A list of steps. Each step contains a name and  transformer.
-These transformers are applied only to the confounds before
-transforming the target.</p>
-</dd>
-<dt><strong>model</strong><span class="classifier">tuple(str, obj)</span></dt><dd><p>tuple of name and sklearn estimator</p>
-</dd>
-<dt><strong>confounds</strong><span class="classifier">list[str] or str</span></dt><dd><p>A list of column_names which are the confounds
-or the column_name of one confound</p>
-</dd>
-<dt><strong>categorical_features</strong><span class="classifier">list[str] or str</span></dt><dd><p>A list of column_names which are the categorical features
-or the column_name of one categorical feature</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-</div>
-<div class="section" id="dataframepipeline">
-<h2>DataFramePipeline<a class="headerlink" href="#dataframepipeline" title="Permalink to this headline">¶</a></h2>
-<dl class="py function">
-<dt id="julearn.pipeline.create_dataframe_pipeline">
-<code class="sig-prename descclassname">julearn.pipeline.</code><code class="sig-name descname">create_dataframe_pipeline</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">steps</span></em>, <em class="sig-param"><span class="n">apply_to</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.pipeline.create_dataframe_pipeline" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates a sklearn pipeline using the provided steps and wrapping all
-transformers into the DataFrameWrapTransformer.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>steps</strong><span class="classifier">list</span></dt><dd><p>A list of steps. Each step is a tuple containing a name and transformer
-or estimator. For more information look at steps in:
-sklearn.pipeline.Pipeline</p>
-</dd>
-<dt><strong>apply_to</strong><span class="classifier">str, list(str), optional</span></dt><dd><p>decides which columns will be transformed.
-For more information see:
-julearn.transformers.dataframe.DataFrameWrapTransformer</p>
-</dd>
-</dl>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
-<dt>sklearn.pipeline.Pipeline</dt><dd><p>A Pipline in which all entries are wrappend in a
-DataFrameWrapTransformer.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-</div>
-<div class="section" id="dataframewraptransformer">
-<h2>DataFrameWrapTransformer<a class="headerlink" href="#dataframewraptransformer" title="Permalink to this headline">¶</a></h2>
-<dl class="py class">
-<dt id="julearn.transformers.DataFrameWrapTransformer">
-<em class="property">class </em><code class="sig-prename descclassname">julearn.transformers.</code><code class="sig-name descname">DataFrameWrapTransformer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">transformer</span></em>, <em class="sig-param"><span class="n">apply_to</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">returned_features</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">params</span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.transformers.DataFrameWrapTransformer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Transformer to wrap other transformers and apply and return a
-DataFrame. Allows to apply the original transformer to only some of the
-columns from the DataFrame, while preserving other columns as they
-are. The returned output will be named using the information provided
-by the returned_features argument and the inputted DataFrame</p>
-<dl class="field-list">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl>
-<dt><strong>transformer</strong><span class="classifier">object</span></dt><dd><p>A transformer following sklearn standards.</p>
-</dd>
-<dt><strong>apply_to</strong><span class="classifier">str, list(str), optional</span></dt><dd><p>decides which columns will be transformed.
-When providing a list of columns the transformer will be applied
-to these columns. Alternativley, users can provide a column type
-or list of valid column types which should be transformed.
-Valid column types are: <cite>confound</cite>, ‘continuous’ and ‘categorical’.
-Furthermore, you can enter <cite>all</cite> to transform all columns,
-<cite>all_features</cite> to transform all columns excluding the confound
-or provide a list of valid column types, by default auto</p>
-</dd>
-<dt><strong>returned_features</strong><span class="classifier">str, optional</span></dt><dd><p>helps to name the transformed DataFrame accordingly.
-Using one of the following strings will lead to the noted behavior:</p>
-<ul class="simple">
-<li><p><cite>None</cite> here returned_features will be set automatically.
-If the transformer has a <cite>.get_support</cite> method it will be set to
-<cite>subset</cite>. Else the appropriate returned_feature is looked up
-in all available_transformers. Lastly, if its not an
-available_transformer it will be set to <cite>unknown</cite>.
-See <a class="reference external" href="https://juaml.github.io/julearn/available_steps.html">https://juaml.github.io/julearn/available_steps.html</a>
-for details.</p></li>
-<li><p><cite>unknown</cite> leads to created column names,</p></li>
-<li><p><cite>unknown_same_type</cite> leads to created column names
-with the same column type.</p></li>
-<li><p><cite>same</cite> leads copies the names from the original pd.DataFrame</p></li>
-<li><p><cite>subset</cite> leads to the columns being a subset of the original
-pd.DataFrame. This functionality needs the transformer to have a
-.get_support method following sklearn standards.</p></li>
-<li><p><cite>from_transformer</cite> the outputted columns are already defined in
-the transformer</p></li>
-</ul>
-<p>, by default None</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
 </div>
 </div>
 

@@ -39,12 +39,10 @@ train_iris, test_iris = train_test_split(df_iris, test_size=0.2,
 
 ###############################################################################
 # Perform multiclass classification as iris dataset contains 3 kinds of species
-scores, model_iris = run_cross_validation(X=X, y=y, data=train_iris,
-                                          model='svm',
-                                          problem_type='multiclass_'
-                                                       'classification',
-                                          scoring=['accuracy'],
-                                          return_estimator='final')
+scores, model_iris = run_cross_validation(
+    X=X, y=y, data=train_iris, model='svm', preprocess_X='zscore',
+    problem_type='multiclass_classification', scoring=['accuracy'],
+    return_estimator='final')
 
 ###############################################################################
 # The scores dictionary has all the values for each CV split. We can convert

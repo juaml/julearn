@@ -64,13 +64,13 @@ Set the logging level to info to see extra information
 
  .. code-block:: none
 
-    2020-12-08 17:16:36,773 - julearn - INFO - ===== Lib Versions =====
-    2020-12-08 17:16:36,774 - julearn - INFO - numpy: 1.16.4
-    2020-12-08 17:16:36,774 - julearn - INFO - scipy: 1.5.4
-    2020-12-08 17:16:36,774 - julearn - INFO - sklearn: 0.23.2
-    2020-12-08 17:16:36,774 - julearn - INFO - pandas: 1.1.5
-    2020-12-08 17:16:36,774 - julearn - INFO - julearn: 0.1.0
-    2020-12-08 17:16:36,774 - julearn - INFO - ========================
+    2020-12-09 10:38:19,911 - julearn - INFO - ===== Lib Versions =====
+    2020-12-09 10:38:19,911 - julearn - INFO - numpy: 1.16.4
+    2020-12-09 10:38:19,911 - julearn - INFO - scipy: 1.5.4
+    2020-12-09 10:38:19,911 - julearn - INFO - sklearn: 0.23.2
+    2020-12-09 10:38:19,911 - julearn - INFO - pandas: 1.1.5
+    2020-12-09 10:38:19,912 - julearn - INFO - julearn: 0.1.0
+    2020-12-09 10:38:19,912 - julearn - INFO - ========================
 
 
 
@@ -95,12 +95,10 @@ Perform multiclass classification as iris dataset contains 3 kinds of species
 
 .. code-block:: default
 
-    scores, model_iris = run_cross_validation(X=X, y=y, data=train_iris,
-                                              model='svm',
-                                              problem_type='multiclass_'
-                                                           'classification',
-                                              scoring=['accuracy'],
-                                              return_estimator='final')
+    scores, model_iris = run_cross_validation(
+        X=X, y=y, data=train_iris, model='svm', preprocess_X='zscore',
+        problem_type='multiclass_classification', scoring=['accuracy'],
+        return_estimator='final')
 
 
 
@@ -112,20 +110,20 @@ Perform multiclass classification as iris dataset contains 3 kinds of species
 
  .. code-block:: none
 
-    2020-12-08 17:16:36,779 - julearn - INFO - Using default CV
-    2020-12-08 17:16:36,779 - julearn - INFO - ==== Input Data ====
-    2020-12-08 17:16:36,779 - julearn - INFO - Using dataframe as input
-    2020-12-08 17:16:36,779 - julearn - INFO - Features: ['sepal_length', 'sepal_width', 'petal_length']
-    2020-12-08 17:16:36,779 - julearn - INFO - Target: species
-    2020-12-08 17:16:36,779 - julearn - INFO - Expanded X: ['sepal_length', 'sepal_width', 'petal_length']
-    2020-12-08 17:16:36,779 - julearn - INFO - Expanded Confounds: []
-    2020-12-08 17:16:36,780 - julearn - INFO - ====================
-    2020-12-08 17:16:36,780 - julearn - INFO - 
-    2020-12-08 17:16:36,780 - julearn - INFO - ====== Model ======
-    2020-12-08 17:16:36,780 - julearn - INFO - Obtaining model by name: svm
-    2020-12-08 17:16:36,780 - julearn - INFO - ===================
-    2020-12-08 17:16:36,780 - julearn - INFO - 
-    2020-12-08 17:16:36,780 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+    2020-12-09 10:38:19,918 - julearn - INFO - Using default CV
+    2020-12-09 10:38:19,918 - julearn - INFO - ==== Input Data ====
+    2020-12-09 10:38:19,918 - julearn - INFO - Using dataframe as input
+    2020-12-09 10:38:19,918 - julearn - INFO - Features: ['sepal_length', 'sepal_width', 'petal_length']
+    2020-12-09 10:38:19,918 - julearn - INFO - Target: species
+    2020-12-09 10:38:19,918 - julearn - INFO - Expanded X: ['sepal_length', 'sepal_width', 'petal_length']
+    2020-12-09 10:38:19,918 - julearn - INFO - Expanded Confounds: []
+    2020-12-09 10:38:19,919 - julearn - INFO - ====================
+    2020-12-09 10:38:19,919 - julearn - INFO - 
+    2020-12-09 10:38:19,919 - julearn - INFO - ====== Model ======
+    2020-12-09 10:38:19,919 - julearn - INFO - Obtaining model by name: svm
+    2020-12-09 10:38:19,919 - julearn - INFO - ===================
+    2020-12-09 10:38:19,919 - julearn - INFO - 
+    2020-12-09 10:38:19,919 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
 
 
 
@@ -151,11 +149,11 @@ this dictionary to a pandas dataframe for easier manipulation
  .. code-block:: none
 
        fit_time  score_time  test_accuracy  repeat  fold
-    0  0.015770    0.009846       0.916667       0     0
-    1  0.013084    0.008493       0.916667       0     1
-    2  0.012774    0.007707       1.000000       0     2
-    3  0.012599    0.007957       0.791667       0     3
-    4  0.012452    0.007770       0.916667       0     4
+    0  0.011606    0.007652       0.875000       0     0
+    1  0.011190    0.007412       0.916667       0     1
+    2  0.011707    0.007491       0.875000       0     2
+    3  0.011547    0.007780       0.875000       0     3
+    4  0.011873    0.007730       1.000000       0     4
 
 
 
@@ -184,11 +182,11 @@ Now we can get the accuracy per fold and repetition:
 
     K-fold splits         0         1         2         3         4
     Repeats                                                        
-    0              0.916667  0.916667  1.000000  0.791667  0.916667
+    0              0.875000  0.916667  0.875000  0.875000  1.000000
     1              0.958333  0.916667  0.833333  0.875000  0.958333
-    2              0.916667  0.875000  0.958333  0.875000  0.875000
-    3              0.791667  0.958333  0.958333  0.916667  0.875000
-    4              0.958333  0.875000  0.958333  0.958333  0.833333
+    2              0.958333  0.958333  0.916667  0.916667  0.916667
+    3              0.833333  0.916667  0.875000  0.958333  0.958333
+    4              1.000000  0.875000  0.833333  0.916667  0.875000
 
 
 
@@ -310,7 +308,7 @@ the heatmap with annotations.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  1.067 seconds)
+   **Total running time of the script:** ( 0 minutes  0.993 seconds)
 
 
 .. _sphx_glr_download_auto_examples_basic_plot_cm_acc_multiclass.py:

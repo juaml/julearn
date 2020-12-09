@@ -89,14 +89,15 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installing julearn</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../input.html">Input Data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../pipeline.html">Main Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pipeline.html">Understanding the pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pipeline.html#advanced-topics">Advanced Topics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../steps.html">Available Pipeline Steps</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../hyperparameters.html">Hyperparameters</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Basic Examples</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="run_simple_binary_classification.html">Simple Binary Classification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_inspect_random_forest.html">Inspecting Random Forest models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_groupcv_inspect_svm.html">Inspecting SVM models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_cm_acc_multiclass.html">Multiclass Classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_groupcv_inspect_svm.html">Inspecting SVM models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_example_regression.html">Regression Analysis</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Confound Removal (model comparison)</a></li>
 </ul>
@@ -200,13 +201,13 @@ with and without confound removal using a Random Forest classifier.</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2020-12-08 17:16:39,599 - julearn - INFO - ===== Lib Versions =====
-2020-12-08 17:16:39,599 - julearn - INFO - numpy: 1.16.4
-2020-12-08 17:16:39,599 - julearn - INFO - scipy: 1.5.4
-2020-12-08 17:16:39,599 - julearn - INFO - sklearn: 0.23.2
-2020-12-08 17:16:39,599 - julearn - INFO - pandas: 1.1.5
-2020-12-08 17:16:39,599 - julearn - INFO - julearn: 0.1.0
-2020-12-08 17:16:39,599 - julearn - INFO - ========================
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2020-12-09 10:38:24,559 - julearn - INFO - ===== Lib Versions =====
+2020-12-09 10:38:24,559 - julearn - INFO - numpy: 1.16.4
+2020-12-09 10:38:24,559 - julearn - INFO - scipy: 1.5.4
+2020-12-09 10:38:24,559 - julearn - INFO - sklearn: 0.23.2
+2020-12-09 10:38:24,559 - julearn - INFO - pandas: 1.1.5
+2020-12-09 10:38:24,559 - julearn - INFO - julearn: 0.1.0
+2020-12-09 10:38:24,559 - julearn - INFO - ========================
 </pre></div>
 </div>
 <p>load the iris data from seaborn</p>
@@ -243,56 +244,54 @@ number of bootstrap iterations to at least 2000 for a valid test.</p>
 </div>
 <p>First, we will train a model without performing confound removal on features
 Note: confounds=None by default</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores_ncr</span></a> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df_iris</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;rf&#39;</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span>
-                                  <span class="n">scoring</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">,</span> <span class="s1">&#39;roc_auc&#39;</span><span class="p">],</span>
-                                  <span class="n">return_estimator</span><span class="o">=</span><span class="s1">&#39;cv&#39;</span><span class="p">,</span>
-                                  <span class="n">seed</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores_ncr</span></a> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df_iris</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;rf&#39;</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span> <span class="n">preprocess_X</span><span class="o">=</span><span class="s1">&#39;zscore&#39;</span><span class="p">,</span>
+    <span class="n">scoring</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">,</span> <span class="s1">&#39;roc_auc&#39;</span><span class="p">],</span> <span class="n">return_estimator</span><span class="o">=</span><span class="s1">&#39;cv&#39;</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2020-12-08 17:16:39,603 - julearn - INFO - Setting random seed to 200
-2020-12-08 17:16:39,604 - julearn - INFO - ==== Input Data ====
-2020-12-08 17:16:39,604 - julearn - INFO - Using dataframe as input
-2020-12-08 17:16:39,604 - julearn - INFO - Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2020-12-08 17:16:39,604 - julearn - INFO - Target: species
-2020-12-08 17:16:39,604 - julearn - INFO - Expanded X: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2020-12-08 17:16:39,604 - julearn - INFO - Expanded Confounds: []
-2020-12-08 17:16:39,605 - julearn - INFO - ====================
-2020-12-08 17:16:39,605 - julearn - INFO -
-2020-12-08 17:16:39,605 - julearn - INFO - ====== Model ======
-2020-12-08 17:16:39,605 - julearn - INFO - Obtaining model by name: rf
-2020-12-08 17:16:39,605 - julearn - INFO - ===================
-2020-12-08 17:16:39,605 - julearn - INFO -
-2020-12-08 17:16:39,606 - julearn - INFO - Using scikit-learn CV scheme StratifiedBootstrap(n_splits=20, random_state=42, test_size=0.3,
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2020-12-09 10:38:24,564 - julearn - INFO - Setting random seed to 200
+2020-12-09 10:38:24,564 - julearn - INFO - ==== Input Data ====
+2020-12-09 10:38:24,564 - julearn - INFO - Using dataframe as input
+2020-12-09 10:38:24,564 - julearn - INFO - Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2020-12-09 10:38:24,564 - julearn - INFO - Target: species
+2020-12-09 10:38:24,564 - julearn - INFO - Expanded X: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2020-12-09 10:38:24,564 - julearn - INFO - Expanded Confounds: []
+2020-12-09 10:38:24,565 - julearn - INFO - ====================
+2020-12-09 10:38:24,565 - julearn - INFO -
+2020-12-09 10:38:24,565 - julearn - INFO - ====== Model ======
+2020-12-09 10:38:24,565 - julearn - INFO - Obtaining model by name: rf
+2020-12-09 10:38:24,565 - julearn - INFO - ===================
+2020-12-09 10:38:24,566 - julearn - INFO -
+2020-12-09 10:38:24,566 - julearn - INFO - Using scikit-learn CV scheme StratifiedBootstrap(n_splits=20, random_state=42, test_size=0.3,
           train_size=None)
 </pre></div>
 </div>
 <p>Next, we train a model after performing confound removal on the features
 Note: we initialize the CV again to use the same folds as before</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cv</span> <span class="o">=</span> <span class="n">StratifiedBootstrap</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">n_bootstrap</span></a><span class="p">,</span> <span class="n">test_size</span><span class="o">=.</span><span class="mi">3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
-<a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores_cr</span></a> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span> <span class="n">confounds</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">confound</span></a><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df_iris</span><span class="p">,</span>
-                                 <span class="n">model</span><span class="o">=</span><span class="s1">&#39;rf&#39;</span><span class="p">,</span> <span class="n">preprocess_X</span><span class="o">=</span><span class="s1">&#39;remove_confound&#39;</span><span class="p">,</span>
-                                 <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">,</span> <span class="s1">&#39;roc_auc&#39;</span><span class="p">],</span>
-                                 <span class="n">return_estimator</span><span class="o">=</span><span class="s1">&#39;cv&#39;</span><span class="p">,</span>
-                                 <span class="n">seed</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores_cr</span></a> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span> <span class="n">confounds</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">confound</span></a><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df_iris</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;rf&#39;</span><span class="p">,</span>
+    <span class="n">preprocess_X</span><span class="o">=</span><span class="s1">&#39;remove_confound&#39;</span><span class="p">,</span> <span class="n">preprocess_confounds</span><span class="o">=</span><span class="s1">&#39;zscore&#39;</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span>
+    <span class="n">scoring</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">,</span> <span class="s1">&#39;roc_auc&#39;</span><span class="p">],</span> <span class="n">return_estimator</span><span class="o">=</span><span class="s1">&#39;cv&#39;</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2020-12-08 17:16:41,995 - julearn - INFO - Setting random seed to 200
-2020-12-08 17:16:41,995 - julearn - INFO - ==== Input Data ====
-2020-12-08 17:16:41,995 - julearn - INFO - Using dataframe as input
-2020-12-08 17:16:41,995 - julearn - INFO - Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2020-12-08 17:16:41,995 - julearn - INFO - Target: species
-2020-12-08 17:16:41,995 - julearn - INFO - Confounds: petal_width
-2020-12-08 17:16:41,995 - julearn - INFO - Expanded X: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2020-12-08 17:16:41,995 - julearn - INFO - Expanded Confounds: [&#39;petal_width&#39;]
-2020-12-08 17:16:41,996 - julearn - INFO - ====================
-2020-12-08 17:16:41,996 - julearn - INFO -
-2020-12-08 17:16:41,997 - julearn - INFO - ====== Model ======
-2020-12-08 17:16:41,997 - julearn - INFO - Obtaining model by name: rf
-2020-12-08 17:16:41,997 - julearn - INFO - ===================
-2020-12-08 17:16:41,997 - julearn - INFO -
-2020-12-08 17:16:41,997 - julearn - INFO - Using scikit-learn CV scheme StratifiedBootstrap(n_splits=20, random_state=42, test_size=0.3,
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2020-12-09 10:38:26,890 - julearn - INFO - Setting random seed to 200
+2020-12-09 10:38:26,890 - julearn - INFO - ==== Input Data ====
+2020-12-09 10:38:26,890 - julearn - INFO - Using dataframe as input
+2020-12-09 10:38:26,890 - julearn - INFO - Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2020-12-09 10:38:26,890 - julearn - INFO - Target: species
+2020-12-09 10:38:26,890 - julearn - INFO - Confounds: petal_width
+2020-12-09 10:38:26,891 - julearn - INFO - Expanded X: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2020-12-09 10:38:26,891 - julearn - INFO - Expanded Confounds: [&#39;petal_width&#39;]
+2020-12-09 10:38:26,892 - julearn - INFO - ====================
+2020-12-09 10:38:26,892 - julearn - INFO -
+2020-12-09 10:38:26,892 - julearn - INFO - ====== Model ======
+2020-12-09 10:38:26,892 - julearn - INFO - Obtaining model by name: rf
+2020-12-09 10:38:26,892 - julearn - INFO - ===================
+2020-12-09 10:38:26,892 - julearn - INFO -
+2020-12-09 10:38:26,892 - julearn - INFO - Using scikit-learn CV scheme StratifiedBootstrap(n_splits=20, random_state=42, test_size=0.3,
           train_size=None)
 </pre></div>
 </div>
@@ -414,7 +413,7 @@ a difference in importances.</p>
 </pre></div>
 </div>
 <img alt="plot confound removal classification" class="sphx-glr-single-img" src="../../_images/sphx_glr_plot_confound_removal_classification_004.png" />
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  7.435 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  7.229 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-basic-plot-confound-removal-classification-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/a04a8d098f83972da74112b5a7f757ed/plot_confound_removal_classification.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_confound_removal_classification.py</span></code></a></p>

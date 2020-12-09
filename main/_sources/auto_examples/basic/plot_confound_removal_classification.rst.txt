@@ -57,13 +57,13 @@ Set the logging level to info to see extra information
 
  .. code-block:: none
 
-    2020-12-08 17:16:39,599 - julearn - INFO - ===== Lib Versions =====
-    2020-12-08 17:16:39,599 - julearn - INFO - numpy: 1.16.4
-    2020-12-08 17:16:39,599 - julearn - INFO - scipy: 1.5.4
-    2020-12-08 17:16:39,599 - julearn - INFO - sklearn: 0.23.2
-    2020-12-08 17:16:39,599 - julearn - INFO - pandas: 1.1.5
-    2020-12-08 17:16:39,599 - julearn - INFO - julearn: 0.1.0
-    2020-12-08 17:16:39,599 - julearn - INFO - ========================
+    2020-12-09 10:38:24,559 - julearn - INFO - ===== Lib Versions =====
+    2020-12-09 10:38:24,559 - julearn - INFO - numpy: 1.16.4
+    2020-12-09 10:38:24,559 - julearn - INFO - scipy: 1.5.4
+    2020-12-09 10:38:24,559 - julearn - INFO - sklearn: 0.23.2
+    2020-12-09 10:38:24,559 - julearn - INFO - pandas: 1.1.5
+    2020-12-09 10:38:24,559 - julearn - INFO - julearn: 0.1.0
+    2020-12-09 10:38:24,559 - julearn - INFO - ========================
 
 
 
@@ -150,10 +150,9 @@ Note: confounds=None by default
 
 .. code-block:: default
 
-    scores_ncr = run_cross_validation(X=X, y=y, data=df_iris, model='rf', cv=cv,
-                                      scoring=['accuracy', 'roc_auc'],
-                                      return_estimator='cv',
-                                      seed=200)
+    scores_ncr = run_cross_validation(
+        X=X, y=y, data=df_iris, model='rf', cv=cv, preprocess_X='zscore',
+        scoring=['accuracy', 'roc_auc'], return_estimator='cv', seed=200)
 
 
 
@@ -166,20 +165,20 @@ Note: confounds=None by default
 
  .. code-block:: none
 
-    2020-12-08 17:16:39,603 - julearn - INFO - Setting random seed to 200
-    2020-12-08 17:16:39,604 - julearn - INFO - ==== Input Data ====
-    2020-12-08 17:16:39,604 - julearn - INFO - Using dataframe as input
-    2020-12-08 17:16:39,604 - julearn - INFO - Features: ['sepal_length', 'sepal_width', 'petal_length']
-    2020-12-08 17:16:39,604 - julearn - INFO - Target: species
-    2020-12-08 17:16:39,604 - julearn - INFO - Expanded X: ['sepal_length', 'sepal_width', 'petal_length']
-    2020-12-08 17:16:39,604 - julearn - INFO - Expanded Confounds: []
-    2020-12-08 17:16:39,605 - julearn - INFO - ====================
-    2020-12-08 17:16:39,605 - julearn - INFO - 
-    2020-12-08 17:16:39,605 - julearn - INFO - ====== Model ======
-    2020-12-08 17:16:39,605 - julearn - INFO - Obtaining model by name: rf
-    2020-12-08 17:16:39,605 - julearn - INFO - ===================
-    2020-12-08 17:16:39,605 - julearn - INFO - 
-    2020-12-08 17:16:39,606 - julearn - INFO - Using scikit-learn CV scheme StratifiedBootstrap(n_splits=20, random_state=42, test_size=0.3,
+    2020-12-09 10:38:24,564 - julearn - INFO - Setting random seed to 200
+    2020-12-09 10:38:24,564 - julearn - INFO - ==== Input Data ====
+    2020-12-09 10:38:24,564 - julearn - INFO - Using dataframe as input
+    2020-12-09 10:38:24,564 - julearn - INFO - Features: ['sepal_length', 'sepal_width', 'petal_length']
+    2020-12-09 10:38:24,564 - julearn - INFO - Target: species
+    2020-12-09 10:38:24,564 - julearn - INFO - Expanded X: ['sepal_length', 'sepal_width', 'petal_length']
+    2020-12-09 10:38:24,564 - julearn - INFO - Expanded Confounds: []
+    2020-12-09 10:38:24,565 - julearn - INFO - ====================
+    2020-12-09 10:38:24,565 - julearn - INFO - 
+    2020-12-09 10:38:24,565 - julearn - INFO - ====== Model ======
+    2020-12-09 10:38:24,565 - julearn - INFO - Obtaining model by name: rf
+    2020-12-09 10:38:24,565 - julearn - INFO - ===================
+    2020-12-09 10:38:24,566 - julearn - INFO - 
+    2020-12-09 10:38:24,566 - julearn - INFO - Using scikit-learn CV scheme StratifiedBootstrap(n_splits=20, random_state=42, test_size=0.3,
               train_size=None)
 
 
@@ -192,11 +191,10 @@ Note: we initialize the CV again to use the same folds as before
 .. code-block:: default
 
     cv = StratifiedBootstrap(n_splits=n_bootstrap, test_size=.3, random_state=42)
-    scores_cr = run_cross_validation(X=X, y=y, confounds=confound, data=df_iris,
-                                     model='rf', preprocess_X='remove_confound',
-                                     cv=cv, scoring=['accuracy', 'roc_auc'],
-                                     return_estimator='cv',
-                                     seed=200)
+    scores_cr = run_cross_validation(
+        X=X, y=y, confounds=confound, data=df_iris, model='rf',
+        preprocess_X='remove_confound', preprocess_confounds='zscore', cv=cv,
+        scoring=['accuracy', 'roc_auc'], return_estimator='cv', seed=200)
 
 
 
@@ -208,21 +206,21 @@ Note: we initialize the CV again to use the same folds as before
 
  .. code-block:: none
 
-    2020-12-08 17:16:41,995 - julearn - INFO - Setting random seed to 200
-    2020-12-08 17:16:41,995 - julearn - INFO - ==== Input Data ====
-    2020-12-08 17:16:41,995 - julearn - INFO - Using dataframe as input
-    2020-12-08 17:16:41,995 - julearn - INFO - Features: ['sepal_length', 'sepal_width', 'petal_length']
-    2020-12-08 17:16:41,995 - julearn - INFO - Target: species
-    2020-12-08 17:16:41,995 - julearn - INFO - Confounds: petal_width
-    2020-12-08 17:16:41,995 - julearn - INFO - Expanded X: ['sepal_length', 'sepal_width', 'petal_length']
-    2020-12-08 17:16:41,995 - julearn - INFO - Expanded Confounds: ['petal_width']
-    2020-12-08 17:16:41,996 - julearn - INFO - ====================
-    2020-12-08 17:16:41,996 - julearn - INFO - 
-    2020-12-08 17:16:41,997 - julearn - INFO - ====== Model ======
-    2020-12-08 17:16:41,997 - julearn - INFO - Obtaining model by name: rf
-    2020-12-08 17:16:41,997 - julearn - INFO - ===================
-    2020-12-08 17:16:41,997 - julearn - INFO - 
-    2020-12-08 17:16:41,997 - julearn - INFO - Using scikit-learn CV scheme StratifiedBootstrap(n_splits=20, random_state=42, test_size=0.3,
+    2020-12-09 10:38:26,890 - julearn - INFO - Setting random seed to 200
+    2020-12-09 10:38:26,890 - julearn - INFO - ==== Input Data ====
+    2020-12-09 10:38:26,890 - julearn - INFO - Using dataframe as input
+    2020-12-09 10:38:26,890 - julearn - INFO - Features: ['sepal_length', 'sepal_width', 'petal_length']
+    2020-12-09 10:38:26,890 - julearn - INFO - Target: species
+    2020-12-09 10:38:26,890 - julearn - INFO - Confounds: petal_width
+    2020-12-09 10:38:26,891 - julearn - INFO - Expanded X: ['sepal_length', 'sepal_width', 'petal_length']
+    2020-12-09 10:38:26,891 - julearn - INFO - Expanded Confounds: ['petal_width']
+    2020-12-09 10:38:26,892 - julearn - INFO - ====================
+    2020-12-09 10:38:26,892 - julearn - INFO - 
+    2020-12-09 10:38:26,892 - julearn - INFO - ====== Model ======
+    2020-12-09 10:38:26,892 - julearn - INFO - Obtaining model by name: rf
+    2020-12-09 10:38:26,892 - julearn - INFO - ===================
+    2020-12-09 10:38:26,892 - julearn - INFO - 
+    2020-12-09 10:38:26,892 - julearn - INFO - Using scikit-learn CV scheme StratifiedBootstrap(n_splits=20, random_state=42, test_size=0.3,
               train_size=None)
 
 
@@ -452,7 +450,7 @@ a difference in importances.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  7.435 seconds)
+   **Total running time of the script:** ( 0 minutes  7.229 seconds)
 
 
 .. _sphx_glr_download_auto_examples_basic_plot_confound_removal_classification.py:

@@ -39,8 +39,8 @@
     
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Regression Analysis" href="plot_example_regression.html" />
-    <link rel="prev" title="Inspecting SVM models" href="plot_groupcv_inspect_svm.html" /> 
+    <link rel="next" title="Inspecting SVM models" href="plot_groupcv_inspect_svm.html" />
+    <link rel="prev" title="Inspecting Random Forest models" href="plot_inspect_random_forest.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -89,14 +89,15 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installing julearn</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../input.html">Input Data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../pipeline.html">Main Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pipeline.html">Understanding the pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pipeline.html#advanced-topics">Advanced Topics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../steps.html">Available Pipeline Steps</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../hyperparameters.html">Hyperparameters</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Basic Examples</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="run_simple_binary_classification.html">Simple Binary Classification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_inspect_random_forest.html">Inspecting Random Forest models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="plot_groupcv_inspect_svm.html">Inspecting SVM models</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Multiclass Classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_groupcv_inspect_svm.html">Inspecting SVM models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_example_regression.html">Regression Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_confound_removal_classification.html">Confound Removal (model comparison)</a></li>
 </ul>
@@ -208,13 +209,13 @@ for the test data.</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2020-12-08 17:16:36,773 - julearn - INFO - ===== Lib Versions =====
-2020-12-08 17:16:36,774 - julearn - INFO - numpy: 1.16.4
-2020-12-08 17:16:36,774 - julearn - INFO - scipy: 1.5.4
-2020-12-08 17:16:36,774 - julearn - INFO - sklearn: 0.23.2
-2020-12-08 17:16:36,774 - julearn - INFO - pandas: 1.1.5
-2020-12-08 17:16:36,774 - julearn - INFO - julearn: 0.1.0
-2020-12-08 17:16:36,774 - julearn - INFO - ========================
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2020-12-09 10:38:19,911 - julearn - INFO - ===== Lib Versions =====
+2020-12-09 10:38:19,911 - julearn - INFO - numpy: 1.16.4
+2020-12-09 10:38:19,911 - julearn - INFO - scipy: 1.5.4
+2020-12-09 10:38:19,911 - julearn - INFO - sklearn: 0.23.2
+2020-12-09 10:38:19,911 - julearn - INFO - pandas: 1.1.5
+2020-12-09 10:38:19,912 - julearn - INFO - julearn: 0.1.0
+2020-12-09 10:38:19,912 - julearn - INFO - ========================
 </pre></div>
 </div>
 <p>Split the dataset into train and test</p>
@@ -223,29 +224,27 @@ for the test data.</p>
 </pre></div>
 </div>
 <p>Perform multiclass classification as iris dataset contains 3 kinds of species</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">,</span> <span class="n">model_iris</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">train_iris</span><span class="p">,</span>
-                                          <span class="n">model</span><span class="o">=</span><span class="s1">&#39;svm&#39;</span><span class="p">,</span>
-                                          <span class="n">problem_type</span><span class="o">=</span><span class="s1">&#39;multiclass_&#39;</span>
-                                                       <span class="s1">&#39;classification&#39;</span><span class="p">,</span>
-                                          <span class="n">scoring</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">],</span>
-                                          <span class="n">return_estimator</span><span class="o">=</span><span class="s1">&#39;final&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">,</span> <span class="n">model_iris</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">train_iris</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;svm&#39;</span><span class="p">,</span> <span class="n">preprocess_X</span><span class="o">=</span><span class="s1">&#39;zscore&#39;</span><span class="p">,</span>
+    <span class="n">problem_type</span><span class="o">=</span><span class="s1">&#39;multiclass_classification&#39;</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">],</span>
+    <span class="n">return_estimator</span><span class="o">=</span><span class="s1">&#39;final&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2020-12-08 17:16:36,779 - julearn - INFO - Using default CV
-2020-12-08 17:16:36,779 - julearn - INFO - ==== Input Data ====
-2020-12-08 17:16:36,779 - julearn - INFO - Using dataframe as input
-2020-12-08 17:16:36,779 - julearn - INFO - Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2020-12-08 17:16:36,779 - julearn - INFO - Target: species
-2020-12-08 17:16:36,779 - julearn - INFO - Expanded X: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2020-12-08 17:16:36,779 - julearn - INFO - Expanded Confounds: []
-2020-12-08 17:16:36,780 - julearn - INFO - ====================
-2020-12-08 17:16:36,780 - julearn - INFO -
-2020-12-08 17:16:36,780 - julearn - INFO - ====== Model ======
-2020-12-08 17:16:36,780 - julearn - INFO - Obtaining model by name: svm
-2020-12-08 17:16:36,780 - julearn - INFO - ===================
-2020-12-08 17:16:36,780 - julearn - INFO -
-2020-12-08 17:16:36,780 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2020-12-09 10:38:19,918 - julearn - INFO - Using default CV
+2020-12-09 10:38:19,918 - julearn - INFO - ==== Input Data ====
+2020-12-09 10:38:19,918 - julearn - INFO - Using dataframe as input
+2020-12-09 10:38:19,918 - julearn - INFO - Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2020-12-09 10:38:19,918 - julearn - INFO - Target: species
+2020-12-09 10:38:19,918 - julearn - INFO - Expanded X: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2020-12-09 10:38:19,918 - julearn - INFO - Expanded Confounds: []
+2020-12-09 10:38:19,919 - julearn - INFO - ====================
+2020-12-09 10:38:19,919 - julearn - INFO -
+2020-12-09 10:38:19,919 - julearn - INFO - ====== Model ======
+2020-12-09 10:38:19,919 - julearn - INFO - Obtaining model by name: svm
+2020-12-09 10:38:19,919 - julearn - INFO - ===================
+2020-12-09 10:38:19,919 - julearn - INFO -
+2020-12-09 10:38:19,919 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
 </pre></div>
 </div>
 <p>The scores dictionary has all the values for each CV split. We can convert
@@ -256,11 +255,11 @@ this dictionary to a pandas dataframe for easier manipulation</p>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>   fit_time  score_time  test_accuracy  repeat  fold
-0  0.015770    0.009846       0.916667       0     0
-1  0.013084    0.008493       0.916667       0     1
-2  0.012774    0.007707       1.000000       0     2
-3  0.012599    0.007957       0.791667       0     3
-4  0.012452    0.007770       0.916667       0     4
+0  0.011606    0.007652       0.875000       0     0
+1  0.011190    0.007412       0.916667       0     1
+2  0.011707    0.007491       0.875000       0     2
+3  0.011547    0.007780       0.875000       0     3
+4  0.011873    0.007730       1.000000       0     4
 </pre></div>
 </div>
 <p>Now we can get the accuracy per fold and repetition:</p>
@@ -274,11 +273,11 @@ this dictionary to a pandas dataframe for easier manipulation</p>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>K-fold splits         0         1         2         3         4
 Repeats
-0              0.916667  0.916667  1.000000  0.791667  0.916667
+0              0.875000  0.916667  0.875000  0.875000  1.000000
 1              0.958333  0.916667  0.833333  0.875000  0.958333
-2              0.916667  0.875000  0.958333  0.875000  0.875000
-3              0.791667  0.958333  0.958333  0.916667  0.875000
-4              0.958333  0.875000  0.958333  0.958333  0.833333
+2              0.958333  0.958333  0.916667  0.916667  0.916667
+3              0.833333  0.916667  0.875000  0.958333  0.958333
+4              1.000000  0.875000  0.833333  0.916667  0.875000
 </pre></div>
 </div>
 <p>Plot heatmap of accuracy over all repeats and CV splits</p>
@@ -340,7 +339,7 @@ the heatmap with annotations.</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Confusion matrix&#39;)
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.067 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.993 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-basic-plot-cm-acc-multiclass-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/618f422c69e53bcf0286380e96ee26b5/plot_cm_acc_multiclass.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_cm_acc_multiclass.py</span></code></a></p>
@@ -360,10 +359,10 @@ the heatmap with annotations.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="plot_example_regression.html" class="btn btn-neutral float-right" title="Regression Analysis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="plot_groupcv_inspect_svm.html" class="btn btn-neutral float-right" title="Inspecting SVM models" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="plot_groupcv_inspect_svm.html" class="btn btn-neutral float-left" title="Inspecting SVM models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="plot_inspect_random_forest.html" class="btn btn-neutral float-left" title="Inspecting Random Forest models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

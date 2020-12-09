@@ -52,8 +52,9 @@ print(df_fmri.head())
 model_params = {'svm__kernel': 'linear'}
 X = ['frontal', 'parietal']
 y = 'event'
-scores = run_cross_validation(X=X, y=y, data=df_fmri, model='svm',
-                              model_params=model_params)
+scores = run_cross_validation(
+    X=X, y=y, data=df_fmri, model='svm', preprocess_X='zscore',
+    model_params=model_params)
 
 print(scores['test_score'].mean())
 
@@ -66,9 +67,9 @@ model_params = {
     'cv': 2}  # CV=2 too speed up the example
 X = ['frontal', 'parietal']
 y = 'event'
-scores, estimator = run_cross_validation(X=X, y=y, data=df_fmri, model='svm',
-                                         model_params=model_params,
-                                         return_estimator='final')
+scores, estimator = run_cross_validation(
+    X=X, y=y, data=df_fmri, model='svm', preprocess_X='zscore',
+    model_params=model_params, return_estimator='final')
 
 print(scores['test_score'].mean())
 
@@ -80,9 +81,9 @@ model_params = {
     'cv': 2}  # CV=2 too speed up the example
 X = ['frontal', 'parietal']
 y = 'event'
-scores, estimator = run_cross_validation(X=X, y=y, data=df_fmri, model='svm',
-                                         model_params=model_params,
-                                         return_estimator='final')
+scores, estimator = run_cross_validation(
+    X=X, y=y, data=df_fmri, model='svm', preprocess_X='zscore',
+    model_params=model_params, return_estimator='final')
 
 print(scores['test_score'].mean())
 ###############################################################################
@@ -99,9 +100,9 @@ model_params = {
     'cv': 2}  # CV=2 too speed up the example
 X = ['frontal', 'parietal']
 y = 'event'
-scores, estimator = run_cross_validation(X=X, y=y, data=df_fmri, model='svm',
-                                         model_params=model_params,
-                                         return_estimator='final')
+scores, estimator = run_cross_validation(
+    X=X, y=y, data=df_fmri, model='svm', preprocess_X='zscore',
+    model_params=model_params, return_estimator='final')
 
 print(scores['test_score'].mean())
 print(estimator.best_params_)
@@ -116,9 +117,9 @@ model_params = {
     'cv': 2}  # CV=2 too speed up the example
 X = ['frontal', 'parietal']
 y = 'event'
-scores, estimator = run_cross_validation(X=X, y=y, data=df_fmri, model='svm',
-                                         model_params=model_params,
-                                         return_estimator='final')
+scores, estimator = run_cross_validation(
+    X=X, y=y, data=df_fmri, model='svm', preprocess_X='zscore',
+    model_params=model_params, return_estimator='final')
 
 print(scores['test_score'].mean())
 print(estimator.best_params_)

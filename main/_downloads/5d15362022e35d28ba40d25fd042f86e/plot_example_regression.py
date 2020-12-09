@@ -63,10 +63,10 @@ train_diabetes, test_diabetes = train_test_split(data_diabetes, test_size=0.3)
 ###############################################################################
 # Train a ridge regression model on train dataset and use mean absolute error
 # for scoring
-scores, model = run_cross_validation(X=X, y=y, data=train_diabetes,
-                                     problem_type='regression', model='ridge',
-                                     return_estimator='final',
-                                     scoring='neg_mean_absolute_error')
+scores, model = run_cross_validation(
+    X=X, y=y, data=train_diabetes, preprocess_X='zscore',
+    problem_type='regression', model='ridge', return_estimator='final',
+    scoring='neg_mean_absolute_error')
 
 ###############################################################################
 # The scores dictionary has all the values for each CV split. We can convert

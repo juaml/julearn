@@ -60,13 +60,13 @@ Set the logging level to info to see extra information
 
  .. code-block:: none
 
-    2020-12-08 17:16:26,768 - julearn - INFO - ===== Lib Versions =====
-    2020-12-08 17:16:26,768 - julearn - INFO - numpy: 1.16.4
-    2020-12-08 17:16:26,768 - julearn - INFO - scipy: 1.5.4
-    2020-12-08 17:16:26,768 - julearn - INFO - sklearn: 0.23.2
-    2020-12-08 17:16:26,768 - julearn - INFO - pandas: 1.1.5
-    2020-12-08 17:16:26,768 - julearn - INFO - julearn: 0.1.0
-    2020-12-08 17:16:26,769 - julearn - INFO - ========================
+    2020-12-09 10:38:12,009 - julearn - INFO - ===== Lib Versions =====
+    2020-12-09 10:38:12,009 - julearn - INFO - numpy: 1.16.4
+    2020-12-09 10:38:12,009 - julearn - INFO - scipy: 1.5.4
+    2020-12-09 10:38:12,009 - julearn - INFO - sklearn: 0.23.2
+    2020-12-09 10:38:12,009 - julearn - INFO - pandas: 1.1.5
+    2020-12-09 10:38:12,009 - julearn - INFO - julearn: 0.1.0
+    2020-12-09 10:38:12,009 - julearn - INFO - ========================
 
 
 
@@ -107,7 +107,8 @@ We will try to predict the species.
 
     X = ['sepal_length', 'sepal_width', 'petal_length']
     y = 'species'
-    scores = run_cross_validation(X=X, y=y, data=df_iris, model='svm')
+    scores = run_cross_validation(
+        X=X, y=y, data=df_iris, model='svm', preprocess_X='zscore')
 
     print(scores['test_score'])
 
@@ -121,22 +122,22 @@ We will try to predict the species.
 
  .. code-block:: none
 
-    2020-12-08 17:16:27,262 - julearn - INFO - Using default CV
-    2020-12-08 17:16:27,262 - julearn - INFO - ==== Input Data ====
-    2020-12-08 17:16:27,262 - julearn - INFO - Using dataframe as input
-    2020-12-08 17:16:27,262 - julearn - INFO - Features: ['sepal_length', 'sepal_width', 'petal_length']
-    2020-12-08 17:16:27,262 - julearn - INFO - Target: species
-    2020-12-08 17:16:27,262 - julearn - INFO - Expanded X: ['sepal_length', 'sepal_width', 'petal_length']
-    2020-12-08 17:16:27,262 - julearn - INFO - Expanded Confounds: []
-    2020-12-08 17:16:27,264 - julearn - INFO - ====================
-    2020-12-08 17:16:27,264 - julearn - INFO - 
-    2020-12-08 17:16:27,264 - julearn - INFO - ====== Model ======
-    2020-12-08 17:16:27,264 - julearn - INFO - Obtaining model by name: svm
-    2020-12-08 17:16:27,264 - julearn - INFO - ===================
-    2020-12-08 17:16:27,264 - julearn - INFO - 
-    2020-12-08 17:16:27,264 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
-    [0.9  0.95 0.95 0.95 0.95 0.95 0.9  0.85 0.95 1.   0.9  0.9  0.9  0.95
-     0.8  1.   0.9  0.85 0.9  0.95 0.95 0.85 0.95 0.9  0.95]
+    2020-12-09 10:38:12,434 - julearn - INFO - Using default CV
+    2020-12-09 10:38:12,434 - julearn - INFO - ==== Input Data ====
+    2020-12-09 10:38:12,434 - julearn - INFO - Using dataframe as input
+    2020-12-09 10:38:12,434 - julearn - INFO - Features: ['sepal_length', 'sepal_width', 'petal_length']
+    2020-12-09 10:38:12,434 - julearn - INFO - Target: species
+    2020-12-09 10:38:12,435 - julearn - INFO - Expanded X: ['sepal_length', 'sepal_width', 'petal_length']
+    2020-12-09 10:38:12,435 - julearn - INFO - Expanded Confounds: []
+    2020-12-09 10:38:12,436 - julearn - INFO - ====================
+    2020-12-09 10:38:12,436 - julearn - INFO - 
+    2020-12-09 10:38:12,436 - julearn - INFO - ====== Model ======
+    2020-12-09 10:38:12,436 - julearn - INFO - Obtaining model by name: svm
+    2020-12-09 10:38:12,436 - julearn - INFO - ===================
+    2020-12-09 10:38:12,436 - julearn - INFO - 
+    2020-12-09 10:38:12,436 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+    [0.95 0.8  0.9  0.95 0.9  0.9  0.9  0.9  1.   0.9  0.85 0.85 0.95 0.95
+     0.9  0.9  0.85 0.95 1.   0.95 0.95 1.   0.95 0.95 0.85]
 
 
 
@@ -180,7 +181,7 @@ We will also set the random seed so we always split the data in the same way.
 .. code-block:: default
 
     scores = run_cross_validation(
-        X=X, y=y, data=df_unbalanced, model='svm', seed=42,
+        X=X, y=y, data=df_unbalanced, model='svm', seed=42, preprocess_X='zscore',
         scoring=['accuracy', 'balanced_accuracy'])
 
     print(scores['test_accuracy'].mean())
@@ -197,21 +198,21 @@ We will also set the random seed so we always split the data in the same way.
 
  .. code-block:: none
 
-    2020-12-08 17:16:27,815 - julearn - INFO - Setting random seed to 42
-    2020-12-08 17:16:27,815 - julearn - INFO - Using default CV
-    2020-12-08 17:16:27,815 - julearn - INFO - ==== Input Data ====
-    2020-12-08 17:16:27,815 - julearn - INFO - Using dataframe as input
-    2020-12-08 17:16:27,815 - julearn - INFO - Features: ['sepal_length', 'sepal_width', 'petal_length']
-    2020-12-08 17:16:27,815 - julearn - INFO - Target: species
-    2020-12-08 17:16:27,816 - julearn - INFO - Expanded X: ['sepal_length', 'sepal_width', 'petal_length']
-    2020-12-08 17:16:27,816 - julearn - INFO - Expanded Confounds: []
-    2020-12-08 17:16:27,816 - julearn - INFO - ====================
-    2020-12-08 17:16:27,816 - julearn - INFO - 
-    2020-12-08 17:16:27,817 - julearn - INFO - ====== Model ======
-    2020-12-08 17:16:27,817 - julearn - INFO - Obtaining model by name: svm
-    2020-12-08 17:16:27,817 - julearn - INFO - ===================
-    2020-12-08 17:16:27,817 - julearn - INFO - 
-    2020-12-08 17:16:27,817 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+    2020-12-09 10:38:12,944 - julearn - INFO - Setting random seed to 42
+    2020-12-09 10:38:12,944 - julearn - INFO - Using default CV
+    2020-12-09 10:38:12,944 - julearn - INFO - ==== Input Data ====
+    2020-12-09 10:38:12,944 - julearn - INFO - Using dataframe as input
+    2020-12-09 10:38:12,944 - julearn - INFO - Features: ['sepal_length', 'sepal_width', 'petal_length']
+    2020-12-09 10:38:12,944 - julearn - INFO - Target: species
+    2020-12-09 10:38:12,944 - julearn - INFO - Expanded X: ['sepal_length', 'sepal_width', 'petal_length']
+    2020-12-09 10:38:12,944 - julearn - INFO - Expanded Confounds: []
+    2020-12-09 10:38:12,945 - julearn - INFO - ====================
+    2020-12-09 10:38:12,945 - julearn - INFO - 
+    2020-12-09 10:38:12,945 - julearn - INFO - ====== Model ======
+    2020-12-09 10:38:12,945 - julearn - INFO - Obtaining model by name: svm
+    2020-12-09 10:38:12,945 - julearn - INFO - ===================
+    2020-12-09 10:38:12,945 - julearn - INFO - 
+    2020-12-09 10:38:12,946 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
     0.895
     0.8708886668886668
 
@@ -233,7 +234,7 @@ In this example, we are interested in detecting `versicolor`.
 .. code-block:: default
 
     precision_scores = run_cross_validation(
-        X=X, y=y, data=df_unbalanced, model='svm', seed=42,
+        X=X, y=y, data=df_unbalanced, model='svm', preprocess_X='zscore', seed=42,
         scoring='precision', pos_labels='versicolor')
     print(precision_scores['test_precision'].mean())
 
@@ -246,22 +247,22 @@ In this example, we are interested in detecting `versicolor`.
 
  .. code-block:: none
 
-    2020-12-08 17:16:28,582 - julearn - INFO - Setting random seed to 42
-    2020-12-08 17:16:28,583 - julearn - INFO - Using default CV
-    2020-12-08 17:16:28,583 - julearn - INFO - ==== Input Data ====
-    2020-12-08 17:16:28,583 - julearn - INFO - Using dataframe as input
-    2020-12-08 17:16:28,583 - julearn - INFO - Features: ['sepal_length', 'sepal_width', 'petal_length']
-    2020-12-08 17:16:28,583 - julearn - INFO - Target: species
-    2020-12-08 17:16:28,583 - julearn - INFO - Expanded X: ['sepal_length', 'sepal_width', 'petal_length']
-    2020-12-08 17:16:28,583 - julearn - INFO - Expanded Confounds: []
-    2020-12-08 17:16:28,584 - julearn - INFO - Setting the following as positive labels ['versicolor']
-    2020-12-08 17:16:28,584 - julearn - INFO - ====================
-    2020-12-08 17:16:28,584 - julearn - INFO - 
-    2020-12-08 17:16:28,584 - julearn - INFO - ====== Model ======
-    2020-12-08 17:16:28,584 - julearn - INFO - Obtaining model by name: svm
-    2020-12-08 17:16:28,584 - julearn - INFO - ===================
-    2020-12-08 17:16:28,584 - julearn - INFO - 
-    2020-12-08 17:16:28,584 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+    2020-12-09 10:38:13,641 - julearn - INFO - Setting random seed to 42
+    2020-12-09 10:38:13,641 - julearn - INFO - Using default CV
+    2020-12-09 10:38:13,641 - julearn - INFO - ==== Input Data ====
+    2020-12-09 10:38:13,641 - julearn - INFO - Using dataframe as input
+    2020-12-09 10:38:13,641 - julearn - INFO - Features: ['sepal_length', 'sepal_width', 'petal_length']
+    2020-12-09 10:38:13,641 - julearn - INFO - Target: species
+    2020-12-09 10:38:13,641 - julearn - INFO - Expanded X: ['sepal_length', 'sepal_width', 'petal_length']
+    2020-12-09 10:38:13,641 - julearn - INFO - Expanded Confounds: []
+    2020-12-09 10:38:13,642 - julearn - INFO - Setting the following as positive labels ['versicolor']
+    2020-12-09 10:38:13,643 - julearn - INFO - ====================
+    2020-12-09 10:38:13,643 - julearn - INFO - 
+    2020-12-09 10:38:13,643 - julearn - INFO - ====== Model ======
+    2020-12-09 10:38:13,643 - julearn - INFO - Obtaining model by name: svm
+    2020-12-09 10:38:13,643 - julearn - INFO - ===================
+    2020-12-09 10:38:13,643 - julearn - INFO - 
+    2020-12-09 10:38:13,643 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
     0.9223333333333333
 
 
@@ -270,7 +271,7 @@ In this example, we are interested in detecting `versicolor`.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  2.405 seconds)
+   **Total running time of the script:** ( 0 minutes  2.176 seconds)
 
 
 .. _sphx_glr_download_auto_examples_basic_run_simple_binary_classification.py:

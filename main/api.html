@@ -89,7 +89,8 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installing julearn</a></li>
 <li class="toctree-l1"><a class="reference internal" href="input.html">Input Data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="pipeline.html">Main Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipeline.html">Understanding the pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipeline.html#advanced-topics">Advanced Topics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="steps.html">Available Pipeline Steps</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hyperparameters.html">Hyperparameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/basic/index.html">Basic Examples</a></li>
@@ -176,7 +177,7 @@
 <span id="main-api-functions"></span><h2>Main API functions<a class="headerlink" href="#module-julearn.api" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
 <dt id="julearn.api.run_cross_validation">
-<code class="sig-prename descclassname">julearn.api.</code><code class="sig-name descname">run_cross_validation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">confounds</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">problem_type</span><span class="o">=</span><span class="default_value">'binary_classification'</span></em>, <em class="sig-param"><span class="n">preprocess_X</span><span class="o">=</span><span class="default_value">'zscore'</span></em>, <em class="sig-param"><span class="n">preprocess_y</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">preprocess_confounds</span><span class="o">=</span><span class="default_value">'zscore'</span></em>, <em class="sig-param"><span class="n">return_estimator</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">cv</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">groups</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scoring</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">pos_labels</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">model_params</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.api.run_cross_validation" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">julearn.api.</code><code class="sig-name descname">run_cross_validation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">confounds</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">problem_type</span><span class="o">=</span><span class="default_value">'binary_classification'</span></em>, <em class="sig-param"><span class="n">preprocess_X</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">preprocess_y</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">preprocess_confounds</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">return_estimator</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">cv</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">groups</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">scoring</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">pos_labels</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">model_params</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.api.run_cross_validation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run cross validation and score.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
@@ -211,21 +212,19 @@ ordinal at least.</p></li>
 </dd>
 <dt><strong>preprocess_X</strong><span class="classifier">str, scikit-learn compatible transformers or list | None</span></dt><dd><p>Transformer to apply to the features (X). If string, use one of the
 available transformers. If list, each element can be a string or
-scikit-learn compatible transformer. If None, no transformation
-is applied.</p>
-<p>Defaults to zscore (StandardScaler).</p>
-<p>See <a class="reference external" href="https://juaml.github.io/julearn/pipeline.html">https://juaml.github.io/julearn/pipeline.html</a> for details.</p>
+scikit-learn compatible transformer. If None (default), no
+transformation is applied.</p>
+<p>See documentation for details.</p>
 </dd>
-<dt><strong>preprocess_y</strong><span class="classifier">str or scikit-learn transformer | None</span></dt><dd><p>Transformer to apply to the target (y). If None, no transformation
-is applied.</p>
-<p>See <a class="reference external" href="https://juaml.github.io/julearn/pipeline.html">https://juaml.github.io/julearn/pipeline.html</a> for details.</p>
+<dt><strong>preprocess_y</strong><span class="classifier">str or scikit-learn transformer | None</span></dt><dd><p>Transformer to apply to the target (y). If None (default), no
+transformation is applied.</p>
+<p>See documentation for details.</p>
 </dd>
 <dt><strong>preprocess_confounds</strong><span class="classifier">str, scikit-learn transformers or list | None</span></dt><dd><p>Transformer to apply to the features (X). If string, use one of the
 available transformers. If list, each element can be a string or
-scikit-learn compatible transformer. If None, no transformation
-is applied.</p>
-<p>Defaults to zscore (StandardScaler).</p>
-<p>See <a class="reference external" href="https://juaml.github.io/julearn/pipeline.html">https://juaml.github.io/julearn/pipeline.html</a> for details.</p>
+scikit-learn compatible transformer. If None (default), no
+transformation is applied.</p>
+<p>See documentation for details.</p>
 </dd>
 <dt><strong>return_estimator</strong><span class="classifier">str | None</span></dt><dd><p>Return the fitted estimator(s).
 Options are:</p>
@@ -530,18 +529,18 @@ given the confounds from the actual features.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>model_confound</strong><span class="classifier">sklearn.base.BaseEstimator</span></dt><dd><p>Model used to predict all features independently
+<dt><strong>model_confound</strong><span class="classifier">obj</span></dt><dd><p>Sklearn compatible model used to predict all features independently
 using the confounds as features. The predictions of these models
 are then subtracted from each feature, defaults to
 LinearRegression().</p>
 </dd>
-<dt><strong>confounds_match</strong><span class="classifier">list[str] or str</span></dt><dd><p>A string representing a regular expression by which the confounds
+<dt><strong>confounds_match</strong><span class="classifier">list(str) | str</span></dt><dd><p>A string representing a regular expression by which the confounds
 can be detected from the column names.
 You can use the exact column names or another regex.
 The default follows the naming convention inside of julearn:
 ‘.*__:type:__*.’</p>
 </dd>
-<dt><strong>threshold</strong><span class="classifier">float or None</span></dt><dd><p>All residual values after confound removal which fall under the
+<dt><strong>threshold</strong><span class="classifier">float | None</span></dt><dd><p>All residual values after confound removal which fall under the
 threshold will be set to 0.None (default) means that no threshold
 will be applied.</p>
 </dd>
@@ -623,15 +622,15 @@ given the confounds from the actual target.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attributes</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>model_confound</strong><span class="classifier">object</span></dt><dd><p>Model used to predict the rategt using the confounds as
+<dt><strong>model_confound</strong><span class="classifier">object</span></dt><dd><p>Model used to predict the target using the confounds as
 features. The predictions of these models are then subtracted
 from the actual target, default is None. Meaning the use of
 a LinearRegression.</p>
 </dd>
-<dt><strong>confounds_match</strong><span class="classifier">list[str] or str</span></dt><dd><p>A string representing a regular expression by which the confounds
+<dt><strong>confounds_match</strong><span class="classifier">list(str) | str</span></dt><dd><p>A string representing a regular expression by which the confounds
 can be detected from the column names.</p>
 </dd>
-<dt><strong>threshold</strong><span class="classifier">float or None</span></dt><dd><p>All residual values after confound removal which fall under the
+<dt><strong>threshold</strong><span class="classifier">float | None</span></dt><dd><p>All residual values after confound removal which fall under the
 threshold will be set to 0. None means that no threshold will be
 applied.</p>
 </dd>
@@ -657,6 +656,132 @@ and returns a transformed version of X.</p>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>X_new</strong><span class="classifier">ndarray array of shape (n_samples, n_features_new)</span></dt><dd><p>Transformed array.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="julearn.pipeline.ExtendedDataFramePipeline">
+<em class="property">class </em><code class="sig-prename descclassname">julearn.pipeline.</code><code class="sig-name descname">ExtendedDataFramePipeline</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dataframe_pipeline</span></em>, <em class="sig-param"><span class="n">y_transformer</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">confound_dataframe_pipeline</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">confounds</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">categorical_features</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.pipeline.ExtendedDataFramePipeline" title="Permalink to this definition">¶</a></dt>
+<dd><p>A class creating a custom metamodel like a Pipeline. In practice this
+should be created using :ref:julearn.pipeline.create_extended_pipeline.
+There are multiple caveats of creating such a pipline without using
+that function. Compared to an usual scikit-learn pipeline, this have added
+functionalities:</p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="simple">
+<dt>Handling transformations of the target:</dt><dd><p>The target can be changed. Importantly this transformed target will
+be considered the ground truth to score against.
+Note: if you want to score this pipeline with an external function.
+You have to consider that the scorer needs to be an exteded_scorer.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Handling confounds:</dt><dd><p>Adds the confound as type to columns.
+This allows the DataFrameWrapTransformer inside of the
+dataframe_pipeline to handle confounds properly.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Handling categorical features:</dt><dd><p>Adds categorical type to columns so that DataFrameWrapTransformer
+inside of the dataframe_pipline can handle categorical features
+properly.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<p>column_types are added to the feature dataframe after each column using
+the specified separator.
+E.g. column <code class="docutils literal notranslate"><span class="pre">age</span></code> becomes <code class="docutils literal notranslate"><span class="pre">age__:type:__confound</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>dataframe_pipeline</strong><span class="classifier">obj</span></dt><dd><p>A pipeline working with dataframes and being able to handle confounds.
+Should be created using julearn.pipeline.create_dataframe_pipeline.</p>
+</dd>
+<dt><strong>y_transformer</strong><span class="classifier">obj or None</span></dt><dd><p>Any transformer which can take the X and y to transform the y.
+You can use julearn.transformers.target.TargetTransfromerWrapper to
+convert most sklearn transformers to a target_transformer.</p>
+</dd>
+<dt><strong>confound_dataframe_pipeline</strong><span class="classifier">obj or None</span></dt><dd><p>Similar to dataframe_pipeline.</p>
+</dd>
+<dt><strong>confounds</strong><span class="classifier">list(str) or None</span></dt><dd><p>List of column names which are confounds (defaults to None).</p>
+</dd>
+<dt><strong>categorical_features</strong><span class="classifier">list(str), optional</span></dt><dd><p>List of column names which are categorical features (defaults to None).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="julearn.pipeline.ExtendedDataFramePipeline.get_params">
+<code class="sig-name descname">get_params</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">deep</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.pipeline.ExtendedDataFramePipeline.get_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get parameters for this estimator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>deep</strong><span class="classifier">bool, default=True</span></dt><dd><p>If True, will return the parameters for this estimator and
+contained subobjects that are estimators.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>params</strong><span class="classifier">mapping of string to any</span></dt><dd><p>Parameter names mapped to their values.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="julearn.pipeline.ExtendedDataFramePipeline.preprocess">
+<code class="sig-name descname">preprocess</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">until</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">return_trans_column_type</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.pipeline.ExtendedDataFramePipeline.preprocess" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>until</strong><span class="classifier">str or None</span></dt><dd><p>the name of the transformer until which preprocess
+should transform, by default None</p>
+</dd>
+<dt><strong>return_trans_column_type</strong><span class="classifier">bool or None</span></dt><dd><p>whether to return transformed column names with the associated
+column type, by default False</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>tuple(pd.DataFrame, pd.Series)</dt><dd><p>Features and target after preprocessing.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="julearn.pipeline.ExtendedDataFramePipeline.set_params">
+<code class="sig-name descname">set_params</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">params</span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.pipeline.ExtendedDataFramePipeline.set_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the parameters of this estimator.</p>
+<p>The method works on simple estimators as well as on nested objects
+(such as pipelines). The latter have parameters of the form
+<code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it’s possible to update each
+component of a nested object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">object</span></dt><dd><p>Estimator instance.</p>
 </dd>
 </dl>
 </dd>
