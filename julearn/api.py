@@ -72,12 +72,12 @@ def run_cross_validation(
 
         Defaults to zscore (StandardScaler).
 
-        See https://juaml.github.io/julearn/pipeline.html for details.
+        See documentation for details.
     preprocess_y : str or scikit-learn transformer | None
         Transformer to apply to the target (y). If None, no transformation
         is applied.
 
-        See https://juaml.github.io/julearn/pipeline.html for details.
+        See documentation for details.
     preprocess_confounds : str, scikit-learn transformers or list | None
         Transformer to apply to the features (X). If string, use one of the
         available transformers. If list, each element can be a string or
@@ -86,7 +86,7 @@ def run_cross_validation(
 
         Defaults to zscore (StandardScaler).
 
-        See https://juaml.github.io/julearn/pipeline.html for details.
+        See documentation for details.
     return_estimator : str | None
         Return the fitted estimator(s).
         Options are:

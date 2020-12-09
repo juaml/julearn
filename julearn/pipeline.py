@@ -49,19 +49,17 @@ def create_dataframe_pipeline(steps, apply_to=None):
 
 
 class ExtendedDataFramePipeline(BaseEstimator):
-    """A class creating a custom metamodel like a Pipeline.
-    In practice this should be created
-    using julearn.pipeline.create_extended_pipeline.
+    """A class creating a custom metamodel like a Pipeline. In practice this
+    should be created using :ref:julearn.pipeline.create_extended_pipeline.
     There are multiple caveats of creating such a pipline without using
-    create_extended_pipeline.
-    Compared to an usual sklearn.pipeline these are the added functionalities:
+    that function. Compared to an usual scikit-learn pipeline, this have added
+    functionalities:
 
         * Handling transformations of the target:
-            The target can be changed. Importantly this transformed
-            target will be considered the ground truth to score against.
+            The target can be changed. Importantly this transformed target will
+            be considered the ground truth to score against.
             Note: if you want to score this pipeline with an external function.
-            You have to consider that the scorer needs to be
-            an exteded_scorer.
+            You have to consider that the scorer needs to be an exteded_scorer.
 
         * Handling confounds:
             Adds the confound as type to columns.
@@ -75,7 +73,7 @@ class ExtendedDataFramePipeline(BaseEstimator):
 
     column_types are added to the feature dataframe after each column using
     the specified separator.
-    E.g. column 'age' becomes 'age__:type:__confound'.
+    E.g. column ``age`` becomes ``age__:type:__confound``.
 
     Parameters
     ----------
@@ -91,9 +89,9 @@ class ExtendedDataFramePipeline(BaseEstimator):
     confound_dataframe_pipeline : obj or None
         Similar to dataframe_pipeline.
     confounds : list(str) or None
-        a list of column names which are confounds ,by default None
+        List of column names which are confounds (defaults to None).
     categorical_features : list(str), optional
-        a list of column names which are categorical features,by default None
+        List of column names which are categorical features (defaults to None).
 
     """
 
