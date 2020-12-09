@@ -27,9 +27,9 @@ When using :func:`.run_cross_validation` you have to answer at least
     argument from :func:`.run_cross_validation` 
   * What problem type do you want to answer?
     In machine learning their are different problems you want to handle.
-    Julearn supports `binary_classification`, `multiclass_classification`
-    and `regression` problems. You shout set `problem_type` to one of these
-    3 problem typed. By default, julearn uses the `binary_classification`
+    Julearn supports ``binary_classification``, ``multiclass_classification``
+    and ``regression`` problems. You shout set ``problem_type`` to one of these
+    3 problem typed. By default, julearn uses the ``binary_classification``
     type.
 
 What model do you want to use and what problem type do you want to use
@@ -53,25 +53,25 @@ confounds, target and features respectively (in this order).
 To do so you can set the following arguments in the
 :func:`.run_cross_validation` :
 
-  * preprocess_X: specifies how to transform the features.
+  * ``preprocess_X``: specifies how to transform the features.
     Here, you can enter the names or a list of the names of available
     transformers (:doc:`steps <steps>` ).
     These are then applied in order to the features.
     By default most transformers are applied only to the continuous features.
     For more information on this and how to modify this behavior see below.
 
-    E.g. ['zscore', 'pca'] would mean that the (continuous) features are first
-    z-standardized and then reduced using a principle component analysis.
-    By default continuous features will be z-standardized using the
-    zscore step and confound removed in case a confound was specified.
+    E.g. ``['zscore', 'pca']`` would mean that the (continuous) features are
+    first z-standardized and then reduced using a principle component analysis.
+    By default features will will not be preprocessed and confound removed in 
+    case a confound was specified.
 
-  * preprocess_y: specifies how to transform the target.
+  * ``preprocess_y``: specifies how to transform the target.
     Currently, this is limited to one available transformer.
     By default no preprocessing is applied.
 
-  * preprocess_confounds: specifies how to transform the confounds.
-    Here, you use the same lists of available transformers as in preprocess_X
-    By default confounds will be z-standardized using the zscore step.
+  * ``preprocess_confounds``: specifies how to transform the confounds.
+    Here, you use the same lists of available transformers as in 
+    ``preprocess_X``. By default confounds will not be preprocessed.
 
 Example
 ^^^^^^^
@@ -81,9 +81,8 @@ features. All of these operations are included in the :doc:`steps <steps>`
 and can therefore be referred to by name.
 
 In other words we need to set:
-  * `preprocess_confounds = []` because we want to apply no transformation
-  * `preprocess_target = 'zscore'`
-  * `preprocess_X = ['pca', 'remove_confound']`
+  * ``preprocess_target = 'zscore'``
+  * ``preprocess_X = ['pca', 'remove_confound']``
 
 Additionally, we know that we are facing a multiclass_classification problem
 and want to use a svm model.
@@ -116,7 +115,7 @@ like this:
   Instead of using the name of the available transformers you can also use
   scikit-learn compatible transformers.
   But it is recommended to register your own transformers first.
-  For more information see #TODO
+  For more information see (#TODO)
 
 
 
@@ -125,8 +124,8 @@ More information
 
 As mentioned above julearn allows the user to specify to which variable/columns
 or variable/column types each transformer will be applied. To do so you
-can adjust the `apply_to` hyperparameter which is added to all transformers
-used in `preprocess_X`. You can find such an example at #TODO
+can adjust the ``apply_to`` hyperparameter which is added to all transformers
+used in ``preprocess_X``. You can find such an example at #TODO
 and find more information on hyperparameter tuning in
 :doc:`hyperparameters <hyperparameters>` .
 
@@ -147,10 +146,10 @@ For all of them you have to set the `return_estimator`.
 These are the possible options:
 
   * None: Does not return any estimator
-  * 'final': Return the estimator fitted on all the data.
-  * 'cv': Return the all the estimator from each CV split, fitted on the
-          training data.
-  * 'all': Return all the estimators (final and cv).
+  * ``'final'``: Return the estimator fitted on all the data.
+  * ``'cv'``: Return the all the estimator from each CV split, fitted on the
+    training data.
+  * ``'all'``: Return all the estimators (final and cv).
 
 These returned estimators are always :class:`.ExtendedDataFramePipeline` 
 objects.Therefore, the next section will discuss how you can use
@@ -166,10 +165,10 @@ Where ExtendedDataFramePipeline behave as usual
 
 The following methods work as in sklearn:
 
-  * `.fit()`
-  * `.predict()`
-  * `.score()`
-  * `.predict_proba()`
+  * ``.fit()``
+  * ``.predict()``
+  * ``.score()``
+  * ``.predict_proba()``
 
 Caveats ExtendedDataFramePipeline
 ---------------------------------
@@ -177,12 +176,12 @@ Caveats ExtendedDataFramePipeline
 In contrast to scikit-learn pipelines :class:`.ExtendedDataFramePipeline`
 can change the ground truth (transform the target).
 This means that any any function which uses sklearn scorer functions instead of
-calling `.score()` on the :class:`.ExtendedDataFramePipeline` can give you
+calling ``.score()`` on the :class:`.ExtendedDataFramePipeline` can give you
 the wrong output without **any warning**.
 For example `cross_validate` function of sklearn when using another scorer.
 
-If you want to use such functions, you can follow this example #TODO which
-shows how to use julearns `extended_scorer` instead
+If you want to use such functions, you can follow this example (#TODO) which
+shows how to use julearns ``extended_scorer`` instead
 
 
 Additional functionality
@@ -190,8 +189,8 @@ Additional functionality
 Furthermore, :class:`.ExtendedDataFramePipeline`  have the following
 added methods:
 
-  * `preprocess`: a method to apply preprocessing steps of the pipeline to
-    some data. Furthermore, the `until` argument can be used to
+  * ``preprocess``: a method to apply preprocessing steps of the pipeline to
+    some data. Furthermore, the ``until`` argument can be used to
     only preprocess up to a specific transformer.
 
 
@@ -222,14 +221,14 @@ How it works
 ^^^^^^^^^^^^
 Every `pandas.DataFrame`_ column has a column name. 
 Inside of Julearn we add another string containing the type of the column 
-separated by our delimiter: '\_\_\:type\:\_\_' to the original column names. 
+separated by our delimiter: ``'__:type:__'`` to the original column names. 
 For example: 
 
   * We have the original columns :
 
-    - 'Intelligence'
-    - 'Age' 
-    - 'LikesEvoks'
+    - ``'Intelligence'``
+    - ``'Age'``
+    - ``'LikesEvoks'``
 
   * We know:
 
@@ -240,6 +239,6 @@ For example:
   * Inside of Julearn's Column Type System we can provide this information
     by changing the column names to:
       
-      - 'Intelligence\_\_:type:\_\_continuous'
-      - 'Age\_\_:type:\_\_confound'
-      - 'LikesEvoks\_\_:type:\_\_categorical'
+      - ``'Intelligence__:type:__continuous'``
+      - ``'Age__:type:__confound'``
+      - ``'LikesEvoks__:type:__categorical'``

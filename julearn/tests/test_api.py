@@ -95,7 +95,7 @@ def test_set_hyperparam():
         model_params = {'cv': 5}
         _, _ = run_cross_validation(
             X=X, y=y, data=df_iris, model='svm',
-            model_params=model_params,
+            model_params=model_params, preprocess_X='zscore',
             seed=42, scoring='accuracy', pos_labels='setosa',
             return_estimator='final')
     with pytest.warns(RuntimeWarning,
@@ -103,7 +103,7 @@ def test_set_hyperparam():
         model_params = {'search': 'grid'}
         _, _ = run_cross_validation(
             X=X, y=y, data=df_iris, model='svm',
-            model_params=model_params,
+            model_params=model_params, preprocess_X='zscore',
             seed=42, scoring='accuracy', pos_labels='setosa',
             return_estimator='final')
 
@@ -119,7 +119,7 @@ def test_set_hyperparam():
     model_params = {'svm__probability': True}
     actual, actual_estimator = run_cross_validation(
         X=X, y=y, data=df_iris, model='svm',
-        model_params=model_params,
+        model_params=model_params, preprocess_X='zscore',
         seed=42, scoring=scoring, pos_labels='setosa',
         return_estimator='final')
 
@@ -170,8 +170,9 @@ def test_tune_hyperparam():
 
     model_params = {'svm__C': [0.01, 0.001], 'cv': cv_inner}
     actual, actual_estimator = run_cross_validation(
-        X=X, y=y, data=df_iris, model='svm', model_params=model_params,
-        cv=cv_outer, scoring=scoring, return_estimator='final')
+        X=X, y=y, data=df_iris, model='svm',  preprocess_X='zscore',
+        model_params=model_params, cv=cv_outer, scoring=scoring,
+        return_estimator='final')
 
     # Now do the same with scikit-learn
     np.random.seed(42)
@@ -201,8 +202,9 @@ def test_tune_hyperparam():
     model_params = {'svm__C': [0.01, 0.001], 'cv': cv_inner,
                     'search': 'random', 'search_params': {'n_iter': 2}}
     actual, actual_estimator = run_cross_validation(
-        X=X, y=y, data=df_iris, model='svm', model_params=model_params,
-        cv=cv_outer, scoring=scoring, return_estimator='final')
+        X=X, y=y, data=df_iris, model='svm', preprocess_X='zscore',
+        model_params=model_params, cv=cv_outer, scoring=scoring,
+        return_estimator='final')
 
     # Now do the same with scikit-learn
     np.random.seed(42)
@@ -237,9 +239,9 @@ def test_tune_hyperparam():
                     'cv': cv_inner}
 
     actual, actual_estimator = run_cross_validation(
-        X=X, y=y, data=df_iris, model='svm', model_params=model_params,
-        seed=42, scoring=scoring, return_estimator='final',
-        pos_labels=['setosa'], cv=cv_outer)
+        X=X, y=y, data=df_iris, model='svm', preprocess_X='zscore',
+        model_params=model_params, seed=42, scoring=scoring,
+        return_estimator='final', pos_labels=['setosa'], cv=cv_outer)
 
     np.random.seed(42)
     cv_outer = RepeatedKFold(n_splits=3, n_repeats=1)
@@ -428,24 +430,28 @@ def test_confound_removal_no_explicit_removal():
     conf = ['petal_width']
     y = 'species'
     scores_not_explicit = run_cross_validation(
-        X=X, y=y, model='svm',
-        confounds=conf, data=df_iris, seed=42)
+        X=X, y=y, model='svm', preprocess_X='zscore', confounds=conf,
+        preprocess_confounds='zscore', data=df_iris, seed=42)
 
     scores_explicit = run_cross_validation(
         X=X, y=y, confounds=conf, model='svm', data=df_iris,
-        preprocess_X=['remove_confound', 'zscore'], seed=42)
+        preprocess_X=['remove_confound', 'zscore'], seed=42,
+        preprocess_confounds='zscore')
 
     scores_explicit_z = run_cross_validation(
         X=X, y=y, confounds=conf, model='svm', data=df_iris,
-        preprocess_X=['zscore'], seed=42)
+        preprocess_X=['zscore'], seed=42,
+        preprocess_confounds='zscore')
 
     scores_not_explicit_no_preprocess = run_cross_validation(
         X=X, y=y, confounds=conf, model='svm', data=df_iris,
-        preprocess_X=[], seed=42)
+        preprocess_X=[], seed=42,
+        preprocess_confounds='zscore')
 
     scores_explicit_no_preprocess = run_cross_validation(
         X=X, y=y, confounds=conf, model='svm', data=df_iris,
-        preprocess_X=['remove_confound'], seed=42)
+        preprocess_X=['remove_confound'], seed=42,
+        preprocess_confounds='zscore')
 
     assert_array_equal(scores_explicit['test_score'],
                        scores_not_explicit['test_score'])

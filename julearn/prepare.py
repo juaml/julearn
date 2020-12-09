@@ -516,15 +516,15 @@ def _prepare_hyperparams(hyperparams, pipeline):
     return to_tune
 
 
-def prepare_preprocessing(preprocess_X, preprocess_y, preprocess_confounds,
+def prepare_preprocessing(preprocess_X, preprocess_y, preprocess_conf,
                           confounds):
     if preprocess_X is not None and not isinstance(preprocess_X, list):
         preprocess_X = [preprocess_X]
-    if not isinstance(preprocess_confounds, list):
-        preprocess_confounds = [preprocess_confounds]
+
     preprocess_X = _prepare_preprocess_X(preprocess_X, confounds)
     preprocess_y = _prepare_preprocess_y(preprocess_y)
-    preprocess_conf = _prepare_preprocess_confounds(preprocess_confounds)
+    if preprocess_conf is not None:
+        preprocess_conf = _prepare_preprocess_confounds(preprocess_conf)
     return preprocess_X, preprocess_y, preprocess_conf
 
 
@@ -552,14 +552,17 @@ def _prepare_preprocess_confounds(preprocess_conf):
     uses user input to create a list of tuples for a normal pipeline
     this can then be used for transforming the confounds/z
     '''
-    if not isinstance(preprocess_conf, list):
-        preprocess_conf = [preprocess_conf]
+    if preprocess_conf is not None:
+        if not isinstance(preprocess_conf, list):
+            preprocess_conf = [preprocess_conf]
+        elif preprocess_conf == []:
+            preprocess_conf = None
 
-    preprocess_conf = [
-        _create_preprocess_tuple(transformer)
-        for transformer in preprocess_conf
-
-    ]
+    if preprocess_conf is not None:
+        preprocess_conf = [
+            _create_preprocess_tuple(transformer)
+            for transformer in preprocess_conf
+        ]
 
     return preprocess_conf
 

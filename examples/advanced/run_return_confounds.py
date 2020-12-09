@@ -121,9 +121,9 @@ scores, model = run_cross_validation(
     X=feature_names, y='target', data=data,
     confounds='sex', model='linreg', problem_type='regression',
     preprocess_X=['remove_confound',
-                  ChangeColumnTypes(
-                      '.*confound', 'continuous'),
+                  ChangeColumnTypes('.*confound', 'continuous'),
                   'pca'],
+    preprocess_confounds='zscore',
     model_params=dict(remove_confound__keep_confounds=True),
     return_estimator='final'
 )

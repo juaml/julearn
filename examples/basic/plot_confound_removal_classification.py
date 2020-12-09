@@ -64,21 +64,19 @@ cv = StratifiedBootstrap(n_splits=n_bootstrap, test_size=.3, random_state=42)
 ###############################################################################
 # First, we will train a model without performing confound removal on features
 # Note: confounds=None by default
-scores_ncr = run_cross_validation(X=X, y=y, data=df_iris, model='rf', cv=cv,
-                                  scoring=['accuracy', 'roc_auc'],
-                                  return_estimator='cv',
-                                  seed=200)
+scores_ncr = run_cross_validation(
+    X=X, y=y, data=df_iris, model='rf', cv=cv, preprocess_X='zscore',
+    scoring=['accuracy', 'roc_auc'], return_estimator='cv', seed=200)
 
 
 ###############################################################################
 # Next, we train a model after performing confound removal on the features
 # Note: we initialize the CV again to use the same folds as before
 cv = StratifiedBootstrap(n_splits=n_bootstrap, test_size=.3, random_state=42)
-scores_cr = run_cross_validation(X=X, y=y, confounds=confound, data=df_iris,
-                                 model='rf', preprocess_X='remove_confound',
-                                 cv=cv, scoring=['accuracy', 'roc_auc'],
-                                 return_estimator='cv',
-                                 seed=200)
+scores_cr = run_cross_validation(
+    X=X, y=y, confounds=confound, data=df_iris, model='rf',
+    preprocess_X='remove_confound', preprocess_confounds='zscore', cv=cv,
+    scoring=['accuracy', 'roc_auc'], return_estimator='cv', seed=200)
 
 ###############################################################################
 # Now we can compare the accuracies. We can combine the two outputs as
