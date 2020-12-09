@@ -45,16 +45,14 @@ scores, model_iris = run_cross_validation(
     return_estimator='final')
 
 ###############################################################################
-# The scores dictionary has all the values for each CV split. We can convert
-# this dictionary to a pandas dataframe for easier manipulation
+# The scores dataframe has all the values for each CV split.
 
-df_scores = pd.DataFrame(scores)
-print(df_scores.head())
+print(scores.head())
 
 ###############################################################################
 # Now we can get the accuracy per fold and repetition:
 
-df_accuracy = df_scores.set_index(
+df_accuracy = scores.set_index(
     ['repeat', 'fold'])['test_accuracy'].unstack()
 df_accuracy.index.name = 'Repeats'
 df_accuracy.columns.name = 'K-fold splits'
