@@ -1,0 +1,740 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Available Pipeline Steps &mdash; julearn  documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="_static/gallery-dataframe.css" type="text/css" />
+
+  
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Hyperparameters" href="hyperparameters.html" />
+    <link rel="prev" title="Understanding the pipeline" href="pipeline.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> julearn
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installing julearn</a></li>
+<li class="toctree-l1"><a class="reference internal" href="input.html">Input Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipeline.html">Understanding the pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipeline.html#advanced-topics">Advanced Topics</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Available Pipeline Steps</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#features-preprocessing">Features Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#scalers">Scalers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#feature-selection">Feature Selection</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#confound-removal">Confound Removal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#decomposition">Decomposition</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#target-preprocessing">Target Preprocessing</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#target-scalers">Target Scalers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#target-confound-removal">Target Confound Removal</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#models">Models</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#support-vector-machines">Support Vector Machines</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ensemble">Ensemble</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gaussian-processes">Gaussian Processes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#linear-models">Linear Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#naive-bayes">Naive Bayes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dummy">Dummy</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hyperparameters.html">Hyperparameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auto_examples/basic/index.html">Basic Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auto_examples/advanced/index.html">Advanced Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing to julearn</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maintaining.html">Maintaining julearn</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">julearn</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Available Pipeline Steps</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/steps.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="available-pipeline-steps">
+<h1>Available Pipeline Steps<a class="headerlink" href="#available-pipeline-steps" title="Permalink to this headline">¶</a></h1>
+<p>The following is a list of all the available steps that can be used to create
+a pipeline by name.</p>
+<div class="section" id="features-preprocessing">
+<h2>Features Preprocessing<a class="headerlink" href="#features-preprocessing" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="scalers">
+<h3>Scalers<a class="headerlink" href="#scalers" title="Permalink to this headline">¶</a></h3>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 53%" />
+<col style="width: 27%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name (str)</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Class</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">zscore</span></code></p></td>
+<td><p>Removing mean and scale to unit variance</p></td>
+<td><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html">StandardScaler</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">scaler_robust</span></code></p></td>
+<td><p>Removing median and scale to IQR</p></td>
+<td><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.RobustScaler.html">RobustScaler</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">scaler_minmax</span></code></p></td>
+<td><p>Scale to a given range</p></td>
+<td><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.MinMaxScaler.html">MinMaxScaler</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">scaler_maxabs</span></code></p></td>
+<td><p>Scale by max absolute value</p></td>
+<td><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.MaxAbsScaler.html">MaxAbsScaler</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">scaler_normalizer</span></code></p></td>
+<td><p>Normalize to unit norm</p></td>
+<td><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.Normalizer.html">Normalizer</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">scaler_quantile</span></code></p></td>
+<td><p>Transform to uniform or normal distribution (robust)</p></td>
+<td><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.QuantileTransformer.html">QuantileTransformer</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">scaler_power</span></code></p></td>
+<td><p><em>Gaussianise</em> data</p></td>
+<td><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.PowerTransformer.html">PowerTransformer</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="feature-selection">
+<h3>Feature Selection<a class="headerlink" href="#feature-selection" title="Permalink to this headline">¶</a></h3>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 53%" />
+<col style="width: 27%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name (str)</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Class</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">select_univariate</span></code></p></td>
+<td><p>Removing mean and scale to unit variance</p></td>
+<td><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.GenericUnivariateSelect.html">GenericUnivariateSelect</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">select_percentile</span></code></p></td>
+<td><p>Rank and select percentile</p></td>
+<td><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectPercentile.html">SelectPercentile</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">select_k</span></code></p></td>
+<td><p>Rank and select K</p></td>
+<td><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectKBest.html">SelectKBest</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">select_fdr</span></code></p></td>
+<td><p>Select based on estimated FDR</p></td>
+<td><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectFdr.html">SelectFdr</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">select_fpr</span></code></p></td>
+<td><p>Select based on FPR threshold</p></td>
+<td><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectFpr.html">SelectFpr</a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">select_fwe</span></code></p></td>
+<td><p>Select based on FWE threshold</p></td>
+<td><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectFwe.html">SelectFwe</a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">select_variance</span></code></p></td>
+<td><p>Remove low variance features</p></td>
+<td><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.VarianceThreshold.html">VarianceThreshold</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="confound-removal">
+<h3>Confound Removal<a class="headerlink" href="#confound-removal" title="Permalink to this headline">¶</a></h3>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 53%" />
+<col style="width: 27%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name (str)</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Class</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">remove_confound</span></code></p></td>
+<td><p>removing confounds from features,
+by subtracting the prediction of each feature given all confounds.
+By default this is equal to “independently regressing out
+the confounds from the features”</p></td>
+<td><p><a class="reference internal" href="api.html#julearn.transformers.confounds.DataFrameConfoundRemover" title="julearn.transformers.confounds.DataFrameConfoundRemover"><code class="xref py py-class docutils literal notranslate"><span class="pre">confounds.DataFrameConfoundRemover</span></code></a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="decomposition">
+<h3>Decomposition<a class="headerlink" href="#decomposition" title="Permalink to this headline">¶</a></h3>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 53%" />
+<col style="width: 27%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name (str)</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Class</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">pca</span></code></p></td>
+<td><p>Principal Component Analysis</p></td>
+<td><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html">PCA</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="target-preprocessing">
+<h2>Target Preprocessing<a class="headerlink" href="#target-preprocessing" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="target-scalers">
+<h3>Target Scalers<a class="headerlink" href="#target-scalers" title="Permalink to this headline">¶</a></h3>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 53%" />
+<col style="width: 27%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name (str)</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Class</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">zscore</span></code></p></td>
+<td><p>Removing mean and scale to unit variance</p></td>
+<td><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html">StandardScaler</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="target-confound-removal">
+<h3>Target Confound Removal<a class="headerlink" href="#target-confound-removal" title="Permalink to this headline">¶</a></h3>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 53%" />
+<col style="width: 27%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name (str)</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Class</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">remove_confound</span></code></p></td>
+<td><p>removing confounds from target,
+by subtracting the prediction of the target given all confounds.
+By default this is equal to “regressing out
+the confounds from the target”</p></td>
+<td><p><a class="reference internal" href="api.html#julearn.transformers.confounds.TargetConfoundRemover" title="julearn.transformers.confounds.TargetConfoundRemover"><code class="xref py py-class docutils literal notranslate"><span class="pre">TargetConfoundRemover</span></code></a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="models">
+<h2>Models<a class="headerlink" href="#models" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="support-vector-machines">
+<h3>Support Vector Machines<a class="headerlink" href="#support-vector-machines" title="Permalink to this headline">¶</a></h3>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 38%" />
+<col style="width: 19%" />
+<col style="width: 10%" />
+<col style="width: 10%" />
+<col style="width: 10%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name (str)</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Class</p></th>
+<th class="head"><p>Binary</p></th>
+<th class="head"><p>Multiclass</p></th>
+<th class="head"><p>Regression</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">svm</span></code></p></td>
+<td><p>Support Vector Machine</p></td>
+<td><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html">SVC</a> and <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVR.html">SVR</a></p></td>
+<td><p>Y</p></td>
+<td><p>Y</p></td>
+<td><p>Y</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="ensemble">
+<h3>Ensemble<a class="headerlink" href="#ensemble" title="Permalink to this headline">¶</a></h3>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 37%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name (str)</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Class</p></th>
+<th class="head"><p>Binary</p></th>
+<th class="head"><p>Multiclass</p></th>
+<th class="head"><p>Regression</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">rf</span></code></p></td>
+<td><p>Random Forest</p></td>
+<td><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html">RandomForestClassifier</a> and <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html">RandomForestRegressor</a></p></td>
+<td><p>Y</p></td>
+<td><p>Y</p></td>
+<td><p>Y</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">et</span></code></p></td>
+<td><p>Extra-Trees</p></td>
+<td><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.ExtraTreesClassifier.html">ExtraTreesClassifier</a> and <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.ExtraTreesRegressor.html">ExtraTreesRegressor</a></p></td>
+<td><p>Y</p></td>
+<td><p>Y</p></td>
+<td><p>Y</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">adaboost</span></code></p></td>
+<td><p>AdaBoost</p></td>
+<td><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.AdaBoostClassifier.html">AdaBoostClassifier</a> and <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.AdaBoostRegressor.html">AdaBoostRegressor</a></p></td>
+<td><p>Y</p></td>
+<td><p>Y</p></td>
+<td><p>Y</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">bagging</span></code></p></td>
+<td><p>Bagging</p></td>
+<td><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.BaggingClassifier.html">BaggingClassifier</a> and <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.BaggingRegressor.html">BaggingRegressor</a></p></td>
+<td><p>Y</p></td>
+<td><p>Y</p></td>
+<td><p>Y</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gradientboost</span></code></p></td>
+<td><p>Gradient Boosting</p></td>
+<td><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.GradientBoostingClassifier.html">GradientBoostingClassifier</a> and <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.GradientBoostingRegressor.html">GradientBoostingRegressor</a></p></td>
+<td><p>Y</p></td>
+<td><p>Y</p></td>
+<td><p>Y</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="gaussian-processes">
+<h3>Gaussian Processes<a class="headerlink" href="#gaussian-processes" title="Permalink to this headline">¶</a></h3>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 16%" />
+<col style="width: 37%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 11%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name (str)</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Class</p></th>
+<th class="head"><p>Binary</p></th>
+<th class="head"><p>Multiclass</p></th>
+<th class="head"><p>Regression</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">gauss</span></code></p></td>
+<td><p>Gaussian Process</p></td>
+<td><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.gaussian_process.GaussianProcessClassifier.html">GaussianProcessClassifier</a> and <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.gaussian_process.GaussianProcessRegressor.html">GaussianProcessRegressor</a></p></td>
+<td><p>Y</p></td>
+<td><p>Y</p></td>
+<td><p>Y</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="linear-models">
+<h3>Linear Models<a class="headerlink" href="#linear-models" title="Permalink to this headline">¶</a></h3>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 28%" />
+<col style="width: 39%" />
+<col style="width: 6%" />
+<col style="width: 6%" />
+<col style="width: 6%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name (str)</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Class</p></th>
+<th class="head"><p>Binary</p></th>
+<th class="head"><p>Multiclass</p></th>
+<th class="head"><p>Regression</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">logit</span></code></p></td>
+<td><p>Logistic Regression (aka logit, MaxEnt).</p></td>
+<td><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html">LogisticRegression</a></p></td>
+<td><p>Y</p></td>
+<td><p>Y</p></td>
+<td><p>N</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">logitcv</span></code></p></td>
+<td><p>Logistic Regression CV (aka logit, MaxEnt).</p></td>
+<td><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegressionCV.html">LogisticRegressionCV</a></p></td>
+<td><p>Y</p></td>
+<td><p>Y</p></td>
+<td><p>N</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">linreg</span></code></p></td>
+<td><p>Least Squares regression.</p></td>
+<td><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html">LinearRegression</a></p></td>
+<td><p>N</p></td>
+<td><p>N</p></td>
+<td><p>Y</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ridge</span></code></p></td>
+<td><p>Linear least squares with l2 regularization.</p></td>
+<td><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.RidgeClassifier.html">RidgeClassifier</a> and <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.Ridge.html">Ridge</a></p></td>
+<td><p>Y</p></td>
+<td><p>Y</p></td>
+<td><p>Y</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ridgecv</span></code></p></td>
+<td><p>Ridge regression with built-in cross-validation.</p></td>
+<td><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.RidgeClassifierCV.html">RidgeClassifierCV</a> and <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.RidgeCV.html">RidgeCV</a></p></td>
+<td><p>Y</p></td>
+<td><p>Y</p></td>
+<td><p>Y</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">sgd</span></code></p></td>
+<td><p>Linear model fitted by minimizing a regularized empirical loss with SGD</p></td>
+<td><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.SGDClassifier.html">SGDClassifier</a> and <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.SGDRegressor.html">SGDRegressor</a></p></td>
+<td><p>Y</p></td>
+<td><p>Y</p></td>
+<td><p>Y</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="naive-bayes">
+<h3>Naive Bayes<a class="headerlink" href="#naive-bayes" title="Permalink to this headline">¶</a></h3>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 28%" />
+<col style="width: 39%" />
+<col style="width: 6%" />
+<col style="width: 6%" />
+<col style="width: 6%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name (str)</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Class</p></th>
+<th class="head"><p>Binary</p></th>
+<th class="head"><p>Multiclass</p></th>
+<th class="head"><p>Regression</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">nb_bernoulli</span></code></p></td>
+<td><p>Multivariate Bernoulli models.</p></td>
+<td><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.BernoulliNB.html">BernoulliNB</a></p></td>
+<td><p>Y</p></td>
+<td><p>Y</p></td>
+<td><p>N</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">nb_categorical</span></code></p></td>
+<td><p>Categorical features.</p></td>
+<td><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.CategoricalNB.html">CategoricalNB</a></p></td>
+<td><p>Y</p></td>
+<td><p>Y</p></td>
+<td><p>N</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">nb_complement</span></code></p></td>
+<td><p>Complement Naive Bayes</p></td>
+<td><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.ComplementNB.html">ComplementNB</a></p></td>
+<td><p>Y</p></td>
+<td><p>Y</p></td>
+<td><p>N</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">nb_gaussian</span></code></p></td>
+<td><p>Gaussian Naive Bayes</p></td>
+<td><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.GaussianNB.html">GaussianNB</a></p></td>
+<td><p>Y</p></td>
+<td><p>Y</p></td>
+<td><p>N</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">nb_multinomial</span></code></p></td>
+<td><p>Multinomial models</p></td>
+<td><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.naive_bayes.MultinomialNB.html">MultinomialNB</a></p></td>
+<td><p>Y</p></td>
+<td><p>Y</p></td>
+<td><p>N</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="dummy">
+<h3>Dummy<a class="headerlink" href="#dummy" title="Permalink to this headline">¶</a></h3>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 28%" />
+<col style="width: 39%" />
+<col style="width: 6%" />
+<col style="width: 6%" />
+<col style="width: 6%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Name (str)</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Class</p></th>
+<th class="head"><p>Binary</p></th>
+<th class="head"><p>Multiclass</p></th>
+<th class="head"><p>Regression</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">dummy</span></code></p></td>
+<td><p>Use simple rules (without features).</p></td>
+<td><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.dummy.DummyClassifier.html">DummyClassifier</a> and <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.dummy.DummyRegressor.html">DummyRegressor</a></p></td>
+<td><p>Y</p></td>
+<td><p>Y</p></td>
+<td><p>Y</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="hyperparameters.html" class="btn btn-neutral float-right" title="Hyperparameters" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="pipeline.html" class="btn btn-neutral float-left" title="Understanding the pipeline" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Authors of julearn
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: v0.2.0
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Tags</dt>
+      <dd><a href="steps.html">v0.2.0</a></dd>
+    </dl>
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="../main/steps.html">main</a></dd>
+    </dl>
+  </div>
+</div>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
