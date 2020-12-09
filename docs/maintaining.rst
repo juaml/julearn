@@ -50,7 +50,7 @@ release.
     git push origin vX.Y.Z
 
 5. Edit the file ``_version.py`` with the version of the next release and 
-   append '.dev' at the end.
+   append '.git' at the end.
 
 6. Commit and push to main
 
