@@ -198,8 +198,8 @@ class ExtendedDataFramePipeline(BaseEstimator):
             except KeyError:
                 raise_error(f'{until} is not a valid step')
 
-            if until.startswith('confound_'):
-                step_name = until.replace('confound_', '')
+            if until.startswith('confound__'):
+                step_name = until.replace('confound__', '')
                 X_trans = self._transform_pipeline_until(
                     pipeline=self.confound_dataframe_pipeline,
                     step_name=step_name,
@@ -207,7 +207,7 @@ class ExtendedDataFramePipeline(BaseEstimator):
                 )
                 y_trans = y.copy()
 
-            elif until.startswith('target_'):
+            elif until.startswith('target__'):
                 X_trans = self.transform_confounds(X)
                 y_trans = self.transform_target(X, y)
             else:
@@ -264,14 +264,34 @@ class ExtendedDataFramePipeline(BaseEstimator):
     def __getitem__(self, ind):
         if not isinstance(ind, str):
             raise_error('Indexing must be done using strings')
-        if ind.startswith('confound_'):
-            n_ind = ind.replace('confound_', '')
+        if ind.startswith('confound__'):
+            n_ind = ind.replace('confound__', '')
             element = self.confound_dataframe_pipeline[n_ind]
-        elif ind.startswith('target_'):
+        elif ind.startswith('target__'):
             element = self.y_transformer
         else:
             element = self.dataframe_pipeline[ind]
         return element
+
+    def __repr__(self):
+        preprocess_X = clone(self.dataframe_pipeline).steps
+        model = preprocess_X.pop()
+
+        preprocess_X = None if preprocess_X == [] else preprocess_X
+        preprocess_target = self.y_transformer
+        preprocess_confounds = self.confound_dataframe_pipeline
+        categorical_features = (None if self.categorical_features == []
+                                else self.categorical_features)
+
+        return f'''
+        ExtendedDataFramePipeline using:
+            * model = {model}
+            * preprocess_X = {preprocess_X}
+            * preprocess_target = {preprocess_target}
+            * preprocess_confounds = {preprocess_confounds}
+            * confounds = {self.confounds}
+            * categorical_features = {categorical_features}
+              '''
 
     def _rename_param(self, param):
         first, *rest = param.split('__')
