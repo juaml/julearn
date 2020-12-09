@@ -1,0 +1,339 @@
+.. only:: html
+
+    .. note::
+        :class: sphx-glr-download-link-note
+
+        Click :ref:`here <sphx_glr_download_auto_examples_basic_plot_cm_acc_multiclass.py>`     to download the full example code
+    .. rst-class:: sphx-glr-example-title
+
+    .. _sphx_glr_auto_examples_basic_plot_cm_acc_multiclass.py:
+
+
+Multiclass Classification
+============================
+
+This example uses the 'iris' dataset and performs multiclass
+classification using a Support Vector Machine classifier and plots
+heatmaps for cross-validation accuracies and plots confusion matrix
+for the test data.
+
+
+.. code-block:: default
+
+    # Authors: Shammi More <s.more@fz-juelich.de>
+    #          Federico Raimondo <f.raimondo@fz-juelich.de>
+    #
+    # License: AGPL
+
+    import pandas as pd
+    import seaborn as sns
+    import numpy as np
+    import matplotlib.pyplot as plt
+    from seaborn import load_dataset
+    from sklearn.model_selection import train_test_split
+    from sklearn.metrics import confusion_matrix
+
+    from julearn import run_cross_validation
+    from julearn.utils import configure_logging
+
+
+
+
+
+
+
+
+Set the logging level to info to see extra information
+
+
+.. code-block:: default
+
+    configure_logging(level='INFO')
+
+    df_iris = load_dataset('iris')
+    X = ['sepal_length', 'sepal_width', 'petal_length']
+    y = 'species'
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+    2020-12-09 11:32:21,785 - julearn - INFO - ===== Lib Versions =====
+    2020-12-09 11:32:21,785 - julearn - INFO - numpy: 1.16.4
+    2020-12-09 11:32:21,785 - julearn - INFO - scipy: 1.5.4
+    2020-12-09 11:32:21,785 - julearn - INFO - sklearn: 0.23.2
+    2020-12-09 11:32:21,785 - julearn - INFO - pandas: 1.1.5
+    2020-12-09 11:32:21,785 - julearn - INFO - julearn: 0.2.2.dev
+    2020-12-09 11:32:21,785 - julearn - INFO - ========================
+
+
+
+
+Split the dataset into train and test
+
+
+.. code-block:: default
+
+    train_iris, test_iris = train_test_split(df_iris, test_size=0.2,
+                                             stratify=df_iris[y])
+
+
+
+
+
+
+
+
+Perform multiclass classification as iris dataset contains 3 kinds of species
+
+
+.. code-block:: default
+
+    scores, model_iris = run_cross_validation(
+        X=X, y=y, data=train_iris, model='svm', preprocess_X='zscore',
+        problem_type='multiclass_classification', scoring=['accuracy'],
+        return_estimator='final')
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+    2020-12-09 11:32:21,789 - julearn - INFO - Using default CV
+    2020-12-09 11:32:21,790 - julearn - INFO - ==== Input Data ====
+    2020-12-09 11:32:21,790 - julearn - INFO - Using dataframe as input
+    2020-12-09 11:32:21,790 - julearn - INFO - Features: ['sepal_length', 'sepal_width', 'petal_length']
+    2020-12-09 11:32:21,790 - julearn - INFO - Target: species
+    2020-12-09 11:32:21,790 - julearn - INFO - Expanded X: ['sepal_length', 'sepal_width', 'petal_length']
+    2020-12-09 11:32:21,790 - julearn - INFO - Expanded Confounds: []
+    2020-12-09 11:32:21,791 - julearn - INFO - ====================
+    2020-12-09 11:32:21,791 - julearn - INFO - 
+    2020-12-09 11:32:21,791 - julearn - INFO - ====== Model ======
+    2020-12-09 11:32:21,791 - julearn - INFO - Obtaining model by name: svm
+    2020-12-09 11:32:21,791 - julearn - INFO - ===================
+    2020-12-09 11:32:21,791 - julearn - INFO - 
+    2020-12-09 11:32:21,791 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+
+
+
+
+The scores dictionary has all the values for each CV split. We can convert
+this dictionary to a pandas dataframe for easier manipulation
+
+
+.. code-block:: default
+
+
+    df_scores = pd.DataFrame(scores)
+    print(df_scores.head())
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+       fit_time  score_time  test_accuracy  repeat  fold
+    0  0.011353    0.007341       0.875000       0     0
+    1  0.010963    0.007344       0.916667       0     1
+    2  0.010871    0.007275       0.875000       0     2
+    3  0.010804    0.007368       0.875000       0     3
+    4  0.010864    0.007276       1.000000       0     4
+
+
+
+
+Now we can get the accuracy per fold and repetition:
+
+
+.. code-block:: default
+
+
+    df_accuracy = df_scores.set_index(
+        ['repeat', 'fold'])['test_accuracy'].unstack()
+    df_accuracy.index.name = 'Repeats'
+    df_accuracy.columns.name = 'K-fold splits'
+    print(df_accuracy)
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+    K-fold splits         0         1         2         3         4
+    Repeats                                                        
+    0              0.875000  0.916667  0.875000  0.875000  1.000000
+    1              0.958333  0.916667  0.833333  0.875000  0.958333
+    2              0.958333  0.958333  0.916667  0.916667  0.916667
+    3              0.833333  0.916667  0.875000  0.958333  0.958333
+    4              1.000000  0.875000  0.833333  0.916667  0.875000
+
+
+
+
+Plot heatmap of accuracy over all repeats and CV splits
+
+
+.. code-block:: default
+
+    sns.set(font_scale=1.2)
+    fig, ax = plt.subplots(1, 1, figsize=(10, 7))
+    sns.heatmap(df_accuracy, cmap="YlGnBu")
+    plt.title('Cross-validation Accuracy')
+
+
+
+
+.. image:: /auto_examples/basic/images/sphx_glr_plot_cm_acc_multiclass_001.png
+    :alt: Cross-validation Accuracy
+    :class: sphx-glr-single-img
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+
+    Text(0.5, 1.0, 'Cross-validation Accuracy')
+
+
+
+We can also test our final model's accuracy and plot the confusion matrix
+for the test data as an annotated heatmap
+
+
+.. code-block:: default
+
+    y_true = test_iris[y]
+    y_pred = model_iris.predict(test_iris[X])
+    cm = confusion_matrix(y_true, y_pred, labels=np.unique(y_true))
+
+    print(cm)
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+    [[10  0  0]
+     [ 0 10  0]
+     [ 0  1  9]]
+
+
+
+
+Now that we have our confusion matrix, let's build another matrix with
+annotations.
+
+
+.. code-block:: default
+
+    cm_sum = np.sum(cm, axis=1, keepdims=True)
+    cm_perc = cm / cm_sum.astype(float) * 100
+    annot = np.empty_like(cm).astype(str)
+    nrows, ncols = cm.shape
+    for i in range(nrows):
+        for j in range(ncols):
+            c = cm[i, j]
+            p = cm_perc[i, j]
+            if c == 0:
+                annot[i, j] = ''
+            else:
+                s = cm_sum[i]
+                annot[i, j] = '%.1f%%\n%d/%d' % (p, c, s)
+
+
+
+
+
+
+
+Finally we create another dataframe with the confusion matrix and plot
+the heatmap with annotations.
+
+
+.. code-block:: default
+
+    cm = pd.DataFrame(cm, index=np.unique(y_true), columns=np.unique(y_true))
+    cm.index.name = 'Actual'
+    cm.columns.name = 'Predicted'
+    fig, ax = plt.subplots(1, 1, figsize=(10, 7))
+    sns.heatmap(cm, cmap="YlGnBu", annot=annot, fmt='', ax=ax)
+    plt.title('Confusion matrix')
+
+
+
+.. image:: /auto_examples/basic/images/sphx_glr_plot_cm_acc_multiclass_002.png
+    :alt: Confusion matrix
+    :class: sphx-glr-single-img
+
+
+.. rst-class:: sphx-glr-script-out
+
+ Out:
+
+ .. code-block:: none
+
+
+    Text(0.5, 1.0, 'Confusion matrix')
+
+
+
+
+.. rst-class:: sphx-glr-timing
+
+   **Total running time of the script:** ( 0 minutes  0.969 seconds)
+
+
+.. _sphx_glr_download_auto_examples_basic_plot_cm_acc_multiclass.py:
+
+
+.. only :: html
+
+ .. container:: sphx-glr-footer
+    :class: sphx-glr-footer-example
+
+
+
+  .. container:: sphx-glr-download sphx-glr-download-python
+
+     :download:`Download Python source code: plot_cm_acc_multiclass.py <plot_cm_acc_multiclass.py>`
+
+
+
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
+
+     :download:`Download Jupyter notebook: plot_cm_acc_multiclass.ipynb <plot_cm_acc_multiclass.ipynb>`
+
+
+.. only:: html
+
+ .. rst-class:: sphx-glr-signature
+
+    `Gallery generated by Sphinx-Gallery <https://sphinx-gallery.github.io>`_
