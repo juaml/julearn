@@ -210,7 +210,7 @@ Example of the first lines:
     """
 
 
-The rest of the script will be executed. as normal python code. In order to
+The rest of the script will be executed as normal python code. In order to
 render the output and embed formatted text within the code, you need to add
 a 79 ``#`` (a full line) at the point in which you want to render and add text.
 Each line of text shall be preceded with ``#``. The code that it's not

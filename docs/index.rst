@@ -7,10 +7,14 @@
 Welcome to julearn's documentation!
 ===================================
 
+.. image:: images/julearn_logo_it.png
+   :width: 300
+   :alt: julearn
+
 julearn is a user-oriented machine-learning library.
 
 At the Applied Machine Learning (`AML`_) group, as part of the Institute of 
-Neuroscience and Medicine - Brain and Behaviour (`INM-7`_), we though that
+Neuroscience and Medicine - Brain and Behaviour (`INM-7`_), we thought that
 using ML in research could be simpler.
 
 In the same way as `seaborn`_ provides an abstraction of `matplotlib`_'s
