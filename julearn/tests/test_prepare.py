@@ -621,7 +621,6 @@ def test__prepare_hyperparams():
              ]
 
     list_should_be_tuned = [False, False, True, True, False, False, True]
-
     for param_grid, should_be_tuned in zip(grids, list_should_be_tuned):
         pipeline = create_extended_pipeline(
             preprocess_steps_features=preprocess_steps_features,
@@ -636,6 +635,13 @@ def test__prepare_hyperparams():
         if needs_tuning:
             pipeline = GridSearchCV(pipeline, param_grid=to_tune)
 
-        pipeline.fit(X, y)
+        with pytest.warns(None) as record:
+            pipeline.fit(X, y)
 
+        assert len(record) == 0
         assert needs_tuning == should_be_tuned
+
+        if not needs_tuning:
+            for param, val in param_grid.items():
+                val = val[0] if type(val) == list else val
+                assert pipeline.get_params()[param] == val
