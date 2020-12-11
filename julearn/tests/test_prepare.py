@@ -8,12 +8,16 @@ import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
+from sklearn.decomposition import PCA
+from seaborn import load_dataset
 
 from julearn.pipeline import create_extended_pipeline
 
 import pytest
 
-from julearn.prepare import prepare_input_data, prepare_model_params
+from julearn.prepare import (prepare_input_data,
+                             prepare_model_params,
+                             _prepare_hyperparams)
 
 
 def _check_np_input(prepared, X, y, confounds, groups):
@@ -595,3 +599,49 @@ def test_pick_regexp():
     assert df_y.name == y
     assert len(confound_names) == 3
     assert all([x in confound_names for x in confounds])
+
+
+def test__prepare_hyperparams():
+    X = load_dataset('iris')
+    y = X.pop('species')
+
+    preprocess_steps_features = [('pca', PCA()),
+                                 ]
+    model = ('svm', SVC())
+
+    grids = [{'svm__kernel': 'linear'},
+             {'svm__kernel': ['linear']},
+             {'svm__kernel': ['linear', 'rbf']},
+             {'pca__n_components': [.2, .3]},
+             {'pca__n_components': .2},
+             {'pca__n_components': [.2]},
+             {'svm__kernel': ['linear', 'rbf'],
+              'pca__n_components': .2,
+              }
+             ]
+
+    list_should_be_tuned = [False, False, True, True, False, False, True]
+    for param_grid, should_be_tuned in zip(grids, list_should_be_tuned):
+        pipeline = create_extended_pipeline(
+            preprocess_steps_features=preprocess_steps_features,
+            preprocess_transformer_target=None,
+            preprocess_steps_confounds=None,
+            model=model,
+            confounds=None,
+            categorical_features=None)
+
+        to_tune = _prepare_hyperparams(param_grid, pipeline)
+        needs_tuning = len(to_tune) > 0
+        if needs_tuning:
+            pipeline = GridSearchCV(pipeline, param_grid=to_tune)
+
+        with pytest.warns(None) as record:
+            pipeline.fit(X, y)
+
+        assert len(record) == 0
+        assert needs_tuning == should_be_tuned
+
+        if not needs_tuning:
+            for param, val in param_grid.items():
+                val = val[0] if type(val) == list else val
+                assert pipeline.get_params()[param] == val

@@ -74,7 +74,7 @@ Then, install julearn from TestPypi
 
 .. code-block:: bash
 
-    pip install --index-url https://test.pypi.org/simple/ -U julearn
+    pip install --index-url https://test.pypi.org/simple/ -U julearn --pre
 
 
 .. _install_development_git:
