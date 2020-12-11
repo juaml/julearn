@@ -395,9 +395,10 @@ def _prepare_hyperparams(hyperparams, pipeline):
             if len(val) > 1:
                 to_tune[param] = val
             else:
-                logger.info(f'Setting hyperparameter {param} = {val}')
-                pipeline.set_params(**{param: val})
+                logger.info(f'Setting hyperparameter {param} = {val[0]}')
+                pipeline.set_params(**{param: val[0]})
         else:
+            logger.info(f'Setting hyperparameter {param} = {val}')
             pipeline.set_params(**{param: val})
     return to_tune
 
