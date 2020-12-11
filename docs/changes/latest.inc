@@ -22,7 +22,7 @@ Enhancements
 Bugs
 ~~~~
 
-- Fix a hyperparameters setting issue where the paramter had an iterable of only one element (:gh:`96` by `Sami Hamdan`_).
+- Fix a hyperparameters setting issue where the parameter had an iterable of only one element (:gh:`96` by `Sami Hamdan`_).
 
 - Fix installations instruction for latest development version (add ``--pre`` by `Fede Raimondo`_)
 
