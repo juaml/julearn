@@ -1,0 +1,31 @@
+.. NOTE: we are now using links to highlight new functions and classes.
+   Please follow the examples below like 
+   :func:`julearn.api.run_cross_validation`, so the
+   whats_new page will have a link to the function/class documentation.
+
+.. NOTE: there are 3 separate sections for changes, based on type:
+   - "Enhancements" for new features
+   - "Bugs" for bug fixes
+   - "API changes" for backward-incompatible changes
+
+.. _current:
+
+Current (0.2.5.dev)
+-------------------
+
+Enhancements
+~~~~~~~~~~~~
+- Add *What's new* section in DOC to document changes (by `Fede Raimondo`_).
+
+- Add information on updating the *What's new* section before releasing (by `Fede Raimondo`_).
+
+Bugs
+~~~~
+
+- Fix a hyperparameters setting issue where the paramter had an iterable of only one element (:gh:`96` by `Sami Hamdan`_).
+
+- Fix installations instruction for latest development version (add ``--pre`` by `Fede Raimondo`_)
+
+
+API changes
+~~~~~~~~~~~

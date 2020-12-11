@@ -39,6 +39,7 @@ from `pandas`_ dataframes, while keeping the flexibiliy of using
    api
    contributing
    maintaining
+   whats_new
 
 
 Indices and tables

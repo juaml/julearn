@@ -112,6 +112,11 @@ Then, execute the following command to create a new branch, replacing
 
 Simply use your preferred code editor to do the modifications you want.
 
+.. note:: You must also add a line in `docs/changes/latest.inc` where you briefly
+  explain the modifications you made. If it's your first contribution, also
+  add yourself to `docs/changes/contributors.inc`.
+
+
 2.4 Commit and Push
 ^^^^^^^^^^^^^^^^^^^
 

@@ -4,6 +4,8 @@
 # list see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
+from sphinx_gallery.sorting import ExplicitOrder
+
 # -- Path setup --------------------------------------------------------------
 
 # If extensions (or modules to document with autodoc) are in another directory,
@@ -14,7 +16,10 @@
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
-from sphinx_gallery.sorting import ExplicitOrder
+from pathlib import Path
+import sys
+curdir = Path(__file__).parent
+sys.path.append((curdir / 'sphinxext').as_posix())
 
 # -- Project information -----------------------------------------------------
 
@@ -24,6 +29,7 @@ author = 'Fede Raimondo'
 
 
 # -- General configuration ---------------------------------------------------
+
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
@@ -37,7 +43,8 @@ extensions = [
     'sphinx_gallery.gen_gallery',
     'sphinx_rtd_theme',
     'sphinx_multiversion',
-    'numpydoc'
+    'numpydoc',
+    'gh_substitutions'
 ]
 
 # Add any paths that contain templates here, relative to this directory.
