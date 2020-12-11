@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Maintaining julearn &mdash; julearn  documentation</title>
+  <title>What’s new &mdash; julearn  documentation</title>
   
 
   
@@ -39,8 +39,7 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="What’s new" href="whats_new.html" />
-    <link rel="prev" title="Contributing to julearn" href="contributing.html" /> 
+    <link rel="prev" title="Maintaining julearn" href="maintaining.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -97,12 +96,16 @@
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/advanced/index.html">Advanced Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="api.html">Reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing to julearn</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Maintaining julearn</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#versioning">Versioning</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#releasing-a-new-version">Releasing a new version</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maintaining.html">Maintaining julearn</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">What’s new</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#current-0-2-5-dev">Current (0.2.5.dev)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#enhancements">Enhancements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bugs">Bugs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#api-changes">API changes</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="whats_new.html">What’s new</a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -149,13 +152,13 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Maintaining julearn</li>
+      <li>What’s new</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/maintaining.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/whats_new.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -168,75 +171,27 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="maintaining-julearn">
-<h1>Maintaining julearn<a class="headerlink" href="#maintaining-julearn" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="versioning">
-<h2>Versioning<a class="headerlink" href="#versioning" title="Permalink to this headline">¶</a></h2>
-<p>julearn version numbers are as follows: <em>MAJOR.MINOR.MICRO</em>. Additionally,
-development version append <em>devN</em> where N is the distance (in commits) to
-the last release.</p>
-<p>This is done automatically by <a class="reference external" href="https://github.com/pypa/setuptools_scm/">setuptools_scm</a>.</p>
-<p>This plugin reads the latest tagged version from git and automatically
-increments the <em>MICRO</em> segment and appends <em>devN</em>. This is considered a
-pre-release.</p>
-<p>The CI scripts will publish every tag with the format <em>v.X.Y.Z</em> to Pypi as
-version “X.Y.Z”. Additionally, for every push to main, it will be published
-as pre-release to TestPypi.</p>
-</div>
-<div class="section" id="releasing-a-new-version">
-<h2>Releasing a new version<a class="headerlink" href="#releasing-a-new-version" title="Permalink to this headline">¶</a></h2>
-<p>Once the milestone is reached (all issues closed), it is time to do a new
-release.</p>
-<ol class="arabic simple">
-<li><dl class="simple">
-<dt>Open a PR to update documentation:</dt><dd><ul class="simple">
-<li><p><cite>docs/changes/latest.inc</cite> should now be renamed to the version to be
-released.</p></li>
-<li><p><cite>docs/whats_new.rst</cite> must update the link to the new version.</p></li>
+  <div class="section" id="what-s-new">
+<span id="whats-new"></span><h1>What’s new<a class="headerlink" href="#what-s-new" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="current-0-2-5-dev">
+<span id="current"></span><h2>Current (0.2.5.dev)<a class="headerlink" href="#current-0-2-5-dev" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="enhancements">
+<h3>Enhancements<a class="headerlink" href="#enhancements" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Add <em>What’s new</em> section in DOC to document changes (by <a class="reference external" href="https://fraimondo.github.io">Fede Raimondo</a>).</p></li>
+<li><p>Add information on updating the <em>What’s new</em> section before releasing (by <a class="reference external" href="https://fraimondo.github.io">Fede Raimondo</a>).</p></li>
 </ul>
-</dd>
-</dl>
-</li>
-<li><p>Merge PR</p></li>
-<li><p>Make sure you are in sync with the main branch.</p></li>
-</ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git checkout main
-git pull --rebase origin main
-</pre></div>
 </div>
-<ol class="arabic simple" start="4">
-<li><p>Edit the file <code class="docutils literal notranslate"><span class="pre">_version.py</span></code> and remove ‘.dev’. It should match the next
-release</p></li>
-<li><p>Make sure that test pass and CI won’t fail after this modification:</p></li>
-</ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest -v
-flake8
-</pre></div>
+<div class="section" id="bugs">
+<h3>Bugs<a class="headerlink" href="#bugs" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>Fix a hyperparameters setting issue where the parameter had an iterable of only one element (<a class="reference external" href="https://github.com/juaml/julearn/issues/96">#96</a> by <a class="reference external" href="https://www.fz-juelich.de/SharedDocs/Personen/INM/INM-7/EN/Hamdan_s.html">Sami Hamdan</a>).</p></li>
+<li><p>Fix installations instruction for latest development version (add <code class="docutils literal notranslate"><span class="pre">--pre</span></code> by <a class="reference external" href="https://fraimondo.github.io">Fede Raimondo</a>)</p></li>
+</ul>
 </div>
-<ol class="arabic simple" start="6">
-<li><p>Commit and create tag (replace <code class="docutils literal notranslate"><span class="pre">X.Y.Z</span></code> with the proper version).</p></li>
-</ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git commit -am <span class="s2">&quot;Set version to X.Y.Z&quot;</span>
-git tag vX.Y.Z
-</pre></div>
+<div class="section" id="api-changes">
+<h3>API changes<a class="headerlink" href="#api-changes" title="Permalink to this headline">¶</a></h3>
 </div>
-<ol class="arabic simple" start="7">
-<li><p>Check that the build system is creating the proper version</p></li>
-</ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">SETUPTOOLS_SCM_DEBUG</span><span class="o">=</span><span class="m">1</span> python -m pep517.build --source --binary --out-dir dist/ .
-</pre></div>
-</div>
-<ol class="arabic simple" start="8">
-<li><p>Push the tag</p></li>
-</ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git push origin vX.Y.Z
-</pre></div>
-</div>
-<ol class="arabic simple" start="9">
-<li><p>Edit the file <code class="docutils literal notranslate"><span class="pre">_version.py</span></code> with the version of the next release and
-append ‘.dev’ at the end.</p></li>
-<li><p>Commit and push to main</p></li>
-</ol>
 </div>
 </div>
 
@@ -248,10 +203,8 @@ append ‘.dev’ at the end.</p></li>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="whats_new.html" class="btn btn-neutral float-right" title="What’s new" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-      
-        <a href="contributing.html" class="btn btn-neutral float-left" title="Contributing to julearn" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="maintaining.html" class="btn btn-neutral float-left" title="Maintaining julearn" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -292,13 +245,13 @@ append ‘.dev’ at the end.</p></li>
   <div class="rst-other-versions">
     <dl>
       <dt>Tags</dt>
-      <dd><a href="../v0.2.2/maintaining.html">v0.2.2</a></dd>
-      <dd><a href="../v0.2.3/maintaining.html">v0.2.3</a></dd>
-      <dd><a href="../v0.2.4/maintaining.html">v0.2.4</a></dd>
+      <dd><a href="../v0.2.2/index.html">v0.2.2</a></dd>
+      <dd><a href="../v0.2.3/index.html">v0.2.3</a></dd>
+      <dd><a href="../v0.2.4/index.html">v0.2.4</a></dd>
     </dl>
     <dl>
       <dt>Branches</dt>
-      <dd><a href="maintaining.html">main</a></dd>
+      <dd><a href="whats_new.html">main</a></dd>
     </dl>
   </div>
 </div>
