@@ -3,6 +3,9 @@
 Installing julearn
 ==================
 
+.. image:: images/julearn_logo_mlit.png
+   :width: 300
+   :alt: julearn
 
 Requirements
 ^^^^^^^^^^^^
