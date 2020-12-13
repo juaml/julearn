@@ -3,7 +3,7 @@
 
 .PHONY: checks
 
-checks: flake spellcheck test
+checks: flake spellcheck
 
 flake:
 	flake8
