@@ -45,6 +45,7 @@ The following is an example on how to install them using `pip`:
     pip install -r requirements.txt
     pip install -r test-requirements.txt
     pip install -r docs-requirements.txt
+    pip install -r dev-requirements.txt
 
 1.3 Install julearn
 ^^^^^^^^^^^^^^^^^^^
@@ -56,6 +57,12 @@ To install julearn in editable/development mode, simple run:
     python setup.py develop
 
 Now you are ready for the first contribution.
+
+.. note:: Every time that you run ``setup.py develop``, the version is going to
+  be automatically set based on the git history. Nevertheless, this change 
+  should not be committed (changes to ``_version.py``). Running ``git stash``
+  at this point will forget the local changes to ``_version.py``.
+
 
 2. Contributing with a pull request
 -----------------------------------
