@@ -85,13 +85,13 @@ First, make sure that you have all the dependencies installed:
 
 .. code-block:: bash
 
-    pip install -U scikit-learn pandas
+    pip install -U scikit-learn pandas numpy
 
 OR:
 
 .. code-block:: bash
 
-    conda install scikit-learn pandas
+    conda install scikit-learn pandas numpy
 
 Then, clone `julearn Github`_ repository in a folder of your choice:
 
@@ -99,10 +99,20 @@ Then, clone `julearn Github`_ repository in a folder of your choice:
 
     git clone https://github.com/juaml/julearn.git
 
+Install development mode requirements:
+
+.. code-block:: bash
+
+    cd julearn
+    pip install -r dev-requirements.txt
 
 Finally, install in development mode:
 
 .. code-block:: bash
 
-    cd julearn
     python setup.py develop
+
+.. note:: Every time that you run ``setup.py develop``, the version is going to
+  be automatically set based on the git history. Nevertheless, this change 
+  should not be committed (changes to ``_version.py``). Running ``git stash``
+  at this point will forget the local changes to ``_version.py``.

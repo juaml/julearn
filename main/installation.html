@@ -234,21 +234,32 @@ with <cite>pip</cite>.</p>
 <div class="section" id="local-git-repository-for-developers">
 <span id="install-development-git"></span><h3>Local git repository (for developers)<a class="headerlink" href="#local-git-repository-for-developers" title="Permalink to this headline">¶</a></h3>
 <p>First, make sure that you have all the dependencies installed:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install -U scikit-learn pandas
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install -U scikit-learn pandas numpy
 </pre></div>
 </div>
 <p>OR:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda install scikit-learn pandas
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda install scikit-learn pandas numpy
 </pre></div>
 </div>
 <p>Then, clone <a class="reference external" href="https://github.com/juaml/julearn">julearn Github</a> repository in a folder of your choice:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/juaml/julearn.git
 </pre></div>
 </div>
-<p>Finally, install in development mode:</p>
+<p>Install development mode requirements:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> julearn
-python setup.py develop
+pip install -r dev-requirements.txt
 </pre></div>
+</div>
+<p>Finally, install in development mode:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python setup.py develop
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Every time that you run <code class="docutils literal notranslate"><span class="pre">setup.py</span> <span class="pre">develop</span></code>, the version is going to
+be automatically set based on the git history. Nevertheless, this change
+should not be committed (changes to <code class="docutils literal notranslate"><span class="pre">_version.py</span></code>). Running <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">stash</span></code>
+at this point will forget the local changes to <code class="docutils literal notranslate"><span class="pre">_version.py</span></code>.</p>
 </div>
 </div>
 </div>
