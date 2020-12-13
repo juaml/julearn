@@ -19,6 +19,8 @@ Enhancements
 
 - Add information on updating the *What's new* section before releasing (by `Fede Raimondo`_).
 
+- Update docs to make it more uniform (by `Kaustubh Patil`_). 
+
 Bugs
 ~~~~
 
