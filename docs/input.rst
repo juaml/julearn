@@ -16,8 +16,8 @@ julearn supports two kinds of data input configuration. The function
 
 julearn interprets data using two kinds of combinations:
 
-1. Using Pandas dataframes (recommended)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Using Pandas dataframes (recommended)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This method interprets `X`, `y`, `confounds` and `groups` as columns in the
 dataframe (specified in `df`).
@@ -67,8 +67,8 @@ For more information, check python's `Regular Expressions`_. Keep in mind that
 julearn uses `fullmatch`, so it requires that the regular expression matches
 the whole string and not part of it.
 
-2. Using Numpy arrays
-^^^^^^^^^^^^^^^^^^^^^
+Using Numpy arrays
+^^^^^^^^^^^^^^^^^^
 This method allows `X`, `y`, `confounds` and groups to be specified as 
 n-dimensional arrays. In this case, the number of samples for `X`, `y`,
 `confounds` and `groups` must match:
