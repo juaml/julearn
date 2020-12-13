@@ -5,14 +5,14 @@ Contributing to julearn
 
 
 Setting up the development environment
------------------------------------------
+--------------------------------------
 
 Before your first contribution, you might want to install all the required
 tools to be able to test that everything is according to the required
 development guidelines.
 
 Download the source code
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 Choose a folder where you will place the code and clone the `julearn Github`_
 repository:
@@ -22,7 +22,7 @@ repository:
     git clone https://github.com/juaml/julearn.git
 
 Create a virtual environment
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This step can be omitted, but it is highly recommended, as the development
 version of julearn can interfere with the other versions that you might use in
@@ -32,7 +32,7 @@ Check the `venv`_ or `conda env`_ documentation on how to create one.
 
 
 Install the requirements
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 The required packages for development are specified within 3 files in the
 repository, according to the different build stages.
@@ -47,7 +47,7 @@ The following is an example on how to install them using `pip`:
     pip install -r docs-requirements.txt
 
 Install julearn
-^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^
 
 To install julearn in editable/development mode, simple run:
 
@@ -58,7 +58,7 @@ To install julearn in editable/development mode, simple run:
 Now you are ready for the first contribution.
 
 Contributing with a pull request
------------------------------------
+--------------------------------
 
 The first step, before doing any edit to the code, is to find the issue in the
 `julearn Github`_ repository that you will address and explain what your
@@ -66,7 +66,7 @@ contribution will do. If it does not exist, you can create it. The idea is that
 after your pull request is merged, the issue is fixed/closed.
 
 Fork the `julearn Github`_ repository
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 In order to push into a repository, you will need to have push permissions.
 Github provides a way of doing this by forking (creating a copy) the repository
 into one under your Github user account in.
@@ -86,7 +86,7 @@ Replace ``fraimondo`` with your Github username.
 
 
 Create a branch for your modifications
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 All your modifications that address this issue will be placed in a new branch.
 First, make sure you have the latest commit in your local ``main`` branch.
@@ -108,7 +108,7 @@ Then, execute the following command to create a new branch, replacing
 .. _do_changes:
 
 Do the changes
-^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^
 
 Simply use your preferred code editor to do the modifications you want.
 
@@ -118,7 +118,7 @@ Simply use your preferred code editor to do the modifications you want.
 
 
 Commit and Push
-^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^
 
 This is the standard git workflow. Replace ``<USERNAME>>`` with your Github 
 username.
@@ -128,7 +128,7 @@ username.
     # Commit the changes with ``git push <USERNAME> <BRANCH_NAME>``
 
 Test and build the documentation
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Before creating the pull request (PR), make sure that all the test pass and
 the documentation can be correctly built.
@@ -168,7 +168,7 @@ to clean up the already build files and then rerun ``make html``.
 If any of this fails, go back to :ref:`do_changes`
 
 Create a pull request
-^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^
 
 Now that you are happy with your contribution, just navigate to your fork
 of the julearn repository in `Github`_ and click on the ^Compare & pull 
@@ -184,7 +184,7 @@ version and later on, in the release version.
 
 
 Writing Examples
--------------------
+----------------
 
 Examples are run and displayed in HTML format using `sphinx gallery`_. There
 are two sub directories in the ``examples`` directory: ``basic`` and
