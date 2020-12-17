@@ -123,7 +123,7 @@ def get_transformer(name, target=False, **params):
         trans = _available_target_transformers[name]
         out = trans(**params)
         if not is_targettransformer(out):
-            out = TargetTransfromerWrapper(trans)
+            out = TargetTransfromerWrapper(out)
     return out
 
 
