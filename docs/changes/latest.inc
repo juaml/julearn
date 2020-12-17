@@ -28,7 +28,7 @@ Bugs
 
 - Fix installations instruction for latest development version (add ``--pre`` by `Fede Raimondo`_)
 
-- Fix target transformers that only normal transformers are wrapped (:gh:`#94`by `Sami Hamdan`_)
+- Fix target transformers that only normal transformers are wrapped (:gh:`94` by `Sami Hamdan`_)
 
 API changes
 ~~~~~~~~~~~
