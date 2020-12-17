@@ -1,6 +1,7 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
+from inspect import signature
 import pandas as pd
 from sklearn.base import TransformerMixin
 
@@ -63,3 +64,19 @@ class TargetTransfromerWrapper(TransformerMixin):
     def _validate_XY_input(self, X, y):
         if y is None:
             raise_error('y should not be None when transforming it')
+
+
+def is_targettransformer(trans):
+
+    is_targettrans = True
+    if hasattr(trans, 'transform'):
+        try:
+            signature(trans.transform).parameters['y']
+        except KeyError:
+            is_targettrans = False
+    else:
+        raise_error(f'is_targettransformer can only be applied to '
+                    f'sklearn compatible transformers. Object {trans} has no '
+                    '.transform method. Therefore, it is no transformer.')
+
+    return is_targettrans

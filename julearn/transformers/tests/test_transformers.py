@@ -185,3 +185,8 @@ def test_register_class_no_default_params():
     reset_register()
     register_transformer('fish', fish, 'unknown', 'all')
     get_transformer('fish', can_it_fly='dont_be_stupid')
+
+
+def test_get_target_transformer_no_error():
+    get_transformer('zscore', target=True)
+    get_transformer('remove_confound', target=True)
