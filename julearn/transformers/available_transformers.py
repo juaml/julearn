@@ -13,7 +13,7 @@ from sklearn.feature_selection import (GenericUnivariateSelect,
                                        SelectFdr, SelectFpr, SelectFwe,
                                        VarianceThreshold)
 from . confounds import DataFrameConfoundRemover, TargetConfoundRemover
-from . target import TargetTransfromerWrapper
+from . target import TargetTransfromerWrapper, is_targettransformer
 
 """
 a dictionary containing all supported transformers
@@ -59,7 +59,7 @@ _apply_to_default_exceptions_reset = deepcopy(_apply_to_default_exceptions)
 
 _available_target_transformers = {
     'zscore': StandardScaler,
-    'remove_confound': [TargetConfoundRemover, 'same'],
+    'remove_confound': TargetConfoundRemover,
 }
 
 _dict_transformer_to_name = {transformer: name
@@ -120,8 +120,10 @@ def get_transformer(name, target=False, **params):
                 f'The specified target transformer ({name}) is not available. '
                 f'Valid options are: '
                 f'{list(_available_target_transformers.keys())}')
-        trans = _available_target_transformers[name]()
-        out = TargetTransfromerWrapper(trans)
+        trans = _available_target_transformers[name]
+        out = trans(**params)
+        if not is_targettransformer(out):
+            out = TargetTransfromerWrapper(trans)
     return out
 
 
