@@ -3,8 +3,10 @@
 # License: AGPL
 
 import numpy as np
+import pytest
 
 from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LinearRegression
 from numpy.testing import assert_array_equal
 
 from julearn.transformers.target import (TargetTransfromerWrapper,
@@ -33,3 +35,7 @@ def test_is_targettransformer():
     assert not is_targettransformer(StandardScaler())
     assert is_targettransformer(TargetTransfromerWrapper(StandardScaler()))
     assert is_targettransformer(TargetConfoundRemover())
+
+    with pytest.raises(ValueError,
+                       match='is_targettransformer can only be applied to '):
+        assert is_targettransformer(LinearRegression())
