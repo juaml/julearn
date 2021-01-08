@@ -1,6 +1,7 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
+import warnings
 import numpy as np
 from numpy.testing import assert_array_equal, assert_array_almost_equal
 from sklearn.svm import SVC, SVR
@@ -59,25 +60,26 @@ def compare_models(clf1, clf2):  # pragma: no cover
             est2 = clf2.base_estimator_.estimators_
             v2 = np.array([x.pi_ for x in est2])
         else:
-            v1 =  clf1.base_estimator_.pi_
-            v2 =  clf2.base_estimator_.pi_
+            v1 = clf1.base_estimator_.pi_
+            v2 = clf2.base_estimator_.pi_
     elif isinstance(clf1, GaussianProcessRegressor):
-        v1 =  np.c_[clf1.L_, clf1.alpha_]
-        v2 =  np.c_[clf2.L_, clf2.alpha_]
+        v1 = np.c_[clf1.L_, clf1.alpha_]
+        v2 = np.c_[clf2.L_, clf2.alpha_]
     elif isinstance(clf1, (LogisticRegression, RidgeClassifier,
                            RidgeClassifierCV, SGDClassifier, SGDRegressor,
                            LinearRegression, Ridge, RidgeCV,
                            BernoulliNB, ComplementNB, MultinomialNB)):
-        v1 =  clf1.coef_
-        v2 =  clf2.coef_
+        v1 = _get_coef_over_versions(clf1)
+        v2 = _get_coef_over_versions(clf1)
     elif isinstance(clf1, CategoricalNB):
         v1 = None
         v2 = None
-        for c1, c2 in zip(clf1.coef_, clf2.coef_):
+        for c1, c2 in zip(_get_coef_over_versions(clf1),
+                          _get_coef_over_versions(clf2)):
             assert_array_equal(c1, c2)
     elif isinstance(clf1, GaussianNB):
-        v1 =  clf1.sigma_
-        v2 =  clf2.sigma_
+        v1 = clf1.sigma_
+        v2 = clf2.sigma_
     elif isinstance(clf1, (AdaBoostClassifier, AdaBoostRegressor,
                            BaggingClassifier, BaggingRegressor)):
         est1 = clf1.estimators_
@@ -106,7 +108,6 @@ def do_scoring_test(X, y, data, api_params, sklearn_model, scorers, cv=None,
     actual, actual_estimator = run_cross_validation(
         X=X, y=y, data=data, scoring=scorers, cv=cv,
         return_estimator='final', **params_dict)
-
     np.random.seed(42)
     sk_cv = prepare_cv(cv)
     expected = cross_validate(sklearn_model, sk_X, sk_y, cv=sk_cv,
@@ -151,3 +152,19 @@ class TargetPassThroughTransformer(PassThroughTransformer):
     def fit_transform(self, X=None, y=None):
         self.fit(X, y)
         return self.transform(X, y)
+
+
+def _get_coef_over_versions(clf):
+
+    if isinstance(clf, (BernoulliNB, ComplementNB,
+                        MultinomialNB, CategoricalNB)):
+
+        with warnings.catch_warnings():
+            warnings.filterwarnings('error', category=FutureWarning)
+            warnings.filterwarnings('error', category=DeprecationWarning)
+            try:
+                return clf.coef_
+            except Warning:
+                return clf.feature_log_prob_
+    else:
+        return clf.coef_

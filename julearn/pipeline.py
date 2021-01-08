@@ -138,6 +138,9 @@ class ExtendedDataFramePipeline(BaseEstimator):
         else:
             y_true = y
         self.dataframe_pipeline.fit(X_conf_trans, y_true)
+
+        if hasattr(self.dataframe_pipeline, 'classes_'):
+            self.classes_ = self.dataframe_pipeline.classes_
         return self
 
     def predict(self, X):
