@@ -30,5 +30,7 @@ Bugs
 
 - Fix target transformers that only normal transformers are wrapped (:gh:`94` by `Sami Hamdan`_)
 
+- Fix classification bug due to scikit-learn version 0.2.4 (:gh:`#108` by `Sami Hamdan`_)
+
 API changes
 ~~~~~~~~~~~
