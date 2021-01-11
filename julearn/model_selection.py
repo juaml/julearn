@@ -3,23 +3,8 @@
 # License: AGPL
 import numpy as np
 
-from sklearn.utils.validation import check_is_fitted
 from sklearn.model_selection._split import (BaseShuffleSplit,
                                             _validate_shuffle_split)
-
-
-def wrap_search(searcher, *args, **kwargs):
-
-    class wrap_searcher(searcher):
-
-        def __init__(self):
-            super().__init__(*args, **kwargs)
-
-        def transform_target(self, X, y):
-            check_is_fitted(self)
-            return self.best_estimator_.transform_target(X, y)
-
-    return wrap_searcher()
 
 
 class StratifiedBootstrap(BaseShuffleSplit):
@@ -49,6 +34,7 @@ class StratifiedBootstrap(BaseShuffleSplit):
         Controls the randomness of the training and testing indices produced.
         Pass an int for reproducible output across multiple function calls.
     """
+
     def __init__(self, n_splits=5, *, test_size=0.5, train_size=None,
                  random_state=None):
         super().__init__(

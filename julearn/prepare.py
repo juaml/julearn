@@ -15,7 +15,6 @@ from sklearn.model_selection import check_cv
 from . estimators import get_model
 from . transformers import get_transformer
 from . scoring import get_extended_scorer
-from . model_selection import wrap_search
 from . utils import raise_error, warn, logger
 
 
@@ -349,8 +348,7 @@ def prepare_model_params(msel_dict, pipeline, cv_outer):
         logger.info('Search Parameters:')
         for k, v in search_params.items():
             logger.info(f'\t{k}: {v}')
-        pipeline = wrap_search(
-            search, pipeline, hyper_params, **search_params)
+        pipeline = search(pipeline, hyper_params, **search_params)
     else:
         if 'cv' in msel_dict:
             warn('Hyperparameter search CV was specified, but no '
