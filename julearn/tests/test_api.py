@@ -15,6 +15,7 @@ from sklearn.model_selection import (cross_validate,
                                      GridSearchCV,
                                      RandomizedSearchCV)
 from sklearn.preprocessing import LabelBinarizer
+from sklearn.utils import parallel_backend
 import pandas as pd
 from seaborn import load_dataset
 import pytest
@@ -171,7 +172,7 @@ def test_tune_hyperparam():
 
     model_params = {'svm__C': [0.01, 0.001], 'cv': cv_inner}
     actual, actual_estimator = run_cross_validation(
-        X=X, y=y, data=df_iris, model='svm',  preprocess_X='zscore',
+        X=X, y=y, data=df_iris, model='svm', preprocess_X='zscore',
         model_params=model_params, cv=cv_outer, scoring=scoring,
         return_estimator='final')
 
@@ -475,3 +476,21 @@ def test_confound_removal_no_explicit_removal():
 
     assert_array_equal(scores_explicit_no_preprocess_at_all['test_score'],
                        scores_not_explicit_no_preprocess_at_all['test_score'])
+
+
+def test_multiprocess_no_error():
+    df_iris = load_dataset('iris')
+
+    df_iris = df_iris[df_iris['species'].isin(['versicolor', 'virginica'])]
+    X = ['sepal_length', 'sepal_width', 'petal_length']
+    y = 'species'
+
+    model_params = {
+        'svm__C': [1, 2, 3],
+        'search': 'grid',
+    }
+
+    with parallel_backend('multiprocessing', n_jobs=-1):
+        run_cross_validation(
+            X=X, y=y, data=df_iris, model='svm', preprocess_X='zscore',
+            model_params=model_params)
