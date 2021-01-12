@@ -32,7 +32,7 @@ Bugs
 
 - Fix compatibility with new scikit-learn release 0.24 (:gh:`#108` by `Sami Hamdan`_)
 
-- Fix compatibility with multiprocessing in sklearn (by `Sami Hamdan`_)
+- Fix compatibility with multiprocessing in scikit-learn (by `Sami Hamdan`_)
 
 API changes
 ~~~~~~~~~~~
