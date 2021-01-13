@@ -21,6 +21,8 @@ Enhancements
 
 - Update docs to make it more uniform (by `Kaustubh Patil`_). 
 
+- Refactor scoring to allow for registering and callable scorers (by `Sami Hamdan`_).
+
 Bugs
 ~~~~
 
