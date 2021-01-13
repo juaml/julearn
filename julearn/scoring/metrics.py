@@ -1,6 +1,5 @@
 import numpy as np
 
 
-def r2_corr(estimator, X, y):
-    y_pred = estimator.predict(X)
-    return np.corrcoef(y_pred, y)**2
+def r2_corr(y_true, y_pred):
+    return np.corrcoef(y_true, y_pred)[0, 1]**2

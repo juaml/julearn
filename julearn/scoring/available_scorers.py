@@ -1,7 +1,7 @@
 from copy import deepcopy
 from sklearn.metrics import _scorer, SCORERS, make_scorer
 from julearn.utils import warn, raise_error, logger
-from . additional_scorers import r2_corr
+from . metrics import r2_corr
 _extra_available_scorers = {
     'r2_corr': make_scorer(r2_corr)
 }
@@ -72,17 +72,20 @@ def register_scorer(name, scorer, overwriting=None):
         elif overwriting is None:
             _extra_available_scorers[name] = scorer
             warn(
-                f'Scorer `{scorer}` already exists. '
+                f'scorer named {name} already exists. '
                 f'Therefore, {name} will be overwritten. '
                 'To remove this warning set overwriting=True '
             )
             logger.info(f'registering scorer named {name}')
         else:
             raise_error(
-                f'scorer named {name} already exists '
+                f'scorer named {name} already exists and '
                 'overwriting is set to False, therefore you cannot overwrite '
                 'existing scorers. Set overwriting=True in case you want to '
                 'overwrite existing scorers')
+    else:
+        _extra_available_scorers[name] = scorer
+        logger.info(f'registering scorer named {name}')
 
 
 def reset_scorer_register():
