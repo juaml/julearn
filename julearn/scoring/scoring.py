@@ -2,6 +2,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 from sklearn.metrics._scorer import check_scoring
+from . available_scorers import get_scorer
 
 
 def get_extended_scorer(estimator, score_name):
@@ -23,7 +24,7 @@ def get_extended_scorer(estimator, score_name):
         A function with arguments: estimator, X, y .
         That returns a single score.
     """
-    scorer = check_scoring(estimator, scoring=score_name)
+    scorer = _check_scoring(estimator, scoring=score_name)
 
     def extended_scorer(estimator, X, y):
         if hasattr(estimator, 'transform_target'):
@@ -32,3 +33,11 @@ def get_extended_scorer(estimator, score_name):
             y_true = estimator.best_estimator_.transform_target(X, y)
         return scorer(estimator, X, y_true)
     return extended_scorer
+
+
+def _check_scoring(estimator, scoring):
+    if isinstance(scoring, str):
+        scoring = get_scorer(scoring)
+    elif isinstance(scoring, list):
+        scoring = {score: get_scorer(score) for score in scoring}
+    return check_scoring(estimator, scoring=scoring)
