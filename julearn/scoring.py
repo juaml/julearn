@@ -26,6 +26,9 @@ def get_extended_scorer(estimator, score_name):
     scorer = check_scoring(estimator, scoring=score_name)
 
     def extended_scorer(estimator, X, y):
-        y_true = estimator.transform_target(X, y)
+        if hasattr(estimator, 'transform_target'):
+            y_true = estimator.transform_target(X, y)
+        else:
+            y_true = estimator.best_estimator_.transform_target(X, y)
         return scorer(estimator, X, y_true)
     return extended_scorer

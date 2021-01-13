@@ -414,7 +414,6 @@ def test_prepare_model_params():
         categorical_features=None)
     pipeline = prepare_model_params(model_params, pipeline, cv_outer)
 
-    assert pipeline.__class__.__name__ == 'wrap_searcher'
     assert pipeline.cv == 2
     assert isinstance(pipeline, GridSearchCV)
     assert 'svm__C' in pipeline.param_grid
@@ -438,7 +437,6 @@ def test_prepare_model_params():
         categorical_features=None)
     pipeline = prepare_model_params(model_params, pipeline, cv_outer)
 
-    assert pipeline.__class__.__name__ == 'wrap_searcher'
     assert pipeline.cv.n_splits == 5
     assert isinstance(pipeline, RandomizedSearchCV)
     assert 'svm__C' in pipeline.param_distributions
