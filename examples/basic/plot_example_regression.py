@@ -66,7 +66,7 @@ train_diabetes, test_diabetes = train_test_split(data_diabetes, test_size=0.3)
 scores, model = run_cross_validation(
     X=X, y=y, data=train_diabetes, preprocess_X='zscore',
     problem_type='regression', model='ridge', return_estimator='final',
-    scoring='neg_mean_absolute_error')
+    scoring=['neg_mean_absolute_error'])
 
 ###############################################################################
 # The scores dataframe has all the values for each CV split.
