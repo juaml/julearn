@@ -4,7 +4,6 @@
 import numpy as np
 
 from numpy.testing import assert_array_equal
-from pandas.testing import assert_frame_equal
 from sklearn import svm
 from sklearn.base import clone
 from sklearn.preprocessing import StandardScaler, LabelEncoder
