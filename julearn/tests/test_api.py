@@ -4,6 +4,7 @@
 import numpy as np
 
 from numpy.testing import assert_array_equal
+from pandas.testing import assert_frame_equal
 from sklearn import svm
 from sklearn.base import clone
 from sklearn.preprocessing import StandardScaler, LabelEncoder
@@ -16,6 +17,7 @@ from sklearn.model_selection import (cross_validate,
                                      RandomizedSearchCV)
 from sklearn.preprocessing import LabelBinarizer
 from sklearn.utils import parallel_backend
+from sklearn.metrics import accuracy_score, make_scorer
 import pandas as pd
 from seaborn import load_dataset
 import pytest
@@ -122,7 +124,7 @@ def test_set_hyperparam():
     actual, actual_estimator = run_cross_validation(
         X=X, y=y, data=df_iris, model='svm',
         model_params=model_params, preprocess_X='zscore',
-        seed=42, scoring=scoring, pos_labels='setosa',
+        seed=42, scoring=[scoring], pos_labels='setosa',
         return_estimator='final')
 
     # Now do the same with scikit-learn
@@ -173,7 +175,7 @@ def test_tune_hyperparam():
     model_params = {'svm__C': [0.01, 0.001], 'cv': cv_inner}
     actual, actual_estimator = run_cross_validation(
         X=X, y=y, data=df_iris, model='svm', preprocess_X='zscore',
-        model_params=model_params, cv=cv_outer, scoring=scoring,
+        model_params=model_params, cv=cv_outer, scoring=[scoring],
         return_estimator='final')
 
     # Now do the same with scikit-learn
@@ -205,7 +207,7 @@ def test_tune_hyperparam():
                     'search': 'random', 'search_params': {'n_iter': 2}}
     actual, actual_estimator = run_cross_validation(
         X=X, y=y, data=df_iris, model='svm', preprocess_X='zscore',
-        model_params=model_params, cv=cv_outer, scoring=scoring,
+        model_params=model_params, cv=cv_outer, scoring=[scoring],
         return_estimator='final')
 
     # Now do the same with scikit-learn
@@ -242,7 +244,7 @@ def test_tune_hyperparam():
 
     actual, actual_estimator = run_cross_validation(
         X=X, y=y, data=df_iris, model='svm', preprocess_X='zscore',
-        model_params=model_params, seed=42, scoring=scoring,
+        model_params=model_params, seed=42, scoring=[scoring],
         return_estimator='final', pos_labels=['setosa'], cv=cv_outer)
 
     np.random.seed(42)
@@ -494,3 +496,36 @@ def test_multiprocess_no_error():
         run_cross_validation(
             X=X, y=y, data=df_iris, model='svm', preprocess_X='zscore',
             model_params=model_params)
+
+
+def test_scorers():
+    df_iris = load_dataset('iris')
+
+    df_iris = df_iris[df_iris['species'].isin(['versicolor', 'virginica'])]
+    X = ['sepal_length', 'sepal_width', 'petal_length']
+    y = 'species'
+
+    result_scoring_name = run_cross_validation(
+        X=X, y=y, data=df_iris, model='svm',
+        scoring='accuracy', seed=42
+    )
+    result_scoring_function = run_cross_validation(
+        X=X, y=y, data=df_iris, model='svm',
+        scoring=make_scorer(accuracy_score), seed=42)
+
+    result_scoring_name_list = run_cross_validation(
+        X=X, y=y, data=df_iris, model='svm',
+        scoring=['accuracy'], seed=42
+    )
+    result_scoring_function_dict = run_cross_validation(
+        X=X, y=y, data=df_iris, model='svm',
+        scoring=dict(accuracy=make_scorer(accuracy_score)), seed=42)
+
+    assert_array_equal(result_scoring_name['test_score'],
+                       result_scoring_function['test_score'])
+
+    assert_array_equal(result_scoring_name['test_score'],
+                       result_scoring_function_dict['test_accuracy'])
+
+    assert_array_equal(result_scoring_name['test_score'],
+                       result_scoring_name_list['test_accuracy'])
