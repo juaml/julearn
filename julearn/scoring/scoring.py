@@ -24,15 +24,9 @@ def get_extended_scorer(estimator, score_name):
         A function with arguments: estimator, X, y .
         That returns a single score.
     """
-    scorer = _check_scoring(estimator, scoring=score_name)
 
-    def extended_scorer(estimator, X, y):
-        if hasattr(estimator, 'transform_target'):
-            y_true = estimator.transform_target(X, y)
-        else:
-            y_true = estimator.best_estimator_.transform_target(X, y)
-        return scorer(estimator, X, y_true)
-    return extended_scorer
+    scorer = _check_scoring(estimator, scoring=score_name)
+    return _ExtendedScorer(scorer)
 
 
 def _check_scoring(estimator, scoring):
@@ -41,3 +35,16 @@ def _check_scoring(estimator, scoring):
     elif isinstance(scoring, list):
         scoring = {score: get_scorer(score) for score in scoring}
     return check_scoring(estimator, scoring=scoring)
+
+
+class _ExtendedScorer():
+    def __init__(self, scorer):
+        self.scorer = scorer
+
+    def __call__(self, estimator, X, y):
+        if hasattr(estimator, 'transform_target'):
+            y_true = estimator.transform_target(X, y)
+        else:
+            y_true = estimator.best_estimator_.transform_target(X, y)
+
+        return self.scorer(estimator, X, y_true)
