@@ -66,7 +66,7 @@ train_diabetes, test_diabetes = train_test_split(data_diabetes, test_size=0.3)
 scores, model = run_cross_validation(
     X=X, y=y, data=train_diabetes, preprocess_X='zscore',
     problem_type='regression', model='ridge', return_estimator='final',
-    scoring=['neg_mean_absolute_error'])
+    scoring='neg_mean_absolute_error')
 
 ###############################################################################
 # The scores dataframe has all the values for each CV split.
@@ -75,13 +75,13 @@ print(scores.head())
 
 ###############################################################################
 # Mean value of mean absolute error across CV
-print(scores['test_neg_mean_absolute_error'].mean() * -1)
+print(scores['test_score'].mean() * -1)
 
 ###############################################################################
 # Now we can get the MAE fold and repetition:
 
 df_mae = scores.set_index(
-    ['repeat', 'fold'])['test_neg_mean_absolute_error'].unstack() * -1
+    ['repeat', 'fold'])['test_score'].unstack() * -1
 df_mae.index.name = 'Repeats'
 df_mae.columns.name = 'K-fold splits'
 
