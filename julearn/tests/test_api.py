@@ -494,6 +494,11 @@ def test_multiprocess_no_error():
     with parallel_backend('multiprocessing', n_jobs=-1):
         run_cross_validation(
             X=X, y=y, data=df_iris, model='svm', preprocess_X='zscore',
+            model_params=model_params)
+
+    with parallel_backend('multiprocessing', n_jobs=-1):
+        run_cross_validation(
+            X=X, y=y, data=df_iris, model='svm', preprocess_X='zscore',
             model_params=model_params, scoring='accuracy')
 
 
