@@ -12,7 +12,7 @@ from . prepare import (prepare_input_data,
                        prepare_preprocessing,
                        prepare_scoring,
                        check_consistency)
-from . pipeline import create_extended_pipeline
+from . pipeline import _create_extended_pipeline
 
 from . utils import logger
 
@@ -169,22 +169,18 @@ def run_cross_validation(
         X=X, y=y, confounds=confounds, df=data, pos_labels=pos_labels,
         groups=groups)
 
-    # Interpret preprocessing parameters
-    preprocess_vars = prepare_preprocessing(
-        preprocess_X, preprocess_y, preprocess_confounds, confounds
+    # create a the pipeline
+    pipeline = create_pipeline(
+        model,
+        preprocess_X,
+        preprocess_y,
+        preprocess_confounds,
+        confounds,
+        problem_type,
     )
-    preprocess_X, preprocess_y, preprocess_confounds = preprocess_vars
-    # Prepare the model
-    model_tuple = prepare_model(model=model, problem_type=problem_type)
 
     # Prepare cross validation
     cv_outer = prepare_cv(cv)
-
-    pipeline = create_extended_pipeline(preprocess_X,
-                                        preprocess_y,
-                                        preprocess_confounds,
-                                        model_tuple, confounds,
-                                        categorical_features=None)
 
     if model_params is not None:
         pipeline = prepare_model_params(model_params, pipeline, cv_outer)
@@ -216,3 +212,29 @@ def run_cross_validation(
         out = out, pipeline
 
     return out
+
+
+def create_pipeline(
+    model,
+    preprocess_X=None,
+    preprocess_y=None,
+    preprocess_confounds=None,
+    confounds=None,
+    problem_type='binary_classification',
+):
+
+    # Interpret preprocessing parameters
+    preprocess_vars = prepare_preprocessing(
+        preprocess_X, preprocess_y, preprocess_confounds, confounds
+    )
+    preprocess_X, preprocess_y, preprocess_confounds = preprocess_vars
+    # Prepare the model
+    model_tuple = prepare_model(model=model, problem_type=problem_type)
+
+    pipeline = _create_extended_pipeline(preprocess_X,
+                                         preprocess_y,
+                                         preprocess_confounds,
+                                         model_tuple, confounds,
+                                         categorical_features=None)
+
+    return pipeline

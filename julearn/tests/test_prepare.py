@@ -11,7 +11,7 @@ from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 from sklearn.decomposition import PCA
 from seaborn import load_dataset
 
-from julearn.pipeline import create_extended_pipeline
+from julearn.pipeline import _create_extended_pipeline
 
 import pytest
 
@@ -392,7 +392,7 @@ def test_prepare_model_params():
     cv_outer = 2
     model_params = {'svm__kernel': 'linear'}
 
-    pipeline = create_extended_pipeline(
+    pipeline = _create_extended_pipeline(
         preprocess_steps_features=preprocess_steps_features,
         preprocess_transformer_target=None,
         preprocess_steps_confounds=None,
@@ -405,7 +405,7 @@ def test_prepare_model_params():
     model_params = {
         'svm__C': [0.001, 0.01, 0.1, 1, 10, 100],
         'svm__kernel': 'linear'}
-    pipeline = create_extended_pipeline(
+    pipeline = _create_extended_pipeline(
         preprocess_steps_features=preprocess_steps_features,
         preprocess_transformer_target=None,
         preprocess_steps_confounds=None,
@@ -428,7 +428,7 @@ def test_prepare_model_params():
         'search_params': {'n_iter': 50},
         'cv': 5
     }
-    pipeline = create_extended_pipeline(
+    pipeline = _create_extended_pipeline(
         preprocess_steps_features=preprocess_steps_features,
         preprocess_transformer_target=None,
         preprocess_steps_confounds=None,
@@ -446,7 +446,7 @@ def test_prepare_model_params():
 
     model_params = {'svm__kernel': 'linear', 'cv': 2}
 
-    pipeline = create_extended_pipeline(
+    pipeline = _create_extended_pipeline(
         preprocess_steps_features=preprocess_steps_features,
         preprocess_transformer_target=None,
         preprocess_steps_confounds=None,
@@ -458,7 +458,7 @@ def test_prepare_model_params():
 
     model_params = {'svm__kernel': 'linear', 'scoring': 'accuracy'}
 
-    pipeline = create_extended_pipeline(
+    pipeline = _create_extended_pipeline(
         preprocess_steps_features=preprocess_steps_features,
         preprocess_transformer_target=None,
         preprocess_steps_confounds=None,
@@ -470,7 +470,7 @@ def test_prepare_model_params():
 
     model_params = {'svm__kernel': 'linear', 'search': 'grid'}
 
-    pipeline = create_extended_pipeline(
+    pipeline = _create_extended_pipeline(
         preprocess_steps_features=preprocess_steps_features,
         preprocess_transformer_target=None,
         preprocess_steps_confounds=None,
@@ -482,7 +482,7 @@ def test_prepare_model_params():
 
     model_params = {'svm__C': [0, 1], 'search': 'wrong'}
 
-    pipeline = create_extended_pipeline(
+    pipeline = _create_extended_pipeline(
         preprocess_steps_features=preprocess_steps_features,
         preprocess_transformer_target=None,
         preprocess_steps_confounds=None,
@@ -620,7 +620,7 @@ def test__prepare_hyperparams():
 
     list_should_be_tuned = [False, False, True, True, False, False, True]
     for param_grid, should_be_tuned in zip(grids, list_should_be_tuned):
-        pipeline = create_extended_pipeline(
+        pipeline = _create_extended_pipeline(
             preprocess_steps_features=preprocess_steps_features,
             preprocess_transformer_target=None,
             preprocess_steps_confounds=None,
