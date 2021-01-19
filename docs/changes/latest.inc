@@ -21,6 +21,7 @@ Enhancements
 
 - Update docs to make it more uniform (by `Kaustubh Patil`_). 
 
+- Add user facing `create_pipeline` function (by `Sami Hamdan`_)
 Bugs
 ~~~~
 
