@@ -216,12 +216,61 @@ def run_cross_validation(
 
 def create_pipeline(
     model,
+    confounds=None,
+    problem_type='binary_classification',
     preprocess_X=None,
     preprocess_y=None,
     preprocess_confounds=None,
-    confounds=None,
-    problem_type='binary_classification',
 ):
+    """Creates a julearn pipeline.
+
+    Parameters
+    ----------
+    model : str or scikit-learn compatible model.
+        If string, it will use one of the available models.
+        See :mod:`.available_models`.
+    confounds : str, list(str) or numpy.array | None
+        The confounds.
+        See https://juaml.github.io/julearn/input.html for details.
+    problem_type : str
+        The kind of problem to model.
+
+        Options are:
+
+        * "binary_classification": Perform a binary classification
+          in which the target (y) has only two possible classes (default).
+          The parameter pos_labels can be used to convert a target with
+          multiple_classes into binary.
+        * "multiclass_classification": Performs a multiclass classification
+          in which the target (y) has more than two possible values.
+        * "regression". Perform a regression. The target (y) has to be
+          ordinal at least.
+
+    preprocess_X : str, scikit-learn compatible transformers or list | None
+        Transformer to apply to the features (X). If string, use one of the
+        available transformers. If list, each element can be a string or
+        scikit-learn compatible transformer. If None (default), no
+        transformation is applied.
+
+        See documentation for details.
+    preprocess_y : str or scikit-learn transformer | None
+        Transformer to apply to the target (y). If None (default), no
+        transformation is applied.
+
+        See documentation for details.
+    preprocess_confounds : str, scikit-learn transformers or list | None
+        Transformer to apply to the features (X). If string, use one of the
+        available transformers. If list, each element can be a string or
+        scikit-learn compatible transformer. If None (default), no
+        transformation is applied.
+
+        See documentation for details.
+
+    Returns
+    -------
+    pipeline : obj
+        A julearn compatible pipeline.
+    """
 
     # Interpret preprocessing parameters
     preprocess_vars = prepare_preprocessing(
