@@ -171,12 +171,13 @@ def run_cross_validation(
 
     # create a the pipeline
     pipeline = create_pipeline(
-        model,
-        preprocess_X,
-        preprocess_y,
-        preprocess_confounds,
-        confounds,
-        problem_type,
+        model=model,
+        preprocess_X=preprocess_X,
+        preprocess_y=preprocess_y,
+        preprocess_confounds=preprocess_confounds,
+        confounds=confounds,
+        problem_type=problem_type,
+
     )
 
     # Prepare cross validation
