@@ -222,7 +222,7 @@ def create_pipeline(
     preprocess_y=None,
     preprocess_confounds=None,
 ):
-    """Creates a julearn pipeline.
+    """Creates a not fitted julearn pipeline.
 
     Parameters
     ----------
@@ -269,7 +269,7 @@ def create_pipeline(
     Returns
     -------
     pipeline : obj
-        A julearn compatible pipeline.
+        Not fitted julearn compatible pipeline.
     """
 
     # Interpret preprocessing parameters
