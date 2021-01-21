@@ -20,7 +20,7 @@ import pandas as pd
 from seaborn import load_dataset
 import pytest
 
-from julearn import run_cross_validation
+from julearn import run_cross_validation, create_pipeline
 from julearn.utils.testing import do_scoring_test, compare_models
 
 
@@ -494,3 +494,12 @@ def test_multiprocess_no_error():
         run_cross_validation(
             X=X, y=y, data=df_iris, model='svm', preprocess_X='zscore',
             model_params=model_params)
+
+
+def test_create_pipeline_set_params():
+    model_params = dict(svm__C=2, pca__n_components=.8)
+    pipeline = create_pipeline('svm', preprocess_X='pca',
+                               model_params=model_params)
+
+    for param, val in model_params.items():
+        assert pipeline.get_params()[param] == val
