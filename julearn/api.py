@@ -222,6 +222,7 @@ def create_pipeline(
     preprocess_X=None,
     preprocess_y=None,
     preprocess_confounds=None,
+    model_params=None
 ):
     """Creates a not fitted julearn pipeline.
 
@@ -266,6 +267,11 @@ def create_pipeline(
         transformation is applied.
 
         See documentation for details.
+    model_params : dict | None
+        If not None it has to be a dictionary of paramaeter value pair.
+        Where the parameter of the pipeline is set to the value.
+        These model_params are not for tuning, but only for setting the values.
+
 
     Returns
     -------
@@ -287,4 +293,4 @@ def create_pipeline(
                                          model_tuple, confounds,
                                          categorical_features=None)
 
-    return pipeline
+    return pipeline.set_params(**model_params)
