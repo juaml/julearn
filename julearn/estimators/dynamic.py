@@ -11,18 +11,25 @@ class DynamicSelection(BaseEstimator):
 
     def __init__(self, ensemble, algorithm, ds_split=.2,
                  random_state=None, **kwargs):
-        """description
+        """Creating a Dynamic model using the deslib library.
 
         Parameters
         ----------
-        ensemble : [type]
-            [description]
-        algorithm : [type]
-            [description]
+        ensemble : obj
+            sklearn compatible ensemble model. E.g RandomForest 
+        algorithm : str
+            algorithm from deslib to make the model dynamic.
+            Options:
+
+            * METADES
+
         ds_split : float, optional
-            [description], by default .2
-        random_state : [type], optional
-            [description], by default None
+            how to split the training data.
+            One split is used to train the ensemble model and 
+            the other to drain the dynamic algorithm, by default .2
+        random_state : int, optional
+            random state to get reproducible train test splits
+            in case you use a float for ds_split, by default None
         """
 
         self.ensemble = ensemble
