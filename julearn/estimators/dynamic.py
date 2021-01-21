@@ -23,8 +23,8 @@ class DynamicSelection(BaseEstimator):
             [description], by default .2
         random_state : [type], optional
             [description], by default None
-        """        
-       
+        """
+
         self.ensemble = ensemble
         self.algorithm = algorithm
         self.ds_split = ds_split
@@ -58,13 +58,13 @@ class DynamicSelection(BaseEstimator):
         return self
 
     def predict(self, X):
-        self._dsmodel.predict(X)
+        return self._dsmodel.predict(X)
 
     def predict_proba(self, X):
-        self._dsmodel.predict_proba(X)
+        return self._dsmodel.predict_proba(X)
 
     def score(self, X, y, sample_weight=None):
-        self._dsmodel.score(X, y, sample_weight)
+        return self._dsmodel.score(X, y, sample_weight)
 
     def get_algortihm(self, **kwargs):
         ds_algo = None
