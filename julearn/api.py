@@ -292,5 +292,7 @@ def create_pipeline(
                                          preprocess_confounds,
                                          model_tuple, confounds,
                                          categorical_features=None)
+    if model_params is not None:
+        pipeline = pipeline.set_params(**model_params)
 
-    return pipeline.set_params(**model_params)
+    return pipeline
