@@ -489,7 +489,7 @@ def test_prepare_model_params():
         model=model,
         confounds=None,
         categorical_features=None)
-    with pytest.raises(ValueError, match='must be'):
+    with pytest.raises(ValueError, match='not a valid julearn searcher'):
         pipeline = prepare_model_params(model_params, pipeline, cv_outer)
 
 
