@@ -1,7 +1,7 @@
 import pytest
 from sklearn.model_selection import ParameterSampler
 from julearn.model_selection import (
-    register_searcher, reset_searcher_register, get_searcher, list_searchers)
+    register_searcher, reset_searcher_register, get_searcher)
 
 
 def test_register_searcher():
