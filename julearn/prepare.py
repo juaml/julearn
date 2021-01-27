@@ -1,15 +1,15 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
-from julearn.model_selection.available_searchers import get_searcher, list_searchers
+from julearn.model_selection.available_searchers import (get_searcher,
+                                                         list_searchers)
 from julearn.utils.column_types import pick_columns
 from julearn.transformers.target import TargetTransfromerWrapper
 import pandas as pd
 import numpy as np
 from copy import deepcopy
 from sklearn import model_selection
-from sklearn.model_selection import (RepeatedKFold, GridSearchCV,
-                                     RandomizedSearchCV)
+from sklearn.model_selection import RepeatedKFold
 from sklearn.base import clone
 from sklearn.model_selection import check_cv
 
