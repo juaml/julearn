@@ -292,7 +292,7 @@ def prepare_model_params(msel_dict, pipeline, cv_outer):
           STEP in the pipeline. Example: 'svm__probability': True will set
           the parameter 'probability' of the 'svm' model. If more than option
         * 'search': The kind of search algorithm to use e.g.:
-        'grid' or 'random'. All valid julearn searchers can be entered.
+          'grid' or 'random'. All valid julearn searchers can be entered.
         * 'cv': If search is going to be used, the cross-validation
           splitting strategy to use. Defaults to same CV as for the model
           evaluation.
