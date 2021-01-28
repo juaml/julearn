@@ -46,7 +46,7 @@ def get_searcher(name):
     return out
 
 
-def register_searcher(name, searcher, overwriting=None):
+def register_searcher(name, searcher, overwrite=None):
     """Register searcher to julearn.
     This function allows you to add a scikit-learn compatible searching
     algorithm to julearn. Afterwars, you can call it as all other searchers in
@@ -58,40 +58,40 @@ def register_searcher(name, searcher, overwriting=None):
         Name by which the searcher will be referenced by.
     searcher : obj
         The searcher class by which the searcher can be initialized.
-    overwriting : bool | None, optional
-        decides whether overwriting should be allowed, by default None.
+    overwrite : bool | None, optional
+        decides whether overwrite should be allowed, by default None.
         Options are:
 
-        * None : overwriting is possible, but warns the user
-        * True : overwriting is possible without any warning
-        * False : overwriting is not possible, error is raised instead
+        * None : overwrite is possible, but warns the user
+        * True : overwrite is possible without any warning
+        * False : overwrite is not possible, error is raised instead
 
     """
     if name in list_searchers():
-        if overwriting:
+        if overwrite:
             _available_searchers[name] = searcher
-            logger.info(f'registering searcher names {name}')
-        elif overwriting is None:
+            logger.info(f'Registering new searcher: {name}')
+        elif overwrite is None:
             _available_searchers[name] = searcher
             warn(
                 f'searcher named {name} already exists. '
                 f'Therfore, {name} will be overwritten. '
-                'To remove this warning set `overwriting=True`. '
+                'To remove this warning set `overwrite=True`. '
             )
 
-            logger.info(f'registering searcher names {name}')
+            logger.info(f'Registering new searcher: {name}')
 
         else:
             raise_error(
                 f'searcher named {name} already exists and '
-                'overwriting is set to False, therefore you cannot overwrite '
+                'overwrite is set to False, therefore you cannot overwrite '
                 'existing searchers. '
-                'Set `overwriting=True` in case you want to '
-                'overwrite existing scorers.'
+                'Set `overwrite=True` in case you want to '
+                'overwrite existing searchers.'
             )
     else:
         _available_searchers[name] = searcher
-        logger.info(f'registering searcher names {name}')
+        logger.info(f'Registering new searcher: {name}')
 
 
 def reset_searcher_register():

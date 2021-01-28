@@ -18,11 +18,11 @@ def test_register_searcher():
                       match='searcher named halving already exists.'):
         register_searcher('halving', HalvingGridSearchCV)
 
-    register_searcher('halving', HalvingGridSearchCV, overwriting=True)
+    register_searcher('halving', HalvingGridSearchCV, overwrite=True)
     with pytest.raises(ValueError,
                        match='searcher named halving already exists and '):
 
-        register_searcher('halving', HalvingGridSearchCV, overwriting=False)
+        register_searcher('halving', HalvingGridSearchCV, overwrite=False)
 
     reset_searcher_register()
 
