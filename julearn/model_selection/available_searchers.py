@@ -68,20 +68,13 @@ def register_searcher(name, searcher, overwrite=None):
 
     """
     if name in list_searchers():
-        if overwrite:
-            _available_searchers[name] = searcher
-            logger.info(f'Registering new searcher: {name}')
-        elif overwrite is None:
-            _available_searchers[name] = searcher
+        if overwrite is None:
             warn(
                 f'searcher named {name} already exists. '
-                f'Therfore, {name} will be overwritten. '
+                f'Therefore, {name} will be overwritten. '
                 'To remove this warning set `overwrite=True`. '
             )
-
-            logger.info(f'Registering new searcher: {name}')
-
-        else:
+        elif overwrite is False:
             raise_error(
                 f'searcher named {name} already exists and '
                 'overwrite is set to False, therefore you cannot overwrite '
@@ -90,8 +83,8 @@ def register_searcher(name, searcher, overwrite=None):
                 'overwrite existing searchers.'
             )
     else:
-        _available_searchers[name] = searcher
         logger.info(f'Registering new searcher: {name}')
+        _available_searchers[name] = searcher
 
 
 def reset_searcher_register():
