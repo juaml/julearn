@@ -79,9 +79,8 @@ def register_scorer(name, scorer, overwrite=None):
                 'overwrite is set to False, therefore you cannot overwrite '
                 'existing scorers. Set overwrite=True in case you want to '
                 'overwrite existing scorers')
-    else:
-        logger.info(f'registering scorer named {name}')
-        _extra_available_scorers[name] = scorer
+    logger.info(f'registering scorer named {name}')
+    _extra_available_scorers[name] = scorer
 
 
 def reset_scorer_register():
