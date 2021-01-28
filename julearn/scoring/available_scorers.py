@@ -47,7 +47,7 @@ def list_scorers():
     return {**SCORERS, **_extra_available_scorers}.keys()
 
 
-def register_scorer(name, scorer, overwriting=None):
+def register_scorer(name, scorer, overwrite=None):
     """register a scorer, so that you can access it in scoring with its name.
 
     Parameters
@@ -57,35 +57,31 @@ def register_scorer(name, scorer, overwriting=None):
     scorer : callable
         function of signature (estimator, X, y) see:
         https://scikit-learn.org/stable/modules/model_evaluation.html#scoring
-    overwriting : bool | None, optional
-        decides whether overwriting should be allowed, by default None.
+    overwrite : bool | None, optional
+        decides whether overwrite should be allowed, by default None.
         Options are:
 
-        * None : overwriting is possible, but warns the user
-        * True : overwriting is possible without any warning
-        * False : overwriting is not possible, error is raised instead
+        * None : overwrite is possible, but warns the user
+        * True : overwrite is possible without any warning
+        * False : overwrite is not possible, error is raised instead
     """
     if name in list_scorers():
-        if overwriting:
-            _extra_available_scorers[name] = scorer
-            logger.info(f'registering scorer named {name}')
-        elif overwriting is None:
-            _extra_available_scorers[name] = scorer
+        if overwrite is None:
             warn(
                 f'scorer named {name} already exists. '
                 f'Therefore, {name} will be overwritten. '
-                'To remove this warning set overwriting=True '
+                'To remove this warning set overwrite=True '
             )
             logger.info(f'registering scorer named {name}')
-        else:
+        elif overwrite is False:
             raise_error(
                 f'scorer named {name} already exists and '
-                'overwriting is set to False, therefore you cannot overwrite '
-                'existing scorers. Set overwriting=True in case you want to '
+                'overwrite is set to False, therefore you cannot overwrite '
+                'existing scorers. Set overwrite=True in case you want to '
                 'overwrite existing scorers')
     else:
-        _extra_available_scorers[name] = scorer
         logger.info(f'registering scorer named {name}')
+        _extra_available_scorers[name] = scorer
 
 
 def reset_scorer_register():
