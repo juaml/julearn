@@ -21,7 +21,7 @@ Enhancements
 
 - Update docs to make it more uniform (by `Kaustubh Patil`_). 
 
-- Update model_selection and add capabilities to register searchers (by `Sami Hamdan`_).
+- Update :mod:`.model_selection` and add capabilities to register searchers (by `Sami Hamdan`_).
 
 Bugs
 ~~~~
