@@ -8,8 +8,6 @@ import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
-from sklearn.model_selection._search_successive_halving import (
-    HalvingGridSearchCV)
 from sklearn.decomposition import PCA
 from seaborn import load_dataset
 
@@ -494,7 +492,7 @@ def test_prepare_model_params():
     with pytest.raises(ValueError, match='not a valid julearn searcher'):
         pipeline = prepare_model_params(model_params, pipeline, cv_outer)
 
-    model_params = {'svm__C': [0, 1], 'search': HalvingGridSearchCV}
+    model_params = {'svm__C': [0, 1], 'search': GridSearchCV}
 
     pipeline = create_extended_pipeline(
         preprocess_steps_features=preprocess_steps_features,

@@ -2,37 +2,36 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 import pytest
-from sklearn.model_selection._search_successive_halving import (
-    HalvingGridSearchCV)
+from sklearn.model_selection import GridSearchCV
 from julearn.model_selection import (
     register_searcher, reset_searcher_register, get_searcher)
 
 
 def test_register_searcher():
     with pytest.raises(ValueError, match='The specified searcher '):
-        get_searcher('halving')
-    register_searcher('halving', HalvingGridSearchCV)
-    assert get_searcher('halving') == HalvingGridSearchCV
+        get_searcher('custom_grid')
+    register_searcher('custom_grid', GridSearchCV)
+    assert get_searcher('custom_grid') == GridSearchCV
 
     with pytest.warns(RuntimeWarning,
-                      match='searcher named halving already exists.'):
-        register_searcher('halving', HalvingGridSearchCV)
+                      match='searcher named custom_grid already exists.'):
+        register_searcher('custom_grid', GridSearchCV)
 
-    register_searcher('halving', HalvingGridSearchCV, overwrite=True)
+    register_searcher('custom_grid', GridSearchCV, overwrite=True)
     with pytest.raises(ValueError,
-                       match='searcher named halving already exists and '):
+                       match='searcher named custom_grid already exists and '):
 
-        register_searcher('halving', HalvingGridSearchCV, overwrite=False)
+        register_searcher('custom_grid', GridSearchCV, overwrite=False)
 
     reset_searcher_register()
 
 
 def test_reset_searcher():
 
-    register_searcher('halving', HalvingGridSearchCV)
-    get_searcher('halving')
+    register_searcher('custom_grid', GridSearchCV)
+    get_searcher('custom_grid')
     reset_searcher_register()
     with pytest.raises(ValueError,
                        match='The specified searcher '):
 
-        get_searcher('halving')
+        get_searcher('custom_grid')
