@@ -74,4 +74,4 @@ print(scores['test_balanced_accuracy'].mean())
 precision_scores = run_cross_validation(
     X=X, y=y, data=df_unbalanced, model='svm', preprocess_X='zscore', seed=42,
     scoring='precision', pos_labels='versicolor')
-print(precision_scores['test_precision'].mean())
+print(precision_scores['test_score'].mean())

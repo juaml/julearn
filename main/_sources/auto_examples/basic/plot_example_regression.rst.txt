@@ -71,13 +71,13 @@ Set the logging level to info to see extra information
 
  .. code-block:: none
 
-    2021-01-28 20:21:15,279 - julearn - INFO - ===== Lib Versions =====
-    2021-01-28 20:21:15,279 - julearn - INFO - numpy: 1.19.5
-    2021-01-28 20:21:15,279 - julearn - INFO - scipy: 1.6.0
-    2021-01-28 20:21:15,279 - julearn - INFO - sklearn: 0.24.1
-    2021-01-28 20:21:15,279 - julearn - INFO - pandas: 1.2.1
-    2021-01-28 20:21:15,279 - julearn - INFO - julearn: 0.2.5.dev20+g6eba31b
-    2021-01-28 20:21:15,279 - julearn - INFO - ========================
+    2021-01-28 20:28:46,599 - julearn - INFO - ===== Lib Versions =====
+    2021-01-28 20:28:46,600 - julearn - INFO - numpy: 1.19.5
+    2021-01-28 20:28:46,600 - julearn - INFO - scipy: 1.6.0
+    2021-01-28 20:28:46,600 - julearn - INFO - sklearn: 0.24.1
+    2021-01-28 20:28:46,600 - julearn - INFO - pandas: 1.2.1
+    2021-01-28 20:28:46,600 - julearn - INFO - julearn: 0.2.5.dev21+gb322463.d20210128
+    2021-01-28 20:28:46,600 - julearn - INFO - ========================
 
 
 
@@ -243,20 +243,20 @@ for scoring
 
  .. code-block:: none
 
-    2021-01-28 20:21:15,656 - julearn - INFO - Using default CV
-    2021-01-28 20:21:15,657 - julearn - INFO - ==== Input Data ====
-    2021-01-28 20:21:15,657 - julearn - INFO - Using dataframe as input
-    2021-01-28 20:21:15,657 - julearn - INFO - Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2021-01-28 20:21:15,657 - julearn - INFO - Target: target
-    2021-01-28 20:21:15,657 - julearn - INFO - Expanded X: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2021-01-28 20:21:15,657 - julearn - INFO - Expanded Confounds: []
-    2021-01-28 20:21:15,658 - julearn - INFO - ====================
-    2021-01-28 20:21:15,658 - julearn - INFO - 
-    2021-01-28 20:21:15,659 - julearn - INFO - ====== Model ======
-    2021-01-28 20:21:15,659 - julearn - INFO - Obtaining model by name: ridge
-    2021-01-28 20:21:15,659 - julearn - INFO - ===================
-    2021-01-28 20:21:15,659 - julearn - INFO - 
-    2021-01-28 20:21:15,659 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+    2021-01-28 20:28:47,099 - julearn - INFO - Using default CV
+    2021-01-28 20:28:47,099 - julearn - INFO - ==== Input Data ====
+    2021-01-28 20:28:47,099 - julearn - INFO - Using dataframe as input
+    2021-01-28 20:28:47,099 - julearn - INFO - Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2021-01-28 20:28:47,099 - julearn - INFO - Target: target
+    2021-01-28 20:28:47,100 - julearn - INFO - Expanded X: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2021-01-28 20:28:47,100 - julearn - INFO - Expanded Confounds: []
+    2021-01-28 20:28:47,101 - julearn - INFO - ====================
+    2021-01-28 20:28:47,101 - julearn - INFO - 
+    2021-01-28 20:28:47,101 - julearn - INFO - ====== Model ======
+    2021-01-28 20:28:47,101 - julearn - INFO - Obtaining model by name: ridge
+    2021-01-28 20:28:47,101 - julearn - INFO - ===================
+    2021-01-28 20:28:47,102 - julearn - INFO - 
+    2021-01-28 20:28:47,102 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
 
 
 
@@ -282,12 +282,12 @@ The scores dataframe has all the values for each CV split.
 
  .. code-block:: none
 
-       fit_time  score_time  test_neg_mean_absolute_error  repeat  fold
-    0  0.011432    0.006795                    -53.711774       0     0
-    1  0.010256    0.006746                    -38.334731       0     1
-    2  0.010219    0.006737                    -46.578596       0     2
-    3  0.010179    0.006836                    -48.109208       0     3
-    4  0.010207    0.006711                    -42.632269       0     4
+       fit_time  score_time  test_score  repeat  fold
+    0  0.014934    0.009160  -53.711774       0     0
+    1  0.013501    0.009471  -38.334731       0     1
+    2  0.013861    0.009177  -46.578596       0     2
+    3  0.013575    0.009152  -48.109208       0     3
+    4  0.013802    0.009359  -42.632269       0     4
 
 
 
@@ -300,7 +300,7 @@ Mean value of mean absolute error across CV
 
 .. code-block:: default
 
-    print(scores['test_neg_mean_absolute_error'].mean() * -1)
+    print(scores['test_score'].mean() * -1)
 
 
 
@@ -327,7 +327,7 @@ Now we can get the MAE fold and repetition:
 
 
     df_mae = scores.set_index(
-        ['repeat', 'fold'])['test_neg_mean_absolute_error'].unstack() * -1
+        ['repeat', 'fold'])['test_score'].unstack() * -1
     df_mae.index.name = 'Repeats'
     df_mae.columns.name = 'K-fold splits'
 
@@ -474,7 +474,7 @@ of true values vs predicted values
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  1.295 seconds)
+   **Total running time of the script:** ( 0 minutes  1.714 seconds)
 
 
 .. _sphx_glr_download_auto_examples_basic_plot_example_regression.py:
