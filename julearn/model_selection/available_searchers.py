@@ -1,3 +1,6 @@
+# Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
+#          Sami Hamdan <s.hamdan@fz-juelich.de>
+# License: AGPL
 from copy import deepcopy
 from julearn.utils.logging import raise_error, logger, warn
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
