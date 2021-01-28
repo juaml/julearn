@@ -82,7 +82,6 @@ def register_searcher(name, searcher, overwrite=None):
                 'Set `overwrite=True` in case you want to '
                 'overwrite existing searchers.'
             )
-    else:
         logger.info(f'Registering new searcher: {name}')
         _available_searchers[name] = searcher
 
