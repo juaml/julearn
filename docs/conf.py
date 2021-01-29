@@ -95,6 +95,7 @@ numpydoc_show_class_members = False
 autoclass_content = 'both'
 
 # sphinx-multiversion options
+smv_rebuild_tags = False
 smv_tag_whitelist = r'^v\d+\.\d+.\d+$'
 smv_branch_whitelist = r'main'
 smv_released_pattern = r'^tags/v.*$'

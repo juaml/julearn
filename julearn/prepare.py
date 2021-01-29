@@ -515,21 +515,29 @@ def prepare_scoring(estimator, scorers):
     estimator : julearn.pipeline.ExtendedDataFramePipeline
         An estimator with a .transform_confounds and .transform_target
         method needed for scoring against a new ground truth.
-    scorers : str or list(str)
-        A scorer name (or list of)
+    scorers : str, obj, list(str) or dict
+        A scorer name (or list of) or dict of scorer name:scorer.
+        For more information see:
+        https://scikit-learn.org/stable/modules/model_evaluation.html#scoring
+
+
 
     Returns
     -------
-    s_dict : dict(string, scorer)
-        A dictionary with the corresponding scorers for each scorer name,
+    scoring : scorer | dict(string, scorer)
+        A dictionary with the corresponding scorers for each scorer name
+        or scorer,
         suitable for sklearn.model_selection.cross_validate.
     """
     if scorers is None:
         return None
-    if not isinstance(scorers, list):
-        scorers = [scorers]
-    s_dict = {k: get_extended_scorer(estimator, k) for k in scorers}
-    return s_dict
+    if isinstance(scorers, list):
+        scoring = {k: get_extended_scorer(estimator, k) for k in scorers}
+    elif isinstance(scorers, dict):
+        scoring = scorers
+    else:
+        scoring = get_extended_scorer(estimator, scorers)
+    return scoring
 
 
 def _create_preprocess_tuple(transformer):

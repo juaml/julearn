@@ -107,7 +107,7 @@ def run_cross_validation(
     groups : str or numpy.array | None
         The grouping labels in case a Group CV is used.
         See https://juaml.github.io/julearn/input.html for details.
-    scoring : str | list(str) | None
+    scoring : str | list(str) | obj | dict | None
         The scoring metric to use.
         See https://scikit-learn.org/stable/modules/model_evaluation.html for
         a comprehensive list of options. If None, use the model's default
