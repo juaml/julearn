@@ -38,7 +38,7 @@ jobs:
       - name: Test Build Docs
         if: github.ref != 'refs/heads/main' && ! startsWith(github.ref, 'refs/tags')
         run: |
-          BUILDDIR=_build/main make local
+          BUILDDIR=_build/main make -C docs/ local
 
       - name: Build Docs
         if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags')
