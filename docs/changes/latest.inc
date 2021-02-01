@@ -23,6 +23,8 @@ Enhancements
 
 - Refactor scoring to allow for registering and callable scorers (by `Sami Hamdan`_).
 
+- Update :mod:`.model_selection` and add capabilities to register searchers (by `Sami Hamdan`_).
+
 Bugs
 ~~~~
 

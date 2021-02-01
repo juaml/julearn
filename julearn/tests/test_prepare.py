@@ -489,7 +489,21 @@ def test_prepare_model_params():
         model=model,
         confounds=None,
         categorical_features=None)
-    with pytest.raises(ValueError, match='must be'):
+    with pytest.raises(ValueError, match='not a valid julearn searcher'):
+        pipeline = prepare_model_params(model_params, pipeline, cv_outer)
+
+    model_params = {'svm__C': [0, 1], 'search': GridSearchCV}
+
+    pipeline = create_extended_pipeline(
+        preprocess_steps_features=preprocess_steps_features,
+        preprocess_transformer_target=None,
+        preprocess_steps_confounds=None,
+        model=model,
+        confounds=None,
+        categorical_features=None)
+    with pytest.warns(RuntimeWarning,
+                      match=f'{model_params["search"]} is not'
+                      ' a registered searcher.'):
         pipeline = prepare_model_params(model_params, pipeline, cv_outer)
 
 
@@ -509,7 +523,7 @@ def test_pick_regexp():
         '_a2_b_c9_'
     ]
 
-    X = columns[:-1]
+    X = columns[: -1]
     y = columns[-1]
     confounds = None
     df = pd.DataFrame(data=data, columns=columns)
@@ -534,7 +548,7 @@ def test_pick_regexp():
     assert df_y.name == y
     assert len(confound_names) == 0
 
-    X = columns[:6]
+    X = columns[: 6]
     y = '_a3_b2_c7_'
     confounds = columns[-3:]
     prepared = prepare_input_data(X=[':'], y=y, confounds=confounds, df=df,
@@ -549,9 +563,9 @@ def test_pick_regexp():
     assert len(confound_names) == 3
     assert all([x in confound_names for x in confounds])
 
-    X = columns[:6]
+    X = columns[: 6]
     y = '_a3_b2_c7_'
-    confounds = columns[-3:-1]
+    confounds = columns[-3: -1]
     groups = columns[-1]
     prepared = prepare_input_data(X=[':'], y=y, confounds=confounds, df=df,
                                   pos_labels=None, groups=groups)
@@ -567,7 +581,7 @@ def test_pick_regexp():
     assert len(confound_names) == 2
     assert all([x in confound_names for x in confounds])
 
-    X = columns[:6]
+    X = columns[: 6]
     y = '_a3_b2_c7_'
     confounds = columns[-3:]
     prepared = prepare_input_data(X=['_a_.*'], y=y, confounds='_a2_.*', df=df,
@@ -582,7 +596,7 @@ def test_pick_regexp():
     assert len(confound_names) == 3
     assert all([x in confound_names for x in confounds])
 
-    X = columns[:6]
+    X = columns[: 6]
     y = '_a3_b2_c7_'
     confounds = columns[-3:]
     prepared = prepare_input_data(X=['.*_b_.*', '.*a_b2_.*', '.*b3_.*'], y=y,

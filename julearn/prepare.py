@@ -1,14 +1,15 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
+from julearn.model_selection.available_searchers import (get_searcher,
+                                                         list_searchers)
 from julearn.utils.column_types import pick_columns
 from julearn.transformers.target import TargetTransfromerWrapper
 import pandas as pd
 import numpy as np
 from copy import deepcopy
 from sklearn import model_selection
-from sklearn.model_selection import (RepeatedKFold, GridSearchCV,
-                                     RandomizedSearchCV)
+from sklearn.model_selection import RepeatedKFold
 from sklearn.base import clone
 from sklearn.model_selection import check_cv
 
@@ -290,7 +291,8 @@ def prepare_model_params(msel_dict, pipeline, cv_outer):
         * 'STEP__PARAMETER': A value (or several) to be used as PARAMETER for
           STEP in the pipeline. Example: 'svm__probability': True will set
           the parameter 'probability' of the 'svm' model. If more than option
-        * 'search': The kind of search algorithm to use: 'grid' or 'random'.
+        * 'search': The kind of search algorithm to use e.g.:
+          'grid' or 'random'. All valid julearn searchers can be entered.
         * 'cv': If search is going to be used, the cross-validation
           splitting strategy to use. Defaults to same CV as for the model
           evaluation.
@@ -323,14 +325,23 @@ def prepare_model_params(msel_dict, pipeline, cv_outer):
         search = msel_dict.get('search', 'grid')
         search_params = msel_dict.get('search_params', {})
 
-        logger.info('Tunning hyperparameters using {search}')
-        if search == 'grid':
-            search = GridSearchCV
-        elif search == 'random':
-            search = RandomizedSearchCV
+        if search in list_searchers():
+            logger.info(f'Tunning hyperparameters using {search}')
+            search = get_searcher(search)
         else:
-            raise_error(f'Parameter "search" must be "grid" or "random"'
-                        f'(was {search})')
+            if isinstance(search, str):
+                raise_error(
+                    f'The searcher {search} is not a valid julearn searcher. '
+                    'You can get a list of all available once by using: '
+                    'julearn.model_selection.list_searchers(). You can also '
+                    'enter a valid scikit-learn searcher or register it.'
+                )
+            else:
+                warn(
+                    f'{search} is not a registered searcher. '
+                )
+                logger.info(
+                    f'Tunning hyperparameters using not registered {search}')
 
         logger.info('Hyperparameters:')
         for k, v in hyper_params.items():
