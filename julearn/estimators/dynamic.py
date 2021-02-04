@@ -58,7 +58,7 @@ class DynamicSelection(BaseEstimator):
             y_dsel = y[test]
 
         self.ensemble.fit(X_train, y_train)
-        self._dsmodel = self.get_algortihm(pool_classifiers=self.ensemble,
+        self._dsmodel = self.get_algorithm(pool_classifiers=self.ensemble,
                                            **self._ds_params)
         self._dsmodel.fit(X_dsel, y_dsel)
 
@@ -73,7 +73,7 @@ class DynamicSelection(BaseEstimator):
     def score(self, X, y, sample_weight=None):
         return self._dsmodel.score(X, y, sample_weight)
 
-    def get_algortihm(self, **kwargs):
+    def get_algorithm(self, **kwargs):
         ds_algo = None
 
         try:
