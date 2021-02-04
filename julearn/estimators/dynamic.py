@@ -1,16 +1,16 @@
+# Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
+#          Sami Hamdan <s.hamdan@fz-juelich.de>
+#          Shammi More <s.more@fz-juelich.de>
+# License: AGPL
 from julearn.utils.logging import raise_error
 from sklearn.base import BaseEstimator
 from sklearn.model_selection import train_test_split, check_cv
-
-# cv = StratifiedShuffleSplit(1, test_size_size=0.2)
-# cv = [[[0, 1], [2, 3]]]
-# cv = 0.2
 
 
 class DynamicSelection(BaseEstimator):
 
     def __init__(self, ensemble, algorithm, ds_split=.2,
-                 random_state=None, **kwargs):
+                 random_state=None, random_state_algorithm=None, **kwargs):
         """Creating a Dynamic model using the deslib library.
 
         Parameters
@@ -22,6 +22,15 @@ class DynamicSelection(BaseEstimator):
             Options:
 
             * METADES
+            * SingleBest
+            * StaticSelection
+            * StackedClassifier
+            * KNORAU
+            * KNORAE
+            * DESP
+            * OLA
+            * MCB
+            * KNOP
 
         ds_split : float, optional
             how to split the training data.
@@ -36,6 +45,7 @@ class DynamicSelection(BaseEstimator):
         self.algorithm = algorithm
         self.ds_split = ds_split
         self.random_state = random_state
+        self.random_state_algorithm = random_state_algorithm
         self._ds_params = kwargs
 
     def fit(self, X, y=None):
@@ -58,8 +68,10 @@ class DynamicSelection(BaseEstimator):
             y_dsel = y[test]
 
         self.ensemble.fit(X_train, y_train)
-        self._dsmodel = self.get_algorithm(pool_classifiers=self.ensemble,
-                                           **self._ds_params)
+        self._dsmodel = self.get_algorithm(
+            pool_classifiers=self.ensemble,
+            random_state=self.random_state_algorithm,
+            ** self._ds_params)
         self._dsmodel.fit(X_dsel, y_dsel)
 
         return self
@@ -84,5 +96,23 @@ class DynamicSelection(BaseEstimator):
 
         if self.algorithm == 'METADES':
             from deslib.des import METADES as ds_algo
+        elif self.algorithm == 'SingleBest':
+            from deslib.static import SingleBest as ds_algo
+        elif self.algorithm == 'StaticSelection':
+            from deslib.static import StaticSelection as ds_algo
+        elif self.algorithm == 'StackedClassifier':
+            from deslib.static.stacked import StackedClassifier as ds_algo
+        elif self.algorithm == 'KNORAU':
+            from deslib.des import KNORAU as ds_algo
+        elif self.algorithm == 'KNORAE':
+            from deslib.des import KNORAE as ds_algo
+        elif self.algorithm == 'DESP':
+            from deslib.des import DESP as ds_algo
+        elif self.algorithm == 'OLA':
+            from deslib.dcs import OLA as ds_algo
+        elif self.algorithm == 'MCB':
+            from deslib.dcs import MCB as ds_algo
+        elif self.algorithm == 'KNOP':
+            from deslib.des import KNOP as ds_algo
 
         return ds_algo(**kwargs)
