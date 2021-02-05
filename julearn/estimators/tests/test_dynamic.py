@@ -63,8 +63,13 @@ def test_algorithms():
 
 
 def test_wrong_algo():
+    df_iris = load_dataset('iris')
+    df_iris = df_iris[df_iris['species'].isin(['versicolor', 'virginica'])]
+    X = ['sepal_length', 'sepal_width', 'petal_length']
+    y = 'species'
     ensemble_model = RandomForestClassifier()
 
-    with pytest.raises(ValueError, match='wrong  is not a valid or supported'):
-        DynamicSelection(
+    with pytest.raises(ValueError, match='wrong is not a valid or supported'):
+        dynamic_model = DynamicSelection(
             ensemble=ensemble_model, algorithm='wrong')
+        dynamic_model.fit(df_iris[X], df_iris[y])
