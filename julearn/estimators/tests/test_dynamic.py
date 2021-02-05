@@ -4,6 +4,7 @@
 # License: AGPL
 
 import numpy as np
+import pytest
 from julearn.estimators.dynamic import DynamicSelection
 from sklearn.ensemble import RandomForestClassifier
 from seaborn import load_dataset
@@ -59,3 +60,11 @@ def test_algorithms():
         model_deslib.fit(X_dsel, y_dsel)
         score_deslib = model_deslib.score(df_iris[X], df_iris[y])
         assert score_deslib == score_julearn
+
+
+def test_wrong_algo():
+    ensemble_model = RandomForestClassifier()
+
+    with pytest.raises(ValueError, match='wrong  is not a valid or supported'):
+        DynamicSelection(
+            ensemble=ensemble_model, algorithm='wrong')
