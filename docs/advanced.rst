@@ -1,7 +1,6 @@
-.. include:: links.inc
-
 Advanced Topics
 ===============
+.. include:: links.inc
 
 The following sections are advanced topic which do not need to be read
 for a lot of usecases, but still provide some context for those who want it.

@@ -32,6 +32,7 @@ from `pandas`_ dataframes, while keeping the flexibiliy of using
    installation
    input
    pipeline
+   advanced
    steps
    hyperparameters
    auto_examples/basic/index.rst
