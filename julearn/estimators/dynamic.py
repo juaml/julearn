@@ -6,6 +6,19 @@ from julearn.utils.logging import raise_error
 from sklearn.base import BaseEstimator
 from sklearn.model_selection import train_test_split, check_cv
 
+_deslib_algorithms = dict(
+    METADES='des',
+    KNORAU='des',
+    KNORAE="des",
+    DESP="des",
+    KNOP="des",
+    OLA="dcs",
+    MCB="dcs",
+    SingleBest="static",
+    StaticSelection="static",
+    StackedClassifier="static"
+)
+
 
 class DynamicSelection(BaseEstimator):
 
@@ -86,7 +99,6 @@ class DynamicSelection(BaseEstimator):
         return self._dsmodel.score(X, y, sample_weight)
 
     def get_algorithm(self, **kwargs):
-        ds_algo = None
 
         try:
             import deslib  # noqa
@@ -94,25 +106,15 @@ class DynamicSelection(BaseEstimator):
             raise_error('DynamicSelection requires deslib library: '
                         'https://deslib.readthedocs.io/en/latest/index.html')
 
-        if self.algorithm == 'METADES':
-            from deslib.des import METADES as ds_algo
-        elif self.algorithm == 'SingleBest':
-            from deslib.static import SingleBest as ds_algo
-        elif self.algorithm == 'StaticSelection':
-            from deslib.static import StaticSelection as ds_algo
-        elif self.algorithm == 'StackedClassifier':
-            from deslib.static.stacked import StackedClassifier as ds_algo
-        elif self.algorithm == 'KNORAU':
-            from deslib.des import KNORAU as ds_algo
-        elif self.algorithm == 'KNORAE':
-            from deslib.des import KNORAE as ds_algo
-        elif self.algorithm == 'DESP':
-            from deslib.des import DESP as ds_algo
-        elif self.algorithm == 'OLA':
-            from deslib.dcs import OLA as ds_algo
-        elif self.algorithm == 'MCB':
-            from deslib.dcs import MCB as ds_algo
-        elif self.algorithm == 'KNOP':
-            from deslib.des import KNOP as ds_algo
+        import_algorithm = _deslib_algorithms.get(self.algorithm)
+        if import_algorithm is None:
+            raise_error(f'{self.algorithm} is not a valid or supported '
+                        f'deslib algorithm. '
+                        f'Valid options are {_deslib_algorithms.keys()}'
+                        )
+        else:
+            exec(
+                f'from deslib.{import_algorithm} import {self.algorithm} '
+                'as ds_algo', locals(), globals())
 
-        return ds_algo(**kwargs)
+        return ds_algo(**kwargs)  # noqa
