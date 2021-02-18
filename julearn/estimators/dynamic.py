@@ -48,7 +48,7 @@ class DynamicSelection(BaseEstimator):
         ds_split : float, optional
             how to split the training data.
             One split is used to train the ensemble model and
-            the other to drain the dynamic algorithm, by default .2
+            the other to train the dynamic algorithm, by default .2
         random_state : int, optional
             random state to get reproducible train test splits
             in case you use a float for ds_split, by default None
