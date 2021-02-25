@@ -5,6 +5,7 @@
 
 import numpy as np
 import pytest
+from sklearn import ensemble
 from julearn.estimators.dynamic import DynamicSelection
 from sklearn.ensemble import RandomForestClassifier
 from seaborn import load_dataset
@@ -12,7 +13,7 @@ from seaborn import load_dataset
 from deslib.dcs import (OLA, MCB)
 from deslib.des import (DESP, KNORAU, METADES, KNOP, KNORAE)
 from deslib.static import (StackedClassifier, SingleBest, StaticSelection)
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, StratifiedKFold, KFold
 
 
 all_algorithms = {'METADES': METADES,
@@ -72,4 +73,30 @@ def test_wrong_algo():
     with pytest.raises(ValueError, match='wrong is not a valid or supported'):
         dynamic_model = DynamicSelection(
             ensemble=ensemble_model, algorithm='wrong')
+        dynamic_model.fit(df_iris[X], df_iris[y])
+
+
+def test_cv():
+
+    df_iris = load_dataset('iris')
+    df_iris = df_iris[df_iris['species'].isin(['versicolor', 'virginica'])]
+    df_iris = df_iris.sample(n=len(df_iris))
+    X = ['sepal_length', 'sepal_width', 'petal_length']
+    y = 'species'
+    ensemble_model = RandomForestClassifier()
+
+    train, test = train_test_split(df_iris.index, test_size=.4, shuffle=True)
+
+    for ds_split in [
+        .2, .3, 2, 10,
+        StratifiedKFold(2),
+        StratifiedKFold(10),
+        KFold(3, shuffle=True),
+        [[train, test]]
+    ]:
+
+        dynamic_model = DynamicSelection(
+            ensemble=ensemble_model, algorithm='METADES',
+            ds_split=ds_split
+        )
         dynamic_model.fit(df_iris[X], df_iris[y])

@@ -69,16 +69,12 @@ class DynamicSelection(BaseEstimator):
                 X, y, test_size=self.ds_split,
                 random_state=self.random_state)
         else:
-            t_split = check_cv(self.ds_split)
-            n_cv = self.cv.get_n_splits()
-            if n_cv != 1:
-                raise_error('The number of splits should be 2')
-
-            train, test = list(t_split.split(X, y))[0]
-            X_train = X[train]
-            y_train = y[train]
-            X_dsel = X[test]
-            y_dsel = y[test]
+            cv_split = check_cv(self.ds_split)
+            train, test = list(cv_split.split(X, y))[0]
+            X_train = X.loc[train, :]
+            y_train = y.loc[train]
+            X_dsel = X.loc[test, :]
+            y_dsel = y.loc[test]
 
         self.ensemble.fit(X_train, y_train)
         self._dsmodel = self.get_algorithm(
