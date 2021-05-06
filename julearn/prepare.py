@@ -17,6 +17,8 @@ from . estimators import get_model
 from . transformers import get_transformer
 from . scoring import get_extended_scorer
 from . utils import raise_error, warn, logger
+from . model_selection import (StratifiedGroupsKFold,
+                               RepeatedStratifiedGroupsKFold)
 
 
 def _validate_input_data_np(X, y, confounds, groups):
@@ -620,7 +622,9 @@ def check_consistency(
             model_selection.GroupKFold,
             model_selection.GroupShuffleSplit,
             model_selection.LeaveOneGroupOut,
-            model_selection.LeavePGroupsOut
+            model_selection.LeavePGroupsOut,
+            StratifiedGroupsKFold,
+            RepeatedStratifiedGroupsKFold
         )
         if not isinstance(cv, valid_instances):
             warn('The parameter groups was specified but the CV strategy '
