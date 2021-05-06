@@ -182,6 +182,80 @@
 <div class="section" id="module-julearn.api">
 <span id="main-api-functions"></span><h2>Main API functions<a class="headerlink" href="#module-julearn.api" title="Permalink to this headline">¶</a></h2>
 <dl class="py function">
+<dt id="julearn.api.create_pipeline">
+<code class="sig-prename descclassname"><span class="pre">julearn.api.</span></code><code class="sig-name descname"><span class="pre">create_pipeline</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">problem_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'binary_classification'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocess_X</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocess_y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocess_confounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.api.create_pipeline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a not fitted julearn pipeline.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>model</strong><span class="classifier">str or scikit-learn compatible model.</span></dt><dd><p>If string, it will use one of the available models.
+See <code class="xref py py-mod docutils literal notranslate"><span class="pre">available_models</span></code>.</p>
+</dd>
+<dt><strong>confounds</strong><span class="classifier">str, list(str) or numpy.array | None</span></dt><dd><p>The confounds.
+See <a class="reference external" href="https://juaml.github.io/julearn/input.html">https://juaml.github.io/julearn/input.html</a> for details.</p>
+</dd>
+<dt><strong>problem_type</strong><span class="classifier">str</span></dt><dd><p>The kind of problem to model.</p>
+<p>Options are:</p>
+<ul class="simple">
+<li><p>“binary_classification”: Perform a binary classification
+in which the target (y) has only two possible classes (default).
+The parameter pos_labels can be used to convert a target with
+multiple_classes into binary.</p></li>
+<li><p>“multiclass_classification”: Performs a multiclass classification
+in which the target (y) has more than two possible values.</p></li>
+<li><p>“regression”. Perform a regression. The target (y) has to be
+ordinal at least.</p></li>
+</ul>
+</dd>
+<dt><strong>preprocess_X</strong><span class="classifier">str, scikit-learn compatible transformers or list | None</span></dt><dd><p>Transformer to apply to the features (X). If string, use one of the
+available transformers. If list, each element can be a string or
+scikit-learn compatible transformer. If None (default), no
+transformation is applied.</p>
+<p>See documentation for details.</p>
+</dd>
+<dt><strong>preprocess_y</strong><span class="classifier">str or scikit-learn transformer | None</span></dt><dd><p>Transformer to apply to the target (y). If None (default), no
+transformation is applied.</p>
+<p>See documentation for details.</p>
+</dd>
+<dt><strong>preprocess_confounds</strong><span class="classifier">str, scikit-learn transformers or list | None</span></dt><dd><p>Transformer to apply to the features (X). If string, use one of the
+available transformers. If list, each element can be a string or
+scikit-learn compatible transformer. If None (default), no
+transformation is applied.</p>
+<p>See documentation for details.</p>
+</dd>
+<dt><strong>model_params</strong><span class="classifier">dict | None</span></dt><dd><p>If not None, this dictionary specifies the model parameters to use</p>
+<p>The dictionary can define the following keys:</p>
+<ul class="simple">
+<li><p>‘STEP__PARAMETER’: A value (or several) to be used as PARAMETER for
+STEP in the pipeline. Example: ‘svm__probability’: True will set
+the parameter ‘probability’ of the ‘svm’ model. If more than option
+is provided for at least one hyperparameter, a search will be
+performed.</p></li>
+<li><p>‘search’: The kind of search algorithm to use, e.g.:
+‘grid’ or ‘random’. Can be any valid julearn searcher name or
+scikit-learn compatible searcher.</p></li>
+<li><p>‘cv’: If search is going to be used, the cross-validation
+splitting strategy to use. Defaults to same CV as for the model
+evaluation.</p></li>
+<li><p>‘scoring’: If search is going to be used, the scoring metric to
+evaluate the performance.</p></li>
+<li><p>‘search_params’: Additional parameters for the search method.</p></li>
+</ul>
+<p>See <a class="reference external" href="https://juaml.github.io/julearn/hyperparameters.html">https://juaml.github.io/julearn/hyperparameters.html</a> for details.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>pipeline</strong><span class="classifier">obj</span></dt><dd><p>Not fitted julearn compatible pipeline
+or pipeline wrappen in Searcher.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt id="julearn.api.run_cross_validation">
 <code class="sig-prename descclassname"><span class="pre">julearn.api.</span></code><code class="sig-name descname"><span class="pre">run_cross_validation</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">problem_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'binary_classification'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocess_X</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocess_y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocess_confounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_estimator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.api.run_cross_validation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run cross validation and score.</p>
@@ -678,7 +752,7 @@ and returns a transformed version of <cite>X</cite>.</p>
 <dt id="julearn.pipeline.ExtendedDataFramePipeline">
 <em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">julearn.pipeline.</span></code><code class="sig-name descname"><span class="pre">ExtendedDataFramePipeline</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataframe_pipeline</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_transformer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confound_dataframe_pipeline</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categorical_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.pipeline.ExtendedDataFramePipeline" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class creating a custom metamodel like a Pipeline. In practice this
-should be created using :ref:julearn.pipeline.create_extended_pipeline.
+should be created using :ref:julearn.pipeline._create_extended_pipeline.
 There are multiple caveats of creating such a pipline without using
 that function. Compared to an usual scikit-learn pipeline, this have added
 functionalities:</p>
