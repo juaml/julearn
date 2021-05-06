@@ -74,6 +74,12 @@ class DynamicSelection(BaseEstimator):
                 random_state=self.random_state)
         else:
             cv_split = check_cv(self.ds_split)
+            if cv_split.get_n_splits() != 1:
+                raise_error(
+                    'ds_split only allows for one train and one test split.\n'
+                    f'You tried to use {cv_split.get_n_splits()} splits'
+                )
+
             train, test = list(cv_split.split(X, y))[0]
             X_train = X.iloc[train, :]
             y_train = y.iloc[train]

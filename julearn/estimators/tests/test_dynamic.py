@@ -12,7 +12,7 @@ from seaborn import load_dataset
 from deslib.dcs import (OLA, MCB)
 from deslib.des import (DESP, KNORAU, METADES, KNOP, KNORAE)
 from deslib.static import (StackedClassifier, SingleBest, StaticSelection)
-from sklearn.model_selection import train_test_split, StratifiedKFold, KFold
+from sklearn.model_selection import train_test_split, ShuffleSplit
 
 
 all_algorithms = {'METADES': METADES,
@@ -75,7 +75,7 @@ def test_wrong_algo():
         dynamic_model.fit(df_iris[X], df_iris[y])
 
 
-def test_cv():
+def test_ds_split_no_error():
 
     df_iris = load_dataset('iris')
     df_iris = df_iris[df_iris['species'].isin(['versicolor', 'virginica'])]
@@ -86,12 +86,34 @@ def test_cv():
 
     train, test = train_test_split(
         np.arange(len(df_iris)), test_size=.4, shuffle=True)
-    for ds_split in [.2, .3, 2, 10,
-                     StratifiedKFold(2), StratifiedKFold(10),
-                     KFold(3, shuffle=True), [(train, test)]]:
 
+    for ds_split in [.2, .3,
+                     [(train, test)],
+                     ShuffleSplit(n_splits=1)]:
         dynamic_model = DynamicSelection(
             ensemble=ensemble_model, algorithm='METADES',
             ds_split=ds_split
         )
         dynamic_model.fit(df_iris[X], df_iris[y])
+
+
+def test_ds_split_error():
+
+    df_iris = load_dataset('iris')
+    df_iris = df_iris[df_iris['species'].isin(['versicolor', 'virginica'])]
+    df_iris = df_iris.sample(n=len(df_iris))
+    X = ['sepal_length', 'sepal_width', 'petal_length']
+    y = 'species'
+    ensemble_model = RandomForestClassifier()
+
+    train, test = train_test_split(
+        np.arange(len(df_iris)), test_size=.4, shuffle=True)
+
+    for ds_split in [4, [(train, test), (train, test)],
+                     ShuffleSplit(n_splits=2)]:
+        with pytest.raises(ValueError, match='ds_split only allows'):
+            dynamic_model = DynamicSelection(
+                ensemble=ensemble_model, algorithm='METADES',
+                ds_split=ds_split
+            )
+            dynamic_model.fit(df_iris[X], df_iris[y])
