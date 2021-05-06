@@ -1,6 +1,5 @@
 """
-repeated_stratified_splits
-stratified_splits
+Stratified K-fold CV for regression analysis
 ============================
 
 This example uses the 'diabetes' data from sklearn datasets to 
