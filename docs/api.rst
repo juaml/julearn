@@ -37,6 +37,12 @@ Cross-Validation
 .. autoclass:: julearn.model_selection.StratifiedBootstrap
    :members: 
 
+.. autoclass:: julearn.model_selection.StratifiedGroupsKFold
+   :members: 
+
+.. autoclass:: julearn.model_selection.RepeatedStratifiedGroupsKFold
+   :members: 
+
 =======
 
 Classes
