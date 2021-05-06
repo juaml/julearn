@@ -179,14 +179,11 @@ def run_cross_validation(
         preprocess_confounds=preprocess_confounds,
         confounds=confounds,
         problem_type=problem_type,
-
+        model_params=model_params
     )
 
     # Prepare cross validation
     cv_outer = prepare_cv(cv)
-
-    if model_params is not None:
-        pipeline = prepare_model_params(model_params, pipeline, cv_outer)
 
     scorer = prepare_scoring(pipeline, scoring)
 
@@ -270,15 +267,32 @@ def create_pipeline(
 
         See documentation for details.
     model_params : dict | None
-        If not None it has to be a dictionary of paramaeter value pair.
-        Where the parameter of the pipeline is set to the value.
-        These model_params are not for tuning, but only for setting the values.
+        If not None, this dictionary specifies the model parameters to use
 
+        The dictionary can define the following keys:
+
+        * 'STEP__PARAMETER': A value (or several) to be used as PARAMETER for
+          STEP in the pipeline. Example: 'svm__probability': True will set
+          the parameter 'probability' of the 'svm' model. If more than option
+          is provided for at least one hyperparameter, a search will be
+          performed.
+        * 'search': The kind of search algorithm to use, e.g.:
+          'grid' or 'random'. Can be any valid julearn searcher name or
+          scikit-learn compatible searcher.
+        * 'cv': If search is going to be used, the cross-validation
+          splitting strategy to use. Defaults to same CV as for the model
+          evaluation.
+        * 'scoring': If search is going to be used, the scoring metric to
+          evaluate the performance.
+        * 'search_params': Additional parameters for the search method.
+
+        See https://juaml.github.io/julearn/hyperparameters.html for details.
 
     Returns
     -------
     pipeline : obj
-        Not fitted julearn compatible pipeline.
+        Not fitted julearn compatible pipeline
+        or pipeline wrappen in Searcher.
     """
 
     # Interpret preprocessing parameters
@@ -294,7 +308,8 @@ def create_pipeline(
                                          preprocess_confounds,
                                          model_tuple, confounds,
                                          categorical_features=None)
+
     if model_params is not None:
-        pipeline = pipeline.set_params(**model_params)
+        pipeline = prepare_model_params(model_params, pipeline)
 
     return pipeline
