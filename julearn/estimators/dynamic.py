@@ -49,8 +49,8 @@ class DynamicSelection(BaseEstimator):
             How to split the training data.
             One split is used to train the ensemble model and
             the other to train the dynamic algorithm, by default .2
-            You can use any sklearn cv consisten cv splitter, but 
-            if you use something as KFold which creates iterations of 
+            You can use any sklearn cv consisten cv splitter, but
+            if you use something as KFold which creates iterations of
             train test splits only the first iteration of splits will be used.
 
         random_state : int, optional
@@ -75,10 +75,10 @@ class DynamicSelection(BaseEstimator):
         else:
             cv_split = check_cv(self.ds_split)
             train, test = list(cv_split.split(X, y))[0]
-            X_train = X.loc[train, :]
-            y_train = y.loc[train]
-            X_dsel = X.loc[test, :]
-            y_dsel = y.loc[test]
+            X_train = X.iloc[train, :]
+            y_train = y.iloc[train]
+            X_dsel = X.iloc[test, :]
+            y_dsel = y.iloc[test]
 
         self.ensemble.fit(X_train, y_train)
         self._dsmodel = self.get_algorithm(

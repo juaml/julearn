@@ -25,7 +25,7 @@ Enhancements
 
 - Update :mod:`.model_selection` and add capabilities to register searchers (by `Sami Hamdan`_).
 
-- Add tests and more algorithms to `DynamicSelection` (by `Sami Hamdan`_ and `Shammi More`_)
+- Add tests and more algorithms to `DynamicSelection` (by `Sami Hamdan`_ and `Shammi More`_).
 
 Bugs
 ~~~~

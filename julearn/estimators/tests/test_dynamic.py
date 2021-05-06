@@ -5,7 +5,6 @@
 
 import numpy as np
 import pytest
-from sklearn import ensemble
 from julearn.estimators.dynamic import DynamicSelection
 from sklearn.ensemble import RandomForestClassifier
 from seaborn import load_dataset
@@ -85,15 +84,11 @@ def test_cv():
     y = 'species'
     ensemble_model = RandomForestClassifier()
 
-    train, test = train_test_split(df_iris.index, test_size=.4, shuffle=True)
-
-    for ds_split in [
-        .2, .3, 2, 10,
-        StratifiedKFold(2),
-        StratifiedKFold(10),
-        KFold(3, shuffle=True),
-        [[train, test]]
-    ]:
+    train, test = train_test_split(
+        np.arange(len(df_iris)), test_size=.4, shuffle=True)
+    for ds_split in [.2, .3, 2, 10,
+                     StratifiedKFold(2), StratifiedKFold(10),
+                     KFold(3, shuffle=True), [(train, test)]]:
 
         dynamic_model = DynamicSelection(
             ensemble=ensemble_model, algorithm='METADES',
