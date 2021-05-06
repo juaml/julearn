@@ -599,6 +599,71 @@ to an integer.</p>
 
 </dd></dl>
 
+<dl class="py class">
+<dt id="julearn.model_selection.StratifiedGroupsKFold">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">julearn.model_selection.</span></code><code class="sig-name descname"><span class="pre">StratifiedGroupsKFold</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_splits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shuffle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.model_selection.StratifiedGroupsKFold" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="julearn.model_selection.StratifiedGroupsKFold.split">
+<code class="sig-name descname"><span class="pre">split</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.model_selection.StratifiedGroupsKFold.split" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate indices to split data into training and test set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_features)</span></dt><dd><p>Training data, where n_samples is the number of samples
+and n_features is the number of features.
+Note that providing <code class="docutils literal notranslate"><span class="pre">y</span></code> is sufficient to generate the splits and
+hence <code class="docutils literal notranslate"><span class="pre">np.zeros(n_samples)</span></code> may be used as a placeholder for
+<code class="docutils literal notranslate"><span class="pre">X</span></code> instead of actual training data.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">array-like of shape (n_samples,)</span></dt><dd><p>Always ignored, exists for compatibility.</p>
+</dd>
+<dt><strong>groups</strong><span class="classifier">object</span></dt><dd><p>The stratification variable.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Yields</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>train</strong><span class="classifier">ndarray</span></dt><dd><p>The training set indices for that split.</p>
+</dd>
+<dt><strong>test</strong><span class="classifier">ndarray</span></dt><dd><p>The testing set indices for that split.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Randomized CV splitters may return different results for each call of
+split. You can make the results identical by setting <cite>random_state</cite>
+to an integer.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="julearn.model_selection.RepeatedStratifiedGroupsKFold">
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">julearn.model_selection.</span></code><code class="sig-name descname"><span class="pre">RepeatedStratifiedGroupsKFold</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_splits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_repeats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.model_selection.RepeatedStratifiedGroupsKFold" title="Permalink to this definition">¶</a></dt>
+<dd><p>Repeated Stratified K-Fold cross validator.
+Repeats Stratified Groups K-Fold n times with different randomization in
+each repetition.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n_splits</strong><span class="classifier">int, default=5</span></dt><dd><p>Number of folds. Must be at least 2.</p>
+</dd>
+<dt><strong>n_repeats</strong><span class="classifier">int, default=10</span></dt><dd><p>Number of times cross-validator needs to be repeated.</p>
+</dd>
+<dt><strong>random_state</strong><span class="classifier">int, RandomState instance or None, default=None</span></dt><dd><p>Controls the generation of the random states for each repetition.
+Pass an int for reproducible output across multiple function calls.
+See <a class="reference external" href="https://scikit-learn.org/stable/glossary.html#term-random_state" title="(in scikit-learn v0.24)"><span class="xref std std-term">Glossary</span></a>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Randomized CV splitters may return different results for each call of
+split. You can make the results identical by setting <cite>random_state</cite>
+to an integer.</p>
+</dd></dl>
+
 </div>
 <hr class="docutils" />
 <div class="section" id="classes">

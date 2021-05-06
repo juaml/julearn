@@ -101,6 +101,7 @@
 <li class="toctree-l2"><a class="reference internal" href="plot_inspect_random_forest.html">Inspecting Random Forest models</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Multiclass Classification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_groupcv_inspect_svm.html">Inspecting SVM models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_stratified_kfold_reg.html">Stratified K-fold CV for regression analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_example_regression.html">Regression Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_confound_removal_classification.html">Confound Removal (model comparison)</a></li>
 </ul>
@@ -243,13 +244,13 @@ for the test data.</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2021-05-06 15:27:22,843 - julearn - INFO - ===== Lib Versions =====
-2021-05-06 15:27:22,843 - julearn - INFO - numpy: 1.19.5
-2021-05-06 15:27:22,843 - julearn - INFO - scipy: 1.6.3
-2021-05-06 15:27:22,843 - julearn - INFO - sklearn: 0.24.2
-2021-05-06 15:27:22,843 - julearn - INFO - pandas: 1.2.4
-2021-05-06 15:27:22,844 - julearn - INFO - julearn: 0.2.5.dev28+g4d32296
-2021-05-06 15:27:22,844 - julearn - INFO - ========================
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2021-05-06 16:53:30,145 - julearn - INFO - ===== Lib Versions =====
+2021-05-06 16:53:30,146 - julearn - INFO - numpy: 1.19.5
+2021-05-06 16:53:30,146 - julearn - INFO - scipy: 1.6.3
+2021-05-06 16:53:30,146 - julearn - INFO - sklearn: 0.24.2
+2021-05-06 16:53:30,146 - julearn - INFO - pandas: 1.2.4
+2021-05-06 16:53:30,146 - julearn - INFO - julearn: 0.2.5.dev29+g1c57332
+2021-05-06 16:53:30,146 - julearn - INFO - ========================
 </pre></div>
 </div>
 <p>Split the dataset into train and test</p>
@@ -265,20 +266,20 @@ for the test data.</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2021-05-06 15:27:22,848 - julearn - INFO - Using default CV
-2021-05-06 15:27:22,848 - julearn - INFO - ==== Input Data ====
-2021-05-06 15:27:22,848 - julearn - INFO - Using dataframe as input
-2021-05-06 15:27:22,848 - julearn - INFO - Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2021-05-06 15:27:22,848 - julearn - INFO - Target: species
-2021-05-06 15:27:22,849 - julearn - INFO - Expanded X: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2021-05-06 15:27:22,849 - julearn - INFO - Expanded Confounds: []
-2021-05-06 15:27:22,850 - julearn - INFO - ====================
-2021-05-06 15:27:22,850 - julearn - INFO -
-2021-05-06 15:27:22,850 - julearn - INFO - ====== Model ======
-2021-05-06 15:27:22,850 - julearn - INFO - Obtaining model by name: svm
-2021-05-06 15:27:22,850 - julearn - INFO - ===================
-2021-05-06 15:27:22,850 - julearn - INFO -
-2021-05-06 15:27:22,851 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2021-05-06 16:53:30,151 - julearn - INFO - Using default CV
+2021-05-06 16:53:30,151 - julearn - INFO - ==== Input Data ====
+2021-05-06 16:53:30,151 - julearn - INFO - Using dataframe as input
+2021-05-06 16:53:30,151 - julearn - INFO - Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2021-05-06 16:53:30,151 - julearn - INFO - Target: species
+2021-05-06 16:53:30,151 - julearn - INFO - Expanded X: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2021-05-06 16:53:30,151 - julearn - INFO - Expanded Confounds: []
+2021-05-06 16:53:30,152 - julearn - INFO - ====================
+2021-05-06 16:53:30,152 - julearn - INFO -
+2021-05-06 16:53:30,152 - julearn - INFO - ====== Model ======
+2021-05-06 16:53:30,152 - julearn - INFO - Obtaining model by name: svm
+2021-05-06 16:53:30,153 - julearn - INFO - ===================
+2021-05-06 16:53:30,153 - julearn - INFO -
+2021-05-06 16:53:30,153 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
 </pre></div>
 </div>
 <p>The scores dataframe has all the values for each CV split.</p>
@@ -287,11 +288,11 @@ for the test data.</p>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>   fit_time  score_time  test_accuracy  repeat  fold
-0  0.013855    0.008982       0.875000       0     0
-1  0.012655    0.008224       0.916667       0     1
-2  0.013376    0.008047       0.875000       0     2
-3  0.012960    0.008419       0.875000       0     3
-4  0.013313    0.008800       1.000000       0     4
+0  0.014153    0.009238       0.875000       0     0
+1  0.014543    0.009222       0.916667       0     1
+2  0.014251    0.009235       0.875000       0     2
+3  0.013853    0.009178       0.875000       0     3
+4  0.013765    0.009314       1.000000       0     4
 </pre></div>
 </div>
 <p>Now we can get the accuracy per fold and repetition:</p>
@@ -371,7 +372,7 @@ the heatmap with annotations.</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Confusion matrix&#39;)
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.025 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.063 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-basic-plot-cm-acc-multiclass-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/618f422c69e53bcf0286380e96ee26b5/plot_cm_acc_multiclass.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_cm_acc_multiclass.py</span></code></a></p>

@@ -42,7 +42,7 @@
     
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Regression Analysis" href="plot_example_regression.html" />
+    <link rel="next" title="Stratified K-fold CV for regression analysis" href="plot_stratified_kfold_reg.html" />
     <link rel="prev" title="Multiclass Classification" href="plot_cm_acc_multiclass.html" /> 
 </head>
 
@@ -107,6 +107,7 @@
 </li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="plot_stratified_kfold_reg.html">Stratified K-fold CV for regression analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_example_regression.html">Regression Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_confound_removal_classification.html">Confound Removal (model comparison)</a></li>
 </ul>
@@ -245,13 +246,13 @@ cognitive control in context-dependent decision-making. Cerebral Cortex.</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2021-05-06 15:27:23,993 - julearn - INFO - ===== Lib Versions =====
-2021-05-06 15:27:23,993 - julearn - INFO - numpy: 1.19.5
-2021-05-06 15:27:23,993 - julearn - INFO - scipy: 1.6.3
-2021-05-06 15:27:23,993 - julearn - INFO - sklearn: 0.24.2
-2021-05-06 15:27:23,994 - julearn - INFO - pandas: 1.2.4
-2021-05-06 15:27:23,994 - julearn - INFO - julearn: 0.2.5.dev28+g4d32296
-2021-05-06 15:27:23,994 - julearn - INFO - ========================
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2021-05-06 16:53:31,330 - julearn - INFO - ===== Lib Versions =====
+2021-05-06 16:53:31,330 - julearn - INFO - numpy: 1.19.5
+2021-05-06 16:53:31,330 - julearn - INFO - scipy: 1.6.3
+2021-05-06 16:53:31,330 - julearn - INFO - sklearn: 0.24.2
+2021-05-06 16:53:31,330 - julearn - INFO - pandas: 1.2.4
+2021-05-06 16:53:31,330 - julearn - INFO - julearn: 0.2.5.dev29+g1c57332
+2021-05-06 16:53:31,330 - julearn - INFO - ========================
 </pre></div>
 </div>
 <div class="section" id="dealing-with-cross-validation-techinques">
@@ -344,20 +345,20 @@ values. And the columns <em>subject</em>, <em>timepoint</em> and <em>event</em> 
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2021-05-06 15:27:24,799 - julearn - INFO - Using default CV
-2021-05-06 15:27:24,799 - julearn - INFO - ==== Input Data ====
-2021-05-06 15:27:24,799 - julearn - INFO - Using dataframe as input
-2021-05-06 15:27:24,799 - julearn - INFO - Features: [&#39;parietal&#39;, &#39;frontal&#39;]
-2021-05-06 15:27:24,799 - julearn - INFO - Target: event
-2021-05-06 15:27:24,799 - julearn - INFO - Expanded X: [&#39;parietal&#39;, &#39;frontal&#39;]
-2021-05-06 15:27:24,799 - julearn - INFO - Expanded Confounds: []
-2021-05-06 15:27:24,801 - julearn - INFO - ====================
-2021-05-06 15:27:24,801 - julearn - INFO -
-2021-05-06 15:27:24,801 - julearn - INFO - ====== Model ======
-2021-05-06 15:27:24,801 - julearn - INFO - Obtaining model by name: svm
-2021-05-06 15:27:24,801 - julearn - INFO - ===================
-2021-05-06 15:27:24,801 - julearn - INFO -
-2021-05-06 15:27:24,801 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2021-05-06 16:53:31,466 - julearn - INFO - Using default CV
+2021-05-06 16:53:31,466 - julearn - INFO - ==== Input Data ====
+2021-05-06 16:53:31,467 - julearn - INFO - Using dataframe as input
+2021-05-06 16:53:31,467 - julearn - INFO - Features: [&#39;parietal&#39;, &#39;frontal&#39;]
+2021-05-06 16:53:31,467 - julearn - INFO - Target: event
+2021-05-06 16:53:31,467 - julearn - INFO - Expanded X: [&#39;parietal&#39;, &#39;frontal&#39;]
+2021-05-06 16:53:31,467 - julearn - INFO - Expanded Confounds: []
+2021-05-06 16:53:31,468 - julearn - INFO - ====================
+2021-05-06 16:53:31,468 - julearn - INFO -
+2021-05-06 16:53:31,468 - julearn - INFO - ====== Model ======
+2021-05-06 16:53:31,469 - julearn - INFO - Obtaining model by name: svm
+2021-05-06 16:53:31,469 - julearn - INFO - ===================
+2021-05-06 16:53:31,469 - julearn - INFO -
+2021-05-06 16:53:31,469 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
 0.7221618762123082
 </pre></div>
 </div>
@@ -387,20 +388,20 @@ later to do some analysis.</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2021-05-06 15:27:25,555 - julearn - INFO - ==== Input Data ====
-2021-05-06 15:27:25,555 - julearn - INFO - Using dataframe as input
-2021-05-06 15:27:25,555 - julearn - INFO - Features: [&#39;parietal&#39;, &#39;frontal&#39;]
-2021-05-06 15:27:25,555 - julearn - INFO - Target: event
-2021-05-06 15:27:25,555 - julearn - INFO - Expanded X: [&#39;parietal&#39;, &#39;frontal&#39;]
-2021-05-06 15:27:25,555 - julearn - INFO - Expanded Confounds: []
-2021-05-06 15:27:25,556 - julearn - INFO - Using subject as groups
-2021-05-06 15:27:25,557 - julearn - INFO - ====================
-2021-05-06 15:27:25,557 - julearn - INFO -
-2021-05-06 15:27:25,557 - julearn - INFO - ====== Model ======
-2021-05-06 15:27:25,557 - julearn - INFO - Obtaining model by name: svm
-2021-05-06 15:27:25,557 - julearn - INFO - ===================
-2021-05-06 15:27:25,557 - julearn - INFO -
-2021-05-06 15:27:25,557 - julearn - INFO - Using scikit-learn CV scheme GroupShuffleSplit(n_splits=5, random_state=42, test_size=0.5, train_size=None)
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2021-05-06 16:53:32,262 - julearn - INFO - ==== Input Data ====
+2021-05-06 16:53:32,263 - julearn - INFO - Using dataframe as input
+2021-05-06 16:53:32,263 - julearn - INFO - Features: [&#39;parietal&#39;, &#39;frontal&#39;]
+2021-05-06 16:53:32,263 - julearn - INFO - Target: event
+2021-05-06 16:53:32,263 - julearn - INFO - Expanded X: [&#39;parietal&#39;, &#39;frontal&#39;]
+2021-05-06 16:53:32,263 - julearn - INFO - Expanded Confounds: []
+2021-05-06 16:53:32,264 - julearn - INFO - Using subject as groups
+2021-05-06 16:53:32,264 - julearn - INFO - ====================
+2021-05-06 16:53:32,264 - julearn - INFO -
+2021-05-06 16:53:32,264 - julearn - INFO - ====== Model ======
+2021-05-06 16:53:32,264 - julearn - INFO - Obtaining model by name: svm
+2021-05-06 16:53:32,265 - julearn - INFO - ===================
+2021-05-06 16:53:32,265 - julearn - INFO -
+2021-05-06 16:53:32,265 - julearn - INFO - Using scikit-learn CV scheme GroupShuffleSplit(n_splits=5, random_state=42, test_size=0.5, train_size=None)
 0.7210526315789474
 </pre></div>
 </div>
@@ -449,7 +450,7 @@ how the SVM does this complex task.</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Preprocessed data with SVM decision function boundaries&#39;)
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  2.225 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.593 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-basic-plot-groupcv-inspect-svm-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/6dea425e076852bbc377c32b7777ddb6/plot_groupcv_inspect_svm.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_groupcv_inspect_svm.py</span></code></a></p>
@@ -469,7 +470,7 @@ how the SVM does this complex task.</p>
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="plot_example_regression.html" class="btn btn-neutral float-right" title="Regression Analysis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="plot_stratified_kfold_reg.html" class="btn btn-neutral float-right" title="Stratified K-fold CV for regression analysis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
         <a href="plot_cm_acc_multiclass.html" class="btn btn-neutral float-left" title="Multiclass Classification" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
