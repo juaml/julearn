@@ -276,7 +276,7 @@ def prepare_model(model, problem_type):
     return model_name, model
 
 
-def prepare_model_params(msel_dict, pipeline, cv_outer):
+def prepare_model_params(msel_dict, pipeline):
     """Prepare model parameters.
 
     For each of the model parameters, determine if it can be directly set or
@@ -302,8 +302,6 @@ def prepare_model_params(msel_dict, pipeline, cv_outer):
 
     pipeline : ExtendedDataframePipeline
         The pipeline to apply/tune the hyperparameters
-    cv_outer : cross-validation generator
-        The cross validation generator used for model evaluation.
 
     Returns
     -------
@@ -347,12 +345,7 @@ def prepare_model_params(msel_dict, pipeline, cv_outer):
         for k, v in hyper_params.items():
             logger.info(f'\t{k}: {v}')
 
-        if cv_inner is None:
-            logger.info(
-                'Cross validating using same scheme as for model evaluation')
-            cv_inner = deepcopy(cv_outer)
-        else:
-            cv_inner = prepare_cv(cv_inner)
+        cv_inner = prepare_cv(cv_inner)
 
         search_params['cv'] = cv_inner
         search_params['scoring'] = scoring
