@@ -7,7 +7,6 @@ from julearn.utils.column_types import pick_columns
 from julearn.transformers.target import TargetTransfromerWrapper
 import pandas as pd
 import numpy as np
-from copy import deepcopy
 from sklearn import model_selection
 from sklearn.model_selection import RepeatedKFold
 from sklearn.base import clone
