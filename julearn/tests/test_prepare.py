@@ -494,7 +494,7 @@ def test_prepare_model_params():
 
     model_params = {'svm__C': [0, 1], 'search': GridSearchCV}
 
-    pipeline = create_extended_pipeline(
+    pipeline = _create_extended_pipeline(
         preprocess_steps_features=preprocess_steps_features,
         preprocess_transformer_target=None,
         preprocess_steps_confounds=None,

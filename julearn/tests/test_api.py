@@ -500,8 +500,8 @@ def test_multiprocess_no_error():
         run_cross_validation(
             X=X, y=y, data=df_iris, model='svm', preprocess_X='zscore',
             model_params=model_params, scoring='accuracy')
-      
-      
+
+
 def test_create_pipeline_set_params():
     model_params = dict(svm__C=2, pca__n_components=.8)
     pipeline = create_pipeline('svm', preprocess_X='pca',
@@ -509,6 +509,7 @@ def test_create_pipeline_set_params():
 
     for param, val in model_params.items():
         assert pipeline.get_params()[param] == val
+
 
 def test_scorers():
     df_iris = load_dataset('iris')
