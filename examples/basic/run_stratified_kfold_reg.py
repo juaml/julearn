@@ -73,7 +73,7 @@ data_df['bins'] = gc.codes
 #     print('len of test and train', len(test_index), len(train_index))
 
 cv = StratifiedGroupsKFold(n_splits=num_splits, shuffle=False, random_state=42)
-run_cross_validation(..., cv=cv, groups="dont forget!")
+run_cross_validation(..., cv=)
 
 # ###############################################################################
 # RepeatedStratifiedKFold for regression
@@ -81,3 +81,9 @@ run_cross_validation(..., cv=cv, groups="dont forget!")
 # for train_index, test_index in cv.split(data_df, qc.codes):
 #     print('test_index', test_index)
 #     print('len of test and train', len(test_index), len(train_index))
+
+
+for train_index, test_index in skcv.split(X, bins):
+    print('train_index', train_index)
+    print('test_index', test_index)
+    print('len of test and train', len(test_index), len(train_index))
