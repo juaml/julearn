@@ -240,3 +240,27 @@ def test_transform_dataframe_unknown():
         'pca_component_0__:type:__confound',
         'pca_component_1__:type:__confound',
     ]
+
+
+def test_get_transfomer_get_attr():
+    trans_df = DataFrameWrapTransformer(
+        transformer=PCA(n_components=1,
+                        random_state=1),
+        apply_to='continuous',
+        returned_features='unknown',
+    )
+    trans_df.fit(X)
+    assert trans_df.n_components == 1
+
+
+def test_get_transfomer_set_attr():
+    trans_df = DataFrameWrapTransformer(
+        transformer=PCA(n_components=1,
+                        random_state=1),
+        apply_to='continuous',
+        returned_features='unknown',
+    )
+    trans_df.fit(X)
+    trans_df.n_components = 2
+    assert trans_df.n_components == 2
+    assert trans_df.transformer.n_components == 2

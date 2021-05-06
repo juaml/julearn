@@ -2,6 +2,8 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 from copy import deepcopy
+from julearn import transformers
+from sklearn._config import get_config
 import pandas as pd
 from sklearn.base import TransformerMixin
 
@@ -221,6 +223,18 @@ class DataFrameWrapTransformer(TransformerMixin):
     def _check_apply_to_returned_features(self):
         _get_apply_to(self.transformer)
         _get_returned_features(self.transformer)
+
+    def __setattr__(self, name, value):
+        if name == "transformer":
+            super().__setattr__(name, value)
+        else:
+            setattr(self.transformer, name, value)
+
+    def __getattr__(self, name):
+        if name == "transformer":
+            return super().__getattr__(name)
+        else:
+            return getattr(self.transformer, name)
 
 
 def transform_dataframe(transformer, df, returned_features):
