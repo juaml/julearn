@@ -107,7 +107,7 @@ def run_cross_validation(
     groups : str or numpy.array | None
         The grouping labels in case a Group CV is used.
         See https://juaml.github.io/julearn/input.html for details.
-    scoring : str | list(str) | None
+    scoring : str | list(str) | obj | dict | None
         The scoring metric to use.
         See https://scikit-learn.org/stable/modules/model_evaluation.html for
         a comprehensive list of options. If None, use the model's default
@@ -125,7 +125,9 @@ def run_cross_validation(
           the parameter 'probability' of the 'svm' model. If more than option
           is provided for at least one hyperparameter, a search will be
           performed.
-        * 'search': The kind of search algorithm to use: 'grid' or 'random'.
+        * 'search': The kind of search algorithm to use, e.g.:
+          'grid' or 'random'. Can be any valid julearn searcher name or
+          scikit-learn compatible searcher.
         * 'cv': If search is going to be used, the cross-validation
           splitting strategy to use. Defaults to same CV as for the model
           evaluation.
