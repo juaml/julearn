@@ -50,7 +50,7 @@ def create_dataframe_pipeline(steps, apply_to=None):
 
 class ExtendedDataFramePipeline(BaseEstimator):
     """A class creating a custom metamodel like a Pipeline. In practice this
-    should be created using :ref:julearn.pipeline.create_extended_pipeline.
+    should be created using :ref:julearn.pipeline._create_extended_pipeline.
     There are multiple caveats of creating such a pipline without using
     that function. Compared to an usual scikit-learn pipeline, this have added
     functionalities:
@@ -370,7 +370,7 @@ class ExtendedDataFramePipeline(BaseEstimator):
         return X_trans
 
 
-def create_extended_pipeline(
+def _create_extended_pipeline(
     preprocess_steps_features,
     preprocess_transformer_target,
     preprocess_steps_confounds,
