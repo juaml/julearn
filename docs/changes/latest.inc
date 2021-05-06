@@ -44,5 +44,7 @@ Bugs
 
 - Raise error message when columns in the dataframe are nos strings (:gh:`77` by `Fede Raimondo`_).
 
+- Fix accessing attrs from wrapped transformers by accessing attrs from wrapper (:gh`122`: by `Sami Hamdan`_).
+
 API changes
 ~~~~~~~~~~~
