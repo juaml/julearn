@@ -222,6 +222,18 @@ class DataFrameWrapTransformer(TransformerMixin):
         _get_apply_to(self.transformer)
         _get_returned_features(self.transformer)
 
+    def __setattr__(self, name, value):
+        if name == "transformer":
+            super().__setattr__(name, value)
+        else:
+            setattr(self.transformer, name, value)
+
+    def __getattr__(self, name):
+        if name == "transformer":
+            return super().__getattr__(name)
+        else:
+            return getattr(self.transformer, name)
+
 
 def transform_dataframe(transformer, df, returned_features):
 
