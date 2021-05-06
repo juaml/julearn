@@ -67,6 +67,7 @@ def _validate_input_data_np(X, y, confounds, groups):
 
 
 def _validate_input_data_df(X, y, confounds, df, groups):
+
     # in the dataframe
     if not isinstance(X, (str, list)):
         raise_error('X must be a string or list of strings')
@@ -84,6 +85,9 @@ def _validate_input_data_df(X, y, confounds, df, groups):
 
     if not isinstance(df, pd.DataFrame):
         raise_error('df must be a pandas.DataFrame')
+
+    if any(not isinstance(x, str) for x in df.columns):
+        raise_error('DataFrame columns must be strings')
 
 
 def _validate_input_data_df_ext(X, y, confounds, df, groups):

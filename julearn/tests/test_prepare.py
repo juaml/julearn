@@ -268,6 +268,22 @@ def test_prepare_input_data_df():
 
     # Wrong types
     with pytest.raises(ValueError,
+                       match=r"DataFrame columns must be strings"):
+        X = 2
+        y = columns[6]
+        data = np.random.rand(4, 10)
+        int_columns = [f'f_{x}' for x in range(data.shape[1] - 1)] + [0]
+
+        X = columns[:-2]
+        y = columns[-1]
+        df_wrong_cols = pd.DataFrame(data=data, columns=int_columns)
+
+        prepared = prepare_input_data(
+            X=X, y=y, confounds=None, df=df_wrong_cols, pos_labels=None,
+            groups=None)
+
+    # Wrong types
+    with pytest.raises(ValueError,
                        match=r"X must be a string or list of strings"):
         X = 2
         y = columns[6]
