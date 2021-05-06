@@ -18,7 +18,7 @@ from julearn.transformers import (
 )
 from julearn.pipeline import (ExtendedDataFramePipeline,
                               create_dataframe_pipeline,
-                              create_extended_pipeline)
+                              _create_extended_pipeline)
 X = pd.DataFrame(dict(A=np.arange(10),
                       B=np.arange(10, 20),
                       C=np.arange(30, 40)
@@ -90,7 +90,7 @@ def test_create_extended_dataframe_transformer():
     model = ('lr', LinearRegression())
     conf_steps = [('zscore', StandardScaler())]
     y_transformer = TargetTransfromerWrapper(StandardScaler())
-    extended_pipe = create_extended_pipeline(
+    extended_pipe = _create_extended_pipeline(
         preprocess_steps_features=preprocess_steps_feature,
         preprocess_transformer_target=y_transformer,
         preprocess_steps_confounds=conf_steps,
@@ -308,7 +308,7 @@ def test_create_exteneded_pipeline_confound_removal():
     model = ('lr', LinearRegression())
     conf_steps = [('zscore', StandardScaler())]
     y_transformer = TargetTransfromerWrapper(StandardScaler())
-    extended_pipe = create_extended_pipeline(
+    extended_pipe = _create_extended_pipeline(
         preprocess_steps_features=preprocess_steps_feature,
         preprocess_transformer_target=y_transformer,
         preprocess_steps_confounds=conf_steps,
@@ -317,7 +317,7 @@ def test_create_exteneded_pipeline_confound_removal():
         categorical_features=None
     )
 
-    extended_pipe_keep_confound = create_extended_pipeline(
+    extended_pipe_keep_confound = _create_extended_pipeline(
         preprocess_steps_features=preprocess_steps_feature_keep_conf,
         preprocess_transformer_target=y_transformer,
         preprocess_steps_confounds=conf_steps,
@@ -344,7 +344,7 @@ def test_tune_params():
               'confounds__zscore__with_mean': True,
               'target__with_mean': True}
 
-    extended_pipe = create_extended_pipeline(
+    extended_pipe = _create_extended_pipeline(
         preprocess_steps_features=[('zscore', get_transformer('zscore'))],
         preprocess_steps_confounds=[('zscore', get_transformer('zscore'))],
         preprocess_transformer_target=get_transformer('zscore', target=True),
@@ -362,7 +362,7 @@ def test_tune_params():
 
 
 def test_ExtendedDataFramePipeline___rpr__():
-    extended_pipe = create_extended_pipeline(
+    extended_pipe = _create_extended_pipeline(
         preprocess_steps_features=[('zscore', get_transformer('zscore'))],
         preprocess_steps_confounds=[('zscore', get_transformer('zscore'))],
         preprocess_transformer_target=get_transformer('zscore', target=True),
