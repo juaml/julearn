@@ -68,14 +68,3 @@ cv = RepeatedStratifiedKFold(n_splits=num_splits, n_repeats=num_repeats, random_
 for train_index, test_index in cv.split(data_df, qc.codes):
     print('test_index', test_index)
     print('len of test and train', len(test_index), len(train_index))
-
-
-
-
-
-
-    
-
-    
-     
-
