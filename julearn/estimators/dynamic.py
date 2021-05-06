@@ -49,7 +49,7 @@ class DynamicSelection(BaseEstimator):
             How to split the training data.
             One split is used to train the ensemble model and
             the other to train the dynamic algorithm, by default .2
-            You can use any sklearn cv consisten cv splitter, but
+            You can use any sklearn cv consistent cv splitter, but
             if you use something as KFold which creates iterations of
             train test splits only the first iteration of splits will be used.
 
