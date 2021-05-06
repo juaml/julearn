@@ -28,6 +28,8 @@ Enhancements
 - Add user facing `create_pipeline` function (by `Sami Hamdan`_)
 
 - Update default behavior of setting inner cv according to scikit-learn instead of using outer cv as default (by `Sami Hamdan`_).
+             
+- Add tests and more algorithms to `DynamicSelection` (by `Sami Hamdan`_ and `Shammi More`_).
 
 Bugs
 ~~~~

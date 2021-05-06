@@ -50,7 +50,7 @@ _clf_params = {
     'rf': {'n_estimators': 10},
     'et': {'n_estimators': 10},
     'dummy': {'strategy': 'prior'},
-    'sgd': {'random_state': 2}
+    'sgd': {'random_state': 2},
 }
 
 _reg_estimators = {
@@ -233,7 +233,7 @@ def test_list_get_models():
     expected = set(
         list(_clf_estimators.keys()) + list(_nb_estimators.keys()) +
         list(_reg_estimators.keys()))
-
+    expected.add('ds')
     actual = list_models()
     diff = set(actual) ^ set(expected)
     assert not diff

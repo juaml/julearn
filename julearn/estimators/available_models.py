@@ -19,6 +19,7 @@ from sklearn.naive_bayes import (BernoulliNB, CategoricalNB, ComplementNB,
 from sklearn.dummy import DummyClassifier, DummyRegressor
 
 from .. utils import raise_error
+from . dynamic import DynamicSelection
 
 _available_models = {
     'svm': {
@@ -107,6 +108,10 @@ _available_models = {
         'binary_classification': MultinomialNB,
         'multiclass_classification': MultinomialNB,
     },
+    'ds': {
+        'binary_classification': DynamicSelection,
+        'multiclass_classification': DynamicSelection,
+    }
 }
 
 
@@ -123,7 +128,7 @@ def list_models():
     return out
 
 
-def get_model(name, problem_type):
+def get_model(name, problem_type, **kwargs):
     """Get a model
 
     Parameters
@@ -149,5 +154,5 @@ def get_model(name, problem_type):
             f'The specified model ({name})) is not suitable for'
             f'{problem_type}')
 
-    out = _available_models[name][problem_type]()
+    out = _available_models[name][problem_type](**kwargs)
     return out
