@@ -389,7 +389,6 @@ def test_prepare_model_params():
                                  ]
     model = ('svm', SVC())
 
-    cv_outer = 2
     model_params = {'svm__kernel': 'linear'}
 
     pipeline = _create_extended_pipeline(
@@ -399,7 +398,7 @@ def test_prepare_model_params():
         model=model,
         confounds=None,
         categorical_features=None)
-    pipeline = prepare_model_params(model_params, pipeline, cv_outer)
+    pipeline = prepare_model_params(model_params, pipeline)
     assert pipeline['svm'].get_params()['kernel'] == 'linear'
 
     model_params = {
@@ -412,9 +411,8 @@ def test_prepare_model_params():
         model=model,
         confounds=None,
         categorical_features=None)
-    pipeline = prepare_model_params(model_params, pipeline, cv_outer)
-
-    assert pipeline.cv == 2
+    pipeline = prepare_model_params(model_params, pipeline)
+    assert pipeline.cv.n_splits == 5  # sklearn cv default
     assert isinstance(pipeline, GridSearchCV)
     assert 'svm__C' in pipeline.param_grid
     assert 'svm__kernel' not in pipeline.param_grid
@@ -435,7 +433,7 @@ def test_prepare_model_params():
         model=model,
         confounds=None,
         categorical_features=None)
-    pipeline = prepare_model_params(model_params, pipeline, cv_outer)
+    pipeline = prepare_model_params(model_params, pipeline)
 
     assert pipeline.cv.n_splits == 5
     assert isinstance(pipeline, RandomizedSearchCV)
@@ -454,7 +452,7 @@ def test_prepare_model_params():
         confounds=None,
         categorical_features=None)
     with pytest.warns(RuntimeWarning, match='search CV was specified'):
-        pipeline = prepare_model_params(model_params, pipeline, cv_outer)
+        pipeline = prepare_model_params(model_params, pipeline)
 
     model_params = {'svm__kernel': 'linear', 'scoring': 'accuracy'}
 
@@ -466,7 +464,7 @@ def test_prepare_model_params():
         confounds=None,
         categorical_features=None)
     with pytest.warns(RuntimeWarning, match='search scoring was specified'):
-        pipeline = prepare_model_params(model_params, pipeline, cv_outer)
+        pipeline = prepare_model_params(model_params, pipeline)
 
     model_params = {'svm__kernel': 'linear', 'search': 'grid'}
 
@@ -478,7 +476,7 @@ def test_prepare_model_params():
         confounds=None,
         categorical_features=None)
     with pytest.warns(RuntimeWarning, match='search method was specified'):
-        pipeline = prepare_model_params(model_params, pipeline, cv_outer)
+        pipeline = prepare_model_params(model_params, pipeline)
 
     model_params = {'svm__C': [0, 1], 'search': 'wrong'}
 
@@ -490,7 +488,7 @@ def test_prepare_model_params():
         confounds=None,
         categorical_features=None)
     with pytest.raises(ValueError, match='not a valid julearn searcher'):
-        pipeline = prepare_model_params(model_params, pipeline, cv_outer)
+        pipeline = prepare_model_params(model_params, pipeline)
 
     model_params = {'svm__C': [0, 1], 'search': GridSearchCV}
 
@@ -504,7 +502,7 @@ def test_prepare_model_params():
     with pytest.warns(RuntimeWarning,
                       match=f'{model_params["search"]} is not'
                       ' a registered searcher.'):
-        pipeline = prepare_model_params(model_params, pipeline, cv_outer)
+        pipeline = prepare_model_params(model_params, pipeline)
 
 
 def test_pick_regexp():
