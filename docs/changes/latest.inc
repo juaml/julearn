@@ -31,6 +31,9 @@ Enhancements
              
 - Add tests and more algorithms to `DynamicSelection` (by `Sami Hamdan`_ and `Shammi More`_).
 
+- Add CV schemes for stratifying based on the grouping variables, useful for regression problems. Check :class:`.StratifiedGroupsKFold` and :class:`.RepeatedStratifiedGroupsKFold` (by `Fede Raimondo`_ and `Shammi More`_).
+
+
 Bugs
 ~~~~
 
