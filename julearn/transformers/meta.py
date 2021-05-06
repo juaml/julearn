@@ -2,8 +2,6 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 from copy import deepcopy
-from julearn import transformers
-from sklearn._config import get_config
 import pandas as pd
 from sklearn.base import TransformerMixin
 
