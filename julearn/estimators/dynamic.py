@@ -46,9 +46,13 @@ class DynamicSelection(BaseEstimator):
             * KNOP
 
         ds_split : float, optional
-            how to split the training data.
+            How to split the training data.
             One split is used to train the ensemble model and
             the other to train the dynamic algorithm, by default .2
+            You can use any sklearn cv consisten cv splitter, but 
+            if you use something as KFold which creates iterations of 
+            train test splits only the first iteration of splits will be used.
+
         random_state : int, optional
             random state to get reproducible train test splits
             in case you use a float for ds_split, by default None
