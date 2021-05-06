@@ -2,9 +2,10 @@
 Stratified K-fold CV for regression analysis
 ============================
 
-This example uses the 'diabetes' data from sklearn datasets to 
-perform stratified Kfold CV for regression problem
+This example uses the 'diabetes' data from sklearn datasets to
+perform stratified Kfold CV for a regression problem,
 
+.. include:: ../../links.inc
 """
 # Authors: Shammi More <s.more@fz-juelich.de>
 #          Federico Raimondo <f.raimondo@fz-juelich.de>
@@ -12,7 +13,6 @@ perform stratified Kfold CV for regression problem
 # License: AGPL
 
 import math
-import numpy as np
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -41,8 +41,8 @@ print('Features: \n', features.head())
 print('Target: \n', target.describe())
 
 ###############################################################################
-# Let's combine features and target together in one dataframe and create some 
-# outliers to see the difference in model performance with and without 
+# Let's combine features and target together in one dataframe and create some
+# outliers to see the difference in model performance with and without
 # stratification
 
 data_df = pd.concat([features, target], axis=1)
@@ -59,22 +59,22 @@ y = 'target'
 
 ###############################################################################
 # Define number of splits for CV and create bins/group for stratification
-num_splits = 7 
+num_splits = 7
 
-num_bins = math.floor(len(data_df)/num_splits) # num of bins to be created
-bins_on = data_df.target # variable to be used for stratification
+num_bins = math.floor(len(data_df) / num_splits)  # num of bins to be created
+bins_on = data_df.target  # variable to be used for stratification
 qc = pd.cut(bins_on.tolist(), num_bins)  # divides data in bins
 data_df['bins'] = qc.codes
-groups ='bins'
+groups = 'bins'
 
 ###############################################################################
 # Train a linear regression model with stratification on target
 
-cv_stratified = StratifiedGroupsKFold(n_splits=num_splits, shuffle=False, random_state=None)
+cv_stratified = StratifiedGroupsKFold(n_splits=num_splits, shuffle=False)
 scores_strat, model = run_cross_validation(
-    X=X, y=y, data=data_df, preprocess_X='zscore', cv=cv_stratified, groups=groups,
-    problem_type='regression', model='linreg', return_estimator='final',
-    scoring='neg_mean_absolute_error')
+    X=X, y=y, data=data_df, preprocess_X='zscore', cv=cv_stratified,
+    groups=groups, problem_type='regression', model='linreg',
+    return_estimator='final', scoring='neg_mean_absolute_error')
 
 ###############################################################################
 # Train a linear regression model without stratification on target
@@ -86,7 +86,7 @@ scores, model = run_cross_validation(
     scoring='neg_mean_absolute_error')
 
 ###############################################################################
-# Now we can compare the test score for model trained with and without 
+# Now we can compare the test score for model trained with and without
 # stratification. We can combine the two outputs as pandas dataframes
 
 scores_strat['model'] = 'With stratification'
