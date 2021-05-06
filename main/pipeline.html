@@ -42,7 +42,7 @@
     
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Available Pipeline Steps" href="steps.html" />
+    <link rel="next" title="Advanced Topics" href="advanced.html" />
     <link rel="prev" title="Input Data" href="input.html" /> 
 </head>
 
@@ -112,14 +112,7 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="#advanced-topics">Advanced Topics</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#column-type-system">Column Type System</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#context">Context</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#how-it-works">How it works</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Topics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="steps.html">Available Pipeline Steps</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hyperparameters.html">Hyperparameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/basic/index.html">Basic Examples</a></li>
@@ -388,65 +381,6 @@ only preprocess up to a specific transformer.</p></li>
 </div>
 </div>
 </div>
-<div class="section" id="advanced-topics">
-<h1>Advanced Topics<a class="headerlink" href="#advanced-topics" title="Permalink to this headline">¶</a></h1>
-<p>The following sections are advanced topic which do not need to be read
-for a lot of usecases, but still provide some context for those who want it.</p>
-<div class="section" id="column-type-system">
-<h2>Column Type System<a class="headerlink" href="#column-type-system" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="context">
-<h3>Context<a class="headerlink" href="#context" title="Permalink to this headline">¶</a></h3>
-<p>To be able to discriminate between different types of variables Julearn
-uses a Column Type System. This system currently distinguishes between
-continuous variables/features, categorical variables/features and confounds.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>On most levels of Julearn this Column Type System is only used internally.
-Therefore, users do not have to work with it directly.
-For example, by providing the confounds and categorical variables to the
-<a class="reference internal" href="api.html#julearn.pipeline.ExtendedDataFramePipeline" title="julearn.pipeline.ExtendedDataFramePipeline"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtendedDataFramePipeline</span></code></a> it has all the information needed to
-apply the Column Type System internally without any further input or changes
-to the <cite>pandas.DataFrame</cite>.</p>
-</div>
-</div>
-<div class="section" id="how-it-works">
-<h3>How it works<a class="headerlink" href="#how-it-works" title="Permalink to this headline">¶</a></h3>
-<p>Every <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html">pandas.DataFrame</a> column has a column name.
-Inside of Julearn we add another string containing the type of the column
-separated by our delimiter: <code class="docutils literal notranslate"><span class="pre">'__:type:__'</span></code> to the original column names.
-For example:</p>
-<blockquote>
-<div><ul>
-<li><p>We have the original columns :</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">'Intelligence'</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">'Age'</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">'LikesEvoks'</span></code></p></li>
-</ul>
-</li>
-<li><p>We know:</p>
-<ul class="simple">
-<li><p>Intelligence is a <strong>continuous</strong> variable</p></li>
-<li><p>Age is a <strong>confound</strong></p></li>
-<li><p>LikesEvoks is a <strong>categorical</strong> variable.
-Either someone likes Evoks or not.</p></li>
-</ul>
-</li>
-<li><p>Inside of Julearn’s Column Type System we can provide this information
-by changing the column names to:</p>
-<blockquote>
-<div><ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">'Intelligence__:type:__continuous'</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">'Age__:type:__confound'</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">'LikesEvoks__:type:__categorical'</span></code></p></li>
-</ul>
-</div></blockquote>
-</li>
-</ul>
-</div></blockquote>
-</div>
-</div>
-</div>
 
 
            </div>
@@ -454,7 +388,7 @@ by changing the column names to:</p>
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="steps.html" class="btn btn-neutral float-right" title="Available Pipeline Steps" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="advanced.html" class="btn btn-neutral float-right" title="Advanced Topics" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
         <a href="input.html" class="btn btn-neutral float-left" title="Input Data" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
