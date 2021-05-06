@@ -12,7 +12,7 @@ from . prepare import (prepare_input_data,
                        prepare_preprocessing,
                        prepare_scoring,
                        check_consistency)
-from . pipeline import create_extended_pipeline
+from . pipeline import _create_extended_pipeline
 
 from . utils import logger
 
@@ -171,25 +171,19 @@ def run_cross_validation(
         X=X, y=y, confounds=confounds, df=data, pos_labels=pos_labels,
         groups=groups)
 
-    # Interpret preprocessing parameters
-    preprocess_vars = prepare_preprocessing(
-        preprocess_X, preprocess_y, preprocess_confounds, confounds
+    # create a the pipeline
+    pipeline = create_pipeline(
+        model=model,
+        preprocess_X=preprocess_X,
+        preprocess_y=preprocess_y,
+        preprocess_confounds=preprocess_confounds,
+        confounds=confounds,
+        problem_type=problem_type,
+        model_params=model_params
     )
-    preprocess_X, preprocess_y, preprocess_confounds = preprocess_vars
-    # Prepare the model
-    model_tuple = prepare_model(model=model, problem_type=problem_type)
 
     # Prepare cross validation
     cv_outer = prepare_cv(cv)
-
-    pipeline = create_extended_pipeline(preprocess_X,
-                                        preprocess_y,
-                                        preprocess_confounds,
-                                        model_tuple, confounds,
-                                        categorical_features=None)
-
-    if model_params is not None:
-        pipeline = prepare_model_params(model_params, pipeline, cv_outer)
 
     scorer = prepare_scoring(pipeline, scoring)
 
@@ -218,3 +212,104 @@ def run_cross_validation(
         out = out, pipeline
 
     return out
+
+
+def create_pipeline(
+    model,
+    confounds=None,
+    problem_type='binary_classification',
+    preprocess_X=None,
+    preprocess_y=None,
+    preprocess_confounds=None,
+    model_params=None
+):
+    """Creates a not fitted julearn pipeline.
+
+    Parameters
+    ----------
+    model : str or scikit-learn compatible model.
+        If string, it will use one of the available models.
+        See :mod:`.available_models`.
+    confounds : str, list(str) or numpy.array | None
+        The confounds.
+        See https://juaml.github.io/julearn/input.html for details.
+    problem_type : str
+        The kind of problem to model.
+
+        Options are:
+
+        * "binary_classification": Perform a binary classification
+          in which the target (y) has only two possible classes (default).
+          The parameter pos_labels can be used to convert a target with
+          multiple_classes into binary.
+        * "multiclass_classification": Performs a multiclass classification
+          in which the target (y) has more than two possible values.
+        * "regression". Perform a regression. The target (y) has to be
+          ordinal at least.
+
+    preprocess_X : str, scikit-learn compatible transformers or list | None
+        Transformer to apply to the features (X). If string, use one of the
+        available transformers. If list, each element can be a string or
+        scikit-learn compatible transformer. If None (default), no
+        transformation is applied.
+
+        See documentation for details.
+    preprocess_y : str or scikit-learn transformer | None
+        Transformer to apply to the target (y). If None (default), no
+        transformation is applied.
+
+        See documentation for details.
+    preprocess_confounds : str, scikit-learn transformers or list | None
+        Transformer to apply to the features (X). If string, use one of the
+        available transformers. If list, each element can be a string or
+        scikit-learn compatible transformer. If None (default), no
+        transformation is applied.
+
+        See documentation for details.
+    model_params : dict | None
+        If not None, this dictionary specifies the model parameters to use
+
+        The dictionary can define the following keys:
+
+        * 'STEP__PARAMETER': A value (or several) to be used as PARAMETER for
+          STEP in the pipeline. Example: 'svm__probability': True will set
+          the parameter 'probability' of the 'svm' model. If more than option
+          is provided for at least one hyperparameter, a search will be
+          performed.
+        * 'search': The kind of search algorithm to use, e.g.:
+          'grid' or 'random'. Can be any valid julearn searcher name or
+          scikit-learn compatible searcher.
+        * 'cv': If search is going to be used, the cross-validation
+          splitting strategy to use. Defaults to same CV as for the model
+          evaluation.
+        * 'scoring': If search is going to be used, the scoring metric to
+          evaluate the performance.
+        * 'search_params': Additional parameters for the search method.
+
+        See https://juaml.github.io/julearn/hyperparameters.html for details.
+
+    Returns
+    -------
+    pipeline : obj
+        Not fitted julearn compatible pipeline
+        or pipeline wrappen in Searcher.
+    """
+
+    # Interpret preprocessing parameters
+    preprocess_vars = prepare_preprocessing(
+        preprocess_X, preprocess_y, preprocess_confounds, confounds
+    )
+    preprocess_X, preprocess_y, preprocess_confounds = preprocess_vars
+    # Prepare the model
+    model_tuple = prepare_model(model=model, problem_type=problem_type)
+
+    pipeline = _create_extended_pipeline(preprocess_X,
+                                         preprocess_y,
+                                         preprocess_confounds,
+                                         model_tuple, confounds,
+                                         categorical_features=None)
+
+    if model_params is not None:
+        pipeline = prepare_model_params(model_params, pipeline)
+
+    return pipeline

@@ -7,7 +7,6 @@ from julearn.utils.column_types import pick_columns
 from julearn.transformers.target import TargetTransfromerWrapper
 import pandas as pd
 import numpy as np
-from copy import deepcopy
 from sklearn import model_selection
 from sklearn.model_selection import RepeatedKFold
 from sklearn.base import clone
@@ -67,6 +66,7 @@ def _validate_input_data_np(X, y, confounds, groups):
 
 
 def _validate_input_data_df(X, y, confounds, df, groups):
+
     # in the dataframe
     if not isinstance(X, (str, list)):
         raise_error('X must be a string or list of strings')
@@ -84,6 +84,9 @@ def _validate_input_data_df(X, y, confounds, df, groups):
 
     if not isinstance(df, pd.DataFrame):
         raise_error('df must be a pandas.DataFrame')
+
+    if any(not isinstance(x, str) for x in df.columns):
+        raise_error('DataFrame columns must be strings')
 
 
 def _validate_input_data_df_ext(X, y, confounds, df, groups):
@@ -276,7 +279,7 @@ def prepare_model(model, problem_type):
     return model_name, model
 
 
-def prepare_model_params(msel_dict, pipeline, cv_outer):
+def prepare_model_params(msel_dict, pipeline):
     """Prepare model parameters.
 
     For each of the model parameters, determine if it can be directly set or
@@ -302,8 +305,6 @@ def prepare_model_params(msel_dict, pipeline, cv_outer):
 
     pipeline : ExtendedDataframePipeline
         The pipeline to apply/tune the hyperparameters
-    cv_outer : cross-validation generator
-        The cross validation generator used for model evaluation.
 
     Returns
     -------
@@ -347,12 +348,7 @@ def prepare_model_params(msel_dict, pipeline, cv_outer):
         for k, v in hyper_params.items():
             logger.info(f'\t{k}: {v}')
 
-        if cv_inner is None:
-            logger.info(
-                'Cross validating using same scheme as for model evaluation')
-            cv_inner = deepcopy(cv_outer)
-        else:
-            cv_inner = prepare_cv(cv_inner)
+        cv_inner = prepare_cv(cv_inner)
 
         search_params['cv'] = cv_inner
         search_params['scoring'] = scoring

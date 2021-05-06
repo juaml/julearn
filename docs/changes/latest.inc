@@ -25,6 +25,10 @@ Enhancements
 
 - Update :mod:`.model_selection` and add capabilities to register searchers (by `Sami Hamdan`_).
 
+- Add user facing `create_pipeline` function (by `Sami Hamdan`_)
+
+- Update default behavior of setting inner cv according to scikit-learn instead of using outer cv as default (by `Sami Hamdan`_).
+             
 - Add tests and more algorithms to `DynamicSelection` (by `Sami Hamdan`_ and `Shammi More`_).
 
 Bugs
@@ -32,13 +36,15 @@ Bugs
 
 - Fix a hyperparameters setting issue where the parameter had an iterable of only one element (:gh:`96` by `Sami Hamdan`_).
 
-- Fix installations instruction for latest development version (add ``--pre`` by `Fede Raimondo`_)
+- Fix installations instruction for latest development version (add ``--pre`` by `Fede Raimondo`_).
 
-- Fix target transformers that only normal transformers are wrapped (:gh:`94` by `Sami Hamdan`_)
+- Fix target transformers that only normal transformers are wrapped (:gh:`94` by `Sami Hamdan`_).
 
-- Fix compatibility with new scikit-learn release 0.24 (:gh:`#108` by `Sami Hamdan`_)
+- Fix compatibility with new scikit-learn release 0.24 (:gh:`#108` by `Sami Hamdan`_).
 
-- Fix compatibility with multiprocessing in scikit-learn (by `Sami Hamdan`_)
+- Fix compatibility with multiprocessing in scikit-learn (by `Sami Hamdan`_).
+
+- Raise error message when columns in the dataframe are nos strings (:gh:`77` by `Fede Raimondo`_).
 
 API changes
 ~~~~~~~~~~~
