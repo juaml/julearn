@@ -19,6 +19,7 @@ import numpy as np
 from sklearn.datasets import load_diabetes
 from sklearn.model_selection import StratifiedKFold, RepeatedStratifiedKFold
 from julearn.utils import configure_logging
+from julearn.model_selection import StratifiedGroupsKFold
 
 ###############################################################################
 # Set the logging level to info to see extra information
@@ -44,6 +45,8 @@ data_df = pd.concat([features, target], axis=1)
 
 X = ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
 y = 'target'
+groups = 'bins'
+
 
 ###############################################################################
 # Define number of splits, number of repeats and random seed
@@ -54,17 +57,27 @@ rand_seed = 200
 num_bins = math.floor(len(data_df)/num_splits) # num of bins to be created
 bins_on = data_df.target # variable to be used for stratification
 qc = pd.cut(bins_on.tolist(), num_bins)  # divides data in bins
+data_df['bins'] = gc.codes
 
-###############################################################################
-# StratifiedKFold for regression
-cv = StratifiedKFold(n_splits=num_splits, shuffle=False, random_state=None)
-for train_index, test_index in cv.split(data_df, qc.codes):
-    print('test_index', test_index)
-    print('len of test and train', len(test_index), len(train_index))
+# ###############################################################################
+# # StratifiedKFold for regression
+# skcv = StratifiedKFold(n_splits=num_splits, shuffle=False, random_state=42)
+# for train_index, test_index in skcv.split(data_df, qc.codes):
+#     print('test_index', test_index)
+#     print('len of test and train', len(test_index), len(train_index))
 
-###############################################################################
-RepeatedStratifiedKFold for regression
-cv = RepeatedStratifiedKFold(n_splits=num_splits, n_repeats=num_repeats, random_state=rand_seed)
-for train_index, test_index in cv.split(data_df, qc.codes):
-    print('test_index', test_index)
-    print('len of test and train', len(test_index), len(train_index))
+# sgkcv = StratifiedGroupsKFold(
+#     n_splits=num_splits, shuffle=False, random_state=42)
+# for train_index, test_index in sgkcv.split(data_df, bins_on, qc.codes):
+#     print('test_index', test_index)
+#     print('len of test and train', len(test_index), len(train_index))
+
+cv = StratifiedGroupsKFold(n_splits=num_splits, shuffle=False, random_state=42)
+run_cross_validation(..., cv=cv, groups="dont forget!")
+
+# ###############################################################################
+# RepeatedStratifiedKFold for regression
+# cv = RepeatedStratifiedKFold(n_splits=num_splits, n_repeats=num_repeats, random_state=rand_seed)
+# for train_index, test_index in cv.split(data_df, qc.codes):
+#     print('test_index', test_index)
+#     print('len of test and train', len(test_index), len(train_index))
