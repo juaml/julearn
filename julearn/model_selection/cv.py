@@ -100,6 +100,7 @@ class StratifiedBootstrap(BaseShuffleSplit):
 class StratifiedGroupsKFold(StratifiedKFold):
     def split(self, X, y, groups=None):
         """Generate indices to split data into training and test set.
+
         Parameters
         ----------
         X : array-like of shape (n_samples, n_features)
@@ -112,12 +113,14 @@ class StratifiedGroupsKFold(StratifiedKFold):
             Always ignored, exists for compatibility.
         groups : object
             The stratification variable.
+
         Yields
         ------
         train : ndarray
             The training set indices for that split.
         test : ndarray
             The testing set indices for that split.
+
         Notes
         -----
         Randomized CV splitters may return different results for each call of
@@ -130,9 +133,9 @@ class StratifiedGroupsKFold(StratifiedKFold):
 
 class RepeatedStratifiedGroupsKFold(_RepeatedSplits):
     """Repeated Stratified K-Fold cross validator.
-    Repeats Stratified K-Fold n times with different randomization in each
-    repetition.
-    Read more in the :ref:`User Guide <repeated_k_fold>`.
+    Repeats Stratified Groups K-Fold n times with different randomization in
+    each repetition.
+
     Parameters
     ----------
     n_splits : int, default=5
@@ -143,31 +146,13 @@ class RepeatedStratifiedGroupsKFold(_RepeatedSplits):
         Controls the generation of the random states for each repetition.
         Pass an int for reproducible output across multiple function calls.
         See :term:`Glossary <random_state>`.
-    Examples
-    --------
-    >>> import numpy as np
-    >>> from sklearn.model_selection import RepeatedStratifiedKFold
-    >>> X = np.array([[1, 2], [3, 4], [1, 2], [3, 4]])
-    >>> y = np.array([0, 0, 1, 1])
-    >>> rskf = RepeatedStratifiedKFold(n_splits=2, n_repeats=2,
-    ...     random_state=36851234)
-    >>> for train_index, test_index in rskf.split(X, y):
-    ...     print("TRAIN:", train_index, "TEST:", test_index)
-    ...     X_train, X_test = X[train_index], X[test_index]
-    ...     y_train, y_test = y[train_index], y[test_index]
-    ...
-    TRAIN: [1 2] TEST: [0 3]
-    TRAIN: [0 3] TEST: [1 2]
-    TRAIN: [1 3] TEST: [0 2]
-    TRAIN: [0 2] TEST: [1 3]
+
     Notes
     -----
     Randomized CV splitters may return different results for each call of
     split. You can make the results identical by setting `random_state`
     to an integer.
-    See Also
-    --------
-    RepeatedKFold : Repeats K-Fold n times.
+
     """
     def __init__(self, *, n_splits=5, n_repeats=10, random_state=None):
         super().__init__(
