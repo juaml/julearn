@@ -24,7 +24,8 @@ Enhancements
 - Refactor scoring to allow for registering and callable scorers (by `Sami Hamdan`_).
 
 - Update :mod:`.model_selection` and add capabilities to register searchers (by `Sami Hamdan`_).
-  - Add user facing `create_pipeline` function (by `Sami Hamdan`_)
+
+- Add user facing `create_pipeline` function (by `Sami Hamdan`_)
 
 - Update default behavior of setting inner cv according to scikit-learn instead of using outer cv as default (by `Sami Hamdan`_).
 
