@@ -126,7 +126,9 @@ def test_access_steps_ExtendedDataFramePipeline():
             == (my_pipe
                 .confound_dataframe_pipeline
                 .named_steps
-                .zscore)
+                .zscore
+                .transformer
+                )
             )
 
     assert (my_pipe.named_steps.pca
@@ -134,7 +136,9 @@ def test_access_steps_ExtendedDataFramePipeline():
             == (my_pipe
                 .dataframe_pipeline
                 .named_steps
-                .pca)
+                .pca
+                .transformer
+                )
             )
 
     assert (my_pipe.named_steps.lr
