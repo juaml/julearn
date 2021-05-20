@@ -49,5 +49,7 @@ Bugs
 
 - Raise error message when columns in the dataframe are nos strings (:gh:`77` by `Fede Raimondo`_).
 
+- Fix Bug in the transformer wrapper implementation (:gh:`122` by `Sami Hamdan`_).
+
 API changes
 ~~~~~~~~~~~
