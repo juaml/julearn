@@ -49,5 +49,7 @@ Bugs
 
 - Raise error message when columns in the dataframe are nos strings (:gh:`77` by `Fede Raimondo`_).
 
+- Fix not implemented bug for decision_function in ExtendedDataFramePipeline (:gh:`135` by `Sami Hamdan`_).
+
 API changes
 ~~~~~~~~~~~
