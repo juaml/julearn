@@ -373,9 +373,18 @@ def test_ExtendedDataFramePipeline___rpr__():
     extended_pipe.__repr__()
 
 
-def test_get_wrapped_transformer_params():
+def test_dataframe_pipeline_get_wrapped_transformer_params():
     steps = [('zscore', StandardScaler(with_mean=False))]
 
     my_pipe = create_dataframe_pipeline(steps)
     my_pipe.fit(X)
     assert my_pipe['zscore'].with_mean is False
+
+
+def test_extended_pipeline_get_wrapped_transformer_params():
+    steps = [('zscore', StandardScaler(with_mean=False))]
+
+    my_pipe = create_dataframe_pipeline(steps)
+    extended_pipe = ExtendedDataFramePipeline(my_pipe)
+    extended_pipe.fit(X)
+    assert extended_pipe['zscore'].with_mean is False
