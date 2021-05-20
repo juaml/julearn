@@ -57,6 +57,17 @@ def test_simple_binary():
     do_scoring_test(X, y, data=df_iris, api_params=api_params,
                     sklearn_model=clf, scorers=scorers, sk_y=sk_y)
 
+    # now let's try for decision_function based scores
+    # e.g. svm with probability=False
+
+    scorers = ['roc_auc']
+    sk_y = (df_iris[y].values == 'setosa').astype(np.int)
+    model = svm.SVC(probability=False)
+    api_params = {'model': model, 'pos_labels': 'setosa'}
+    clf = make_pipeline(StandardScaler(), svm.SVC())
+    do_scoring_test(X, y, data=df_iris, api_params=api_params,
+                    sklearn_model=clf, scorers=scorers, sk_y=sk_y)
+
 
 def test_scoring_y_transformer():
     """Test scoring with y transformer"""
