@@ -260,24 +260,18 @@ class ExtendedDataFramePipeline(BaseEstimator):
     @ property
     def named_steps(self):
         steps = self.dataframe_pipeline.named_steps
-        if isinstance(steps, Bunch):
-            return Bunch(**
-                         {name: self._get_wrapped_step(step)
-                          for name, step in steps.items()
-                          })
-        else:
-            return self._get_wrapped_step(steps)
+        return Bunch(**
+                     {name: self._get_wrapped_step(step)
+                         for name, step in steps.items()
+                      })
 
     @ property
     def named_confound_steps(self):
         steps = self.confound_dataframe_pipeline.named_steps
-        if isinstance(steps, Bunch):
-            return Bunch(**
-                         {name: self._get_wrapped_step(step)
-                          for name, step in steps.items()
-                          })
-        else:
-            return self._get_wrapped_step(steps)
+        return Bunch(**
+                     {name: self._get_wrapped_step(step)
+                         for name, step in steps.items()
+                      })
 
     def __getitem__(self, ind):
         if not isinstance(ind, str):
