@@ -154,7 +154,7 @@ def prepare_input_data(X, y, confounds, df, pos_labels, groups):
     -------
     df_X_conf : pandas.DataFrame
         A dataframe with the features and confounds (if specified in the
-        confounds parameter) for each sample.
+        confounds parameter) features can be continuous or categorical.
     df_y : pandas.Series
         A series with the y variable (target) for each sample.
     df_groups : pandas.Series
@@ -162,6 +162,8 @@ def prepare_input_data(X, y, confounds, df, pos_labels, groups):
         in the groups parameter).
     confound_names : str
         The name of the columns if df_X_conf that represent confounds.
+    categorical_features : str
+        The names of columns in df_X_conf that represent categorical features
 
     """
     logger.info('==== Input Data ====')
@@ -170,6 +172,7 @@ def prepare_input_data(X, y, confounds, df, pos_labels, groups):
     df_X_conf = None
     confound_names = None
     df_groups = None
+    categorical_features = None
     if df is None:
         logger.info(f'Using numpy arrays as input')
         _validate_input_data_np(X, y, confounds, groups)
@@ -216,7 +219,11 @@ def prepare_input_data(X, y, confounds, df, pos_labels, groups):
         else:
             X_columns = pick_columns(X, df.columns)
 
+        categorical_features = df.select_dtypes(include=['category'])
+
         logger.info(f'Expanded X: {X_columns}')
+        logger.info(
+            f'X includes these categorical features {categorical_features}')
         logger.info(f'Expanded Confounds: {X_confounds}')
         _validate_input_data_df_ext(X_columns, y, X_confounds, df, groups)
         X_conf_columns = X_columns
@@ -244,7 +251,7 @@ def prepare_input_data(X, y, confounds, df, pos_labels, groups):
         df_y = df_y.isin(pos_labels).astype(np.int)
     logger.info('====================')
     logger.info('')
-    return df_X_conf, df_y, df_groups, confound_names
+    return df_X_conf, df_y, df_groups, confound_names, categorical_features
 
 
 def prepare_model(model, problem_type):

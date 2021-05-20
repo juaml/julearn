@@ -163,11 +163,8 @@ def run_cross_validation(
         logger.info(f'Using default CV')
         cv = 'repeat:5_nfolds:5'
 
-    # if scoring is None:
-    #     scoring = 'accuracy'
-
     # Interpret the input data and prepare it to be used with the library
-    df_X_conf, y, df_groups, _ = prepare_input_data(
+    df_X_conf, y, df_groups, _, categorical_features = prepare_input_data(
         X=X, y=y, confounds=confounds, df=data, pos_labels=pos_labels,
         groups=groups)
 
@@ -178,6 +175,7 @@ def run_cross_validation(
         preprocess_y=preprocess_y,
         preprocess_confounds=preprocess_confounds,
         confounds=confounds,
+        categorical_features=categorical_features,
         problem_type=problem_type,
         model_params=model_params
     )
@@ -217,6 +215,7 @@ def run_cross_validation(
 def create_pipeline(
     model,
     confounds=None,
+    categorical_features=None,
     problem_type='binary_classification',
     preprocess_X=None,
     preprocess_y=None,
@@ -233,6 +232,8 @@ def create_pipeline(
     confounds : str, list(str) or numpy.array | None
         The confounds.
         See https://juaml.github.io/julearn/input.html for details.
+    categorical_features : str, list(str)
+        The categorical features.
     problem_type : str
         The kind of problem to model.
 
@@ -303,11 +304,10 @@ def create_pipeline(
     # Prepare the model
     model_tuple = prepare_model(model=model, problem_type=problem_type)
 
-    pipeline = _create_extended_pipeline(preprocess_X,
-                                         preprocess_y,
-                                         preprocess_confounds,
-                                         model_tuple, confounds,
-                                         categorical_features=None)
+    pipeline = _create_extended_pipeline(
+        preprocess_X, preprocess_y,
+        preprocess_confounds, model_tuple, confounds,
+        categorical_features=categorical_features)
 
     if model_params is not None:
         pipeline = prepare_model_params(model_params, pipeline)
