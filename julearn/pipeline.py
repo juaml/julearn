@@ -109,7 +109,7 @@ class ExtendedDataFramePipeline(BaseEstimator):
         self.confounds = confounds
         self.categorical_features = categorical_features
 
-    def fit(self, X, y=None):
+    def fit(self, X, y=None, **fit_params):
         self.dataframe_pipeline = clone(self.dataframe_pipeline)
         self.confound_dataframe_pipeline = (
             None

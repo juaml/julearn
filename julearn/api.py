@@ -208,7 +208,7 @@ def run_cross_validation(
 
     out = pd.DataFrame(scores)
     if return_estimator in ['final', 'all']:
-        pipeline.fit(df_X_conf, y)
+        pipeline.fit(df_X_conf, y, groups=df_groups)
         out = out, pipeline
 
     return out

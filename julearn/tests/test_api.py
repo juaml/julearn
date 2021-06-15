@@ -267,6 +267,19 @@ def test_tune_hyperparam():
     clf2 = clone(gs).fit(sk_X, sk_y).best_estimator_.steps[-1][1]
     compare_models(clf1, clf2)
 
+    # Now test using group cv as inner CV scheme
+    cv_outer = RepeatedKFold(n_splits=2, n_repeats=1)
+    cv_inner = GroupKFold(n_splits=2)
+    df_iris['groups'] = np.digitize(
+        df_iris['sepal_length'],
+        bins=np.histogram(df_iris['sepal_length'], bins=20)[1])
+
+    model_params = {'svm__C': [0.01, 0.001], 'cv': cv_inner}
+    actual, actual_estimator = run_cross_validation(
+        X=X, y=y, data=df_iris, model='svm', preprocess_X='zscore',
+        model_params=model_params, cv=cv_outer, scoring=[scoring],
+        return_estimator='final')
+
 
 def test_consistency():
     """Test for consistency in the parameters"""
