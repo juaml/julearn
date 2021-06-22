@@ -4,6 +4,7 @@
 import numpy as np
 from numpy.testing import assert_array_equal
 import pandas as pd
+from pandas.core.arrays import categorical
 
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
@@ -21,7 +22,7 @@ from julearn.prepare import (prepare_input_data,
 
 
 def _check_np_input(prepared, X, y, confounds, groups):
-    df_X_conf, df_y, df_groups, _ = prepared
+    df_X_conf, df_y, df_groups, _, _ = prepared
 
     new_X = X
     if confounds is not None:
@@ -42,7 +43,7 @@ def _check_np_input(prepared, X, y, confounds, groups):
 
 
 def _check_df_input(prepared, X, y, confounds, groups, df):
-    df_X_conf, df_y, df_groups, _ = prepared
+    df_X_conf, df_y, df_groups, _, categorical_names = prepared
 
     assert_array_equal(df[X].values, df_X_conf[X].values)
     assert_array_equal(df_y.values, df[y].values)
@@ -50,6 +51,10 @@ def _check_df_input(prepared, X, y, confounds, groups, df):
         assert_array_equal(df[confounds].values, df_X_conf[confounds].values)
     if groups is not None:
         assert_array_equal(df[groups].values, df_groups)
+    df_categoricals = df.select_dtypes(include='category')
+    if not df_categoricals.empty:
+        assert_array_equal(df_categoricals.values,
+                           df_X_conf[categorical_names].values)
 
 
 def test_prepare_input_data_np():
