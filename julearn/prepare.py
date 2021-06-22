@@ -219,7 +219,10 @@ def prepare_input_data(X, y, confounds, df, pos_labels, groups):
         else:
             X_columns = pick_columns(X, df.columns)
 
-        categorical_features = df.select_dtypes(include=['category'])
+        categorical_features = (df
+                                .select_dtypes(include=['category'])
+                                .columns
+                                .to_list())
 
         logger.info(f'Expanded X: {X_columns}')
         logger.info(
@@ -249,6 +252,8 @@ def prepare_input_data(X, y, confounds, df, pos_labels, groups):
         logger.info(f'Setting the following as positive labels {pos_labels}')
         # TODO: Warn if pos_labels are not in df_y
         df_y = df_y.isin(pos_labels).astype(np.int)
+    categorical_features = ([] if categorical_features is None
+                            else categorical_features)
     logger.info('====================')
     logger.info('')
     return df_X_conf, df_y, df_groups, confound_names, categorical_features

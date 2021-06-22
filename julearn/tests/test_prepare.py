@@ -545,22 +545,24 @@ def test_pick_regexp():
     prepared = prepare_input_data(X=X, y=y, confounds=confounds, df=df,
                                   pos_labels=None, groups=None)
 
-    df_X_conf, df_y, _, confound_names = prepared
+    df_X_conf, df_y, _, confound_names, categorical_names = prepared
 
     assert all([x in df_X_conf.columns for x in X])
     assert y not in df_X_conf.columns
     assert df_y.name == y
     assert len(confound_names) == 0
+    assert len(categorical_names) == 0
 
     prepared = prepare_input_data(X=[':'], y=y, confounds=confounds, df=df,
                                   pos_labels=None, groups=None)
 
-    df_X_conf, df_y, _, confound_names = prepared
+    df_X_conf, df_y, _, confound_names, categorical_names = prepared
 
     assert all([x in df_X_conf.columns for x in X])
     assert y not in df_X_conf.columns
     assert df_y.name == y
     assert len(confound_names) == 0
+    assert len(categorical_names) == 0
 
     X = columns[: 6]
     y = '_a3_b2_c7_'
@@ -568,7 +570,7 @@ def test_pick_regexp():
     prepared = prepare_input_data(X=[':'], y=y, confounds=confounds, df=df,
                                   pos_labels=None, groups=None)
 
-    df_X_conf, df_y, _, confound_names = prepared
+    df_X_conf, df_y, _, confound_names, categorical_names = prepared
 
     assert all([x in df_X_conf.columns for x in X])
     assert all([x in df_X_conf.columns for x in confounds])
@@ -576,6 +578,7 @@ def test_pick_regexp():
     assert df_y.name == y
     assert len(confound_names) == 3
     assert all([x in confound_names for x in confounds])
+    assert len(categorical_names) == 0
 
     X = columns[: 6]
     y = '_a3_b2_c7_'
@@ -584,7 +587,7 @@ def test_pick_regexp():
     prepared = prepare_input_data(X=[':'], y=y, confounds=confounds, df=df,
                                   pos_labels=None, groups=groups)
 
-    df_X_conf, df_y, df_groups, confound_names = prepared
+    df_X_conf, df_y, df_groups, confound_names, categorical_names = prepared
 
     assert all([x in df_X_conf.columns for x in X])
     assert all([x in df_X_conf.columns for x in confounds])
@@ -594,6 +597,7 @@ def test_pick_regexp():
     assert df_groups.name == groups
     assert len(confound_names) == 2
     assert all([x in confound_names for x in confounds])
+    assert len(categorical_names) == 0
 
     X = columns[: 6]
     y = '_a3_b2_c7_'
@@ -601,7 +605,7 @@ def test_pick_regexp():
     prepared = prepare_input_data(X=['_a_.*'], y=y, confounds='_a2_.*', df=df,
                                   pos_labels=None, groups=None)
 
-    df_X_conf, df_y, _, confound_names = prepared
+    df_X_conf, df_y, _, confound_names, categorical_names = prepared
 
     assert all([x in df_X_conf.columns for x in X])
     assert all([x in df_X_conf.columns for x in confounds])
@@ -609,6 +613,7 @@ def test_pick_regexp():
     assert df_y.name == y
     assert len(confound_names) == 3
     assert all([x in confound_names for x in confounds])
+    assert len(categorical_names) == 0
 
     X = columns[: 6]
     y = '_a3_b2_c7_'
@@ -617,7 +622,7 @@ def test_pick_regexp():
                                   confounds='_a2_.*', df=df,
                                   pos_labels=None, groups=None)
 
-    df_X_conf, df_y, _, confound_names = prepared
+    df_X_conf, df_y, _, confound_names, categorical_names = prepared
 
     assert all([x in df_X_conf.columns for x in X])
     assert all([x in df_X_conf.columns for x in confounds])
@@ -625,6 +630,29 @@ def test_pick_regexp():
     assert df_y.name == y
     assert len(confound_names) == 3
     assert all([x in confound_names for x in confounds])
+    assert len(categorical_names) == 0
+
+    X = columns[: 6]
+    y = '_a3_b2_c7_'
+    confounds = columns[-3:]
+    categoricals = ['_a_b_c1_', '_a_b_c2_']
+    df[categoricals] = df[categoricals].astype('category')
+
+    prepared = prepare_input_data(X=['.*_b_.*', '.*a_b2_.*', '.*b3_.*'], y=y,
+                                  confounds='_a2_.*', df=df,
+                                  pos_labels=None, groups=None)
+
+    df_X_conf, df_y, _, confound_names, categorical_names = prepared
+
+    assert all([x in df_X_conf.columns for x in X])
+    assert all([x in df_X_conf.columns for x in confounds])
+    assert all([x in df_X_conf.columns for x in categoricals])
+
+    assert y not in df_X_conf.columns
+    assert df_y.name == y
+    assert len(confound_names) == 3
+    assert all([x in confound_names for x in confounds])
+    assert len(categorical_names) == 2
 
 
 def test__prepare_hyperparams():
