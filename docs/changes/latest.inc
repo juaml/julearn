@@ -33,6 +33,8 @@ Enhancements
 
 - Add CV schemes for stratifying based on the grouping variables, useful for regression problems. Check :class:`.StratifiedGroupsKFold` and :class:`.RepeatedStratifiedGroupsKFold` (by `Fede Raimondo`_ and `Shammi More`_).
 
+- Add support of categorical features in `run_cross_validation` (by `Sami Hamdan`_).
+
 
 Bugs
 ~~~~
