@@ -4,7 +4,6 @@
 import numpy as np
 from numpy.testing import assert_array_equal
 import pandas as pd
-from pandas.core.arrays import categorical
 
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
