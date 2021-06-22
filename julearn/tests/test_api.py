@@ -1,6 +1,8 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
+import operator
+from numpy.testing import assert_array_compare
 import numpy as np
 
 from numpy.testing import assert_array_equal
@@ -477,6 +479,84 @@ def test_confound_removal_no_explicit_removal():
 
     assert_array_equal(scores_explicit_no_preprocess_at_all['test_score'],
                        scores_not_explicit_no_preprocess_at_all['test_score'])
+
+
+def test_categorical_features_zscore_ignored():
+
+    df_iris = load_dataset('iris')
+
+    df_iris = df_iris[df_iris['species'].isin(['versicolor', 'virginica'])]
+    df_iris['sepal_width'] = pd.Categorical(
+        df_iris.sepal_width.apply(lambda x: x > df_iris.sepal_width.mean())
+    )
+
+    X = ['sepal_length', 'sepal_width', 'petal_length']
+    y = 'species'
+
+    _, model = run_cross_validation(
+        X=X, y=y, data=df_iris, model='svm', preprocess_X='zscore',
+        return_estimator='final')
+    df_prep, _ = model.preprocess(df_iris.drop(columns=y), df_iris[y])
+    assert_array_equal(df_prep['sepal_width'].values,
+                       df_iris['sepal_width'].values)
+
+    assert_array_compare(operator.__ne__,
+                         df_prep[['sepal_length', 'petal_length']].values,
+                         df_iris[['sepal_length', 'petal_length']].values)
+
+
+def test_categorical_features_zscore_cat_only():
+
+    df_iris = load_dataset('iris')
+
+    df_iris = df_iris[df_iris['species'].isin(['versicolor', 'virginica'])]
+    df_iris['sepal_width'] = pd.Categorical(
+        df_iris.sepal_width.apply(lambda x: x > df_iris.sepal_width.mean())
+    )
+
+    X = ['sepal_length', 'sepal_width', 'petal_length']
+    y = 'species'
+
+    _, model = run_cross_validation(
+        X=X, y=y, data=df_iris, model='svm', preprocess_X='zscore',
+        return_estimator='final',
+        model_params=dict(zscore__apply_to='categorical'))
+
+    df_prep, _ = model.preprocess(df_iris.drop(columns=y), df_iris[y])
+
+    assert_array_compare(operator.__ne__,
+                         df_prep['sepal_width'].values,
+                         df_iris['sepal_width'].values)
+
+    assert_array_equal(df_prep[['sepal_length', 'petal_length']].values,
+                       df_iris[['sepal_length', 'petal_length']].values)
+
+
+def test_categorical_features_zscore_all():
+
+    df_iris = load_dataset('iris')
+
+    df_iris = df_iris[df_iris['species'].isin(['versicolor', 'virginica'])]
+    df_iris['sepal_width'] = pd.Categorical(
+        df_iris.sepal_width.apply(lambda x: x > df_iris.sepal_width.mean())
+    )
+
+    X = ['sepal_length', 'sepal_width', 'petal_length']
+    y = 'species'
+
+    _, model = run_cross_validation(
+        X=X, y=y, data=df_iris, model='svm', preprocess_X='zscore',
+        return_estimator='final', model_params=dict(zscore__apply_to='all'))
+
+    df_prep, _ = model.preprocess(df_iris.drop(columns=y), df_iris[y])
+
+    assert_array_compare(operator.__ne__,
+                         df_prep['sepal_width'].values,
+                         df_iris['sepal_width'].values)
+
+    assert_array_compare(operator.__ne__,
+                         df_prep[['sepal_length', 'petal_length']].values,
+                         df_iris[['sepal_length', 'petal_length']].values)
 
 
 def test_multiprocess_no_error():
