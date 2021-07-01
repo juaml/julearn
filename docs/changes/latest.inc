@@ -25,7 +25,7 @@ Enhancements
 
 - Update :mod:`.model_selection` and add capabilities to register searchers (by `Sami Hamdan`_).
 
-- Add user facing `create_pipeline` function (by `Sami Hamdan`_)
+- Add user facing `create_pipeline` function (by `Sami Hamdan`_).
 
 - Update default behavior of setting inner cv according to scikit-learn instead of using outer cv as default (by `Sami Hamdan`_).
              
@@ -33,6 +33,7 @@ Enhancements
 
 - Add CV schemes for stratifying based on the grouping variables, useful for regression problems. Check :class:`.StratifiedGroupsKFold` and :class:`.RepeatedStratifiedGroupsKFold` (by `Fede Raimondo`_ and `Shammi More`_).
 
+- Add example for `tranform_until` (:gh:`63` by `Shammi More`_).
 
 Bugs
 ~~~~
