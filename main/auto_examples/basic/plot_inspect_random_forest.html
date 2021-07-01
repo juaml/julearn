@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/gallery-binder.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/gallery-dataframe.css" type="text/css" />
@@ -33,6 +35,7 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
@@ -105,6 +108,7 @@
 <li class="toctree-l2"><a class="reference internal" href="plot_cm_acc_multiclass.html">Multiclass Classification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_groupcv_inspect_svm.html">Inspecting SVM models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_stratified_kfold_reg.html">Stratified K-fold CV for regression analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_transform_until.html">Preprocessing with variance threshold, zscore and PCA</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_example_regression.html">Regression Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_confound_removal_classification.html">Confound Removal (model comparison)</a></li>
 </ul>
@@ -237,13 +241,13 @@ using a Random Forest classifier and analyse the model.</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2021-05-06 16:53:20,192 - julearn - INFO - ===== Lib Versions =====
-2021-05-06 16:53:20,193 - julearn - INFO - numpy: 1.19.5
-2021-05-06 16:53:20,193 - julearn - INFO - scipy: 1.6.3
-2021-05-06 16:53:20,193 - julearn - INFO - sklearn: 0.24.2
-2021-05-06 16:53:20,193 - julearn - INFO - pandas: 1.2.4
-2021-05-06 16:53:20,193 - julearn - INFO - julearn: 0.2.5.dev29+g1c57332
-2021-05-06 16:53:20,193 - julearn - INFO - ========================
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2021-07-01 14:01:21,845 - julearn - INFO - ===== Lib Versions =====
+2021-07-01 14:01:21,846 - julearn - INFO - numpy: 1.19.5
+2021-07-01 14:01:21,846 - julearn - INFO - scipy: 1.7.0
+2021-07-01 14:01:21,846 - julearn - INFO - sklearn: 0.24.2
+2021-07-01 14:01:21,846 - julearn - INFO - pandas: 1.2.5
+2021-07-01 14:01:21,846 - julearn - INFO - julearn: 0.2.5.dev30+ga7bb466.d20210701
+2021-07-01 14:01:21,846 - julearn - INFO - ========================
 </pre></div>
 </div>
 <div class="section" id="random-forest-variable-importance">
@@ -268,20 +272,20 @@ returns the estimator fitted with all the data.</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2021-05-06 16:53:20,197 - julearn - INFO - Using default CV
-2021-05-06 16:53:20,198 - julearn - INFO - ==== Input Data ====
-2021-05-06 16:53:20,198 - julearn - INFO - Using dataframe as input
-2021-05-06 16:53:20,198 - julearn - INFO - Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2021-05-06 16:53:20,198 - julearn - INFO - Target: species
-2021-05-06 16:53:20,198 - julearn - INFO - Expanded X: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2021-05-06 16:53:20,198 - julearn - INFO - Expanded Confounds: []
-2021-05-06 16:53:20,199 - julearn - INFO - ====================
-2021-05-06 16:53:20,199 - julearn - INFO -
-2021-05-06 16:53:20,199 - julearn - INFO - ====== Model ======
-2021-05-06 16:53:20,199 - julearn - INFO - Obtaining model by name: rf
-2021-05-06 16:53:20,199 - julearn - INFO - ===================
-2021-05-06 16:53:20,199 - julearn - INFO -
-2021-05-06 16:53:20,200 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2021-07-01 14:01:21,850 - julearn - INFO - Using default CV
+2021-07-01 14:01:21,850 - julearn - INFO - ==== Input Data ====
+2021-07-01 14:01:21,850 - julearn - INFO - Using dataframe as input
+2021-07-01 14:01:21,850 - julearn - INFO - Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2021-07-01 14:01:21,850 - julearn - INFO - Target: species
+2021-07-01 14:01:21,850 - julearn - INFO - Expanded X: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2021-07-01 14:01:21,850 - julearn - INFO - Expanded Confounds: []
+2021-07-01 14:01:21,851 - julearn - INFO - ====================
+2021-07-01 14:01:21,851 - julearn - INFO -
+2021-07-01 14:01:21,852 - julearn - INFO - ====== Model ======
+2021-07-01 14:01:21,852 - julearn - INFO - Obtaining model by name: rf
+2021-07-01 14:01:21,852 - julearn - INFO - ===================
+2021-07-01 14:01:21,852 - julearn - INFO -
+2021-07-01 14:01:21,852 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
 </pre></div>
 </div>
 <p>This type of classifier has an internal variable that can inform us on how
@@ -313,20 +317,20 @@ estimator.</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2021-05-06 16:53:25,022 - julearn - INFO - Using default CV
-2021-05-06 16:53:25,022 - julearn - INFO - ==== Input Data ====
-2021-05-06 16:53:25,022 - julearn - INFO - Using dataframe as input
-2021-05-06 16:53:25,022 - julearn - INFO - Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2021-05-06 16:53:25,022 - julearn - INFO - Target: species
-2021-05-06 16:53:25,022 - julearn - INFO - Expanded X: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2021-05-06 16:53:25,022 - julearn - INFO - Expanded Confounds: []
-2021-05-06 16:53:25,023 - julearn - INFO - ====================
-2021-05-06 16:53:25,023 - julearn - INFO -
-2021-05-06 16:53:25,024 - julearn - INFO - ====== Model ======
-2021-05-06 16:53:25,024 - julearn - INFO - Obtaining model by name: rf
-2021-05-06 16:53:25,024 - julearn - INFO - ===================
-2021-05-06 16:53:25,024 - julearn - INFO -
-2021-05-06 16:53:25,024 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2021-07-01 14:01:25,819 - julearn - INFO - Using default CV
+2021-07-01 14:01:25,819 - julearn - INFO - ==== Input Data ====
+2021-07-01 14:01:25,819 - julearn - INFO - Using dataframe as input
+2021-07-01 14:01:25,819 - julearn - INFO - Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2021-07-01 14:01:25,819 - julearn - INFO - Target: species
+2021-07-01 14:01:25,820 - julearn - INFO - Expanded X: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2021-07-01 14:01:25,820 - julearn - INFO - Expanded Confounds: []
+2021-07-01 14:01:25,820 - julearn - INFO - ====================
+2021-07-01 14:01:25,821 - julearn - INFO -
+2021-07-01 14:01:25,821 - julearn - INFO - ====== Model ======
+2021-07-01 14:01:25,821 - julearn - INFO - Obtaining model by name: rf
+2021-07-01 14:01:25,821 - julearn - INFO - ===================
+2021-07-01 14:01:25,821 - julearn - INFO -
+2021-07-01 14:01:25,821 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
 </pre></div>
 </div>
 <p>Now we can obtain the feature importance for each estimator (CV fold)</p>
@@ -351,7 +355,7 @@ estimator.</p>
 </pre></div>
 </div>
 <img alt="Distribution of variable Importances for Random Forest Classifier across folds" class="sphx-glr-single-img" src="../../_images/sphx_glr_plot_inspect_random_forest_002.png" />
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  9.863 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  8.012 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-basic-plot-inspect-random-forest-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/f7a96073e75f8e520bb1e3aebe3a5b0f/plot_inspect_random_forest.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_inspect_random_forest.py</span></code></a></p>

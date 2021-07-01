@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/gallery-binder.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/gallery-dataframe.css" type="text/css" />
@@ -33,6 +35,7 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
@@ -43,7 +46,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Confound Removal (model comparison)" href="plot_confound_removal_classification.html" />
-    <link rel="prev" title="Stratified K-fold CV for regression analysis" href="plot_stratified_kfold_reg.html" /> 
+    <link rel="prev" title="Preprocessing with variance threshold, zscore and PCA" href="plot_transform_until.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -102,6 +105,7 @@
 <li class="toctree-l2"><a class="reference internal" href="plot_cm_acc_multiclass.html">Multiclass Classification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_groupcv_inspect_svm.html">Inspecting SVM models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_stratified_kfold_reg.html">Stratified K-fold CV for regression analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_transform_until.html">Preprocessing with variance threshold, zscore and PCA</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Regression Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_confound_removal_classification.html">Confound Removal (model comparison)</a></li>
 </ul>
@@ -238,13 +242,13 @@ a regression analysis using a Ridge Regression model.</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2021-05-06 16:53:33,751 - julearn - INFO - ===== Lib Versions =====
-2021-05-06 16:53:33,751 - julearn - INFO - numpy: 1.19.5
-2021-05-06 16:53:33,751 - julearn - INFO - scipy: 1.6.3
-2021-05-06 16:53:33,752 - julearn - INFO - sklearn: 0.24.2
-2021-05-06 16:53:33,752 - julearn - INFO - pandas: 1.2.4
-2021-05-06 16:53:33,752 - julearn - INFO - julearn: 0.2.5.dev29+g1c57332
-2021-05-06 16:53:33,752 - julearn - INFO - ========================
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2021-07-01 14:01:42,293 - julearn - INFO - ===== Lib Versions =====
+2021-07-01 14:01:42,293 - julearn - INFO - numpy: 1.19.5
+2021-07-01 14:01:42,293 - julearn - INFO - scipy: 1.7.0
+2021-07-01 14:01:42,293 - julearn - INFO - sklearn: 0.24.2
+2021-07-01 14:01:42,293 - julearn - INFO - pandas: 1.2.5
+2021-07-01 14:01:42,293 - julearn - INFO - julearn: 0.2.5.dev30+ga7bb466.d20210701
+2021-07-01 14:01:42,293 - julearn - INFO - ========================
 </pre></div>
 </div>
 <p>load the diabetes data from sklearn as a pandas dataframe</p>
@@ -315,20 +319,20 @@ for scoring</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2021-05-06 16:53:34,164 - julearn - INFO - Using default CV
-2021-05-06 16:53:34,164 - julearn - INFO - ==== Input Data ====
-2021-05-06 16:53:34,164 - julearn - INFO - Using dataframe as input
-2021-05-06 16:53:34,164 - julearn - INFO - Features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
-2021-05-06 16:53:34,164 - julearn - INFO - Target: target
-2021-05-06 16:53:34,164 - julearn - INFO - Expanded X: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
-2021-05-06 16:53:34,165 - julearn - INFO - Expanded Confounds: []
-2021-05-06 16:53:34,166 - julearn - INFO - ====================
-2021-05-06 16:53:34,166 - julearn - INFO -
-2021-05-06 16:53:34,166 - julearn - INFO - ====== Model ======
-2021-05-06 16:53:34,166 - julearn - INFO - Obtaining model by name: ridge
-2021-05-06 16:53:34,166 - julearn - INFO - ===================
-2021-05-06 16:53:34,166 - julearn - INFO -
-2021-05-06 16:53:34,166 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2021-07-01 14:01:42,690 - julearn - INFO - Using default CV
+2021-07-01 14:01:42,690 - julearn - INFO - ==== Input Data ====
+2021-07-01 14:01:42,690 - julearn - INFO - Using dataframe as input
+2021-07-01 14:01:42,690 - julearn - INFO - Features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2021-07-01 14:01:42,690 - julearn - INFO - Target: target
+2021-07-01 14:01:42,691 - julearn - INFO - Expanded X: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2021-07-01 14:01:42,691 - julearn - INFO - Expanded Confounds: []
+2021-07-01 14:01:42,692 - julearn - INFO - ====================
+2021-07-01 14:01:42,692 - julearn - INFO -
+2021-07-01 14:01:42,692 - julearn - INFO - ====== Model ======
+2021-07-01 14:01:42,692 - julearn - INFO - Obtaining model by name: ridge
+2021-07-01 14:01:42,692 - julearn - INFO - ===================
+2021-07-01 14:01:42,692 - julearn - INFO -
+2021-07-01 14:01:42,692 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
 </pre></div>
 </div>
 <p>The scores dataframe has all the values for each CV split.</p>
@@ -337,11 +341,11 @@ for scoring</p>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>   fit_time  score_time  test_score  repeat  fold
-0  0.014652    0.009311  -53.711774       0     0
-1  0.013839    0.009823  -38.334731       0     1
-2  0.014211    0.009206  -46.578596       0     2
-3  0.014217    0.009788  -48.109208       0     3
-4  0.014747    0.011001  -42.632269       0     4
+0  0.011508    0.006961  -43.906430       0     0
+1  0.010903    0.007296  -44.127262       0     1
+2  0.011509    0.007568  -45.136034       0     2
+3  0.011707    0.007237  -41.324288       0     3
+4  0.011068    0.007523  -47.367616       0     4
 </pre></div>
 </div>
 <p>Mean value of mean absolute error across CV</p>
@@ -349,7 +353,7 @@ for scoring</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>45.94450832287054
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>43.98214011826165
 </pre></div>
 </div>
 <p>Now we can get the MAE fold and repetition:</p>
@@ -364,11 +368,11 @@ for scoring</p>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>K-fold splits          0          1          2          3          4
 Repeats
-0              53.711774  38.334731  46.578596  48.109208  42.632269
-1              46.110360  49.273373  45.245755  48.425018  41.661824
-2              45.176249  50.034589  48.108842  39.433303  44.937370
-3              46.238680  39.120725  48.266876  46.853780  48.097210
-4              45.943724  43.651725  41.527743  47.429889  53.709096
+0              43.906430  44.127262  45.136034  41.324288  47.367616
+1              43.647265  43.816622  44.047904  45.788798  41.244561
+2              49.546995  43.503900  43.895329  38.566435  45.413806
+3              45.911183  43.881612  47.925275  42.304993  39.137493
+4              49.955405  35.486691  46.914710  43.613901  43.088996
 </pre></div>
 </div>
 <p>Plot heatmap of mean absolute error (MAE) over all repeats and CV splits</p>
@@ -423,10 +427,10 @@ of true values vs predicted values</p>
 </div>
 <img alt="Actual vs Predicted" class="sphx-glr-single-img" src="../../_images/sphx_glr_plot_example_regression_004.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>(10.75, 324.25, 10.75, 324.25)
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>(9.45, 351.55, 9.45, 351.55)
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.603 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.477 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-basic-plot-example-regression-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/5d15362022e35d28ba40d25fd042f86e/plot_example_regression.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_example_regression.py</span></code></a></p>
@@ -445,7 +449,7 @@ of true values vs predicted values</p>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
         <a href="plot_confound_removal_classification.html" class="btn btn-neutral float-right" title="Confound Removal (model comparison)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-        <a href="plot_stratified_kfold_reg.html" class="btn btn-neutral float-left" title="Stratified K-fold CV for regression analysis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="plot_transform_until.html" class="btn btn-neutral float-left" title="Preprocessing with variance threshold, zscore and PCA" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

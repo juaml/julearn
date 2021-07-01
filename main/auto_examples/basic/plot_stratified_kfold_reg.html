@@ -13,6 +13,8 @@
   
   <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/gallery-binder.css" type="text/css" />
   <link rel="stylesheet" href="../../_static/gallery-dataframe.css" type="text/css" />
@@ -33,6 +35,7 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
@@ -42,7 +45,7 @@
     
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Regression Analysis" href="plot_example_regression.html" />
+    <link rel="next" title="Preprocessing with variance threshold, zscore and PCA" href="plot_transform_until.html" />
     <link rel="prev" title="Inspecting SVM models" href="plot_groupcv_inspect_svm.html" /> 
 </head>
 
@@ -102,6 +105,7 @@
 <li class="toctree-l2"><a class="reference internal" href="plot_cm_acc_multiclass.html">Multiclass Classification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_groupcv_inspect_svm.html">Inspecting SVM models</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Stratified K-fold CV for regression analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_transform_until.html">Preprocessing with variance threshold, zscore and PCA</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_example_regression.html">Regression Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_confound_removal_classification.html">Confound Removal (model comparison)</a></li>
 </ul>
@@ -238,13 +242,13 @@ perform stratified Kfold CV for a regression problem,</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2021-05-06 16:53:33,052 - julearn - INFO - ===== Lib Versions =====
-2021-05-06 16:53:33,052 - julearn - INFO - numpy: 1.19.5
-2021-05-06 16:53:33,052 - julearn - INFO - scipy: 1.6.3
-2021-05-06 16:53:33,052 - julearn - INFO - sklearn: 0.24.2
-2021-05-06 16:53:33,052 - julearn - INFO - pandas: 1.2.4
-2021-05-06 16:53:33,053 - julearn - INFO - julearn: 0.2.5.dev29+g1c57332
-2021-05-06 16:53:33,053 - julearn - INFO - ========================
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2021-07-01 14:01:32,547 - julearn - INFO - ===== Lib Versions =====
+2021-07-01 14:01:32,547 - julearn - INFO - numpy: 1.19.5
+2021-07-01 14:01:32,547 - julearn - INFO - scipy: 1.7.0
+2021-07-01 14:01:32,547 - julearn - INFO - sklearn: 0.24.2
+2021-07-01 14:01:32,547 - julearn - INFO - pandas: 1.2.5
+2021-07-01 14:01:32,548 - julearn - INFO - julearn: 0.2.5.dev30+ga7bb466.d20210701
+2021-07-01 14:01:32,548 - julearn - INFO - ========================
 </pre></div>
 </div>
 <p>load the diabetes data from sklearn as a pandas dataframe</p>
@@ -298,7 +302,7 @@ stratification</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/tmp/tmp9urrtlrp/1c573327ffbc2b4fa6a6cf36819f397bda707cae/examples/basic/plot_stratified_kfold_reg.py:52: SettingWithCopyWarning:
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/tmp/tmpgvufj58h/a7bb466958a1fb25d65c60c0dec623c601759d2b/examples/basic/plot_stratified_kfold_reg.py:52: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
@@ -325,20 +329,20 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2021-05-06 16:53:33,098 - julearn - INFO - ==== Input Data ====
-2021-05-06 16:53:33,098 - julearn - INFO - Using dataframe as input
-2021-05-06 16:53:33,098 - julearn - INFO - Features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
-2021-05-06 16:53:33,098 - julearn - INFO - Target: target
-2021-05-06 16:53:33,099 - julearn - INFO - Expanded X: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
-2021-05-06 16:53:33,099 - julearn - INFO - Expanded Confounds: []
-2021-05-06 16:53:33,100 - julearn - INFO - Using bins as groups
-2021-05-06 16:53:33,101 - julearn - INFO - ====================
-2021-05-06 16:53:33,101 - julearn - INFO -
-2021-05-06 16:53:33,101 - julearn - INFO - ====== Model ======
-2021-05-06 16:53:33,101 - julearn - INFO - Obtaining model by name: linreg
-2021-05-06 16:53:33,101 - julearn - INFO - ===================
-2021-05-06 16:53:33,101 - julearn - INFO -
-2021-05-06 16:53:33,101 - julearn - INFO - Using scikit-learn CV scheme StratifiedGroupsKFold(n_splits=7, random_state=None, shuffle=False)
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2021-07-01 14:01:32,586 - julearn - INFO - ==== Input Data ====
+2021-07-01 14:01:32,586 - julearn - INFO - Using dataframe as input
+2021-07-01 14:01:32,586 - julearn - INFO - Features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2021-07-01 14:01:32,586 - julearn - INFO - Target: target
+2021-07-01 14:01:32,587 - julearn - INFO - Expanded X: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2021-07-01 14:01:32,587 - julearn - INFO - Expanded Confounds: []
+2021-07-01 14:01:32,588 - julearn - INFO - Using bins as groups
+2021-07-01 14:01:32,588 - julearn - INFO - ====================
+2021-07-01 14:01:32,588 - julearn - INFO -
+2021-07-01 14:01:32,588 - julearn - INFO - ====== Model ======
+2021-07-01 14:01:32,588 - julearn - INFO - Obtaining model by name: linreg
+2021-07-01 14:01:32,588 - julearn - INFO - ===================
+2021-07-01 14:01:32,588 - julearn - INFO -
+2021-07-01 14:01:32,588 - julearn - INFO - Using scikit-learn CV scheme StratifiedGroupsKFold(n_splits=7, random_state=None, shuffle=False)
 /opt/hostedtoolcache/Python/3.8.10/x64/lib/python3.8/site-packages/sklearn/model_selection/_split.py:666: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=7.
   warnings.warn((&quot;The least populated class in y has only %d&quot;
 </pre></div>
@@ -352,19 +356,19 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2021-05-06 16:53:33,289 - julearn - INFO - ==== Input Data ====
-2021-05-06 16:53:33,289 - julearn - INFO - Using dataframe as input
-2021-05-06 16:53:33,289 - julearn - INFO - Features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
-2021-05-06 16:53:33,289 - julearn - INFO - Target: target
-2021-05-06 16:53:33,290 - julearn - INFO - Expanded X: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
-2021-05-06 16:53:33,290 - julearn - INFO - Expanded Confounds: []
-2021-05-06 16:53:33,291 - julearn - INFO - ====================
-2021-05-06 16:53:33,291 - julearn - INFO -
-2021-05-06 16:53:33,291 - julearn - INFO - ====== Model ======
-2021-05-06 16:53:33,291 - julearn - INFO - Obtaining model by name: linreg
-2021-05-06 16:53:33,291 - julearn - INFO - ===================
-2021-05-06 16:53:33,291 - julearn - INFO -
-2021-05-06 16:53:33,291 - julearn - INFO - Using scikit-learn CV scheme KFold(n_splits=7, random_state=None, shuffle=False)
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2021-07-01 14:01:32,734 - julearn - INFO - ==== Input Data ====
+2021-07-01 14:01:32,734 - julearn - INFO - Using dataframe as input
+2021-07-01 14:01:32,734 - julearn - INFO - Features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2021-07-01 14:01:32,734 - julearn - INFO - Target: target
+2021-07-01 14:01:32,735 - julearn - INFO - Expanded X: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2021-07-01 14:01:32,735 - julearn - INFO - Expanded Confounds: []
+2021-07-01 14:01:32,735 - julearn - INFO - ====================
+2021-07-01 14:01:32,736 - julearn - INFO -
+2021-07-01 14:01:32,736 - julearn - INFO - ====== Model ======
+2021-07-01 14:01:32,736 - julearn - INFO - Obtaining model by name: linreg
+2021-07-01 14:01:32,736 - julearn - INFO - ===================
+2021-07-01 14:01:32,736 - julearn - INFO -
+2021-07-01 14:01:32,736 - julearn - INFO - Using scikit-learn CV scheme KFold(n_splits=7, random_state=None, shuffle=False)
 </pre></div>
 </div>
 <p>Now we can compare the test score for model trained with and without
@@ -385,7 +389,7 @@ stratified</p>
 </pre></div>
 </div>
 <img alt="plot stratified kfold reg" class="sphx-glr-single-img" src="../../_images/sphx_glr_plot_stratified_kfold_reg_001.png" />
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.607 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.521 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-basic-plot-stratified-kfold-reg-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/95ea80ff4fbbc571ed97c12dd9488fd2/plot_stratified_kfold_reg.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_stratified_kfold_reg.py</span></code></a></p>
@@ -403,7 +407,7 @@ stratified</p>
           </div>
           <footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="plot_example_regression.html" class="btn btn-neutral float-right" title="Regression Analysis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="plot_transform_until.html" class="btn btn-neutral float-right" title="Preprocessing with variance threshold, zscore and PCA" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
         <a href="plot_groupcv_inspect_svm.html" class="btn btn-neutral float-left" title="Inspecting SVM models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
