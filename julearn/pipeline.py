@@ -152,6 +152,10 @@ class ExtendedDataFramePipeline(BaseEstimator):
         X_conf_trans = self.transform_confounds(X)
         return self.dataframe_pipeline.predict_proba(X_conf_trans)
 
+    def decision_function(self, X):
+        X_conf_trans = self.transform_confounds(X)
+        return self.dataframe_pipeline.decision_function(X_conf_trans)
+
     def score(self, X, y):
         X_conf_trans = self.transform_confounds(X)
         y_true = self.transform_target(X, y)
