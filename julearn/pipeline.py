@@ -3,6 +3,7 @@
 # License: AGPL
 from sklearn.pipeline import Pipeline
 from sklearn.base import BaseEstimator, clone
+from sklearn.utils import Bunch
 
 from . transformers import DataFrameWrapTransformer, DropColumns
 from . utils import raise_error
@@ -258,11 +259,19 @@ class ExtendedDataFramePipeline(BaseEstimator):
 
     @ property
     def named_steps(self):
-        return self.dataframe_pipeline.named_steps
+        steps = self.dataframe_pipeline.named_steps
+        return Bunch(**
+                     {name: self._get_wrapped_step(step)
+                         for name, step in steps.items()
+                      })
 
     @ property
     def named_confound_steps(self):
-        return self.confound_dataframe_pipeline.named_steps
+        steps = self.confound_dataframe_pipeline.named_steps
+        return Bunch(**
+                     {name: self._get_wrapped_step(step)
+                         for name, step in steps.items()
+                      })
 
     def __getitem__(self, ind):
         if not isinstance(ind, str):
@@ -274,7 +283,7 @@ class ExtendedDataFramePipeline(BaseEstimator):
             element = self.y_transformer
         else:
             element = self.dataframe_pipeline[ind]
-        return element
+        return self._get_wrapped_step(element)
 
     def __repr__(self):
         preprocess_X = clone(self.dataframe_pipeline).steps
@@ -368,6 +377,27 @@ class ExtendedDataFramePipeline(BaseEstimator):
                    )
 
         return X_trans
+
+    @staticmethod
+    def _get_wrapped_step(step):
+        """returns wrapped transformer if a DataFrameWrapTransformer is
+        provided.
+
+        Parameters
+        ----------
+        step : obj
+            A step of a DataFramePipeline
+
+        Returns
+        -------
+        step
+            step if not wrapped else wrapped transformer
+        """
+        step = (step.transformer
+                if isinstance(step, DataFrameWrapTransformer)
+                else step
+                )
+        return step
 
 
 def _create_extended_pipeline(
