@@ -278,7 +278,7 @@ def test_tune_hyperparam():
     actual, actual_estimator = run_cross_validation(
         X=X, y=y, data=df_iris, model='svm', preprocess_X='zscore',
         model_params=model_params, cv=cv_outer, scoring=[scoring],
-        return_estimator='final')
+        groups='groups', return_estimator='final')
 
 
 def test_consistency():
