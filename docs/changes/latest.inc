@@ -49,5 +49,7 @@ Bugs
 
 - Raise error message when columns in the dataframe are nos strings (:gh:`77` by `Fede Raimondo`_).
 
+- Fix groups not properly applied (:gh:141` by `Fede Raimondo`_ and `Sami Hamdan`_).
+
 API changes
 ~~~~~~~~~~~
