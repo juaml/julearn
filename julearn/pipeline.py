@@ -3,6 +3,7 @@
 # License: AGPL
 from sklearn.pipeline import Pipeline
 from sklearn.base import BaseEstimator, clone
+from sklearn.utils.validation import check_is_fitted
 
 from . transformers import DataFrameWrapTransformer, DropColumns
 from . utils import raise_error
@@ -59,7 +60,8 @@ class ExtendedDataFramePipeline(BaseEstimator):
             The target can be changed. Importantly this transformed target will
             be considered the ground truth to score against.
             Note: if you want to score this pipeline with an external function.
-            You have to consider that the scorer needs to be an exteded_scorer.
+            You have to consider that the scorer needs to be an
+             extended_scorer.
 
         * Handling confounds:
             Adds the confound as type to columns.
@@ -88,10 +90,6 @@ class ExtendedDataFramePipeline(BaseEstimator):
 
     confound_dataframe_pipeline : obj or None
         Similar to dataframe_pipeline.
-    confounds : list(str) or None
-        List of column names which are confounds (defaults to None).
-    categorical_features : list(str), optional
-        List of column names which are categorical features (defaults to None).
 
     """
 
@@ -100,16 +98,18 @@ class ExtendedDataFramePipeline(BaseEstimator):
     def __init__(self, dataframe_pipeline,
                  y_transformer=None,
                  confound_dataframe_pipeline=None,
-                 confounds=None, categorical_features=None,
                  ):
 
         self.dataframe_pipeline = dataframe_pipeline
         self.y_transformer = y_transformer
         self.confound_dataframe_pipeline = confound_dataframe_pipeline
-        self.confounds = confounds
-        self.categorical_features = categorical_features
 
     def fit(self, X, y=None, **fit_params):
+
+        self.confounds = fit_params.pop('confounds', None)
+        self.categorical_features = fit_params.pop(
+            'categorical_features', None)
+
         self.dataframe_pipeline = clone(self.dataframe_pipeline)
         self.confound_dataframe_pipeline = (
             None
@@ -227,8 +227,8 @@ class ExtendedDataFramePipeline(BaseEstimator):
             X_trans = self._remove_column_types(X_trans)
         return X_trans, y_trans
 
-    def fit_transform(self, X, y=None):
-        self.fit(X, y)
+    def fit_transform(self, X, y=None, **fit_params):
+        self.fit(X, y, **fit_params)
         return self.transform(X)
 
     def set_params(self, **params):
@@ -283,18 +283,27 @@ class ExtendedDataFramePipeline(BaseEstimator):
         preprocess_X = None if preprocess_X == [] else preprocess_X
         preprocess_target = self.y_transformer
         preprocess_confounds = self.confound_dataframe_pipeline
-        categorical_features = (None if self.categorical_features == []
-                                else self.categorical_features)
+        if hasattr(self, 'categorical_features'):
 
-        return f'''
-        ExtendedDataFramePipeline using:
-            * model = {model}
-            * preprocess_X = {preprocess_X}
-            * preprocess_target = {preprocess_target}
-            * preprocess_confounds = {preprocess_confounds}
-            * confounds = {self.confounds}
-            * categorical_features = {categorical_features}
-              '''
+            categorical_features = (None if self.categorical_features == []
+                                    else self.categorical_features)
+            return f'''
+                ExtendedDataFramePipeline using:
+                    * model = {model}
+                    * preprocess_X = {preprocess_X}
+                    * preprocess_target = {preprocess_target}
+                    * preprocess_confounds = {preprocess_confounds}
+                    * confounds = {self.confounds}
+                    * categorical_features = {categorical_features}
+                    '''
+        else:
+            return f'''
+                ExtendedDataFramePipeline using:
+                    * model = {model}
+                    * preprocess_X = {preprocess_X}
+                    * preprocess_target = {preprocess_target}
+                    * preprocess_confounds = {preprocess_confounds}
+                    '''
 
     def _rename_param(self, param):
         first, *rest = param.split('__')
@@ -374,7 +383,7 @@ def _create_extended_pipeline(
     preprocess_steps_features,
     preprocess_transformer_target,
     preprocess_steps_confounds,
-    model, confounds, categorical_features
+    model
 ):
     """
 
@@ -397,13 +406,6 @@ def _create_extended_pipeline(
         transforming the target.
     model : tuple(str, obj)
         tuple of name and sklearn estimator
-    confounds : list(str) or str
-        A list of column_names which are the confounds
-        or the column_name of one confound
-
-    categorical_features : list(str) or str
-        A list of column_names which are the categorical features
-        or the column_name of one categorical feature
     """
 
     drop_confounds = DataFrameWrapTransformer(
@@ -431,5 +433,4 @@ def _create_extended_pipeline(
         dataframe_pipeline=pipeline,
         y_transformer=preprocess_transformer_target,
         confound_dataframe_pipeline=confound_pipe,
-        confounds=confounds,
-        categorical_features=categorical_features)
+    )

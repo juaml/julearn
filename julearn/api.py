@@ -196,7 +196,11 @@ def run_cross_validation(
     scores = cross_validate(pipeline, df_X_conf, y, cv=cv_outer,
                             scoring=scorer, groups=df_groups,
                             return_estimator=cv_return_estimator,
-                            fit_params=dict(groups=df_groups)
+                            fit_params=dict(
+                                groups=df_groups,
+                                confounds=confounds,
+                                categorical_features=None
+                            )
                             )
 
     n_repeats = getattr(cv_outer, 'n_repeats', 1)
@@ -210,7 +214,10 @@ def run_cross_validation(
 
     out = pd.DataFrame(scores)
     if return_estimator in ['final', 'all']:
-        pipeline.fit(df_X_conf, y, groups=df_groups)
+        pipeline.fit(df_X_conf, y,
+                     groups=df_groups,
+                     confounds=confounds,
+                     categorical_features=None)
         out = out, pipeline
 
     return out
@@ -308,8 +315,8 @@ def create_pipeline(
     pipeline = _create_extended_pipeline(preprocess_X,
                                          preprocess_y,
                                          preprocess_confounds,
-                                         model_tuple, confounds,
-                                         categorical_features=None)
+                                         model_tuple,
+                                         )
 
     if model_params is not None:
         pipeline = prepare_model_params(model_params, pipeline)
