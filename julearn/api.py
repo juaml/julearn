@@ -163,9 +163,6 @@ def run_cross_validation(
         logger.info(f'Using default CV')
         cv = 'repeat:5_nfolds:5'
 
-    # if scoring is None:
-    #     scoring = 'accuracy'
-
     # Interpret the input data and prepare it to be used with the library
     df_X_conf, y, df_groups, _ = prepare_input_data(
         X=X, y=y, confounds=confounds, df=data, pos_labels=pos_labels,

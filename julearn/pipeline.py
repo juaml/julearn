@@ -3,7 +3,6 @@
 # License: AGPL
 from sklearn.pipeline import Pipeline
 from sklearn.base import BaseEstimator, clone
-from sklearn.utils.validation import check_is_fitted
 
 from . transformers import DataFrameWrapTransformer, DropColumns
 from . utils import raise_error
