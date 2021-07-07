@@ -195,7 +195,9 @@ def run_cross_validation(
 
     scores = cross_validate(pipeline, df_X_conf, y, cv=cv_outer,
                             scoring=scorer, groups=df_groups,
-                            return_estimator=cv_return_estimator)
+                            return_estimator=cv_return_estimator,
+                            fit_params=dict(groups=df_groups)
+                            )
 
     n_repeats = getattr(cv_outer, 'n_repeats', 1)
     n_folds = len(scores['fit_time']) // n_repeats
