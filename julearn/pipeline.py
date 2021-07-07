@@ -172,6 +172,14 @@ class ExtendedDataFramePipeline(BaseEstimator):
         else:
             return self.confound_dataframe_pipeline.transform(X)
 
+    def fit_transform(self, X, y=None, **params):
+        self.fit(X, y, **params)
+        return self.transform(X)
+
+    def fit_predict(self, X, y=None, **params):
+        self.fit(X, y, **params)
+        return self.predict(X)
+
     def preprocess(self, X, y, until=None, return_trans_column_type=False):
         """
 
@@ -225,10 +233,6 @@ class ExtendedDataFramePipeline(BaseEstimator):
         if not return_trans_column_type:
             X_trans = self._remove_column_types(X_trans)
         return X_trans, y_trans
-
-    def fit_transform(self, X, y=None, **fit_params):
-        self.fit(X, y, **fit_params)
-        return self.transform(X)
 
     def set_params(self, **params):
         super().set_params(**{self._rename_param(param): val
