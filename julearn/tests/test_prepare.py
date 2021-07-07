@@ -412,8 +412,7 @@ def test_prepare_model_params():
         preprocess_transformer_target=None,
         preprocess_steps_confounds=None,
         model=model,
-        confounds=None,
-        categorical_features=None)
+    )
     pipeline = prepare_model_params(model_params, pipeline)
     assert pipeline['svm'].get_params()['kernel'] == 'linear'
 
@@ -425,8 +424,7 @@ def test_prepare_model_params():
         preprocess_transformer_target=None,
         preprocess_steps_confounds=None,
         model=model,
-        confounds=None,
-        categorical_features=None)
+    )
     pipeline = prepare_model_params(model_params, pipeline)
     assert pipeline.cv.n_splits == 5  # sklearn cv default
     assert isinstance(pipeline, GridSearchCV)
@@ -447,8 +445,7 @@ def test_prepare_model_params():
         preprocess_transformer_target=None,
         preprocess_steps_confounds=None,
         model=model,
-        confounds=None,
-        categorical_features=None)
+    )
     pipeline = prepare_model_params(model_params, pipeline)
 
     assert pipeline.cv.n_splits == 5
@@ -465,8 +462,7 @@ def test_prepare_model_params():
         preprocess_transformer_target=None,
         preprocess_steps_confounds=None,
         model=model,
-        confounds=None,
-        categorical_features=None)
+    )
     with pytest.warns(RuntimeWarning, match='search CV was specified'):
         pipeline = prepare_model_params(model_params, pipeline)
 
@@ -477,8 +473,7 @@ def test_prepare_model_params():
         preprocess_transformer_target=None,
         preprocess_steps_confounds=None,
         model=model,
-        confounds=None,
-        categorical_features=None)
+    )
     with pytest.warns(RuntimeWarning, match='search scoring was specified'):
         pipeline = prepare_model_params(model_params, pipeline)
 
@@ -489,8 +484,7 @@ def test_prepare_model_params():
         preprocess_transformer_target=None,
         preprocess_steps_confounds=None,
         model=model,
-        confounds=None,
-        categorical_features=None)
+    )
     with pytest.warns(RuntimeWarning, match='search method was specified'):
         pipeline = prepare_model_params(model_params, pipeline)
 
@@ -501,8 +495,7 @@ def test_prepare_model_params():
         preprocess_transformer_target=None,
         preprocess_steps_confounds=None,
         model=model,
-        confounds=None,
-        categorical_features=None)
+    )
     with pytest.raises(ValueError, match='not a valid julearn searcher'):
         pipeline = prepare_model_params(model_params, pipeline)
 
@@ -513,8 +506,7 @@ def test_prepare_model_params():
         preprocess_transformer_target=None,
         preprocess_steps_confounds=None,
         model=model,
-        confounds=None,
-        categorical_features=None)
+    )
     with pytest.warns(RuntimeWarning,
                       match=f'{model_params["search"]} is not'
                       ' a registered searcher.'):
@@ -653,8 +645,7 @@ def test__prepare_hyperparams():
             preprocess_transformer_target=None,
             preprocess_steps_confounds=None,
             model=model,
-            confounds=None,
-            categorical_features=None)
+        )
 
         to_tune = _prepare_hyperparams(param_grid, pipeline)
         needs_tuning = len(to_tune) > 0

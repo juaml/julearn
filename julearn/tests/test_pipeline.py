@@ -73,8 +73,8 @@ def test_ExtendedDataFramePipeline_transform_with_categorical():
     sklearn_pipe = make_pipeline(StandardScaler())
 
     my_pipe = create_dataframe_pipeline(steps)
-    my_pipe = ExtendedDataFramePipeline(my_pipe, categorical_features=['C'])
-    X_trans = my_pipe.fit_transform(X)
+    my_pipe = ExtendedDataFramePipeline(my_pipe)
+    X_trans = my_pipe.fit_transform(X, categorical_features=['C'])
     X_trans_sklearn = sklearn_pipe.fit_transform(X.loc[:, ['A', 'B']])
 
     assert_array_equal(X_trans.loc[:, ['A', 'B']].values, X_trans_sklearn)
@@ -95,11 +95,9 @@ def test_create_extended_dataframe_transformer():
         preprocess_transformer_target=y_transformer,
         preprocess_steps_confounds=conf_steps,
         model=model,
-        confounds='B',
-        categorical_features=None
     )
 
-    extended_pipe.fit(X.iloc[:, :-1], X.C)
+    extended_pipe.fit(X.iloc[:, :-1], X.C, confounds='B',)
     extended_pipe.predict(X.iloc[:, :-1])
     score = extended_pipe.score(X.iloc[:, :-1], X.C)
     assert score is not np.nan
@@ -119,7 +117,7 @@ def test_access_steps_ExtendedDataFramePipeline():
 
     my_pipe = ExtendedDataFramePipeline(
         my_pipe, y_transformer=y_transformer,
-        confound_dataframe_pipeline=my_confound_pipe, confounds=['B'])
+        confound_dataframe_pipeline=my_confound_pipe)
 
     assert (my_pipe.named_confound_steps.zscore
             == my_pipe['confound__zscore']
@@ -171,10 +169,10 @@ def test_preprocess_all_ExtendedDataFramePipeline():
         dataframe_pipeline=steps_pipe,
         y_transformer=y_transformer,
         confound_dataframe_pipeline=confounds_pipe,
-        confounds=['B'])
+    )
 
     np.random.seed(42)
-    extended_pipe.fit(X, y)
+    extended_pipe.fit(X, y, confounds=['B'])
 
     np.random.seed(42)
     X_recoded = extended_pipe._recode_columns(X.copy())
@@ -211,10 +209,10 @@ def test_preprocess_until_ExtendedDataFramePipeline():
         dataframe_pipeline=steps_pipe,
         y_transformer=y_transformer,
         confound_dataframe_pipeline=confounds_pipe,
-        confounds=['B'])
+    )
 
     np.random.seed(42)
-    extended_pipe.fit(X, y)
+    extended_pipe.fit(X, y, confounds=['B'])
 
     np.random.seed(42)
     X_trans = extended_pipe._recode_columns(X.copy())
@@ -285,10 +283,10 @@ def test_remove_column_types_ExtendedDataFramePipe():
     extended_pipe = ExtendedDataFramePipeline(
         dataframe_pipeline=steps_pipe,
         y_transformer=y_transformer,
-        confound_dataframe_pipeline=confounds_pipe,
-        confounds=['B'])
+        confound_dataframe_pipeline=confounds_pipe
+    )
 
-    extended_pipe.fit(X, y)
+    extended_pipe.fit(X, y, confounds=['B'])
     X_removed = extended_pipe._remove_column_types(X_with_types)
     assert (X_removed.columns == list('abcdef')).all()
 
@@ -313,8 +311,6 @@ def test_create_exteneded_pipeline_confound_removal():
         preprocess_transformer_target=y_transformer,
         preprocess_steps_confounds=conf_steps,
         model=model,
-        confounds='B',
-        categorical_features=None
     )
 
     extended_pipe_keep_confound = _create_extended_pipeline(
@@ -322,17 +318,15 @@ def test_create_exteneded_pipeline_confound_removal():
         preprocess_transformer_target=y_transformer,
         preprocess_steps_confounds=conf_steps,
         model=model,
-        confounds='B',
-        categorical_features=None
     )
     np.random.seed(4242)
     pred = (extended_pipe
-            .fit(X.iloc[:, :-1], X.C)
+            .fit(X.iloc[:, :-1], X.C, confounds='B')
             .predict(X.iloc[:, :-1]))
 
     np.random.seed(4242)
     pred_keep = (extended_pipe_keep_confound
-                 .fit(X.iloc[:, :-1], X.C)
+                 .fit(X.iloc[:, :-1], X.C, confounds='B',)
                  .predict(X.iloc[:, :-1]))
 
     assert_array_equal(pred, pred_keep)
@@ -349,8 +343,6 @@ def test_tune_params():
         preprocess_steps_confounds=[('zscore', get_transformer('zscore'))],
         preprocess_transformer_target=get_transformer('zscore', target=True),
         model=('svm', SVR()),
-        confounds=None,
-        categorical_features=None
     )
 
     extended_pipe.set_params(**params)
@@ -367,7 +359,5 @@ def test_ExtendedDataFramePipeline___rpr__():
         preprocess_steps_confounds=[('zscore', get_transformer('zscore'))],
         preprocess_transformer_target=get_transformer('zscore', target=True),
         model=('svm', SVR()),
-        confounds=None,
-        categorical_features=None
     )
     extended_pipe.__repr__()
