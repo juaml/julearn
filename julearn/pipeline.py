@@ -60,7 +60,7 @@ class ExtendedDataFramePipeline(BaseEstimator):
             be considered the ground truth to score against.
             Note: if you want to score this pipeline with an external function.
             You have to consider that the scorer needs to be an
-             extended_scorer.
+            extended_scorer.
 
         * Handling confounds:
             Adds the confound as type to columns.
