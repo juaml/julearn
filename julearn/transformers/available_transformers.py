@@ -1,7 +1,6 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
-from . dataframe import DropColumns, ChangeColumnTypes
 from .. utils import raise_error, warn
 from copy import deepcopy
 from sklearn.decomposition import PCA
@@ -12,7 +11,7 @@ from sklearn.feature_selection import (GenericUnivariateSelect,
                                        SelectPercentile, SelectKBest,
                                        SelectFdr, SelectFpr, SelectFwe,
                                        VarianceThreshold)
-from . confounds import DataFrameConfoundRemover, TargetConfoundRemover
+from . confounds import ConfoundRemover, TargetConfoundRemover
 from . target import TargetTransfromerWrapper, is_targettransformer
 
 """
@@ -42,11 +41,9 @@ _available_transformers = {
     'select_variance': [VarianceThreshold, 'subset'],
     # DataFrame operations
     'remove_confound': [
-        DataFrameConfoundRemover,
+        ConfoundRemover,
         'from_transformer'
-    ],
-    'drop_columns': [DropColumns, 'subset'],
-    'change_column_types': [ChangeColumnTypes, 'from_transformer']
+    ]
 }
 
 _available_transformers_reset = deepcopy(_available_transformers)

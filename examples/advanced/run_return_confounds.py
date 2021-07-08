@@ -80,7 +80,7 @@ print(X_deconfounded.head())
 # Let us have a closer look to the confound remover in order to understand
 # how we could achieve such a task:
 #
-# .. autoclass:: julearn.transformers.DataFrameConfoundRemover
+# .. autoclass:: julearn.transformers.ConfoundRemover
 
 ###############################################################################
 # Above, you can see that we can set the `keep_confounds` argument to True.

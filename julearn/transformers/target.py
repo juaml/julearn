@@ -8,6 +8,7 @@ from sklearn.base import TransformerMixin
 from .. utils import raise_error
 
 
+# TODO: Fix
 class TargetTransfromerWrapper(TransformerMixin):
 
     def __init__(self, transformer, **params):
@@ -21,7 +22,7 @@ class TargetTransfromerWrapper(TransformerMixin):
         self.transformer = transformer
         self.transformer.set_params(**params)
 
-    def fit(self, X=None, y=None):
+    def fit(self, X=None, y=None, confounds=None):
 
         self._validate_XY_input(X, y)
         if type(y) == pd.Series:
@@ -31,7 +32,7 @@ class TargetTransfromerWrapper(TransformerMixin):
 
         return self
 
-    def transform(self, X=None, y=None):
+    def transform(self, X=None, y=None, confounds=None):
         self._validate_XY_input(X, y)
         if type(y) == pd.Series:
             _y = pd.DataFrame(y)

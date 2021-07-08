@@ -6,7 +6,5 @@ from . import target
 from . available_transformers import (
     list_transformers, get_transformer, register_transformer, reset_register)
 
-from . confounds import DataFrameConfoundRemover, TargetConfoundRemover
-from . meta import DataFrameWrapTransformer
-from . dataframe import DropColumns, ChangeColumnTypes
+from . confounds import ConfoundRemover, BaseConfoundRemover
 from . target import TargetTransfromerWrapper

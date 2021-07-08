@@ -12,7 +12,7 @@ from . prepare import (prepare_input_data,
                        prepare_preprocessing,
                        prepare_scoring,
                        check_consistency)
-from . pipeline import _create_extended_pipeline
+from . pipeline import make_pipeline
 
 from . utils import logger
 
@@ -309,11 +309,12 @@ def create_pipeline(
     # Prepare the model
     model_tuple = prepare_model(model=model, problem_type=problem_type)
 
-    pipeline = _create_extended_pipeline(preprocess_X,
-                                         preprocess_y,
-                                         preprocess_confounds,
-                                         model_tuple,
-                                         )
+    if preprocess_X is None:
+        preprocess_X = []
+    pipeline = make_pipeline(
+        steps=preprocess_X + model_tuple,
+        confound_steps=preprocess_confounds,
+        y_transformer=preprocess_y)
 
     if model_params is not None:
         pipeline = prepare_model_params(model_params, pipeline)

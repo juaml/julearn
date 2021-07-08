@@ -19,7 +19,7 @@ from julearn.utils.testing import (do_scoring_test, PassThroughTransformer,
                                    TargetPassThroughTransformer)
 from julearn.transformers import (
     list_transformers, get_transformer, reset_register, register_transformer,
-    DataFrameConfoundRemover)
+    ConfoundRemover)
 from julearn.transformers.available_transformers import (
     _get_returned_features, _get_apply_to,
     _available_transformers)
@@ -129,7 +129,7 @@ def test__get_returned_features():
 
 
 def test__get_apply_to():
-    apply_to_confound = _get_apply_to(DataFrameConfoundRemover())
+    apply_to_confound = _get_apply_to(ConfoundRemover())
     apply_to_select = _get_apply_to(get_transformer('select_percentile'))
     apply_to_zscore = _get_apply_to(StandardScaler())
 

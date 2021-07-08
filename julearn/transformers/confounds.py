@@ -1,20 +1,32 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
+from abc import abstractmethod
+from julearn.utils.logging import raise_error
+from julearn.utils.array import ensure_2d
 import numpy as np
 import pandas as pd
 from sklearn.base import BaseEstimator, TransformerMixin, clone
 from sklearn.linear_model import LinearRegression
 
-from .. utils import raise_error, pick_columns, logger
+
+class BaseConfoundRemover(TransformerMixin, BaseEstimator):
+    @abstractmethod
+    def fit(self, X, y=None, confounds=None):
+        pass
+
+    @abstractmethod
+    def transform(self, X, confounds=None):
+        pass
+
+    @abstractmethod
+    def fit_transform(self, X, y=None, confounds=None, **fit_params):
+        self.fit(X, confounds=confounds, **fit_params)
+        return self.transform(X, confounds=confounds)
 
 
-class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
-    def __init__(self, model_confound=None,
-                 confounds_match='.*__:type:__confound',
-                 threshold=None,
-                 keep_confounds=False,
-                 ):
+class ConfoundRemover(BaseConfoundRemover):
+    def __init__(self, model_confound=None, threshold=None):
         """Transformer which can use pd.DataFrames and remove the confounds
         from the features by subtracting the predicted features
         given the confounds from the actual features.
@@ -26,148 +38,75 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
             using the confounds as features. The predictions of these models
             are then subtracted from each feature, defaults to
             LinearRegression().
-        confounds_match : list(str) | str
-            A string representing a regular expression by which the confounds
-            can be detected from the column names.
-            You can use the exact column names or another regex.
-            The default follows the naming convention inside of julearn:
-            '.*__:type:__*.'
         threshold : float | None
             All residual values after confound removal which fall under the
-            threshold will be set to 0.None (default) means that no threshold
+            threshold will be set to 0. None (default) means that no threshold
             will be applied.
-        keep_confounds : bool, optional
-            Whether you want to return the confound together with the confound
-            removed features, default is False
         """
         if model_confound is None:
             model_confound = LinearRegression()
         self.model_confound = model_confound
-        self.confounds_match = confounds_match
         self.threshold = threshold
-        self.keep_confounds = keep_confounds
 
-    def fit(self, X, y=None):
+    def fit(self, X, y=None, confounds=None):
         """Fit confound remover
 
         Parameters
         ----------
-        X : pandas.DataFrame
+        X : pandas.DataFrame | np.ndarray
             Training data
-        y : pandas.Series | None
+        y : pandas.Series | np.ndarray
             Target values.
+        confounds : pandas.DataFrame | np.ndarray
+            confounds used to deconfound X
 
-        Returns
-        -------
-        self : returns an instance of self.
         """
-        df_X, ser_confound, _ = self._split_into_X_confound(X)
-        if self.keep_confounds:
-            self.support_mask_ = pd.Series(True, index=X.columns, dtype=bool)
-        else:
-            self.support_mask_ = pd.Series(False, index=X.columns,
-                                           dtype=bool)
-            self.support_mask_[df_X.columns] = True
-        self.support_mask_ = self.support_mask_.values
+        if confounds is None:
+            raise_error('Confound must be set for confound removal to happen')
+        confounds = ensure_2d(confounds)
 
-        def fit_confound_models(X):
+        def fit_confound_models(t_X):
             _model = clone(self.model_confound)
-            _model.fit(ser_confound.values, X)
+            _model.fit(confounds, t_X)
             return _model
 
-        self.models_confound_ = df_X.apply(fit_confound_models, axis=0,
-                                           result_type='reduce')
+        self.models_confound_ = []
+        for i_X in range(X.shape[1]):
+            if isinstance(X, pd.DataFrame):
+                t_X = X.iloc[:, i_X]
+            else:
+                t_X = X[:, i_X]
+            self.models_confound_.append(fit_confound_models(t_X))
+
         return self
 
-    def transform(self, X):
+    def transform(self, X, confounds):  # Todo: fix
         """Removes confounds from data
 
         Parameters
         ----------
-        X : pandas.DataFrame
+        X : pd.DataFrame | np.ndarray
             Data to be deconfounded
+        confounds : pandas.DataFrame | np.ndarray
+            confounds used to deconfound X
 
         Returns
         -------
-        out : pandas.DataFrame
-            Data without confounds
+        out : np.ndarray
+            Confound removed X
         """
-        df_X, df_confounds, df_feat_equal_conf = self._split_into_X_confound(X)
-        if df_feat_equal_conf.columns.to_list() != []:
-            logger.info(
-                f'{df_feat_equal_conf.columns.to_list()} are both '
-                'features and confounds. Therefore, confound removal will '
-                'ignore these features')
+        if confounds is None:
+            raise_error('Confound must be set for confound removal to happen')
+        confounds = ensure_2d(confounds)
 
-        df_X_prediction = pd.DataFrame(
-            [model.predict(df_confounds)
-             for model in self.models_confound_.values],
-            index=df_X.columns,
-            columns=df_X.index,
-        ).T
-        residuals = df_X - df_X_prediction
-        df_out = self._apply_threshold(residuals)
+        X_pred = np.zeros_like(X, dtype=np.float)
+        for i_model, model in enumerate(self.models_confound_):
+            X_pred[:, i_model] = model.predict(confounds)
 
-        if self.keep_confounds:
-            df_out = pd.concat(
-                [df_out, df_confounds, df_feat_equal_conf], axis=1
-            ).reindex(columns=X.columns)
-        else:
-            df_out = pd.concat(
-                [df_out, df_feat_equal_conf], axis=1
-            ).reindex(columns=X.drop(columns=df_confounds.columns).columns)
+        residuals = X - X_pred
+        X_removed = self._apply_threshold(residuals)
 
-        return df_out
-
-    def get_support(self, indices=False):
-        """Get the support mask
-
-        Parameters
-        ----------
-        indices : bool
-            If true, return indexes
-
-        Returns
-        -------
-        support_mask : numpy.array
-            The support mask
-        """
-        if indices:
-            return np.arange(len(self.support_mask_))[self.support_mask_]
-        else:
-            return self.support_mask_
-
-    def _split_into_X_confound(self, X):
-        """splits the original X input into the reals features (X) and confound
-        """
-        if not isinstance(X, pd.DataFrame):
-            raise_error(
-                'DataFrameConfoundRemover only supports DataFrames as X')
-
-        df_X = X.copy()
-
-        try:
-            self.detected_confounds_ = pick_columns(
-                self.confounds_match, df_X.columns)
-        except ValueError:
-            raise_error('No confound was found using the regex:'
-                        f'{self.confounds_match} in   the columns {X.columns}')
-        df_confounds = df_X.loc[:, self.detected_confounds_]
-        df_X = df_X.drop(columns=self.detected_confounds_)
-
-        confounds_without_type = [
-            col.split('__:type:__')[0]
-            for col in self.detected_confounds_]
-        feature_equal_conf = [
-            col
-            for col in df_X.columns.to_list()
-            if col.split('__:type:__')[0] in confounds_without_type
-
-        ]
-        df_feature_equal_conf = df_X.loc[:, feature_equal_conf]
-        df_X = df_X.drop(columns=df_feature_equal_conf.columns)
-
-        return df_X, df_confounds, df_feature_equal_conf
+        return X_removed
 
     def _apply_threshold(self, residuals):
         """Rounds residuals to 0 when smaller than
@@ -177,18 +116,13 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
         if self.threshold is not None:
             # Accounting for correlated rounding errors for very small
             # residuals
-            residuals = residuals.applymap(
-                lambda x: 0 if abs(x) <= self.threshold else x
-            )
+            residuals[np.abs(residuals) <= self.threshold] = 0
         return residuals
 
 
 class TargetConfoundRemover(TransformerMixin):
 
-    def __init__(self,
-                 model_confound=None,
-                 confounds_match='.*__:type:__confound',
-                 threshold=None):
+    def __init__(self, model_confound=None, threshold=None):
         """Transformer which can use pd.DataFrames and remove the confounds
         from the target by subtracting the predicted target
         given the confounds from the actual target.
@@ -200,34 +134,30 @@ class TargetConfoundRemover(TransformerMixin):
             features. The predictions of these models are then subtracted
             from the actual target, default is None. Meaning the use of
             a LinearRegression.
-        confounds_match : list(str) | str
-            A string representing a regular expression by which the confounds
-            can be detected from the column names.
         threshold : float | None
             All residual values after confound removal which fall under the
             threshold will be set to 0. None means that no threshold will be
             applied.
         """
         self.model_confound = model_confound
-        self.confounds_match = confounds_match
         self.threshold = threshold
-        self._confound_remover = DataFrameConfoundRemover(
+        self._confound_remover = ConfoundRemover(
             model_confound=self.model_confound,
-            confounds_match=self.confounds_match,
             threshold=self.threshold)
 
-    def fit(self, X, y):
+    def fit(self, X, y, confounds):
+        if confounds is None:
+            raise_error('Confound must be set for confound removal to happen')
+        Xy = ensure_2d(y)
+        self._confound_remover.fit(X=Xy, confounds=confounds)
 
-        Xy = X.copy()
-        Xy['y'] = y.copy()
+    def transform(self, X, y, confounds):
+        if confounds is None:
+            raise_error('Confound must be set for confound removal to happen')
+        Xy = ensure_2d(y)
+        return self._confound_remover.transform(
+            X=Xy, confounds=confounds).squeeze()
 
-        self._confound_remover.fit(X=Xy)
-
-    def transform(self, X, y):
-        Xy = X.copy()
-        Xy['y'] = y.copy()
-        return self._confound_remover.transform(Xy)['y']
-
-    def fit_transform(self, X, y):
-        self.fit(X, y)
-        return self.transform(X, y)
+    def fit_transform(self, X, y, confounds):
+        self.fit(X, y, confounds=confounds)
+        return self.transform(X, y, confounds=confounds)

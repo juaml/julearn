@@ -48,7 +48,7 @@ Cross-Validation
 Classes
 ^^^^^^^
 
-.. autoclass:: julearn.transformers.confounds.DataFrameConfoundRemover
+.. autoclass:: julearn.transformers.confounds.ConfoundRemover
    :members: 
 .. autoclass:: julearn.transformers.confounds.TargetConfoundRemover
    :members: 
