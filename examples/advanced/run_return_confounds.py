@@ -60,7 +60,7 @@ scores, model = run_cross_validation(
     return_estimator='final')
 
 ###############################################################################
-# We can use the `preprocess` method of the `.ExtendedDataFramePipeline`
+# We can use the `preprocess` method of the `.ExtendedPipeline`
 # to inspect the transformations/preprocessing steps of the returned estimator.
 # By providing a step name to the `until` argument of the
 # `preprocess` method we return the transformed X and y up to

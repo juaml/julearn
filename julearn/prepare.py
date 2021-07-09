@@ -1,10 +1,9 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
-from julearn.model_selection.available_searchers import (get_searcher,
-                                                         list_searchers)
-from julearn.utils.column_types import pick_columns
-from julearn.transformers.target import TargetTransfromerWrapper
+
+from pandas.core.base import PandasObject
+from julearn.transformers.confounds import BaseConfoundRemover
 import pandas as pd
 import numpy as np
 from sklearn import model_selection
@@ -16,8 +15,11 @@ from . estimators import get_model
 from . transformers import get_transformer
 from . scoring import get_extended_scorer
 from . utils import raise_error, warn, logger
+from . utils.column_types import pick_columns
 from . model_selection import (StratifiedGroupsKFold,
                                RepeatedStratifiedGroupsKFold)
+from . model_selection.available_searchers import (get_searcher, is_searcher,
+                                                   list_searchers)
 
 
 def _validate_input_data_np(X, y, confounds, groups):
@@ -152,24 +154,24 @@ def prepare_input_data(X, y, confounds, df, pos_labels, groups):
 
     Returns
     -------
-    df_X_conf : pandas.DataFrame
-        A dataframe with the features and confounds (if specified in the
-        confounds parameter) for each sample.
+    df_X: pandas.DataFrame
+        A dataframe with the features for each sample.
     df_y : pandas.Series
         A series with the y variable (target) for each sample.
     df_groups : pandas.Series
         A series with the grouping variable for each sample (if specified
         in the groups parameter).
-    confound_names : str
-        The name of the columns if df_X_conf that represent confounds.
+    df_conf : pandas.DataFrame
+        A dataframe with the confounds for each sample
 
     """
     logger.info('==== Input Data ====')
 
     # Declare them as None to avoid CI issues
-    df_X_conf = None
-    confound_names = None
+    df_X = None
+    df_y = None
     df_groups = None
+    df_conf = None
     if df is None:
         logger.info(f'Using numpy arrays as input')
         _validate_input_data_np(X, y, confounds, groups)
@@ -179,7 +181,7 @@ def prepare_input_data(X, y, confounds, df, pos_labels, groups):
         logger.info(f'# Samples: {X.shape[0]}')
         logger.info(f'# Features: {X.shape[1]}')
         columns = [f'feature_{i}' for i in range(X.shape[1])]
-        df_X_conf = pd.DataFrame(X, columns=columns)
+        df_X = pd.DataFrame(X, columns=columns)
 
         # adding confounds to df_X_conf
         if confounds is not None:
@@ -188,7 +190,7 @@ def prepare_input_data(X, y, confounds, df, pos_labels, groups):
             logger.info(f'# Confounds: {X.shape[1]}')
             confound_names = [
                 f'confound_{i}' for i in range(confounds.shape[1])]
-            df_X_conf[confound_names] = confounds
+            df_conf = pd.DataFrame(confounds, columns=confound_names)
 
         # creating a Series for y if not existent
         df_y = pd.Series(y, name='y')
@@ -219,22 +221,16 @@ def prepare_input_data(X, y, confounds, df, pos_labels, groups):
         logger.info(f'Expanded X: {X_columns}')
         logger.info(f'Expanded Confounds: {X_confounds}')
         _validate_input_data_df_ext(X_columns, y, X_confounds, df, groups)
-        X_conf_columns = X_columns
 
         overlapping = [t_c for t_c in X_confounds if t_c in X]
         if len(overlapping) > 0:
             warn(f'X contains the following confounds {overlapping}')
-        for t_c in X_confounds:
-            # This will add the confounds if not there already
-            if t_c not in X_conf_columns:
-                X_conf_columns.append(t_c)
-
-        df_X_conf = df.loc[:, X_conf_columns].copy()
+        df_conf = df.loc[:, X_confounds].copy()
+        df_X = df.loc[:, X_columns].copy()
         df_y = df.loc[:, y].copy()
         if groups is not None:
             logger.info(f'Using {groups} as groups')
             df_groups = df.loc[:, groups].copy()
-        confound_names = X_confounds
 
     if pos_labels is not None:
         if not isinstance(pos_labels, list):
@@ -244,7 +240,7 @@ def prepare_input_data(X, y, confounds, df, pos_labels, groups):
         df_y = df_y.isin(pos_labels).astype(np.int)
     logger.info('====================')
     logger.info('')
-    return df_X_conf, df_y, df_groups, confound_names
+    return df_X, df_y, df_groups, df_conf
 
 
 def prepare_model(model, problem_type):
@@ -305,12 +301,12 @@ def prepare_model_params(msel_dict, pipeline):
           evaluate the performance.
         * 'search_params': Additional parameters for the search method.
 
-    pipeline : ExtendedDataframePipeline
+    pipeline : ExtendedPipeline
         The pipeline to apply/tune the hyperparameters
 
     Returns
     -------
-    pipeline : ExtendedDataframePipeline
+    pipeline : ExtendedPipeline
         The modified pipeline
     """
     logger.info('= Model Parameters =')
@@ -385,7 +381,7 @@ def _prepare_hyperparams(hyperparams, pipeline):
         A dictionary with hyperparameters. The key must be like
         'STEP__PARAMETER': A value (or several) to be used as PARAMETER for
         STEP in the pipeline.
-    pipeline : ExtendedDataframePipeline
+    pipeline : ExtendedPipeline
         The pipeline to apply the hyperparameters
 
     Returns
@@ -427,17 +423,21 @@ def _prepare_preprocess_X(preprocess_X, confounds):
     validates preprocess_X and returns a list of tuples accordingly
     and default params for this list
     '''
-    preprocess_X = None if preprocess_X == [] else preprocess_X
     if preprocess_X is None:
-        if confounds is not None:
-            preprocess_X = [_create_preprocess_tuple('remove_confound')]
-    else:
-        preprocess_X = [_create_preprocess_tuple(transformer)
-                        for transformer in preprocess_X]
-        names, _, = zip(*preprocess_X)
-        if ('remove_confound' not in names) and (confounds is not None):
-            preprocess_X = ([(_create_preprocess_tuple('remove_confound'))]
-                            + preprocess_X)
+        preprocess_X = []
+    preprocess_X = [
+        _create_preprocess_tuple(transformer) for transformer in preprocess_X]
+
+    # Get the current steps
+    has_confound_remove = any(
+        isinstance(x, BaseConfoundRemover) for _, x in preprocess_X)
+
+    if (not has_confound_remove) and confounds is not None:
+        msg = ('Confounds were specified but the pipeline has no confound '
+               'removal step. Adding a confound remover as the first step '
+               'of X preprocessing.')
+        warn(msg)
+        preprocess_X.insert(0, _create_preprocess_tuple('remove_confound'))
     return preprocess_X
 
 
@@ -465,12 +465,9 @@ def _prepare_preprocess_y(preprocess_y):
     if preprocess_y is not None:
         if isinstance(preprocess_y, str):
             preprocess_y = get_transformer(preprocess_y, target=True)
-        elif not isinstance(preprocess_y, TargetTransfromerWrapper):
-            if _is_valid_sklearn_transformer(preprocess_y):
-                preprocess_y = TargetTransfromerWrapper(preprocess_y)
-            else:
-                raise_error(f'y preprocess must be a string or a '
-                            'valid sklearn transformer instance')
+        elif not _is_valid_sklearn_transformer(preprocess_y):
+            raise_error(f'y preprocess must be a string or a '
+                        'valid sklearn transformer instance')
     return preprocess_y
 
 
@@ -506,11 +503,11 @@ def prepare_cv(cv):
 
 def prepare_scoring(estimator, scorers):
     """Prepares the scikit-learn scorers to work with the
-    ExtendedDataFramePipeline
+    ExtendedPipeline
 
     Parameters
     ----------
-    estimator : julearn.pipeline.ExtendedDataFramePipeline
+    estimator : julearn.pipeline.ExtendedPipeline
         An estimator with a .transform_confounds and .transform_target
         method needed for scoring against a new ground truth.
     scorers : str, obj, list(str) or dict
@@ -612,16 +609,21 @@ def check_consistency(
                 warn(
                     f'A regression will be performed but only 2 '
                     'distinct values are defined in y.')
+
+    valid_group_cv_instances = (
+        model_selection.GroupKFold,
+        model_selection.GroupShuffleSplit,
+        model_selection.LeaveOneGroupOut,
+        model_selection.LeavePGroupsOut,
+        StratifiedGroupsKFold,
+        RepeatedStratifiedGroupsKFold
+    )
     # Check groups and CV scheme
     if groups is not None:
-        valid_instances = (
-            model_selection.GroupKFold,
-            model_selection.GroupShuffleSplit,
-            model_selection.LeaveOneGroupOut,
-            model_selection.LeavePGroupsOut,
-            StratifiedGroupsKFold,
-            RepeatedStratifiedGroupsKFold
-        )
-        if not isinstance(cv, valid_instances):
+        if not isinstance(cv, valid_group_cv_instances):
             warn('The parameter groups was specified but the CV strategy '
                  'will not consider them.')
+        if is_searcher(pipeline):
+            if not isinstance(pipeline.cv, valid_group_cv_instances):
+                warn('The parameter groups was specified but the inner CV '
+                     'strategy will not consider them.')

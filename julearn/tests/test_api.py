@@ -24,7 +24,6 @@ import pytest
 from julearn import run_cross_validation, create_pipeline
 from julearn.utils.testing import do_scoring_test, compare_models
 
-
 def test_simple_binary():
     """Test simple binary classification"""
     df_iris = load_dataset('iris')
@@ -141,7 +140,7 @@ def test_set_hyperparam():
             zip(actual['test_roc_auc'], expected['test_roc_auc'])])
 
     # Compare the models
-    clf1 = actual_estimator.dataframe_pipeline.steps[-1][1]
+    clf1 = actual_estimator.steps[-1][1]
     clf2 = clone(clf).fit(sk_X, sk_y).steps[-1][1]
     compare_models(clf1, clf2)
 
@@ -149,7 +148,7 @@ def test_set_hyperparam():
     actual, actual_estimator = run_cross_validation(
         X=X, y=y, data=df_iris, preprocess_X=['zscore', 'pca'], model='svm',
         model_params=model_params, seed=42, return_estimator='final')
-    pre_X, _ = actual_estimator.preprocess(df_iris[X], df_iris[y])
+    pre_X, _, _ = actual_estimator.preprocess(df_iris[X], df_iris[y])
     assert pre_X.shape[1] == 2
 
 
@@ -194,7 +193,7 @@ def test_tune_hyperparam():
             zip(actual['test_accuracy'], expected['test_accuracy'])])
 
     # Compare the models
-    clf1 = actual_estimator.best_estimator_.dataframe_pipeline.steps[-1][1]
+    clf1 = actual_estimator.best_estimator_.steps[-1][1]
     clf2 = clone(gs).fit(sk_X, sk_y).best_estimator_.steps[-1][1]
     compare_models(clf1, clf2)
 
@@ -227,7 +226,7 @@ def test_tune_hyperparam():
             zip(actual['test_accuracy'], expected['test_accuracy'])])
 
     # Compare the models
-    clf1 = actual_estimator.best_estimator_.dataframe_pipeline.steps[-1][1]
+    clf1 = actual_estimator.best_estimator_.pipeline.steps[-1][1]
     clf2 = clone(gs).fit(sk_X, sk_y).best_estimator_.steps[-1][1]
     compare_models(clf1, clf2)
 
@@ -263,12 +262,12 @@ def test_tune_hyperparam():
             zip(actual['test_accuracy'], expected['test_accuracy'])])
 
     # Compare the models
-    clf1 = actual_estimator.best_estimator_.dataframe_pipeline.steps[-1][1]
+    clf1 = actual_estimator.best_estimator_.pipeline.steps[-1][1]
     clf2 = clone(gs).fit(sk_X, sk_y).best_estimator_.steps[-1][1]
     compare_models(clf1, clf2)
 
     # Now test using group cv as inner CV scheme
-    cv_outer = RepeatedKFold(n_splits=2, n_repeats=1)
+    cv_outer = GroupKFold(n_splits=2)
     cv_inner = GroupKFold(n_splits=2)
     df_iris['groups'] = np.digitize(
         df_iris['sepal_length'],
@@ -279,6 +278,36 @@ def test_tune_hyperparam():
         X=X, y=y, data=df_iris, model='svm', preprocess_X='zscore',
         model_params=model_params, cv=cv_outer, scoring=[scoring],
         groups='groups', return_estimator='final')
+
+    # Now test using group cv as outer CV scheme
+    cv_outer = GroupKFold(n_splits=2)
+    cv_inner = RepeatedKFold(n_splits=2, n_repeats=1)
+    df_iris['groups'] = np.digitize(
+        df_iris['sepal_length'],
+        bins=np.histogram(df_iris['sepal_length'], bins=20)[1])
+
+    model_params = {'svm__C': [0.01, 0.001], 'cv': cv_inner}
+    msg = "but the inner CV strategy will not consider them"
+    with pytest.warns(RuntimeWarning, match=msg):
+        actual, actual_estimator = run_cross_validation(
+            X=X, y=y, data=df_iris, model='svm', preprocess_X='zscore',
+            model_params=model_params, cv=cv_outer, scoring=[scoring],
+            groups='groups', return_estimator='final')
+
+    # Now test using group cv as inner CV scheme
+    cv_outer = RepeatedKFold(n_splits=2, n_repeats=1)
+    cv_inner = GroupKFold(n_splits=2)
+    df_iris['groups'] = np.digitize(
+        df_iris['sepal_length'],
+        bins=np.histogram(df_iris['sepal_length'], bins=20)[1])
+
+    model_params = {'svm__C': [0.01, 0.001], 'cv': cv_inner}
+    msg = "but the CV strategy will not consider them"
+    with pytest.warns(RuntimeWarning, match=msg):
+        actual, actual_estimator = run_cross_validation(
+            X=X, y=y, data=df_iris, model='svm', preprocess_X='zscore',
+            model_params=model_params, cv=cv_outer, scoring=[scoring],
+            groups='groups', return_estimator='final')
 
 
 def test_consistency():

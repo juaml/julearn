@@ -7,11 +7,11 @@ from . available_scorers import get_scorer
 
 def get_extended_scorer(estimator, score_name):
     """A function that can use an estimator and score_name to
-    create a scorer compatible with julearn.pipeline.ExtendedDataFramePipeline.
+    create a scorer compatible with julearn.pipeline.ExtendedPipeline.
 
     Parameters
     ----------
-    estimator : julearn.pipeline.ExtendedDataFramePipeline
+    estimator : julearn.pipeline.ExtendedPipeline
         An estimator with a .transform_confounds and .transform_target
         method needed for scoring against a new ground truth
     score_name : str

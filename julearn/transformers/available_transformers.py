@@ -1,6 +1,8 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
+from julearn.transformers.target import (TargetTransformerWrapper,
+                                         BaseTargetTransformer)
 from .. utils import raise_error, warn
 from copy import deepcopy
 from sklearn.decomposition import PCA
@@ -12,7 +14,6 @@ from sklearn.feature_selection import (GenericUnivariateSelect,
                                        SelectFdr, SelectFpr, SelectFwe,
                                        VarianceThreshold)
 from . confounds import ConfoundRemover, TargetConfoundRemover
-from . target import TargetTransfromerWrapper, is_targettransformer
 
 """
 a dictionary containing all supported transformers
@@ -104,23 +105,21 @@ def get_transformer(name, target=False, **params):
         The transformer object.
     """
     out = None
-    if target is False:
-        if name not in _available_transformers:
-            raise_error(
-                f'The specified transformer ({name}) is not available. '
-                f'Valid options are: {list(_available_transformers.keys())}')
-        trans, *_ = _available_transformers[name]
-        out = trans(**params)
+    if target is True:
+        avail = _available_target_transformers
     else:
-        if name not in _available_target_transformers:
-            raise_error(
-                f'The specified target transformer ({name}) is not available. '
-                f'Valid options are: '
-                f'{list(_available_target_transformers.keys())}')
-        trans = _available_target_transformers[name]
-        out = trans(**params)
-        if not is_targettransformer(out):
-            out = TargetTransfromerWrapper(out)
+        avail = _available_transformers
+
+    if name not in avail:
+        kind = 'target ' if target else ''
+        raise_error(
+            f'The specified {kind}transformer ({name}) is not available. '
+            f'Valid options are: {list(avail.keys())}')
+    trans, *_ = _available_transformers[name]
+    out = trans(**params)
+    if target is True and not isinstance(out, BaseTargetTransformer):
+        out = TargetTransformerWrapper(target)
+
     return out
 
 

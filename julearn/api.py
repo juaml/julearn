@@ -12,6 +12,7 @@ from . prepare import (prepare_input_data,
                        prepare_preprocessing,
                        prepare_scoring,
                        check_consistency)
+from . model_selection.available_searchers import is_searcher
 from . pipeline import make_pipeline
 
 from . utils import logger
@@ -164,7 +165,7 @@ def run_cross_validation(
         cv = 'repeat:5_nfolds:5'
 
     # Interpret the input data and prepare it to be used with the library
-    df_X_conf, y, df_groups, _ = prepare_input_data(
+    df_X, y, df_groups, df_conf = prepare_input_data(
         X=X, y=y, confounds=confounds, df=data, pos_labels=pos_labels,
         groups=groups)
 
@@ -185,20 +186,19 @@ def run_cross_validation(
     scorer = prepare_scoring(pipeline, scoring)
 
     check_consistency(pipeline, preprocess_X, preprocess_y,
-                      preprocess_confounds, df_X_conf, y, cv, groups,
+                      preprocess_confounds, df_X, y, cv, df_groups,
                       problem_type)
 
     cv_return_estimator = return_estimator in ['cv', 'all']
 
-    scores = cross_validate(pipeline, df_X_conf, y, cv=cv_outer,
-                            scoring=scorer, groups=df_groups,
-                            return_estimator=cv_return_estimator,
-                            fit_params=dict(
-                                groups=df_groups,
-                                confounds=confounds,
-                                categorical_features=None
-                            )
-                            )
+    fit_params = dict(confounds=df_conf)
+
+    if is_searcher(pipeline):
+        fit_params['groups'] = df_groups
+
+    scores = cross_validate(
+        pipeline, df_X, y, cv=cv_outer, scoring=scorer, groups=df_groups,
+        return_estimator=cv_return_estimator, fit_params=fit_params)
 
     n_repeats = getattr(cv_outer, 'n_repeats', 1)
     n_folds = len(scores['fit_time']) // n_repeats
@@ -211,10 +211,8 @@ def run_cross_validation(
 
     out = pd.DataFrame(scores)
     if return_estimator in ['final', 'all']:
-        pipeline.fit(df_X_conf, y,
-                     groups=df_groups,
-                     confounds=confounds,
-                     categorical_features=None)
+
+        pipeline.fit(df_X, y, **fit_params)
         out = out, pipeline
 
     return out
@@ -312,7 +310,7 @@ def create_pipeline(
     if preprocess_X is None:
         preprocess_X = []
     pipeline = make_pipeline(
-        steps=preprocess_X + model_tuple,
+        steps=preprocess_X + [model_tuple],
         confound_steps=preprocess_confounds,
         y_transformer=preprocess_y)
 

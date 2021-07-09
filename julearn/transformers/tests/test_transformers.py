@@ -1,6 +1,5 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL
-from julearn.transformers.target import TargetTransfromerWrapper
 from sklearn import svm
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import (StandardScaler, RobustScaler, MaxAbsScaler,
@@ -101,7 +100,6 @@ def test_list_get_transformers():
     expected = _features_transformers['zscore']
     actual = get_transformer('zscore', target=True)
 
-    assert isinstance(actual, TargetTransfromerWrapper)
     assert isinstance(actual.transformer, expected)
 
     with pytest.raises(ValueError, match="is not available"):

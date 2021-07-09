@@ -134,7 +134,7 @@ The returned pipeline
 *********************
 
 The :func:`.run_cross_validation` uses all the information mentioned above
-to create one :class:`.ExtendedDataFramePipeline` which is then used for
+to create one :class:`.ExtendedPipeline` which is then used for
 cross_validation. Additionally, it can return the fitted pipeline for other
 application. E.g. you could want to test the pipeline on one additional
 test set. But how can you do that?
@@ -151,16 +151,16 @@ These are the possible options:
     training data.
   * ``'all'``: Return all the estimators (final and cv).
 
-These returned estimators are always :class:`.ExtendedDataFramePipeline` 
+These returned estimators are always :class:`.ExtendedPipeline` 
 objects.Therefore, the next section will discuss how you can use
 a returned estimator.
 
-ExtendedDataFramePipeline
+ExtendedPipeline
 ^^^^^^^^^^^^^^^^^^^^^^^^^
-The :class:`.ExtendedDataFramePipeline` has the same basic functionality as
+The :class:`.ExtendedPipeline` has the same basic functionality as
 all scikit-learn pipelines or estimators, but also has some caveats.
 
-Where ExtendedDataFramePipeline behave as usual
+Where ExtendedPipeline behave as usual
 -----------------------------------------------
 
 The following methods work as in sklearn:
@@ -170,13 +170,13 @@ The following methods work as in sklearn:
   * ``.score()``
   * ``.predict_proba()``
 
-Caveats ExtendedDataFramePipeline
+Caveats ExtendedPipeline
 ---------------------------------
 
-In contrast to scikit-learn pipelines :class:`.ExtendedDataFramePipeline`
+In contrast to scikit-learn pipelines :class:`.ExtendedPipeline`
 can change the ground truth (transform the target).
 This means that any any function which uses sklearn scorer functions instead of
-calling ``.score()`` on the :class:`.ExtendedDataFramePipeline` can give you
+calling ``.score()`` on the :class:`.ExtendedPipeline` can give you
 the wrong output without **any warning**.
 For example `cross_validate` function of sklearn when using another scorer.
 
@@ -186,7 +186,7 @@ shows how to use julearns ``extended_scorer`` instead
 
 Additional functionality
 ------------------------
-Furthermore, :class:`.ExtendedDataFramePipeline`  have the following
+Furthermore, :class:`.ExtendedPipeline`  have the following
 added methods:
 
   * ``preprocess``: a method to apply preprocessing steps of the pipeline to

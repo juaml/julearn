@@ -46,6 +46,22 @@ def get_searcher(name):
     return out
 
 
+def is_searcher(instance):
+    """Test for seachers
+
+    Parameters
+    ----------
+    instance : object
+        The object to tests.
+
+    Returns
+    -------
+    out : bool
+        True if instance is a searcher
+    """
+    return any(isinstance(instance, v) for v in _available_searchers.values())
+
+
 def register_searcher(name, searcher, overwrite=None):
     """Register searcher to julearn.
     This function allows you to add a scikit-learn compatible searching

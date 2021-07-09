@@ -11,7 +11,7 @@ from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 from sklearn.decomposition import PCA
 from seaborn import load_dataset
 
-from julearn.pipeline import _create_extended_pipeline
+from julearn.pipeline import make_pipeline
 
 import pytest
 
@@ -19,37 +19,37 @@ from julearn.prepare import (prepare_input_data,
                              prepare_model_params,
                              _prepare_hyperparams)
 
+from julearn.utils.array import ensure_2d
 
 def _check_np_input(prepared, X, y, confounds, groups):
-    df_X_conf, df_y, df_groups, _ = prepared
+    df_X, df_y, df_groups, df_conf = prepared
 
-    new_X = X
-    if confounds is not None:
-        new_X = np.c_[X, confounds]
-    assert_array_equal(df_X_conf.values, new_X)
+    assert_array_equal(df_X.values, ensure_2d(X))
     assert_array_equal(df_y.values, y)
     if groups is not None:
         assert_array_equal(df_groups.values, groups)
 
     n_features = X.shape[1] if X.ndim == 2 else 1
     feature_names = [f'feature_{i}' for i in range(n_features)]
-    assert all(x in df_X_conf.columns for x in feature_names)
+    assert all(x in df_X.columns for x in feature_names)
 
     if confounds is not None:
         n_confounds = confounds.shape[1] if confounds.ndim == 2 else 1
         c_names = [f'confound_{i}' for i in range(n_confounds)]
-        assert all(x in df_X_conf.columns for x in c_names)
+        assert all(x in df_conf.columns for x in c_names)
+        assert_array_equal(df_conf.values, ensure_2d(confounds))
 
 
 def _check_df_input(prepared, X, y, confounds, groups, df):
-    df_X_conf, df_y, df_groups, _ = prepared
+    df_X, df_y, df_groups, df_conf = prepared
 
-    assert_array_equal(df[X].values, df_X_conf[X].values)
-    assert_array_equal(df_y.values, df[y].values)
+    assert_array_equal(ensure_2d(df[X].values), ensure_2d(df_X.values))
+    assert_array_equal(df[y].values, df_y.values)
     if confounds is not None:
-        assert_array_equal(df[confounds].values, df_X_conf[confounds].values)
+        assert_array_equal(
+            ensure_2d(df[confounds].values), ensure_2d(df_conf.values))
     if groups is not None:
-        assert_array_equal(df[groups].values, df_groups)
+        assert_array_equal(df[groups].values, df_groups.values)
 
 
 def test_prepare_input_data_np():
@@ -401,29 +401,26 @@ def test_prepare_input_data_df():
 
 
 def test_prepare_model_params():
-    preprocess_steps_features = [('zscore', StandardScaler()),
-                                 ]
     model = ('svm', SVC())
+    preprocess_steps_features = [('zscore', StandardScaler()), model]
 
     model_params = {'svm__kernel': 'linear'}
 
-    pipeline = _create_extended_pipeline(
-        preprocess_steps_features=preprocess_steps_features,
-        preprocess_transformer_target=None,
-        preprocess_steps_confounds=None,
-        model=model,
+    pipeline = make_pipeline(
+        steps=preprocess_steps_features,
+        y_transformer=None,
+        confound_steps=None,
     )
     pipeline = prepare_model_params(model_params, pipeline)
-    assert pipeline['svm'].get_params()['kernel'] == 'linear'
+    assert pipeline['svm'].get_params()['kernel'] == 'linear'  # type: ignore
 
     model_params = {
         'svm__C': [0.001, 0.01, 0.1, 1, 10, 100],
         'svm__kernel': 'linear'}
-    pipeline = _create_extended_pipeline(
-        preprocess_steps_features=preprocess_steps_features,
-        preprocess_transformer_target=None,
-        preprocess_steps_confounds=None,
-        model=model,
+    pipeline = make_pipeline(
+        steps=preprocess_steps_features,
+        y_transformer=None,
+        confound_steps=None
     )
     pipeline = prepare_model_params(model_params, pipeline)
     assert pipeline.cv.n_splits == 5  # sklearn cv default
@@ -440,11 +437,10 @@ def test_prepare_model_params():
         'search_params': {'n_iter': 50},
         'cv': 5
     }
-    pipeline = _create_extended_pipeline(
-        preprocess_steps_features=preprocess_steps_features,
-        preprocess_transformer_target=None,
-        preprocess_steps_confounds=None,
-        model=model,
+    pipeline = make_pipeline(
+        steps=preprocess_steps_features,
+        y_transformer=None,
+        confound_steps=None
     )
     pipeline = prepare_model_params(model_params, pipeline)
 
@@ -457,55 +453,50 @@ def test_prepare_model_params():
 
     model_params = {'svm__kernel': 'linear', 'cv': 2}
 
-    pipeline = _create_extended_pipeline(
-        preprocess_steps_features=preprocess_steps_features,
-        preprocess_transformer_target=None,
-        preprocess_steps_confounds=None,
-        model=model,
+    pipeline = make_pipeline(
+        steps=preprocess_steps_features,
+        y_transformer=None,
+        confound_steps=None
     )
     with pytest.warns(RuntimeWarning, match='search CV was specified'):
         pipeline = prepare_model_params(model_params, pipeline)
 
     model_params = {'svm__kernel': 'linear', 'scoring': 'accuracy'}
 
-    pipeline = _create_extended_pipeline(
-        preprocess_steps_features=preprocess_steps_features,
-        preprocess_transformer_target=None,
-        preprocess_steps_confounds=None,
-        model=model,
+    pipeline = make_pipeline(
+        steps=preprocess_steps_features,
+        y_transformer=None,
+        confound_steps=None
     )
     with pytest.warns(RuntimeWarning, match='search scoring was specified'):
         pipeline = prepare_model_params(model_params, pipeline)
 
     model_params = {'svm__kernel': 'linear', 'search': 'grid'}
 
-    pipeline = _create_extended_pipeline(
-        preprocess_steps_features=preprocess_steps_features,
-        preprocess_transformer_target=None,
-        preprocess_steps_confounds=None,
-        model=model,
+    pipeline = make_pipeline(
+        steps=preprocess_steps_features,
+        y_transformer=None,
+        confound_steps=None
     )
     with pytest.warns(RuntimeWarning, match='search method was specified'):
         pipeline = prepare_model_params(model_params, pipeline)
 
     model_params = {'svm__C': [0, 1], 'search': 'wrong'}
 
-    pipeline = _create_extended_pipeline(
-        preprocess_steps_features=preprocess_steps_features,
-        preprocess_transformer_target=None,
-        preprocess_steps_confounds=None,
-        model=model,
+    pipeline = make_pipeline(
+        steps=preprocess_steps_features,
+        y_transformer=None,
+        confound_steps=None
     )
     with pytest.raises(ValueError, match='not a valid julearn searcher'):
         pipeline = prepare_model_params(model_params, pipeline)
 
     model_params = {'svm__C': [0, 1], 'search': GridSearchCV}
 
-    pipeline = _create_extended_pipeline(
-        preprocess_steps_features=preprocess_steps_features,
-        preprocess_transformer_target=None,
-        preprocess_steps_confounds=None,
-        model=model,
+    pipeline = make_pipeline(
+        steps=preprocess_steps_features,
+        y_transformer=None,
+        confound_steps=None
     )
     with pytest.warns(RuntimeWarning,
                       match=f'{model_params["search"]} is not'
@@ -537,22 +528,22 @@ def test_pick_regexp():
     prepared = prepare_input_data(X=X, y=y, confounds=confounds, df=df,
                                   pos_labels=None, groups=None)
 
-    df_X_conf, df_y, _, confound_names = prepared
+    df_X, df_y, _, df_conf = prepared
 
-    assert all([x in df_X_conf.columns for x in X])
-    assert y not in df_X_conf.columns
+    assert all([x in df_X.columns for x in X])
+    assert y not in df_X.columns
     assert df_y.name == y
-    assert len(confound_names) == 0
+    assert len(df_conf.columns) == 0
 
     prepared = prepare_input_data(X=[':'], y=y, confounds=confounds, df=df,
                                   pos_labels=None, groups=None)
 
-    df_X_conf, df_y, _, confound_names = prepared
+    df_X, df_y, _, df_conf = prepared
 
-    assert all([x in df_X_conf.columns for x in X])
-    assert y not in df_X_conf.columns
+    assert all([x in df_X.columns for x in X])
+    assert y not in df_X.columns
     assert df_y.name == y
-    assert len(confound_names) == 0
+    assert len(df_conf.columns) == 0
 
     X = columns[: 6]
     y = '_a3_b2_c7_'
@@ -560,14 +551,13 @@ def test_pick_regexp():
     prepared = prepare_input_data(X=[':'], y=y, confounds=confounds, df=df,
                                   pos_labels=None, groups=None)
 
-    df_X_conf, df_y, _, confound_names = prepared
+    df_X, df_y, _, df_conf = prepared
 
-    assert all([x in df_X_conf.columns for x in X])
-    assert all([x in df_X_conf.columns for x in confounds])
-    assert y not in df_X_conf.columns
+    assert all([x in df_X.columns for x in X])
+    assert y not in df_X.columns
     assert df_y.name == y
-    assert len(confound_names) == 3
-    assert all([x in confound_names for x in confounds])
+    assert len(df_conf.columns) == 3
+    assert all([x in df_conf.columns for x in confounds])
 
     X = columns[: 6]
     y = '_a3_b2_c7_'
@@ -576,16 +566,15 @@ def test_pick_regexp():
     prepared = prepare_input_data(X=[':'], y=y, confounds=confounds, df=df,
                                   pos_labels=None, groups=groups)
 
-    df_X_conf, df_y, df_groups, confound_names = prepared
+    df_X, df_y, df_groups, df_conf = prepared
 
-    assert all([x in df_X_conf.columns for x in X])
-    assert all([x in df_X_conf.columns for x in confounds])
-    assert y not in df_X_conf.columns
-    assert groups not in df_X_conf.columns
+    assert all([x in df_X.columns for x in X])
+    assert y not in df_X.columns
+    assert groups not in df_X.columns
     assert df_y.name == y
     assert df_groups.name == groups
-    assert len(confound_names) == 2
-    assert all([x in confound_names for x in confounds])
+    assert len(df_conf.columns) == 2
+    assert all([x in df_conf.columns for x in confounds])
 
     X = columns[: 6]
     y = '_a3_b2_c7_'
@@ -593,14 +582,13 @@ def test_pick_regexp():
     prepared = prepare_input_data(X=['_a_.*'], y=y, confounds='_a2_.*', df=df,
                                   pos_labels=None, groups=None)
 
-    df_X_conf, df_y, _, confound_names = prepared
+    df_X, df_y, _, df_conf = prepared
 
-    assert all([x in df_X_conf.columns for x in X])
-    assert all([x in df_X_conf.columns for x in confounds])
-    assert y not in df_X_conf.columns
+    assert all([x in df_X.columns for x in X])
+    assert y not in df_X.columns
     assert df_y.name == y
-    assert len(confound_names) == 3
-    assert all([x in confound_names for x in confounds])
+    assert len(df_conf.columns) == 3
+    assert all([x in df_conf.columns for x in confounds])
 
     X = columns[: 6]
     y = '_a3_b2_c7_'
@@ -609,23 +597,21 @@ def test_pick_regexp():
                                   confounds='_a2_.*', df=df,
                                   pos_labels=None, groups=None)
 
-    df_X_conf, df_y, _, confound_names = prepared
+    df_X, df_y, _, df_conf = prepared
 
-    assert all([x in df_X_conf.columns for x in X])
-    assert all([x in df_X_conf.columns for x in confounds])
-    assert y not in df_X_conf.columns
+    assert all([x in df_X.columns for x in X])
+    assert y not in df_X.columns
     assert df_y.name == y
-    assert len(confound_names) == 3
-    assert all([x in confound_names for x in confounds])
+    assert len(df_conf.columns) == 3
+    assert all([x in df_conf.columns for x in confounds])
 
 
 def test__prepare_hyperparams():
     X = load_dataset('iris')
     y = X.pop('species')
-
-    preprocess_steps_features = [('pca', PCA()),
-                                 ]
     model = ('svm', SVC())
+
+    preprocess_steps_features = [('pca', PCA()), model]
 
     grids = [{'svm__kernel': 'linear'},
              {'svm__kernel': ['linear']},
@@ -640,11 +626,10 @@ def test__prepare_hyperparams():
 
     list_should_be_tuned = [False, False, True, True, False, False, True]
     for param_grid, should_be_tuned in zip(grids, list_should_be_tuned):
-        pipeline = _create_extended_pipeline(
-            preprocess_steps_features=preprocess_steps_features,
-            preprocess_transformer_target=None,
-            preprocess_steps_confounds=None,
-            model=model,
+        pipeline = make_pipeline(
+            steps=preprocess_steps_features,
+            y_transformer=None,
+            confound_steps=None,
         )
 
         to_tune = _prepare_hyperparams(param_grid, pipeline)

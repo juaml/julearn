@@ -120,7 +120,7 @@ def do_scoring_test(X, y, data, api_params, sklearn_model, scorers, cv=None,
         assert_array_almost_equal(actual[s_key], expected[s_key])
 
         # Compare the models
-        clf1 = actual_estimator.dataframe_pipeline.steps[-1][1]
+        clf1 = actual_estimator.steps[-1][1]
         clf2 = clone(sklearn_model).fit(sk_X, sk_y).steps[-1][1]
         compare_models(clf1, clf2)
 

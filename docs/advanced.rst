@@ -18,7 +18,7 @@ continuous variables/features, categorical variables/features and confounds.
   On most levels of Julearn this Column Type System is only used internally.
   Therefore, users do not have to work with it directly.
   For example, by providing the confounds and categorical variables to the
-  :class:`.ExtendedDataFramePipeline` it has all the information needed to
+  :class:`.ExtendedPipeline` it has all the information needed to
   apply the Column Type System internally without any further input or changes
   to the `pandas.DataFrame`.
 

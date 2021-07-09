@@ -2,13 +2,17 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: BSD
 
-from inspect import getfullargspec
-from julearn.utils.array import ensure_2d
+from julearn.transformers.target import BaseTargetTransformer, TargetTransformerWrapper
+
+import numpy as np
+
 from sklearn.base import BaseEstimator, clone
 from sklearn.pipeline import Pipeline
+from sklearn.compose import ColumnTransformer
 
-from . transformers.confounds import BaseConfoundRemover
+from . transformers.confounds import BaseConfoundRemover, TargetConfoundRemover
 from . utils import raise_error
+from . utils.array import ensure_2d, safe_select
 
 
 def make_pipeline(steps, confound_steps=None, y_transformer=None):
@@ -16,14 +20,16 @@ def make_pipeline(steps, confound_steps=None, y_transformer=None):
     confound_pipeline = None
     if confound_steps is not None:
         confound_pipeline = Pipeline(confound_steps)
+    if y_transformer is not None:
+        if not isinstance(y_transformer, BaseTargetTransformer):
+            y_transformer = TargetTransformerWrapper(y_transformer)
     return ExtendedPipeline(
         pipeline=pipeline, y_transformer=y_transformer,
         confound_pipeline=confound_pipeline)
 
 
 class ExtendedPipeline(BaseEstimator):
-    """A class creating a custom metamodel like a Pipeline. In practice this
-    should be created using :ref:julearn.pipeline._create_extended_pipeline.
+    """A class creating a custom metamodel like a Pipeline.
     There are multiple caveats of creating such a pipline without using
     that function. Compared to an usual scikit-learn pipeline, this have added
     functionalities:
@@ -56,9 +62,7 @@ class ExtendedPipeline(BaseEstimator):
         Should be created using julearn.pipeline.create_pipeline.
 
     y_transformer : obj or None
-        Any transformer which can take the X and y to transform the y.
-        You can use julearn.transformers.target.TargetTransfromerWrapper to
-        convert most sklearn transformers to a target_transformer.
+        Any transformer which will be applied to the target variable y.
 
     confound_pipeline : obj or None
         Similar to pipeline.
@@ -66,15 +70,32 @@ class ExtendedPipeline(BaseEstimator):
     """
 
     def __init__(self, pipeline, y_transformer=None, confound_pipeline=None):
-        self.pipeline = pipeline
-        self.y_transformer = y_transformer
         self.confound_pipeline = confound_pipeline
+        self.y_transformer = y_transformer
+        self.pipeline = pipeline
+
+        wrapped_steps = []
+        for name, transformer in pipeline.steps:
+            if (not isinstance(transformer, BaseConfoundRemover) and
+                    is_transformable(transformer)):
+                wrapped_trans = ColumnTransformer(
+                    [(name, transformer, slice(None))],
+                    remainder='passthrough')
+                wrapped_steps.append((name, wrapped_trans))
+            else:
+                wrapped_steps.append((name, transformer))
+        self.w_pipeline_ = Pipeline(wrapped_steps)
 
     def _preprocess(self, X, y=None, **fit_params):
-        confounds = fit_params.pop('confounds', None)
-        confounds = ensure_2d(confounds)
+        """ Transform confounds and X, as well as prepare the pipeline for
+            selecting the right columns.
+        """
+        n_confounds = fit_params.pop('n_confounds', 0)
+        self.n_confounds_ = n_confounds
+
         all_params = self._split_params(fit_params)
-        self.pipeline = clone(self.pipeline)  # TODO check whether needed
+        # TODO check whether this is needed
+        self.w_pipeline_ = clone(self.w_pipeline_)
         if self.confound_pipeline is not None:
             self.confound_pipeline = clone(self.confound_pipeline)
 
@@ -83,57 +104,66 @@ class ExtendedPipeline(BaseEstimator):
 
         fit_params = all_params['pipeline']
         # Preprocess confounds (if specified)
-        trans_confounds = confounds
-        if self.confound_pipeline is not None:
-            trans_confounds = self.confound_pipeline.fit_transform(
-                confounds, y, **all_params['confounds'])
+        X = self._fit_transform_confounds(X, y, **all_params['confounds'])
 
-        for name, object in self.pipeline.steps:
-            if isinstance(object, BaseConfoundRemover):
-                fit_params[f'{name}__confounds'] = trans_confounds
-
-        # Tranform y (if specified)
+        # fit tranform y (if specified)
+        y_true = y
         if self.y_transformer is not None and y is not None:
-            y_true = self.y_transformer.fit_transform(
-                ensure_2d(y), **all_params['target']).squeeze()
-        else:
-            y_true = y
+            if isinstance(self.y_transformer, TargetConfoundRemover):
+                all_params['target']['n_confounds'] = n_confounds
+            y_true = self._fit_transform_target(X, y, **all_params['target'])
 
-        return y_true, fit_params
+        fit_params = self._update_w_pipeline(X, fit_params)
+
+        return X, y_true, fit_params
+
+    def _update_w_pipeline(self, X, fit_params):
+        n_features = X.shape[1]
+        # Iterate over the pipeline and set the right columns according to
+        # the flow of the confounds and features
+        n_confounds = self.n_confounds_
+        slice_end = n_features - n_confounds if n_confounds > 0 else n_features
+        for name, object in self.w_pipeline_.steps:
+            if isinstance(object, BaseConfoundRemover):
+                # If its a confound remover, will set the number of confounds
+                fit_params[f'{name}__n_confounds'] = n_confounds
+
+                # Check if the object will drop confounds
+                if object.will_drop_confounds():
+                    # If confounds are drop, there will be no more confounds
+                    slice_end = n_features
+                    # Not really needed, but if more than one confound remover
+                    # is to be applied, will fail if the any but the last one
+                    # drops the confounds.
+                    n_confounds = 0
+            elif isinstance(object, ColumnTransformer):
+                object.transformers = [
+                    (n, t, slice(0, slice_end))
+                    for n, t, _ in object.transformers
+                ]
+        return fit_params
 
     def fit(self, X, y=None, **fit_params):
         if fit_params is None:
             fit_params = {}
-        y_true, fit_params = self._preprocess(X, y, **fit_params)
+        X, y_true, fit_params = self._preprocess(X, y, **fit_params)
 
-        self.pipeline.fit(X, y_true, **fit_params)
+        self.w_pipeline_.fit(X, y_true, **fit_params)
 
         # Copy some of the pipeline attributes
-        if hasattr(self.pipeline, 'classes_'):
-            self.classes_ = self.pipeline.classes_  # type: ignore
+        if hasattr(self.w_pipeline_, 'classes_'):
+            self.classes_ = self.w_pipeline_.classes_  # type: ignore
 
         return self
 
     def _fit(self, X, y=None, **fit_params):
-        y_true, fit_params = self._preprocess(X, y, **fit_params)
-        fit_params_steps = self.pipeline._check_fit_params(**fit_params)
-        Xt = self.pipeline._fit(X, y_true, **fit_params_steps)
+        X, y_true, fit_params = self._preprocess(X, y, **fit_params)
+        fit_params_steps = self.w_pipeline_._check_fit_params(**fit_params)
+        Xt = self.w_pipeline_._fit(X, y_true, **fit_params_steps)
 
         return Xt
 
-    def _transform(self, X, confounds=None, with_final=True):
-        confounds_trans = None
-        confounds_trans = self.transform_confounds(confounds)
-        X_trans = X
-        for _, _, transform in self.pipeline._iter(with_final=with_final):
-            if isinstance(transform, BaseConfoundRemover):
-                X_trans = transform.transform(
-                    X_trans, confounds=confounds_trans)
-            else:
-                X_trans = transform.transform(X_trans)
-        return X_trans
-
-    def transform(self, X, confounds=None):
+    def transform(self, X):
         """Apply transforms, and transform with the final estimator
         This also works where final estimator is ``None``: all prior
         transformations are applied.
@@ -149,33 +179,39 @@ class ExtendedPipeline(BaseEstimator):
         -------
         Xt : array-like of shape  (n_samples, n_transformed_features)
         """
-        if self.pipeline._final_estimator != 'passthrough':
-            # Check that the attribute exists
-            self.pipeline._final_estimator.transform
+        X_trans = self.transform_confounds(X)
+        return self.w_pipeline_.transform(X_trans)
 
-        return self._transform(X, confounds=confounds, with_final=True)
-
-    def transform_target(self, X, y, confounds=None):
-        y_true = ensure_2d(y)
-        confounds = ensure_2d(confounds)
+    def _fit_transform_target(self, X, y, **target_params):
+        y_true = y
         if self.y_transformer is not None:
-            args = getfullargspec(self.y_transformer.transform).args
-            if 'confounds' in args:
-                conf_trans = self.transform_confounds(confounds)
-                y_true = self.y_transformer.transform(
-                    y_true, confounds=conf_trans)
-            else:
-                y_true = self.y_transformer.transform(y_true)
-        return y_true.squeeze()
+            y_true = self.y_transformer.fit_transform(X, y, **target_params)
+        return y_true
 
-    def transform_confounds(self, confounds):
-        if confounds is None:
-            return confounds
-        confounds = ensure_2d(confounds)
-        trans_confounds = confounds
-        if self.confound_pipeline is not None:
+    def transform_target(self, X, y):
+        y_true = y
+        if self.y_transformer is not None:
+            y_true = self.y_transformer.transform(X, y)
+        return y_true
+
+    def _fit_transform_confounds(self, X, y, **confound_params):
+        if self.n_confounds_ > 0 and self.confound_pipeline is not None:
+            # Find the IDX and update the pipelines
+            confounds = safe_select(X, slice(-self.n_confounds_, None))
+            trans_confounds = self.confound_pipeline.fit_transform(
+                confounds, y, **confound_params)
+            newX = safe_select(X, slice(None, -self.n_confounds_))
+            X = np.c_[newX, trans_confounds]
+        return X
+
+    def transform_confounds(self, X):
+        if self.n_confounds_ > 0 and self.confound_pipeline is not None:
+            # Find the IDX and update the pipelines
+            confounds = safe_select(X, slice(-self.n_confounds_, None))
             trans_confounds = self.confound_pipeline.transform(confounds)
-        return trans_confounds
+            newX = safe_select(X, slice(None, -self.n_confounds_))
+            X = np.c_[newX, trans_confounds]
+        return X
 
     def fit_transform(self, X, y=None, **fit_params):
         """Fit the model and transform with the final estimator
@@ -205,49 +241,41 @@ class ExtendedPipeline(BaseEstimator):
         if fit_params is None:
             fit_params = {}
         Xt = self._fit(X, y, **fit_params)
-        last_step = self.pipeline._final_estimator
+        last_step = self.w_pipeline_._final_estimator
         if last_step == "passthrough":
             return Xt
-        if 'confounds' in fit_params:
-            fit_params.pop('confounds')
-        fit_params_steps = self.pipeline._check_fit_params(**fit_params)
+        if 'n_confounds' in fit_params:
+            fit_params.pop('n_confounds')
+        fit_params_steps = self.w_pipeline_._check_fit_params(**fit_params)
         fit_params_last_step = fit_params_steps[self.steps[-1][0]]
         if hasattr(last_step, "fit_transform"):
             return last_step.fit_transform(Xt, y, **fit_params_last_step)
         else:
             return last_step.fit(Xt, y, **fit_params_last_step).transform(Xt)
 
-    def _prepare_predict(self, X, confounds):
-        conf_trans = self.transform_confounds(confounds)
-        Xt = self._transform(X, confounds=conf_trans, with_final=False)
-        return Xt
+    def predict(self, X, **predict_params):
+        X = self.transform_confounds(X)
+        return self.w_pipeline_.predict(X, **predict_params)
 
-    def predict(self, X, confounds=None, **predict_params):
-        Xt = self._prepare_predict(X, confounds=confounds)
-        return self.pipeline.steps[-1][1].predict(Xt, **predict_params)
+    def predict_proba(self, X, **predict_params):
+        X = self.transform_confounds(X)
+        return self.w_pipeline_.predict_proba(X, **predict_params)
 
-    def predict_proba(self, X, confounds=None, **predict_params):
-        Xt = self._prepare_predict(X, confounds=confounds)
-        return self.pipeline.steps[-1][1].predict_proba(Xt, **predict_params)
-
-    def score(self, X, y=None, confounds=None, sample_weight=None):
-        conf_trans = self.transform_confounds(confounds=confounds)
+    def score(self, X, y=None, sample_weight=None):
+        X = self.transform_confounds(X)
         y_true = self.transform_target(X, y)
-        Xt = self._transform(
-            X, confounds=conf_trans, with_final=False)
-        return self.pipeline.steps[-1][1].score(
-            Xt, y=y_true, sample_weight=sample_weight)
+        return self.w_pipeline_.score(X, y_true, sample_weight=None)
 
     def fit_predict(self, X, y=None, **fit_params):
         if fit_params is not None:
             fit_params = {}
         Xt = self._fit(X, y, **fit_params)
-        fit_params_steps = self.pipeline._check_fit_params(**fit_params)
+        fit_params_steps = self.w_pipeline_._check_fit_params(**fit_params)
         fit_params_last_step = fit_params_steps[self.steps[-1][0]]
-        return self.pipeline.steps[-1][1].fit_predict(
+        return self.w_pipeline_.steps[-1][1].fit_predict(
             Xt, y, **fit_params_last_step)
 
-    def preprocess(self, X, y, confounds=None, until=None):
+    def preprocess(self, X, y, until=None):
         """
 
         Parameters
@@ -266,38 +294,39 @@ class ExtendedPipeline(BaseEstimator):
             The transformed confounds
         """
 
-        transformers_pipe = clone(self.pipeline)
+        transformers_pipe = clone(self.w_pipeline_)
         if until is None:
             until = transformers_pipe.steps[-2][0]
         try:
             self[until]
         except KeyError:
             raise_error(f'{until} is not a valid step')
-        conf_trans = None if confounds is None else ensure_2d(confounds.copy())
+
+        confounds = safe_select(X, slice(-self.n_confounds_, None))
+        X_trans = X
         y_trans = y.copy()
-        X_trans = X.copy()
 
         if until.startswith('confound__'):
             if self.confound_pipeline is not None:
                 step_name = until.replace('confound__', '')
                 for name, step in self.confound_pipeline.steps:
-                    conf_trans = step.transform(conf_trans)
+                    confounds = step.transform(confounds)
                     if name == step_name:
                         break
         elif until.startswith('target__'):
-            conf_trans = self.transform_confounds(conf_trans)
-            y_trans = self.transform_target(X, y, confounds=conf_trans)
+            X_trans = self.transform_confounds(X_trans)
+            confounds = safe_select(X_trans, slice(-self.n_confounds_, None))
+            y_trans = self.transform_target(X_trans, y)
         else:
-            conf_trans = self.transform_confounds(conf_trans)
-            y_trans = self.transform_target(X, y, confounds=conf_trans)
-            for name, step in self.pipeline.steps:
-                if isinstance(step, BaseConfoundRemover):
-                    X_trans = step.transform(X_trans, confounds=conf_trans)
-                else:
-                    X_trans = step.transform(X_trans)
+            X_trans = self.transform_confounds(X_trans)
+            confounds = safe_select(X_trans, slice(-self.n_confounds_, None))
+
+            y_trans = self.transform_target(X_trans, y)
+            for name, t_step in self.w_pipeline_.steps:
+                X_trans = t_step.transform(X_trans)
                 if name == until:
                     break
-        return X_trans, y_trans, conf_trans
+        return X_trans, y_trans, confounds
 
     def set_params(self, **params):
         super().set_params(**{self._rename_param(param): val
@@ -331,12 +360,12 @@ class ExtendedPipeline(BaseEstimator):
             all_steps.extend(self.confound_pipeline.steps)
         if self.y_transformer is not None:
             all_steps.append(('y_transformer', self.y_transformer))
-        all_steps.extend(self.pipeline.steps)
+        all_steps.extend(self.w_pipeline_.steps)
         return all_steps
 
     @ property
     def named_steps(self):
-        return self.pipeline.named_steps
+        return self.w_pipeline_.named_steps
 
     @ property
     def named_confound_steps(self):
@@ -356,11 +385,11 @@ class ExtendedPipeline(BaseEstimator):
         elif ind.startswith('target__'):
             element = self.y_transformer
         else:
-            element = self.pipeline[ind]
+            element = self.w_pipeline_[ind]
         return element
 
     def __repr__(self):
-        preprocess_X = clone(self.pipeline).steps
+        preprocess_X = clone(self.w_pipeline_).steps
         model = preprocess_X.pop()
         preprocess_X = None if preprocess_X == [] else preprocess_X
         return f'''
@@ -413,3 +442,8 @@ ExtendedPipeline using:
             if name == step_name:
                 break
         return X_transformed
+
+
+def is_transformable(t):
+    can_transform = hasattr(t, "fit_transform") or hasattr(t, "transform")
+    return can_transform
