@@ -1,16 +1,14 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
-
-from numpy.testing._private.utils import assert_array_almost_equal, assert_warns
-from sklearn.base import clone
-
 import numpy as np
+from numpy.testing import assert_array_equal, assert_array_almost_equal
+
 import pandas as pd
 import pytest
 
-from numpy.testing import assert_array_equal
 from sklearn.decomposition import PCA
+from sklearn.base import clone
 from sklearn.linear_model import LinearRegression
 from sklearn.pipeline import Pipeline
 from sklearn.svm import SVR
@@ -170,7 +168,8 @@ def test_preprocess_all_ExtendedPipeline():
     X_trans_preprocess, y_trans_preprocess, conf_preprocess = \
         extended_pipe.preprocess(X, y, until='pca')
 
-    assert_array_almost_equal(X_trans, X_trans_preprocess[:, :2])
+    assert_array_almost_equal(
+        X_trans, X_trans_preprocess[:, :2])  # type: ignore
     assert_array_equal(conf_trans, conf_preprocess)
     assert_array_equal(y_trans, y_trans_preprocess)
 
@@ -211,7 +210,8 @@ def test_preprocess_until_ExtendedPipeline():
     y_trans = y_transformer.fit_transform(ensure_2d(y_trans)).squeeze()
     X_trans_pipe, y_trans_pipe, conf_trans_pipe = extended_pipe.preprocess(
         X, y, until='target__',)
-    assert_array_equal(X.values[:, :2], X_trans_pipe[:, :2])
+    assert_array_equal(
+        X.values[:, :2], X_trans_pipe[:, :2])  # type: ignore
     assert_array_equal(y_trans, y_trans_pipe)
     assert_array_equal(conf_trans, conf_trans_pipe)
 
@@ -221,7 +221,7 @@ def test_preprocess_until_ExtendedPipeline():
         X_trans_pipe, y_trans_pipe, conf_trans_pipe = \
             extended_pipe.preprocess(X, y, until=name)
 
-        assert_array_almost_equal(X_trans, X_trans_pipe[:, :2])
+        assert_array_almost_equal(X_trans, X_trans_pipe[:, :2])  # type: ignore
         assert_array_equal(y_trans, y_trans_pipe)
         assert_array_equal(conf_trans, conf_trans_pipe)
 

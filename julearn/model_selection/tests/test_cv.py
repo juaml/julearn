@@ -1,11 +1,11 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL
-from julearn.model_selection.cv import (StratifiedGroupsKFold,
-                                        RepeatedStratifiedGroupsKFold)
 import numpy as np
 from numpy.testing._private.utils import assert_array_equal
 from sklearn.model_selection import StratifiedKFold, RepeatedStratifiedKFold
 from julearn.model_selection import StratifiedBootstrap
+from julearn.model_selection.cv import (StratifiedGroupsKFold,
+                                        RepeatedStratifiedGroupsKFold)
 
 
 def test_stratified_bootstrap():

@@ -1,5 +1,9 @@
-from julearn.scoring import register_scorer, reset_scorer_register, get_scorer
+# Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
+#          Sami Hamdan <s.hamdan@fz-juelich.de>
+# License: AGPL
+
 import pytest
+from julearn.scoring import register_scorer, reset_scorer_register, get_scorer
 
 
 def return_1(estimator, X, y):

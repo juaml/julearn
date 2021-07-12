@@ -1,5 +1,9 @@
-from julearn.utils import pick_columns
+# Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
+#          Sami Hamdan <s.hamdan@fz-juelich.de>
+# License: AGPL
 import pytest
+
+from julearn.utils import pick_columns
 
 
 def test_pick_using_column_name():

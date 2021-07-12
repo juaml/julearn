@@ -24,6 +24,7 @@ import pytest
 from julearn import run_cross_validation, create_pipeline
 from julearn.utils.testing import do_scoring_test, compare_models
 
+
 def test_simple_binary():
     """Test simple binary classification"""
     df_iris = load_dataset('iris')
@@ -149,7 +150,7 @@ def test_set_hyperparam():
         X=X, y=y, data=df_iris, preprocess_X=['zscore', 'pca'], model='svm',
         model_params=model_params, seed=42, return_estimator='final')
     pre_X, _, _ = actual_estimator.preprocess(df_iris[X], df_iris[y])
-    assert pre_X.shape[1] == 2
+    assert pre_X.shape[1] == 2  # type: ignore
 
 
 def test_tune_hyperparam():
@@ -474,34 +475,39 @@ def test_confound_removal_no_explicit_removal():
     X = ['sepal_length', 'sepal_width', 'petal_length']
     conf = ['petal_width']
     y = 'species'
-    scores_not_explicit = run_cross_validation(
-        X=X, y=y, model='svm', preprocess_X='zscore', confounds=conf,
-        preprocess_confounds='zscore', data=df_iris, seed=42)
+    match = 'no confound removal step'
+    with pytest.warns(RuntimeWarning, match=match):
+        scores_not_explicit = run_cross_validation(
+            X=X, y=y, model='svm', preprocess_X='zscore', confounds=conf,
+            preprocess_confounds='zscore', data=df_iris, seed=42)
 
     scores_explicit = run_cross_validation(
         X=X, y=y, confounds=conf, model='svm', data=df_iris,
         preprocess_X=['remove_confound', 'zscore'], seed=42,
         preprocess_confounds='zscore')
 
-    scores_explicit_z = run_cross_validation(
-        X=X, y=y, confounds=conf, model='svm', data=df_iris,
-        preprocess_X=['zscore'], seed=42,
-        preprocess_confounds='zscore')
+    with pytest.warns(RuntimeWarning, match=match):
+        scores_explicit_z = run_cross_validation(
+            X=X, y=y, confounds=conf, model='svm', data=df_iris,
+            preprocess_X=['zscore'], seed=42,
+            preprocess_confounds='zscore')
 
-    scores_not_explicit_no_preprocess = run_cross_validation(
-        X=X, y=y, confounds=conf, model='svm', data=df_iris,
-        preprocess_X=[], seed=42,
-        preprocess_confounds='zscore')
+    with pytest.warns(RuntimeWarning, match=match):
+        scores_not_explicit_no_preprocess = run_cross_validation(
+            X=X, y=y, confounds=conf, model='svm', data=df_iris,
+            preprocess_X=[], seed=42,
+            preprocess_confounds='zscore')
 
     scores_explicit_no_preprocess = run_cross_validation(
         X=X, y=y, confounds=conf, model='svm', data=df_iris,
         preprocess_X=['remove_confound'], seed=42,
         preprocess_confounds='zscore')
 
-    scores_not_explicit_no_preprocess_at_all = run_cross_validation(
-        X=X, y=y, confounds=conf, model='svm', data=df_iris,
-        preprocess_X=[], seed=42,
-        preprocess_confounds=[])
+    with pytest.warns(RuntimeWarning, match=match):
+        scores_not_explicit_no_preprocess_at_all = run_cross_validation(
+            X=X, y=y, confounds=conf, model='svm', data=df_iris,
+            preprocess_X=[], seed=42,
+            preprocess_confounds=[])
 
     scores_explicit_no_preprocess_at_all = run_cross_validation(
         X=X, y=y, confounds=conf, model='svm', data=df_iris,

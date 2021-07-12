@@ -165,7 +165,7 @@ def run_cross_validation(
         cv = 'repeat:5_nfolds:5'
 
     # Interpret the input data and prepare it to be used with the library
-    df_X, y, df_groups, df_conf = prepare_input_data(
+    df_X, y, df_groups, n_confounds = prepare_input_data(
         X=X, y=y, confounds=confounds, df=data, pos_labels=pos_labels,
         groups=groups)
 
@@ -175,7 +175,7 @@ def run_cross_validation(
         preprocess_X=preprocess_X,
         preprocess_y=preprocess_y,
         preprocess_confounds=preprocess_confounds,
-        confounds=confounds,
+        n_confounds=n_confounds,
         problem_type=problem_type,
         model_params=model_params
     )
@@ -191,7 +191,7 @@ def run_cross_validation(
 
     cv_return_estimator = return_estimator in ['cv', 'all']
 
-    fit_params = dict(confounds=df_conf)
+    fit_params = dict(n_confounds=n_confounds)
 
     if is_searcher(pipeline):
         fit_params['groups'] = df_groups
@@ -220,7 +220,7 @@ def run_cross_validation(
 
 def create_pipeline(
     model,
-    confounds=None,
+    n_confounds=0,
     problem_type='binary_classification',
     preprocess_X=None,
     preprocess_y=None,
@@ -234,9 +234,8 @@ def create_pipeline(
     model : str or scikit-learn compatible model.
         If string, it will use one of the available models.
         See :mod:`.available_models`.
-    confounds : str, list(str) or numpy.array | None
-        The confounds.
-        See https://juaml.github.io/julearn/input.html for details.
+    n_confounds : int
+        The number of confounds.
     problem_type : str
         The kind of problem to model.
 
@@ -301,7 +300,7 @@ def create_pipeline(
 
     # Interpret preprocessing parameters
     preprocess_vars = prepare_preprocessing(
-        preprocess_X, preprocess_y, preprocess_confounds, confounds
+        preprocess_X, preprocess_y, preprocess_confounds, n_confounds
     )
     preprocess_X, preprocess_y, preprocess_confounds = preprocess_vars
     # Prepare the model

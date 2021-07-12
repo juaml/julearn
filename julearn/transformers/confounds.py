@@ -2,13 +2,15 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 from abc import abstractmethod
-from julearn.transformers.target import BaseTargetTransformer
-from julearn.utils.logging import raise_error
-from julearn.utils.array import ensure_2d, safe_select
+
 import numpy as np
 import pandas as pd
 from sklearn.base import BaseEstimator, TransformerMixin, clone
 from sklearn.linear_model import LinearRegression
+
+from . target import BaseTargetTransformer
+from .. utils.logging import raise_error, warn
+from .. utils.array import safe_select, safe_set
 
 
 class BaseConfoundRemover(TransformerMixin, BaseEstimator):
@@ -33,15 +35,17 @@ class BaseConfoundRemover(TransformerMixin, BaseEstimator):
 class ConfoundRemover(BaseConfoundRemover):
     def __init__(self, model_confound=None, threshold=None,
                  drop_confounds=True):
-        """Transformer which can use pd.DataFrames and remove the confounds
-        from the features by subtracting the predicted features
-        given the confounds from the actual features.
+        """Transformer to remove n_confounds from the features.
+        Subtracts the predicted features given confounds from features.
+        Resulting residuals can be thresholded in case residuals are so small
+        that rouding error can be informative. 
 
         Parameters
         ----------
         model_confound : obj
-            Sklearn compatible model used to predict all features independently
-            using the confounds as features. The predictions of these models
+            Scikit-learn compatible model used to predict all features
+            independently using the confounds as features.
+            The predictions of these models
             are then subtracted from each feature, defaults to
             LinearRegression().
         threshold : float | None
@@ -55,76 +59,85 @@ class ConfoundRemover(BaseConfoundRemover):
         self.threshold = threshold
         self.drop_confounds = drop_confounds
 
-    def fit(self, X, y=None, n_confounds=0):
+    def fit(self, X, y=None, n_confounds=0, apply_to=None):
         """Fit confound remover
 
         Parameters
         ----------
         X : pandas.DataFrame | np.ndarray
-            Training data
+            Training data. Includes features and n_confounds as the last
+            n columns.
         y : pandas.Series | np.ndarray
             Target values.
-        confounds : pandas.DataFrame | np.ndarray
-            confounds used to deconfound X
+        n_confounds : int
+            Number of confounds inside of X.
+            The last n_confounds columns in X will be used as confounds.
+        apply_to : array-like of int, slice, array-like of bool
+            apply_to will be used to index the features inside of X
+            (excluding the confound). The selected features will be confound
+            removed. The keep as they are.
 
         """
-        if n_confounds <= 0:
-            raise_error('Confound must be set for confound removal to happen')
         self.n_confounds_ = n_confounds
-        confounds = safe_select(X, slice(-n_confounds, None))
+        self.apply_to_ = apply_to
+        if self.n_confounds_ <= 0:
+            warn(
+                'Number of confounds is 0, confound removal will not have any '
+                'effect')
+            return self
+        confounds = safe_select(X, slice(-self.n_confounds_, None))
 
         def fit_confound_models(t_X):
             _model = clone(self.model_confound)
             _model.fit(confounds, t_X)
             return _model
 
+        t_X = safe_select(X, slice(None, -self.n_confounds_))
+        if self.apply_to_ is not None:
+            t_X = safe_select(t_X, self.apply_to_)
+
         self.models_confound_ = []
-        for i_X in range(X.shape[1] - self.n_confounds_):
-            if isinstance(X, pd.DataFrame):
-                t_X = X.iloc[:, i_X]
-            else:
-                t_X = X[:, i_X]
+        for i_X in range(t_X.shape[1]):
+            t_X = safe_select(X, i_X)
             self.models_confound_.append(fit_confound_models(t_X))
 
         return self
 
     def transform(self, X):
-        """Removes confounds from data
+        """Removes confounds from X.
 
         Parameters
         ----------
-        X : pd.DataFrame | np.ndarray
-            Data to be deconfounded
-        confounds : pandas.DataFrame | np.ndarray
-            confounds used to deconfound X
+        X : pandas.DataFrame | np.ndarray
+            Training data. Includes features and n_confounds as the last
+            n columns.
 
         Returns
         -------
         out : np.ndarray
-            Confound removed X
+            Deconfounded X.
         """
+        if self.n_confounds_ <= 0:
+            return X
         confounds = safe_select(X, slice(-self.n_confounds_, None))
-        X = safe_select(X, slice(None, self.n_confounds_))
-        X_pred = np.zeros_like(X, dtype=np.float)
+        X = safe_select(X, slice(None, -self.n_confounds_))
+        if isinstance(X, pd.DataFrame):
+            X = X.values
+        X = X.copy()
+        idx = np.arange(0, X.shape[1])
+        if self.apply_to_ is not None:
+            idx = idx[self.apply_to_]
         for i_model, model in enumerate(self.models_confound_):
-            X_pred[:, i_model] = model.predict(confounds)
+            t_idx = idx[i_model]
+            t_pred = model.predict(confounds)
+            X_res = X[:, t_idx] - t_pred
+            if self.threshold is not None:
+                X_res[np.abs(X_res) < self.threshold] = 0
+            X[:, t_idx] = X_res
 
-        residuals = X - X_pred
-        X_removed = self._apply_threshold(residuals)
         if self.drop_confounds is not True:
-            X_removed = np.c_[X_removed, confounds]
-        return X_removed
-
-    def _apply_threshold(self, residuals):
-        """Rounds residuals to 0 when smaller than
-        the previously described absolute threshold.
-        This is done to prevent correlated rounding errors
-        """
-        if self.threshold is not None:
-            # Accounting for correlated rounding errors for very small
-            # residuals
-            residuals[np.abs(residuals) <= self.threshold] = 0
-        return residuals
+            X = np.c_[X, confounds]
+        return X
 
     def will_drop_confounds(self):
         return self.drop_confounds
@@ -133,15 +146,17 @@ class ConfoundRemover(BaseConfoundRemover):
 class TargetConfoundRemover(TransformerMixin, BaseTargetTransformer):
 
     def __init__(self, model_confound=None, threshold=None):
-        """Transformer which can use pd.DataFrames and remove the confounds
-        from the target by subtracting the predicted target
-        given the confounds from the actual target.
+        """Transformer to remove n_confounds from the target.
+        Subtracts the predicted target given confounds from target.
+        Resulting residuals can be thresholded in case residuals are so small
+        that rouding error can be informative. 
 
         Attributes
         ----------
         model_confound : object
-            Model used to predict the target using the confounds as
-            features. The predictions of these models are then subtracted
+            Scikit-learn compatible model used to predict the target
+            using the confounds as features.
+            The predictions of these models are then subtracted
             from the actual target, default is None. Meaning the use of
             a LinearRegression.
         threshold : float | None
@@ -156,14 +171,42 @@ class TargetConfoundRemover(TransformerMixin, BaseTargetTransformer):
             threshold=self.threshold)
 
     def fit(self, X, y, n_confounds):
+        """Fit confound remover
+
+        Parameters
+        ----------
+        X : pandas.DataFrame | np.ndarray
+            Training data. Includes features and n_confounds as the last
+            n columns.
+        y : pandas.Series | np.ndarray
+            Target values.
+        n_confounds : int
+            Number of confounds inside of X.
+            The last n_confounds columns in X will be used as confounds.
+        """
         if n_confounds <= 0:
             raise_error('Confound must be set for confound removal to happen')
         self.n_confounds_ = n_confounds
         confounds = safe_select(X, slice(-self.n_confounds_, None))
         yConf = np.c_[y, confounds]
-        self._confound_remover.fit(X=yConf, confounds=self.n_confounds_)
+        self._confound_remover.fit(X=yConf, n_confounds=self.n_confounds_)
 
     def transform(self, X, y):
+        """Removes confounds from target.
+
+        Parameters
+        ----------
+        X : pandas.DataFrame | np.ndarray
+            Training data. Includes features and n_confounds as the last
+            n columns.
+        y : pandas.Series | np.ndarray
+                Target values.
+
+        Returns
+        -------
+        out : np.ndarray
+            Deconfounded target.
+        """
         confounds = safe_select(X, slice(-self.n_confounds_, None))
         yConf = np.c_[y, confounds]
         n_y = self._confound_remover.transform(

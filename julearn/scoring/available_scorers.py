@@ -1,7 +1,13 @@
+# Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
+#          Sami Hamdan <s.hamdan@fz-juelich.de>
+# License: AGPL
 from copy import deepcopy
 from sklearn.metrics import _scorer, SCORERS, make_scorer
-from julearn.utils import warn, raise_error, logger
+
+from .. utils import warn, raise_error, logger
 from . metrics import r2_corr
+
+
 _extra_available_scorers = {
     'r2_corr': make_scorer(r2_corr)
 }

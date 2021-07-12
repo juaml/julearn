@@ -2,9 +2,10 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 #          Shammi More <s.more@fz-juelich.de>
 # License: AGPL
-from julearn.utils.logging import raise_error
 from sklearn.base import BaseEstimator
 from sklearn.model_selection import train_test_split, check_cv
+
+from .. utils.logging import raise_error
 
 _deslib_algorithms = dict(
     METADES='des',

@@ -1,9 +1,6 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
-from julearn.transformers.target import (TargetTransformerWrapper,
-                                         BaseTargetTransformer)
-from .. utils import raise_error, warn
 from copy import deepcopy
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import (StandardScaler, RobustScaler, MaxAbsScaler,
@@ -13,7 +10,10 @@ from sklearn.feature_selection import (GenericUnivariateSelect,
                                        SelectPercentile, SelectKBest,
                                        SelectFdr, SelectFpr, SelectFwe,
                                        VarianceThreshold)
+
 from . confounds import ConfoundRemover, TargetConfoundRemover
+from . target import TargetTransformerWrapper, BaseTargetTransformer
+from .. utils import raise_error, warn
 
 """
 a dictionary containing all supported transformers
@@ -51,7 +51,6 @@ _available_transformers_reset = deepcopy(_available_transformers)
 _apply_to_default_exceptions = {
     'remove_confound': ['continuous', 'confound'],
     'drop_columns': 'all',
-    'change_column_types': 'all'
 }
 _apply_to_default_exceptions_reset = deepcopy(_apply_to_default_exceptions)
 
@@ -118,7 +117,7 @@ def get_transformer(name, target=False, **params):
     trans, *_ = _available_transformers[name]
     out = trans(**params)
     if target is True and not isinstance(out, BaseTargetTransformer):
-        out = TargetTransformerWrapper(target)
+        out = TargetTransformerWrapper(out)
 
     return out
 
@@ -180,15 +179,16 @@ def register_transformer(transformer_name, transformer_cls,
         Here, you can specify what features the transformer returns.
         The returned_features can be set to one of the following options:
 
-            * 'same': leads copies the names from the original pd.DataFrame
-            * 'subset': leads to the columns being a subset of the original
-              pd.DataFrame. This functionality needs the transformer to have a
+            * 'same': The order and type of the columns of X are not
+              modified.
+            * 'subset': A subset of the columns of X are returned.
+              This functionality needs the transformer to have a
               .get_support method following sklearn standards.
-            * 'from_transformer': the outputted columns are already defined in
+            * 'from_transformer': The resulting columns are already defined in
               the transformer
-            * 'unknown' leads to created column names,
-            * 'unknown_same_type' leads to created column names
-              with the same column type.
+            * 'unknown': The resulting columns are unknonwn.
+            * 'unknown_same_type' The resulting columns are unkown, but
+              with the same type.
 
     apply_to : str | list(str)
         Defines to which columns the transformer is applied to.

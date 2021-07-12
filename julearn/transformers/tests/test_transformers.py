@@ -1,5 +1,7 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL
+import pytest
+
 from sklearn import svm
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import (StandardScaler, RobustScaler, MaxAbsScaler,
@@ -12,7 +14,6 @@ from sklearn.feature_selection import (GenericUnivariateSelect,
 from sklearn.base import BaseEstimator, TransformerMixin
 from seaborn import load_dataset
 
-import pytest
 
 from julearn.utils.testing import (do_scoring_test, PassThroughTransformer,
                                    TargetPassThroughTransformer)
@@ -79,9 +80,7 @@ def test_list_get_transformers():
     """Test list and getting transformers"""
     expected = list(_features_transformers.keys()) + [
         'pca',
-        'remove_confound',
-        'drop_columns',
-        'change_column_types',
+        'remove_confound'
     ]
     actual = list_transformers()
     diff = set(actual) ^ set(expected)

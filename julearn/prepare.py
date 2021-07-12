@@ -2,8 +2,6 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from pandas.core.base import PandasObject
-from julearn.transformers.confounds import BaseConfoundRemover
 import pandas as pd
 import numpy as np
 from sklearn import model_selection
@@ -13,6 +11,7 @@ from sklearn.model_selection import check_cv
 
 from . estimators import get_model
 from . transformers import get_transformer
+from . transformers.confounds import BaseConfoundRemover
 from . scoring import get_extended_scorer
 from . utils import raise_error, warn, logger
 from . utils.column_types import pick_columns
@@ -240,7 +239,11 @@ def prepare_input_data(X, y, confounds, df, pos_labels, groups):
         df_y = df_y.isin(pos_labels).astype(np.int)
     logger.info('====================')
     logger.info('')
-    return df_X, df_y, df_groups, df_conf
+    n_confounds = 0
+    if df_conf is not None:
+        df_X = pd.concat([df_X, df_conf], axis=1)
+        n_confounds = df_conf.shape[1]
+    return df_X, df_y, df_groups, n_confounds
 
 
 def prepare_model(model, problem_type):
@@ -407,18 +410,18 @@ def _prepare_hyperparams(hyperparams, pipeline):
 
 
 def prepare_preprocessing(preprocess_X, preprocess_y, preprocess_conf,
-                          confounds):
+                          n_confounds):
     if preprocess_X is not None and not isinstance(preprocess_X, list):
         preprocess_X = [preprocess_X]
 
-    preprocess_X = _prepare_preprocess_X(preprocess_X, confounds)
+    preprocess_X = _prepare_preprocess_X(preprocess_X, n_confounds)
     preprocess_y = _prepare_preprocess_y(preprocess_y)
     if preprocess_conf is not None:
         preprocess_conf = _prepare_preprocess_confounds(preprocess_conf)
     return preprocess_X, preprocess_y, preprocess_conf
 
 
-def _prepare_preprocess_X(preprocess_X, confounds):
+def _prepare_preprocess_X(preprocess_X, n_confounds):
     '''
     validates preprocess_X and returns a list of tuples accordingly
     and default params for this list
@@ -432,7 +435,7 @@ def _prepare_preprocess_X(preprocess_X, confounds):
     has_confound_remove = any(
         isinstance(x, BaseConfoundRemover) for _, x in preprocess_X)
 
-    if (not has_confound_remove) and confounds is not None:
+    if (not has_confound_remove) and n_confounds > 0:
         msg = ('Confounds were specified but the pipeline has no confound '
                'removal step. Adding a confound remover as the first step '
                'of X preprocessing.')

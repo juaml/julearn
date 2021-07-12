@@ -24,7 +24,19 @@ class TargetTransformerWrapper(TransformerMixin, BaseTargetTransformer):
         self.transformer.set_params(**params)
 
     def fit(self, X=None, y=None):
-
+        """Fit the transformer
+        Fit the transformer using y.
+        Parameters
+        ----------
+        X : object
+            Always ignored, exists for compatibility.
+        y : iterable, default=None
+            Training data.
+        Returns
+        -------
+        self : TargetTransformerWrapper
+            This transformer
+        """
         self._validate_XY_input(X, y)
         if type(y) == pd.Series:
             self.transformer.fit(pd.DataFrame(y))
@@ -34,6 +46,19 @@ class TargetTransformerWrapper(TransformerMixin, BaseTargetTransformer):
         return self
 
     def transform(self, X=None, y=None):
+        """Transform the target data
+
+        Parameters
+        ----------
+        X : object
+            Always ignored, exists for compatibility.
+        y : iterable, default=None
+            The data to be transformed
+        Returns
+        -------
+        y : array of same shape as y
+            The tranformed data
+        """
         self._validate_XY_input(X, y)
         if type(y) == pd.Series:
             _y = pd.DataFrame(y)
@@ -47,6 +72,19 @@ class TargetTransformerWrapper(TransformerMixin, BaseTargetTransformer):
             return _y.reshape(-1)
 
     def fit_transform(self, X=None, y=None):
+        """Fit and transform the target data
+
+        Parameters
+        ----------
+        X : object
+            Always ignored, exists for compatibility.
+        y : iterable, default=None
+            Training data.
+        Returns
+        -------
+        y : array of same shape as y
+            The tranformed data
+        """
         self.fit(X, y)
         return self.transform(X, y)
 

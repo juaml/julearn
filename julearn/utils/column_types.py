@@ -1,3 +1,6 @@
+# Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
+#          Sami Hamdan <s.hamdan@fz-juelich.de>
+# License: AGPL
 import re
 
 
@@ -46,11 +49,3 @@ def pick_columns(regexes, columns):
             f'The following are missing: {unmatched}')
 
     return picks
-
-
-def change_column_type(column, new_type):
-    return '__:type:__'.join(column.split('__:type:__')[0:1] + [new_type])
-
-
-def get_column_type(column):
-    return column.split('__:type:__')[1]

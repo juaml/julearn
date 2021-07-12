@@ -1,9 +1,8 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: BSD
-
-from julearn.transformers.target import BaseTargetTransformer, TargetTransformerWrapper
-
+import inspect
+from operator import attrgetter
 import numpy as np
 
 from sklearn.base import BaseEstimator, clone
@@ -11,8 +10,10 @@ from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
 
 from . transformers.confounds import BaseConfoundRemover, TargetConfoundRemover
-from . utils import raise_error
-from . utils.array import ensure_2d, safe_select
+from . transformers.target import (BaseTargetTransformer,
+                                   TargetTransformerWrapper)
+from . utils import raise_error, warn
+from . utils.array import safe_select
 
 
 def make_pipeline(steps, confound_steps=None, y_transformer=None):
@@ -35,7 +36,7 @@ class ExtendedPipeline(BaseEstimator):
     functionalities:
 
         * Handling transformations of the target:
-            The target can be changed. Importantly this transformed target will
+            The target can be changed. Importantly, the transformed target will
             be considered the ground truth to score against.
             Note: if you want to score this pipeline with an external function.
             You have to consider that the scorer needs to be an
@@ -43,22 +44,12 @@ class ExtendedPipeline(BaseEstimator):
 
         * Handling confounds:
             Adds the confound as type to columns.
-            This allows the DataFrameWrapTransformer inside of the
-            pipeline to handle confounds properly.
-
-        * Handling categorical features:
-            Adds categorical type to columns so that DataFrameWrapTransformer
-            inside of the dataframe_pipline can handle categorical features
-            properly.
-
-    column_types are added to the feature dataframe after each column using
-    the specified separator.
-    E.g. column ``age`` becomes ``age__:type:__confound``.
+            This allows the pipeline to handle confounds properly.
 
     Parameters
     ----------
     pipeline : obj
-        A pipeline working with dataframes and being able to handle confounds.
+        Pipeline which is applied to the features.
         Should be created using julearn.pipeline.create_pipeline.
 
     y_transformer : obj or None
@@ -72,7 +63,7 @@ class ExtendedPipeline(BaseEstimator):
     def __init__(self, pipeline, y_transformer=None, confound_pipeline=None):
         self.confound_pipeline = confound_pipeline
         self.y_transformer = y_transformer
-        self.pipeline = pipeline
+        self._pipeline = pipeline
 
         wrapped_steps = []
         for name, transformer in pipeline.steps:
@@ -85,6 +76,17 @@ class ExtendedPipeline(BaseEstimator):
             else:
                 wrapped_steps.append((name, transformer))
         self.w_pipeline_ = Pipeline(wrapped_steps)
+
+    @property
+    def pipeline(self):
+        curframe = inspect.currentframe()
+        calframe = inspect.getouterframes(curframe, 2)
+        if calframe[3][3] != 'clone':
+            warn(
+                "The attribute 'pipeline' should not be accessed. "
+                "This parameter will always be the unmodified and unfitted "
+                "pipeline")
+        return self._pipeline
 
     def _preprocess(self, X, y=None, **fit_params):
         """ Transform confounds and X, as well as prepare the pipeline for
@@ -144,6 +146,33 @@ class ExtendedPipeline(BaseEstimator):
         return fit_params
 
     def fit(self, X, y=None, **fit_params):
+        """Fit the model
+        Fit all the transforms one after the other and transform the
+        data, then fit the transformed data using the final estimator.
+
+        First the confounds will be fitted and transformed. Then the target
+        will be transformed. Finally, the internal pipeline will be
+        transformed.
+
+        Adapted from sklearn.Pipeline.fit
+
+        Parameters
+        ----------
+        X : iterable
+            Training data. Must fulfill input requirements of first step of the
+            pipeline.
+        y : iterable, default=None
+            Training targets. Must fulfill label requirements for all steps of
+            the pipeline.
+        **fit_params : dict of string -> object
+            Parameters passed to the ``fit`` method of each step, where
+            each parameter name is prefixed such that parameter ``p`` for step
+            ``s`` has key ``s__p``.
+        Returns
+        -------
+        self : Pipeline
+            This estimator
+        """
         if fit_params is None:
             fit_params = {}
         X, y_true, fit_params = self._preprocess(X, y, **fit_params)

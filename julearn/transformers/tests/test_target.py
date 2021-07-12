@@ -3,15 +3,11 @@
 # License: AGPL
 
 import numpy as np
-import pytest
 
 from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import LinearRegression
 from numpy.testing import assert_array_equal
 
-from julearn.transformers.target import (TargetTransformerWrapper,
-                                         is_targettransformer)
-from julearn.transformers.confounds import TargetConfoundRemover
+from julearn.transformers.target import TargetTransformerWrapper
 
 
 def test_get_target_transformer():
@@ -28,14 +24,3 @@ def test_get_target_transformer():
                       ).reshape(-1)
 
     assert_array_equal(y_trans_manual, y_trans_wrapped)
-
-
-def test_is_targettransformer():
-
-    assert not is_targettransformer(StandardScaler())
-    assert is_targettransformer(TargetTransformerWrapper(StandardScaler()))
-    assert is_targettransformer(TargetConfoundRemover())
-
-    with pytest.raises(ValueError,
-                       match='is_targettransformer can only be applied to '):
-        assert is_targettransformer(LinearRegression())

@@ -1,6 +1,7 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
+import pytest
 import numpy as np
 from numpy.testing import assert_array_equal
 import pandas as pd
@@ -13,7 +14,6 @@ from seaborn import load_dataset
 
 from julearn.pipeline import make_pipeline
 
-import pytest
 
 from julearn.prepare import (prepare_input_data,
                              prepare_model_params,
@@ -21,10 +21,13 @@ from julearn.prepare import (prepare_input_data,
 
 from julearn.utils.array import ensure_2d
 
-def _check_np_input(prepared, X, y, confounds, groups):
-    df_X, df_y, df_groups, df_conf = prepared
 
-    assert_array_equal(df_X.values, ensure_2d(X))
+def _check_np_input(prepared, X, y, confounds, groups):
+    df_X, df_y, df_groups, n_confounds = prepared
+    if n_confounds > 0:
+        assert_array_equal(df_X.values[:, :-n_confounds], ensure_2d(X))
+    else:
+        assert_array_equal(df_X.values, ensure_2d(X))
     assert_array_equal(df_y.values, y)
     if groups is not None:
         assert_array_equal(df_groups.values, groups)
@@ -33,21 +36,24 @@ def _check_np_input(prepared, X, y, confounds, groups):
     feature_names = [f'feature_{i}' for i in range(n_features)]
     assert all(x in df_X.columns for x in feature_names)
 
-    if confounds is not None:
-        n_confounds = confounds.shape[1] if confounds.ndim == 2 else 1
+    if n_confounds > 0:
         c_names = [f'confound_{i}' for i in range(n_confounds)]
-        assert all(x in df_conf.columns for x in c_names)
-        assert_array_equal(df_conf.values, ensure_2d(confounds))
+        assert all(x in df_X.columns for x in c_names)
+        assert_array_equal(df_X.values[:, -n_confounds:], ensure_2d(confounds))
 
 
 def _check_df_input(prepared, X, y, confounds, groups, df):
-    df_X, df_y, df_groups, df_conf = prepared
-
-    assert_array_equal(ensure_2d(df[X].values), ensure_2d(df_X.values))
-    assert_array_equal(df[y].values, df_y.values)
-    if confounds is not None:
+    df_X, df_y, df_groups, n_confounds = prepared
+    if n_confounds > 0:
         assert_array_equal(
-            ensure_2d(df[confounds].values), ensure_2d(df_conf.values))
+            ensure_2d(df[X].values), ensure_2d(df_X.values[:, :-n_confounds]))
+    else:
+        assert_array_equal(ensure_2d(df[X].values), ensure_2d(df_X.values))
+
+    assert_array_equal(df[y].values, df_y.values)
+    if n_confounds > 0:
+        assert_array_equal(
+            ensure_2d(df[confounds].values), df_X.values[:, -n_confounds:])
     if groups is not None:
         assert_array_equal(df[groups].values, df_groups.values)
 
@@ -528,22 +534,22 @@ def test_pick_regexp():
     prepared = prepare_input_data(X=X, y=y, confounds=confounds, df=df,
                                   pos_labels=None, groups=None)
 
-    df_X, df_y, _, df_conf = prepared
+    df_X, df_y, _, n_confounds = prepared
 
     assert all([x in df_X.columns for x in X])
     assert y not in df_X.columns
     assert df_y.name == y
-    assert len(df_conf.columns) == 0
+    assert n_confounds == 0
 
     prepared = prepare_input_data(X=[':'], y=y, confounds=confounds, df=df,
                                   pos_labels=None, groups=None)
 
-    df_X, df_y, _, df_conf = prepared
+    df_X, df_y, _, n_confounds = prepared
 
     assert all([x in df_X.columns for x in X])
     assert y not in df_X.columns
     assert df_y.name == y
-    assert len(df_conf.columns) == 0
+    assert n_confounds == 0
 
     X = columns[: 6]
     y = '_a3_b2_c7_'
@@ -551,13 +557,13 @@ def test_pick_regexp():
     prepared = prepare_input_data(X=[':'], y=y, confounds=confounds, df=df,
                                   pos_labels=None, groups=None)
 
-    df_X, df_y, _, df_conf = prepared
+    df_X, df_y, _, n_confounds = prepared
 
     assert all([x in df_X.columns for x in X])
     assert y not in df_X.columns
     assert df_y.name == y
-    assert len(df_conf.columns) == 3
-    assert all([x in df_conf.columns for x in confounds])
+    assert n_confounds == 3
+    assert all([x in df_X.columns for x in confounds])
 
     X = columns[: 6]
     y = '_a3_b2_c7_'
@@ -566,15 +572,15 @@ def test_pick_regexp():
     prepared = prepare_input_data(X=[':'], y=y, confounds=confounds, df=df,
                                   pos_labels=None, groups=groups)
 
-    df_X, df_y, df_groups, df_conf = prepared
+    df_X, df_y, df_groups, n_confounds = prepared
 
     assert all([x in df_X.columns for x in X])
     assert y not in df_X.columns
     assert groups not in df_X.columns
     assert df_y.name == y
-    assert df_groups.name == groups
-    assert len(df_conf.columns) == 2
-    assert all([x in df_conf.columns for x in confounds])
+    assert df_groups.name == groups  # type: ignore
+    assert n_confounds == 2
+    assert all([x in df_X.columns for x in confounds])
 
     X = columns[: 6]
     y = '_a3_b2_c7_'
@@ -582,13 +588,13 @@ def test_pick_regexp():
     prepared = prepare_input_data(X=['_a_.*'], y=y, confounds='_a2_.*', df=df,
                                   pos_labels=None, groups=None)
 
-    df_X, df_y, _, df_conf = prepared
+    df_X, df_y, _, n_confounds = prepared
 
     assert all([x in df_X.columns for x in X])
     assert y not in df_X.columns
     assert df_y.name == y
-    assert len(df_conf.columns) == 3
-    assert all([x in df_conf.columns for x in confounds])
+    assert n_confounds == 3
+    assert all([x in df_X.columns for x in confounds])
 
     X = columns[: 6]
     y = '_a3_b2_c7_'
@@ -597,13 +603,13 @@ def test_pick_regexp():
                                   confounds='_a2_.*', df=df,
                                   pos_labels=None, groups=None)
 
-    df_X, df_y, _, df_conf = prepared
+    df_X, df_y, _, n_confounds = prepared
 
     assert all([x in df_X.columns for x in X])
     assert y not in df_X.columns
     assert df_y.name == y
-    assert len(df_conf.columns) == 3
-    assert all([x in df_conf.columns for x in confounds])
+    assert n_confounds == 3
+    assert all([x in df_X.columns for x in confounds])
 
 
 def test__prepare_hyperparams():

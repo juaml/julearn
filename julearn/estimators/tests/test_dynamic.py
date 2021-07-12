@@ -5,14 +5,17 @@
 
 import numpy as np
 import pytest
-from julearn.estimators.dynamic import DynamicSelection
+
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split, ShuffleSplit
+
 from seaborn import load_dataset
 
 from deslib.dcs import (OLA, MCB)
 from deslib.des import (DESP, KNORAU, METADES, KNOP, KNORAE)
 from deslib.static import (StackedClassifier, SingleBest, StaticSelection)
-from sklearn.model_selection import train_test_split, ShuffleSplit
+
+from julearn.estimators.dynamic import DynamicSelection
 
 
 all_algorithms = {'METADES': METADES,
