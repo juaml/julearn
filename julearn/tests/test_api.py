@@ -226,7 +226,7 @@ def test_tune_hyperparam():
             zip(actual['test_accuracy'], expected['test_accuracy'])])
 
     # Compare the models
-    clf1 = actual_estimator.best_estimator_.pipeline.steps[-1][1]
+    clf1 = actual_estimator.best_estimator_.steps[-1][1]
     clf2 = clone(gs).fit(sk_X, sk_y).best_estimator_.steps[-1][1]
     compare_models(clf1, clf2)
 
@@ -262,7 +262,7 @@ def test_tune_hyperparam():
             zip(actual['test_accuracy'], expected['test_accuracy'])])
 
     # Compare the models
-    clf1 = actual_estimator.best_estimator_.pipeline.steps[-1][1]
+    clf1 = actual_estimator.best_estimator_.steps[-1][1]
     clf2 = clone(gs).fit(sk_X, sk_y).best_estimator_.steps[-1][1]
     compare_models(clf1, clf2)
 

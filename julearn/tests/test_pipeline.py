@@ -170,7 +170,7 @@ def test_preprocess_all_ExtendedPipeline():
     X_trans_preprocess, y_trans_preprocess, conf_preprocess = \
         extended_pipe.preprocess(X, y, until='pca')
 
-    assert_array_equal(X_trans, X_trans_preprocess)
+    assert_array_almost_equal(X_trans, X_trans_preprocess[:, :2])
     assert_array_equal(conf_trans, conf_preprocess)
     assert_array_equal(y_trans, y_trans_preprocess)
 
