@@ -651,5 +651,7 @@ def test__prepare_hyperparams():
 
         if not needs_tuning:
             for param, val in param_grid.items():
-                val = val[0] if type(val) == list else val
-                assert pipeline.get_params()[param] == val
+                with pytest.warns(RuntimeWarning,
+                                  match="The attribute 'pipeline' should"):
+                    val = val[0] if type(val) == list else val
+                    assert pipeline.get_params()[param] == val

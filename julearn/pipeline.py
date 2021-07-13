@@ -81,7 +81,7 @@ class ExtendedPipeline(BaseEstimator):
     def pipeline(self):
         curframe = inspect.currentframe()
         calframe = inspect.getouterframes(curframe, 2)
-        if calframe[3][3] != 'clone':
+        if calframe[3][3] not in ['clone', 'set_params']:
             warn(
                 "The attribute 'pipeline' should not be accessed. "
                 "This parameter will always be the unmodified and unfitted "
