@@ -52,8 +52,6 @@ def test_create_pipeline_steps_added_correctly():
     for my_step, original_estimator in zip(
             my_pipeline.steps, [scaler, pca, lr]):
         my_trans = my_step[1]
-        if isinstance(my_trans, ColumnTransformer):
-            my_trans = my_step[1].transformers[0][1]
         for est_param in original_estimator.get_params():
             est_val = getattr(original_estimator, est_param)
             assert my_trans.get_params().get(est_param) == est_val
@@ -63,11 +61,9 @@ def test_create_pipeline_steps_added_correctly():
 
     for my_step, original_estimator in zip(
             my_pipeline.steps, [y_transformer, scaler, pca, lr]):
-        if my_step[0] == 'y_transformer':
+        if my_step[0].startswith('target__'):
             continue
         my_trans = my_step[1]
-        if isinstance(my_trans, ColumnTransformer):
-            my_trans = my_step[1].transformers[0][1]
         for est_param in original_estimator.get_params():
             est_val = getattr(original_estimator, est_param)
             assert my_trans.get_params().get(est_param) == est_val
@@ -79,7 +75,7 @@ def test_create_pipeline_steps_added_correctly():
 
     for my_step, original_estimator in zip(
             my_pipeline.steps, [pca_conf, y_transformer, scaler, pca, lr]):
-        if my_step[0] == 'y_transformer':
+        if my_step[0].startswith('target__'):
             continue
         my_trans = my_step[1]
         if isinstance(my_trans, ColumnTransformer):
@@ -118,20 +114,27 @@ def test_access_steps_ExtendedPipeline():
         steps,
         y_transformer=y_transformer,
         confound_steps=steps[0:1])
-
-    assert (my_pipe.named_confound_steps.zscore  # type: ignore
-            == my_pipe['confound__zscore']
-            == my_pipe.confound_pipeline.named_steps.zscore  # type: ignore
-            )
-
+    my_pipe.fit(X, y, n_confounds=1)
+    assert (
+        my_pipe.named_steps.confounds__zscore  # type: ignore
+        == my_pipe['confounds__zscore']
+        == my_pipe._confound_pipeline.named_steps.zscore  # type: ignore
+    )
     assert (my_pipe.named_steps.pca
             == my_pipe['pca']
-            == my_pipe.w_pipeline_.named_steps.pca
+            # == (my_pipe._pipeline.named_steps
+            #     ._internally_wrapped_pca.transformers[0][1])
+            )
+    assert (my_pipe.named_steps.pca.get_params() ==
+            my_pipe._pipeline.named_steps
+            ._internally_wrapped_pca.transformers[0][1].get_params()
+
+
             )
 
     assert (my_pipe.named_steps.lr
             == my_pipe['lr']
-            == (my_pipe.w_pipeline_.named_steps.lr)
+            == (my_pipe._pipeline.named_steps.lr)
             )
 
     with pytest.raises(ValueError, match='Indexing must be done '):
@@ -201,7 +204,7 @@ def test_preprocess_until_ExtendedPipeline():
         conf_trans = this_confounds_pipe.fit_transform(conf_trans)
 
         X_trans_pipe, y_trans_pipe, conf_trans_pipe = extended_pipe.preprocess(
-            X, y, until=f'confound__{name}')
+            X, y, until=f'confounds__{name}')
 
         assert_array_equal(X, X_trans_pipe)
         assert_array_equal(y, y_trans_pipe)
@@ -209,7 +212,7 @@ def test_preprocess_until_ExtendedPipeline():
 
     y_trans = y_transformer.fit_transform(ensure_2d(y_trans)).squeeze()
     X_trans_pipe, y_trans_pipe, conf_trans_pipe = extended_pipe.preprocess(
-        X, y, until='target__',)
+        X, y, until='target__transformer',)
     assert_array_equal(
         X.values[:, :2], X_trans_pipe[:, :2])  # type: ignore
     assert_array_equal(y_trans, y_trans_pipe)
@@ -221,6 +224,7 @@ def test_preprocess_until_ExtendedPipeline():
         X_trans_pipe, y_trans_pipe, conf_trans_pipe = \
             extended_pipe.preprocess(X, y, until=name)
 
+        print(name, step)
         assert_array_almost_equal(X_trans, X_trans_pipe[:, :2])  # type: ignore
         assert_array_equal(y_trans, y_trans_pipe)
         assert_array_equal(conf_trans, conf_trans_pipe)
@@ -265,13 +269,20 @@ def test_tune_params():
         confound_steps=[('zscore', get_transformer('zscore'))],
         y_transformer=get_transformer('zscore')
     )
-
-    extended_pipe.set_params(**params)
+    extended_pipe.fit(X, y, n_confounds=1)
     for param, val in params.items():
+        extended_pipe.set_params(**{param: val})
+
         assert extended_pipe.get_params()[param] == val
 
-    with pytest.raises(ValueError, match='Each element of the'):
+    with pytest.raises(ValueError, match='You cannot set'):
         extended_pipe.set_params(cOnFouunds__zscore__with_mean=True)
+
+    with pytest.raises(ValueError, match='You cannot set'):
+        extended_pipe.set_params(confounds__Isacore__with_mean=True)
+
+    with pytest.raises(ValueError, match='You cannot set'):
+        extended_pipe.set_params(target__Isacore__with_mean=True)
 
 
 def test_ExtendedPipeline___repr__():

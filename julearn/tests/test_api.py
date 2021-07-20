@@ -22,6 +22,7 @@ from seaborn import load_dataset
 import pytest
 
 from julearn import run_cross_validation, create_pipeline
+from julearn.transformers.target import TargetTransformerWrapper
 from julearn.utils.testing import do_scoring_test, compare_models
 
 
@@ -70,7 +71,7 @@ def test_scoring_y_transformer():
     # sk_X = df_iris[X].values
     sk_y = df_iris[y].values
     clf = make_pipeline(StandardScaler(), svm.SVC(probability=True))
-    y_transformer = LabelBinarizer()
+    y_transformer = TargetTransformerWrapper(LabelBinarizer())
 
     scorers = ['accuracy', 'balanced_accuracy']
     api_params = {'model': 'svm', 'preprocess_y': y_transformer}
@@ -484,7 +485,8 @@ def test_confound_removal_no_explicit_removal():
     scores_explicit = run_cross_validation(
         X=X, y=y, confounds=conf, model='svm', data=df_iris,
         preprocess_X=['remove_confound', 'zscore'], seed=42,
-        preprocess_confounds='zscore')
+        preprocess_confounds='zscore'
+    )
 
     with pytest.warns(RuntimeWarning, match=match):
         scores_explicit_z = run_cross_validation(

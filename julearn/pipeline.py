@@ -1,35 +1,35 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: BSD
-import inspect
-from operator import attrgetter
 import numpy as np
 
-from sklearn.base import BaseEstimator, clone
-from sklearn.pipeline import Pipeline
+from sklearn.base import clone
+from sklearn.utils import Bunch
+from sklearn.utils.metaestimators import _BaseComposition
+from sklearn.pipeline import Pipeline, _name_estimators
 from sklearn.compose import ColumnTransformer
 
 from . transformers.confounds import BaseConfoundRemover, TargetConfoundRemover
 from . transformers.target import (BaseTargetTransformer,
                                    TargetTransformerWrapper)
-from . utils import raise_error, warn
+from . utils import raise_error
 from . utils.array import safe_select
 
 
 def make_pipeline(steps, confound_steps=None, y_transformer=None):
-    pipeline = Pipeline(steps=steps)
-    confound_pipeline = None
-    if confound_steps is not None:
-        confound_pipeline = Pipeline(confound_steps)
+    # pipeline = Pipeline(steps=steps)
+    # confound_pipeline = None
+    # if confound_steps is not None:
+    #     confound_pipeline = Pipeline(confound_steps)
     if y_transformer is not None:
         if not isinstance(y_transformer, BaseTargetTransformer):
             y_transformer = TargetTransformerWrapper(y_transformer)
     return ExtendedPipeline(
-        pipeline=pipeline, y_transformer=y_transformer,
-        confound_pipeline=confound_pipeline)
+        pipeline_steps=steps, y_transformer=y_transformer,
+        confound_pipeline_steps=confound_steps)
 
 
-class ExtendedPipeline(BaseEstimator):
+class ExtendedPipeline(_BaseComposition):
     """A class creating a custom metamodel like a Pipeline.
     There are multiple caveats of creating such a pipline without using
     that function. Compared to an usual scikit-learn pipeline, this have added
@@ -60,46 +60,41 @@ class ExtendedPipeline(BaseEstimator):
 
     """
 
-    def __init__(self, pipeline, y_transformer=None, confound_pipeline=None):
-        self.confound_pipeline = confound_pipeline
+    def __init__(self, pipeline_steps, y_transformer=None,
+                 confound_pipeline_steps=None):
+        self.pipeline_steps = pipeline_steps
+        self.confound_pipeline_steps = confound_pipeline_steps
         self.y_transformer = y_transformer
-        self._pipeline = pipeline
-
-        wrapped_steps = []
-        for name, transformer in pipeline.steps:
-            if (not isinstance(transformer, BaseConfoundRemover) and
-                    is_transformable(transformer)):
-                wrapped_trans = ColumnTransformer(
-                    [(name, transformer, slice(None))],
-                    remainder='passthrough')
-                wrapped_steps.append((name, wrapped_trans))
-            else:
-                wrapped_steps.append((name, transformer))
-        self.w_pipeline_ = Pipeline(wrapped_steps)
-
-    @property
-    def pipeline(self):
-        curframe = inspect.currentframe()
-        calframe = inspect.getouterframes(curframe, 2)
-        if calframe[3][3] not in ['clone', 'set_params']:
-            warn(
-                "The attribute 'pipeline' should not be accessed. "
-                "This parameter will always be the unmodified and unfitted "
-                "pipeline")
-        return self._pipeline
 
     def _preprocess(self, X, y=None, **fit_params):
         """ Transform confounds and X, as well as prepare the pipeline for
             selecting the right columns.
         """
+        wrapped_steps = []
+        # TODO validate pipeline_steps not including _internally_wrapped_
+        for name, transformer in self.pipeline_steps:
+            if (not isinstance(transformer, BaseConfoundRemover) and
+                    is_transformable(transformer)):
+                wrapped_trans = ColumnTransformer(
+                    [(name, transformer, slice(None))],
+                    remainder='passthrough')
+                wrapped_steps.append(
+                    ('_internally_wrapped_' + name, wrapped_trans))
+            else:
+                wrapped_steps.append((name, transformer))
+
+        self._pipeline = Pipeline(wrapped_steps)
+        self._confound_pipeline = (None if self.confound_pipeline_steps is None
+                                   else Pipeline(self.confound_pipeline_steps))
+
         n_confounds = fit_params.pop('n_confounds', 0)
         self.n_confounds_ = n_confounds
 
         all_params = self._split_params(fit_params)
         # TODO check whether this is needed
-        self.w_pipeline_ = clone(self.w_pipeline_)
-        if self.confound_pipeline is not None:
-            self.confound_pipeline = clone(self.confound_pipeline)
+        self._pipeline = clone(self._pipeline)
+        if self._confound_pipeline is not None:
+            self._confound_pipeline = clone(self._confound_pipeline)
 
         if self.y_transformer is not None:
             clone(self.y_transformer)
@@ -125,7 +120,7 @@ class ExtendedPipeline(BaseEstimator):
         # the flow of the confounds and features
         n_confounds = self.n_confounds_
         slice_end = n_features - n_confounds if n_confounds > 0 else n_features
-        for name, object in self.w_pipeline_.steps:
+        for name, object in self._pipeline.steps:
             if isinstance(object, BaseConfoundRemover):
                 # If its a confound remover, will set the number of confounds
                 fit_params[f'{name}__n_confounds'] = n_confounds
@@ -177,18 +172,20 @@ class ExtendedPipeline(BaseEstimator):
             fit_params = {}
         X, y_true, fit_params = self._preprocess(X, y, **fit_params)
 
-        self.w_pipeline_.fit(X, y_true, **fit_params)
+        self._pipeline.fit(X, y_true, **fit_params)
+        self._update_pipeline_steps_from_wrapped()
 
         # Copy some of the pipeline attributes
-        if hasattr(self.w_pipeline_, 'classes_'):
-            self.classes_ = self.w_pipeline_.classes_  # type: ignore
+        if hasattr(self._pipeline, 'classes_'):
+            self.classes_ = self._pipeline.classes_  # type: ignore
 
         return self
 
     def _fit(self, X, y=None, **fit_params):
         X, y_true, fit_params = self._preprocess(X, y, **fit_params)
-        fit_params_steps = self.w_pipeline_._check_fit_params(**fit_params)
-        Xt = self.w_pipeline_._fit(X, y_true, **fit_params_steps)
+        fit_params_steps = self._pipeline._check_fit_params(**fit_params)
+        Xt = self._pipeline._fit(X, y_true, **fit_params_steps)
+        self._update_pipeline_steps_from_wrapped()
 
         return Xt
 
@@ -209,7 +206,7 @@ class ExtendedPipeline(BaseEstimator):
         Xt : array-like of shape  (n_samples, n_transformed_features)
         """
         X_trans = self.transform_confounds(X)
-        return self.w_pipeline_.transform(X_trans)
+        return self._pipeline.transform(X_trans)
 
     def _fit_transform_target(self, X, y, **target_params):
         y_true = y
@@ -224,20 +221,23 @@ class ExtendedPipeline(BaseEstimator):
         return y_true
 
     def _fit_transform_confounds(self, X, y, **confound_params):
-        if self.n_confounds_ > 0 and self.confound_pipeline is not None:
+        if self.n_confounds_ > 0 and self._confound_pipeline is not None:
             # Find the IDX and update the pipelines
             confounds = safe_select(X, slice(-self.n_confounds_, None))
-            trans_confounds = self.confound_pipeline.fit_transform(
+            trans_confounds = self._confound_pipeline.fit_transform(
                 confounds, y, **confound_params)
+
+            # update confound_pipeline_steps
+            self.confound_pipeline_steps = self._confound_pipeline.steps
             newX = safe_select(X, slice(None, -self.n_confounds_))
             X = np.c_[newX, trans_confounds]
         return X
 
     def transform_confounds(self, X):
-        if self.n_confounds_ > 0 and self.confound_pipeline is not None:
+        if self.n_confounds_ > 0 and self._confound_pipeline is not None:
             # Find the IDX and update the pipelines
             confounds = safe_select(X, slice(-self.n_confounds_, None))
-            trans_confounds = self.confound_pipeline.transform(confounds)
+            trans_confounds = self._confound_pipeline.transform(confounds)
             newX = safe_select(X, slice(None, -self.n_confounds_))
             X = np.c_[newX, trans_confounds]
         return X
@@ -270,39 +270,45 @@ class ExtendedPipeline(BaseEstimator):
         if fit_params is None:
             fit_params = {}
         Xt = self._fit(X, y, **fit_params)
-        last_step = self.w_pipeline_._final_estimator
+        last_step = self._pipeline._final_estimator
         if last_step == "passthrough":
             return Xt
         if 'n_confounds' in fit_params:
             fit_params.pop('n_confounds')
-        fit_params_steps = self.w_pipeline_._check_fit_params(**fit_params)
-        fit_params_last_step = fit_params_steps[self.steps[-1][0]]
+        fit_params_steps = self._pipeline._check_fit_params(**fit_params)
+        fit_params_last_step = fit_params_steps[self._pipeline.steps[-1][0]]
         if hasattr(last_step, "fit_transform"):
-            return last_step.fit_transform(Xt, y, **fit_params_last_step)
+            Xt = last_step.fit_transform(Xt, y, **fit_params_last_step)
         else:
-            return last_step.fit(Xt, y, **fit_params_last_step).transform(Xt)
+            Xt = last_step.fit(Xt, y, **fit_params_last_step).transform(Xt)
+
+        self._update_pipeline_steps_from_wrapped()
+
+        return Xt
 
     def predict(self, X, **predict_params):
         X = self.transform_confounds(X)
-        return self.w_pipeline_.predict(X, **predict_params)
+        return self._pipeline.predict(X, **predict_params)
 
     def predict_proba(self, X, **predict_params):
         X = self.transform_confounds(X)
-        return self.w_pipeline_.predict_proba(X, **predict_params)
+        return self._pipeline.predict_proba(X, **predict_params)
 
     def score(self, X, y=None, sample_weight=None):
         X = self.transform_confounds(X)
         y_true = self.transform_target(X, y)
-        return self.w_pipeline_.score(X, y_true, sample_weight=None)
+        return self._pipeline.score(X, y_true, sample_weight=None)
 
     def fit_predict(self, X, y=None, **fit_params):
         if fit_params is not None:
             fit_params = {}
         Xt = self._fit(X, y, **fit_params)
-        fit_params_steps = self.w_pipeline_._check_fit_params(**fit_params)
-        fit_params_last_step = fit_params_steps[self.steps[-1][0]]
-        return self.w_pipeline_.steps[-1][1].fit_predict(
+        fit_params_steps = self._pipeline._check_fit_params(**fit_params)
+        fit_params_last_step = fit_params_steps[self._pipeline.steps[-1][0]]
+        pred = self._pipeline.steps[-1][1].fit_predict(
             Xt, y, **fit_params_last_step)
+        self._update_pipeline_steps_from_wrapped()
+        return pred
 
     def preprocess(self, X, y, until=None):
         """
@@ -323,9 +329,8 @@ class ExtendedPipeline(BaseEstimator):
             The transformed confounds
         """
 
-        transformers_pipe = clone(self.w_pipeline_)
         if until is None:
-            until = transformers_pipe.steps[-2][0]
+            until = self.pipeline_steps[-2][0]
         try:
             self[until]
         except KeyError:
@@ -335,10 +340,10 @@ class ExtendedPipeline(BaseEstimator):
         X_trans = X
         y_trans = y.copy()
 
-        if until.startswith('confound__'):
-            if self.confound_pipeline is not None:
-                step_name = until.replace('confound__', '')
-                for name, step in self.confound_pipeline.steps:
+        if until.startswith('confounds__'):
+            if self._confound_pipeline is not None:
+                step_name = until.replace('confounds__', '')
+                for name, step in self._confound_pipeline.steps:
                     confounds = step.transform(confounds)
                     if name == step_name:
                         break
@@ -351,74 +356,175 @@ class ExtendedPipeline(BaseEstimator):
             confounds = safe_select(X_trans, slice(-self.n_confounds_, None))
 
             y_trans = self.transform_target(X_trans, y)
-            for name, t_step in self.w_pipeline_.steps:
+            wrapped_until = self._get_wrapped_param_name(until)
+            # get wrapper itself
+            wrapped_until = wrapped_until.split('__')[0]
+            for name, t_step in self._pipeline.steps:
+                print('name', name, wrapped_until)
                 X_trans = t_step.transform(X_trans)
-                if name == until:
+                if name == wrapped_until:
                     break
         return X_trans, y_trans, confounds
 
     def set_params(self, **params):
-        super().set_params(**{self._rename_param(param): val
-                              for param, val in params.items()})
+        for param, val in params.items():
+
+            if param.startswith('confounds__'):
+                param_name = param.replace('confounds__', '')
+                # set inside of the created pipeline
+                if self._confound_pipeline is None:
+                    raise_error(
+                        ('Your confounding pipeline seems to be None '
+                         'So you cannot set any parameter for it.'),
+                        AttributeError)
+                else:
+                    try:
+                        self._set_params('confound_pipeline_steps',
+                                         ** {param_name: val})
+
+                        if hasattr(self, '_confound_pipeline'):
+                            self._confound_pipeline.set_params(
+                                **{param_name: val})
+                    except ValueError:
+                        possible_params = [
+                            'confounds__' + name for name, _ in
+                            self.confound_pipeline_steps]  # type: ignore
+                        raise_error(
+                            f'You cannot set {param} as it is not part of the '
+                            'confounding pipeline. Possible params are: '
+                            f'{possible_params}'
+                        )
+
+            elif param.startswith('target__'):
+                param_name = param.replace('target__', '')
+                if self.y_transformer is None:
+                    raise_error(
+                        ('Your y_transformer seems to be None '
+                         'So you cannot set any parameter for it.'),
+                        AttributeError)
+                else:
+                    possible_params = self.y_transformer.get_params().keys()
+                    try:
+                        self.y_transformer.set_params(**{param_name: val})
+                    except ValueError:
+                        raise_error(
+                            f'You cannot set {param} as it is not a valid '
+                            'param of the target transformer.'
+                            f'Possible params are: {possible_params}'
+                        )
+
+                        # parameters of constructor
+            elif param in ['pipeline_steps', 'y_transformer',
+                           'confound_pipeline_steps']:
+                super().set_params(**{param: val})
+
+            # parameters of pipeline_steps and _pipeline
+            else:
+                try:
+                    self._set_params('pipeline_steps', **{param: val})
+                    wrapped_param = self._get_wrapped_param_name(param)
+
+                    if hasattr(self, '_pipeline'):
+                        self._pipeline.set_params(**{wrapped_param: val})
+                except ValueError:
+                    raise_error(
+                        f'You cannot set {param} as it is not part of the '
+                        'pipeline. Possible params are: '
+                        f'{self.get_params()}'
+                    )
+
         return self
 
     def get_params(self, deep=True):
-        params = super().get_params(deep=deep)
+        init_arguments = ['pipeline_steps',
+                          'confound_pipeline_steps',
+                          'y_transformer']
+        pipeline_steps_params = self._get_params('pipeline_steps', deep=deep)
+        confound_pipeline_steps_params = (
+            {} if self.confound_pipeline_steps is None
+            else self._get_params('confound_pipeline_steps', deep=deep))
+        y_transformer_params = (
+            {} if self.y_transformer is None
+            else self.y_transformer.get_params(deep=deep))
 
-        def _rename_get(param):
-            first, *rest = param.split('__')
-            # if rest is empty then these are the actual parameters/pipelines
-            if rest != []:
-                if first == 'pipeline':
-                    first = []
-                elif first == 'confound_pipeline':
-                    first = ['confounds']
-                else:
-                    first = ['target']
-                return '__'.join(first + rest)
-            else:
-                return param
+        pipeline_steps_params = {
+            param: val
+            for param, val in pipeline_steps_params.items()
+            if param not in init_arguments
+        }
+        confound_pipeline_steps_params = {
+            (param if param == 'confound_pipeline_steps'
+             else 'confounds__' + param): val
+            for param, val in confound_pipeline_steps_params.items()
+            if param not in init_arguments
+        }
+        if deep:
+            y_transformer_params = {
+                'target__' + param: val
+                for param, val in y_transformer_params.items()
+            }
+        else:
+            y_transformer_params = {}
 
-        return {_rename_get(param): val
-                for param, val in params.items()}
+        params = {
+            **pipeline_steps_params,
+            **confound_pipeline_steps_params,
+            **y_transformer_params,
+            **{'y_transformer': self.y_transformer,
+               'pipeline_steps': self.pipeline_steps,
+               'confound_pipeline_steps': self.confound_pipeline_steps
+               }
+        }
+        return params
 
-    @property
+    @ property
     def steps(self):
         all_steps = []
-        if self.confound_pipeline is not None:
-            all_steps.extend(self.confound_pipeline.steps)
+        if self.confound_pipeline_steps is not None:
+            all_steps.extend([(f'confounds__{name}', step)
+                              for name, step in self.confound_pipeline_steps])
         if self.y_transformer is not None:
-            all_steps.append(('y_transformer', self.y_transformer))
-        all_steps.extend(self.w_pipeline_.steps)
+            all_steps.append(
+                (f'target__{_name_estimators([self.y_transformer])[0][0]}',
+                 self.y_transformer)
+            )
+        all_steps.extend(self.pipeline_steps)
         return all_steps
 
     @ property
     def named_steps(self):
-        return self.w_pipeline_.named_steps
 
-    @ property
-    def named_confound_steps(self):
-        steps = None
-        if self.confound_pipeline is not None:
-            steps = self.confound_pipeline.named_steps
-        return steps
+        if self.confound_pipeline_steps is None:
+            conf_dict = {}
+        else:
+            conf_dict = {f'confounds__{name}': step
+                         for name, step in self.confound_pipeline_steps}
+        y_dict = (
+            {} if self.y_transformer is None
+            else {f'target__{_name_estimators([self.y_transformer])[0][0]}':
+                  self.y_transformer}
+        )
+
+        return Bunch(**dict(self.pipeline_steps),
+                     **conf_dict, **y_dict)
 
     def __getitem__(self, ind):
         if not isinstance(ind, str):
             raise_error('Indexing must be done using strings')
-        if ind.startswith('confound__'):
-            if self.confound_pipeline is None:
-                raise_error('No confound pipeline to index')
-            n_ind = ind.replace('confound__', '')
-            element = self.confound_pipeline[n_ind]
-        elif ind.startswith('target__'):
-            element = self.y_transformer
-        else:
-            element = self.w_pipeline_[ind]
+        # if ind.startswith('confound__'):
+        #     if self._confound_pipeline is None:
+        #         raise_error('No confound pipeline to index')
+        #     n_ind = ind.replace('confound__', '')
+        #     element = self._confound_pipeline[n_ind]
+        # elif ind.startswith('target__'):
+        #     element = self.y_transformer
+        # else:
+        #     element = self._pipeline[ind]
+        element = self.get_params(deep=True)[ind]
         return element
 
     def __repr__(self):
-        preprocess_X = clone(self.w_pipeline_).steps
+        preprocess_X = self.pipeline_steps
         model = preprocess_X.pop()
         preprocess_X = None if preprocess_X == [] else preprocess_X
         return f'''
@@ -426,26 +532,67 @@ ExtendedPipeline using:
     * model = {model}
     * preprocess_X = {preprocess_X}
     * preprocess_target = {self.y_transformer}
-    * preprocess_confounds = {self.confound_pipeline}
+    * preprocess_confounds = {self.confound_pipeline_steps}
 '''
 
-    def _rename_param(self, param):
-        # Map from "confounds__", "target__" and step to the proper parameter
-        first, *rest = param.split('__')
-        steps = list(self.named_steps.keys())
+    def _update_pipeline_steps_from_wrapped(self):
+        steps = self._pipeline.steps
 
-        if first in steps:
-            new_first = f'pipeline__{first}'
-        elif first == 'confounds':
-            new_first = 'confound_pipeline'
-        elif first == 'target':
-            new_first = 'y_transformer'
-        else:
-            raise_error(
-                'Each element of the hyperparameters dict  has to start with '
-                f'"confounds__", "target__" or any of "{steps}__" '
-                f'but was {first}')
-        return '__'.join([new_first] + rest)
+        # steps_params = {}
+        for name, est in steps:
+
+            if name.startswith('_internally_wrapped_'):
+
+                nested_levels = name.split('__')
+
+                # # ignoring the Wrapper/ColumnTransformer itself
+                # if len(nested_levels) == 1:
+                #     pass
+                # # find parameters of Wrapper/ColumnTransformer itself
+                # elif len(nested_levels) == 2:
+                #     # of the parameters of the Wrapper only the tranformer(s)
+                #     # should be set in the pipeline_steps
+                #     if nested_levels[1] == 'transformers':
+                #         step_param = nested_levels[0].replace(
+                #             '_internally_wrapped_', '')
+                #         steps_params[step_param] = val
+
+                if len(nested_levels) > 2:
+                    # remove wrapper name
+                    steps_name = '__'.join(name.split('__')[1:])
+                    self.pipeline_steps = [
+                        (inner_name, (est if inner_name == steps_name
+                                      else inner_step))
+                        for inner_name, inner_step in self.pipeline_steps]
+                    # steps_params[step_param] = val
+
+            else:
+                self.pipeline_steps = [
+                    (inner_name, (est if inner_name == name
+                                  else inner_step))
+                    for inner_name, inner_step in self.pipeline_steps]
+                # excluding Pipeline specific params
+                # if param not in ['memory', 'verbose', 'steps']:
+                #     steps_params[param] = val
+        # self._set_params('pipeline_steps', **steps_params)
+
+    # def _rename_param(self, param):
+    #     # Map from "confounds__", "target__" and step to the proper parameter
+    #     first, *rest = param.split('__')
+    #     steps = list(self.named_steps.keys())
+
+    #     if first in steps:
+    #         new_first = f'pipeline__{first}'
+    #     elif first == 'confounds':
+    #         new_first = 'confound_pipeline'
+    #     elif first == 'target':
+    #         new_first = 'y_transformer'
+    #     else:
+    #         raise_error(
+    #             'Each element of the hyperparameters dict  has to start with '
+    #             f'"confounds__", "target__" or any of "{steps}__" '
+    #             f'but was {first}')
+    #     return '__'.join([new_first] + rest)
 
     @ staticmethod
     def _split_params(params):
@@ -463,7 +610,7 @@ ExtendedPipeline using:
                 split_params['pipeline'][t_key] = t_value
         return split_params
 
-    @staticmethod
+    @ staticmethod
     def _transform_pipeline_until(pipeline, step_name, X, confounds):
         X_transformed = X.copy()
         for name, step in pipeline.steps:
@@ -471,6 +618,20 @@ ExtendedPipeline using:
             if name == step_name:
                 break
         return X_transformed
+
+    def _get_wrapped_param_name(self, param):
+
+        # find out whether this param was wrapped
+        # and adjust param name accordingly
+        est_name = param.split('__')[0]
+        est = self.get_params()[est_name]
+        if (not isinstance(est, BaseConfoundRemover) and
+                is_transformable(est)):
+            wrapped_param = f'_internally_wrapped_{est_name}__{param}'
+        else:
+            wrapped_param = param
+
+        return wrapped_param
 
 
 def is_transformable(t):
