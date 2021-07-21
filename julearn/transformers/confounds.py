@@ -117,12 +117,12 @@ class ConfoundRemover(BaseConfoundRemover):
         out : np.ndarray
             Deconfounded X.
         """
+        if isinstance(X, pd.DataFrame):
+            X = X.values
         if self.n_confounds_ <= 0:
             return X
         confounds = safe_select(X, slice(-self.n_confounds_, None))
         X = safe_select(X, slice(None, -self.n_confounds_))
-        if isinstance(X, pd.DataFrame):
-            X = X.values
         X = X.copy()
         idx = np.arange(0, X.shape[1])
         if self.apply_to_ is not None:

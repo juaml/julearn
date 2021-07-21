@@ -1,7 +1,6 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
-from numpy.testing._private.utils import assert_array_almost_equal
 import pandas as pd
 import numpy as np
 from numpy.testing import assert_array_equal, assert_array_almost_equal
@@ -16,34 +15,37 @@ from julearn.transformers.confounds import (ConfoundRemover,
 # TODO: change this values, the confounds are perect regressions
 X = pd.DataFrame({
     'a': np.arange(10),
-    'b': np.arange(10, 20),
-    'c': np.arange(30, 40),
-    'd': np.arange(40, 50),
-    'e': np.arange(40, 50),
-    'f': np.arange(40, 50),
+    'b': np.array([0, 2, 1, 3, 3.5, 5.5, 6, 7, 7.6, 10]),
+    'c': np.array([10, 11, 12, 14, 15, 16.5, 17.2, 18.3, 18.9, 20]),
 })
 
-y = np.arange(10)
+y = np.array([20, 25, 22, 23.6, 24.9, 26, 27.5, 28, 28.8, 29.4])
 
 
 def test_confound_removal_methods():
     """Test two different confound removal methods"""
     c_tests = [
-        [X.copy(), ['e', 'f']],
-        [X.drop(columns='d').copy(), ['f']]
+        [X.drop(columns='c'), ['b']],
+        [X, ['b', 'c']],
     ]
     for _X, confounds in c_tests:
         n_confounds = len(confounds)
         features = _X.drop(columns=confounds).columns
-        models = [LinearRegression(), RandomForestRegressor(n_estimators=5)]
+        models = [LinearRegression(),
+                  RandomForestRegressor(n_estimators=5)
+                  ]
 
         for model_to_remove in models:
             confound_remover = ConfoundRemover(model_confound=model_to_remove)
 
             np.random.seed(42)
-            df_c_removed = confound_remover.fit_transform(
-                _X, n_confounds=n_confounds)
-            print(df_c_removed)
+            df_c_removed = (confound_remover
+                            .fit(_X, n_confounds=n_confounds)
+                            .transform(_X)
+                            )
+            np.random.seed(42)
+            arr_c_removed = confound_remover.fit_transform(
+                _X.values, n_confounds=n_confounds)
             np.random.seed(42)
             c_regressions = [
                 clone(model_to_remove).fit(_X.loc[:, confounds],
@@ -56,6 +58,7 @@ def test_confound_removal_methods():
             # Test that each model inside of the confound removal
             # is the same as if we would have trained the same model
             # in sklearn
+
             for i_model, m_model, feature in zip(
                     confound_remover.models_confound_,
                     c_regressions,
@@ -71,19 +74,19 @@ def test_confound_removal_methods():
 
             df_removed_X = (_X.drop(columns=confounds) - df_pred_X)
 
+            assert_array_almost_equal(arr_c_removed, df_c_removed)
             assert_array_almost_equal(df_c_removed, df_removed_X.values)
 
 
 def test_TargetConfoundRemover():
-    confound_names = ['e', 'f']
+    confound_names = ['b', 'c']
     confounds = X[confound_names]
     n_confounds = len(confound_names)
-    X_feat = X.drop(columns=confound_names)
 
     target_remover = TargetConfoundRemover()
     np.random.seed(42)
     y_transformed = target_remover.fit_transform(
-        X_feat, y, n_confounds=n_confounds)
+        X, y, n_confounds=n_confounds)
     np.random.seed(42)
     y_pred = (LinearRegression()
               .fit(confounds, y)
