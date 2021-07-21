@@ -17,10 +17,6 @@ from . utils.array import safe_select
 
 
 def make_pipeline(steps, confound_steps=None, y_transformer=None):
-    # pipeline = Pipeline(steps=steps)
-    # confound_pipeline = None
-    # if confound_steps is not None:
-    #     confound_pipeline = Pipeline(confound_steps)
     if y_transformer is not None:
         if not isinstance(y_transformer, BaseTargetTransformer):
             y_transformer = TargetTransformerWrapper(y_transformer)
@@ -511,15 +507,6 @@ class ExtendedPipeline(_BaseComposition):
     def __getitem__(self, ind):
         if not isinstance(ind, str):
             raise_error('Indexing must be done using strings')
-        # if ind.startswith('confound__'):
-        #     if self._confound_pipeline is None:
-        #         raise_error('No confound pipeline to index')
-        #     n_ind = ind.replace('confound__', '')
-        #     element = self._confound_pipeline[n_ind]
-        # elif ind.startswith('target__'):
-        #     element = self.y_transformer
-        # else:
-        #     element = self._pipeline[ind]
         element = self.get_params(deep=True)[ind]
         return element
 
@@ -544,19 +531,6 @@ ExtendedPipeline using:
             if name.startswith('_internally_wrapped_'):
 
                 nested_levels = name.split('__')
-
-                # # ignoring the Wrapper/ColumnTransformer itself
-                # if len(nested_levels) == 1:
-                #     pass
-                # # find parameters of Wrapper/ColumnTransformer itself
-                # elif len(nested_levels) == 2:
-                #     # of the parameters of the Wrapper only the tranformer(s)
-                #     # should be set in the pipeline_steps
-                #     if nested_levels[1] == 'transformers':
-                #         step_param = nested_levels[0].replace(
-                #             '_internally_wrapped_', '')
-                #         steps_params[step_param] = val
-
                 if len(nested_levels) > 2:
                     # remove wrapper name
                     steps_name = '__'.join(name.split('__')[1:])
@@ -564,36 +538,12 @@ ExtendedPipeline using:
                         (inner_name, (est if inner_name == steps_name
                                       else inner_step))
                         for inner_name, inner_step in self.pipeline_steps]
-                    # steps_params[step_param] = val
 
             else:
                 self.pipeline_steps = [
                     (inner_name, (est if inner_name == name
                                   else inner_step))
                     for inner_name, inner_step in self.pipeline_steps]
-                # excluding Pipeline specific params
-                # if param not in ['memory', 'verbose', 'steps']:
-                #     steps_params[param] = val
-        # self._set_params('pipeline_steps', **steps_params)
-
-    # def _rename_param(self, param):
-    #     # Map from "confounds__", "target__" and step to the proper parameter
-    #     first, *rest = param.split('__')
-    #     steps = list(self.named_steps.keys())
-
-    #     if first in steps:
-    #         new_first = f'pipeline__{first}'
-    #     elif first == 'confounds':
-    #         new_first = 'confound_pipeline'
-    #     elif first == 'target':
-    #         new_first = 'y_transformer'
-    #     else:
-    #         raise_error(
-    #             'Each element of the hyperparameters dict  has to start with '
-    #             f'"confounds__", "target__" or any of "{steps}__" '
-    #             f'but was {first}')
-    #     return '__'.join([new_first] + rest)
-
     @ staticmethod
     def _split_params(params):
         split_params = {
