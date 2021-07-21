@@ -10,7 +10,7 @@ from sklearn.linear_model import LinearRegression
 
 from . target import BaseTargetTransformer
 from .. utils.logging import raise_error, warn
-from .. utils.array import safe_select, safe_set
+from .. utils.array import safe_select
 
 
 class BaseConfoundRemover(TransformerMixin, BaseEstimator):
@@ -38,7 +38,7 @@ class ConfoundRemover(BaseConfoundRemover):
         """Transformer to remove n_confounds from the features.
         Subtracts the predicted features given confounds from features.
         Resulting residuals can be thresholded in case residuals are so small
-        that rouding error can be informative. 
+        that rounding error can be informative.
 
         Parameters
         ----------
@@ -149,7 +149,7 @@ class TargetConfoundRemover(TransformerMixin, BaseTargetTransformer):
         """Transformer to remove n_confounds from the target.
         Subtracts the predicted target given confounds from target.
         Resulting residuals can be thresholded in case residuals are so small
-        that rouding error can be informative. 
+        that rounding error can be informative.
 
         Attributes
         ----------

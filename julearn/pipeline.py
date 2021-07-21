@@ -544,6 +544,7 @@ ExtendedPipeline using:
                     (inner_name, (est if inner_name == name
                                   else inner_step))
                     for inner_name, inner_step in self.pipeline_steps]
+
     @ staticmethod
     def _split_params(params):
         split_params = {
