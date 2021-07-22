@@ -172,7 +172,7 @@ def test_preprocess_all_ExtendedPipeline():
         extended_pipe.preprocess(X, y, until='pca')
 
     assert_array_almost_equal(
-        X_trans, X_trans_preprocess[:, :2])  # type: ignore
+        X_trans, X_trans_preprocess.iloc[:, :2])  # type: ignore
     assert_array_equal(conf_trans, conf_preprocess)
     assert_array_equal(y_trans, y_trans_preprocess)
 
@@ -214,7 +214,7 @@ def test_preprocess_until_ExtendedPipeline():
     X_trans_pipe, y_trans_pipe, conf_trans_pipe = extended_pipe.preprocess(
         X, y, until='target__transformer',)
     assert_array_equal(
-        X.values[:, :2], X_trans_pipe[:, :2])  # type: ignore
+        X.iloc[:, :2], X_trans_pipe.iloc[:, :2])  # type: ignore
     assert_array_equal(y_trans, y_trans_pipe)
     assert_array_equal(conf_trans, conf_trans_pipe)
 
@@ -224,8 +224,8 @@ def test_preprocess_until_ExtendedPipeline():
         X_trans_pipe, y_trans_pipe, conf_trans_pipe = \
             extended_pipe.preprocess(X, y, until=name)
 
-        print(name, step)
-        assert_array_almost_equal(X_trans, X_trans_pipe[:, :2])  # type: ignore
+        assert_array_almost_equal(
+            X_trans, X_trans_pipe.iloc[:, :2])  # type: ignore
         assert_array_equal(y_trans, y_trans_pipe)
         assert_array_equal(conf_trans, conf_trans_pipe)
 

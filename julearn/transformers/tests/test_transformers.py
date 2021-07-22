@@ -1,5 +1,6 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL
+from numpy.testing._private.utils import assert_array_equal
 import pytest
 
 from sklearn import svm
@@ -7,6 +8,9 @@ from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import (StandardScaler, RobustScaler, MaxAbsScaler,
                                    MinMaxScaler, Normalizer,
                                    QuantileTransformer, PowerTransformer)
+from sklearn.decomposition import PCA
+from sklearn.compose import ColumnTransformer
+
 from sklearn.feature_selection import (GenericUnivariateSelect,
                                        SelectPercentile, SelectKBest,
                                        SelectFdr, SelectFpr, SelectFwe,
@@ -22,7 +26,8 @@ from julearn.transformers import (
     ConfoundRemover)
 from julearn.transformers.available_transformers import (
     _get_returned_features, _get_apply_to,
-    _available_transformers)
+    _available_transformers,
+    _propagate_simple_transformer, _propagate_transformer_column_names)
 
 reset_register()
 
@@ -187,3 +192,74 @@ def test_register_class_no_default_params():
 def test_get_target_transformer_no_error():
     get_transformer('zscore', target=True)
     get_transformer('remove_confound', target=True)
+
+
+def test_propagation_of_columns_raises_errors():
+
+    df_iris = load_dataset('iris')
+    X = df_iris.iloc[:, :-1]
+    new_columns = ['A', 'B', 'C', 'D']
+
+    st = StandardScaler().fit(X)
+    with pytest.raises(ValueError, match='Provided column_names and columns'):
+        _propagate_transformer_column_names(st, X, new_columns)
+
+    with pytest.raises(ValueError, match='You have to provide column_name'):
+        _propagate_transformer_column_names(st, X.values)
+
+    with pytest.raises(ValueError, match='X has to be either a pd.DataFrame'):
+        _propagate_transformer_column_names(st, [1, 2, 3, 4])
+
+
+def test_propagation_of_columns():
+    df_iris = load_dataset('iris')
+    X = df_iris.iloc[:, :-1]
+    y = df_iris.species
+    for t in [StandardScaler(), PCA(), SelectFdr()]:
+        t = t.fit(X, y)
+        df_propagate_columns = _propagate_transformer_column_names(
+            t, X, X.columns)
+        arr_propagate_columns = _propagate_transformer_column_names(
+            t, X.values, X.columns)
+
+        df_simp_propagate_columns = _propagate_simple_transformer(
+            t, X, X.columns)
+
+        arr_simp_propagate_columns = _propagate_simple_transformer(
+            t, X.values, X.columns)
+
+        assert_array_equal(df_propagate_columns, arr_propagate_columns)
+        assert_array_equal(arr_propagate_columns, df_simp_propagate_columns)
+        assert_array_equal(arr_propagate_columns, arr_simp_propagate_columns)
+
+
+def test_ColumnTransformer_propagation_of_columns():
+    # TODO test a selection transformer
+    df_iris = load_dataset('iris')
+    X = df_iris.iloc[:, :-1].values
+    y = df_iris.species
+    idx_slice = slice(2, 3)
+    provided_columns = ['A', 'B', 'C', 'D']
+
+    transformers = [
+        ColumnTransformer([('st', StandardScaler(), idx_slice)],
+                          remainder='passthrough'),
+        ColumnTransformer([('st', StandardScaler(), idx_slice)],
+                          remainder='drop'),
+        ColumnTransformer([('pca', PCA(), idx_slice)],
+                          remainder='passthrough'),
+        ColumnTransformer([('pca', PCA(), idx_slice)],
+                          remainder='drop'),
+    ]
+    expected_columns_sets = [
+        ['C', 'A', 'B', 'D'],
+        ['C'],
+        ['pca_0', 'A', 'B', 'D'],
+        ['pca_0'],
+    ]
+    for t, expected_columns in zip(transformers, expected_columns_sets):
+        t = t.fit(X, y)
+        returned_columns = _propagate_transformer_column_names(
+            t, X, provided_columns)
+
+        assert_array_equal(returned_columns, expected_columns)

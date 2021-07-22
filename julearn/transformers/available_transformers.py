@@ -2,6 +2,10 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 from copy import deepcopy
+import numpy as np
+import pandas as pd
+from numpy import array_equal
+from sklearn.compose import ColumnTransformer
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import (StandardScaler, RobustScaler, MaxAbsScaler,
                                    MinMaxScaler, Normalizer,
@@ -14,6 +18,7 @@ from sklearn.feature_selection import (GenericUnivariateSelect,
 from . confounds import ConfoundRemover, TargetConfoundRemover
 from . target import TargetTransformerWrapper, BaseTargetTransformer
 from .. utils import raise_error, warn
+from .. utils.array import safe_select
 
 """
 a dictionary containing all supported transformers
@@ -236,3 +241,66 @@ def reset_register():
                                  }
     _apply_to_default_exceptions = deepcopy(_apply_to_default_exceptions_reset)
     return _available_transformers
+
+
+def _propagate_transformer_column_names(transformer, X, column_names=None):
+    if isinstance(X, np.ndarray):
+        if column_names is None:
+            raise_error(
+                'You have to provide column_names when using np.arrays')
+        else:
+            column_names = np.array(column_names)
+    elif isinstance(X, pd.DataFrame):
+        column_names = np.array(
+            X.columns) if column_names is None else np.array(column_names)
+        if not array_equal(np.array(X.columns), column_names):
+            raise_error(
+                'Provided column_names and columns of the DataFrame '
+                f'are not equal: DataFrame.columns={X.columns} '
+                f'and column_names = {column_names}'
+            )
+    else:
+        raise_error('X has to be either a pd.DataFrame or np.ndarray, '
+                    'but X is of type {type(X)}'
+                    )
+
+    if isinstance(transformer, ColumnTransformer):
+        # if there are more then 1 transformers we do not know how to
+        # get proper column names, so we treat it as own unknown transformer
+        if len(transformer.transformers) != 1:
+            return _propagate_simple_transformer(transformer, X, column_names)
+
+        _, inner_transformer, ind = transformer.transformers_[0]
+
+        if isinstance(inner_transformer, ColumnTransformer):
+            X_t = transformer.transform(X)
+            trans_column_names = _propagate_transformer_column_names(
+                inner_transformer, X_t, column_names[ind])
+        else:
+            trans_column_names = _propagate_simple_transformer(
+                inner_transformer, safe_select(X, ind), column_names[ind])
+
+        if transformer.remainder == 'passthrough':
+            mask = np.zeros(column_names.shape, dtype=bool)
+            mask[ind] = True
+            trans_column_names = np.hstack(
+                (trans_column_names, column_names[~mask]))
+
+        return trans_column_names
+
+    else:
+        return _propagate_simple_transformer(transformer, X, column_names)
+
+
+def _propagate_simple_transformer(transformer, X, column_names):
+    return_type = _get_returned_features(transformer)
+    if return_type == 'same':
+        return column_names
+    elif return_type == 'subset' or hasattr(transformer, 'subset'):
+        mask = transformer.get_support()
+        return column_names[mask]
+    else:
+        X_t = transformer.transform(X)
+        transformer_name = _dict_transformer_to_name.copy().get(
+            transformer.__class__)
+        return [f'{transformer_name}_{i}' for i in range(len(X_t[0]))]

@@ -1,7 +1,10 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: BSD
+from julearn.transformers.available_transformers import (
+    _propagate_transformer_column_names)
 import numpy as np
+import pandas as pd
 
 from sklearn.base import clone
 from sklearn.utils import Bunch
@@ -306,7 +309,7 @@ class ExtendedPipeline(_BaseComposition):
         self._update_pipeline_steps_from_wrapped()
         return pred
 
-    def preprocess(self, X, y, until=None):
+    def preprocess(self, X, y, until=None, column_names=None):
         """
 
         Parameters
@@ -331,8 +334,13 @@ class ExtendedPipeline(_BaseComposition):
             self[until]
         except KeyError:
             raise_error(f'{until} is not a valid step')
+        if column_names is None and isinstance(X, pd.DataFrame):
+            column_names = np.array(X.columns)
 
         confounds = safe_select(X, slice(-self.n_confounds_, None))
+        c_column_names = (column_names if column_names is None
+                          else column_names[slice(-self.n_confounds_, None)]
+                          )
         X_trans = X
         y_trans = y.copy()
 
@@ -340,7 +348,11 @@ class ExtendedPipeline(_BaseComposition):
             if self._confound_pipeline is not None:
                 step_name = until.replace('confounds__', '')
                 for name, step in self._confound_pipeline.steps:
-                    confounds = step.transform(confounds)
+                    if c_column_names is not None:
+                        c_column_names = _propagate_transformer_column_names(
+                            step, confounds, c_column_names)
+                        confounds = step.transform(confounds)
+
                     if name == step_name:
                         break
         elif until.startswith('target__'):
@@ -356,10 +368,19 @@ class ExtendedPipeline(_BaseComposition):
             # get wrapper itself
             wrapped_until = wrapped_until.split('__')[0]
             for name, t_step in self._pipeline.steps:
-                print('name', name, wrapped_until)
+
+                if column_names is not None:
+                    column_names = _propagate_transformer_column_names(
+                        t_step, X_trans, column_names)
+
                 X_trans = t_step.transform(X_trans)
+
                 if name == wrapped_until:
                     break
+        if column_names is not None:
+            X_trans = pd.DataFrame(X_trans, columns=column_names)
+        if c_column_names is not None:
+            confounds = pd.DataFrame(confounds, columns=c_column_names)
         return X_trans, y_trans, confounds
 
     def set_params(self, **params):
