@@ -102,7 +102,7 @@ class ExtendedPipeline(_BaseComposition):
         # Preprocess confounds (if specified)
         X = self._fit_transform_confounds(X, y, **all_params['confounds'])
 
-        # fit tranform y (if specified)
+        # fit transform y (if specified)
         y_true = y
         if self.y_transformer is not None and y is not None:
             if isinstance(self.y_transformer, TargetConfoundRemover):

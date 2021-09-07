@@ -191,8 +191,8 @@ def register_transformer(transformer_name, transformer_cls,
               .get_support method following sklearn standards.
             * 'from_transformer': The resulting columns are already defined in
               the transformer
-            * 'unknown': The resulting columns are unknonwn.
-            * 'unknown_same_type' The resulting columns are unkown, but
+            * 'unknown': The resulting columns are unknown.
+            * 'unknown_same_type' The resulting columns are unknown, but
               with the same type.
 
     apply_to : str | list(str)

@@ -57,7 +57,7 @@ class TargetTransformerWrapper(TransformerMixin, BaseTargetTransformer):
         Returns
         -------
         y : array of same shape as y
-            The tranformed data
+            The transformed data
         """
         self._validate_XY_input(X, y)
         if type(y) == pd.Series:
@@ -83,7 +83,7 @@ class TargetTransformerWrapper(TransformerMixin, BaseTargetTransformer):
         Returns
         -------
         y : array of same shape as y
-            The tranformed data
+            The transformed data
         """
         self.fit(X, y)
         return self.transform(X, y)
