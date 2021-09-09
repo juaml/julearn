@@ -137,7 +137,7 @@ sns.scatterplot(x='parietal', y='frontal', hue='event', data=df_fmri,
                 ax=axes[0], s=5)
 axes[0].set_title('Raw data')
 
-pre_X, pre_y = model.preprocess(df_fmri[X], df_fmri[y])
+pre_X, pre_y, pre_confound = model.preprocess(df_fmri[X], df_fmri[y])
 pre_df = pre_X.join(pre_y)
 sns.scatterplot(x='parietal', y='frontal', hue='event', data=pre_df,
                 ax=axes[1], s=5)

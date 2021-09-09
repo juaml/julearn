@@ -351,5 +351,6 @@ def prepare_data(X, y, data=None, confounds=None, pos_labels=None):
     """
 
     X, y, *_ = prepare_input_data(X=X, y=y, confounds=confounds,
-                                  df=data, pos_labels=pos_labels)
+                                  df=data, pos_labels=pos_labels,
+                                  groups=None)
     return X, y

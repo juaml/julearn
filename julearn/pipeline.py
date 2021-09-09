@@ -249,8 +249,8 @@ class ExtendedPipeline(_BaseComposition):
         Parameters
         ----------
         X : iterable
-            Training data. Must fulfill input requirements of first step of the
-            pipeline.
+            Training data. Must fulfill input requirements of first
+            step of the pipeline.
         y : iterable, default=None
             Training targets. Must fulfill label requirements for all steps of
             the pipeline.
