@@ -317,3 +317,39 @@ def create_pipeline(
         pipeline = prepare_model_params(model_params, pipeline)
 
     return pipeline
+
+
+def prepare_data(X, y, data=None, confounds=None, pos_labels=None):
+    """prepares X, y for the usage of julearn.pipeline.ExtendedPipelines
+    preprocess, predict, score method.
+
+    Parameters
+    ----------
+    X : str, list(str) or numpy.array
+        The features to use.
+        See https://juaml.github.io/julearn/input.html for details.
+    y : str or numpy.array
+        The targets to predict.
+        See https://juaml.github.io/julearn/input.html for details.
+    model : str or scikit-learn compatible model.
+        If string, it will use one of the available models.
+        See :mod:`.available_models`.
+    data : pandas.DataFrame | None
+        DataFrame with the data (optional).
+        See https://juaml.github.io/julearn/input.html for details.
+    confounds : str, list(str) or numpy.array | None
+        The confounds.
+        See https://juaml.github.io/julearn/input.html for details.
+    pos_labels : str, int, float or list | None
+        The labels to interpret as positive. If not None, every element from y
+        will be converted to 1 if is equal or in pos_labels and to 0 if not.
+
+    Returns
+    -------
+    pd.DataFrame, pd.Series
+        X, y
+    """
+
+    X, y, *_ = prepare_input_data(X=X, y=y, confounds=confounds,
+                                  df=data, pos_labels=pos_labels)
+    return X, y
