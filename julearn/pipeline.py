@@ -583,14 +583,14 @@ ExtendedPipeline using:
                 split_params['pipeline'][t_key] = t_value
         return split_params
 
-    @ staticmethod
-    def _transform_pipeline_until(pipeline, step_name, X, confounds):
-        X_transformed = X.copy()
-        for name, step in pipeline.steps:
-            X_transformed = step.transform(X_transformed, confounds)
-            if name == step_name:
-                break
-        return X_transformed
+    # @ staticmethod
+    # def _transform_pipeline_until(pipeline, step_name, X, confounds):
+    #     X_transformed = X.copy()
+    #     for name, step in pipeline.steps:
+    #         X_transformed = step.transform(X_transformed, confounds)
+    #         if name == step_name:
+    #             break
+    #     return X_transformed
 
     def _get_wrapped_param_name(self, param):
 
