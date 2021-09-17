@@ -12,6 +12,7 @@ from sklearn.base import clone
 from sklearn.linear_model import LinearRegression
 from sklearn.pipeline import Pipeline
 from sklearn.svm import SVR
+from sklearn.mixture import GaussianMixture
 from sklearn.preprocessing import StandardScaler, RobustScaler
 from sklearn.compose import ColumnTransformer
 
@@ -85,7 +86,22 @@ def test_create_pipeline_steps_added_correctly():
             assert my_trans.get_params().get(est_param) == est_val
 
 
-def test_fit_and_score():
+def test_fit_and_score_no_error():
+    steps = [('zscore', StandardScaler()),
+             ('pca', PCA()),
+             ('lr', LinearRegression())]
+
+    y_transformer = StandardScaler()
+    extended_pipe = make_pipeline(
+        steps, y_transformer=y_transformer)
+
+    extended_pipe.fit(X.iloc[:, :-1], X.C)
+    extended_pipe.predict(X.iloc[:, :-1])
+    score = extended_pipe.score(X.iloc[:, :-1], X.C)
+    assert score is not np.nan
+
+
+def test_fit_and_score_confound_no_error():
     """Test fitting and scoring"""
     steps = [('zscore', StandardScaler()),
              ('pca', PCA()),
@@ -101,6 +117,72 @@ def test_fit_and_score():
     extended_pipe.predict(X.iloc[:, :-1])
     score = extended_pipe.score(X.iloc[:, :-1], X.C)
     assert score is not np.nan
+
+
+def test_fit_then_transform():
+    steps = [('zscore', StandardScaler()),
+             ('pca', PCA()), ('lr', 'passthrough')
+             ]
+
+    y_transformer = StandardScaler()
+    extended_pipe = make_pipeline(steps, y_transformer=y_transformer)
+    np.random.seed(42)
+    extended_trans = (extended_pipe
+                      .fit(X.iloc[:, :-1], X.C)
+                      .transform(X.iloc[:, :-1])
+                      )
+
+    np.random.seed(42)
+    sk_pipe = Pipeline(steps)
+    sk_trans = (sk_pipe
+                .fit(X.iloc[:, :-1], X.C)
+                .transform(X.iloc[:, :-1])
+                )
+
+    assert_array_equal(extended_trans, sk_trans)
+
+
+def test_fit_transform():
+    steps = [('zscore', StandardScaler()),
+             ('pca', PCA()), ('lr', 'passthrough')
+             ]
+
+    y_transformer = StandardScaler()
+    extended_pipe = make_pipeline(steps, y_transformer=y_transformer)
+    np.random.seed(42)
+    extended_trans = (extended_pipe
+                      .fit_transform(X.iloc[:, :-1], X.C)
+                      )
+
+    np.random.seed(42)
+    sk_pipe = Pipeline(steps)
+    sk_trans = (sk_pipe
+                .fit_transform(X.iloc[:, :-1], X.C)
+                )
+
+    assert_array_equal(extended_trans, sk_trans)
+
+
+def test_fit_predict():
+    steps = [('remove_confound', ConfoundRemover()),
+             ('z-score', StandardScaler()),
+             ('gmixed', GaussianMixture())
+             ]
+    extended_pipe = make_pipeline(steps)
+    sk_pipe = Pipeline(steps[1:])
+    np.random.seed(42)
+    extended_pred = (extended_pipe
+                     .fit_predict(X.iloc[:, :-1], X.C, n_confounds=1)
+                     )
+    np.random.seed(42)
+    X_conf_rem = (ConfoundRemover()
+                  .fit_transform(X.iloc[:, :-1], X.C, n_confounds=1)
+                  )
+    sk_pred = (sk_pipe
+               .fit_predict(X_conf_rem, X.C)
+               )
+
+    assert_array_equal(extended_pred, sk_pred)
 
 
 def test_access_steps_ExtendedPipeline():
