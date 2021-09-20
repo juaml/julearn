@@ -2,6 +2,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 from . import logging
+from . import validation
 
 from . logging import logger, configure_logging, raise_error, warn
 
