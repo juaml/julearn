@@ -1,8 +1,8 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
+from itertools import tee
 import numpy as np
-
 from numpy.testing import assert_array_equal
 from sklearn import svm
 from sklearn.base import clone
@@ -24,6 +24,7 @@ import pytest
 from julearn import run_cross_validation, create_pipeline
 from julearn.transformers.target import TargetTransformerWrapper
 from julearn.utils.testing import do_scoring_test, compare_models
+from julearn.api import prepare_data
 
 
 def test_simple_binary():
@@ -592,3 +593,60 @@ def test_scorers():
 
     assert_array_equal(result_scoring_name['test_score'],
                        result_scoring_name_list['test_accuracy'])
+
+
+def test_prepare_data():
+    df_iris = load_dataset('iris')
+    X = df_iris.iloc[:, :-1].columns.tolist()
+    y = 'species'
+    confounds = ['species']
+    Xc_prep, yc_prep = prepare_data(
+        X, y, data=df_iris, confounds=confounds)
+
+    X_prep, y_prep = prepare_data(
+        X, y, data=df_iris)
+
+    assert_array_equal(df_iris[X + confounds], Xc_prep)
+    assert_array_equal(df_iris[y], yc_prep)
+
+    assert_array_equal(df_iris[X], X_prep)
+    assert_array_equal(yc_prep, y_prep)
+
+
+def test_manual_workflow():
+
+    df_iris = load_dataset('iris')
+
+    df_iris = df_iris[df_iris['species'].isin(['versicolor', 'virginica'])]
+    df_iris['species'] = df_iris.species.apply(
+        lambda x: 0 if x == 'versicolor' else 1)
+    X_names = ['sepal_length', 'sepal_width', 'petal_length']
+    y_name = 'species'
+
+    X, y = prepare_data(X_names, y_name, data=df_iris)
+
+    cv = StratifiedKFold(2).split(X, y)
+    run_cv, manual_cv = tee(cv)
+    np.random.seed(42)
+    run_scores = run_cross_validation(X_names, y_name, 'svm', df_iris,
+                                      preprocess_X=['zscore', 'pca'],
+                                      preprocess_y='zscore',
+                                      preprocess_confounds='zscore',
+                                      cv=run_cv
+                                      )
+
+    np.random.seed(42)
+
+    pipe = create_pipeline(
+        model='svm',
+        preprocess_X=['zscore', 'pca'],
+        preprocess_y='zscore',
+        preprocess_confounds='zscore'
+    )
+
+    manual_scores = [(clone(pipe)
+                      .fit(X.iloc[idx_train, :], y.iloc[idx_train])
+                      .score(X.iloc[idx_test, :], y.iloc[idx_test])
+                      )
+                     for idx_train, idx_test in manual_cv]
+    assert_array_equal(manual_scores, run_scores['test_score'])
