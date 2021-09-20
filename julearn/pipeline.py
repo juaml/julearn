@@ -11,13 +11,14 @@ from sklearn.utils import Bunch
 from sklearn.utils.metaestimators import _BaseComposition
 from sklearn.pipeline import Pipeline, _name_estimators
 from sklearn.compose import ColumnTransformer
+from sklearn.utils.metaestimators import if_delegate_has_method
 
 from . transformers.confounds import BaseConfoundRemover, TargetConfoundRemover
 from . transformers.target import (BaseTargetTransformer,
                                    TargetTransformerWrapper)
 from . utils import raise_error
 from . utils.array import safe_select
-
+from . utils.validation import is_transformable, check_n_confounds
 
 def make_pipeline(steps, confound_steps=None, y_transformer=None):
     if y_transformer is not None:
@@ -87,14 +88,10 @@ class ExtendedPipeline(_BaseComposition):
                                    else Pipeline(self.confound_pipeline_steps))
 
         n_confounds = fit_params.pop('n_confounds', 0)
+        check_n_confounds(n_confounds)
         self.n_confounds_ = n_confounds
 
         all_params = self._split_params(fit_params)
-        # TODO check whether this is needed
-        self._pipeline = clone(self._pipeline)
-        if self._confound_pipeline is not None:
-            self._confound_pipeline = clone(self._confound_pipeline)
-
         if self.y_transformer is not None:
             clone(self.y_transformer)
 
@@ -115,10 +112,13 @@ class ExtendedPipeline(_BaseComposition):
 
     def _update_w_pipeline(self, X, fit_params):
         n_features = X.shape[1]
-        # Iterate over the pipeline and set the right columns according to
-        # the flow of the confounds and features
         n_confounds = self.n_confounds_
-        slice_end = n_features - n_confounds if n_confounds > 0 else n_features
+        check_n_confounds(n_confounds)
+        slice_end = n_features - n_confounds
+
+        # Iterate over the pipeline and
+        # set the columns used by each step, according to
+        # the flow of the confounds and features
         for name, object in self._pipeline.steps:
             if isinstance(object, BaseConfoundRemover):
                 # If its a confound remover, will set the number of confounds
@@ -128,9 +128,6 @@ class ExtendedPipeline(_BaseComposition):
                 if object.will_drop_confounds():
                     # If confounds are drop, there will be no more confounds
                     slice_end = n_features
-                    # Not really needed, but if more than one confound remover
-                    # is to be applied, will fail if the any but the last one
-                    # drops the confounds.
                     n_confounds = 0
             elif isinstance(object, ColumnTransformer):
                 object.transformers = [
@@ -143,7 +140,6 @@ class ExtendedPipeline(_BaseComposition):
         """Fit the model
         Fit all the transforms one after the other and transform the
         data, then fit the transformed data using the final estimator.
-
         First the confounds will be fitted and transformed. Then the target
         will be transformed. Finally, the internal pipeline will be
         transformed.
@@ -173,7 +169,6 @@ class ExtendedPipeline(_BaseComposition):
 
         self._pipeline.fit(X, y_true, **fit_params)
         self._update_pipeline_steps_from_wrapped()
-
         # Copy some of the pipeline attributes
         if hasattr(self._pipeline, 'classes_'):
             self.classes_ = self._pipeline.classes_  # type: ignore
@@ -286,13 +281,20 @@ class ExtendedPipeline(_BaseComposition):
 
         return Xt
 
+    @if_delegate_has_method(delegate='_final_estimator')
     def predict(self, X, **predict_params):
         X = self.transform_confounds(X)
         return self._pipeline.predict(X, **predict_params)
 
-    def predict_proba(self, X, **predict_params):
+    @if_delegate_has_method(delegate='_final_estimator')
+    def predict_proba(self, X):
         X = self.transform_confounds(X)
-        return self._pipeline.predict_proba(X, **predict_params)
+        return self._pipeline.predict_proba(X)
+
+    @if_delegate_has_method(delegate='_final_estimator')
+    def decision_function(self, X):
+        X = self.transform_confounds(X)
+        return self._pipeline.decision_function(X)
 
     def score(self, X, y=None, sample_weight=None):
         X = self.transform_confounds(X)
@@ -511,7 +513,6 @@ class ExtendedPipeline(_BaseComposition):
 
     @ property
     def named_steps(self):
-
         if self.confound_pipeline_steps is None:
             conf_dict = {}
         else:
@@ -525,6 +526,11 @@ class ExtendedPipeline(_BaseComposition):
 
         return Bunch(**dict(self.pipeline_steps),
                      **conf_dict, **y_dict)
+
+    @property
+    def _final_estimator(self):
+        estimator = self.steps[-1][1]
+        return 'passthrough' if estimator is None else estimator
 
     def __getitem__(self, ind):
         if not isinstance(ind, str):
@@ -583,15 +589,6 @@ ExtendedPipeline using:
                 split_params['pipeline'][t_key] = t_value
         return split_params
 
-    # @ staticmethod
-    # def _transform_pipeline_until(pipeline, step_name, X, confounds):
-    #     X_transformed = X.copy()
-    #     for name, step in pipeline.steps:
-    #         X_transformed = step.transform(X_transformed, confounds)
-    #         if name == step_name:
-    #             break
-    #     return X_transformed
-
     def _get_wrapped_param_name(self, param):
 
         # find out whether this param was wrapped
@@ -606,7 +603,3 @@ ExtendedPipeline using:
 
         return wrapped_param
 
-
-def is_transformable(t):
-    can_transform = hasattr(t, "fit_transform") or hasattr(t, "transform")
-    return can_transform
