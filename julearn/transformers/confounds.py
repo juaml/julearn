@@ -5,8 +5,11 @@ from abc import abstractmethod
 
 import numpy as np
 import pandas as pd
+from joblib import Parallel, delayed
 from sklearn.base import BaseEstimator, TransformerMixin, clone
 from sklearn.linear_model import LinearRegression
+from sklearn.utils.fixes import _joblib_parallel_args
+from sklearn.utils.validation import check_X_y, check_array, check_is_fitted
 
 from . target import BaseTargetTransformer
 from .. utils.logging import raise_error, warn
@@ -34,7 +37,7 @@ class BaseConfoundRemover(TransformerMixin, BaseEstimator):
 
 class ConfoundRemover(BaseConfoundRemover):
     def __init__(self, model_confound=None, threshold=None,
-                 drop_confounds=True):
+                 drop_confounds=True, n_jobs=None, verbose=0):
         """Transformer to remove n_confounds from the features.
         Subtracts the predicted features given confounds from features.
         Resulting residuals can be thresholded in case residuals are so small
@@ -52,12 +55,19 @@ class ConfoundRemover(BaseConfoundRemover):
             All residual values after confound removal which fall under the
             threshold will be set to 0. None (default) means that no threshold
             will be applied.
+        n_jobs : int
+            Number of jobs in parallel.
+            See.: https://scikit-learn.org/stable/computing/parallelism.html
+        verbose: int
+            How verbose the output of Parallel Processes should be.
         """
         if model_confound is None:
             model_confound = LinearRegression()
         self.model_confound = model_confound
         self.threshold = threshold
         self.drop_confounds = drop_confounds
+        self.n_jobs = n_jobs
+        self.verbose = verbose
 
     def fit(self, X, y=None, n_confounds=0, apply_to=None):
         """Fit confound remover
@@ -78,6 +88,7 @@ class ConfoundRemover(BaseConfoundRemover):
             removed. The keep as they are.
 
         """
+        check_array(X)
         self.n_confounds_ = n_confounds
         self.apply_to_ = apply_to
         if self.n_confounds_ <= 0:
@@ -96,11 +107,12 @@ class ConfoundRemover(BaseConfoundRemover):
         if self.apply_to_ is not None:
             t_X = safe_select(t_X, self.apply_to_)
 
-        self.models_confound_ = []
-        for i_X in range(t_X.shape[1]):
-            t_X = safe_select(X, i_X)
-            self.models_confound_.append(fit_confound_models(t_X))
-
+        self.models_confound_ = Parallel(
+            n_jobs=self.n_jobs, verbose=self.verbose,
+            **_joblib_parallel_args())(
+            delayed(fit_confound_models)(safe_select(X, i_X))
+            for i_X in range(t_X.shape[1])
+        )
         return self
 
     def transform(self, X):
@@ -117,6 +129,8 @@ class ConfoundRemover(BaseConfoundRemover):
         out : np.ndarray
             Deconfounded X.
         """
+        check_is_fitted(self)
+        check_array(X)
         if isinstance(X, pd.DataFrame):
             X = X.values
         if self.n_confounds_ <= 0:
@@ -184,6 +198,7 @@ class TargetConfoundRemover(TransformerMixin, BaseTargetTransformer):
             Number of confounds inside of X.
             The last n_confounds columns in X will be used as confounds.
         """
+        check_X_y(X, y)
         if n_confounds <= 0:
             raise_error('Confound must be set for confound removal to happen')
         self.n_confounds_ = n_confounds
@@ -207,6 +222,7 @@ class TargetConfoundRemover(TransformerMixin, BaseTargetTransformer):
         out : np.ndarray
             Deconfounded target.
         """
+        check_X_y(X, y)
         confounds = safe_select(X, slice(-self.n_confounds_, None))
         yConf = np.c_[y, confounds]
         n_y = self._confound_remover.transform(

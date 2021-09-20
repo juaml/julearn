@@ -8,8 +8,10 @@ from numpy.testing import assert_array_equal, assert_array_almost_equal
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.base import clone
+from sklearn.utils.estimator_checks import check_estimator
 
-from julearn.transformers.confounds import (ConfoundRemover,
+from julearn.transformers.confounds import (BaseConfoundRemover,
+                                            ConfoundRemover,
                                             TargetConfoundRemover)
 
 # TODO: change this values, the confounds are perect regressions
@@ -20,6 +22,14 @@ X = pd.DataFrame({
 })
 
 y = np.array([20, 25, 22, 23.6, 24.9, 26, 27.5, 28, 28.8, 29.4])
+
+
+def test_BaseConfoundRemover():
+    bc = BaseConfoundRemover()
+    bc.fit([1])
+    bc.transform([1])
+    bc.fit_transform([1])
+    bc.will_drop_confounds()
 
 
 def test_confound_removal_methods():
