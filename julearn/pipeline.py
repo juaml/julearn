@@ -20,6 +20,7 @@ from . utils import raise_error
 from . utils.array import safe_select
 from . utils.validation import is_transformable, check_n_confounds
 
+
 def make_pipeline(steps, confound_steps=None, y_transformer=None):
     if y_transformer is not None:
         if not isinstance(y_transformer, BaseTargetTransformer):
@@ -602,4 +603,3 @@ ExtendedPipeline using:
             wrapped_param = param
 
         return wrapped_param
-

@@ -8,7 +8,6 @@ from numpy.testing import assert_array_equal, assert_array_almost_equal
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.base import clone
-from sklearn.utils.estimator_checks import check_estimator
 
 from julearn.transformers.confounds import (BaseConfoundRemover,
                                             ConfoundRemover,
