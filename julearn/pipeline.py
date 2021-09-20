@@ -164,8 +164,6 @@ class ExtendedPipeline(_BaseComposition):
         self : Pipeline
             This estimator
         """
-        if fit_params is None:
-            fit_params = {}
         X, y_true, fit_params = self._preprocess(X, y, **fit_params)
 
         self._pipeline.fit(X, y_true, **fit_params)
@@ -263,8 +261,6 @@ class ExtendedPipeline(_BaseComposition):
         Xt : array-like of shape  (n_samples, n_transformed_features)
             Transformed samples
         """
-        if fit_params is None:
-            fit_params = {}
         Xt = self._fit(X, y, **fit_params)
         last_step = self._pipeline._final_estimator
         if last_step == "passthrough":
@@ -303,9 +299,9 @@ class ExtendedPipeline(_BaseComposition):
         return self._pipeline.score(X, y_true, sample_weight=None)
 
     def fit_predict(self, X, y=None, **fit_params):
-        if fit_params is not None:
-            fit_params = {}
         Xt = self._fit(X, y, **fit_params)
+        # self._fit dealt with n_confound so we remove it
+        _ = fit_params.pop('n_confounds')
         fit_params_steps = self._pipeline._check_fit_params(**fit_params)
         fit_params_last_step = fit_params_steps[self._pipeline.steps[-1][0]]
         pred = self._pipeline.steps[-1][1].fit_predict(
