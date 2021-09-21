@@ -238,18 +238,21 @@ def test_multiple_confound_removal():
     X_trans_one = (my_pipe_one_drop
                    .fit_transform(X, y, n_confounds=1)
                    )
-
-    X_trans_no = (my_pipe_no_drop
-                  .fit_transform(X, y, n_confounds=1)
-                  )
+    X_trans_no_1 = (clone(my_pipe_no_drop)
+                    .fit(X, y, n_confounds=1).transform(X)
+                    )
+    X_trans_no_2 = (my_pipe_no_drop
+                    .fit_transform(X, y, n_confounds=1)
+                    )
 
     with pytest.warns(RuntimeWarning,
                       match='Number of confounds is 0'
                       ):
         my_pipe_drop.fit(X, y, n_confounds=1)
-    print(X_trans_no)
+
     assert_array_equal(X_trans_one.shape, X.iloc[:, :-1].shape)
-    assert_array_equal(X_trans_no.shape, X.iloc[:, :-1].shape)
+    assert_array_equal(X_trans_no_1.shape, X.iloc[:, :-1].shape)
+    assert_array_equal(X_trans_no_1.shape, X_trans_no_2.shape)
 
 
 def test_target_removal_pipe():
@@ -490,3 +493,26 @@ def test_set_params_errors():
     with pytest.raises(AttributeError,
                        match='Your y_transformer seems to be None '):
         pipe.set_params(target__not_valid=2)
+
+
+def test_nested_hyperparameters():
+    steps = [
+        ('trans', ColumnTransformer(
+            transformers=[('zscore', StandardScaler(), slice(None, -1))],
+            remainder='passthrough')),
+        ('lr', LogisticRegression())
+    ]
+    confound_steps = [
+        ('trans', ColumnTransformer(
+            transformers=[('zscore', StandardScaler(), slice(None, -1))],
+            remainder='passthrough'))
+    ]
+    pipe = make_pipeline(
+        steps=steps,
+        confound_steps=confound_steps
+
+    )
+    pipe.set_params(trans__zscore__with_mean=False)
+    pipe.set_params(confounds__trans__zscore__with_mean=False)
+
+    pipe.fit(X_with_types, y_bin, n_confounds=2)
