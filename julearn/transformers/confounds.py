@@ -149,7 +149,7 @@ class ConfoundRemover(BaseConfoundRemover):
                 X_res[np.abs(X_res) < self.threshold] = 0
             X[:, t_idx] = X_res
 
-        if self.drop_confounds is not True:
+        if not self.drop_confounds:
             X = np.c_[X, confounds]
         return X
 

@@ -87,7 +87,6 @@ class ExtendedPipeline(_BaseComposition):
         self._pipeline = Pipeline(wrapped_steps)
         self._confound_pipeline = (None if self.confound_pipeline_steps is None
                                    else Pipeline(self.confound_pipeline_steps))
-
         n_confounds = fit_params.pop('n_confounds', 0)
         check_n_confounds(n_confounds)
         self.n_confounds_ = n_confounds
@@ -105,7 +104,9 @@ class ExtendedPipeline(_BaseComposition):
         if self.y_transformer is not None and y is not None:
             if isinstance(self.y_transformer, TargetConfoundRemover):
                 all_params['target']['n_confounds'] = n_confounds
-            y_true = self._fit_transform_target(X, y, **all_params['target'])
+
+            y_true = self.y_transformer.fit_transform(
+                X, y, **all_params['target'])
 
         fit_params = self._update_w_pipeline(X, fit_params)
 
@@ -165,7 +166,6 @@ class ExtendedPipeline(_BaseComposition):
             This estimator
         """
         X, y_true, fit_params = self._preprocess(X, y, **fit_params)
-
         self._pipeline.fit(X, y_true, **fit_params)
         self._update_pipeline_steps_from_wrapped()
         # Copy some of the pipeline attributes
@@ -179,7 +179,6 @@ class ExtendedPipeline(_BaseComposition):
         fit_params_steps = self._pipeline._check_fit_params(**fit_params)
         Xt = self._pipeline._fit(X, y_true, **fit_params_steps)
         self._update_pipeline_steps_from_wrapped()
-
         return Xt
 
     def transform(self, X):
@@ -199,13 +198,9 @@ class ExtendedPipeline(_BaseComposition):
         Xt : array-like of shape  (n_samples, n_transformed_features)
         """
         X_trans = self.transform_confounds(X)
-        return self._pipeline.transform(X_trans)
-
-    def _fit_transform_target(self, X, y, **target_params):
-        y_true = y
-        if self.y_transformer is not None:
-            y_true = self.y_transformer.fit_transform(X, y, **target_params)
-        return y_true
+        X_trans = self._pipeline.transform(X_trans)
+        X_trans = self._last_trans_drops_confounds(X_trans)
+        return X_trans
 
     def transform_target(self, X, y):
         y_true = y
@@ -269,26 +264,34 @@ class ExtendedPipeline(_BaseComposition):
             fit_params.pop('n_confounds')
         fit_params_steps = self._pipeline._check_fit_params(**fit_params)
         fit_params_last_step = fit_params_steps[self._pipeline.steps[-1][0]]
+
+        if isinstance(last_step, BaseConfoundRemover):
+            fit_params_last_step['n_confounds'] = self.n_confounds_
+
         if hasattr(last_step, "fit_transform"):
             Xt = last_step.fit_transform(Xt, y, **fit_params_last_step)
         else:
             Xt = last_step.fit(Xt, y, **fit_params_last_step).transform(Xt)
 
+        if (isinstance(last_step, BaseConfoundRemover) and
+                (not last_step.will_drop_confounds())):
+            Xt = safe_select(Xt, slice(None, -self.n_confounds_))
+
         self._update_pipeline_steps_from_wrapped()
 
         return Xt
 
-    @if_delegate_has_method(delegate='_final_estimator')
+    @ if_delegate_has_method(delegate='_final_estimator')
     def predict(self, X, **predict_params):
         X = self.transform_confounds(X)
         return self._pipeline.predict(X, **predict_params)
 
-    @if_delegate_has_method(delegate='_final_estimator')
+    @ if_delegate_has_method(delegate='_final_estimator')
     def predict_proba(self, X):
         X = self.transform_confounds(X)
         return self._pipeline.predict_proba(X)
 
-    @if_delegate_has_method(delegate='_final_estimator')
+    @ if_delegate_has_method(delegate='_final_estimator')
     def decision_function(self, X):
         X = self.transform_confounds(X)
         return self._pipeline.decision_function(X)
@@ -300,6 +303,8 @@ class ExtendedPipeline(_BaseComposition):
 
     def fit_predict(self, X, y=None, **fit_params):
         Xt = self._fit(X, y, **fit_params)
+
+        Xt = self._last_trans_drops_confounds(Xt)
         # self._fit dealt with n_confound so we remove it
         _ = fit_params.pop('n_confounds')
         fit_params_steps = self._pipeline._check_fit_params(**fit_params)
@@ -348,10 +353,9 @@ class ExtendedPipeline(_BaseComposition):
             if self._confound_pipeline is not None:
                 step_name = until.replace('confounds__', '')
                 for name, step in self._confound_pipeline.steps:
-                    if c_column_names is not None:
-                        c_column_names = _propagate_transformer_column_names(
-                            step, confounds, c_column_names)
-                        confounds = step.transform(confounds)
+                    c_column_names = _propagate_transformer_column_names(
+                        step, confounds, c_column_names)
+                    confounds = step.transform(confounds)
 
                     if name == step_name:
                         break
@@ -389,7 +393,8 @@ class ExtendedPipeline(_BaseComposition):
             if param.startswith('confounds__'):
                 param_name = param.replace('confounds__', '')
                 # set inside of the created pipeline
-                if self._confound_pipeline is None:
+                if ((hasattr(self, '_confound_pipeline')) and
+                        (self._confound_pipeline is None)):
                     raise_error(
                         ('Your confounding pipeline seems to be None '
                          'So you cannot set any parameter for it.'),
@@ -403,14 +408,20 @@ class ExtendedPipeline(_BaseComposition):
                             self._confound_pipeline.set_params(
                                 **{param_name: val})
                     except ValueError:
-                        possible_params = [
-                            'confounds__' + name for name, _ in
-                            self.confound_pipeline_steps]  # type: ignore
-                        raise_error(
-                            f'You cannot set {param} as it is not part of the '
-                            'confounding pipeline. Possible params are: '
-                            f'{possible_params}'
-                        )
+                        if self.confound_pipeline_steps is None:
+                            raise_error(
+                                'You cannot set parameters for the confound '
+                                'Pipeline as there is None.'
+                            )
+                        else:
+                            possible_params = [
+                                'confounds__' + name for name, _ in
+                                self.confound_pipeline_steps]  # type: ignore
+                            raise_error(
+                                f'You cannot set {param} as it is not part of'
+                                ' the confounding pipeline. Possible params '
+                                f'are: {possible_params}'
+                            )
 
             elif param.startswith('target__'):
                 param_name = param.replace('target__', '')
@@ -524,7 +535,7 @@ class ExtendedPipeline(_BaseComposition):
         return Bunch(**dict(self.pipeline_steps),
                      **conf_dict, **y_dict)
 
-    @property
+    @ property
     def _final_estimator(self):
         estimator = self.steps[-1][1]
         return 'passthrough' if estimator is None else estimator
@@ -599,3 +610,13 @@ ExtendedPipeline using:
             wrapped_param = param
 
         return wrapped_param
+
+    def _last_trans_drops_confounds(self, X):
+        if ((isinstance(self._final_estimator, BaseConfoundRemover)) or
+                ((hasattr(self._final_estimator, 'predict')) and
+                 (isinstance(
+                     self._pipeline.steps[-2][1], BaseConfoundRemover))
+                 )):
+            if self.n_confounds_ > 0:
+                return safe_select(X, slice(None, -self.n_confounds_))
+        return X

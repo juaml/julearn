@@ -1,6 +1,7 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
+from julearn.transformers.confounds import TargetConfoundRemover
 import numpy as np
 from numpy.testing import assert_array_equal, assert_array_almost_equal
 
@@ -9,7 +10,7 @@ import pytest
 
 from sklearn.decomposition import PCA
 from sklearn.base import clone
-from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LinearRegression, LogisticRegression
 from sklearn.pipeline import Pipeline
 from sklearn.svm import SVR
 from sklearn.mixture import GaussianMixture
@@ -26,6 +27,7 @@ from julearn.pipeline import make_pipeline
 X = pd.DataFrame(
     dict(A=np.arange(10), B=np.arange(10, 20), C=np.arange(30, 40)))
 y = pd.Series(np.arange(50, 60))
+y_bin = pd.Series([0, 1] * 5)
 
 X_with_types = pd.DataFrame({
     'a': np.arange(10),
@@ -99,6 +101,31 @@ def test_fit_and_score_no_error():
     extended_pipe.predict(X.iloc[:, :-1])
     score = extended_pipe.score(X.iloc[:, :-1], X.C)
     assert score is not np.nan
+
+
+def test_prediction_binary():
+    steps = [('log', LogisticRegression())]
+    extended_pipe = make_pipeline(steps)
+    lg = LogisticRegression()
+
+    np.random.seed(24)
+    extended_pipe.fit(X, y_bin)
+    extended_proba = extended_pipe.predict_proba(X)
+    extended_pred = extended_pipe.predict(X)
+    extended_decision_func = extended_pipe.decision_function(X)
+    extended_score = extended_pipe.score(X, y_bin)
+
+    np.random.seed(24)
+    lg.fit(X, y_bin)
+    lg_proba = lg.predict_proba(X)
+    lg_pred = lg.predict(X)
+    lg_decision_func = lg.decision_function(X)
+    lg_score = lg.score(X, y_bin)
+
+    assert_array_equal(lg_proba, extended_proba)
+    assert_array_equal(lg_pred, extended_pred)
+    assert_array_equal(lg_decision_func, extended_decision_func)
+    assert_array_equal(lg_score, extended_score)
 
 
 def test_fit_and_score_confound_no_error():
@@ -183,6 +210,67 @@ def test_fit_predict():
                )
 
     assert_array_equal(extended_pred, sk_pred)
+
+
+def test_multiple_confound_removal():
+
+    my_pipe_drop = make_pipeline(
+        steps=[
+            ('remove_confound_1', ConfoundRemover()),
+            ('remove_confound_2', ConfoundRemover()),
+        ],
+    )
+
+    my_pipe_one_drop = make_pipeline(
+        steps=[
+            ('remove_confound_1', ConfoundRemover(drop_confounds=False)),
+            ('remove_confound_2', ConfoundRemover(drop_confounds=True)),
+        ],
+    )
+
+    my_pipe_no_drop = make_pipeline(
+        steps=[
+            ('remove_confound_1', ConfoundRemover(drop_confounds=False)),
+            ('remove_confound_2', ConfoundRemover(drop_confounds=False)),
+        ],
+    )
+
+    X_trans_one = (my_pipe_one_drop
+                   .fit_transform(X, y, n_confounds=1)
+                   )
+
+    X_trans_no = (my_pipe_no_drop
+                  .fit_transform(X, y, n_confounds=1)
+                  )
+
+    with pytest.warns(RuntimeWarning,
+                      match='Number of confounds is 0'
+                      ):
+        my_pipe_drop.fit(X, y, n_confounds=1)
+    print(X_trans_no)
+    assert_array_equal(X_trans_one.shape, X.iloc[:, :-1].shape)
+    assert_array_equal(X_trans_no.shape, X.iloc[:, :-1].shape)
+
+
+def test_target_removal_pipe():
+    my_pipe = make_pipeline(
+        steps=[('lr', LinearRegression())],
+        y_transformer=TargetConfoundRemover()
+    )
+    my_pipe_no_rem = make_pipeline(
+        steps=[('lr', LinearRegression())]
+    )
+    np.random.seed(42)
+    y_trans_conf = TargetConfoundRemover().fit_transform(X, y, 1)
+
+    np.random.seed(42)
+    y_trans_conf_pipe = my_pipe.fit(X, y, n_confounds=1).transform_target(X, y)
+
+    np.random.seed(42)
+    y_trans_no_rem = my_pipe_no_rem.fit(X, y).transform_target(X, y)
+
+    assert_array_equal(y, y_trans_no_rem)
+    assert_array_equal(y_trans_conf_pipe, y_trans_conf)
 
 
 def test_access_steps_ExtendedPipeline():
@@ -377,3 +465,28 @@ def test_ExtendedPipeline___repr__():
         y_transformer=get_transformer('zscore')
     )
     extended_pipe.__repr__()
+
+
+def test_set_params_errors():
+    pipe = make_pipeline([('lr', LogisticRegression())])
+
+    with pytest.raises(ValueError,
+                       match='You cannot set bananapie'):
+        clone(pipe).set_params(bananapie=2)
+
+    with pytest.raises(ValueError,
+                       match='You cannot set parameters for the confound'):
+        clone(pipe).set_params(confounds__not_valid=2)
+
+    with pytest.raises(AttributeError,
+                       match='Your y_transformer seems to be None '):
+        clone(pipe).set_params(target__not_valid=2)
+
+    pipe.fit(X, y_bin)
+    with pytest.raises(AttributeError,
+                       match='Your confounding pipeline seems to be None'):
+        pipe.set_params(confounds__not_valid=2)
+
+    with pytest.raises(AttributeError,
+                       match='Your y_transformer seems to be None '):
+        pipe.set_params(target__not_valid=2)

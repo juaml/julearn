@@ -2,12 +2,12 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 import pandas as pd
-from sklearn.base import TransformerMixin
+from sklearn.base import BaseEstimator, TransformerMixin
 
 from .. utils import raise_error
 
 
-class BaseTargetTransformer():
+class BaseTargetTransformer(BaseEstimator):
     pass
 
 
