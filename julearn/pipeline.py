@@ -334,7 +334,13 @@ class ExtendedPipeline(_BaseComposition):
         """
 
         if until is None:
-            until = self.pipeline_steps[-2][0]
+            if len(self.pipeline_steps) == 1:
+                until =  self.pipeline_steps[-1][0]
+            else:
+                if hasattr(self._final_estimator, 'predict'):
+                    until = self.pipeline_steps[-2][0]
+                else:
+                    until = self.pipeline_steps[-1][0]
         try:
             self[until]
         except KeyError:

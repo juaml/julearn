@@ -6,6 +6,7 @@ import numpy as np
 from numpy.testing import assert_array_equal, assert_array_almost_equal
 
 import pandas as pd
+from pandas.testing import assert_frame_equal
 import pytest
 
 from sklearn.decomposition import PCA
@@ -319,7 +320,6 @@ def test_preprocess_all_ExtendedPipeline():
         ('zscore', StandardScaler()),
         ('pca', PCA())
     ]
-    # model = ('lr', LinearRegression())
 
     confound_steps = [('zscore', StandardScaler()),
                       ('zscore_2', StandardScaler())]
@@ -348,6 +348,35 @@ def test_preprocess_all_ExtendedPipeline():
         X_trans, X_trans_preprocess.iloc[:, :2])  # type: ignore
     assert_array_equal(conf_trans, conf_preprocess)
     assert_array_equal(y_trans, y_trans_preprocess)
+
+
+def test_preprocess_column_names():
+    feature_steps = [
+        ('zscore', StandardScaler()),
+        ('zscore2', StandardScaler()),
+        ('zscore3', StandardScaler()),
+        ('pca', PCA()),
+    ]
+
+    confound_steps = [('zscore', StandardScaler()),
+                      ('zscore_2', StandardScaler())]
+
+    y_transformer = TargetTransformerWrapper(StandardScaler())
+    extended_pipe = make_pipeline(
+        feature_steps,
+        y_transformer=y_transformer,
+        confound_steps=confound_steps)
+
+    np.random.seed(42)
+    X_trans_preprocess = extended_pipe.fit_transform(
+        X, y, n_confounds=1)
+
+    prep_col_names, *_ = extended_pipe.preprocess(
+        X, y, column_names=X.columns.tolist())
+    prep_no_col_names, *_ = extended_pipe.preprocess(X, y)
+
+    assert_array_almost_equal(X_trans_preprocess, prep_col_names.values)
+    assert_frame_equal(prep_col_names, prep_no_col_names)
 
 
 def test_preprocess_until_ExtendedPipeline():
