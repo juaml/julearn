@@ -335,7 +335,7 @@ class ExtendedPipeline(_BaseComposition):
 
         if until is None:
             if len(self.pipeline_steps) == 1:
-                until =  self.pipeline_steps[-1][0]
+                until = self.pipeline_steps[-1][0]
             else:
                 if hasattr(self._final_estimator, 'predict'):
                     until = self.pipeline_steps[-2][0]
@@ -397,7 +397,6 @@ class ExtendedPipeline(_BaseComposition):
         for param, val in params.items():
 
             if param.startswith('confounds__'):
-                param_name = param.replace('confounds__', '')
                 # set inside of the created pipeline
                 if ((hasattr(self, '_confound_pipeline')) and
                         (self._confound_pipeline is None)):
@@ -406,25 +405,22 @@ class ExtendedPipeline(_BaseComposition):
                          'So you cannot set any parameter for it.'),
                         AttributeError)
                 else:
-                    try:
-                        self._set_params('confound_pipeline_steps',
-                                         ** {param_name: val})
 
-                        if hasattr(self, '_confound_pipeline'):
+                    self._set_confounds_param(param, val)
+
+                    param_name = param.replace('confounds__', '')
+                    if hasattr(self, '_confound_pipeline'):
+                        try:
                             self._confound_pipeline.set_params(
                                 **{param_name: val})
-                    except ValueError:
-                        if self.confound_pipeline_steps is None:
-                            raise_error(
-                                'You cannot set parameters for the confound '
-                                'Pipeline as there is None.'
-                            )
-                        else:
+                        except ValueError:
+
                             possible_params = [
                                 'confounds__' + name for name, _ in
                                 self.confound_pipeline_steps]  # type: ignore
                             raise_error(
-                                f'You cannot set {param} as it is not part of'
+                                f'You cannot set {param_name} as it is not '
+                                'part of'
                                 ' the confounding pipeline. Possible params '
                                 f'are: {possible_params}'
                             )
@@ -572,20 +568,41 @@ ExtendedPipeline using:
 
             if name.startswith('_internally_wrapped_'):
 
-                nested_levels = name.split('__')
-                if len(nested_levels) > 2:
-                    # remove wrapper name
-                    steps_name = '__'.join(name.split('__')[1:])
-                    self.pipeline_steps = [
-                        (inner_name, (est if inner_name == steps_name
-                                      else inner_step))
-                        for inner_name, inner_step in self.pipeline_steps]
-
-            else:
                 self.pipeline_steps = [
                     (inner_name, (est if inner_name == name
                                   else inner_step))
                     for inner_name, inner_step in self.pipeline_steps]
+
+    def _set_confounds_param(self, param_name, param_val):
+        # Ensure strict ordering of parameter setting:
+
+        name = param_name.replace('confounds__', '')
+        est_to_change = name.split('__')[0]
+        param_to_change = name.replace(f'{est_to_change}__', '')
+
+        if self.confound_pipeline_steps is not None:
+            try:
+                for i, (est_name, est) in enumerate(
+                        self.confound_pipeline_steps):
+                    if est_name == est_to_change:
+                        est = est.set_params(**{param_to_change: param_val})
+                        self.confound_pipeline_steps[i] = (est_name, est)
+                        break
+            except ValueError:
+
+                possible_params = [
+                    'confounds__' + name for name, _ in
+                    self.confound_pipeline_steps]  # type: ignore
+                raise_error(
+                    f'You cannot set {param_name} as it is not part of'
+                    ' the confounding pipeline. Possible params '
+                    f'are: {possible_params}'
+                )
+        else:
+            raise_error(
+                'You cannot set parameters for the confound '
+                'Pipeline as there is None.'
+            )
 
     @ staticmethod
     def _split_params(params):

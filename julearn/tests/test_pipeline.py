@@ -524,6 +524,124 @@ def test_set_params_errors():
         pipe.set_params(target__not_valid=2)
 
 
+def test_get_params():
+    steps = [
+        ('pca', PCA()),
+        ('zscore', StandardScaler(with_mean=False))
+    ]
+    confound_steps = [
+        ('zscore', StandardScaler(with_std=False))
+    ]
+    target_transformer = TargetTransformerWrapper(StandardScaler(copy=False))
+
+    pipe = make_pipeline(steps=steps, confound_steps=confound_steps,
+                         y_transformer=target_transformer)
+
+    params_before_fit = pipe.get_params()
+    params_after_fit = clone(pipe.fit(X, y, n_confounds=1)).get_params()
+
+    assert (params_before_fit['confounds__zscore__with_mean']
+            == params_after_fit['confounds__zscore__with_mean'])
+    assert (params_before_fit['confounds__zscore__with_mean'] is True)
+
+    assert(params_before_fit['confounds__zscore__with_std']
+           == params_after_fit['confounds__zscore__with_std'])
+    assert(params_before_fit['confounds__zscore__with_std'] is False)
+
+    assert(params_before_fit['confounds__zscore__copy']
+           == params_after_fit['confounds__zscore__copy'])
+    assert (params_before_fit['confounds__zscore__copy'] is True)
+
+    assert (params_before_fit['target__with_mean']
+            == params_after_fit['target__with_mean'])
+    assert (params_before_fit['target__with_mean'] is True)
+
+    assert (params_before_fit['target__with_std']
+            == params_after_fit['target__with_std'])
+    assert (params_before_fit['target__with_std'] is True)
+
+    assert (params_before_fit['target__copy']
+            == params_after_fit['target__copy'])
+    assert (params_before_fit['target__copy'] is False)
+
+    assert (params_before_fit['zscore__with_mean']
+            == params_after_fit['zscore__with_mean'])
+    assert (params_before_fit['zscore__with_mean'] is False)
+
+    assert (params_before_fit['zscore__with_std']
+            == params_after_fit['zscore__with_std'])
+    assert (params_before_fit['zscore__with_std'] is True)
+
+    assert (params_before_fit['zscore__copy']
+            == params_after_fit['zscore__copy'])
+    assert (params_before_fit['zscore__copy'] is True)
+
+
+def test_set_params():
+
+    steps = [
+        ('pca', PCA()),
+        ('zscore', StandardScaler())
+    ]
+    confound_steps = [
+        ('zscore', StandardScaler())
+    ]
+    target_transformer = TargetTransformerWrapper(StandardScaler())
+
+    pipe = make_pipeline(steps=steps, confound_steps=confound_steps,
+                         y_transformer=target_transformer)
+
+    set_dict = dict(
+        zscore__with_mean=False,
+        confounds__zscore__with_std=False,
+        target__copy=False,
+    )
+
+    params_before_fit = (clone(pipe)
+                         .set_params(**set_dict)
+                         .get_params())
+    params_after_fit = (clone(pipe)
+                        .fit(X, y, n_confounds=1)
+                        .set_params(**set_dict)
+                        .get_params())
+
+    assert (params_before_fit['confounds__zscore__with_mean']
+            == params_after_fit['confounds__zscore__with_mean'])
+    assert (params_before_fit['confounds__zscore__with_mean'] is True)
+
+    assert(params_before_fit['confounds__zscore__with_std']
+           == params_after_fit['confounds__zscore__with_std'])
+    assert(params_before_fit['confounds__zscore__with_std'] is False)
+
+    assert(params_before_fit['confounds__zscore__copy']
+           == params_after_fit['confounds__zscore__copy'])
+    assert (params_before_fit['confounds__zscore__copy'] is True)
+
+    assert (params_before_fit['target__with_mean']
+            == params_after_fit['target__with_mean'])
+    assert (params_before_fit['target__with_mean'] is True)
+
+    assert (params_before_fit['target__with_std']
+            == params_after_fit['target__with_std'])
+    assert (params_before_fit['target__with_std'] is True)
+
+    assert (params_before_fit['target__copy']
+            == params_after_fit['target__copy'])
+    assert (params_before_fit['target__copy'] is False)
+
+    assert (params_before_fit['zscore__with_mean']
+            == params_after_fit['zscore__with_mean'])
+    assert (params_before_fit['zscore__with_mean'] is False)
+
+    assert (params_before_fit['zscore__with_std']
+            == params_after_fit['zscore__with_std'])
+    assert (params_before_fit['zscore__with_std'] is True)
+
+    assert (params_before_fit['zscore__copy']
+            == params_after_fit['zscore__copy'])
+    assert (params_before_fit['zscore__copy'] is True)
+
+
 def test_nested_hyperparameters():
     steps = [
         ('trans', ColumnTransformer(
@@ -545,3 +663,15 @@ def test_nested_hyperparameters():
     pipe.set_params(confounds__trans__zscore__with_mean=False)
 
     pipe.fit(X_with_types, y_bin, n_confounds=2)
+
+    assert (
+        pipe.named_steps.trans.transformers[0][1].with_mean
+        == pipe.pipeline_steps[0][1].transformers[0][1].with_mean
+        == pipe.get_params()['trans__zscore__with_mean']
+        == pipe._pipeline.get_params()[
+            '_internally_wrapped_trans__trans__zscore__with_mean']
+    )
+    assert (
+        pipe.named_steps.trans.transformers[0][1].with_mean
+        is False
+    )
