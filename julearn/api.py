@@ -306,8 +306,6 @@ def create_pipeline(
     # Prepare the model
     model_tuple = prepare_model(model=model, problem_type=problem_type)
 
-    if preprocess_X is None:
-        preprocess_X = []
     pipeline = make_pipeline(
         steps=preprocess_X + [model_tuple],
         confound_steps=preprocess_confounds,

@@ -374,7 +374,6 @@ def test_preprocess_column_names():
     prep_col_names, *_ = extended_pipe.preprocess(
         X, y, column_names=X.columns.tolist())
     prep_no_col_names, *_ = extended_pipe.preprocess(X, y)
-    print(X.shape)
     assert_array_almost_equal(X_trans_preprocess, prep_col_names.values)
     assert_frame_equal(prep_col_names, prep_no_col_names)
 
