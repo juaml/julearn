@@ -374,7 +374,7 @@ def test_preprocess_column_names():
     prep_col_names, *_ = extended_pipe.preprocess(
         X, y, column_names=X.columns.tolist())
     prep_no_col_names, *_ = extended_pipe.preprocess(X, y)
-
+    print(X.shape)
     assert_array_almost_equal(X_trans_preprocess, prep_col_names.values)
     assert_frame_equal(prep_col_names, prep_no_col_names)
 
@@ -433,6 +433,22 @@ def test_preprocess_until_ExtendedPipeline():
 
     with pytest.raises(ValueError, match='banana_pie is not a valid'):
         extended_pipe.preprocess(X, y, until='banana_pie')
+
+
+def test_preprocess_numpy():
+    feature_steps = [('zscore', StandardScaler()),
+                     ]
+    extended_pipe = make_pipeline(steps=feature_steps)
+
+    np.random.seed(42)
+    extended_pipe.fit(X.values, y.values, n_confounds=1)
+
+    np.random.seed(42)
+    scaler = StandardScaler().fit(X.values[:, :-1], y.values)
+    X_scaler = scaler.transform(X.values[:, :-1])
+    X_extended_prep, *_ = extended_pipe.preprocess(X.values, y.values)
+
+    assert_array_equal(X_scaler, X_extended_prep)
 
 
 def test_create_exteneded_pipeline_confound_removal():
@@ -640,6 +656,34 @@ def test_set_params():
     assert (params_before_fit['zscore__copy']
             == params_after_fit['zscore__copy'])
     assert (params_before_fit['zscore__copy'] is True)
+
+
+def test_set_y_transformer():
+    steps = [
+        ('pca', PCA()),
+        ('zscore', StandardScaler())
+    ]
+    y_transformer = TargetTransformerWrapper(StandardScaler())
+    pipe = make_pipeline(steps=steps)
+    pipe.set_params(y_transformer=y_transformer)
+    assert pipe.get_params()['y_transformer'] == y_transformer
+
+
+def test_named_steps():
+    steps = [
+        ('pca', PCA()),
+        ('zscore', StandardScaler())
+    ]
+    confound_steps = [
+        ('zscore', StandardScaler())
+    ]
+
+    pipe_all = make_pipeline(steps=steps, confound_steps=confound_steps)
+    pipe_no_extra = make_pipeline(steps=steps)
+
+    assert isinstance(pipe_all.named_steps.pca, PCA)
+    assert isinstance(pipe_all.named_steps.confounds__zscore, StandardScaler)
+    assert isinstance(pipe_no_extra.named_steps.zscore, StandardScaler)
 
 
 def test_nested_hyperparameters():

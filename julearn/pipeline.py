@@ -273,8 +273,16 @@ class ExtendedPipeline(_BaseComposition):
         else:
             Xt = last_step.fit(Xt, y, **fit_params_last_step).transform(Xt)
 
+        includes_confound_removal = False
+        for _, est in self.pipeline_steps:
+            if isinstance(est, BaseConfoundRemover):
+                includes_confound_removal = True
+                break
+
         if (isinstance(last_step, BaseConfoundRemover) and
-                (not last_step.will_drop_confounds())):
+                (not last_step.will_drop_confounds()) or
+            ((includes_confound_removal is False)
+             and (self.n_confounds_ > 0))):
             Xt = safe_select(Xt, slice(None, -self.n_confounds_))
 
         self._update_pipeline_steps_from_wrapped()
@@ -356,15 +364,14 @@ class ExtendedPipeline(_BaseComposition):
         y_trans = y.copy()
 
         if until.startswith('confounds__'):
-            if self._confound_pipeline is not None:
-                step_name = until.replace('confounds__', '')
-                for name, step in self._confound_pipeline.steps:
-                    c_column_names = _propagate_transformer_column_names(
-                        step, confounds, c_column_names)
-                    confounds = step.transform(confounds)
+            step_name = until.replace('confounds__', '')
+            for name, step in self._confound_pipeline.steps:
+                c_column_names = _propagate_transformer_column_names(
+                    step, confounds, c_column_names)
+                confounds = step.transform(confounds)
 
-                    if name == step_name:
-                        break
+                if name == step_name:
+                    break
         elif until.startswith('target__'):
             X_trans = self.transform_confounds(X_trans)
             confounds = safe_select(X_trans, slice(-self.n_confounds_, None))
@@ -377,6 +384,7 @@ class ExtendedPipeline(_BaseComposition):
             wrapped_until = self._get_wrapped_param_name(until)
             # get wrapper itself
             wrapped_until = wrapped_until.split('__')[0]
+            dropped_confound = False
             for name, t_step in self._pipeline.steps:
 
                 if column_names is not None:
@@ -384,9 +392,17 @@ class ExtendedPipeline(_BaseComposition):
                         t_step, X_trans, column_names)
 
                 X_trans = t_step.transform(X_trans)
+                if isinstance(t_step, BaseConfoundRemover):
+                    dropped_confound = t_step.will_drop_confounds()
 
                 if name == wrapped_until:
                     break
+            if not dropped_confound and self.n_confounds_ > 0:
+                X_trans = safe_select(X_trans, slice(None, -self.n_confounds_))
+                if column_names is not None:
+                    column_names = column_names[slice(
+                        None, -self.n_confounds_)]
+
         if column_names is not None:
             X_trans = pd.DataFrame(X_trans, columns=column_names)
         if c_column_names is not None:
