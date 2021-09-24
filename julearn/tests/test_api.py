@@ -625,28 +625,29 @@ def test_manual_workflow():
 
     X, y = prepare_data(X_names, y_name, data=df_iris)
 
-    cv = StratifiedKFold(2).split(X, y)
-    run_cv, manual_cv = tee(cv)
-    np.random.seed(42)
-    run_scores = run_cross_validation(X_names, y_name, 'svm', df_iris,
-                                      preprocess_X=['zscore', 'pca'],
-                                      preprocess_y='zscore',
-                                      preprocess_confounds='zscore',
-                                      cv=run_cv
-                                      )
+    for preprocess_X in [['zscore', 'pca'], None]:
+        cv = StratifiedKFold(2).split(X, y)
+        run_cv, manual_cv = tee(cv)
+        np.random.seed(42)
+        run_scores = run_cross_validation(X_names, y_name, 'svm', df_iris,
+                                          preprocess_X=preprocess_X,
+                                          preprocess_y='zscore',
+                                          preprocess_confounds='zscore',
+                                          cv=run_cv
+                                          )
 
-    np.random.seed(42)
+        np.random.seed(42)
 
-    pipe = create_pipeline(
-        model='svm',
-        preprocess_X=['zscore', 'pca'],
-        preprocess_y='zscore',
-        preprocess_confounds='zscore'
-    )
+        pipe = create_pipeline(
+            model='svm',
+            preprocess_X=preprocess_X,
+            preprocess_y='zscore',
+            preprocess_confounds='zscore'
+        )
 
-    manual_scores = [(clone(pipe)
-                      .fit(X.iloc[idx_train, :], y.iloc[idx_train])
-                      .score(X.iloc[idx_test, :], y.iloc[idx_test])
-                      )
-                     for idx_train, idx_test in manual_cv]
-    assert_array_equal(manual_scores, run_scores['test_score'])
+        manual_scores = [(clone(pipe)
+                          .fit(X.iloc[idx_train, :], y.iloc[idx_train])
+                          .score(X.iloc[idx_test, :], y.iloc[idx_test])
+                          )
+                         for idx_train, idx_test in manual_cv]
+        assert_array_equal(manual_scores, run_scores['test_score'])
