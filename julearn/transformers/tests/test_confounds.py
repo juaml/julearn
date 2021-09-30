@@ -1,6 +1,8 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
+import pytest
+
 import pandas as pd
 import numpy as np
 from numpy.testing import assert_array_equal, assert_array_almost_equal
@@ -102,3 +104,42 @@ def test_TargetConfoundRemover():
               .predict(confounds)
               )
     assert_array_almost_equal(y_transformed, y - y_pred)
+
+
+def test_thresholding():
+    cr_no_thresh = ConfoundRemover()
+    cr_thresh = ConfoundRemover(threshold=1e-2)
+    _X = np.random.normal(size=[300, 2])
+    _X = np.c_[_X, _X[:, 1]]
+    _y = np.random.normal(size=300)
+    res_no_thresh = cr_no_thresh.fit_transform(_X, _y, n_confounds=1)
+    res_thresh = cr_thresh.fit_transform(_X, _y, n_confounds=1)
+
+    assert res_no_thresh.min().min() < 1e-2
+    assert res_thresh[res_thresh > 0].min() >= 1e-2
+
+
+def test_apply_to():
+
+    cr = ConfoundRemover()
+
+    res_cr = cr.fit_transform(X, y, n_confounds=1, apply_to=slice(0, 1))
+    assert_array_equal(res_cr[:, 1], X.iloc[:, 1])
+    assert not ((res_cr == X.iloc[:, :-1]).all().all())
+
+
+def test_n_confounds_nonewrong():
+
+    cr = ConfoundRemover()
+
+    with pytest.warns(
+            RuntimeWarning,
+            match='Number of confounds is 0 or below'):
+
+        cr.fit(X, y, n_confounds=0)
+
+    with pytest.warns(
+            RuntimeWarning,
+            match='Number of confounds is 0 or below'):
+
+        cr.fit(X, y, n_confounds=-1)

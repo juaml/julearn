@@ -93,8 +93,8 @@ class ConfoundRemover(BaseConfoundRemover):
         self.apply_to_ = apply_to
         if self.n_confounds_ <= 0:
             warn(
-                'Number of confounds is 0, confound removal will not have any '
-                'effect')
+                'Number of confounds is 0 or below '
+                'confound removal will not have any effect')
             return self
         confounds = safe_select(X, slice(-self.n_confounds_, None))
 
