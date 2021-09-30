@@ -250,12 +250,18 @@ def test_ColumnTransformer_propagation_of_columns():
                           remainder='passthrough'),
         ColumnTransformer([('pca', PCA(), idx_slice)],
                           remainder='drop'),
+        ColumnTransformer([
+            ('other', ColumnTransformer(
+                [('st', StandardScaler(), slice(1, 2))], remainder='drop'),
+             slice(1, None))], remainder='drop'
+        )
     ]
     expected_columns_sets = [
         ['C', 'A', 'B', 'D'],
         ['C'],
         ['pca_0', 'A', 'B', 'D'],
         ['pca_0'],
+        ['C']
     ]
     for t, expected_columns in zip(transformers, expected_columns_sets):
         t = t.fit(X, y)
