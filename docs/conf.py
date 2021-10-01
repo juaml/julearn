@@ -67,6 +67,7 @@ html_sidebars = {
     '**': ['globaltoc.html', 'sourcelink.html', 'searchbox.html']
 }
 
+html_logo = 'images/julearn_logo_it.png'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -99,3 +100,12 @@ smv_rebuild_tags = False
 smv_tag_whitelist = r'^v\d+\.\d+.\d+$'
 smv_branch_whitelist = r'main'
 smv_released_pattern = r'^tags/v.*$'
+
+
+# Options for rtd-theme
+html_theme_options = {
+    'analytics_id': 'G-CB4ETK4DBG',  # Provided by Google in your dashboard
+    'analytics_anonymize_ip': False,
+    'logo_only': True,
+    'display_version': True,
+}
