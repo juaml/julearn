@@ -35,6 +35,8 @@ Enhancements
 
 - Add example for `tranform_until` (:gh:`63` by `Shammi More`_).
 
+- Add `CBPM` transformer (by `Sami Hamdan`_).
+
 Bugs
 ~~~~
 
