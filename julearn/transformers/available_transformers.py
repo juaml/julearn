@@ -1,6 +1,7 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
+from julearn.transformers.additional_transformer import CBPM
 from . dataframe import DropColumns, ChangeColumnTypes
 from .. utils import raise_error, warn
 from copy import deepcopy
@@ -40,6 +41,8 @@ _available_transformers = {
     'select_fpr': [SelectFpr, 'subset'],
     'select_fwe': [SelectFwe, 'subset'],
     'select_variance': [VarianceThreshold, 'subset'],
+    # Custom
+    'cbpm': [CBPM, 'unknown'],
     # DataFrame operations
     'remove_confound': [
         DataFrameConfoundRemover,
