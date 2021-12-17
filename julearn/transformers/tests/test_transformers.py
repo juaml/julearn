@@ -1,5 +1,6 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL
+from julearn.transformers.additional_transformer import CBPM
 from julearn.transformers.target import TargetTransfromerWrapper
 from sklearn import svm
 from sklearn.pipeline import make_pipeline
@@ -42,6 +43,7 @@ _features_transformers = {
     'select_fpr': SelectFpr,
     'select_fwe': SelectFwe,
     'select_variance': VarianceThreshold,
+    'cbpm': CBPM
 }
 
 _transformer_params = {

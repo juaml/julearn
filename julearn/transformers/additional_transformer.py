@@ -6,7 +6,6 @@ from joblib import Parallel, delayed
 from scipy.stats import pearsonr
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.utils.fixes import _joblib_parallel_args
-from sklearn.utils import check_X_y, check_array
 from ..utils import warn
 
 
@@ -91,7 +90,8 @@ class CBPM(BaseEstimator, TransformerMixin):
 
     def fit(self, X, y):
 
-        X, y = check_X_y(X, y)
+        X, y = self._validate_data(X, y)
+
         self.X_y_correlations_ = np.array(Parallel(
             n_jobs=self.n_jobs, verbose=self.verbose,
             **_joblib_parallel_args())(
@@ -105,7 +105,7 @@ class CBPM(BaseEstimator, TransformerMixin):
 
     def transform(self, X):
 
-        X = check_array(X)
+        X = self._validate_data(X)
         if self.y_average_ is not None:
             out = np.empty(X.shape[0])
             out.fill(self.y_average_)
