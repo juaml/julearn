@@ -51,6 +51,10 @@ _transformer_params = {
     'select_k': {'k': 2},
 }
 
+_works_only_with_regression = [
+    'cbpm'
+]
+
 
 def test_feature_transformers():
     """Test transform X"""
@@ -74,7 +78,13 @@ def test_feature_transformers():
         else:
             tr = tr_klass()
         clf = make_pipeline(tr, svm.SVC())
-        do_scoring_test(X, y, data=df_iris, api_params=api_params,
+        if tr_name in _works_only_with_regression:
+            df_test = df_iris.copy()
+            df_test[y] = df_iris[y].apply(
+                lambda x: {'setosa': 0, 'versicolor': 1, 'virginica': 3}[x])
+        else:
+            df_test = df_iris.copy()
+        do_scoring_test(X, y, data=df_test, api_params=api_params,
                         sklearn_model=clf, scorers=scorers)
 
 
