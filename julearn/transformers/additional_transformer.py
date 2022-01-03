@@ -1,5 +1,6 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
+#          Kaustubh, Patil <k.patil@fz-juelich.de>
 # License: AGPL
 import numpy as np
 from joblib import Parallel, delayed
@@ -118,7 +119,7 @@ class CBPM(BaseEstimator, TransformerMixin):
     def transform(self, X):
 
         X = self._validate_data(X)
-        if self.used_corr_sign_ is None:
+        if not any(self.used_significant_mask_):
             out = np.empty(X.shape[0])
             out.fill(self.y_average_)
             return out
@@ -133,7 +134,8 @@ class CBPM(BaseEstimator, TransformerMixin):
             )
 
             X_meaned = np.concatenate(
-                [X_meaned_pos.reshape(-1, 1),
+                [
+                    X_meaned_pos.reshape(-1, 1),
                     X_meaned_neg.reshape(-1, 1)],
                 axis=1)
 
@@ -158,14 +160,14 @@ class CBPM(BaseEstimator, TransformerMixin):
             self.significant_mask_ & self.neg_mask_)
 
         self.y_average_ = y.mean()
-        self.used_corr_sign = self.corr_sign
+        self.used_corr_sign_ = self.corr_sign
 
         have_pos_feat = any(self.pos_significant_mask_)
-        have_neg_feat = any(self.neg_significnat_mask_)
+        have_neg_feat = any(self.neg_significant_mask_)
 
         if self.corr_sign == 'posneg':
-            self.used_corr_sign = ''
-            if ~have_pos_feat:
+            self.used_corr_sign_ = ''
+            if not have_pos_feat:
                 warn(
                     'No feature with significant positive correlations. '
                     'Only features with negative correlations will be '
@@ -175,7 +177,7 @@ class CBPM(BaseEstimator, TransformerMixin):
             else:
                 self.used_corr_sign_ = 'pos'
 
-            if ~have_neg_feat:
+            if not have_neg_feat:
                 warn(
                     'No feature with significant negative correlations. '
                     'Only features with positive correlations will be '
@@ -183,26 +185,22 @@ class CBPM(BaseEstimator, TransformerMixin):
                     'set `corr_sign = "pos"`.'
                 )
             else:
-                self.used_corr_sign_ = self.used_corr_sign_ + 'neg'
+                self.used_corr_sign_ += 'neg'
 
-        # todo: deal with empty used_corr_sign_ ''
         self.used_significant_mask_ = (
-            # return all false
-            # if self.used_corr_sign == ''
             self.significant_mask_
-            if self.used_corr_sign == 'posneg'
+            if self.used_corr_sign_ == 'posneg'
             else self.pos_significant_mask_
-            if self.used_corr_sign == 'pos'
+            if self.used_corr_sign_ == 'pos'
             else self.neg_significant_mask_
+            if self.used_corr_sign_ == 'neg'
+            else np.zeros(self.significant_mask_.shape, dtype=bool)
         )
-        self.y_average_ = y.mean()
 
         if all(~self.used_significant_mask_):
             warn('No feature is significant. Therefore, the mean of'
                  ' target will be used for prediction instead.'
                  )
-            self.used_corr_sign_ = None
-
 
     def average(self, X, mask):
         weights = (
