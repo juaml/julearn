@@ -75,6 +75,18 @@ class CBPM(BaseEstimator, TransformerMixin):
         Array of bools showing which of the original features had a
         positive correlation.
 
+    pos_significant_feat_mask_ : np.array of bools
+        Array of bools showing which of the original features had a
+        significant positive correlation.
+
+    neg_significant_feat_mask_ : np.array of bools
+        Array of bools showing which of the original features had a
+        significant negative correlation.
+
+    used_significant_feat_mask_ : np.array of bools
+        Array of bools showing which of the original features will be used
+        by this transformer.
+
    '''
 
     def __init__(self, significance_threshold=0.05,
@@ -106,84 +118,80 @@ class CBPM(BaseEstimator, TransformerMixin):
     def transform(self, X):
 
         X = self._validate_data(X)
-        if self.y_average_ is not None:
+        if self.used_corr_values_used_ is None:
             out = np.empty(X.shape[0])
             out.fill(self.y_average_)
             return out
 
-        else:
+        elif self.used_corr_values_used_ == 'posneg':
+            X_meaned_pos = self.average(
+                X, mask=self.pos_significant_feat_mask_
+            )
 
-            if self.used_corr_values_used_ == 'posneg':
-                mask = self.sign_mask_
+            X_meaned_neg = self.average(
+                X, mask=self.neg_significant_feat_mask_
+            )
 
-                X_meaned_pos = self.average(
-                    X, mask=(self.sign_mask_ & self.pos_correction_mask_)
-                )
+            X_meaned = np.concatenate(
+                [X_meaned_pos.reshape(-1, 1),
+                    X_meaned_neg.reshape(-1, 1)],
+                axis=1)
 
-                X_meaned_neg = self.average(
-                    X, mask=(self.sign_mask_ & ~self.pos_correction_mask_)
-                )
+        elif self.used_corr_values_used_ == 'pos':
+            X_meaned = self.average(X, self.pos_significant_feat_mask_)
 
-                X_meaned = np.concatenate(
-                    [X_meaned_pos.reshape(-1, 1),
-                     X_meaned_neg.reshape(-1, 1)],
-                    axis=1)
+        elif self.used_corr_values_used_ == 'neg':
+            X_meaned = self.average(X, self.neg_significant_feat_mask_)
 
-            elif self.used_corr_values_used_ == 'pos':
-                mask = self.sign_mask_ & self.pos_correction_mask_
-                X_meaned = self.average(X, mask)
-
-            elif self.used_corr_values_used_ == 'neg':
-                mask = self.sign_mask_ & ~self.pos_correction_mask_
-                X_meaned = self.average(X, mask)
-
-            return X_meaned
+        return X_meaned
 
     def create_masks(self, y):
 
-        self.sign_mask_ = self.X_y_correlations_[
+        self.significant_mask_ = self.X_y_correlations_[
             :, 1] < self.significance_threshold
         self.pos_correction_mask_ = self.X_y_correlations_[:, 0] >= 0
 
-        if self.corr_values_used == 'posneg':
-            sig_feat_mask = self.sign_mask_
-        elif self.corr_values_used == 'pos':
-            sig_feat_mask = self.sign_mask_ & self.pos_correction_mask_
-        elif self.corr_values_used == 'neg':
-            sig_feat_mask = self.sign_mask_ & ~self.pos_correction_mask_
-        if all(~sig_feat_mask):
+        self.pos_significant_feat_mask_ = (
+            self.significant_mask_ & self.pos_correction_mask_)
+        self.neg_significant_feat_mask_ = (
+            self.significant_mask_ & ~self.pos_correction_mask_)
+
+        self.used_significant_feat_mask_ = (
+            self.significant_mask_
+            if self.corr_values_used == 'posneg'
+            else self.pos_significant_feat_mask_
+            if self.corr_values_used == 'pos'
+            else self.neg_significant_feat_mask_
+        )
+        self.y_average_ = y.mean()
+
+        if all(~self.used_significant_feat_mask_):
             warn('No feature is significant. Therefore, the mean of'
                  ' target will be used for prediction instead.'
                  )
-            self.y_average_ = y.mean()
             self.used_corr_values_used_ = None
 
+        elif (self.corr_values_used == 'posneg'
+              and all(~(self.pos_significant_feat_mask_))):
+            warn(
+                'No feature with significant positive correlations. '
+                'Only features with negative correlations will be '
+                'used. To get rid of this message, '
+                'set `corr_values_used = "neg".`'
+            )
+            self.used_corr_values_used_ = 'neg'
+
+        elif (self.corr_values_used == 'posneg'
+              and all(~(self.neg_significant_feat_mask_))):
+            warn(
+                'No feature with significant negative correlations. '
+                'Only features with positive correlations will be '
+                'used. To get rid of this message, '
+                'set `corr_values_used = "pos"`.'
+            )
+            self.used_corr_values_used_ = 'pos'
         else:
-            self.y_average_ = None
-
-            if self.corr_values_used == 'posneg':
-                if all(~(self.sign_mask_ & self.pos_correction_mask_)):
-                    warn(
-                        'No feature with significant positive correlations. '
-                        'Only features with negative correlations will be '
-                        'used. To get rid of this message, '
-                        'set `corr_values_used = "neg".`'
-                    )
-                    self.used_corr_values_used_ = 'neg'
-
-                elif all(~(self.sign_mask_
-                           & ~self.pos_correction_mask_)):
-                    warn(
-                        'No feature with significant negative correlations. '
-                        'Only features with positive correlations will be '
-                        'used. To get rid of this message, '
-                        'set `corr_values_used = "pos"`.'
-                    )
-                    self.used_corr_values_used_ = 'pos'
-                else:
-                    self.used_corr_values_used_ = self.corr_values_used
-            else:
-                self.used_corr_values_used_ = self.corr_values_used
+            self.used_corr_values_used_ = self.corr_values_used
 
     def average(self, X, mask):
         weights = (
