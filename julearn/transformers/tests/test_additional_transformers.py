@@ -27,7 +27,7 @@ df_shuffled_X[X_posneg] = (df_shuffled_X[X_posneg]
 
 
 def test_posneg_correlated_features():
-    trans_X_posneg = (CBPM(corr_values_used='posneg')
+    trans_X_posneg = (CBPM(corr_sign='posneg')
                       .fit_transform(df_iris[X_posneg], df_iris[y])
                       )
     trans_man_pos = df_iris[X_pos].values.mean(axis=1)
@@ -38,11 +38,11 @@ def test_posneg_correlated_features():
 
 
 def test_pos_correlated_features():
-    trans_X_pos = (CBPM(corr_values_used='pos')
+    trans_X_pos = (CBPM(corr_sign='pos')
                    .fit_transform(df_iris[X_pos], df_iris[y])
                    )
 
-    trans_X_pos_neg = (CBPM(corr_values_used='pos')
+    trans_X_pos_neg = (CBPM(corr_sign='pos')
                        .fit_transform(df_iris[X_posneg], df_iris[y])
                        )
 
@@ -53,11 +53,11 @@ def test_pos_correlated_features():
 
 
 def test_neg_correlated_features():
-    trans_X_neg = (CBPM(corr_values_used='neg')
+    trans_X_neg = (CBPM(corr_sign='neg')
                    .fit_transform(df_iris[X_neg], df_iris[y])
                    )
 
-    trans_X_pos_neg = (CBPM(corr_values_used='neg')
+    trans_X_pos_neg = (CBPM(corr_sign='neg')
                        .fit_transform(df_iris[X_posneg], df_iris[y])
                        )
 
@@ -70,7 +70,7 @@ def test_neg_correlated_features():
 def test_warn_pos_no_feat():
     with pytest.warns(RuntimeWarning,
                       match='No feature is significant'):
-        trans = (CBPM(corr_values_used='pos')
+        trans = (CBPM(corr_sign='pos')
                  .fit_transform(df_iris[X_neg], df_iris[y])
                  )
 
@@ -80,7 +80,7 @@ def test_warn_pos_no_feat():
 def test_warn_neg_no_feat():
     with pytest.warns(RuntimeWarning,
                       match='No feature is significant'):
-        trans = (CBPM(corr_values_used='neg')
+        trans = (CBPM(corr_sign='neg')
                  .fit_transform(df_iris[X_pos], df_iris[y])
                  )
 
@@ -90,7 +90,7 @@ def test_warn_neg_no_feat():
 def test_warn_posneg_no_feat():
     with pytest.warns(RuntimeWarning,
                       match='No feature is significant'):
-        trans = (CBPM(corr_values_used='posneg')
+        trans = (CBPM(corr_sign='posneg')
                  .fit_transform(df_shuffled_X[X_posneg], df_iris[y])
                  )
     assert (trans == df_iris[y].values.mean()).all()
@@ -99,7 +99,7 @@ def test_warn_posneg_no_feat():
 def test_warn_posneg_no_pos_feat():
     with pytest.warns(RuntimeWarning,
                       match='No feature with significant positive'):
-        trans_posneg = (CBPM(corr_values_used='posneg')
+        trans_posneg = (CBPM(corr_sign='posneg')
                         .fit_transform(df_iris[X_neg], df_iris[y])
                         )
 
@@ -111,7 +111,7 @@ def test_warn_posneg_no_pos_feat():
 def test_warn_posneg_no_neg_feat():
     with pytest.warns(RuntimeWarning,
                       match='No feature with significant negative'):
-        trans_posneg = (CBPM(corr_values_used='posneg')
+        trans_posneg = (CBPM(corr_sign='posneg')
                         .fit_transform(df_iris[X_pos], df_iris[y])
                         )
 
@@ -123,7 +123,7 @@ def test_warn_posneg_no_neg_feat():
 def test_lower_sign_threshhold():
 
     # I have checked before that only these 2 have pvalues under 1e-50
-    trans_posneg = (CBPM(corr_values_used='pos', significance_threshold=1e-50)
+    trans_posneg = (CBPM(corr_sign='pos', significance_threshold=1e-50)
                     .fit_transform(df_iris[X_pos], df_iris[y])
                     )
     trans_man = df_iris[['petal_length', 'petal_width']].values.mean(axis=1)
@@ -136,7 +136,7 @@ def test_lower_sign_threshhold_no_sig():
     # I have checked before there are no under 1e-100
     with pytest.warns(RuntimeWarning,
                       match='No feature is significant'):
-        trans_posneg = (CBPM(corr_values_used='pos',
+        trans_posneg = (CBPM(corr_sign='pos',
                              significance_threshold=1e-100)
                         .fit_transform(df_iris[X_pos], df_iris[y])
                         )
@@ -158,7 +158,7 @@ def test_spearman():
 
 
 def test_posneg_weighted_correlated_features():
-    trans_X_posneg = (CBPM(corr_values_used='posneg', weight_by_corr=True)
+    trans_X_posneg = (CBPM(corr_sign='posneg', weight_by_corr=True)
                       .fit_transform(df_iris[X_posneg], df_iris[y])
                       )
     corr_pos = df_iris[X_pos].apply(
@@ -182,7 +182,7 @@ def test_posneg_weighted_correlated_features():
 
 
 def test_pos_weighted_correlated_features():
-    trans_X_pos = (CBPM(corr_values_used='pos', weight_by_corr=True)
+    trans_X_pos = (CBPM(corr_sign='pos', weight_by_corr=True)
                    .fit_transform(df_iris[X_pos], df_iris[y])
                    )
 
@@ -197,7 +197,7 @@ def test_pos_weighted_correlated_features():
 
 
 def test_neg_weighted_correlated_features():
-    trans_X_neg = (CBPM(corr_values_used='neg', weight_by_corr=True)
+    trans_X_neg = (CBPM(corr_sign='neg', weight_by_corr=True)
                    .fit_transform(df_iris[X_neg], df_iris[y])
                    )
     corr = df_iris[X_neg].apply(
