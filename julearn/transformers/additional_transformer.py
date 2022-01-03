@@ -67,7 +67,7 @@ class CBPM(BaseEstimator, TransformerMixin):
     X_y_correlations_ : tuple(np.array, np.array)
         Output of the corr_method. tuple(correlations, pvals).
 
-    sign_mask_ : np.array of bools
+    significant_mask_ : np.array of bools
         Array of bools showing which of the original features had a
         significant correlation.
 
