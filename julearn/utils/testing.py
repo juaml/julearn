@@ -117,7 +117,7 @@ def do_scoring_test(X, y, data, api_params, sklearn_model, scorers, cv=None,
         s_key = f'test_{scoring}'
         assert len(actual.columns) == len(expected) + 2
         assert len(actual[s_key]) == len(expected[s_key])
-        assert_array_almost_equal(actual[s_key], expected[s_key])
+        assert_array_almost_equal(actual[s_key], expected[s_key], decimal=5)
 
         # Compare the models
         clf1 = actual_estimator.dataframe_pipeline.steps[-1][1]
