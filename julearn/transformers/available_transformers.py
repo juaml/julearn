@@ -1,7 +1,7 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
-from julearn.transformers.additional_transformer import CBPM
+from julearn.transformers.cbpm import CBPM
 from . dataframe import DropColumns, ChangeColumnTypes
 from .. utils import raise_error, warn
 from copy import deepcopy

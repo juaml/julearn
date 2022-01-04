@@ -1,6 +1,6 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL
-from julearn.transformers.additional_transformer import CBPM
+from julearn.transformers.cbpm import CBPM
 from julearn.transformers.target import TargetTransfromerWrapper
 from sklearn import svm
 from sklearn.pipeline import make_pipeline

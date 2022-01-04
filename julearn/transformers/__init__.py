@@ -10,4 +10,4 @@ from . confounds import DataFrameConfoundRemover, TargetConfoundRemover
 from . meta import DataFrameWrapTransformer
 from . dataframe import DropColumns, ChangeColumnTypes
 from . target import TargetTransfromerWrapper
-from . additional_transformer import CBPM
+from .cbpm import CBPM
