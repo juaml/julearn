@@ -85,8 +85,9 @@ print(scores[['test_neg_mean_absolute_error', 'test_r2_corr']].mean())
 # that takes the predicted and the actual values as input and returns a value.
 # In this case, we want to compute Pearson correlation coefficient (r).
 
-def pearson_scorer(y_pred, y_true):
-    return scipy.stats.pearsonr(y_pred, y_true)[0]  # type: ignore
+def pearson_scorer(y_true, y_pred):
+    return scipy.stats.pearsonr(  # type: ignore
+        y_true.squeeze(), y_pred.squeeze())[0]
 
 
 ###############################################################################
