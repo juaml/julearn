@@ -17,6 +17,7 @@
 .. _scikit-learn: https://scikit-learn.org/stable/
 .. _`Balanced Accuracy`: https://scikit-learn.org/stable/modules/model_evaluation.html#balanced-accuracy-score
 .. _`Precision`: https://scikit-learn.org/stable/modules/model_evaluation.html#precission-score
+.. _`scoring`: https://scikit-learn.org/stable/modules/model_evaluation.html#
 .. _`Metrics`: https://scikit-learn.org/stable/modules/model_evaluation.html#classification-metrics
 .. _`Cross Validation`: https://scikit-learn.org/stable/modules/classes.html#module-sklearn.model_selection
 .. _`Hyperparameter Tuning`: https://scikit-learn.org/stable/modules/grid_search.html
@@ -84,6 +85,7 @@
 .. _`GridSearchCV`: https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html#sklearn.model_selection.GridSearchCV
 .. _`RandomizedSearchCV`: https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.RandomizedSearchCV.html#sklearn.model_selection.RandomizedSearchCV
 
+.. _`make_scorer`: https://scikit-learn.org/stable/modules/generated/sklearn.metrics.make_scorer.html?highlight=make_scorer#sklearn.metrics.make_scorer
 
 .. _`pandas`: https://pandas.pydata.org
 .. _`pandas.DataFrame` : https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html
@@ -106,3 +108,9 @@
 
 .. _`sphinx gallery`: https://sphinx-gallery.github.io/stable/index.html
 .. _`sphinx RST reference`: https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#inline-markup
+
+
+.. numpy
+.. _`numpy`: https://numpy.org
+.. _`numpy.array`: https://numpy.org/doc/stable/reference/generated/numpy.array.html
+.. _`numpy.corrcoef`: https://numpy.org/doc/stable/reference/generated/numpy.corrcoef.html
