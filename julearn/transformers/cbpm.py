@@ -35,12 +35,14 @@ class CBPM(BaseEstimator, TransformerMixin):
         Callable which can be used to create tuple of arrays: (correlations,
         p values). Input has to be X, y.
 
-    corr_sign : str ,default='posneg'
+    corr_sign : str , default='posneg'
         Which correlations should be used:
-        Only positives use `'pos'`.
-        Only negatives use `'neg'`.
-        All use posneg.
-        In case you use posneg and theere are only pos or neg this
+        Options are:
+         * `'pos'`: use positive correlations only
+         * `'neg'`: use negative correlations only
+         * `'posneg'`: use all correlations
+
+        In case you use posneg and there are only pos or neg this
         will be used instead. The actually used correlation_values can be
         found in the attribute: `used_corr_sign_`
 
