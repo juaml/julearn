@@ -11,13 +11,16 @@ from ..utils import warn
 
 
 class CBPM(BaseEstimator, TransformerMixin):
-    '''Transformer meaning all significantly to the target
-    correlated features together.
+    '''Transformer that means together all features significantly 
+    correlated to the target.
+    
     Significant negative and positive correlations are meaned separately.
-    Non significant once are dropped. One can only chose to use negative
-    or positive correlations. The others are then also dropped.
-    In case that there are no significant correlations the mean target
-    will be returned as the only feature.
+    Non-significant ones are dropped. 
+    
+    User can choose to use negative, positive or both correlations.
+    
+    In case that there are no significant correlations the mean of the 
+    target will be returned as the only feature.
 
     This transformer implements the procedure described in :
     Shen, X., Finn, E., Scheinost, D. et al. 2016
