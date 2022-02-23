@@ -124,38 +124,23 @@ git pull --rebase origin main
 </pre></div>
 </div>
 <ol class="arabic simple" start="4">
-<li><p>Edit the file <code class="docutils literal notranslate"><span class="pre">_version.py</span></code> and remove ‘.dev’. It should match the next
-release</p></li>
-<li><p>Make sure that test pass and CI won’t fail after this modification:</p></li>
+<li><p>Create tag (replace <code class="docutils literal notranslate"><span class="pre">X.Y.Z</span></code> with the proper version).</p></li>
 </ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest -v
-flake8
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git tag vX.Y.Z
+</pre></div>
+</div>
+<ol class="arabic simple" start="5">
+<li><p>Check that the build system is creating the proper version</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">SETUPTOOLS_SCM_DEBUG</span><span class="o">=</span><span class="m">1</span> python -m build --source --binary --out-dir dist/ .
 </pre></div>
 </div>
 <ol class="arabic simple" start="6">
-<li><p>Commit and create tag (replace <code class="docutils literal notranslate"><span class="pre">X.Y.Z</span></code> with the proper version).</p></li>
-</ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git commit -am <span class="s2">&quot;Set version to X.Y.Z&quot;</span>
-git tag vX.Y.Z
-</pre></div>
-</div>
-<ol class="arabic simple" start="7">
-<li><p>Check that the build system is creating the proper version</p></li>
-</ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">SETUPTOOLS_SCM_DEBUG</span><span class="o">=</span><span class="m">1</span> python -m pep517.build --source --binary --out-dir dist/ .
-</pre></div>
-</div>
-<ol class="arabic simple" start="8">
 <li><p>Push the tag</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git push origin vX.Y.Z
 </pre></div>
 </div>
-<ol class="arabic simple" start="9">
-<li><p>Edit the file <code class="docutils literal notranslate"><span class="pre">_version.py</span></code> with the version of the next release and
-append ‘.dev’ at the end.</p></li>
-<li><p>Commit and push to main</p></li>
-</ol>
 </section>
 </section>
 
