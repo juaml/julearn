@@ -7,6 +7,21 @@ with open('README.md', 'r') as fh:
     long_description = fh.read()
 
 
+def _getversion():
+    from setuptools_scm.version import get_local_node_and_date, \
+        simplified_semver_version
+
+    def clean_scheme(version):
+        print(version)
+        return get_local_node_and_date(version) if version.dirty else ""
+
+    return {
+        'version_scheme': simplified_semver_version,
+        'local_scheme': clean_scheme,
+        'write_to': 'julearn/_version.py',
+        'write_to_template': "__version__ = '{version}'\n"}
+
+
 DOWNLOAD_URL = 'https://github.com/juaml/julearn/'
 URL = 'https://juaml.github.io/julearn'
 
@@ -41,11 +56,6 @@ setuptools.setup(
                       'pandas>=1.1.2',
                       'scikit-learn>=0.23.2'],
     python_requires='>=3.6',
-    use_scm_version=dict(
-        version_scheme="python-simplified-semver",
-        local_scheme="node-and-date",
-        write_to="julearn/_version.py",
-        write_to_template="__version__ = '{version}'\n"
-    ),
+    use_scm_version=_getversion,
     setup_requires=['setuptools_scm'],
 )
