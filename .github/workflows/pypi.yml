@@ -17,17 +17,12 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: 3.8
-    - name: Install pep517
+    - name: Install build
       run: 
-        pip install pep517
+        pip install build
     - name: Build a binary wheel and a source tarball
       run: >-
-        python -m
-        pep517.build
-        --source
-        --binary
-        --out-dir dist/
-        .
+        python -m build --sdist --wheel --outdir dist/ .
     - name: Publish distribution 📦 to Test PyPI
       uses: pypa/gh-action-pypi-publish@master
       with:
