@@ -1,5 +1,6 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL
+from julearn.transformers.cbpm import CBPM
 from julearn.transformers.target import TargetTransfromerWrapper
 from sklearn import svm
 from sklearn.pipeline import make_pipeline
@@ -42,12 +43,17 @@ _features_transformers = {
     'select_fpr': SelectFpr,
     'select_fwe': SelectFwe,
     'select_variance': VarianceThreshold,
+    'cbpm': CBPM
 }
 
 _transformer_params = {
     'scaler_quantile': {'n_quantiles': 10},
     'select_k': {'k': 2},
 }
+
+_works_only_with_regression = [
+    'cbpm'
+]
 
 
 def test_feature_transformers():
@@ -72,7 +78,13 @@ def test_feature_transformers():
         else:
             tr = tr_klass()
         clf = make_pipeline(tr, svm.SVC())
-        do_scoring_test(X, y, data=df_iris, api_params=api_params,
+        if tr_name in _works_only_with_regression:
+            df_test = df_iris.copy()
+            df_test[y] = df_iris[y].apply(
+                lambda x: {'setosa': 0, 'versicolor': 1, 'virginica': 3}[x])
+        else:
+            df_test = df_iris.copy()
+        do_scoring_test(X, y, data=df_test, api_params=api_params,
                         sklearn_model=clf, scorers=scorers)
 
 
