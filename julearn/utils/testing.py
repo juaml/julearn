@@ -4,7 +4,6 @@
 import warnings
 import numpy as np
 from numpy.testing import assert_array_equal, assert_array_almost_equal
-import sklearn
 from sklearn.svm import SVC, SVR
 from sklearn.ensemble import (RandomForestClassifier, RandomForestRegressor,
                               ExtraTreesClassifier, ExtraTreesRegressor,
@@ -26,7 +25,6 @@ from sklearn.model_selection import cross_validate
 
 from julearn import run_cross_validation
 from julearn.prepare import prepare_cv
-from julearn.utils.versions import check_version
 
 
 def compare_models(clf1, clf2):  # pragma: no cover
