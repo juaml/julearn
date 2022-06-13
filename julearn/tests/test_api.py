@@ -302,9 +302,9 @@ def test_consistency():
                              pos_labels='setosa')
 
     # Warn with target transformer
-    # with pytest.warns(RuntimeWarning, match='not suitable for'):
-    #     _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
-    #                              preprocess_y='zscore')
+    with pytest.warns(RuntimeWarning, match='not suitable for'):
+        _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
+                                 preprocess_y='zscore')
 
     # Error for regression
     with pytest.raises(ValueError, match='not suitable for'):
@@ -319,11 +319,11 @@ def test_consistency():
                                  pos_labels='setosa')
 
     # Warn for regression with y_transformer
-    # match = 'owever, a y transformer'
-    # with pytest.warns(RuntimeWarning, match=match):
-    #     _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
-    #                              problem_type='regression',
-    #                              preprocess_y='zscore')
+    match = 'owever, a y transformer'
+    with pytest.warns(RuntimeWarning, match=match):
+        _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
+                                 problem_type='regression',
+                                 preprocess_y='zscore')
 
     # Example 2: 2 classes, as strings
     df_iris = df_iris[df_iris['species'].isin(['setosa', 'virginica'])]
@@ -367,9 +367,9 @@ def test_consistency():
                              pos_labels=2)
 
     # # Warn with target transformer
-    # with pytest.warns(RuntimeWarning, match='not suitable for'):
-    #     _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
-    #                              preprocess_y='zscore')
+    with pytest.warns(RuntimeWarning, match='not suitable for'):
+        _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
+                                 preprocess_y='zscore')
 
     # no error for regression
     _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
