@@ -162,6 +162,7 @@ def _get_coef_over_versions(clf):
         with warnings.catch_warnings():
             warnings.filterwarnings('error', category=FutureWarning)
             warnings.filterwarnings('error', category=DeprecationWarning)
+             
             try:
                 return clf.coef_
             except Warning:
