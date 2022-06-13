@@ -164,9 +164,12 @@ def _get_coef_over_versions(clf):
         with warnings.catch_warnings():
             warnings.filterwarnings('error', category=FutureWarning)
             warnings.filterwarnings('error', category=DeprecationWarning)
-            version_over_1 = check_version(
-                sklearn.__version__, lambda x: int(x) >= 1)
-            if version_over_1:
+            version_over_024 = check_version(
+                sklearn.__version__, lambda x: int(x) >= 0,
+                minor_check=lambda x: int(x) >= 24
+            )
+
+            if version_over_024:
                 return clf.feature_log_prob_
             else:
                 return clf.coef_
