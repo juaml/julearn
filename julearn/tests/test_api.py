@@ -42,7 +42,7 @@ def test_simple_binary():
 
     # now let's try target-dependent scores
     scorers = ['recall', 'precision', 'f1']
-    sk_y = (df_iris[y].values == 'setosa').astype(np.int)
+    sk_y = (df_iris[y].values == 'setosa').astype(np.int64)
     api_params = {'model': 'svm', 'pos_labels': 'setosa'}
     clf = make_pipeline(StandardScaler(), svm.SVC())
     do_scoring_test(X, y, data=df_iris, api_params=api_params,
@@ -50,7 +50,7 @@ def test_simple_binary():
 
     # now let's try proba-dependent scores
     scorers = ['roc_auc']
-    sk_y = (df_iris[y].values == 'setosa').astype(np.int)
+    sk_y = (df_iris[y].values == 'setosa').astype(np.int64)
     model = svm.SVC(probability=True)
     api_params = {'model': model, 'pos_labels': 'setosa'}
     clf = make_pipeline(StandardScaler(), svm.SVC())
@@ -61,7 +61,7 @@ def test_simple_binary():
     # e.g. svm with probability=False
 
     scorers = ['roc_auc']
-    sk_y = (df_iris[y].values == 'setosa').astype(np.int)
+    sk_y = (df_iris[y].values == 'setosa').astype(np.int64)
     model = svm.SVC(probability=False)
     api_params = {'model': model, 'pos_labels': 'setosa'}
     clf = make_pipeline(StandardScaler(), svm.SVC())
@@ -102,7 +102,7 @@ def test_set_hyperparam():
     sk_y = df_iris[y].values
 
     scoring = 'roc_auc'
-    t_sk_y = (sk_y == 'setosa').astype(np.int)
+    t_sk_y = (sk_y == 'setosa').astype(np.int64)
 
     with pytest.warns(RuntimeWarning,
                       match=r"Hyperparameter search CV"):
@@ -264,7 +264,7 @@ def test_tune_hyperparam():
     clf = make_pipeline(StandardScaler(), svm.SVC())
     gs = GridSearchCV(clf, {'svc__C': [0.01, 0.001]}, cv=cv_inner,
                       scoring=gs_scoring)
-    sk_y = (sk_y == 'setosa').astype(np.int)
+    sk_y = (sk_y == 'setosa').astype(np.int64)
     expected = cross_validate(gs, sk_X, sk_y, cv=cv_outer, scoring=[scoring])
 
     assert len(actual.columns) == len(expected) + 2

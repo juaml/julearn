@@ -112,7 +112,7 @@ def test_prepare_input_data_np():
         X=X, y=y, confounds=confounds, df=None, pos_labels=pos_labels,
         groups=groups)
 
-    labeled_y = (y == pos_labels).astype(np.int)
+    labeled_y = (y == pos_labels).astype(np.int64)
     _check_np_input(prepared, X=X, y=labeled_y, confounds=confounds,
                     groups=groups)
 
@@ -126,7 +126,7 @@ def test_prepare_input_data_np():
         X=X, y=y, confounds=confounds, df=None, pos_labels=pos_labels,
         groups=groups)
 
-    labeled_y = np.isin(y, pos_labels).astype(np.int)
+    labeled_y = np.isin(y, pos_labels).astype(np.int64)
     _check_np_input(prepared, X=X, y=labeled_y, confounds=confounds,
                     groups=groups)
 
