@@ -56,5 +56,7 @@ Bugs
 
 - Fix Bug in the transformer wrapper implementation (:gh:`122` by `Sami Hamdan`_).
 
+- Fix Bug of showing Warnings when using confound removal (:gh:`152` by `Sami Hamdan`_).
+
 API changes
 ~~~~~~~~~~~
