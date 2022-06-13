@@ -56,5 +56,7 @@ Bugs
 
 - Fix Bug in the transformer wrapper implementation (:gh:`122` by `Sami Hamdan`_).
 
+- Fix Bug Target Transformer missing BaseEstimator (:gh:`151` by `Sami Hamdan`_).
+
 API changes
 ~~~~~~~~~~~
