@@ -28,7 +28,7 @@ def check_version(version,
     """
 
     def get_check(check_func):
-        return lambda x: True if check_func is None else check_func
+        return lambda x: True if check_func is None else check_func(x)
 
     version_checks = [major_check, minor_check, patch_check]
     versions_checked = [get_check(check)(version)
