@@ -4,6 +4,7 @@
 import warnings
 import numpy as np
 from numpy.testing import assert_array_equal, assert_array_almost_equal
+import sklearn
 from sklearn.svm import SVC, SVR
 from sklearn.ensemble import (RandomForestClassifier, RandomForestRegressor,
                               ExtraTreesClassifier, ExtraTreesRegressor,
@@ -25,6 +26,7 @@ from sklearn.model_selection import cross_validate
 
 from julearn import run_cross_validation
 from julearn.prepare import prepare_cv
+from julearn.utils.versions import check_version
 
 
 def compare_models(clf1, clf2):  # pragma: no cover
@@ -162,10 +164,11 @@ def _get_coef_over_versions(clf):
         with warnings.catch_warnings():
             warnings.filterwarnings('error', category=FutureWarning)
             warnings.filterwarnings('error', category=DeprecationWarning)
-             
-            try:
-                return clf.coef_
-            except Warning:
+            version_over_1 = check_version(
+                sklearn.__version__, lambda x: int(x) >= 1)
+            if version_over_1:
                 return clf.feature_log_prob_
+            else:
+                return clf.coef_
     else:
         return clf.coef_
