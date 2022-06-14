@@ -60,4 +60,4 @@ Bugs
 API changes
 ~~~~~~~~~~~
 
-- Inner `cv` needs to be provided using `search_params`. Depricating `cv` in `model_params` (:gh:`146`  by `Sami Hamdan`_).
+- Inner `cv` needs to be provided using `search_params`. Deprecating `cv` in `model_params` (:gh:`146`  by `Sami Hamdan`_).
