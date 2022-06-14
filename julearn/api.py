@@ -18,20 +18,22 @@ from . utils import logger
 
 
 def run_cross_validation(
-        X, y, model,
-        data=None,
-        confounds=None,
-        problem_type='binary_classification',
-        preprocess_X=None,
-        preprocess_y=None,
-        preprocess_confounds=None,
-        return_estimator=False,
-        cv=None,
-        groups=None,
-        scoring=None,
-        pos_labels=None,
-        model_params=None,
-        seed=None):
+    X, y, model,
+    data=None,
+    confounds=None,
+    problem_type='binary_classification',
+    preprocess_X=None,
+    preprocess_y=None,
+    preprocess_confounds=None,
+    return_estimator=False,
+    cv=None,
+    groups=None,
+    scoring=None,
+    pos_labels=None,
+    model_params=None,
+    seed=None,
+    n_jobs=None
+):
     """Run cross validation and score.
 
     Parameters
@@ -151,6 +153,11 @@ def run_cross_validation(
     final_estimator : object
         The final estimator, fitted on all the data (only if
         ``return_estimator='all'`` or ``return_estimator='final'``)
+    n_jobs : int | None
+        Number of parallel jobs used by outer cv.
+        Follows scikit-learn/joblib conventions.
+        None is 1 unless you use a joblib.parallel_backend.
+        -1 means use all available processes for parallelisation.
     """
 
     if seed is not None:
@@ -195,7 +202,8 @@ def run_cross_validation(
 
     scores = cross_validate(pipeline, df_X_conf, y, cv=cv_outer,
                             scoring=scorer, groups=df_groups,
-                            return_estimator=cv_return_estimator)
+                            return_estimator=cv_return_estimator,
+                            n_jobs=n_jobs)
 
     n_repeats = getattr(cv_outer, 'n_repeats', 1)
     n_folds = len(scores['fit_time']) // n_repeats
