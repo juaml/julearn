@@ -32,7 +32,8 @@ def run_cross_validation(
     pos_labels=None,
     model_params=None,
     seed=None,
-    n_jobs=None
+    n_jobs=None,
+    verbose=0
 ):
     """Run cross validation and score.
 
@@ -154,10 +155,17 @@ def run_cross_validation(
         The final estimator, fitted on all the data (only if
         ``return_estimator='all'`` or ``return_estimator='final'``)
     n_jobs : int | None
-        Number of parallel jobs used by outer cv.
+        Number of parallel jobs used by outer cross-validation.
         Follows scikit-learn/joblib conventions.
         None is 1 unless you use a joblib.parallel_backend.
         -1 means use all available processes for parallelisation.
+    verbose: int
+        Verbosity level of outer cross-validation.
+        Follows scikit-learn/joblib converntions.
+        0 means no additional information is printed.
+        Larger number genereally mean more information is printed.
+        Note: verbosity up to 50 will print into standard error,
+        wile larger than 50 will print in standrad output.
     """
 
     if seed is not None:
