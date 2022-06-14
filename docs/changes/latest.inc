@@ -37,7 +37,6 @@ Enhancements
 
 - Add `CBPM` transformer (by `Sami Hamdan`_).
 
-- Modified how inner `cv` is provided (:gh:`146`  by `Sami Hamdan`_).
 
 Bugs
 ~~~~
@@ -60,3 +59,5 @@ Bugs
 
 API changes
 ~~~~~~~~~~~
+
+- Inner `cv` needs to be provided using `search_params`. Depricating `cv` in `model_params` (:gh:`146`  by `Sami Hamdan`_).
