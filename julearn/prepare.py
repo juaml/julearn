@@ -323,10 +323,22 @@ def prepare_model_params(msel_dict, pipeline):
     hyper_params = _prepare_hyperparams(hyperparameters, pipeline)
 
     if len(hyper_params) > 0:
-        cv_inner = msel_dict.get('cv', None)
         scoring = msel_dict.get('scoring', None)
         search = msel_dict.get('search', 'grid')
         search_params = msel_dict.get('search_params', {})
+        cv_inner = search_params.get('cv', None)
+        cv_inner_dep = msel_dict.get('cv', None)
+        if cv_inner_dep is not None:
+            warn(
+                "`cv` should not be directly provided in the"
+                "`model_params` anymore. This functionality will"
+                "be removed in the next version of julearn."
+                "Please use `cv` inside of `search_params` instead",
+                category=DeprecationWarning
+
+
+            )
+        cv_inner = cv_inner_dep if cv_inner is None else cv_inner
 
         if search in list_searchers():
             logger.info(f'Tunning hyperparameters using {search}')
