@@ -60,7 +60,7 @@ scores = run_cross_validation(
 
 
 ###############################################################################
-# Depending on your ressources you can use n_jobs for outer cv, inner cv or
+# Depending on your resources you can use n_jobs for outer cv, inner cv or
 # even as a model_parameter for some models like `rf`.
 # Additionally, you can also use the scikitlearns `parallel_backend` for
 # parallelization.
