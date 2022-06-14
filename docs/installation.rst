@@ -22,6 +22,10 @@ automatically.
 
 Installing
 ^^^^^^^^^^
+
+.. note:: Currently, there is a big difference betweek the latest release and developer version.
+    Therefore, it might make more sense for you to use the developer version until we release
+    the next julearn version.
 There are different ways to install julearn:
 
 * Install the :ref:`install_latest_release`. This is the most suitable approach
