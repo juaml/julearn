@@ -37,6 +37,8 @@ Enhancements
 
 - Add `CBPM` transformer (by `Sami Hamdan`_).
 
+- Modified how inner `cv` is provided (:gh:`146`  by `Sami Hamdan`_).
+
 Bugs
 ~~~~
 
