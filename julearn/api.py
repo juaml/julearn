@@ -165,7 +165,7 @@ def run_cross_validation(
         0 means no additional information is printed.
         Larger number genereally mean more information is printed.
         Note: verbosity up to 50 will print into standard error,
-        wile larger than 50 will print in standrad output.
+        while larger than 50 will print in standrad output.
     """
 
     if seed is not None:

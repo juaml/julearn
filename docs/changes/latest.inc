@@ -37,6 +37,8 @@ Enhancements
 
 - Add `CBPM` transformer (by `Sami Hamdan`_).
 
+- Add documentation/example for parallelization (by `Sami Hamdan`_).
+
 Bugs
 ~~~~
 
@@ -58,3 +60,5 @@ Bugs
 
 API changes
 ~~~~~~~~~~~
+
+- Add `n_jobs` and `verbose` to `run_cross_validation` (by `Sami Hamdan`_).
