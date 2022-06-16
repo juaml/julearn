@@ -1,6 +1,7 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
+from copy import deepcopy
 from sklearn.svm import SVC, SVR
 from sklearn.ensemble import (RandomForestClassifier, RandomForestRegressor,
                               ExtraTreesClassifier, ExtraTreesRegressor,
@@ -18,7 +19,7 @@ from sklearn.naive_bayes import (BernoulliNB, CategoricalNB, ComplementNB,
                                  GaussianNB, MultinomialNB)
 from sklearn.dummy import DummyClassifier, DummyRegressor
 
-from .. utils import raise_error
+from .. utils import raise_error, warn
 from . dynamic import DynamicSelection
 
 _available_models = {
@@ -114,6 +115,8 @@ _available_models = {
     }
 }
 
+_available_models_reset = deepcopy(_available_models)
+
 
 def list_models():
     """List all the available model names
@@ -156,3 +159,54 @@ def get_model(name, problem_type, **kwargs):
 
     out = _available_models[name][problem_type](**kwargs)
     return out
+
+
+def register_model(model_name,
+                   binary_cls=None, multiclass_cls=None, regression_cls=None):
+    """Register a model to julearn.
+    This function allows you to add a model or models for different
+    problem_types to julearn.
+    Afterwards, it behaves like every other julearn model and can
+    be referred to by name. E.g. you can use inside of
+     `run_cross_validation` unsig `model=model_name`.
+
+    Parameters
+    ----------
+    model_name : str
+        Name by which model will be referenced by
+    binary_cls : object
+        The class which will be used for
+         binary_classification problem_type.
+    multiclass_cls : str
+        The class which will be used for
+         multiclass_classification problem_type.
+    regression_cls : str
+        The class which will be used for
+         regression problem_type.
+
+    """
+    problem_types = [
+        "binary_classification",
+        "multiclass_classification",
+        "regression"
+    ]
+    for cls, problem_type in zip(
+            [binary_cls, multiclass_cls, regression_cls],
+            problem_types):
+        if cls is not None:
+            if _available_models.get(model_name) is not None:
+                if _available_models.get(model_name).get(problem_type):
+
+                    warn(f'The model of name `{model_name}` and of'
+                         f' problem_type  `{problem_type}` does already '
+                         'exist. Therefore, you are overwriting this model.'
+                         )
+                _available_models[model_name][problem_type] = cls
+            else:
+                _available_models[model_name] = {problem_type: cls}
+
+
+def reset_models():
+    global _available_models
+    _available_models = deepcopy(_available_models_reset)
+    return _available_models
