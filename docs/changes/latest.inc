@@ -63,4 +63,8 @@ Bugs
 API changes
 ~~~~~~~~~~~
 
+
+- Inner `cv` needs to be provided using `search_params`. Deprecating `cv` in `model_params` (:gh:`146`  by `Sami Hamdan`_).
+
 - Add `n_jobs` and `verbose` to `run_cross_validation` (by `Sami Hamdan`_).
+
