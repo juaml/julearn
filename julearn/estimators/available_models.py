@@ -205,7 +205,6 @@ def register_model(model_name,
         if cls is not None:
             if _available_models.get(model_name) is not None:
                 if _available_models.get(model_name).get(problem_type):
-
                     if overwrite is None:
                         warn(
                             f'Model named {model_name} with'
@@ -216,9 +215,6 @@ def register_model(model_name,
                             'If you wont to reset this use '
                             '`julearn.estimators.reset_models`.'
                         )
-                        logger.info(f'registering model named {model_name} '
-                                    f'with problem_type {problem_type}'
-                                    )
                     elif overwrite is False:
                         raise_error(
 

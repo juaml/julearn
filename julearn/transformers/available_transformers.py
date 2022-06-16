@@ -1,9 +1,9 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
-from julearn.transformers.cbpm import CBPM
+from . cbpm import CBPM
 from . dataframe import DropColumns, ChangeColumnTypes
-from .. utils import raise_error, warn
+from .. utils import raise_error, warn, logger
 from copy import deepcopy
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import (StandardScaler, RobustScaler, MaxAbsScaler,
@@ -171,7 +171,8 @@ def _get_apply_to(transformer):
 
 
 def register_transformer(transformer_name, transformer_cls,
-                         returned_features, apply_to):
+                         returned_features, apply_to,
+                         overwrite=None):
     """Register a transformer to julearn.
     This function allows you to add a transformer to julearn.
     Afterwards, it behaves like every other julearn transformer and can
@@ -196,7 +197,6 @@ def register_transformer(transformer_name, transformer_cls,
             * 'unknown' leads to created column names,
             * 'unknown_same_type' leads to created column names
               with the same column type.
-
     apply_to : str | list(str)
         Defines to which columns the transformer is applied to.
         For this julearn user specified 'columns_types' from the user.
@@ -216,11 +216,40 @@ def register_transformer(transformer_name, transformer_cls,
         As mentioned above you can combine these types.
         E.g. ['continuous', 'confound'] would specify that your transformer
         uses both the confounds and the continuous variables as input.
+    overwrite : bool | None, optional
+        decides whether overwrite should be allowed, by default None.
+        Options are:
+
+        * None : overwrite is possible, but warns the user
+        * True : overwrite is possible without any warning
+        * False : overwrite is not possible, error is raised instead
     """
     if _available_transformers.get(transformer_name) is not None:
-        warn(f'The transformer of name `{transformer_name}` does already '
-             'exist. Therefore, you are overwriting this transformer.'
-             )
+
+        if overwrite is None:
+            warn(
+                f'Transformer named {transformer_name}'
+                ' already exists. '
+                f'Therefore, {transformer_name} will be overwritten. '
+                'To remove this warning set overwrite=True. '
+                'If you want to reset this use '
+                '`julearn.transformer.reset_models`.'
+            )
+        elif overwrite is False:
+            raise_error(
+                f'Transformer named {transformer_name}'
+                ' already exists. '
+                f'Therefore, {transformer_name} will be overwritten. '
+                'overwrite is set to False, '
+                'therefore you cannot overwrite '
+                'existing models. Set overwrite=True'
+                ' in case you want to '
+                'overwrite existing transformer.'
+            )
+
+    logger.info(f'registering transfromer named {transformer_name}.'
+                )
+
     _dict_transformer_to_name[transformer_cls] = transformer_name
 
     if apply_to != 'continuous':

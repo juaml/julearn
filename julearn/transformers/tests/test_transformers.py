@@ -25,6 +25,19 @@ from julearn.transformers.available_transformers import (
     _get_returned_features, _get_apply_to,
     _available_transformers)
 
+
+class fish(BaseEstimator, TransformerMixin):
+
+    def __init__(self, can_it_fly):
+        self.can_it_fly = can_it_fly
+
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        return X
+
+
 reset_register()
 
 
@@ -167,7 +180,7 @@ def test_register_reset():
     assert _get_apply_to(PassThroughTransformer()) == 'all'
     assert _get_returned_features(PassThroughTransformer()) == 'same'
 
-    with pytest.warns(RuntimeWarning, match='The transformer of name '):
+    with pytest.warns(RuntimeWarning, match='Transformer named'):
         register_transformer('passthrough', PassThroughTransformer,
                              'same', 'all')
     reset_register()
@@ -183,17 +196,6 @@ def test_register_reset():
 
 def test_register_class_no_default_params():
 
-    class fish(BaseEstimator, TransformerMixin):
-
-        def __init__(self, can_it_fly):
-            self.can_it_fly = can_it_fly
-
-        def fit(self, X, y=None):
-            return self
-
-        def transform(self, X):
-            return X
-
     reset_register()
     register_transformer('fish', fish, 'unknown', 'all')
     get_transformer('fish', can_it_fly='dont_be_stupid')
@@ -202,3 +204,21 @@ def test_register_class_no_default_params():
 def test_get_target_transformer_no_error():
     get_transformer('zscore', target=True)
     get_transformer('remove_confound', target=True)
+
+
+def test_register_warning():
+    with pytest.warns(RuntimeWarning, match="Transformer name"):
+        register_transformer('zscore', fish, 'unknown', 'all')
+    reset_register()
+
+    with pytest.raises(ValueError, match="Transformer name"):
+        register_transformer('zscore', fish, 'unknown', 'all',
+                             overwrite=False)
+    reset_register()
+
+    with pytest.warns(None) as record:
+        register_transformer('zscore', fish, 'unknown', 'all',
+                             overwrite=True)
+
+    reset_register()
+    assert len(record) == 0
