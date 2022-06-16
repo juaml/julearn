@@ -62,3 +62,4 @@ Bugs
 
 API changes
 ~~~~~~~~~~~
+- Make api surrounding registering consistently use overwrite (by `Sami Hamdan`_).
