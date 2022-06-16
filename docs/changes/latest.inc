@@ -37,6 +37,8 @@ Enhancements
 
 - Add `CBPM` transformer (by `Sami Hamdan`_).
 
+- ADD `register_model` (:gh:`105` by `Sami Hamdan`_).
+
 Bugs
 ~~~~
 
