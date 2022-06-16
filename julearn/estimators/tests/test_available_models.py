@@ -28,7 +28,18 @@ def test_register_model():
         binary = get_model("dt", "binary_classification")
 
 
-def test_reister_warning():
-    with pytest.warns(RuntimeWarning, match="The model of name"):
+def test_register_warning():
+    with pytest.warns(RuntimeWarning, match="Model name"):
         register_model("rf", regression_cls=RandomForestRegressor)
     reset_models()
+
+    with pytest.raises(ValueError, match="Model name"):
+        register_model(
+            "rf", regression_cls=RandomForestRegressor, overwrite=False)
+    reset_models()
+
+    with pytest.warns(None) as record:
+        register_model(
+            "rf", regression_cls=RandomForestRegressor, overwrite=True)
+    reset_models()
+    assert len(record) == 0
