@@ -3,12 +3,12 @@
 # License: AGPL
 from inspect import signature
 import pandas as pd
-from sklearn.base import TransformerMixin
+from sklearn.base import TransformerMixin, BaseEstimator
 
 from .. utils import raise_error
 
 
-class TargetTransfromerWrapper(TransformerMixin):
+class TargetTransfromerWrapper(TransformerMixin, BaseEstimator):
 
     def __init__(self, transformer, **params):
         """Using a sklearn transformer and applying them to the target/y.
