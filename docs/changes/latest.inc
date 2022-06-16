@@ -58,5 +58,7 @@ Bugs
 
 - Fix Bug in the transformer wrapper implementation (:gh:`122` by `Sami Hamdan`_).
 
+- Fix Bug registered scorer not working in dictionary for scoring  ( by `Sami Hamdan`_). 
+
 API changes
 ~~~~~~~~~~~
