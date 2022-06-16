@@ -52,6 +52,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../steps.html">Available Pipeline Steps</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../hyperparameters.html">Hyperparameters</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Basic Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="run_n_jobs.html">Parallelize Julearn</a></li>
 <li class="toctree-l2"><a class="reference internal" href="run_simple_binary_classification.html">Simple Binary Classification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_inspect_random_forest.html">Inspecting Random Forest models</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Multiclass Classification</a></li>
@@ -158,13 +159,13 @@ for the test data.</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-06-16 09:06:14,460 - julearn - INFO - ===== Lib Versions =====
-2022-06-16 09:06:14,460 - julearn - INFO - numpy: 1.19.5
-2022-06-16 09:06:14,460 - julearn - INFO - scipy: 1.8.1
-2022-06-16 09:06:14,460 - julearn - INFO - sklearn: 0.24.2
-2022-06-16 09:06:14,460 - julearn - INFO - pandas: 1.2.5
-2022-06-16 09:06:14,460 - julearn - INFO - julearn: 0.2.5.dev42
-2022-06-16 09:06:14,460 - julearn - INFO - ========================
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-06-16 09:07:11,351 - julearn - INFO - ===== Lib Versions =====
+2022-06-16 09:07:11,351 - julearn - INFO - numpy: 1.19.5
+2022-06-16 09:07:11,351 - julearn - INFO - scipy: 1.8.1
+2022-06-16 09:07:11,351 - julearn - INFO - sklearn: 0.24.2
+2022-06-16 09:07:11,351 - julearn - INFO - pandas: 1.2.5
+2022-06-16 09:07:11,351 - julearn - INFO - julearn: 0.2.5.dev43
+2022-06-16 09:07:11,351 - julearn - INFO - ========================
 </pre></div>
 </div>
 <p>Split the dataset into train and test</p>
@@ -180,20 +181,20 @@ for the test data.</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-06-16 09:06:14,465 - julearn - INFO - Using default CV
-2022-06-16 09:06:14,465 - julearn - INFO - ==== Input Data ====
-2022-06-16 09:06:14,465 - julearn - INFO - Using dataframe as input
-2022-06-16 09:06:14,465 - julearn - INFO - Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2022-06-16 09:06:14,465 - julearn - INFO - Target: species
-2022-06-16 09:06:14,465 - julearn - INFO - Expanded X: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2022-06-16 09:06:14,465 - julearn - INFO - Expanded Confounds: []
-2022-06-16 09:06:14,466 - julearn - INFO - ====================
-2022-06-16 09:06:14,466 - julearn - INFO -
-2022-06-16 09:06:14,466 - julearn - INFO - ====== Model ======
-2022-06-16 09:06:14,466 - julearn - INFO - Obtaining model by name: svm
-2022-06-16 09:06:14,466 - julearn - INFO - ===================
-2022-06-16 09:06:14,466 - julearn - INFO -
-2022-06-16 09:06:14,466 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-06-16 09:07:11,356 - julearn - INFO - Using default CV
+2022-06-16 09:07:11,356 - julearn - INFO - ==== Input Data ====
+2022-06-16 09:07:11,356 - julearn - INFO - Using dataframe as input
+2022-06-16 09:07:11,356 - julearn - INFO - Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2022-06-16 09:07:11,356 - julearn - INFO - Target: species
+2022-06-16 09:07:11,356 - julearn - INFO - Expanded X: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2022-06-16 09:07:11,357 - julearn - INFO - Expanded Confounds: []
+2022-06-16 09:07:11,358 - julearn - INFO - ====================
+2022-06-16 09:07:11,358 - julearn - INFO -
+2022-06-16 09:07:11,358 - julearn - INFO - ====== Model ======
+2022-06-16 09:07:11,358 - julearn - INFO - Obtaining model by name: svm
+2022-06-16 09:07:11,358 - julearn - INFO - ===================
+2022-06-16 09:07:11,358 - julearn - INFO -
+2022-06-16 09:07:11,358 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
 </pre></div>
 </div>
 <p>The scores dataframe has all the values for each CV split.</p>
@@ -202,11 +203,11 @@ for the test data.</p>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>   fit_time  score_time  test_accuracy  repeat  fold
-0  0.010963    0.006825       0.875000       0     0
-1  0.010535    0.006776       0.916667       0     1
-2  0.010559    0.006777       0.875000       0     2
-3  0.010631    0.006780       0.875000       0     3
-4  0.010497    0.006794       1.000000       0     4
+0  0.014604    0.009453       0.875000       0     0
+1  0.014296    0.010190       0.916667       0     1
+2  0.014194    0.009324       0.875000       0     2
+3  0.014786    0.009813       0.875000       0     3
+4  0.015010    0.009961       1.000000       0     4
 </pre></div>
 </div>
 <p>Now we can get the accuracy per fold and repetition:</p>
@@ -284,7 +285,7 @@ the heatmap with annotations.</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Confusion matrix&#39;)
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.800 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.072 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-basic-plot-cm-acc-multiclass-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/618f422c69e53bcf0286380e96ee26b5/plot_cm_acc_multiclass.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_cm_acc_multiclass.py</span></code></a></p>

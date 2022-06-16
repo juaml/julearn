@@ -52,6 +52,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../steps.html">Available Pipeline Steps</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../hyperparameters.html">Hyperparameters</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Basic Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="run_n_jobs.html">Parallelize Julearn</a></li>
 <li class="toctree-l2"><a class="reference internal" href="run_simple_binary_classification.html">Simple Binary Classification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_inspect_random_forest.html">Inspecting Random Forest models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_cm_acc_multiclass.html">Multiclass Classification</a></li>
@@ -150,13 +151,13 @@ with and without confound removal using a Random Forest classifier.</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-06-16 09:06:26,876 - julearn - INFO - ===== Lib Versions =====
-2022-06-16 09:06:26,876 - julearn - INFO - numpy: 1.19.5
-2022-06-16 09:06:26,876 - julearn - INFO - scipy: 1.8.1
-2022-06-16 09:06:26,876 - julearn - INFO - sklearn: 0.24.2
-2022-06-16 09:06:26,876 - julearn - INFO - pandas: 1.2.5
-2022-06-16 09:06:26,876 - julearn - INFO - julearn: 0.2.5.dev42
-2022-06-16 09:06:26,876 - julearn - INFO - ========================
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-06-16 09:07:28,709 - julearn - INFO - ===== Lib Versions =====
+2022-06-16 09:07:28,709 - julearn - INFO - numpy: 1.19.5
+2022-06-16 09:07:28,709 - julearn - INFO - scipy: 1.8.1
+2022-06-16 09:07:28,709 - julearn - INFO - sklearn: 0.24.2
+2022-06-16 09:07:28,709 - julearn - INFO - pandas: 1.2.5
+2022-06-16 09:07:28,709 - julearn - INFO - julearn: 0.2.5.dev43
+2022-06-16 09:07:28,710 - julearn - INFO - ========================
 </pre></div>
 </div>
 <p>load the iris data from seaborn</p>
@@ -199,20 +200,20 @@ Note: confounds=None by default</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-06-16 09:06:26,881 - julearn - INFO - Setting random seed to 200
-2022-06-16 09:06:26,881 - julearn - INFO - ==== Input Data ====
-2022-06-16 09:06:26,881 - julearn - INFO - Using dataframe as input
-2022-06-16 09:06:26,881 - julearn - INFO - Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2022-06-16 09:06:26,881 - julearn - INFO - Target: species
-2022-06-16 09:06:26,881 - julearn - INFO - Expanded X: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2022-06-16 09:06:26,881 - julearn - INFO - Expanded Confounds: []
-2022-06-16 09:06:26,882 - julearn - INFO - ====================
-2022-06-16 09:06:26,882 - julearn - INFO -
-2022-06-16 09:06:26,882 - julearn - INFO - ====== Model ======
-2022-06-16 09:06:26,882 - julearn - INFO - Obtaining model by name: rf
-2022-06-16 09:06:26,882 - julearn - INFO - ===================
-2022-06-16 09:06:26,882 - julearn - INFO -
-2022-06-16 09:06:26,883 - julearn - INFO - Using scikit-learn CV scheme StratifiedBootstrap(n_splits=20, random_state=42, test_size=0.3,
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-06-16 09:07:28,716 - julearn - INFO - Setting random seed to 200
+2022-06-16 09:07:28,717 - julearn - INFO - ==== Input Data ====
+2022-06-16 09:07:28,717 - julearn - INFO - Using dataframe as input
+2022-06-16 09:07:28,717 - julearn - INFO - Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2022-06-16 09:07:28,717 - julearn - INFO - Target: species
+2022-06-16 09:07:28,717 - julearn - INFO - Expanded X: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2022-06-16 09:07:28,717 - julearn - INFO - Expanded Confounds: []
+2022-06-16 09:07:28,718 - julearn - INFO - ====================
+2022-06-16 09:07:28,718 - julearn - INFO -
+2022-06-16 09:07:28,718 - julearn - INFO - ====== Model ======
+2022-06-16 09:07:28,718 - julearn - INFO - Obtaining model by name: rf
+2022-06-16 09:07:28,719 - julearn - INFO - ===================
+2022-06-16 09:07:28,719 - julearn - INFO -
+2022-06-16 09:07:28,719 - julearn - INFO - Using scikit-learn CV scheme StratifiedBootstrap(n_splits=20, random_state=42, test_size=0.3,
           train_size=None)
 </pre></div>
 </div>
@@ -226,21 +227,21 @@ Note: we initialize the CV again to use the same folds as before</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-06-16 09:06:29,936 - julearn - INFO - Setting random seed to 200
-2022-06-16 09:06:29,936 - julearn - INFO - ==== Input Data ====
-2022-06-16 09:06:29,936 - julearn - INFO - Using dataframe as input
-2022-06-16 09:06:29,936 - julearn - INFO - Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2022-06-16 09:06:29,936 - julearn - INFO - Target: species
-2022-06-16 09:06:29,936 - julearn - INFO - Confounds: petal_width
-2022-06-16 09:06:29,936 - julearn - INFO - Expanded X: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2022-06-16 09:06:29,936 - julearn - INFO - Expanded Confounds: [&#39;petal_width&#39;]
-2022-06-16 09:06:29,937 - julearn - INFO - ====================
-2022-06-16 09:06:29,937 - julearn - INFO -
-2022-06-16 09:06:29,937 - julearn - INFO - ====== Model ======
-2022-06-16 09:06:29,937 - julearn - INFO - Obtaining model by name: rf
-2022-06-16 09:06:29,937 - julearn - INFO - ===================
-2022-06-16 09:06:29,937 - julearn - INFO -
-2022-06-16 09:06:29,938 - julearn - INFO - Using scikit-learn CV scheme StratifiedBootstrap(n_splits=20, random_state=42, test_size=0.3,
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-06-16 09:07:32,845 - julearn - INFO - Setting random seed to 200
+2022-06-16 09:07:32,846 - julearn - INFO - ==== Input Data ====
+2022-06-16 09:07:32,846 - julearn - INFO - Using dataframe as input
+2022-06-16 09:07:32,846 - julearn - INFO - Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2022-06-16 09:07:32,846 - julearn - INFO - Target: species
+2022-06-16 09:07:32,846 - julearn - INFO - Confounds: petal_width
+2022-06-16 09:07:32,846 - julearn - INFO - Expanded X: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2022-06-16 09:07:32,846 - julearn - INFO - Expanded Confounds: [&#39;petal_width&#39;]
+2022-06-16 09:07:32,847 - julearn - INFO - ====================
+2022-06-16 09:07:32,847 - julearn - INFO -
+2022-06-16 09:07:32,847 - julearn - INFO - ====== Model ======
+2022-06-16 09:07:32,847 - julearn - INFO - Obtaining model by name: rf
+2022-06-16 09:07:32,847 - julearn - INFO - ===================
+2022-06-16 09:07:32,848 - julearn - INFO -
+2022-06-16 09:07:32,848 - julearn - INFO - Using scikit-learn CV scheme StratifiedBootstrap(n_splits=20, random_state=42, test_size=0.3,
           train_size=None)
 </pre></div>
 </div>
@@ -355,7 +356,7 @@ a difference in importances.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_confound_removal_classification_004.png" srcset="../../_images/sphx_glr_plot_confound_removal_classification_004.png" alt="plot confound removal classification" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  8.090 seconds)</p>
+<img src="../../_images/sphx_glr_plot_confound_removal_classification_004.png" srcset="../../_images/sphx_glr_plot_confound_removal_classification_004.png" alt="plot confound removal classification" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  11.214 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-basic-plot-confound-removal-classification-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/a04a8d098f83972da74112b5a7f757ed/plot_confound_removal_classification.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_confound_removal_classification.py</span></code></a></p>
