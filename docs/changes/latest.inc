@@ -37,6 +37,7 @@ Enhancements
 
 - Add `CBPM` transformer (by `Sami Hamdan`_).
 
+- Add documentation/example for parallelization (by `Sami Hamdan`_).
 
 Bugs
 ~~~~
@@ -57,7 +58,13 @@ Bugs
 
 - Fix Bug in the transformer wrapper implementation (:gh:`122` by `Sami Hamdan`_).
 
+- Fix Bug Target Transformer missing BaseEstimator (:gh:`151` by `Sami Hamdan`_).
+
 API changes
 ~~~~~~~~~~~
 
+
 - Inner `cv` needs to be provided using `search_params`. Deprecating `cv` in `model_params` (:gh:`146`  by `Sami Hamdan`_).
+
+- Add `n_jobs` and `verbose` to `run_cross_validation` (by `Sami Hamdan`_).
+
