@@ -304,7 +304,7 @@ def test_consistency():
     # Warn with target transformer
     with pytest.warns(RuntimeWarning, match='not suitable for'):
         _ = run_cross_validation(X=X, y=y, data=df_iris, model='svm', cv=cv,
-                                 preprocess_y=LabelBinarizer())
+                                 preprocess_y='zscore')
 
     # Error for regression
     with pytest.raises(ValueError, match='not suitable for'):
