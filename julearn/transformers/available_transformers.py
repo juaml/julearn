@@ -259,7 +259,7 @@ def register_transformer(transformer_name, transformer_cls,
         transformer_cls, returned_features]
 
 
-def reset_register():
+def reset_transformer_register():
     global _available_transformers
     global _dict_transformer_to_name
     global _apply_to_default_exceptions

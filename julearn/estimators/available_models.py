@@ -213,7 +213,7 @@ def register_model(model_name,
                             f'Therefore, {model_name} will be overwritten. '
                             'To remove this warning set overwrite=True. '
                             'If you wont to reset this use '
-                            '`julearn.estimators.reset_models`.'
+                            '`julearn.estimators.reset_model_register`.'
                         )
                     elif overwrite is False:
                         raise_error(
@@ -242,7 +242,7 @@ def register_model(model_name,
                 _available_models[model_name] = {problem_type: cls}
 
 
-def reset_models():
+def reset_model_register():
     global _available_models
     _available_models = deepcopy(_available_models_reset)
     return _available_models

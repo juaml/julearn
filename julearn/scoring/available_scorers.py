@@ -47,12 +47,12 @@ def list_scorers():
     return {**SCORERS, **_extra_available_scorers}.keys()
 
 
-def register_scorer(name, scorer, overwrite=None):
+def register_scorer(scorer_name, scorer, overwrite=None):
     """register a scorer, so that you can access it in scoring with its name.
 
     Parameters
     ----------
-    name : str
+    scorer_name : str
         name of the scorer you want to register
     scorer : callable
         function of signature (estimator, X, y) see:
@@ -65,22 +65,22 @@ def register_scorer(name, scorer, overwrite=None):
         * True : overwrite is possible without any warning
         * False : overwrite is not possible, error is raised instead
     """
-    if name in list_scorers():
+    if scorer_name in list_scorers():
         if overwrite is None:
             warn(
-                f'scorer named {name} already exists. '
-                f'Therefore, {name} will be overwritten. '
+                f'scorer named {scorer_name} already exists. '
+                f'Therefore, {scorer_name} will be overwritten. '
                 'To remove this warning set overwrite=True '
             )
-            logger.info(f'registering scorer named {name}')
+            logger.info(f'registering scorer named {scorer_name}')
         elif overwrite is False:
             raise_error(
-                f'scorer named {name} already exists and '
+                f'scorer named {scorer_name} already exists and '
                 'overwrite is set to False, therefore you cannot overwrite '
                 'existing scorers. Set overwrite=True in case you want to '
                 'overwrite existing scorers')
-    logger.info(f'registering scorer named {name}')
-    _extra_available_scorers[name] = scorer
+    logger.info(f'registering scorer named {scorer_name}')
+    _extra_available_scorers[scorer_name] = scorer
 
 
 def reset_scorer_register():
