@@ -139,7 +139,8 @@ hyperparameter search will be done:</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">search</span></code>: The kind of algorithm to apply. The value <code class="docutils literal notranslate"><span class="pre">'grid'</span></code> (default)
 will apply a <cite>GridSearchCV</cite>. The value <code class="docutils literal notranslate"><span class="pre">'random'</span></code> will use a
 <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.RandomizedSearchCV.html#sklearn.model_selection.RandomizedSearchCV">RandomizedSearchCV</a></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">cv</span></code>: The cross-validation scheme to use for the hyperparameter tuning.
+<li><p><code class="docutils literal notranslate"><span class="pre">cv</span></code>: This is deprecated! Please use cv inside of <cite>search_params</cite> instead.
+The cross-validation scheme to use for the hyperparameter tuning.
 The default is to use the same scheme as for the model evaluation.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">scoring</span></code>: The scoring metric to optimize.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">search_params</span></code>: Additional parameters for the search algorithm.</p></li>
@@ -155,7 +156,7 @@ random combinations.</p>
                    <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">1000</span><span class="p">],</span>
     <span class="s1">&#39;svm__kernel&#39;</span><span class="p">:</span> <span class="s1">&#39;rbf&#39;</span><span class="p">,</span>
     <span class="s1">&#39;search&#39;</span><span class="p">:</span> <span class="s1">&#39;random&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;search_params&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;n_iter&#39;</span><span class="p">:</span> <span class="mi">50</span><span class="p">}</span>
+    <span class="s1">&#39;search_params&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;n_iter&#39;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span><span class="s1">&#39;cv&#39;</span> <span class="p">:</span> <span class="mi">3</span><span class="p">}</span>
 
 <span class="p">}</span>
 <span class="n">run_cross_validation</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;svm&#39;</span><span class="p">,</span> <span class="n">model_params</span><span class="o">=</span><span class="n">model_params</span><span class="p">)</span>
