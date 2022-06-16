@@ -34,7 +34,7 @@ configure_logging(level='INFO')
 
 
 ###############################################################################
-# Dealing with Cross-Validation techinques
+# Dealing with Cross-Validation techniques
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
 
