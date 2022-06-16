@@ -212,7 +212,7 @@ def register_model(model_name,
                             ' already exists. '
                             f'Therefore, {model_name} will be overwritten. '
                             'To remove this warning set overwrite=True. '
-                            'If you wont to reset this use '
+                            "If you won't to reset this use "
                             '`julearn.estimators.reset_model_register`.'
                         )
                     elif overwrite is False:

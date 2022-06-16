@@ -247,7 +247,7 @@ def register_transformer(transformer_name, transformer_cls,
                 'overwrite existing transformer.'
             )
 
-    logger.info(f'registering transfromer named {transformer_name}.'
+    logger.info(f'registering transformer named {transformer_name}.'
                 )
 
     _dict_transformer_to_name[transformer_cls] = transformer_name
