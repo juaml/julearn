@@ -39,6 +39,8 @@ Enhancements
 
 - ADD `register_model` (:gh:`105` by `Sami Hamdan`_).
 
+- Add documentation/example for parallelization (by `Sami Hamdan`_).
+
 Bugs
 ~~~~
 
@@ -63,3 +65,7 @@ Bugs
 API changes
 ~~~~~~~~~~~
 - Make api surrounding registering consistently use overwrite (by `Sami Hamdan`_).
+
+- Fix Bug Target Transformer missing BaseEstimator (:gh:`151` by `Sami Hamdan`_).
+
+- Add `n_jobs` and `verbose` to `run_cross_validation` (by `Sami Hamdan`_).
