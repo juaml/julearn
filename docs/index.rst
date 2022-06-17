@@ -33,7 +33,6 @@ from `pandas`_ dataframes, while keeping the flexibiliy of using
    input
    pipeline
    scoring
-   advanced
    steps
    hyperparameters
    auto_examples/basic/index.rst

@@ -67,7 +67,8 @@ hyperparameter search will be done:
 * ``search``: The kind of algorithm to apply. The value ``'grid'`` (default)
   will apply a `GridSearchCV`. The value ``'random'`` will use a 
   `RandomizedSearchCV`_
-* ``cv``: The cross-validation scheme to use for the hyperparameter tuning.
+* ``cv``: This is deprecated! Please use cv inside of `search_params` instead.
+  The cross-validation scheme to use for the hyperparameter tuning.
   The default is to use the same scheme as for the model evaluation.
 * ``scoring``: The scoring metric to optimize.
 * ``search_params``: Additional parameters for the search algorithm.
@@ -86,7 +87,7 @@ random combinations.
                        10, 100, 1000],
         'svm__kernel': 'rbf',
         'search': 'random',
-        'search_params': {'n_iter': 50}
+        'search_params': {'n_iter': 50,'cv' : 3}
         
     }
     run_cross_validation(X, y, data=df, model='svm', model_params=model_params)
