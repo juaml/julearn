@@ -93,7 +93,7 @@ def pearson_scorer(y_true, y_pred):
 ###############################################################################
 # Before using it, we need to convert it to a sklearn scorer and register it
 # with julearn.
-register_scorer(name='pearsonr', scorer=make_scorer(pearson_scorer))
+register_scorer(scorer_name='pearsonr', scorer=make_scorer(pearson_scorer))
 
 ###############################################################################
 # Now we can use it as another scoring metric.

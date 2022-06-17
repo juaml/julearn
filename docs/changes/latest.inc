@@ -37,6 +37,8 @@ Enhancements
 
 - Add `CBPM` transformer (by `Sami Hamdan`_).
 
+- ADD `register_model` (:gh:`105` by `Sami Hamdan`_).
+
 - Add documentation/example for parallelization (by `Sami Hamdan`_).
 
 Bugs
@@ -58,10 +60,13 @@ Bugs
 
 - Fix Bug in the transformer wrapper implementation (:gh:`122` by `Sami Hamdan`_).
 
-- Fix Bug Target Transformer missing BaseEstimator (:gh:`151` by `Sami Hamdan`_).
+- Fix Bug registered scorer not working in dictionary for scoring  ( by `Sami Hamdan`_). 
 
 API changes
 ~~~~~~~~~~~
+- Make api surrounding registering consistently use overwrite (by `Sami Hamdan`_).
+
+- Fix Bug Target Transformer missing BaseEstimator (:gh:`151` by `Sami Hamdan`_).
 
 
 - Inner `cv` needs to be provided using `search_params`. Deprecating `cv` in `model_params` (:gh:`146`  by `Sami Hamdan`_).

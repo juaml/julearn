@@ -544,7 +544,10 @@ def prepare_scoring(estimator, scorers):
     if isinstance(scorers, list):
         scoring = {k: get_extended_scorer(estimator, k) for k in scorers}
     elif isinstance(scorers, dict):
-        scoring = scorers
+        scoring = {
+            name: get_extended_scorer(estimator, scorer) if isinstance(
+                scorer, str) else scorer
+            for name, scorer in scorers.items()}
     else:
         scoring = get_extended_scorer(estimator, scorers)
     return scoring
