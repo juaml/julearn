@@ -81,7 +81,7 @@ def test_confound_auto_find_conf():
                 df_confound_removed_manual[feature] = manual_pred
 
                 assert_array_equal(
-                    internal_model.predict(_X.loc[:, confounds]),
+                    internal_model.predict(_X.loc[:, confounds].values),
                     manual_pred
                 )
             df_confound_removed_manual = (_X.drop(columns=confounds)
@@ -151,7 +151,7 @@ def test_confound_set_confounds():
                 df_confound_removed_manual[feature] = manual_pred
 
                 assert_array_equal(
-                    internal_model.predict(X.loc[:, conf_as_feat]),
+                    internal_model.predict(X.loc[:, conf_as_feat].values),
                     manual_pred
                 )
 
