@@ -25,6 +25,9 @@ This library provides users with the possibility of testing ML models directly
 from `pandas`_ dataframes, while keeping the flexibiliy of using
 `scikit-learn`_'s models.
 
+You can also check out our video tutorial:
+`<https://youtube.com/playlist?list=PLvb39y5Ge21CUjccmY_0kXRCwBBaikGf>`_
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
