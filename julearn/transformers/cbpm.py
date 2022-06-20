@@ -6,7 +6,7 @@ import numpy as np
 from joblib import Parallel, delayed
 from scipy.stats import pearsonr
 from sklearn.base import BaseEstimator, TransformerMixin
-from sklearn.utils.fixes import _joblib_parallel_args
+from julearn.utils.versions import _joblib_parallel_args
 from ..utils import warn
 
 

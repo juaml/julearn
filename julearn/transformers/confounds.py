@@ -9,7 +9,7 @@ from sklearn.linear_model import LinearRegression
 from .. utils import raise_error, pick_columns, logger
 
 
-class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
+class DataFrameConfoundRemover(BaseEstimator, TransformerMixin):
     def __init__(self, model_confound=None,
                  confounds_match='.*__:type:__confound',
                  threshold=None,
@@ -100,7 +100,7 @@ class DataFrameConfoundRemover(TransformerMixin, BaseEstimator):
                 'ignore these features')
 
         df_X_prediction = pd.DataFrame(
-            [model.predict(df_confounds)
+            [model.predict(df_confounds.values)
              for model in self.models_confound_.values],
             index=df_X.columns,
             columns=df_X.index,

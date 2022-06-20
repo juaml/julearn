@@ -129,7 +129,7 @@ def test_naive_bayes_estimators():
         if t_mname not in ['nb_bernoulli']:
             # now let's try target-dependent scores
             scorers = ['recall', 'precision', 'f1']
-            sk_y = (t_df_binary[y].values == 'setosa').astype(np.int)
+            sk_y = (t_df_binary[y].values == 'setosa').astype(np.int64)
             api_params = {'model': t_mname, 'pos_labels': 'setosa',
                           'model_params': model_params,
                           'preprocess_X': None}
@@ -167,7 +167,7 @@ def test_binary_estimators():
         if t_mname != 'dummy':
             # now let's try target-dependent scores
             scorers = ['recall', 'precision', 'f1']
-            sk_y = (df_iris[y].values == 'setosa').astype(np.int)
+            sk_y = (df_iris[y].values == 'setosa').astype(np.int64)
             api_params = {'model': t_mname, 'pos_labels': 'setosa',
                           'model_params': model_params}
             clf = make_pipeline(StandardScaler(), clone(t_model))

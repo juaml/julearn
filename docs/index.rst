@@ -36,7 +36,6 @@ You can also check out our video tutorial:
    input
    pipeline
    scoring
-   advanced
    steps
    hyperparameters
    auto_examples/basic/index.rst

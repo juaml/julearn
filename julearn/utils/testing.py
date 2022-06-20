@@ -162,9 +162,6 @@ def _get_coef_over_versions(clf):
         with warnings.catch_warnings():
             warnings.filterwarnings('error', category=FutureWarning)
             warnings.filterwarnings('error', category=DeprecationWarning)
-            try:
-                return clf.coef_
-            except Warning:
-                return clf.feature_log_prob_
+            return clf.feature_log_prob_
     else:
         return clf.coef_

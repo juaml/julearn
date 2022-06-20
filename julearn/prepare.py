@@ -241,7 +241,7 @@ def prepare_input_data(X, y, confounds, df, pos_labels, groups):
             pos_labels = [pos_labels]
         logger.info(f'Setting the following as positive labels {pos_labels}')
         # TODO: Warn if pos_labels are not in df_y
-        df_y = df_y.isin(pos_labels).astype(np.int)
+        df_y = df_y.isin(pos_labels).astype(np.int64)
     logger.info('====================')
     logger.info('')
     return df_X_conf, df_y, df_groups, confound_names
@@ -323,10 +323,22 @@ def prepare_model_params(msel_dict, pipeline):
     hyper_params = _prepare_hyperparams(hyperparameters, pipeline)
 
     if len(hyper_params) > 0:
-        cv_inner = msel_dict.get('cv', None)
         scoring = msel_dict.get('scoring', None)
         search = msel_dict.get('search', 'grid')
         search_params = msel_dict.get('search_params', {})
+        cv_inner = search_params.get('cv', None)
+        cv_inner_dep = msel_dict.get('cv', None)
+        if cv_inner_dep is not None:
+            warn(
+                "`cv` should not be directly provided in the"
+                "`model_params` anymore. This functionality will"
+                "be removed in the next version of julearn."
+                "Please use `cv` inside of `search_params` instead",
+                category=DeprecationWarning
+
+
+            )
+        cv_inner = cv_inner_dep if cv_inner is None else cv_inner
 
         if search in list_searchers():
             logger.info(f'Tunning hyperparameters using {search}')
@@ -532,7 +544,10 @@ def prepare_scoring(estimator, scorers):
     if isinstance(scorers, list):
         scoring = {k: get_extended_scorer(estimator, k) for k in scorers}
     elif isinstance(scorers, dict):
-        scoring = scorers
+        scoring = {
+            name: get_extended_scorer(estimator, scorer) if isinstance(
+                scorer, str) else scorer
+            for name, scorer in scorers.items()}
     else:
         scoring = get_extended_scorer(estimator, scorers)
     return scoring
