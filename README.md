@@ -3,7 +3,7 @@
 The Forschungszentrum Jülich Machine Learning Library
 
 Check our full documentation here: https://juaml.github.io/julearn/index.html
-Check our video tutorial here: https://youtube.com/playlist?list=PLvb39y5Ge21CUjccmY_0kXRCwBBaikGf_
+Check our video tutorial here: [Julearn Playlist](https://youtube.com/playlist?list=PLvb39y5Ge21CUjccmY_0kXRCwBBaikGf_)
 
 
 ## Licensing
