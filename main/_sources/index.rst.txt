@@ -26,7 +26,7 @@ from `pandas`_ dataframes, while keeping the flexibiliy of using
 `scikit-learn`_'s models.
 
 You can also check out our video tutorial:
-`<https://youtube.com/playlist?list=PLvb39y5Ge21CUjccmY_0kXRCwBBaikGf>`_
+`<https://youtube.com/playlist?list=PLvb39y5Ge21CUjccmY_0kXRCwBBaikGf_>`
 
 .. toctree::
    :maxdepth: 2
