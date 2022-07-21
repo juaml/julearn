@@ -15,6 +15,8 @@
 
 Enhancements
 ~~~~~~~~~~~~
+- Bump minimum python version to 3.7 (by `Fede Raimondo`_).
+
 - Add *What's new* section in DOC to document changes (by `Fede Raimondo`_).
 
 - Add information on updating the *What's new* section before releasing (by `Fede Raimondo`_).
