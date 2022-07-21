@@ -97,14 +97,14 @@ like this:
     df_iris = load_dataset('iris')
     X = ['sepal_length', 'sepal_width', 'petal_length']
     y = 'species'
-    confounds = 'petal_width
+    confounds = 'petal_width'
 
     preprocess_confounds = []
     preprocess_target = 'zscore'
     preprocess_X = ['pca', 'remove_confound']
     run_cross_validation(
       X=X, y=y, data=df_iris, confounds=confounds,
-      model=model='svm', problem_type='multiclass_classification'
+      model='svm', problem_type='multiclass_classification',
       preprocess_X=preprocess_X,
       preprocess_confounds=preprocess_confounds,
       preprocess_target=preprocess_target)
