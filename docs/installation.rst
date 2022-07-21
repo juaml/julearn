@@ -9,7 +9,7 @@ Requirements
 
 julearn requires the following packages:
 
-* `Python`_ >= 3.6
+* `Python`_ >= 3.7
 * `scikit-learn`_
 * `pandas`_
 

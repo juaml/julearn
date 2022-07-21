@@ -55,7 +55,7 @@ setuptools.setup(
     install_requires=['numpy>=1.19.1',
                       'pandas>=1.1.2',
                       'scikit-learn>=0.23.2'],
-    python_requires='>=3.6',
+    python_requires='>=3.7',
     use_scm_version=_getversion,
     setup_requires=['setuptools_scm'],
 )
