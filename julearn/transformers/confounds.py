@@ -183,7 +183,7 @@ class DataFrameConfoundRemover(BaseEstimator, TransformerMixin):
         return residuals
 
 
-class TargetConfoundRemover(TransformerMixin):
+class TargetConfoundRemover(BaseEstimator, TransformerMixin):
 
     def __init__(self,
                  model_confound=None,
