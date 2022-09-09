@@ -11,10 +11,10 @@ from ..utils import warn
 
 
 class CBPM(BaseEstimator, TransformerMixin):
-    '''Transformer that means together all features significantly
+    '''Transformer that aggregates together all features significantly
     correlated to the target.
 
-    Significant negative and positive correlations are meaned separately.
+    Significant negative and positive correlations are aggregateed separately.
     Non-significant ones are dropped.
 
     User can choose to use negative, positive or both correlations.
@@ -35,6 +35,10 @@ class CBPM(BaseEstimator, TransformerMixin):
         Callable which can be used to create tuple of arrays: (correlations,
         p values). Input has to be X, y.
 
+    agg_method : callable, default=np.sum
+        Callable to aggregate the features.
+        Has to follow np convention using axis.
+
     corr_sign : str , default='posneg'
         Which correlations should be used:
         Options are:
@@ -45,10 +49,6 @@ class CBPM(BaseEstimator, TransformerMixin):
         In case you use posneg and there are only pos or neg this
         will be used instead. The actually used correlation_values can be
         found in the attribute: `used_corr_sign_`
-
-    weight_by_corr : bool, default=False
-        If meaning the features should be weighted
-        by each features correlation.
 
     n_jobs : int, default=None
         How many jobs should run in parallel to compute the correlations of
@@ -97,12 +97,12 @@ class CBPM(BaseEstimator, TransformerMixin):
 
     def __init__(self, significance_threshold=0.05,
                  corr_method=pearsonr, corr_sign='posneg',
-                 weight_by_corr=False,
+                 agg_method=np.sum,
                  n_jobs=None, verbose=0):
         self.significance_threshold = significance_threshold
         self.corr_method = corr_method
+        self.agg_method = agg_method
         self.corr_sign = corr_sign
-        self.weight_by_corr = weight_by_corr
         self.n_jobs = n_jobs
         self.verbose = verbose
 
@@ -130,11 +130,11 @@ class CBPM(BaseEstimator, TransformerMixin):
             return out
 
         elif self.used_corr_sign_ == 'posneg':
-            X_meaned_pos = self.average(
+            X_meaned_pos = self.aggregate(
                 X, mask=self.pos_significant_mask_
             )
 
-            X_meaned_neg = self.average(
+            X_meaned_neg = self.aggregate(
                 X, mask=self.neg_significant_mask_
             )
 
@@ -145,10 +145,10 @@ class CBPM(BaseEstimator, TransformerMixin):
                 axis=1)
 
         elif self.used_corr_sign_ == 'pos':
-            X_meaned = self.average(X, self.pos_significant_mask_)
+            X_meaned = self.aggregate(X, self.pos_significant_mask_)
 
         elif self.used_corr_sign_ == 'neg':
-            X_meaned = self.average(X, self.neg_significant_mask_)
+            X_meaned = self.aggregate(X, self.neg_significant_mask_)
 
         return X_meaned
 
@@ -207,9 +207,5 @@ class CBPM(BaseEstimator, TransformerMixin):
                  ' target will be used for prediction instead.'
                  )
 
-    def average(self, X, mask):
-        weights = (
-            self.X_y_correlations_[:, 0][mask] if self.weight_by_corr
-            else None
-        )
-        return np.average(X[:, mask], weights=weights, axis=1)
+    def aggregate(self, X, mask):
+        return self.agg_method(X[:, mask], axis=1)

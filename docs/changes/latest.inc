@@ -16,6 +16,8 @@ Current (0.2.6.dev)
 Enhancements
 ~~~~~~~~~~~~
 
+- Make CBPM use sum by default  (:gh:`170` by `Sami Hamdan`_).
+
 Bugs
 ~~~~
 
