@@ -19,6 +19,9 @@ Enhancements
 Bugs
 ~~~~
 
+
+- ADD BaseEstimator to ConfoundRemoval for Target  (:gh:`151` by `Sami Hamdan`_).
+
 API changes
 ~~~~~~~~~~~
 
