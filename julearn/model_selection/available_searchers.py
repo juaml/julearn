@@ -14,12 +14,12 @@ _available_searchers_reset = deepcopy(_available_searchers)
 
 
 def list_searchers():
-    """ List all available seraching algorithms
+    """ List all available searching algorithms
 
     Returns
     -------
     out : list(str)
-        A list of all available seracher names.
+        A list of all available searcher names.
     """
     return list(_available_searchers)
 
