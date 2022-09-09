@@ -40,7 +40,7 @@ will discuss the options you have.
     from sklearn.datasets import load_diabetes  # to load data
     from julearn.transformers import ChangeColumnTypes
     from julearn import run_cross_validation
-
+    import warnings
 
     # load in the data
     df_features, target = load_diabetes(return_X_y=True, as_frame=True)
@@ -74,8 +74,6 @@ this example.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     Features:          age       sex       bmi  ...        s4        s5        s6
@@ -105,8 +103,6 @@ Second, we can have a look at the target
 
 
 .. rst-class:: sphx-glr-script-out
-
- Out:
 
  .. code-block:: none
 
@@ -154,16 +150,18 @@ Afterwards, we will transform our features with a pca and run
 a linear regression.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 55-62
+.. GENERATED FROM PYTHON SOURCE LINES 55-64
 
 .. code-block:: default
 
     feature_names = list(df_features.drop(columns='sex').columns)
-    scores, model = run_cross_validation(
-        X=feature_names, y='target', data=data,
-        confounds='sex', model='linreg', problem_type='regression',
-        preprocess_X=['remove_confound', 'pca'],
-        return_estimator='final')
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", lineno=443)
+        scores, model = run_cross_validation(
+            X=feature_names, y='target', data=data,
+            confounds='sex', model='linreg', problem_type='regression',
+            preprocess_X=['remove_confound', 'pca'],
+            return_estimator='final')
 
 
 
@@ -171,30 +169,28 @@ a linear regression.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
-    2022-07-21 09:53:36,818 - julearn - INFO - Using default CV
-    2022-07-21 09:53:36,818 - julearn - INFO - ==== Input Data ====
-    2022-07-21 09:53:36,818 - julearn - INFO - Using dataframe as input
-    2022-07-21 09:53:36,818 - julearn - INFO - Features: ['age', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2022-07-21 09:53:36,818 - julearn - INFO - Target: target
-    2022-07-21 09:53:36,818 - julearn - INFO - Confounds: sex
-    2022-07-21 09:53:36,818 - julearn - INFO - Expanded X: ['age', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2022-07-21 09:53:36,818 - julearn - INFO - Expanded Confounds: ['sex']
-    2022-07-21 09:53:36,819 - julearn - INFO - ====================
-    2022-07-21 09:53:36,819 - julearn - INFO - 
-    2022-07-21 09:53:36,819 - julearn - INFO - ====== Model ======
-    2022-07-21 09:53:36,819 - julearn - INFO - Obtaining model by name: linreg
-    2022-07-21 09:53:36,819 - julearn - INFO - ===================
-    2022-07-21 09:53:36,819 - julearn - INFO - 
-    2022-07-21 09:53:36,820 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+    2022-09-09 07:50:06,207 - julearn - INFO - Using default CV
+    2022-09-09 07:50:06,207 - julearn - INFO - ==== Input Data ====
+    2022-09-09 07:50:06,207 - julearn - INFO - Using dataframe as input
+    2022-09-09 07:50:06,207 - julearn - INFO - Features: ['age', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2022-09-09 07:50:06,207 - julearn - INFO - Target: target
+    2022-09-09 07:50:06,207 - julearn - INFO - Confounds: sex
+    2022-09-09 07:50:06,207 - julearn - INFO - Expanded X: ['age', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2022-09-09 07:50:06,207 - julearn - INFO - Expanded Confounds: ['sex']
+    2022-09-09 07:50:06,208 - julearn - INFO - ====================
+    2022-09-09 07:50:06,208 - julearn - INFO - 
+    2022-09-09 07:50:06,208 - julearn - INFO - ====== Model ======
+    2022-09-09 07:50:06,208 - julearn - INFO - Obtaining model by name: linreg
+    2022-09-09 07:50:06,208 - julearn - INFO - ===================
+    2022-09-09 07:50:06,208 - julearn - INFO - 
+    2022-09-09 07:50:06,208 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 63-69
+.. GENERATED FROM PYTHON SOURCE LINES 65-71
 
 We can use the `preprocess` method of the `.ExtendedDataFramePipeline`
 to inspect the transformations/preprocessing steps of the returned estimator.
@@ -203,7 +199,7 @@ By providing a step name to the `until` argument of the
 the provided step (inclusive).
 This output consists of a tuple containing the transformed X and y,
 
-.. GENERATED FROM PYTHON SOURCE LINES 69-85
+.. GENERATED FROM PYTHON SOURCE LINES 71-87
 
 .. code-block:: default
 
@@ -229,8 +225,6 @@ This output consists of a tuple containing the transformed X and y,
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
             age       bmi        bp  ...        s4        s5        s6
@@ -245,13 +239,13 @@ This output consists of a tuple containing the transformed X and y,
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 86-89
+.. GENERATED FROM PYTHON SOURCE LINES 88-91
 
 Above, you can see that we can set the `keep_confounds` argument to True.
 This will keep the confounds after confound removal.
 Here, is an example of how this can look like:
 
-.. GENERATED FROM PYTHON SOURCE LINES 89-97
+.. GENERATED FROM PYTHON SOURCE LINES 91-99
 
 .. code-block:: default
 
@@ -269,38 +263,36 @@ Here, is an example of how this can look like:
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
-    2022-07-21 09:53:37,851 - julearn - INFO - Using default CV
-    2022-07-21 09:53:37,851 - julearn - INFO - ==== Input Data ====
-    2022-07-21 09:53:37,851 - julearn - INFO - Using dataframe as input
-    2022-07-21 09:53:37,851 - julearn - INFO - Features: ['age', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2022-07-21 09:53:37,851 - julearn - INFO - Target: target
-    2022-07-21 09:53:37,851 - julearn - INFO - Confounds: sex
-    2022-07-21 09:53:37,851 - julearn - INFO - Expanded X: ['age', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2022-07-21 09:53:37,851 - julearn - INFO - Expanded Confounds: ['sex']
-    2022-07-21 09:53:37,852 - julearn - INFO - ====================
-    2022-07-21 09:53:37,852 - julearn - INFO - 
-    2022-07-21 09:53:37,852 - julearn - INFO - ====== Model ======
-    2022-07-21 09:53:37,852 - julearn - INFO - Obtaining model by name: linreg
-    2022-07-21 09:53:37,852 - julearn - INFO - ===================
-    2022-07-21 09:53:37,852 - julearn - INFO - 
-    2022-07-21 09:53:37,852 - julearn - INFO - = Model Parameters =
-    2022-07-21 09:53:37,852 - julearn - INFO - Setting hyperparameter remove_confound__keep_confounds = True
-    2022-07-21 09:53:37,853 - julearn - INFO - ====================
-    2022-07-21 09:53:37,853 - julearn - INFO - 
-    2022-07-21 09:53:37,853 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+    2022-09-09 07:50:07,185 - julearn - INFO - Using default CV
+    2022-09-09 07:50:07,185 - julearn - INFO - ==== Input Data ====
+    2022-09-09 07:50:07,185 - julearn - INFO - Using dataframe as input
+    2022-09-09 07:50:07,185 - julearn - INFO - Features: ['age', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2022-09-09 07:50:07,186 - julearn - INFO - Target: target
+    2022-09-09 07:50:07,186 - julearn - INFO - Confounds: sex
+    2022-09-09 07:50:07,186 - julearn - INFO - Expanded X: ['age', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2022-09-09 07:50:07,186 - julearn - INFO - Expanded Confounds: ['sex']
+    2022-09-09 07:50:07,187 - julearn - INFO - ====================
+    2022-09-09 07:50:07,187 - julearn - INFO - 
+    2022-09-09 07:50:07,187 - julearn - INFO - ====== Model ======
+    2022-09-09 07:50:07,187 - julearn - INFO - Obtaining model by name: linreg
+    2022-09-09 07:50:07,187 - julearn - INFO - ===================
+    2022-09-09 07:50:07,187 - julearn - INFO - 
+    2022-09-09 07:50:07,187 - julearn - INFO - = Model Parameters =
+    2022-09-09 07:50:07,187 - julearn - INFO - Setting hyperparameter remove_confound__keep_confounds = True
+    2022-09-09 07:50:07,188 - julearn - INFO - ====================
+    2022-09-09 07:50:07,188 - julearn - INFO - 
+    2022-09-09 07:50:07,188 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 98-99
+.. GENERATED FROM PYTHON SOURCE LINES 100-101
 
 As you can see this will keep the confound
 
-.. GENERATED FROM PYTHON SOURCE LINES 99-103
+.. GENERATED FROM PYTHON SOURCE LINES 101-105
 
 .. code-block:: default
 
@@ -313,8 +305,6 @@ As you can see this will keep the confound
 
 
 .. rst-class:: sphx-glr-script-out
-
- Out:
 
  .. code-block:: none
 
@@ -330,14 +320,14 @@ As you can see this will keep the confound
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 104-108
+.. GENERATED FROM PYTHON SOURCE LINES 106-110
 
 Even after the pca the confound will still be present.
 This is the case because by default transformers only transform continuous
 features (including features without a specified type)
 and ignore confounds and categorical variables.
 
-.. GENERATED FROM PYTHON SOURCE LINES 108-114
+.. GENERATED FROM PYTHON SOURCE LINES 110-116
 
 .. code-block:: default
 
@@ -353,8 +343,6 @@ and ignore confounds and categorical variables.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
        pca_component_0  pca_component_1  ...  pca_component_7  pca_component_8
@@ -369,7 +357,7 @@ and ignore confounds and categorical variables.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 115-120
+.. GENERATED FROM PYTHON SOURCE LINES 117-122
 
 Lastly, you can also use the confound as a normal feature after confound
 removal. To do so you can either add the confound(s) to the
@@ -377,7 +365,7 @@ which return the same columns or you can use the
 `.ChangeColumnTypes` to change the returned confounds
 to a continuous variable like this:
 
-.. GENERATED FROM PYTHON SOURCE LINES 120-132
+.. GENERATED FROM PYTHON SOURCE LINES 122-134
 
 .. code-block:: default
 
@@ -399,39 +387,37 @@ to a continuous variable like this:
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
-    2022-07-21 09:53:38,917 - julearn - INFO - Using default CV
-    2022-07-21 09:53:38,918 - julearn - INFO - ==== Input Data ====
-    2022-07-21 09:53:38,918 - julearn - INFO - Using dataframe as input
-    2022-07-21 09:53:38,918 - julearn - INFO - Features: ['age', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2022-07-21 09:53:38,918 - julearn - INFO - Target: target
-    2022-07-21 09:53:38,918 - julearn - INFO - Confounds: sex
-    2022-07-21 09:53:38,918 - julearn - INFO - Expanded X: ['age', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2022-07-21 09:53:38,918 - julearn - INFO - Expanded Confounds: ['sex']
-    2022-07-21 09:53:38,919 - julearn - INFO - ====================
-    2022-07-21 09:53:38,919 - julearn - INFO - 
-    2022-07-21 09:53:38,919 - julearn - INFO - ====== Model ======
-    2022-07-21 09:53:38,919 - julearn - INFO - Obtaining model by name: linreg
-    2022-07-21 09:53:38,919 - julearn - INFO - ===================
-    2022-07-21 09:53:38,919 - julearn - INFO - 
-    2022-07-21 09:53:38,919 - julearn - INFO - = Model Parameters =
-    2022-07-21 09:53:38,920 - julearn - INFO - Setting hyperparameter remove_confound__keep_confounds = True
-    2022-07-21 09:53:38,921 - julearn - INFO - ====================
-    2022-07-21 09:53:38,921 - julearn - INFO - 
-    2022-07-21 09:53:38,921 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+    2022-09-09 07:50:08,199 - julearn - INFO - Using default CV
+    2022-09-09 07:50:08,199 - julearn - INFO - ==== Input Data ====
+    2022-09-09 07:50:08,199 - julearn - INFO - Using dataframe as input
+    2022-09-09 07:50:08,200 - julearn - INFO - Features: ['age', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2022-09-09 07:50:08,200 - julearn - INFO - Target: target
+    2022-09-09 07:50:08,200 - julearn - INFO - Confounds: sex
+    2022-09-09 07:50:08,200 - julearn - INFO - Expanded X: ['age', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2022-09-09 07:50:08,200 - julearn - INFO - Expanded Confounds: ['sex']
+    2022-09-09 07:50:08,201 - julearn - INFO - ====================
+    2022-09-09 07:50:08,201 - julearn - INFO - 
+    2022-09-09 07:50:08,201 - julearn - INFO - ====== Model ======
+    2022-09-09 07:50:08,201 - julearn - INFO - Obtaining model by name: linreg
+    2022-09-09 07:50:08,201 - julearn - INFO - ===================
+    2022-09-09 07:50:08,201 - julearn - INFO - 
+    2022-09-09 07:50:08,201 - julearn - INFO - = Model Parameters =
+    2022-09-09 07:50:08,201 - julearn - INFO - Setting hyperparameter remove_confound__keep_confounds = True
+    2022-09-09 07:50:08,202 - julearn - INFO - ====================
+    2022-09-09 07:50:08,202 - julearn - INFO - 
+    2022-09-09 07:50:08,202 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 133-135
+.. GENERATED FROM PYTHON SOURCE LINES 135-137
 
 As you can see this will keep the confound and
 change its type to a continuous variable.
 
-.. GENERATED FROM PYTHON SOURCE LINES 135-140
+.. GENERATED FROM PYTHON SOURCE LINES 137-142
 
 .. code-block:: default
 
@@ -445,8 +431,6 @@ change its type to a continuous variable.
 
 
 .. rst-class:: sphx-glr-script-out
-
- Out:
 
  .. code-block:: none
 
@@ -462,12 +446,12 @@ change its type to a continuous variable.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 141-143
+.. GENERATED FROM PYTHON SOURCE LINES 143-145
 
 Because the confound is treated as a normal continuous feature
 after removal it will be transformed in the pca as well
 
-.. GENERATED FROM PYTHON SOURCE LINES 143-145
+.. GENERATED FROM PYTHON SOURCE LINES 145-147
 
 .. code-block:: default
 
@@ -478,8 +462,6 @@ after removal it will be transformed in the pca as well
 
 
 .. rst-class:: sphx-glr-script-out
-
- Out:
 
  .. code-block:: none
 
@@ -498,28 +480,23 @@ after removal it will be transformed in the pca as well
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  3.539 seconds)
+   **Total running time of the script:** ( 0 minutes  3.353 seconds)
 
 
 .. _sphx_glr_download_auto_examples_advanced_run_return_confounds.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: run_return_confounds.py <run_return_confounds.py>`
 
-     :download:`Download Python source code: run_return_confounds.py <run_return_confounds.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: run_return_confounds.ipynb <run_return_confounds.ipynb>`
+      :download:`Download Jupyter notebook: run_return_confounds.ipynb <run_return_confounds.ipynb>`
 
 
 .. only:: html

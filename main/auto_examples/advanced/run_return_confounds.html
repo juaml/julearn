@@ -112,7 +112,7 @@ will discuss the options you have.</p>
 <span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_diabetes.html#sklearn.datasets.load_diabetes" title="sklearn.datasets.load_diabetes" class="sphx-glr-backref-module-sklearn-datasets sphx-glr-backref-type-py-function"><span class="n">load_diabetes</span></a>  <span class="c1"># to load data</span>
 <span class="kn">from</span> <span class="nn">julearn.transformers</span> <span class="kn">import</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.base.TransformerMixin.html#sklearn.base.TransformerMixin" title="sklearn.base.TransformerMixin" class="sphx-glr-backref-module-sklearn-base sphx-glr-backref-type-py-class"><span class="n">ChangeColumnTypes</span></a>
 <span class="kn">from</span> <span class="nn">julearn</span> <span class="kn">import</span> <span class="n">run_cross_validation</span>
-
+<span class="kn">import</span> <span class="nn">warnings</span>
 
 <span class="c1"># load in the data</span>
 <span class="n">df_features</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_diabetes.html#sklearn.datasets.load_diabetes" title="sklearn.datasets.load_diabetes" class="sphx-glr-backref-module-sklearn-datasets sphx-glr-backref-type-py-function"><span class="n">load_diabetes</span></a><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">as_frame</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -126,7 +126,6 @@ this example.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Features: &#39;</span><span class="p">,</span> <span class="n">df_features</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
 </pre></div>
 </div>
-<p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Features:          age       sex       bmi  ...        s4        s5        s6
 0  0.038076  0.050680  0.061696  ... -0.002592  0.019908 -0.017646
 1 -0.001882 -0.044642 -0.051474  ... -0.039493 -0.068330 -0.092204
@@ -141,7 +140,6 @@ this example.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Target: &#39;</span><span class="p">,</span> <span class="n">target</span><span class="o">.</span><span class="n">describe</span><span class="p">())</span>
 </pre></div>
 </div>
-<p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Target:  count    442.000000
 mean     152.133484
 std       77.093005
@@ -167,29 +165,30 @@ feature into our last model.
 Afterwards, we will transform our features with a pca and run
 a linear regression.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">feature_names</span></a> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">df_features</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="s1">&#39;sex&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
-<span class="n">scores</span><span class="p">,</span> <span class="n">model</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
-    <span class="n">X</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">feature_names</span></a><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
-    <span class="n">confounds</span><span class="o">=</span><span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;linreg&#39;</span><span class="p">,</span> <span class="n">problem_type</span><span class="o">=</span><span class="s1">&#39;regression&#39;</span><span class="p">,</span>
-    <span class="n">preprocess_X</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;remove_confound&#39;</span><span class="p">,</span> <span class="s1">&#39;pca&#39;</span><span class="p">],</span>
-    <span class="n">return_estimator</span><span class="o">=</span><span class="s1">&#39;final&#39;</span><span class="p">)</span>
+<span class="k">with</span> <a href="https://docs.python.org/3/library/warnings.html#warnings.catch_warnings" title="warnings.catch_warnings" class="sphx-glr-backref-module-warnings sphx-glr-backref-type-py-class"><span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span></a><span class="p">():</span>
+    <a href="https://docs.python.org/3/library/warnings.html#warnings.simplefilter" title="warnings.simplefilter" class="sphx-glr-backref-module-warnings sphx-glr-backref-type-py-function"><span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span></a><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">lineno</span><span class="o">=</span><span class="mi">443</span><span class="p">)</span>
+    <span class="n">scores</span><span class="p">,</span> <span class="n">model</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+        <span class="n">X</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">feature_names</span></a><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;target&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
+        <span class="n">confounds</span><span class="o">=</span><span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;linreg&#39;</span><span class="p">,</span> <span class="n">problem_type</span><span class="o">=</span><span class="s1">&#39;regression&#39;</span><span class="p">,</span>
+        <span class="n">preprocess_X</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;remove_confound&#39;</span><span class="p">,</span> <span class="s1">&#39;pca&#39;</span><span class="p">],</span>
+        <span class="n">return_estimator</span><span class="o">=</span><span class="s1">&#39;final&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-07-21 09:53:36,818 - julearn - INFO - Using default CV
-2022-07-21 09:53:36,818 - julearn - INFO - ==== Input Data ====
-2022-07-21 09:53:36,818 - julearn - INFO - Using dataframe as input
-2022-07-21 09:53:36,818 - julearn - INFO - Features: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
-2022-07-21 09:53:36,818 - julearn - INFO - Target: target
-2022-07-21 09:53:36,818 - julearn - INFO - Confounds: sex
-2022-07-21 09:53:36,818 - julearn - INFO - Expanded X: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
-2022-07-21 09:53:36,818 - julearn - INFO - Expanded Confounds: [&#39;sex&#39;]
-2022-07-21 09:53:36,819 - julearn - INFO - ====================
-2022-07-21 09:53:36,819 - julearn - INFO -
-2022-07-21 09:53:36,819 - julearn - INFO - ====== Model ======
-2022-07-21 09:53:36,819 - julearn - INFO - Obtaining model by name: linreg
-2022-07-21 09:53:36,819 - julearn - INFO - ===================
-2022-07-21 09:53:36,819 - julearn - INFO -
-2022-07-21 09:53:36,820 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-09-09 07:50:06,207 - julearn - INFO - Using default CV
+2022-09-09 07:50:06,207 - julearn - INFO - ==== Input Data ====
+2022-09-09 07:50:06,207 - julearn - INFO - Using dataframe as input
+2022-09-09 07:50:06,207 - julearn - INFO - Features: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2022-09-09 07:50:06,207 - julearn - INFO - Target: target
+2022-09-09 07:50:06,207 - julearn - INFO - Confounds: sex
+2022-09-09 07:50:06,207 - julearn - INFO - Expanded X: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2022-09-09 07:50:06,207 - julearn - INFO - Expanded Confounds: [&#39;sex&#39;]
+2022-09-09 07:50:06,208 - julearn - INFO - ====================
+2022-09-09 07:50:06,208 - julearn - INFO -
+2022-09-09 07:50:06,208 - julearn - INFO - ====== Model ======
+2022-09-09 07:50:06,208 - julearn - INFO - Obtaining model by name: linreg
+2022-09-09 07:50:06,208 - julearn - INFO - ===================
+2022-09-09 07:50:06,208 - julearn - INFO -
+2022-09-09 07:50:06,208 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
 </pre></div>
 </div>
 <p>We can use the <cite>preprocess</cite> method of the <cite>.ExtendedDataFramePipeline</cite>
@@ -215,7 +214,6 @@ This output consists of a tuple containing the transformed X and y,</p>
 <span class="c1"># .. autoclass:: julearn.transformers.DataFrameConfoundRemover</span>
 </pre></div>
 </div>
-<p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>        age       bmi        bp  ...        s4        s5        s6
 0  0.029271  0.057228  0.009658  ... -0.019424  0.012311 -0.028194
 1  0.005874 -0.047538 -0.015569  ... -0.024667 -0.061637 -0.082913
@@ -237,26 +235,25 @@ Here, is an example of how this can look like:</p>
     <span class="n">return_estimator</span><span class="o">=</span><span class="s1">&#39;final&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-07-21 09:53:37,851 - julearn - INFO - Using default CV
-2022-07-21 09:53:37,851 - julearn - INFO - ==== Input Data ====
-2022-07-21 09:53:37,851 - julearn - INFO - Using dataframe as input
-2022-07-21 09:53:37,851 - julearn - INFO - Features: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
-2022-07-21 09:53:37,851 - julearn - INFO - Target: target
-2022-07-21 09:53:37,851 - julearn - INFO - Confounds: sex
-2022-07-21 09:53:37,851 - julearn - INFO - Expanded X: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
-2022-07-21 09:53:37,851 - julearn - INFO - Expanded Confounds: [&#39;sex&#39;]
-2022-07-21 09:53:37,852 - julearn - INFO - ====================
-2022-07-21 09:53:37,852 - julearn - INFO -
-2022-07-21 09:53:37,852 - julearn - INFO - ====== Model ======
-2022-07-21 09:53:37,852 - julearn - INFO - Obtaining model by name: linreg
-2022-07-21 09:53:37,852 - julearn - INFO - ===================
-2022-07-21 09:53:37,852 - julearn - INFO -
-2022-07-21 09:53:37,852 - julearn - INFO - = Model Parameters =
-2022-07-21 09:53:37,852 - julearn - INFO - Setting hyperparameter remove_confound__keep_confounds = True
-2022-07-21 09:53:37,853 - julearn - INFO - ====================
-2022-07-21 09:53:37,853 - julearn - INFO -
-2022-07-21 09:53:37,853 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-09-09 07:50:07,185 - julearn - INFO - Using default CV
+2022-09-09 07:50:07,185 - julearn - INFO - ==== Input Data ====
+2022-09-09 07:50:07,185 - julearn - INFO - Using dataframe as input
+2022-09-09 07:50:07,185 - julearn - INFO - Features: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2022-09-09 07:50:07,186 - julearn - INFO - Target: target
+2022-09-09 07:50:07,186 - julearn - INFO - Confounds: sex
+2022-09-09 07:50:07,186 - julearn - INFO - Expanded X: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2022-09-09 07:50:07,186 - julearn - INFO - Expanded Confounds: [&#39;sex&#39;]
+2022-09-09 07:50:07,187 - julearn - INFO - ====================
+2022-09-09 07:50:07,187 - julearn - INFO -
+2022-09-09 07:50:07,187 - julearn - INFO - ====== Model ======
+2022-09-09 07:50:07,187 - julearn - INFO - Obtaining model by name: linreg
+2022-09-09 07:50:07,187 - julearn - INFO - ===================
+2022-09-09 07:50:07,187 - julearn - INFO -
+2022-09-09 07:50:07,187 - julearn - INFO - = Model Parameters =
+2022-09-09 07:50:07,187 - julearn - INFO - Setting hyperparameter remove_confound__keep_confounds = True
+2022-09-09 07:50:07,188 - julearn - INFO - ====================
+2022-09-09 07:50:07,188 - julearn - INFO -
+2022-09-09 07:50:07,188 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
 </pre></div>
 </div>
 <p>As you can see this will keep the confound</p>
@@ -265,7 +262,6 @@ Here, is an example of how this can look like:</p>
 <span class="nb">print</span><span class="p">(</span><span class="n">X_deconfounded</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
 </pre></div>
 </div>
-<p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>        age       sex       bmi  ...        s4        s5        s6
 0  0.029271  0.050680  0.057228  ... -0.019424  0.012311 -0.028194
 1  0.005874 -0.044642 -0.047538  ... -0.024667 -0.061637 -0.082913
@@ -287,7 +283,6 @@ and ignore confounds and categorical variables.</p>
 <span class="c1"># features together with the confound to predict the target.</span>
 </pre></div>
 </div>
-<p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>   pca_component_0  pca_component_1  ...  pca_component_7  pca_component_8
 0        -0.014050         0.075715  ...        -0.008604        -0.002330
 1        -0.099883        -0.062830  ...         0.024022         0.002074
@@ -315,26 +310,25 @@ to a continuous variable like this:</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-07-21 09:53:38,917 - julearn - INFO - Using default CV
-2022-07-21 09:53:38,918 - julearn - INFO - ==== Input Data ====
-2022-07-21 09:53:38,918 - julearn - INFO - Using dataframe as input
-2022-07-21 09:53:38,918 - julearn - INFO - Features: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
-2022-07-21 09:53:38,918 - julearn - INFO - Target: target
-2022-07-21 09:53:38,918 - julearn - INFO - Confounds: sex
-2022-07-21 09:53:38,918 - julearn - INFO - Expanded X: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
-2022-07-21 09:53:38,918 - julearn - INFO - Expanded Confounds: [&#39;sex&#39;]
-2022-07-21 09:53:38,919 - julearn - INFO - ====================
-2022-07-21 09:53:38,919 - julearn - INFO -
-2022-07-21 09:53:38,919 - julearn - INFO - ====== Model ======
-2022-07-21 09:53:38,919 - julearn - INFO - Obtaining model by name: linreg
-2022-07-21 09:53:38,919 - julearn - INFO - ===================
-2022-07-21 09:53:38,919 - julearn - INFO -
-2022-07-21 09:53:38,919 - julearn - INFO - = Model Parameters =
-2022-07-21 09:53:38,920 - julearn - INFO - Setting hyperparameter remove_confound__keep_confounds = True
-2022-07-21 09:53:38,921 - julearn - INFO - ====================
-2022-07-21 09:53:38,921 - julearn - INFO -
-2022-07-21 09:53:38,921 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-09-09 07:50:08,199 - julearn - INFO - Using default CV
+2022-09-09 07:50:08,199 - julearn - INFO - ==== Input Data ====
+2022-09-09 07:50:08,199 - julearn - INFO - Using dataframe as input
+2022-09-09 07:50:08,200 - julearn - INFO - Features: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2022-09-09 07:50:08,200 - julearn - INFO - Target: target
+2022-09-09 07:50:08,200 - julearn - INFO - Confounds: sex
+2022-09-09 07:50:08,200 - julearn - INFO - Expanded X: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2022-09-09 07:50:08,200 - julearn - INFO - Expanded Confounds: [&#39;sex&#39;]
+2022-09-09 07:50:08,201 - julearn - INFO - ====================
+2022-09-09 07:50:08,201 - julearn - INFO -
+2022-09-09 07:50:08,201 - julearn - INFO - ====== Model ======
+2022-09-09 07:50:08,201 - julearn - INFO - Obtaining model by name: linreg
+2022-09-09 07:50:08,201 - julearn - INFO - ===================
+2022-09-09 07:50:08,201 - julearn - INFO -
+2022-09-09 07:50:08,201 - julearn - INFO - = Model Parameters =
+2022-09-09 07:50:08,201 - julearn - INFO - Setting hyperparameter remove_confound__keep_confounds = True
+2022-09-09 07:50:08,202 - julearn - INFO - ====================
+2022-09-09 07:50:08,202 - julearn - INFO -
+2022-09-09 07:50:08,202 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
 </pre></div>
 </div>
 <p>As you can see this will keep the confound and
@@ -345,7 +339,6 @@ change its type to a continuous variable.</p>
 <span class="nb">print</span><span class="p">(</span><span class="n">X_deconfounded</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
 </pre></div>
 </div>
-<p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>        age       bmi        bp  ...        s5        s6  sex__:type:__continuous
 0  0.029271  0.057228  0.009658  ...  0.012311 -0.028194                 1.065488
 1  0.005874 -0.047538 -0.015569  ... -0.061637 -0.082913                -0.938537
@@ -362,7 +355,6 @@ after removal it will be transformed in the pca as well</p>
 <span class="nb">print</span><span class="p">(</span><span class="n">X_transformed</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
 </pre></div>
 </div>
-<p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>   pca_component_0  pca_component_1  ...  pca_component_8  pca_component_9
 0         1.065488        -0.014050  ...        -0.008604        -0.002330
 1        -0.938537        -0.099883  ...         0.024022         0.002074
@@ -373,8 +365,8 @@ after removal it will be transformed in the pca as well</p>
 [5 rows x 10 columns]
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  3.539 seconds)</p>
-<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-advanced-run-return-confounds-py">
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  3.353 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-advanced-run-return-confounds-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/05217961c0ebf3cb63c1e97bc9c29c19/run_return_confounds.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">run_return_confounds.py</span></code></a></p>
 </div>
@@ -423,6 +415,7 @@ after removal it will be transformed in the pca as well</p>
       <dd><a href="../../../v0.2.2/index.html">v0.2.2</a></dd>
       <dd><a href="../../../v0.2.3/index.html">v0.2.3</a></dd>
       <dd><a href="../../../v0.2.4/index.html">v0.2.4</a></dd>
+      <dd><a href="../../../v0.2.5/index.html">v0.2.5</a></dd>
     </dl>
     <dl>
       <dt>Branches</dt>

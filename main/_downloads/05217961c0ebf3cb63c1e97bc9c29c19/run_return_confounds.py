@@ -17,7 +17,7 @@ will discuss the options you have.
 from sklearn.datasets import load_diabetes  # to load data
 from julearn.transformers import ChangeColumnTypes
 from julearn import run_cross_validation
-
+import warnings
 
 # load in the data
 df_features, target = load_diabetes(return_X_y=True, as_frame=True)
@@ -53,11 +53,13 @@ data['target'] = target
 # a linear regression.
 #
 feature_names = list(df_features.drop(columns='sex').columns)
-scores, model = run_cross_validation(
-    X=feature_names, y='target', data=data,
-    confounds='sex', model='linreg', problem_type='regression',
-    preprocess_X=['remove_confound', 'pca'],
-    return_estimator='final')
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", lineno=443)
+    scores, model = run_cross_validation(
+        X=feature_names, y='target', data=data,
+        confounds='sex', model='linreg', problem_type='regression',
+        preprocess_X=['remove_confound', 'pca'],
+        return_estimator='final')
 
 ###############################################################################
 # We can use the `preprocess` method of the `.ExtendedDataFramePipeline`
