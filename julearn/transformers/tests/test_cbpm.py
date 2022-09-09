@@ -5,7 +5,7 @@
 import pytest
 import numpy as np
 from numpy.testing import assert_array_equal
-from scipy.stats import pearsonr, spearmanr
+from scipy.stats import spearmanr
 from seaborn import load_dataset
 from julearn.transformers import CBPM
 
