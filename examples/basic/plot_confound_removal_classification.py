@@ -18,6 +18,7 @@ import seaborn as sns
 from seaborn import load_dataset
 
 from julearn import run_cross_validation
+from julearn.pipeline import PipelineCreator
 from julearn.utils import configure_logging
 from julearn.model_selection import StratifiedBootstrap
 
@@ -65,7 +66,7 @@ cv = StratifiedBootstrap(n_splits=n_bootstrap, test_size=.3, random_state=42)
 # First, we will train a model without performing confound removal on features
 # Note: confounds=None by default
 scores_ncr = run_cross_validation(
-    X=X, y=y, data=df_iris, model='rf', cv=cv, preprocess_X='zscore',
+    X=X, y=y, data=df_iris, model='rf', cv=cv, preprocess='zscore',
     scoring=['accuracy', 'roc_auc'], return_estimator='cv', seed=200)
 
 
@@ -73,9 +74,14 @@ scores_ncr = run_cross_validation(
 # Next, we train a model after performing confound removal on the features
 # Note: we initialize the CV again to use the same folds as before
 cv = StratifiedBootstrap(n_splits=n_bootstrap, test_size=.3, random_state=42)
+
+preproces = PipelineCreator()
+preproces.add('zscore', apply_to="confounds")
+preproces.add('remove_confound', apply_to="ducks", confounds=confound)
+
 scores_cr = run_cross_validation(
-    X=X, y=y, confounds=confound, data=df_iris, model='rf',
-    preprocess_X='remove_confound', preprocess_confounds='zscore', cv=cv,
+    X=X + confound, y=y, data=df_iris, model='rf', preproces=preproces,
+    cv=cv, X_types={'ducks': X, 'confounds': confound},
     scoring=['accuracy', 'roc_auc'], return_estimator='cv', seed=200)
 
 ###############################################################################

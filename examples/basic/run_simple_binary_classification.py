@@ -33,7 +33,8 @@ df_iris = df_iris[df_iris['species'].isin(['versicolor', 'virginica'])]
 X = ['sepal_length', 'sepal_width', 'petal_length']
 y = 'species'
 scores = run_cross_validation(
-    X=X, y=y, data=df_iris, model='svm', preprocess_X='zscore')
+    X=X, y=y, data=df_iris, model='svm',
+    preprocess='zscore')
 
 print(scores['test_score'])
 
@@ -53,7 +54,7 @@ print(df_unbalanced['species'].value_counts())
 #
 # We will also set the random seed so we always split the data in the same way.
 scores = run_cross_validation(
-    X=X, y=y, data=df_unbalanced, model='svm', seed=42, preprocess_X='zscore',
+    X=X, y=y, data=df_unbalanced, model='svm', seed=42, preprocess='zscore',
     scoring=['accuracy', 'balanced_accuracy'])
 
 print(scores['test_accuracy'].mean())
@@ -72,6 +73,6 @@ print(scores['test_balanced_accuracy'].mean())
 # For this metric to work, we need to define which are our `positive` values.
 # In this example, we are interested in detecting `versicolor`.
 precision_scores = run_cross_validation(
-    X=X, y=y, data=df_unbalanced, model='svm', preprocess_X='zscore', seed=42,
+    X=X, y=y, data=df_unbalanced, model='svm', preprocess='zscore', seed=42,
     scoring='precision', pos_labels='versicolor')
 print(precision_scores['test_score'].mean())
