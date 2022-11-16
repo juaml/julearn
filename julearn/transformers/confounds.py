@@ -3,17 +3,19 @@
 # License: AGPL
 import numpy as np
 import pandas as pd
-from sklearn.base import BaseEstimator, TransformerMixin, clone
+from sklearn.base import (
+    BaseEstimator, TransformerMixin, clone, OneToOneFeatureMixin)
 from sklearn.linear_model import LinearRegression
 
 from .. utils import raise_error, pick_columns, logger
 
 
-class DataFrameConfoundRemover(BaseEstimator, TransformerMixin):
+class DataFrameConfoundRemover(
+        BaseEstimator, TransformerMixin, OneToOneFeatureMixin):
     def __init__(self, model_confound=None,
                  confounds_match='.*__:type:__confound',
                  threshold=None,
-                 keep_confounds=False,
+                 keep_confounds=True,
                  ):
         """Transformer which can use pd.DataFrames and remove the confounds
         from the features by subtracting the predicted features
@@ -61,6 +63,7 @@ class DataFrameConfoundRemover(BaseEstimator, TransformerMixin):
         -------
         self : returns an instance of self.
         """
+        self.n_features_in_ = len(X.columns)
         df_X, ser_confound, _ = self._split_into_X_confound(X)
         if self.keep_confounds:
             self.support_mask_ = pd.Series(True, index=X.columns, dtype=bool)
@@ -183,7 +186,7 @@ class DataFrameConfoundRemover(BaseEstimator, TransformerMixin):
         return residuals
 
 
-class TargetConfoundRemover(BaseEstimator, TransformerMixin):
+class TargetConfoundRemover(BaseEstimator, TransformerMixin, OneToOneFeatureMixin):
 
     def __init__(self,
                  model_confound=None,
