@@ -26,6 +26,7 @@ def run_cross_validation(
     preprocess_y=None,
     preprocess_confounds=None,
     return_estimator=False,
+    return_train_score=False,
     cv=None,
     groups=None,
     scoring=None,
@@ -96,6 +97,10 @@ def run_cross_validation(
           training data.
         * 'all': Return all the estimators (final and cv).
 
+
+    return_train_score : bool
+        Whether to return the training score with the test scores 
+        (default is False).
 
     cv : int, str or cross-validation generator | None
         Cross-validation splitting strategy to use for model evaluation.
@@ -208,7 +213,8 @@ def run_cross_validation(
     scores = cross_validate(pipeline, df_X_conf, y, cv=cv_outer,
                             scoring=scorer, groups=df_groups,
                             return_estimator=cv_return_estimator,
-                            n_jobs=n_jobs)
+                            n_jobs=n_jobs,
+                            return_train_score=return_train_score)
 
     n_repeats = getattr(cv_outer, 'n_repeats', 1)
     n_folds = len(scores['fit_time']) // n_repeats
