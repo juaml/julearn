@@ -20,6 +20,7 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -83,9 +84,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="index.html">Basic Examples</a> &raquo;</li>
-      <li>Regression Analysis</li>
+      <li><a href="../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Basic Examples</a></li>
+      <li class="breadcrumb-item active">Regression Analysis</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/auto_examples/basic/plot_example_regression.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -125,13 +126,13 @@ a regression analysis using a Ridge Regression model.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s1">&#39;INFO&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-09-09 07:55:35,892 - julearn - INFO - ===== Lib Versions =====
-2022-09-09 07:55:35,893 - julearn - INFO - numpy: 1.23.2
-2022-09-09 07:55:35,893 - julearn - INFO - scipy: 1.9.1
-2022-09-09 07:55:35,893 - julearn - INFO - sklearn: 1.0.2
-2022-09-09 07:55:35,893 - julearn - INFO - pandas: 1.4.4
-2022-09-09 07:55:35,893 - julearn - INFO - julearn: 0.2.6.dev2
-2022-09-09 07:55:35,893 - julearn - INFO - ========================
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-11-17 13:25:29,267 - julearn - INFO - ===== Lib Versions =====
+2022-11-17 13:25:29,267 - julearn - INFO - numpy: 1.23.4
+2022-11-17 13:25:29,268 - julearn - INFO - scipy: 1.9.3
+2022-11-17 13:25:29,268 - julearn - INFO - sklearn: 1.0.2
+2022-11-17 13:25:29,268 - julearn - INFO - pandas: 1.4.4
+2022-11-17 13:25:29,268 - julearn - INFO - julearn: 0.2.6.dev3
+2022-11-17 13:25:29,268 - julearn - INFO - ========================
 </pre></div>
 </div>
 <p>load the diabetes data from sklearn as a pandas dataframe</p>
@@ -183,7 +184,7 @@ and y</p>
             <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;0.1f&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_example_regression_001.png" srcset="../../_images/sphx_glr_plot_example_regression_001.png" alt="plot example regression" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot:&gt;
+<img src="../../_images/sphx_glr_plot_example_regression_001.png" srcset="../../_images/sphx_glr_plot_example_regression_001.png" alt="plot example regression" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;AxesSubplot: &gt;
 </pre></div>
 </div>
 <p>Split the dataset into train and test</p>
@@ -198,20 +199,20 @@ for scoring</p>
     <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;neg_mean_absolute_error&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-09-09 07:55:36,269 - julearn - INFO - Using default CV
-2022-09-09 07:55:36,269 - julearn - INFO - ==== Input Data ====
-2022-09-09 07:55:36,269 - julearn - INFO - Using dataframe as input
-2022-09-09 07:55:36,269 - julearn - INFO - Features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
-2022-09-09 07:55:36,269 - julearn - INFO - Target: target
-2022-09-09 07:55:36,270 - julearn - INFO - Expanded X: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
-2022-09-09 07:55:36,270 - julearn - INFO - Expanded Confounds: []
-2022-09-09 07:55:36,271 - julearn - INFO - ====================
-2022-09-09 07:55:36,271 - julearn - INFO -
-2022-09-09 07:55:36,271 - julearn - INFO - ====== Model ======
-2022-09-09 07:55:36,271 - julearn - INFO - Obtaining model by name: ridge
-2022-09-09 07:55:36,272 - julearn - INFO - ===================
-2022-09-09 07:55:36,272 - julearn - INFO -
-2022-09-09 07:55:36,272 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-11-17 13:25:29,558 - julearn - INFO - Using default CV
+2022-11-17 13:25:29,558 - julearn - INFO - ==== Input Data ====
+2022-11-17 13:25:29,558 - julearn - INFO - Using dataframe as input
+2022-11-17 13:25:29,558 - julearn - INFO - Features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2022-11-17 13:25:29,558 - julearn - INFO - Target: target
+2022-11-17 13:25:29,558 - julearn - INFO - Expanded X: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2022-11-17 13:25:29,558 - julearn - INFO - Expanded Confounds: []
+2022-11-17 13:25:29,559 - julearn - INFO - ====================
+2022-11-17 13:25:29,559 - julearn - INFO -
+2022-11-17 13:25:29,559 - julearn - INFO - ====== Model ======
+2022-11-17 13:25:29,559 - julearn - INFO - Obtaining model by name: ridge
+2022-11-17 13:25:29,560 - julearn - INFO - ===================
+2022-11-17 13:25:29,560 - julearn - INFO -
+2022-11-17 13:25:29,560 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
 </pre></div>
 </div>
 <p>The scores dataframe has all the values for each CV split.</p>
@@ -219,11 +220,11 @@ for scoring</p>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>   fit_time  score_time  test_score  repeat  fold
-0  0.011660    0.008001  -43.906430       0     0
-1  0.010917    0.007667  -44.127262       0     1
-2  0.011926    0.007808  -45.136034       0     2
-3  0.011825    0.008005  -41.324288       0     3
-4  0.011816    0.008557  -47.367616       0     4
+0  0.009412    0.005828  -43.906430       0     0
+1  0.008640    0.005800  -44.127262       0     1
+2  0.008628    0.005744  -45.136034       0     2
+3  0.008584    0.005760  -41.324288       0     3
+4  0.008457    0.005743  -47.367616       0     4
 </pre></div>
 </div>
 <p>Mean value of mean absolute error across CV</p>
@@ -300,7 +301,7 @@ of true values vs predicted values</p>
 <img src="../../_images/sphx_glr_plot_example_regression_004.png" srcset="../../_images/sphx_glr_plot_example_regression_004.png" alt="Actual vs Predicted" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>(9.45, 351.55, 9.45, 351.55)
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.377 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.106 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-basic-plot-example-regression-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/5d15362022e35d28ba40d25fd042f86e/plot_example_regression.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_example_regression.py</span></code></a></p>

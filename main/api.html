@@ -20,6 +20,7 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -54,12 +55,58 @@
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/basic/index.html">Basic Examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="auto_examples/advanced/index.html">Advanced Examples</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#module-julearn.api">Main API functions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#model-functions">Model functions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#transformer-functions">Transformer functions</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#logging">Logging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id1">Cross-Validation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#classes">Classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-julearn.api">Main API functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#julearn.api.create_pipeline"><code class="docutils literal notranslate"><span class="pre">create_pipeline()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#julearn.api.run_cross_validation"><code class="docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#model-functions">Model functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#julearn.estimators.list_models"><code class="docutils literal notranslate"><span class="pre">list_models()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#julearn.estimators.get_model"><code class="docutils literal notranslate"><span class="pre">get_model()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#transformer-functions">Transformer functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#julearn.transformers.list_transformers"><code class="docutils literal notranslate"><span class="pre">list_transformers()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#julearn.transformers.get_transformer"><code class="docutils literal notranslate"><span class="pre">get_transformer()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#logging">Logging</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#julearn.utils.configure_logging"><code class="docutils literal notranslate"><span class="pre">configure_logging()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#julearn.utils.warn"><code class="docutils literal notranslate"><span class="pre">warn()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#julearn.utils.raise_error"><code class="docutils literal notranslate"><span class="pre">raise_error()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">Cross-Validation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#julearn.model_selection.StratifiedBootstrap"><code class="docutils literal notranslate"><span class="pre">StratifiedBootstrap</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#julearn.model_selection.StratifiedBootstrap.split"><code class="docutils literal notranslate"><span class="pre">StratifiedBootstrap.split()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#julearn.model_selection.StratifiedGroupsKFold"><code class="docutils literal notranslate"><span class="pre">StratifiedGroupsKFold</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#julearn.model_selection.StratifiedGroupsKFold.split"><code class="docutils literal notranslate"><span class="pre">StratifiedGroupsKFold.split()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#julearn.model_selection.RepeatedStratifiedGroupsKFold"><code class="docutils literal notranslate"><span class="pre">RepeatedStratifiedGroupsKFold</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#classes">Classes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#julearn.transformers.confounds.DataFrameConfoundRemover"><code class="docutils literal notranslate"><span class="pre">DataFrameConfoundRemover</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#julearn.transformers.confounds.DataFrameConfoundRemover.fit"><code class="docutils literal notranslate"><span class="pre">DataFrameConfoundRemover.fit()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#julearn.transformers.confounds.DataFrameConfoundRemover.get_support"><code class="docutils literal notranslate"><span class="pre">DataFrameConfoundRemover.get_support()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#julearn.transformers.confounds.DataFrameConfoundRemover.transform"><code class="docutils literal notranslate"><span class="pre">DataFrameConfoundRemover.transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#julearn.transformers.confounds.TargetConfoundRemover"><code class="docutils literal notranslate"><span class="pre">TargetConfoundRemover</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#julearn.transformers.confounds.TargetConfoundRemover.fit_transform"><code class="docutils literal notranslate"><span class="pre">TargetConfoundRemover.fit_transform()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#julearn.pipeline.ExtendedDataFramePipeline"><code class="docutils literal notranslate"><span class="pre">ExtendedDataFramePipeline</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#julearn.pipeline.ExtendedDataFramePipeline.get_params"><code class="docutils literal notranslate"><span class="pre">ExtendedDataFramePipeline.get_params()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#julearn.pipeline.ExtendedDataFramePipeline.preprocess"><code class="docutils literal notranslate"><span class="pre">ExtendedDataFramePipeline.preprocess()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#julearn.pipeline.ExtendedDataFramePipeline.set_params"><code class="docutils literal notranslate"><span class="pre">ExtendedDataFramePipeline.set_params()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing to julearn</a></li>
@@ -80,8 +127,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Reference</li>
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">Reference</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/api.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -171,7 +218,7 @@ or pipeline wrappen in Searcher.</p>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="julearn.api.run_cross_validation">
-<span class="sig-prename descclassname"><span class="pre">julearn.api.</span></span><span class="sig-name descname"><span class="pre">run_cross_validation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">problem_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'binary_classification'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocess_X</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocess_y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocess_confounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_estimator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.api.run_cross_validation" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">julearn.api.</span></span><span class="sig-name descname"><span class="pre">run_cross_validation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">problem_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'binary_classification'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocess_X</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocess_y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocess_confounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_estimator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_train_score</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.api.run_cross_validation" title="Permalink to this definition"></a></dt>
 <dd><p>Run cross validation and score.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
@@ -228,6 +275,9 @@ Options are:</p>
 training data.</p></li>
 <li><p>‘all’: Return all the estimators (final and cv).</p></li>
 </ul>
+</dd>
+<dt><strong>return_train_score</strong><span class="classifier">bool</span></dt><dd><p>Whether to return the training score with the test scores 
+(default is False).</p>
 </dd>
 <dt><strong>cv</strong><span class="classifier">int, str or cross-validation generator | None</span></dt><dd><p>Cross-validation splitting strategy to use for model evaluation.</p>
 <p>Options are:</p>
