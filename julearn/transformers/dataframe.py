@@ -3,6 +3,30 @@ import numpy as np
 from sklearn.base import TransformerMixin, BaseEstimator
 
 from .. utils import pick_columns, change_column_type
+from . base import JuTransformer
+
+
+class SetColumnTypes(TransformerMixin, BaseEstimator, JuTransformer):
+
+    def __init__(self, X_types):
+        self.X_types = X_types
+
+    def fit(self, X, y=None):
+        self.feature_names_in_ = X.columns
+        column_mapper_ = {}
+        for X_type, columns in self.X_types.items():
+            column_mapper_ = {**column_mapper_,
+                              **{col: change_column_type(col, X_type)
+                                 for col in columns}
+                              }
+        self.column_mapper_ = column_mapper_
+        return self
+
+    def transform(self, X):
+        return X.copy().rename(columns=self.column_mapper_)
+
+    def get_feature_names_out(self, input_features=None):
+        return self.feature_names_in_.map(self.column_mapper_)
 
 
 class ChangeColumnTypes(TransformerMixin, BaseEstimator):
@@ -18,7 +42,6 @@ class ChangeColumnTypes(TransformerMixin, BaseEstimator):
         return self
 
     def transform(self, X):
-
         return X.copy().rename(columns=self.column_mapper_)
 
 

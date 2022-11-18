@@ -10,19 +10,21 @@ from . prepare import (prepare_input_data,
                        prepare_cv,
                        # prepare_model_params,
                        # prepare_preprocessing,
-                       prepare_scoring,
-                       check_consistency)
-from . pipeline import create_cv_pipeline
+                       # prepare_scoring,
+                       # check_consistency
+                       )
+from . pipeline import PipelineCreator
 
 from . utils import logger
 
 
 def run_cross_validation(
     X, y, model,
+    X_types=None,
     data=None,
     confounds=None,
     problem_type='binary_classification',
-    preprocess_X=None,
+    preprocess=None,
     # preprocess_y=None,
     # preprocess_confounds=None,
     return_estimator=False,
@@ -168,6 +170,7 @@ def run_cross_validation(
         while larger than 50 will print in standrad output.
     """
 
+    X_types = {} if X_types is None else X_types
     if seed is not None:
         # If a seed is passed, use it, otherwise do not do anything. User
         # might have set the seed outside of the library
@@ -184,12 +187,12 @@ def run_cross_validation(
         groups=groups)
 
     # create a the pipeline
-    pipeline = create_cv_pipeline(
-        model=model,
-        preprocess=preprocess_X,
-        problem_type=problem_type,
+    if not isinstance(preprocess, PipelineCreator):
+        preprocess = PipelineCreator.from_list(preprocess)
+    pipeline = preprocess.to_pipeline(
+        X_types, model=model,
         model_params=model_params,
-    )
+        problem_type=problem_type)
 
     # Prepare cross validation
     cv_outer = prepare_cv(cv)

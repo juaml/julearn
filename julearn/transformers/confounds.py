@@ -8,14 +8,15 @@ from sklearn.base import (
 from sklearn.linear_model import LinearRegression
 
 from .. utils import raise_error, pick_columns, logger
+from . base import JuTransformer
 
 
 class DataFrameConfoundRemover(
-        BaseEstimator, TransformerMixin, OneToOneFeatureMixin):
+        BaseEstimator, TransformerMixin, JuTransformer):
     def __init__(self, model_confound=None,
                  confounds_match='.*__:type:__confound',
                  threshold=None,
-                 keep_confounds=True,
+                 keep_confounds=False,
                  ):
         """Transformer which can use pd.DataFrames and remove the confounds
         from the features by subtracting the predicted features
@@ -63,7 +64,7 @@ class DataFrameConfoundRemover(
         -------
         self : returns an instance of self.
         """
-        self.n_features_in_ = len(X.columns)
+        self.feature_names_in_ = list(X.columns)
         df_X, ser_confound, _ = self._split_into_X_confound(X)
         if self.keep_confounds:
             self.support_mask_ = pd.Series(True, index=X.columns, dtype=bool)
@@ -139,6 +140,14 @@ class DataFrameConfoundRemover(
             return np.arange(len(self.support_mask_))[self.support_mask_]
         else:
             return self.support_mask_
+
+    def get_feature_names_out(self, input_features=None):
+        return (self.feature_names_in_
+                if self.keep_confounds is True
+                else [feat for feat in self.feature_names_in_
+                      if feat not in self.detected_confounds_
+                      ]
+                )
 
     def _split_into_X_confound(self, X):
         """splits the original X input into the reals features (X) and confound
