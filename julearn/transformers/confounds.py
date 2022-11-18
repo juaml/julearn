@@ -28,7 +28,7 @@ class DataFrameConfoundRemover(JuTransformer):
             using the confounds as features. The predictions of these models
             are then subtracted from each feature, defaults to
             LinearRegression().
-        confounds_match : list(str) | str
+        confounds : list(str) | str
             A string representing a regular expression by which the confounds
             can be detected from the column names.
             You can use the exact column names or another regex.
@@ -63,8 +63,8 @@ class DataFrameConfoundRemover(JuTransformer):
         -------
         self : returns an instance of self.
         """
-        self.feature_names_in_ = list(X.columns)
         df_X, ser_confound, _ = self._split_into_X_confound(X)
+        self.feature_names_in_ = list(X.columns)
         if self.keep_confounds:
             self.support_mask_ = pd.Series(True, index=X.columns, dtype=bool)
         else:
@@ -198,7 +198,7 @@ class TargetConfoundRemover(BaseEstimator, TransformerMixin, OneToOneFeatureMixi
 
     def __init__(self,
                  model_confound=None,
-                 confounds_match='.*__:type:__confound',
+                 confounds='.*__:type:__confound',
                  threshold=None):
         """Transformer which can use pd.DataFrames and remove the confounds
         from the target by subtracting the predicted target
@@ -211,7 +211,7 @@ class TargetConfoundRemover(BaseEstimator, TransformerMixin, OneToOneFeatureMixi
             features. The predictions of these models are then subtracted
             from the actual target, default is None. Meaning the use of
             a LinearRegression.
-        confounds_match : list(str) | str
+        confounds : list(str) | str
             A string representing a regular expression by which the confounds
             can be detected from the column names.
         threshold : float | None
@@ -220,11 +220,11 @@ class TargetConfoundRemover(BaseEstimator, TransformerMixin, OneToOneFeatureMixi
             applied.
         """
         self.model_confound = model_confound
-        self.confounds = confounds_match
+        self.confounds = confounds
         self.threshold = threshold
         self._confound_remover = DataFrameConfoundRemover(
             model_confound=self.model_confound,
-            confounds_match=self.confounds,
+            confounds=self.confounds,
             threshold=self.threshold)
 
     def fit(self, X, y):

@@ -128,7 +128,10 @@ class PipelineCreator:  # Pipeline creator
         if isinstance(transformers, str):
             transformers = [transformers]
         for transformer_name in transformers:
-            t_params = model_params.get(transformer_name, dict())
+            t_params = {
+                x.replace(f"{transformer_name}__", ""): y
+                for x, y in model_params.items()
+                if x.startswith(f"{transformer_name}__")}
             preprocessor.add(transformer_name, **t_params)
         return preprocessor
 
