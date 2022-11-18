@@ -7,37 +7,40 @@ from numpy.testing._private.utils import assert_array_equal
 from sklearn.model_selection import StratifiedKFold, RepeatedStratifiedKFold
 from julearn.model_selection import StratifiedBootstrap
 
+import pytest
 
-def test_stratified_bootstrap():
-    """Test stratified bootstrap CV generator"""
-    n_samples = 100
-    X = np.random.rand(n_samples, 2)
-
-    cases = [
+@pytest.mark.parametrize(
+    "n_classes, test_size",
+    [
         (3, .2),
         (2, .5),
         (4, .8),
     ]
+)
+def test_stratified_bootstrap(n_classes, test_size):
+    """Test stratified bootstrap CV generator"""
+    n_samples = 100
+    X = np.random.rand(n_samples, 2)
 
-    for n_classes, test_size in cases:
-        y = np.random.randint(0, n_classes, n_samples)
+    y = np.random.randint(0, n_classes, n_samples)
 
-        cv = StratifiedBootstrap(n_splits=10, test_size=test_size)
+    cv = StratifiedBootstrap(n_splits=10, test_size=test_size)
 
-        for train, test in cv.split(X, y):
-            y_train = y[train]
-            y_test = y[test]
-            for i in range(n_classes):
-                n_y = (y == i).sum()
-                n_y_train = (y_train == i).sum()
-                n_y_test = (y_test == i).sum()
-                print(n_y_test)
-                print(n_y_train)
-                assert abs(n_y_train - (n_y * (1 - test_size))) < 1
-                assert abs(n_y_test - (n_y * test_size)) < 1
+    for train, test in cv.split(X, y):
+        y_train = y[train]
+        y_test = y[test]
+        for i in range(n_classes):
+            n_y = (y == i).sum()
+            n_y_train = (y_train == i).sum()
+            n_y_test = (y_test == i).sum()
+            print(n_y_test)
+            print(n_y_train)
+            assert abs(n_y_train - (n_y * (1 - test_size))) < 1
+            assert abs(n_y_test - (n_y * test_size)) < 1
 
 
 def test_stratified_groups_kfold():
+    """Test stratified groups K-fold generator"""
     n_samples, n_features = 200, 20
     X = np.random.rand(n_samples, n_features)
     y = np.random.rand(n_samples)
