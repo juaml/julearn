@@ -3,7 +3,7 @@ from pytest import fixture
 from copy import copy
 
 
-@fixture
+@fixture(scope="module")
 def df_typed_iris():
     df = load_dataset("iris")
     X_names = df.iloc[:, :-1].columns.tolist()
@@ -15,19 +15,20 @@ def df_typed_iris():
     return df
 
 
-@fixture
-def X_typed_iris():
+@fixture(scope="module")
+def X_multi_typed_iris():
     df = load_dataset("iris")
     X_names = df.iloc[:, :-1].columns.tolist()
 
-    renamer = {col: col + "__:type:__continuous"
-               for col in X_names}
+    X_types = ["duck", "continuous", "continuous", "quack"]
+    renamer = {col: col + f"__:type:__{X_type}"
+               for X_type, col in zip(X_types, X_names)}
 
     df = df.rename(columns=renamer)
     return df[renamer.values()]
 
 
-@fixture
+@fixture(scope="module")
 def y_typed_iris():
     df = load_dataset("iris")
     return (
@@ -36,13 +37,15 @@ def y_typed_iris():
     )
 
 
-@fixture(params=["rf", "svm", "gauss", "ridge"])
+@fixture(params=["rf", "svm", "gauss", "ridge"], scope="module")
 def models_all_problem_types(request):
     return request.param
 
 
 @fixture(params=["regression",
-                 "classification"])
+                 "classification"],
+         scope="module"
+         )
 def all_problem_types(request):
     return request.param
 
@@ -57,7 +60,7 @@ step_to_params = dict(
 )
 
 
-@fixture
+@fixture(scope="module")
 def get_default_params():
     def get(step):
         return copy(step_to_params[step])
@@ -69,6 +72,6 @@ def get_default_params():
     ["select_univariate"],
     ["zscore", "pca"],
     ["select_univariate", "zscore", "pca"],
-])
+], scope="module")
 def preprocessing(request):
     return request.param

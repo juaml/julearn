@@ -6,27 +6,23 @@ import pytest
 
 
 @pytest.mark.parametrize(
-    "model,problem_type",
-    [pytest.lazy_fixture(["models_all_problem_types", "all_problem_types"])],
+    "model,preprocess,problem_type",
+    [pytest.lazy_fixture(
+        ["models_all_problem_types", "preprocessing", "all_problem_types"])],
 )
-def test_param(model, problem_type):
-
-    raise ValueError(f"{model}, {problem_type}")
-
-
-def test_construction_working(
-        models_all_problem_types, preprocessing,
-        all_problem_types
-):
-    pipeline = (PipelineCreator.from_list(preprocessing)
-                .add(models_all_problem_types,
-                     problem_type=all_problem_types,)
-                .to_pipeline(dict(continuous=["col"]))
+def test_construction_working(model, preprocess, problem_type
+                              ):
+    pipeline = (PipelineCreator.from_list(preprocess, model_params={})
+                .add(model,
+                     problem_type=problem_type,)
+                .to_pipeline(dict(), search_params={})
                 )
 
     # check preprocessing steps
-    for preprocess, step in zip(preprocessing, pipeline.steps[:-1]):
-        name, transformer = step.name, step.estimator
+    # ignoring first step for types and last for model
+    for preprocess, step in zip(preprocess, pipeline.steps[1:-1]):
+        name, transformer = step
+        print(name, preprocess, type(preprocess))
         assert name.startswith(f"wrapped_{preprocess}")
         assert isinstance(transformer, ColumnTransformer)
         assert isinstance(
@@ -35,25 +31,29 @@ def test_construction_working(
 
     # check model step
     model_name, model = pipeline.steps[-1]
-    assert model_name == models_all_problem_types
+    # assert model_name == model
     assert isinstance(
         model,
-        get_model(models_all_problem_types,
-                  problem_type=all_problem_types,
+        get_model(model_name,
+                  problem_type=problem_type,
                   ).__class__
     )
 
 
+@pytest.mark.parametrize(
+    "X,y,model,preprocess,problem_type",
+    [pytest.lazy_fixture(
+        ["X_multi_typed_iris", "y_typed_iris",
+         "models_all_problem_types", "preprocessing", "all_problem_types"])],
+)
 def test_fit_and_transform_no_error(
-        X_typed_iris, y_typed_iris,
-        models_all_problem_types, preprocessing,
-        all_problem_types
+        X, y, model, preprocess, problem_type
 ):
 
-    pipeline = (PipelineCreator.from_list(preprocessing)
-                .add(models_all_problem_types,
-                     problem_type=all_problem_types,)
-                .to_pipeline(["continuous"])
+    pipeline = (PipelineCreator.from_list(preprocess, model_params={})
+                .add(model,
+                     problem_type=problem_type,)
+                .to_pipeline(dict())
                 )
-    pipeline.fit(X_typed_iris, y_typed_iris)
-    pipeline[:-1].transform(X_typed_iris)
+    pipeline.fit(X, y)
+    pipeline[:-1].transform(X)
