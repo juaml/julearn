@@ -25,7 +25,7 @@ from julearn.utils import configure_logging
 
 ###############################################################################
 # Set the logging level to info to see extra information
-configure_logging(level='INFO')
+configure_logging(level='DEBUG')
 
 ###############################################################################
 # Set the random seed to always have the same example
@@ -49,14 +49,14 @@ print(df_fmri.head())
 
 ###############################################################################
 # Lets do a first attempt and use a linear SVM with the default parameters.
-model_params = {'svm__kernel': 'linear'}
-X = ['frontal', 'parietal']
-y = 'event'
-scores = run_cross_validation(
-    X=X, y=y, data=df_fmri, model='svm', preprocess_X='zscore',
-    model_params=model_params)
+# model_params = {'svm__kernel': 'linear'}
+# X = ['frontal', 'parietal']
+# y = 'event'
+# scores = run_cross_validation(
+#     X=X, y=y, data=df_fmri, model='svm', preprocess='zscore',
+#     model_params=model_params)
 
-print(scores['test_score'].mean())
+# print(scores['test_score'].mean())
 
 ###############################################################################
 # The score is not so good. Lets try to see if there is an optimal
@@ -68,7 +68,7 @@ model_params = {
 X = ['frontal', 'parietal']
 y = 'event'
 scores, estimator = run_cross_validation(
-    X=X, y=y, data=df_fmri, model='svm', preprocess_X='zscore',
+    X=X, y=y, data=df_fmri, model='svm', preprocess='zscore',
     model_params=model_params, return_estimator='final')
 
 print(scores['test_score'].mean())
@@ -82,7 +82,7 @@ model_params = {
 X = ['frontal', 'parietal']
 y = 'event'
 scores, estimator = run_cross_validation(
-    X=X, y=y, data=df_fmri, model='svm', preprocess_X='zscore',
+    X=X, y=y, data=df_fmri, model='svm', preprocess='zscore',
     model_params=model_params, return_estimator='final')
 
 print(scores['test_score'].mean())
@@ -101,7 +101,7 @@ model_params = {
 X = ['frontal', 'parietal']
 y = 'event'
 scores, estimator = run_cross_validation(
-    X=X, y=y, data=df_fmri, model='svm', preprocess_X='zscore',
+    X=X, y=y, data=df_fmri, model='svm', preprocess='zscore',
     model_params=model_params, return_estimator='final')
 
 print(scores['test_score'].mean())
@@ -118,7 +118,7 @@ model_params = {
 X = ['frontal', 'parietal']
 y = 'event'
 scores, estimator = run_cross_validation(
-    X=X, y=y, data=df_fmri, model='svm', preprocess_X='zscore',
+    X=X, y=y, data=df_fmri, model='svm', preprocess='zscore',
     model_params=model_params, return_estimator='final')
 
 print(scores['test_score'].mean())

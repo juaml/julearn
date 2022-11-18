@@ -3,27 +3,32 @@
 # License: AGPL
 import numpy as np
 from sklearn.model_selection import cross_validate
+from sklearn.pipeline import Pipeline
 import pandas as pd
 
-from . prepare import (prepare_input_data,
-                       # prepare_model,
-                       prepare_cv,
-                       # prepare_model_params,
-                       # prepare_preprocessing,
-                       # prepare_scoring,
-                       # check_consistency
-                       )
-from . pipeline import PipelineCreator
+from .prepare import (
+    prepare_input_data,
+    # prepare_model,
+    prepare_cv,
+    # prepare_model_params,
+    # prepare_preprocessing,
+    # prepare_scoring,
+    # check_consistency
+)
+from .pipeline import PipelineCreator
 
-from . utils import logger
+from .utils import logger, raise_error
+from .utils.typing import ModelLike
 
 
 def run_cross_validation(
-    X, y, model,
+    X,
+    y,
+    model,
     X_types=None,
     data=None,
     confounds=None,
-    problem_type='binary_classification',
+    problem_type="binary_classification",
     preprocess=None,
     # preprocess_y=None,
     # preprocess_confounds=None,
@@ -35,7 +40,7 @@ def run_cross_validation(
     model_params=None,
     seed=None,
     n_jobs=None,
-    verbose=0
+    verbose=0,
 ):
     """Run cross validation and score.
 
@@ -174,25 +179,86 @@ def run_cross_validation(
     if seed is not None:
         # If a seed is passed, use it, otherwise do not do anything. User
         # might have set the seed outside of the library
-        logger.info(f'Setting random seed to {seed}')
+        logger.info(f"Setting random seed to {seed}")
         np.random.seed(seed)
 
     if cv is None:
-        logger.info(f'Using default CV')
-        cv = 'repeat:5_nfolds:5'
+        logger.info(f"Using default CV")
+        cv = "repeat:5_nfolds:5"
 
     # Interpret the input data and prepare it to be used with the library
     df_X_conf, y, df_groups, _ = prepare_input_data(
-        X=X, y=y, confounds=confounds, df=data, pos_labels=pos_labels,
-        groups=groups)
+        X=X,
+        y=y,
+        confounds=confounds,
+        df=data,
+        pos_labels=pos_labels,
+        groups=groups,
+    )
 
-    # create a the pipeline
-    if not isinstance(preprocess, PipelineCreator):
-        preprocess = PipelineCreator.from_list(preprocess)
-    pipeline = preprocess.to_pipeline(
-        X_types, model=model,
-        model_params=model_params,
-        problem_type=problem_type)
+    if model_params is None:
+        model_params = {}
+
+    search_params = {}
+    if "search_params" in model_params:
+        search_params = model_params.pop("search_params")
+
+    # Deal with model and preprocess
+    if isinstance(model, Pipeline):
+        raise_error(
+            "Currently we do not allow to pass a scikit-learn pipeline as "
+            "model, use PipelineCreator instead"
+        )
+
+    if isinstance(model, PipelineCreator):
+        if preprocess is not None:
+            raise_error(
+                "If model is a PipelineCreator, preprocess should be None"
+            )
+        pipeline = model.to_pipeline(
+            X_types=X_types, search_params=search_params
+        )
+    elif not isinstance(model, (str, ModelLike)):
+        raise_error(
+            "Model has to be a PipelineCreator, a string or a "
+            "scikit-learn compatible model."
+        )
+    else:
+        if isinstance(preprocess, str):
+            preprocess = [preprocess]
+        if isinstance(preprocess, list):
+            pipeline_creator = PipelineCreator.from_list(
+                preprocess, model_params
+            )
+        elif preprocess is None:
+            pipeline_creator = PipelineCreator()
+        elif not isinstance(preprocess, PipelineCreator):
+            raise_error(
+                "preprocess has to be a PipelineCreator, a string or a "
+                "list of strings."
+            )
+        else:
+            pipeline_creator = preprocess
+
+        # Add the model to the pipeline creator
+        t_params = {}
+        if isinstance(model, str):
+            t_params = {
+                x.replace(f"{model}__", ""): y
+                for x, y in model_params.items()
+                if x.startswith(f"{model}__")
+            }
+        else:
+            model_name = model.__class__.__name__.lower()
+            if any(x.startswith(f"{model_name}__") for x in model_params):
+                raise_error(
+                    "Cannot use model_params with a model object. Use either "
+                    "a string or a PipelineCreator")
+        pipeline_creator.add(model, problem_type=problem_type, **t_params)
+
+        pipeline = pipeline_creator.to_pipeline(
+            X_types=X_types, search_params=search_params
+        )
 
     # Prepare cross validation
     cv_outer = prepare_cv(cv)
@@ -203,24 +269,30 @@ def run_cross_validation(
     #                   preprocess_confounds, df_X_conf, y, cv, groups,
     #                   problem_type)
 
-    cv_return_estimator = return_estimator in ['cv', 'all']
+    cv_return_estimator = return_estimator in ["cv", "all"]
 
-    scores = cross_validate(pipeline, df_X_conf, y, cv=cv_outer,
-                            scoring=scoring, groups=df_groups,
-                            return_estimator=cv_return_estimator,
-                            n_jobs=n_jobs)
+    scores = cross_validate(
+        pipeline,
+        df_X_conf,
+        y,
+        cv=cv_outer,
+        scoring=scoring,
+        groups=df_groups,
+        return_estimator=cv_return_estimator,
+        n_jobs=n_jobs,
+    )
 
-    n_repeats = getattr(cv_outer, 'n_repeats', 1)
-    n_folds = len(scores['fit_time']) // n_repeats
+    n_repeats = getattr(cv_outer, "n_repeats", 1)
+    n_folds = len(scores["fit_time"]) // n_repeats
 
     repeats = np.repeat(np.arange(n_repeats), n_folds)
     folds = np.tile(np.arange(n_folds), n_repeats)
 
-    scores['repeat'] = repeats
-    scores['fold'] = folds
+    scores["repeat"] = repeats
+    scores["fold"] = folds
 
     out = pd.DataFrame(scores)
-    if return_estimator in ['final', 'all']:
+    if return_estimator in ["final", "all"]:
         pipeline.fit(df_X_conf, y)
         out = out, pipeline
 

@@ -281,7 +281,7 @@ def prepare_model(model, problem_type):
     return model_name, model
 
 
-def prepare_model_params(msel_dict, pipeline):
+def prepare_hyperparameter_tunning(params_to_tune, search_params, pipeline):
     """Prepare model parameters.
 
     For each of the model parameters, determine if it can be directly set or
@@ -315,30 +315,10 @@ def prepare_model_params(msel_dict, pipeline):
     """
     logger.info('= Model Parameters =')
 
-    tunning_params = ['scoring', 'cv', 'search', 'search_params']
-
-    hyperparameters = {k: v for k, v in msel_dict.items()
-                       if k not in tunning_params}
-
-    hyper_params = _prepare_hyperparams(hyperparameters, pipeline)
-
-    if len(hyper_params) > 0:
-        scoring = msel_dict.get('scoring', None)
-        search = msel_dict.get('search', 'grid')
-        search_params = msel_dict.get('search_params', {})
+    if len(params_to_tune) > 0:
+        search = search_params.get("kind", "grid")
+        scoring = search_params.get('scoring', None)
         cv_inner = search_params.get('cv', None)
-        cv_inner_dep = msel_dict.get('cv', None)
-        if cv_inner_dep is not None:
-            warn(
-                "`cv` should not be directly provided in the"
-                "`model_params` anymore. This functionality will"
-                "be removed in the next version of julearn."
-                "Please use `cv` inside of `search_params` instead",
-                category=DeprecationWarning
-
-
-            )
-        cv_inner = cv_inner_dep if cv_inner is None else cv_inner
 
         if search in list_searchers():
             logger.info(f'Tunning hyperparameters using {search}')
@@ -359,7 +339,7 @@ def prepare_model_params(msel_dict, pipeline):
                     f'Tunning hyperparameters using not registered {search}')
 
         logger.info('Hyperparameters:')
-        for k, v in hyper_params.items():
+        for k, v in params_to_tune.items():
             logger.info(f'\t{k}: {v}')
 
         cv_inner = prepare_cv(cv_inner)
@@ -369,57 +349,13 @@ def prepare_model_params(msel_dict, pipeline):
         logger.info('Search Parameters:')
         for k, v in search_params.items():
             logger.info(f'\t{k}: {v}')
-        pipeline = search(pipeline, hyper_params, **search_params)
-    else:
-        if 'cv' in msel_dict:
-            warn('Hyperparameter search CV was specified, but no '
-                 'hyperparameters to tune')
-        if 'scoring' in msel_dict:
-            warn('Hyperparameter search scoring was specified, but no '
-                 'hyperparameters to tune')
-        if 'search' in msel_dict:
-            warn('Hyperparameter search method was specified, but no '
-                 'hyperparameters to tune')
+        pipeline = search(pipeline, params_to_tune, **search_params)
+    elif search_params is not None and len(search_params) > 0:
+        warn('Hyperparameter search parameters were specified, but no '
+             'hyperparameters to tune')
     logger.info('====================')
     logger.info('')
     return pipeline
-
-
-def _prepare_hyperparams(hyperparams, pipeline):
-    """Prepare model hyperparameters.
-
-    Either set the model hyperparameter or add it to the dictionary of
-    parameters to be tuned.
-
-    Parameters
-    ----------
-    hyperparams : dict
-        A dictionary with hyperparameters. The key must be like
-        'STEP__PARAMETER': A value (or several) to be used as PARAMETER for
-        STEP in the pipeline.
-    pipeline : ExtendedDataframePipeline
-        The pipeline to apply the hyperparameters
-
-    Returns
-    -------
-    to_tune : dict
-        The parameters that must be tuned.
-    """
-    to_tune = {}
-    # steps = list(pipeline.named_steps.keys())
-    for param, val in hyperparams.items():
-        # If we have more than 1 value, we will tune it. If not, it will
-        # be set in the model.
-        if hasattr(val, '__iter__') and not isinstance(val, str):
-            if len(val) > 1:
-                to_tune[param] = val
-            else:
-                logger.info(f'Setting hyperparameter {param} = {val[0]}')
-                pipeline.set_params(**{param: val[0]})
-        else:
-            logger.info(f'Setting hyperparameter {param} = {val}')
-            pipeline.set_params(**{param: val})
-    return to_tune
 
 
 def prepare_preprocessing(preprocess_X, preprocess_y, preprocess_conf,

@@ -4,6 +4,7 @@ from sklearn.base import TransformerMixin, BaseEstimator
 
 from .. utils import pick_columns, change_column_type
 from . base import JuTransformer
+from .. utils import raise_error
 
 
 class SetColumnTypes(JuTransformer):
@@ -12,13 +13,21 @@ class SetColumnTypes(JuTransformer):
         self.X_types = X_types
 
     def fit(self, X, y=None):
+        if self.X_types is None:
+            self.X_types = {}
         self.feature_names_in_ = X.columns
         column_mapper_ = {}
         for X_type, columns in self.X_types.items():
+            if not isinstance(columns, (list, tuple)):
+                raise_error(
+                    "Each value of X_types must be either a list or a tuple.")
             column_mapper_ = {**column_mapper_,
                               **{col: change_column_type(col, X_type)
                                  for col in columns}
                               }
+        for x in X.columns:
+            if x not in column_mapper_:
+                column_mapper_[x] = change_column_type(x, "continuous")
         self.column_mapper_ = column_mapper_
         return self
 

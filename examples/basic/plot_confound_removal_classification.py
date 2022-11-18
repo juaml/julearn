@@ -42,7 +42,7 @@ df_iris = df_iris[df_iris['species'].isin(['versicolor', 'virginica'])]
 
 X = ['sepal_length', 'sepal_width', 'petal_length']
 y = 'species'
-confound = 'petal_width'
+confounds = ['petal_width']
 
 ###############################################################################
 # Doing hypothesis testing in ML is not that simple. If we were to used
@@ -75,13 +75,13 @@ scores_ncr = run_cross_validation(
 # Note: we initialize the CV again to use the same folds as before
 cv = StratifiedBootstrap(n_splits=n_bootstrap, test_size=.3, random_state=42)
 
-preproces = PipelineCreator()
-preproces.add('zscore', apply_to="confounds")
-preproces.add('remove_confound', apply_to="ducks", confounds=confound)
+preprocess = PipelineCreator()
+preprocess.add('zscore', apply_to="confound")
+preprocess.add('remove_confound', apply_to="duck")
 
 scores_cr = run_cross_validation(
-    X=X + confound, y=y, data=df_iris, model='rf', preproces=preproces,
-    cv=cv, X_types={'ducks': X, 'confounds': confound},
+    X=X + confounds, y=y, data=df_iris, model='rf', preprocess=preprocess,
+    cv=cv, X_types={'duck': X, 'confound': confounds},
     scoring=['accuracy', 'roc_auc'], return_estimator='cv', seed=200)
 
 ###############################################################################

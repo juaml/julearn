@@ -13,7 +13,7 @@ from . base import JuTransformer
 
 class DataFrameConfoundRemover(JuTransformer):
     def __init__(self, model_confound=None,
-                 confounds_match='.*__:type:__confound',
+                 confounds='.*__:type:__confound',
                  threshold=None,
                  keep_confounds=False,
                  ):
@@ -45,7 +45,7 @@ class DataFrameConfoundRemover(JuTransformer):
         if model_confound is None:
             model_confound = LinearRegression()
         self.model_confound = model_confound
-        self.confounds_match = confounds_match
+        self.confounds = confounds
         self.threshold = threshold
         self.keep_confounds = keep_confounds
 
@@ -159,10 +159,10 @@ class DataFrameConfoundRemover(JuTransformer):
 
         try:
             self.detected_confounds_ = pick_columns(
-                self.confounds_match, df_X.columns)
+                self.confounds, df_X.columns)
         except ValueError:
             raise_error('No confound was found using the regex:'
-                        f'{self.confounds_match} in   the columns {X.columns}')
+                        f'{self.confounds} in   the columns {X.columns}')
         df_confounds = df_X.loc[:, self.detected_confounds_]
         df_X = df_X.drop(columns=self.detected_confounds_)
 
@@ -220,11 +220,11 @@ class TargetConfoundRemover(BaseEstimator, TransformerMixin, OneToOneFeatureMixi
             applied.
         """
         self.model_confound = model_confound
-        self.confounds_match = confounds_match
+        self.confounds = confounds_match
         self.threshold = threshold
         self._confound_remover = DataFrameConfoundRemover(
             model_confound=self.model_confound,
-            confounds_match=self.confounds_match,
+            confounds_match=self.confounds,
             threshold=self.threshold)
 
     def fit(self, X, y):

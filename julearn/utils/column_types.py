@@ -27,6 +27,15 @@ def pick_columns(regexes, columns):
         regexes = [regexes]
 
     picks = []
+    matched = []
+    # # Pick literal matches (in case regexes are not regexes but column names)
+    for regex in regexes:
+        picks += [
+            col for col in columns
+            if '__:type:__' in col and col.split('__:type:__')[0] == regex]
+        if len(picks) > 0:
+            matched.append(regex)
+
     for exp in regexes:
         cols = [
             col
@@ -35,11 +44,9 @@ def pick_columns(regexes, columns):
         ]
         if len(cols) > 0:
             picks.extend(cols)
+            matched.append(exp)
 
-    unmatched = []
-    for exp in regexes:
-        if not any([re.fullmatch(exp, col) for col in columns]):
-            unmatched.append(exp)
+    unmatched = [exp for exp in regexes if exp not in matched]
     if len(unmatched) > 0:
         raise ValueError(
             'All elements must be matched. '
