@@ -9,120 +9,144 @@ from julearn.estimators.dynamic import DynamicSelection
 from sklearn.ensemble import RandomForestClassifier
 from seaborn import load_dataset
 
-from deslib.dcs import (OLA, MCB)
-from deslib.des import (DESP, KNORAU, METADES, KNOP, KNORAE)
-from deslib.static import (StackedClassifier, SingleBest, StaticSelection)
-from sklearn.model_selection import train_test_split, ShuffleSplit
+
+# Check if the test is running on juseless
+try:
+    import deslib  # type: ignore
+except ImportError:
+    pytest.skip("Need deslib to test", allow_module_level=True)
 
 
-all_algorithms = {'METADES': METADES,
-                  'SingleBest': SingleBest,
-                  'StaticSelection': StaticSelection,
-                  'StackedClassifier': StackedClassifier,
-                  'KNORAU': KNORAU,
-                  'KNORAE': KNORAE,
-                  'DESP': DESP,
-                  'OLA': OLA,
-                  'MCB': MCB,
-                  'KNOP': KNOP
-                  }
+
+# TODO: fix this test
+
+@pytest.fixture
+def all_deslib_algorithms():
+    from deslib.dcs import OLA, MCB
+    from deslib.des import DESP, KNORAU, METADES, KNOP, KNORAE
+    from deslib.static import StackedClassifier, SingleBest, StaticSelection
+    from sklearn.model_selection import train_test_split, ShuffleSplit
+
+    all_algorithms = {
+        "METADES": METADES,
+        "SingleBest": SingleBest,
+        "StaticSelection": StaticSelection,
+        "StackedClassifier": StackedClassifier,
+        "KNORAU": KNORAU,
+        "KNORAE": KNORAE,
+        "DESP": DESP,
+        "OLA": OLA,
+        "MCB": MCB,
+        "KNOP": KNOP,
+    }
+    return all_algorithms
 
 
-def test_algorithms():
-    df_iris = load_dataset('iris')
-    df_iris = df_iris[df_iris['species'].isin(['versicolor', 'virginica'])]
-    X = ['sepal_length', 'sepal_width', 'petal_length']
-    y = 'species'
+@pytest.mark.parametrize(
+    "algo_name, algo_class",
+    [pytest.lazy_fixture(["all_deslib_algorithms"])],
+)
+def test_algorithms(algo_name, algo_class):
+    df_iris = load_dataset("iris")
+    df_iris = df_iris[df_iris["species"].isin(["versicolor", "virginica"])]
+    X = ["sepal_length", "sepal_width", "petal_length"]
+    y = "species"
 
-    for algorithm in all_algorithms.keys():
-        seed = 42
-        ds_split = .2
+    seed = 42
+    ds_split = 0.2
 
-        # julearn
-        np.random.seed(seed)
-        ensemble_model = RandomForestClassifier(random_state=6)
-        dynamic_model = DynamicSelection(
-            ensemble=ensemble_model, algorithm=algorithm,
-            random_state=seed, random_state_algorithm=seed, ds_split=ds_split)
-        dynamic_model.fit(df_iris[X], df_iris[y])
-        score_julearn = dynamic_model.score(df_iris[X], df_iris[y])
-        pred_julearn = dynamic_model.predict(df_iris[X])
+    # julearn
+    np.random.seed(seed)
+    ensemble_model = RandomForestClassifier(random_state=6)
+    dynamic_model = DynamicSelection(
+        ensemble=ensemble_model,
+        algorithm=algo_name,
+        random_state=seed,
+        random_state_algorithm=seed,
+        ds_split=ds_split,
+    )
+    dynamic_model.fit(df_iris[X], df_iris[y])
+    score_julearn = dynamic_model.score(df_iris[X], df_iris[y])
+    pred_julearn = dynamic_model.predict(df_iris[X])
 
-        # deslib
-        np.random.seed(seed)
-        X_train, X_dsel, y_train, y_dsel = train_test_split(
-            df_iris[X], df_iris[y], test_size=ds_split, random_state=seed)
+    # deslib
+    np.random.seed(seed)
+    X_train, X_dsel, y_train, y_dsel = train_test_split(
+        df_iris[X], df_iris[y], test_size=ds_split, random_state=seed
+    )
 
-        pool_classifiers = RandomForestClassifier(random_state=6)
-        pool_classifiers.fit(X_train, y_train)
+    pool_classifiers = RandomForestClassifier(random_state=6)
+    pool_classifiers.fit(X_train, y_train)
 
-        cls = all_algorithms[algorithm]
-        model_deslib = cls(pool_classifiers, random_state=seed)
-        model_deslib.fit(X_dsel, y_dsel)
-        score_deslib = model_deslib.score(df_iris[X], df_iris[y])
-        pred_deslib = model_deslib.predict(df_iris[X])
+    cls = algo_class
+    model_deslib = cls(pool_classifiers, random_state=seed)
+    model_deslib.fit(X_dsel, y_dsel)
+    score_deslib = model_deslib.score(df_iris[X], df_iris[y])
+    pred_deslib = model_deslib.predict(df_iris[X])
 
-        assert score_deslib == score_julearn
-        assert (pred_deslib == pred_julearn).all()
+    assert score_deslib == score_julearn
+    assert (pred_deslib == pred_julearn).all()
 
-        if hasattr(model_deslib, 'predict_proba'):
-            pred_proba_julearn = dynamic_model.predict_proba(df_iris[X])
-            pred_proba_deslib = model_deslib.predict_proba(df_iris[X])
-            assert (pred_proba_deslib == pred_proba_julearn).all()
+    if hasattr(model_deslib, "predict_proba"):
+        pred_proba_julearn = dynamic_model.predict_proba(df_iris[X])
+        pred_proba_deslib = model_deslib.predict_proba(df_iris[X])
+        assert (pred_proba_deslib == pred_proba_julearn).all()
 
 
 def test_wrong_algo():
-    df_iris = load_dataset('iris')
-    df_iris = df_iris[df_iris['species'].isin(['versicolor', 'virginica'])]
-    X = ['sepal_length', 'sepal_width', 'petal_length']
-    y = 'species'
+    df_iris = load_dataset("iris")
+    df_iris = df_iris[df_iris["species"].isin(["versicolor", "virginica"])]
+    X = ["sepal_length", "sepal_width", "petal_length"]
+    y = "species"
     ensemble_model = RandomForestClassifier()
 
-    with pytest.raises(ValueError, match='wrong is not a valid or supported'):
+    with pytest.raises(ValueError, match="wrong is not a valid or supported"):
         dynamic_model = DynamicSelection(
-            ensemble=ensemble_model, algorithm='wrong')
+            ensemble=ensemble_model, algorithm="wrong"
+        )
         dynamic_model.fit(df_iris[X], df_iris[y])
 
 
 def test_ds_split_no_error():
 
-    df_iris = load_dataset('iris')
-    df_iris = df_iris[df_iris['species'].isin(['versicolor', 'virginica'])]
+    df_iris = load_dataset("iris")
+    df_iris = df_iris[df_iris["species"].isin(["versicolor", "virginica"])]
     df_iris = df_iris.sample(n=len(df_iris))
-    X = ['sepal_length', 'sepal_width', 'petal_length']
-    y = 'species'
+    X = ["sepal_length", "sepal_width", "petal_length"]
+    y = "species"
     ensemble_model = RandomForestClassifier()
 
     train, test = train_test_split(
-        np.arange(len(df_iris)), test_size=.4, shuffle=True)
+        np.arange(len(df_iris)), test_size=0.4, shuffle=True
+    )
 
-    for ds_split in [.2, .3,
-                     [(train, test)],
-                     ShuffleSplit(n_splits=1)]:
+    for ds_split in [0.2, 0.3, [(train, test)], ShuffleSplit(n_splits=1)]:
         dynamic_model = DynamicSelection(
-            ensemble=ensemble_model, algorithm='METADES',
-            ds_split=ds_split
+            ensemble=ensemble_model, algorithm="METADES", ds_split=ds_split
         )
         dynamic_model.fit(df_iris[X], df_iris[y])
 
 
 def test_ds_split_error():
 
-    df_iris = load_dataset('iris')
-    df_iris = df_iris[df_iris['species'].isin(['versicolor', 'virginica'])]
+    df_iris = load_dataset("iris")
+    df_iris = df_iris[df_iris["species"].isin(["versicolor", "virginica"])]
     df_iris = df_iris.sample(n=len(df_iris))
-    X = ['sepal_length', 'sepal_width', 'petal_length']
-    y = 'species'
+    X = ["sepal_length", "sepal_width", "petal_length"]
+    y = "species"
     ensemble_model = RandomForestClassifier()
 
     train, test = train_test_split(
-        np.arange(len(df_iris)), test_size=.4, shuffle=True)
+        np.arange(len(df_iris)), test_size=0.4, shuffle=True
+    )
 
-    for ds_split in [4, [(train, test), (train, test)],
-                     ShuffleSplit(n_splits=2)]:
-        with pytest.raises(ValueError, match='ds_split only allows'):
+    for ds_split in [
+        4,
+        [(train, test), (train, test)],
+        ShuffleSplit(n_splits=2),
+    ]:
+        with pytest.raises(ValueError, match="ds_split only allows"):
             dynamic_model = DynamicSelection(
-                ensemble=ensemble_model, algorithm='METADES',
-                ds_split=ds_split
+                ensemble=ensemble_model, algorithm="METADES", ds_split=ds_split
             )
             dynamic_model.fit(df_iris[X], df_iris[y])
