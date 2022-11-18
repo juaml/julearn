@@ -42,8 +42,7 @@ def models_all_problem_types(request):
 
 
 @fixture(params=["regression",
-                 "binary_classification",
-                 "multiclass_classification"])
+                 "classification"])
 def all_problem_types(request):
     return request.param
 

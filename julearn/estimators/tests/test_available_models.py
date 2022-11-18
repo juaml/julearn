@@ -11,21 +11,18 @@ from sklearn.ensemble import RandomForestRegressor
 
 def test_register_model():
     register_model("dt",
-                   binary_cls=DecisionTreeClassifier,
-                   multiclass_cls=DecisionTreeClassifier,
+                   classification_cls=DecisionTreeClassifier,
                    regression_cls=DecisionTreeRegressor
                    )
-    binary = get_model("dt", "binary_classification")
-    multiclass = get_model("dt", "multiclass_classification")
+    classification = get_model("dt", "classification")
     regression = get_model("dt", "regression")
 
-    assert isinstance(binary, DecisionTreeClassifier)
-    assert isinstance(multiclass, DecisionTreeClassifier)
+    assert isinstance(classification, DecisionTreeClassifier)
     assert isinstance(regression, DecisionTreeRegressor)
     reset_model_register()
 
     with pytest.raises(ValueError, match="The specified model "):
-        binary = get_model("dt", "binary_classification")
+        classification = get_model("dt", "classification")
 
 
 def test_register_warning():

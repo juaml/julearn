@@ -28,7 +28,7 @@ def run_cross_validation(
     X_types=None,
     data=None,
     confounds=None,
-    problem_type="binary_classification",
+    problem_type="classification",
     preprocess=None,
     # preprocess_y=None,
     # preprocess_confounds=None,
@@ -66,12 +66,10 @@ def run_cross_validation(
 
         Options are:
 
-        * "binary_classification": Perform a binary classification
-          in which the target (y) has only two possible classes (default).
+        * "classification": Perform a classification
+          in which the target (y) has categorical classes (default).
           The parameter pos_labels can be used to convert a target with
           multiple_classes into binary.
-        * "multiclass_classification": Performs a multiclass classification
-          in which the target (y) has more than two possible values.
         * "regression". Perform a regression. The target (y) has to be
           ordinal at least.
 

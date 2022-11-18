@@ -78,8 +78,8 @@ def compare_models(clf1, clf2):  # pragma: no cover
                           _get_coef_over_versions(clf2)):
             assert_array_equal(c1, c2)
     elif isinstance(clf1, GaussianNB):
-        v1 = clf1.sigma_
-        v2 = clf2.sigma_
+        v1 = clf1.var_
+        v2 = clf2.var_
     elif isinstance(clf1, (AdaBoostClassifier, AdaBoostRegressor,
                            BaggingClassifier, BaggingRegressor)):
         est1 = clf1.estimators_
@@ -103,8 +103,8 @@ def do_scoring_test(X, y, data, api_params, sklearn_model, scorers, cv=None,
 
     np.random.seed(42)
     params_dict = {k: v for k, v in api_params.items()}
-    if 'preprocess_X' not in params_dict:
-        params_dict['preprocess_X'] = 'zscore'
+    if 'preprocess' not in params_dict:
+        params_dict['preprocess'] = 'zscore'
     actual, actual_estimator = run_cross_validation(
         X=X, y=y, data=data, scoring=scorers, cv=cv,
         return_estimator='final', **params_dict)
@@ -120,7 +120,7 @@ def do_scoring_test(X, y, data, api_params, sklearn_model, scorers, cv=None,
         assert_array_almost_equal(actual[s_key], expected[s_key], decimal=5)
 
         # Compare the models
-        clf1 = actual_estimator.dataframe_pipeline.steps[-1][1]
+        clf1 = actual_estimator.steps[-1][1]
         clf2 = clone(sklearn_model).fit(sk_X, sk_y).steps[-1][1]
         compare_models(clf1, clf2)
 

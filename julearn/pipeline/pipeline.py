@@ -74,7 +74,7 @@ class PipelineCreator:  # Pipeline creator
         self._added_model = False
 
     def add(self, step, apply_to="continuous",
-            problem_type="binary_classification", **params):
+            problem_type="classification", **params):
         
         apply_to = self._ensure_apply_to(apply_to)
         self.validate_step(step, apply_to)

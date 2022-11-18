@@ -255,7 +255,7 @@ def prepare_model(model, problem_type):
     model: str or sklearn.base.BaseEstimator
         str/model_name that can be read in to create a model.
     problem_type: str
-        binary_classification, multiclass_classification or regression
+        classification or regression
 
     Returns
     -------
@@ -524,25 +524,13 @@ def check_consistency(
 
     # Check problem type and the target.
     n_classes = np.unique(y.values).shape[0]
-    if problem_type == 'binary_classification':
+    if problem_type == 'classification':
         # If not exactly two classes:
         if n_classes != 2:
-            if preprocess_y is None:
-                raise_error(
-                    f'The number of classes ({n_classes}) is not suitable for '
-                    'a binary classification. You can either specify '
-                    '``pos_labels``, a suitable y transformer or change the '
-                    'problem type.')
-            else:
-                warn(
-                    f'The number of classes ({n_classes}) is not suitable for '
-                    'a binary classification. However, a y transformer has '
-                    'been set.')
-    elif problem_type == 'multiclass_classification':
-        if n_classes == 2:
-            warn(
-                f'A multiclass classification will be performed but only 2 '
-                'classes are defined in y.')
+            logger.info("Multi-class classification problem detected "
+                        f"#classes = {n_classes}.")
+        else:
+            logger.info("Binary classification problem detected.")
     else:
         # Regression
         is_numeric = np.issubdtype(y.values.dtype, np.number)

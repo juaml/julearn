@@ -25,93 +25,74 @@ from . dynamic import DynamicSelection
 _available_models = {
     'svm': {
         'regression': SVR,
-        'binary_classification': SVC,
-        'multiclass_classification': SVC
+        'classification': SVC,
     },
     'rf': {
         'regression': RandomForestRegressor,
-        'binary_classification': RandomForestClassifier,
-        'multiclass_classification': RandomForestClassifier
+        'classification': RandomForestClassifier,
     },
     'et': {
         'regression': ExtraTreesRegressor,
-        'binary_classification': ExtraTreesClassifier,
-        'multiclass_classification': ExtraTreesClassifier
+        'classification': ExtraTreesClassifier,
     },
     'dummy': {
         'regression': DummyRegressor,
-        'binary_classification': DummyClassifier,
-        'multiclass_classification': DummyClassifier,
+        'classification': DummyClassifier,
     },
     'gauss': {
         'regression': GaussianProcessRegressor,
-        'binary_classification': GaussianProcessClassifier,
-        'multiclass_classification': GaussianProcessClassifier
+        'classification': GaussianProcessClassifier,
     },
     'logit': {
-        'binary_classification': LogisticRegression,
-        'multiclass_classification': LogisticRegression,
+        'classification': LogisticRegression,
     },
     'logitcv': {
-        'binary_classification': LogisticRegressionCV,
-        'multiclass_classification': LogisticRegressionCV,
+        'classification': LogisticRegressionCV,
     },
     'linreg': {
         'regression': LinearRegression,
     },
     'ridge': {
         'regression': Ridge,
-        'binary_classification': RidgeClassifier,
-        'multiclass_classification': RidgeClassifier,
+        'classification': RidgeClassifier,
     },
     'ridgecv': {
         'regression': RidgeCV,
-        'binary_classification': RidgeClassifierCV,
-        'multiclass_classification': RidgeClassifierCV,
+        'classification': RidgeClassifierCV,
     },
     'sgd': {
         'regression': SGDRegressor,
-        'binary_classification': SGDClassifier,
-        'multiclass_classification': SGDClassifier,
+        'classification': SGDClassifier,
     },
     'adaboost': {
         'regression': AdaBoostRegressor,
-        'binary_classification': AdaBoostClassifier,
-        'multiclass_classification': AdaBoostClassifier,
+        'classification': AdaBoostClassifier,
     },
     'bagging': {
         'regression': BaggingRegressor,
-        'binary_classification': BaggingClassifier,
-        'multiclass_classification': BaggingClassifier,
+        'classification': BaggingClassifier,
     },
     'gradientboost': {
         'regression': GradientBoostingRegressor,
-        'binary_classification': GradientBoostingClassifier,
-        'multiclass_classification': GradientBoostingClassifier,
+        'classification': GradientBoostingClassifier,
     },
     'nb_bernoulli': {
-        'binary_classification': BernoulliNB,
-        'multiclass_classification': BernoulliNB,
+        'classification': BernoulliNB,
     },
     'nb_categorical': {
-        'binary_classification': CategoricalNB,
-        'multiclass_classification': CategoricalNB,
+        'classification': CategoricalNB,
     },
     'nb_complement': {
-        'binary_classification': ComplementNB,
-        'multiclass_classification': ComplementNB,
+        'classification': ComplementNB,
     },
     'nb_gaussian': {
-        'binary_classification': GaussianNB,
-        'multiclass_classification': GaussianNB,
+        'classification': GaussianNB,
     },
     'nb_multinomial': {
-        'binary_classification': MultinomialNB,
-        'multiclass_classification': MultinomialNB,
+        'classification': MultinomialNB,
     },
     'ds': {
-        'binary_classification': DynamicSelection,
-        'multiclass_classification': DynamicSelection,
+        'classification': DynamicSelection,
     }
 }
 
@@ -162,7 +143,8 @@ def get_model(name, problem_type, **kwargs):
 
 
 def register_model(model_name,
-                   binary_cls=None, multiclass_cls=None, regression_cls=None,
+                   classification_cls=None,
+                   regression_cls=None,
                    overwrite=None
                    ):
     """Register a model to julearn.
@@ -176,12 +158,9 @@ def register_model(model_name,
     ----------
     model_name : str
         Name by which model will be referenced by
-    binary_cls : object
+    classification_cls : object
         The class which will be used for
-         binary_classification problem_type.
-    multiclass_cls : str
-        The class which will be used for
-         multiclass_classification problem_type.
+         classification problem_type.
     regression_cls : str
         The class which will be used for
          regression problem_type.
@@ -195,12 +174,11 @@ def register_model(model_name,
 
     """
     problem_types = [
-        "binary_classification",
-        "multiclass_classification",
+        "classification",
         "regression"
     ]
     for cls, problem_type in zip(
-            [binary_cls, multiclass_cls, regression_cls],
+            [classification_cls, regression_cls],
             problem_types):
         if cls is not None:
             if _available_models.get(model_name) is not None:
