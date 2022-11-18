@@ -6,7 +6,7 @@ from .. utils import pick_columns, change_column_type
 from . base import JuTransformer
 
 
-class SetColumnTypes(TransformerMixin, BaseEstimator, JuTransformer):
+class SetColumnTypes(JuTransformer):
 
     def __init__(self, X_types):
         self.X_types = X_types

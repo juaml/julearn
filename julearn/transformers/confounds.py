@@ -11,8 +11,7 @@ from .. utils import raise_error, pick_columns, logger
 from . base import JuTransformer
 
 
-class DataFrameConfoundRemover(
-        BaseEstimator, TransformerMixin, JuTransformer):
+class DataFrameConfoundRemover(JuTransformer):
     def __init__(self, model_confound=None,
                  confounds_match='.*__:type:__confound',
                  threshold=None,

@@ -2,6 +2,16 @@ from julearn.pipeline import PipelineCreator
 from julearn.transformers import get_transformer
 from julearn.estimators import get_model
 from sklearn.compose import ColumnTransformer
+import pytest
+
+
+@pytest.mark.parametrize(
+    "model,problem_type",
+    [pytest.lazy_fixture(["models_all_problem_types", "all_problem_types"])],
+)
+def test_param(model, problem_type):
+
+    raise ValueError(f"{model}, {problem_type}")
 
 
 def test_construction_working(
