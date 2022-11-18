@@ -118,7 +118,9 @@ def test_ignore_feature_equal_confound():
     )
 
 
-@pytest.mark.parametrize("model_class", [LinearRegression, RandomForestRegressor])
+@pytest.mark.parametrize(
+    "model_class", [LinearRegression, RandomForestRegressor]
+)
 @pytest.mark.parametrize(
     "confounds",
     [
@@ -137,13 +139,9 @@ def test_confound_set_confounds(model_class, confounds):
     df_cofound_removed = confound_remover.fit_transform(X)
 
     np.random.seed(42)
-    conf_as_feat = (
-        confounds if type(confounds) is list else [confounds]
-    )
+    conf_as_feat = confounds if type(confounds) is list else [confounds]
     confound_regressions = [
-        model_class().fit(
-            X.loc[:, conf_as_feat], X.loc[:, feature]
-        )
+        model_class().fit(X.loc[:, conf_as_feat], X.loc[:, feature])
         for feature in features
     ]
     df_confound_removed_manual = X.drop(columns=confounds).copy()
@@ -157,9 +155,7 @@ def test_confound_set_confounds(model_class, confounds):
         features,
     ):
 
-        manual_pred = confound_regression.predict(
-            X.loc[:, conf_as_feat]
-        )
+        manual_pred = confound_regression.predict(X.loc[:, conf_as_feat])
         df_confound_removed_manual[feature] = manual_pred
 
         assert_array_equal(

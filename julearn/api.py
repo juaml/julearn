@@ -30,8 +30,6 @@ def run_cross_validation(
     confounds=None,
     problem_type="classification",
     preprocess=None,
-    # preprocess_y=None,
-    # preprocess_confounds=None,
     return_estimator=False,
     cv=None,
     groups=None,
@@ -73,25 +71,14 @@ def run_cross_validation(
         * "regression". Perform a regression. The target (y) has to be
           ordinal at least.
 
-    preprocess_X : str, scikit-learn compatible transformers or list | None
-        Transformer to apply to the features (X). If string, use one of the
+    preprocess : str, scikit-learn compatible transformers or list | None
+        Transformer to apply to the features. If string, use one of the
         available transformers. If list, each element can be a string or
         scikit-learn compatible transformer. If None (default), no
         transformation is applied.
 
         See documentation for details.
-    preprocess_y : str or scikit-learn transformer | None
-        Transformer to apply to the target (y). If None (default), no
-        transformation is applied.
 
-        See documentation for details.
-    preprocess_confounds : str, scikit-learn transformers or list | None
-        Transformer to apply to the features (X). If string, use one of the
-        available transformers. If list, each element can be a string or
-        scikit-learn compatible transformer. If None (default), no
-        transformation is applied.
-
-        See documentation for details.
     return_estimator : str | None
         Return the fitted estimator(s).
         Options are:
@@ -180,8 +167,9 @@ def run_cross_validation(
         logger.info(f"Setting random seed to {seed}")
         np.random.seed(seed)
 
+    # TODO: remove default CV like this
     if cv is None:
-        logger.info(f"Using default CV")
+        logger.info("Using default CV")
         cv = "repeat:5_nfolds:5"
 
     # Interpret the input data and prepare it to be used with the library
@@ -251,7 +239,8 @@ def run_cross_validation(
             if any(x.startswith(f"{model_name}__") for x in model_params):
                 raise_error(
                     "Cannot use model_params with a model object. Use either "
-                    "a string or a PipelineCreator")
+                    "a string or a PipelineCreator"
+                )
         pipeline_creator.add(model, problem_type=problem_type, **t_params)
 
         pipeline = pipeline_creator.to_pipeline(

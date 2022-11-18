@@ -1,7 +1,5 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL
-from julearn.transformers.cbpm import CBPM
-from julearn.transformers.target import TargetTransfromerWrapper
 from sklearn import svm
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import (
@@ -30,19 +28,17 @@ import pytest
 from julearn.utils.testing import (
     do_scoring_test,
     PassThroughTransformer,
-    TargetPassThroughTransformer,
 )
 from julearn.transformers import (
-    list_transformers,
     get_transformer,
     reset_transformer_register,
     register_transformer,
     DataFrameConfoundRemover,
 )
+
 from julearn.transformers.available_transformers import (
     _get_returned_features,
     _get_apply_to,
-    _available_transformers,
 )
 
 

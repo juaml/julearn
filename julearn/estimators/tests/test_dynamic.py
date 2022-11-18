@@ -8,24 +8,23 @@ import pytest
 from julearn.estimators.dynamic import DynamicSelection
 from sklearn.ensemble import RandomForestClassifier
 from seaborn import load_dataset
-
+from sklearn.model_selection import train_test_split, ShuffleSplit
 
 # Check if the test is running on juseless
 try:
-    import deslib  # type: ignore
+    import deslib  # type: ignore # noqa: F401
 except ImportError:
     pytest.skip("Need deslib to test", allow_module_level=True)
 
 
-
 # TODO: fix this test
+
 
 @pytest.fixture
 def all_deslib_algorithms():
     from deslib.dcs import OLA, MCB
     from deslib.des import DESP, KNORAU, METADES, KNOP, KNORAE
     from deslib.static import StackedClassifier, SingleBest, StaticSelection
-    from sklearn.model_selection import train_test_split, ShuffleSplit
 
     all_algorithms = {
         "METADES": METADES,

@@ -65,10 +65,6 @@ To do so you can set the following arguments in the
     By default features will will not be preprocessed and confound removed in 
     case a confound was specified.
 
-  * ``preprocess_y``: specifies how to transform the target.
-    Currently, this is limited to one available transformer.
-    By default no preprocessing is applied.
-
   * ``preprocess_confounds``: specifies how to transform the confounds.
     Here, you use the same lists of available transformers as in 
     ``preprocess_X``. By default confounds will not be preprocessed.

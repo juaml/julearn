@@ -1,94 +1,94 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
-from julearn.model_selection.available_searchers import (get_searcher,
-                                                         list_searchers)
+from julearn.model_selection.available_searchers import (
+    get_searcher,
+    list_searchers,
+)
 from julearn.utils.column_types import pick_columns
-from julearn.transformers.target import TargetTransfromerWrapper
 import pandas as pd
 import numpy as np
-from sklearn import model_selection
 from sklearn.model_selection import RepeatedKFold
 from sklearn.base import clone
 from sklearn.model_selection import check_cv
 
-from . estimators import get_model
-from . transformers import get_transformer
-from . scoring import get_extended_scorer
-from . utils import raise_error, warn, logger
-from . model_selection import (StratifiedGroupsKFold,
-                               RepeatedStratifiedGroupsKFold)
+from .estimators import get_model
+from .transformers import get_transformer
+from .scoring import get_extended_scorer
+from .utils import raise_error, warn, logger
 
 
 def _validate_input_data_np(X, y, confounds, groups):
     # X must be np.ndarray with at most 2d
     if not isinstance(X, np.ndarray):
-        raise_error(
-            'X must be a numpy array if no dataframe is specified')
+        raise_error("X must be a numpy array if no dataframe is specified")
 
     if X.ndim not in [1, 2]:
-        raise_error('X must be at most bi-dimensional')
+        raise_error("X must be at most bi-dimensional")
 
     # Y must be np.ndarray with 1 dimension
     if not isinstance(y, np.ndarray):
-        raise_error(
-            'y must be a numpy array if no dataframe is specified')
+        raise_error("y must be a numpy array if no dataframe is specified")
 
     if y.ndim != 1:
-        raise_error('y must be one-dimensional')
+        raise_error("y must be one-dimensional")
 
     # Same number of elements
     if X.shape[0] != y.shape[0]:
         raise_error(
-            'The number of samples in X do not match y '
-            '(X.shape[0] != y.shape[0]')
+            "The number of samples in X do not match y "
+            "(X.shape[0] != y.shape[0]"
+        )
 
     if confounds is not None:
         if not isinstance(confounds, np.ndarray):
             raise_error(
-                'confounds must be a numpy array if no dataframe is '
-                'specified')
+                "confounds must be a numpy array if no dataframe is "
+                "specified"
+            )
 
         if confounds.ndim not in [1, 2]:
-            raise_error('confounds must be at most bi-dimensional')
+            raise_error("confounds must be at most bi-dimensional")
 
         if X.shape[0] != confounds.shape[0]:
             raise_error(
-                'The number of samples in X do not match confounds '
-                '(X.shape[0] != confounds.shape[0]')
+                "The number of samples in X do not match confounds "
+                "(X.shape[0] != confounds.shape[0]"
+            )
 
     if groups is not None:
         if not isinstance(groups, np.ndarray):
             raise_error(
-                'groups must be a numpy array if no dataframe is '
-                'specified')
+                "groups must be a numpy array if no dataframe is " "specified"
+            )
 
         if groups.ndim != 1:
-            raise_error('groups must be one-dimensional')
+            raise_error("groups must be one-dimensional")
 
 
 def _validate_input_data_df(X, y, confounds, df, groups):
 
     # in the dataframe
     if not isinstance(X, (str, list)):
-        raise_error('X must be a string or list of strings')
+        raise_error("X must be a string or list of strings")
 
     if not isinstance(y, str):
-        raise_error('y must be a string')
+        raise_error("y must be a string")
 
     # Confounds can be a string, list or none
     if not isinstance(confounds, (str, list, type(None))):
-        raise_error('If not None, confounds must be a string or list '
-                    'of strings')
+        raise_error(
+            "If not None, confounds must be a string or list " "of strings"
+        )
 
     if not isinstance(groups, (str, type(None))):
-        raise_error('groups must be a string')
+        raise_error("groups must be a string")
 
     if not isinstance(df, pd.DataFrame):
-        raise_error('df must be a pandas.DataFrame')
+        raise_error("df must be a pandas.DataFrame")
 
     if any(not isinstance(x, str) for x in df.columns):
-        raise_error('DataFrame columns must be strings')
+        raise_error("DataFrame columns must be strings")
 
 
 def _validate_input_data_df_ext(X, y, confounds, df, groups):
@@ -97,38 +97,39 @@ def _validate_input_data_df_ext(X, y, confounds, df, groups):
     # Leaving it as additional check in case the regexp match changes
     if len(missing_columns) > 0:  # pragma: no cover
         raise_error(  # pragma: no cover
-            'All elements of X must be in the dataframe. '
-            f'The following are missing: {missing_columns}')
+            "All elements of X must be in the dataframe. "
+            f"The following are missing: {missing_columns}"
+        )
 
     if y not in df.columns:
-        raise_error(
-            f"Target '{y}' (y) is not a valid column in the dataframe")
+        raise_error(f"Target '{y}' (y) is not a valid column in the dataframe")
 
     if confounds is not None:
-        missing_columns = [
-            t_c for t_c in confounds if t_c not in df.columns]
+        missing_columns = [t_c for t_c in confounds if t_c not in df.columns]
         # In reality, this is not needed as the regexp match will fail
         # Leaving it as additional check in case the regexp match changes
         if len(missing_columns) > 0:  # pragma: no cover
             raise_error(  # pragma: no cover
-                'All elements of confounds must be in the dataframe. '
-                f'The following are missing: {missing_columns}')
+                "All elements of confounds must be in the dataframe. "
+                f"The following are missing: {missing_columns}"
+            )
 
     if groups is not None:
         if groups not in df.columns:
-            raise_error(f"Groups '{groups}' is not a valid column "
-                        "in the dataframe")
+            raise_error(
+                f"Groups '{groups}' is not a valid column " "in the dataframe"
+            )
         if groups == y:
             warn("y and groups are the same column")
         if groups in X:
             warn("groups is part of X")
 
     if y in X:
-        warn(f'List of features (X) contains the target {y}')
+        warn(f"List of features (X) contains the target {y}")
 
 
 def prepare_input_data(X, y, confounds, df, pos_labels, groups):
-    """ Prepare the input data and variables for the pipeline
+    """Prepare the input data and variables for the pipeline
 
     Parameters
     ----------
@@ -164,66 +165,68 @@ def prepare_input_data(X, y, confounds, df, pos_labels, groups):
         The name of the columns if df_X_conf that represent confounds.
 
     """
-    logger.info('==== Input Data ====')
+    logger.info("==== Input Data ====")
 
     # Declare them as None to avoid CI issues
     df_X_conf = None
     confound_names = None
     df_groups = None
     if df is None:
-        logger.info(f'Using numpy arrays as input')
+        logger.info("Using numpy arrays as input")
         _validate_input_data_np(X, y, confounds, groups)
         # creating df_X_conf
         if X.ndim == 1:
             X = X[:, None]
-        logger.info(f'# Samples: {X.shape[0]}')
-        logger.info(f'# Features: {X.shape[1]}')
-        columns = [f'feature_{i}' for i in range(X.shape[1])]
+        logger.info(f"# Samples: {X.shape[0]}")
+        logger.info(f"# Features: {X.shape[1]}")
+        columns = [f"feature_{i}" for i in range(X.shape[1])]
         df_X_conf = pd.DataFrame(X, columns=columns)
 
         # adding confounds to df_X_conf
         if confounds is not None:
             if confounds.ndim == 1:
                 confounds = confounds[:, None]
-            logger.info(f'# Confounds: {X.shape[1]}')
+            logger.info(f"# Confounds: {X.shape[1]}")
             confound_names = [
-                f'confound_{i}' for i in range(confounds.shape[1])]
+                f"confound_{i}" for i in range(confounds.shape[1])
+            ]
             df_X_conf[confound_names] = confounds
 
         # creating a Series for y if not existent
-        df_y = pd.Series(y, name='y')
+        df_y = pd.Series(y, name="y")
 
         if groups is not None:
-            logger.info('Using groups')
-            df_groups = pd.Series(groups, name='groups')
+            logger.info("Using groups")
+            df_groups = pd.Series(groups, name="groups")
 
     else:
-        logger.info(f'Using dataframe as input')
+        logger.info("Using dataframe as input")
         _validate_input_data_df(X, y, confounds, df, groups)
-        logger.info(f'Features: {X}')
-        logger.info(f'Target: {y}')
+        logger.info(f"\tFeatures: {X}")
+        logger.info(f"\tTarget: {y}")
         if confounds is not None:
-            logger.info(f'Confounds: {confounds}')
+            logger.info(f"Confounds: {confounds}")
             X_confounds = pick_columns(confounds, df.columns)
         else:
             X_confounds = []
 
-        if X == [':']:
-            X_columns = [x for x in df.columns if x not in X_confounds
-                         and x != y]
+        if X == [":"]:
+            X_columns = [
+                x for x in df.columns if x not in X_confounds and x != y
+            ]
             if groups is not None:
                 X_columns = [x for x in X_columns if x not in groups]
         else:
             X_columns = pick_columns(X, df.columns)
 
-        logger.info(f'Expanded X: {X_columns}')
-        logger.info(f'Expanded Confounds: {X_confounds}')
+        logger.info(f"\tExpanded X: {X_columns}")
+        logger.info(f"\tExpanded Confounds: {X_confounds}")
         _validate_input_data_df_ext(X_columns, y, X_confounds, df, groups)
         X_conf_columns = X_columns
 
         overlapping = [t_c for t_c in X_confounds if t_c in X]
         if len(overlapping) > 0:
-            warn(f'X contains the following confounds {overlapping}')
+            warn(f"X contains the following confounds {overlapping}")
         for t_c in X_confounds:
             # This will add the confounds if not there already
             if t_c not in X_conf_columns:
@@ -232,23 +235,23 @@ def prepare_input_data(X, y, confounds, df, pos_labels, groups):
         df_X_conf = df.loc[:, X_conf_columns].copy()
         df_y = df.loc[:, y].copy()
         if groups is not None:
-            logger.info(f'Using {groups} as groups')
+            logger.info(f"Using {groups} as groups")
             df_groups = df.loc[:, groups].copy()
         confound_names = X_confounds
 
     if pos_labels is not None:
         if not isinstance(pos_labels, list):
             pos_labels = [pos_labels]
-        logger.info(f'Setting the following as positive labels {pos_labels}')
+        logger.info(f"Setting the following as positive labels {pos_labels}")
         # TODO: Warn if pos_labels are not in df_y
         df_y = df_y.isin(pos_labels).astype(np.int64)
-    logger.info('====================')
-    logger.info('')
+    logger.info("====================")
+    logger.info("")
     return df_X_conf, df_y, df_groups, confound_names
 
 
 def prepare_model(model, problem_type):
-    """ Get the propel model/name pair from the input
+    """Get the propel model/name pair from the input
 
     Parameters
     ----------
@@ -265,19 +268,20 @@ def prepare_model(model, problem_type):
         The model
 
     """
-    logger.info('====== Model ======')
+    logger.info("====== Model ======")
     if isinstance(model, str):
-        logger.info(f'Obtaining model by name: {model}')
+        logger.info(f"Obtaining model by name: {model}")
         model_name = model
         model = get_model(model_name, problem_type)
     elif _is_valid_sklearn_model(model):
         model_name = model.__class__.__name__.lower()
-        logger.info(f'Using scikit-learn model: {model_name}')
+        logger.info(f"Using scikit-learn model: {model_name}")
     else:
         raise_error(
-            f'Model must be a string or a scikit-learn compatible object.')
-    logger.info('===================')
-    logger.info('')
+            "Model must be a string or a scikit-learn compatible object."
+        )
+    logger.info("===================")
+    logger.info("")
     return model_name, model
 
 
@@ -313,113 +317,50 @@ def prepare_hyperparameter_tunning(params_to_tune, search_params, pipeline):
     pipeline : ExtendedDataframePipeline
         The modified pipeline
     """
-    logger.info('= Model Parameters =')
+    logger.info("= Model Parameters =")
 
     if len(params_to_tune) > 0:
         search = search_params.get("kind", "grid")
-        scoring = search_params.get('scoring', None)
-        cv_inner = search_params.get('cv', None)
+        scoring = search_params.get("scoring", None)
+        cv_inner = search_params.get("cv", None)
 
         if search in list_searchers():
-            logger.info(f'Tunning hyperparameters using {search}')
+            logger.info(f"Tunning hyperparameters using {search}")
             search = get_searcher(search)
         else:
             if isinstance(search, str):
                 raise_error(
-                    f'The searcher {search} is not a valid julearn searcher. '
-                    'You can get a list of all available once by using: '
-                    'julearn.model_selection.list_searchers(). You can also '
-                    'enter a valid scikit-learn searcher or register it.'
+                    f"The searcher {search} is not a valid julearn searcher. "
+                    "You can get a list of all available once by using: "
+                    "julearn.model_selection.list_searchers(). You can also "
+                    "enter a valid scikit-learn searcher or register it."
                 )
             else:
-                warn(
-                    f'{search} is not a registered searcher. '
-                )
+                warn(f"{search} is not a registered searcher. ")
                 logger.info(
-                    f'Tunning hyperparameters using not registered {search}')
+                    f"Tunning hyperparameters using not registered {search}"
+                )
 
-        logger.info('Hyperparameters:')
+        logger.info("Hyperparameters:")
         for k, v in params_to_tune.items():
-            logger.info(f'\t{k}: {v}')
+            logger.info(f"\t{k}: {v}")
 
         cv_inner = prepare_cv(cv_inner)
 
-        search_params['cv'] = cv_inner
-        search_params['scoring'] = scoring
-        logger.info('Search Parameters:')
+        search_params["cv"] = cv_inner
+        search_params["scoring"] = scoring
+        logger.info("Search Parameters:")
         for k, v in search_params.items():
-            logger.info(f'\t{k}: {v}')
+            logger.info(f"\t{k}: {v}")
         pipeline = search(pipeline, params_to_tune, **search_params)
     elif search_params is not None and len(search_params) > 0:
-        warn('Hyperparameter search parameters were specified, but no '
-             'hyperparameters to tune')
-    logger.info('====================')
-    logger.info('')
+        warn(
+            "Hyperparameter search parameters were specified, but no "
+            "hyperparameters to tune"
+        )
+    logger.info("====================")
+    logger.info("")
     return pipeline
-
-
-def prepare_preprocessing(preprocess_X, preprocess_y, preprocess_conf,
-                          confounds):
-    if preprocess_X is not None and not isinstance(preprocess_X, list):
-        preprocess_X = [preprocess_X]
-
-    preprocess_X = _prepare_preprocess_X(preprocess_X, confounds)
-    preprocess_y = _prepare_preprocess_y(preprocess_y)
-    if preprocess_conf is not None:
-        preprocess_conf = _prepare_preprocess_confounds(preprocess_conf)
-    return preprocess_X, preprocess_y, preprocess_conf
-
-
-def _prepare_preprocess_X(preprocess_X, confounds):
-    '''
-    validates preprocess_X and returns a list of tuples accordingly
-    and default params for this list
-    '''
-    preprocess_X = None if preprocess_X == [] else preprocess_X
-    if preprocess_X is None:
-        if confounds is not None:
-            preprocess_X = [_create_preprocess_tuple('remove_confound')]
-    else:
-        preprocess_X = [_create_preprocess_tuple(transformer)
-                        for transformer in preprocess_X]
-        names, _, = zip(*preprocess_X)
-        if ('remove_confound' not in names) and (confounds is not None):
-            preprocess_X = ([(_create_preprocess_tuple('remove_confound'))]
-                            + preprocess_X)
-    return preprocess_X
-
-
-def _prepare_preprocess_confounds(preprocess_conf):
-    '''
-    uses user input to create a list of tuples for a normal pipeline
-    this can then be used for transforming the confounds/z
-    '''
-    if preprocess_conf is not None:
-        if not isinstance(preprocess_conf, list):
-            preprocess_conf = [preprocess_conf]
-        elif preprocess_conf == []:
-            preprocess_conf = None
-
-    if preprocess_conf is not None:
-        preprocess_conf = [
-            _create_preprocess_tuple(transformer)
-            for transformer in preprocess_conf
-        ]
-
-    return preprocess_conf
-
-
-def _prepare_preprocess_y(preprocess_y):
-    if preprocess_y is not None:
-        if isinstance(preprocess_y, str):
-            preprocess_y = get_transformer(preprocess_y, target=True)
-        elif not isinstance(preprocess_y, TargetTransfromerWrapper):
-            if _is_valid_sklearn_transformer(preprocess_y):
-                preprocess_y = TargetTransfromerWrapper(preprocess_y)
-            else:
-                raise_error(f'y preprocess must be a string or a '
-                            'valid sklearn transformer instance')
-    return preprocess_y
 
 
 def prepare_cv(cv):
@@ -436,16 +377,19 @@ def prepare_cv(cv):
     """
 
     def parser(cv_string):
-        n_repeats, n_folds = cv_string.split('_')
-        n_repeats, n_folds = [int(name.split(':')[-1])
-                              for name in [n_repeats, n_folds]]
-        logger.info(f'CV interpreted as RepeatedKFold with {n_repeats} '
-                    f'repetitions of {n_folds} folds')
+        n_repeats, n_folds = cv_string.split("_")
+        n_repeats, n_folds = [
+            int(name.split(":")[-1]) for name in [n_repeats, n_folds]
+        ]
+        logger.info(
+            f"CV interpreted as RepeatedKFold with {n_repeats} "
+            f"repetitions of {n_folds} folds"
+        )
         return RepeatedKFold(n_splits=n_folds, n_repeats=n_repeats)
 
     try:
         _cv = check_cv(cv)
-        logger.info(f'Using scikit-learn CV scheme {_cv}')
+        logger.info(f"Using scikit-learn CV scheme {_cv}")
     except ValueError:
         _cv = parser(cv)
 
@@ -481,9 +425,11 @@ def prepare_scoring(estimator, scorers):
         scoring = {k: get_extended_scorer(estimator, k) for k in scorers}
     elif isinstance(scorers, dict):
         scoring = {
-            name: get_extended_scorer(estimator, scorer) if isinstance(
-                scorer, str) else scorer
-            for name, scorer in scorers.items()}
+            name: get_extended_scorer(estimator, scorer)
+            if isinstance(scorer, str)
+            else scorer
+            for name, scorer in scorers.items()
+        }
     else:
         scoring = get_extended_scorer(estimator, scorers)
     return scoring
@@ -504,63 +450,71 @@ def _create_preprocess_tuple(transformer):
 
 def _is_valid_sklearn_transformer(transformer):
 
-    return (hasattr(transformer, 'fit') and
-            hasattr(transformer, 'transform') and
-            hasattr(transformer, 'get_params') and
-            hasattr(transformer, 'set_params'))
+    return (
+        hasattr(transformer, "fit")
+        and hasattr(transformer, "transform")
+        and hasattr(transformer, "get_params")
+        and hasattr(transformer, "set_params")
+    )
 
 
 def _is_valid_sklearn_model(model):
-    return (hasattr(model, 'fit') and
-            hasattr(model, 'predict') and
-            hasattr(model, 'get_params') and
-            hasattr(model, 'set_params'))
+    return (
+        hasattr(model, "fit")
+        and hasattr(model, "predict")
+        and hasattr(model, "get_params")
+        and hasattr(model, "set_params")
+    )
 
 
-def check_consistency(
-        pipeline, preprocess_X, preprocess_y, preprocess_confounds, df_X_conf,
-        y, cv, groups, problem_type):
-    """Check the consistency of the parameters/input"""
+# def check_consistency(
+#     pipeline,
+#     df_X_conf,
+#     y,
+#     cv,
+#     groups,
+#     problem_type,
+# ):
+#     """Check the consistency of the parameters/input"""
 
-    # Check problem type and the target.
-    n_classes = np.unique(y.values).shape[0]
-    if problem_type == 'classification':
-        # If not exactly two classes:
-        if n_classes != 2:
-            logger.info("Multi-class classification problem detected "
-                        f"#classes = {n_classes}.")
-        else:
-            logger.info("Binary classification problem detected.")
-    else:
-        # Regression
-        is_numeric = np.issubdtype(y.values.dtype, np.number)
-        if not is_numeric:
-            if preprocess_y is None:
-                raise_error(
-                    f'The kind of values in y ({y.values.dtype}) is not '
-                    'suitable for a regression. You can either specify a '
-                    'suitable y transformer or change the problem type.')
-            else:
-                warn(
-                    f'The kind of values in y ({y.values.dtype}) is not '
-                    'suitable for a regression. However, a y transformer has '
-                    'been set.')
-        else:
-            n_classes = np.unique(y.values).shape[0]
-            if n_classes == 2:
-                warn(
-                    f'A regression will be performed but only 2 '
-                    'distinct values are defined in y.')
-    # Check groups and CV scheme
-    if groups is not None:
-        valid_instances = (
-            model_selection.GroupKFold,
-            model_selection.GroupShuffleSplit,
-            model_selection.LeaveOneGroupOut,
-            model_selection.LeavePGroupsOut,
-            StratifiedGroupsKFold,
-            RepeatedStratifiedGroupsKFold
-        )
-        if not isinstance(cv, valid_instances):
-            warn('The parameter groups was specified but the CV strategy '
-                 'will not consider them.')
+#     # Check problem type and the target.
+#     n_classes = np.unique(y.values).shape[0]
+#     if problem_type == "classification":
+#         # If not exactly two classes:
+#         if n_classes != 2:
+#             logger.info(
+#                 "Multi-class classification problem detected "
+#                 f"#classes = {n_classes}."
+#             )
+#         else:
+#             logger.info("Binary classification problem detected.")
+#     else:
+#         # Regression
+#         is_numeric = np.issubdtype(y.values.dtype, np.number)
+#         if not is_numeric:
+#             warn(
+#                 f"The kind of values in y ({y.values.dtype}) is not "
+#                 "suitable for a regression."
+#             )
+#         else:
+#             n_classes = np.unique(y.values).shape[0]
+#             if n_classes == 2:
+#                 warn(
+#                     f"A regression will be performed but only 2 "
+#                     "distinct values are defined in y."
+#                 )
+#     # Check groups and CV scheme
+#     if groups is not None:
+#         valid_instances = (
+#             model_selection.GroupKFold,
+#             model_selection.GroupShuffleSplit,
+#             model_selection.LeaveOneGroupOut,
+#             model_selection.LeavePGroupsOut,
+#             StratifiedGroupsKFold,
+#             RepeatedStratifiedGroupsKFold,
+#         )
+#         if not isinstance(cv, valid_instances):
+#             warn(
+#                 "The parameter groups was specified but the CV strategy "
+#                 "will not consider them."
+#             )

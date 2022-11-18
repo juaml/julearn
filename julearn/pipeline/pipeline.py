@@ -1,18 +1,22 @@
 import numpy as np
 from sklearn.compose import (
-    ColumnTransformer, make_column_selector,
-    TransformedTargetRegressor)
+    ColumnTransformer,
+    make_column_selector,
+    TransformedTargetRegressor,
+)
 from sklearn.pipeline import Pipeline
 from dataclasses import dataclass
-from typing import Any, Union, List, TYPE_CHECKING, Dict, Optional, Tuple
+from typing import Any, Union, List, Dict, Optional, Tuple
 
-from .. transformers import (
-    get_transformer, list_transformers,
-    SetColumnTypes, JuTransformer
+from ..transformers import (
+    get_transformer,
+    list_transformers,
+    SetColumnTypes,
+    JuTransformer,
 )
-from .. estimators import list_models, get_model
-from .. utils import raise_error, warn, logger
-from .. prepare import prepare_hyperparameter_tunning
+from ..estimators import list_models, get_model
+from ..utils import raise_error, warn, logger
+from ..prepare import prepare_hyperparameter_tunning
 
 
 class NoInversePipeline(Pipeline):
@@ -21,33 +25,33 @@ class NoInversePipeline(Pipeline):
 
 
 def make_type_selector(pattern):
-
     def get_renamer(X_df):
-        return {x: (x
-                if "__:type:__" in x
-                else f"{x}__:type:__continuous"
-                    )
-                for x in X_df.columns
-                }
+        return {
+            x: (x if "__:type:__" in x else f"{x}__:type:__continuous")
+            for x in X_df.columns
+        }
 
     def type_selector(X_df):
         # Rename the columns to add the type if not present
         renamer = get_renamer(X_df)
         _X_df = X_df.rename(columns=renamer)
         reverse_renamer = {
-            new_name: name
-            for name, new_name in renamer.items()}
+            new_name: name for name, new_name in renamer.items()
+        }
 
         # Select the columns based on the pattern
         selected_columns = make_column_selector(pattern)(_X_df)
         if len(selected_columns) == 0:
             raise_error(
                 f"No columns selected with pattern {pattern} in "
-                f"{_X_df.columns.to_list()}")
+                f"{_X_df.columns.to_list()}"
+            )
 
         # Rename the column back to their original name
-        return [reverse_renamer[col] if col in reverse_renamer else col
-                for col in selected_columns]
+        return [
+            reverse_renamer[col] if col in reverse_renamer else col
+            for col in selected_columns
+        ]
 
     return type_selector
 
@@ -73,9 +77,14 @@ class PipelineCreator:  # Pipeline creator
         self._added_target_transformer = False
         self._added_model = False
 
-    def add(self, step, apply_to="continuous",
-            problem_type="classification", **params):
-        
+    def add(
+        self,
+        step,
+        apply_to="continuous",
+        problem_type="classification",
+        **params,
+    ):
+
         apply_to = self._ensure_apply_to(apply_to)
         self.validate_step(step, apply_to)
         name = step if isinstance(step, str) else step.__cls__.lower()
@@ -91,15 +100,15 @@ class PipelineCreator:  # Pipeline creator
         for param, vals in params.items():
             # If we have more than 1 value, we will tune it. If not, it will
             # be set in the model.
-            if hasattr(vals, '__iter__') and not isinstance(vals, str):
+            if hasattr(vals, "__iter__") and not isinstance(vals, str):
                 if len(vals) > 1:
-                    logger.info(f'Tunning hyperparameter {param} = {vals}')
+                    logger.info(f"Tunning hyperparameter {param} = {vals}")
                     params_to_tune[param] = vals
                 else:
-                    logger.info(f'Setting hyperparameter {param} = {vals[0]}')
+                    logger.info(f"Setting hyperparameter {param} = {vals[0]}")
                     params_to_set[param] = vals[0]
             else:
-                logger.info(f'Setting hyperparameter {param} = {vals}')
+                logger.info(f"Setting hyperparameter {param} = {vals}")
                 params_to_set[param] = vals
 
         estimator = estimator.set_params(**params_to_set)
@@ -107,10 +116,12 @@ class PipelineCreator:  # Pipeline creator
             name = f"target_{name}"
 
         self._steps.append(
-            Step(name=name,
-                 estimator=estimator,
-                 apply_to=apply_to,
-                 params=params_to_tune)
+            Step(
+                name=name,
+                estimator=estimator,
+                apply_to=apply_to,
+                params=params_to_tune,
+            )
         )
         logger.info("Step added")
         return self
@@ -131,20 +142,21 @@ class PipelineCreator:  # Pipeline creator
             t_params = {
                 x.replace(f"{transformer_name}__", ""): y
                 for x, y in model_params.items()
-                if x.startswith(f"{transformer_name}__")}
+                if x.startswith(f"{transformer_name}__")
+            }
             preprocessor.add(transformer_name, **t_params)
         return preprocessor
 
     def to_pipeline(
-            self,
-            X_types: Optional[Dict[str, List]] = None,
-            search_params=None):
+        self, X_types: Optional[Dict[str, List]] = None, search_params=None
+    ):
 
         logger.debug("Creating pipeline")
         if not self.has_model():
             raise_error("Cannot create a pipeline without a model")
         pipeline_steps: List[Tuple[str, Any]] = [
-            ("set_column_types", SetColumnTypes(X_types))]
+            ("set_column_types", SetColumnTypes(X_types))
+        ]
 
         X_types_patterns = self.X_types_to_patterns(X_types)
 
@@ -175,8 +187,7 @@ class PipelineCreator:  # Pipeline creator
 
             # Wrap in a JuTransformer if needed
             if wrap and not isinstance(estimator, JuTransformer):
-                estimator = self.wrap_step(
-                    name, estimator, step_dict.apply_to)
+                estimator = self.wrap_step(name, estimator, step_dict.apply_to)
                 name_for_tunning = f"wrapped_{name}__{name}"
                 name = f"wrapped_{name}"
 
@@ -184,13 +195,16 @@ class PipelineCreator:  # Pipeline creator
 
             # Add params to tune
             params_to_tune.update(
-                {f"{name_for_tunning}__{param}": val
-                 for param, val in step_params_to_tune.items()}
+                {
+                    f"{name_for_tunning}__{param}": val
+                    for param, val in step_params_to_tune.items()
+                }
             )
 
         model_name = model_step.name
         step_params_to_tune = {
-            f"{model_name}__{k}": v for k, v in model_step.params.items()}
+            f"{model_name}__{k}": v for k, v in model_step.params.items()
+        }
 
         logger.debug(f"Adding model {model_name}")
         logger.debug(f"\t Params to tune: {step_params_to_tune}")
@@ -200,13 +214,16 @@ class PipelineCreator:  # Pipeline creator
         pipeline = Pipeline(pipeline_steps).set_output(transform="pandas")
 
         # Deal with the Hyperparameter tunning
-        out =  prepare_hyperparameter_tunning(params_to_tune, search_params, pipeline)
+        out = prepare_hyperparameter_tunning(
+            params_to_tune, search_params, pipeline
+        )
         logger.debug("Pipeline created")
         return out
 
     @staticmethod
     def wrap_target_model(
-            model_step, target_transformer_steps, model_params=None):
+        model_step, target_transformer_steps, model_params=None
+    ):
         model_params = {} if model_params is None else model_params
         if target_transformer_steps == []:
             return (model_step.name, model_step.estimator), model_params
@@ -214,10 +231,9 @@ class PipelineCreator:  # Pipeline creator
         target_model = TransformedTargetRegressor(
             transformer=transformer_pipe,
             regressor=model_step[1],
-            check_inverse=False
+            check_inverse=False,
         )
-        return (f"{model_step[0]}_target_transform",
-                target_model)
+        return (f"{model_step[0]}_target_transform", target_model)
 
     def _validate_model_params(self, model_name, model_params):
 
@@ -227,32 +243,29 @@ class PipelineCreator:  # Pipeline creator
                 if est_name != model_name:
                     raise_error(
                         "Only parameters for the model should be specified. "
-                        f"Got {param} for {est_name}.")
+                        f"Got {param} for {est_name}."
+                    )
 
     def _ensure_name(self, name):
 
-        count = np.array(
-            [_step.name == name
-             for _step in self._steps
-             ]).sum()
+        count = np.array([_step.name == name for _step in self._steps]).sum()
         return f"{name}_{count}" if count > 0 else name
 
     def validate_step(self, step, apply_to):
         if self._is_transfromer_step(step):
             if self._added_model:
-                raise_error(
-                    "Cannot add a transformer after adding a model")
+                raise_error("Cannot add a transformer after adding a model")
             if self._added_target_transformer and apply_to != "target":
                 raise_error(
                     "Cannot add a non-target transformer after adding "
-                    "a target transformer.") 
+                    "a target transformer."
+                )
             if apply_to == "target":
                 self._added_target_transformer = True
         elif self._is_model_step(step):
             self._added_model = True
         else:
-            raise_error(
-                f"Cannot add a {step}. I don't know what it is.")
+            raise_error(f"Cannot add a {step}. I don't know what it is.")
 
     def X_types_to_patterns(self, X_types: Optional[Dict] = None):
         if X_types is not None:
@@ -302,7 +315,8 @@ class PipelineCreator:  # Pipeline creator
     def wrap_step(name, step, pattern):
         return ColumnTransformer(
             [(name, step, make_type_selector(pattern))],
-            verbose_feature_names_out=False, remainder="passthrough"
+            verbose_feature_names_out=False,
+            remainder="passthrough",
         )
 
     @staticmethod
@@ -313,7 +327,7 @@ class PipelineCreator:  # Pipeline creator
             pattern = f"({types[0]}"
             if len(types) > 1:
                 for t in types[1:]:
-                    pattern += fr"|{t}"
+                    pattern += rf"|{t}"
             pattern += r")"
         else:
             pattern = f"__:type:__{apply_to}"

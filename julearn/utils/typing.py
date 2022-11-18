@@ -21,6 +21,7 @@ class TransformerLike(EstimatorLike, Protocol):
     def fit_transform(self, X, y=None):
         pass
 
+
 @runtime_checkable
 class ModelLike(EstimatorLike, Protocol):
     def predict(self, X):

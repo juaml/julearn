@@ -16,11 +16,11 @@ def test_register_scorer():
     register_scorer('useless', return_1, True)
 
     with pytest.warns(RuntimeWarning,
-                      match=f'scorer named useless already exists. '):
+                      match='scorer named useless already exists. '):
         register_scorer('useless', return_1, None)
 
     with pytest.raises(ValueError,
-                       match=f'scorer named useless already exists and'):
+                       match='scorer named useless already exists and'):
         register_scorer('useless', return_1, False)
     assert scorer == return_1
     reset_scorer_register()

@@ -47,7 +47,7 @@ from seaborn import load_dataset
 import pytest
 
 from julearn.utils.testing import do_scoring_test
-from julearn.estimators import list_models, get_model
+from julearn.estimators import get_model
 
 
 @pytest.mark.parametrize(
@@ -140,7 +140,7 @@ def test_naive_bayes_estimators(model_name, model_class, model_params):
     [
         ("svm", SVC, {}),
         ("rf", RandomForestClassifier, {"n_estimators": 10}),
-        ("et", ExtraTreesClassifier, {"n_estimators": 10, 'random_state': 42}),
+        ("et", ExtraTreesClassifier, {"n_estimators": 10, "random_state": 42}),
         ("dummy", DummyClassifier, {"strategy": "prior"}),
         ("gauss", GaussianProcessClassifier, {}),
         ("logit", LogisticRegression, {}),
