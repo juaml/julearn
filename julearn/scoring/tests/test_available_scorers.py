@@ -7,6 +7,7 @@ def return_1(estimator, X, y):
 
 
 def test_register_scorer():
+    """Test registering scorers."""
     with pytest.raises(ValueError, match='useless is not a valid scorer'):
         get_scorer('useless')
     register_scorer('useless', return_1)
@@ -26,6 +27,7 @@ def test_register_scorer():
 
 
 def test_reset_scorer():
+    """Test resetting the scorers registry."""
     with pytest.raises(ValueError, match='useless is not a valid scorer '):
         get_scorer('useless')
     register_scorer('useless', return_1)
