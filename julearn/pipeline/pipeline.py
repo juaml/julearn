@@ -16,7 +16,7 @@ from ..transformers import (
 )
 from ..estimators import list_models, get_model
 from ..utils import raise_error, warn, logger
-from ..prepare import prepare_hyperparameter_tunning
+from ..prepare import prepare_hyperparameter_tuning
 
 
 class NoInversePipeline(Pipeline):
@@ -102,7 +102,7 @@ class PipelineCreator:  # Pipeline creator
             # be set in the model.
             if hasattr(vals, "__iter__") and not isinstance(vals, str):
                 if len(vals) > 1:
-                    logger.info(f"Tunning hyperparameter {param} = {vals}")
+                    logger.info(f"Tuning hyperparameter {param} = {vals}")
                     params_to_tune[param] = vals
                 else:
                     logger.info(f"Setting hyperparameter {param} = {vals[0]}")
@@ -179,7 +179,7 @@ class PipelineCreator:  # Pipeline creator
         for step_dict in transformer_steps:
             logger.debug(f"Adding transformer {step_dict.name}")
             name = step_dict.name
-            name_for_tunning = name
+            name_for_tuning = name
             estimator = step_dict.estimator
             logger.debug(f"\t Estimator: {estimator}")
             step_params_to_tune = step_dict.params
@@ -188,7 +188,7 @@ class PipelineCreator:  # Pipeline creator
             # Wrap in a JuTransformer if needed
             if wrap and not isinstance(estimator, JuTransformer):
                 estimator = self.wrap_step(name, estimator, step_dict.apply_to)
-                name_for_tunning = f"wrapped_{name}__{name}"
+                name_for_tuning = f"wrapped_{name}__{name}"
                 name = f"wrapped_{name}"
 
             pipeline_steps.append((name, estimator))
@@ -196,7 +196,7 @@ class PipelineCreator:  # Pipeline creator
             # Add params to tune
             params_to_tune.update(
                 {
-                    f"{name_for_tunning}__{param}": val
+                    f"{name_for_tuning}__{param}": val
                     for param, val in step_params_to_tune.items()
                 }
             )
@@ -213,8 +213,8 @@ class PipelineCreator:  # Pipeline creator
         pipeline_steps.append((model_name, model_step.estimator))
         pipeline = Pipeline(pipeline_steps).set_output(transform="pandas")
 
-        # Deal with the Hyperparameter tunning
-        out = prepare_hyperparameter_tunning(
+        # Deal with the Hyperparameter tuning
+        out = prepare_hyperparameter_tuning(
             params_to_tune, search_params, pipeline
         )
         logger.debug("Pipeline created")

@@ -285,7 +285,7 @@ def prepare_model(model, problem_type):
     return model_name, model
 
 
-def prepare_hyperparameter_tunning(params_to_tune, search_params, pipeline):
+def prepare_hyperparameter_tuning(params_to_tune, search_params, pipeline):
     """Prepare model parameters.
 
     For each of the model parameters, determine if it can be directly set or
@@ -325,7 +325,7 @@ def prepare_hyperparameter_tunning(params_to_tune, search_params, pipeline):
         cv_inner = search_params.get("cv", None)
 
         if search in list_searchers():
-            logger.info(f"Tunning hyperparameters using {search}")
+            logger.info(f"Tuning hyperparameters using {search}")
             search = get_searcher(search)
         else:
             if isinstance(search, str):
@@ -338,7 +338,7 @@ def prepare_hyperparameter_tunning(params_to_tune, search_params, pipeline):
             else:
                 warn(f"{search} is not a registered searcher. ")
                 logger.info(
-                    f"Tunning hyperparameters using not registered {search}"
+                    f"Tuning hyperparameters using not registered {search}"
                 )
 
         logger.info("Hyperparameters:")
