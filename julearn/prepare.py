@@ -14,7 +14,6 @@ from sklearn.model_selection import check_cv
 
 from .estimators import get_model
 from .transformers import get_transformer
-from .scoring import get_extended_scorer
 from .utils import raise_error, warn, logger
 
 
@@ -394,45 +393,6 @@ def prepare_cv(cv):
         _cv = parser(cv)
 
     return _cv
-
-
-def prepare_scoring(estimator, scorers):
-    """Prepares the scikit-learn scorers to work with the
-    ExtendedDataFramePipeline
-
-    Parameters
-    ----------
-    estimator : julearn.pipeline.ExtendedDataFramePipeline
-        An estimator with a .transform_confounds and .transform_target
-        method needed for scoring against a new ground truth.
-    scorers : str, obj, list(str) or dict
-        A scorer name (or list of) or dict of scorer name:scorer.
-        For more information see:
-        https://scikit-learn.org/stable/modules/model_evaluation.html#scoring
-
-
-
-    Returns
-    -------
-    scoring : scorer | dict(string, scorer)
-        A dictionary with the corresponding scorers for each scorer name
-        or scorer,
-        suitable for sklearn.model_selection.cross_validate.
-    """
-    if scorers is None:
-        return None
-    if isinstance(scorers, list):
-        scoring = {k: get_extended_scorer(estimator, k) for k in scorers}
-    elif isinstance(scorers, dict):
-        scoring = {
-            name: get_extended_scorer(estimator, scorer)
-            if isinstance(scorer, str)
-            else scorer
-            for name, scorer in scorers.items()
-        }
-    else:
-        scoring = get_extended_scorer(estimator, scorers)
-    return scoring
 
 
 def _create_preprocess_tuple(transformer):

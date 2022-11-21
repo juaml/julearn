@@ -20,6 +20,7 @@ def test_construction_working(model, preprocess, problem_type
 
     # check preprocessing steps
     # ignoring first step for types and last for model
+    preprocess = [preprocess] if isinstance(preprocess, str) else preprocess
     for preprocess, step in zip(preprocess, pipeline.steps[1:-1]):
         name, transformer = step
         print(name, preprocess, type(preprocess))

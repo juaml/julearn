@@ -209,7 +209,7 @@ class DataFrameConfoundRemover(JuTransformer):
 
 
 class TargetConfoundRemover(
-    BaseEstimator, TransformerMixin, OneToOneFeatureMixin
+    BaseEstimator, TransformerMixin, 
 ):
     def __init__(
         self,

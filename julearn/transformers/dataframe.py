@@ -38,11 +38,11 @@ class SetColumnTypes(JuTransformer):
         return self.feature_names_in_.map(self.column_mapper_)
 
 
-class ChangeColumnTypes(TransformerMixin, BaseEstimator):
+class ChangeColumnTypes(JuTransformer):
 
-    def __init__(self, columns_match, new_type):
-        self.columns_match = columns_match
-        self.new_type = new_type
+    def __init__(self, X_types, new_X_type):
+        self.columns_match = X_types
+        self.new_type = new_X_type
 
     def fit(self, X, y=None):
         self.detected_columns_ = pick_columns(self.columns_match, X.columns)

@@ -68,7 +68,8 @@ def get_default_params():
 
 
 @fixture(params=[
-    ["zscore"], ["pca"],
+    "zscore", ["zscore"],
+    ["pca"],
     ["select_univariate"],
     ["zscore", "pca"],
     ["select_univariate", "zscore", "pca"],

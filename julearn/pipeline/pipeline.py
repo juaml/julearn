@@ -56,10 +56,6 @@ def make_type_selector(pattern):
     return type_selector
 
 
-def get_step(step_name, pattern):
-    return step_name, get_transformer(step_name), pattern
-
-
 @dataclass
 class Step:
     name: str

@@ -8,12 +8,7 @@ import pandas as pd
 
 from .prepare import (
     prepare_input_data,
-    # prepare_model,
     prepare_cv,
-    # prepare_model_params,
-    # prepare_preprocessing,
-    # prepare_scoring,
-    # check_consistency
 )
 from .pipeline import PipelineCreator
 
@@ -249,8 +244,6 @@ def run_cross_validation(
 
     # Prepare cross validation
     cv_outer = prepare_cv(cv)
-
-    # scorer = prepare_scoring(pipeline, scoring)
 
     # check_consistency(pipeline, preprocess_X, preprocess_y,
     #                   preprocess_confounds, df_X_conf, y, cv, groups,
