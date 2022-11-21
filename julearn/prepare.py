@@ -318,6 +318,7 @@ def prepare_hyperparameter_tuning(params_to_tune, search_params, pipeline):
     """
     logger.info("= Model Parameters =")
 
+    search_params = {} if search_params is None else search_params
     if len(params_to_tune) > 0:
         search = search_params.get("kind", "grid")
         scoring = search_params.get("scoring", None)

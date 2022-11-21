@@ -7,7 +7,7 @@ import pandas as pd
 from numpy.testing import assert_array_equal
 from pandas.testing import assert_frame_equal
 
-from julearn.transformers import DropColumns
+from julearn.transformers import DropColumns, FilterColumns
 
 X = pd.DataFrame(
     dict(A=np.arange(10), B=np.arange(10, 20), C=np.arange(30, 40))
@@ -41,3 +41,13 @@ def test_DropColumns():
         ),
         X_trans,
     )
+
+
+def test_FilterColumns():
+    filter = FilterColumns(
+        apply_to=r"(__:type:__continuous|__:type:__categorical)",
+        keep="__:type:__continuous")
+    filter.set_output(transform="pandas").fit(X_with_types)
+    X_trans = filter.transform(X_with_types)
+    assert list(X_trans.columns) == [
+        "a__:type:__continuous", "b__:type:__continuous"]

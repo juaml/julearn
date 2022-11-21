@@ -1,10 +1,11 @@
 import pandas as pd
 import numpy as np
 from sklearn.base import TransformerMixin, BaseEstimator
+from sklearn.compose import ColumnTransformer
 
 from .. utils import pick_columns, change_column_type
 from . base import JuTransformer
-from .. utils import raise_error, logger
+from .. utils import raise_error, logger, make_type_selector
 
 
 class SetColumnTypes(JuTransformer):
@@ -43,6 +44,37 @@ class SetColumnTypes(JuTransformer):
 
     def get_feature_names_out(self, input_features=None):
         return self.feature_names_in_.map(self.column_mapper_)
+
+
+class FilterColumns(JuTransformer):
+
+    def __init__(self, apply_to, keep, needed_types=None):
+        self.apply_to = apply_to
+        self.keep = keep
+        self.needed_types = needed_types
+
+    def fit(self, X, y=None):
+        inner_selector = make_type_selector(self.apply_to)
+        inner_filter = ColumnTransformer(
+            transformers=[
+                ("filter_apply_to", "passthrough", inner_selector), ],
+            remainder="passthrough", verbose_feature_names_out=False,
+        )
+
+        apply_to_selector = make_type_selector(self.keep)
+        self.filter_columns_ = ColumnTransformer(
+            transformers=[
+                ("keep", inner_filter, apply_to_selector)],
+            remainder="drop", verbose_feature_names_out=False,
+
+        )
+        self.filter_columns_.fit(X, y)
+
+    def transform(self, X):
+        return self.filter_columns_.transform(X)
+
+    def get_feature_names_out(self, input_features=None):
+        return self.filter_columns_.get_feature_names_out(input_features)
 
 
 class ChangeColumnTypes(JuTransformer):

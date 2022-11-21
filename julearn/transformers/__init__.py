@@ -7,7 +7,7 @@ from . available_transformers import (
     list_transformers, get_transformer, register_transformer, reset_transformer_register)
 
 from . confounds import DataFrameConfoundRemover, TargetConfoundRemover
-from . dataframe import DropColumns, ChangeColumnTypes, SetColumnTypes
+from . dataframe import DropColumns, ChangeColumnTypes, SetColumnTypes, FilterColumns
 from . target import TargetTransfromerWrapper
 from . cbpm import CBPM
 from . base import JuTransformer
