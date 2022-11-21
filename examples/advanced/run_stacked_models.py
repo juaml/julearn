@@ -61,13 +61,12 @@ y = "species"
 # print(scores["test_score"])
 
 
-
 model_sepal = PipelineCreator()
-model_sepal.add("zscore")
-model_sepal.add("svm")
+model_sepal.add("zscore", apply_to="sepal")
+model_sepal.add("svm", apply_to="sepal")
 
 model_petal = PipelineCreator()
-model_petal.add("zscore")
+model_petal.add("zscore", apply_to="petal")
 model_petal.add("rf")
 
 
@@ -88,7 +87,3 @@ scores = run_cross_validation(
 )
 
 print(scores["test_score"])
-
-
-
-

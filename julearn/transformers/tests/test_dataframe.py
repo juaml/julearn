@@ -7,7 +7,7 @@ import pandas as pd
 from numpy.testing import assert_array_equal
 from pandas.testing import assert_frame_equal
 
-from julearn.transformers import DropColumns, FilterColumns
+from julearn.transformers import DropColumns, FilterColumns, SetColumnTypes
 
 X = pd.DataFrame(
     dict(A=np.arange(10), B=np.arange(10, 20), C=np.arange(30, 40))
@@ -51,3 +51,25 @@ def test_FilterColumns():
     X_trans = filter.transform(X_with_types)
     assert list(X_trans.columns) == [
         "a__:type:__continuous", "b__:type:__continuous"]
+
+
+def test_SetDtype(X_iris, X_types_iris):
+    X_iris_with_types = (X_iris
+                         .copy()
+                         .rename(columns={
+                             col: f"{col}__:type:__{dtype}"
+                             for dtype, columns in X_types_iris.items()
+                             for col in columns
+                         })
+                         .rename(
+                             columns=lambda col: (
+                                 col
+                                 if "__:type:__" in col
+                                 else f"{col}__:type:__continuous"
+                             ))
+                         )
+    st = SetColumnTypes(X_types_iris).set_output(transform="pandas")
+    Xt = st.fit_transform(X_iris)
+    Xt_iris_with_types = st.fit_transform(X_iris_with_types)
+    assert_frame_equal(Xt, X_iris_with_types)
+    assert_frame_equal(Xt_iris_with_types, X_iris_with_types)

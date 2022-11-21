@@ -18,32 +18,44 @@ class SetColumnTypes(JuTransformer):
             self.X_types = {}
         self.feature_names_in_ = X.columns
         logger.debug(f"Setting column types for {self.feature_names_in_}")
-        column_mapper_ = {}
+
+        # initialize the column_mapper_ using the X_types of X
+        column_mapper_ = dict()
+        for col in X.columns.tolist():
+
+            if "__:type:__" in col:
+                col_no_type, X_type = col.split("__:type:__")
+            else:
+                col_no_type, X_type = col, "continuous"
+            column_mapper_[col_no_type] = change_column_type(
+                col_no_type, X_type)
+
         for X_type, columns in self.X_types.items():
             if not isinstance(columns, (list, tuple)):
                 raise_error(
                     "Each value of X_types must be either a list or a tuple.")
-            column_mapper_ = {**column_mapper_,
-                              **{col: change_column_type(col, X_type)
-                                 for col in columns}
-                              }
-        for x in X.columns:
-            if x not in column_mapper_:
-                if "__:type:__" not in x:
-                    column_mapper_[x] = change_column_type(x, "continuous")
-                # TODO: this should not be needed, but there's an error
-                else:
-                    column_mapper_[x] = x
+            column_mapper_.update({
+                col: change_column_type(col, X_type)
+                for col in columns})
 
         logger.debug(f"\tColumn mappers for {column_mapper_}")
         self.column_mapper_ = column_mapper_
         return self
 
     def transform(self, X):
-        return X.copy().rename(columns=self.column_mapper_)
+        return (X
+                # remove column types of input
+                .rename(columns=lambda col: col.split("__:type:__")[0])
+                # assgin new column types (previous as default)
+                .rename(columns=self.column_mapper_)
+                )
 
     def get_feature_names_out(self, input_features=None):
-        return self.feature_names_in_.map(self.column_mapper_)
+        return (self.feature_names_in_
+                .map(lambda col: col.split("__:type:__")[0])
+                .map(self.column_mapper_)
+                .values
+                )
 
 
 class FilterColumns(JuTransformer):
