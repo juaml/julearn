@@ -6,35 +6,29 @@ from copy import copy
 @fixture(scope="module")
 def df_typed_iris():
     df = load_dataset("iris")
-    X_names = df.iloc[:, :-1].columns.tolist()
-
-    renamer = {col: col + "__:type:__continuous"
-               for col in X_names}
-
-    df = df.rename(columns=renamer)
     return df
 
 
 @fixture(scope="module")
-def X_multi_typed_iris():
+def X_iris():
     df = load_dataset("iris")
-    X_names = df.iloc[:, :-1].columns.tolist()
-
-    X_types = ["duck", "continuous", "continuous", "quack"]
-    renamer = {col: col + f"__:type:__{X_type}"
-               for X_type, col in zip(X_types, X_names)}
-
-    df = df.rename(columns=renamer)
-    return df[renamer.values()]
+    return df.iloc[:, :-1]
 
 
 @fixture(scope="module")
-def y_typed_iris():
+def y_iris():
     df = load_dataset("iris")
     return (
         df["species"]
         .map(lambda x: dict(setosa=0, versicolor=1, virginica=2)[x])
     )
+
+
+@fixture(params=[dict(), dict(duck=["petal_length"]),
+                 dict(duck=["petal_length"], confound=["petal_width"])],
+         scope="module")
+def X_types_iris(request):
+    return request.param
 
 
 @fixture(params=["rf", "svm", "gauss", "ridge"], scope="module")
@@ -63,7 +57,7 @@ step_to_params = dict(
 @fixture(scope="module")
 def get_default_params():
     def get(step):
-        return copy(step_to_params[step])
+        return copy(step_to_params.get(step, {}))
     return get
 
 
