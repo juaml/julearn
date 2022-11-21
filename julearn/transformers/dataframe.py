@@ -4,7 +4,7 @@ from sklearn.base import TransformerMixin, BaseEstimator
 
 from .. utils import pick_columns, change_column_type
 from . base import JuTransformer
-from .. utils import raise_error
+from .. utils import raise_error, logger
 
 
 class SetColumnTypes(JuTransformer):
@@ -16,6 +16,7 @@ class SetColumnTypes(JuTransformer):
         if self.X_types is None:
             self.X_types = {}
         self.feature_names_in_ = X.columns
+        logger.debug(f"Setting column types for {self.feature_names_in_}")
         column_mapper_ = {}
         for X_type, columns in self.X_types.items():
             if not isinstance(columns, (list, tuple)):
@@ -27,7 +28,13 @@ class SetColumnTypes(JuTransformer):
                               }
         for x in X.columns:
             if x not in column_mapper_:
-                column_mapper_[x] = change_column_type(x, "continuous")
+                if "__:type:__" not in x:
+                    column_mapper_[x] = change_column_type(x, "continuous")
+                # TODO: this should not be needed, but there's an error
+                else:
+                    column_mapper_[x] = x
+
+        logger.debug(f"\tColumn mappers for {column_mapper_}")
         self.column_mapper_ = column_mapper_
         return self
 

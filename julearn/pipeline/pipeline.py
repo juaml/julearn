@@ -221,7 +221,7 @@ class PipelineCreator:  # Pipeline creator
 
         logger.debug(f"Adding model {model_name}")
         logger.debug(f"\t Estimator: {model_step.estimator}")
-        logger.debug("f\t Looking for nested pipeline creators")
+        logger.debug("\t Looking for nested pipeline creators")
         model_params = model_step.estimator.get_params(deep=False)
         model_params = {
             k: _params_to_pipeline(v, X_types=X_types)

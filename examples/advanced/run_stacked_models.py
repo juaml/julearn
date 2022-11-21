@@ -17,7 +17,7 @@ from julearn.utils import configure_logging
 
 ###############################################################################
 # Set the logging level to info to see extra information
-configure_logging(level="INFO")
+configure_logging(level="DEBUG")
 
 ###############################################################################
 df_iris = load_dataset("iris")
@@ -35,6 +35,33 @@ X = ["sepal_length", "sepal_width", "petal_length", "petal_width"]
 y = "species"
 
 
+# model_sepal = PipelineCreator()
+# model_sepal.add("svm")
+
+# model_petal = PipelineCreator()
+# model_petal.add("rf")
+
+# model = PipelineCreator()
+# model.add("zscore")
+# model.add("stacking", estimators=[[
+#     ('sepal', model_sepal),
+#     ('petal', model_petal)
+# ]])
+
+
+# X_types = {
+#     "sepal": ["sepal_length", "sepal_width"],
+#     "petal": ["petal_length", "petal_width"],
+# }
+
+# scores = run_cross_validation(
+#     X=X, y=y, X_types=X_types, data=df_iris, model=model
+# )
+
+# print(scores["test_score"])
+
+
+
 model_sepal = PipelineCreator()
 model_sepal.add("zscore")
 model_sepal.add("svm")
@@ -42,6 +69,7 @@ model_sepal.add("svm")
 model_petal = PipelineCreator()
 model_petal.add("zscore")
 model_petal.add("rf")
+
 
 model = PipelineCreator()
 model.add("stacking", estimators=[[
@@ -60,3 +88,7 @@ scores = run_cross_validation(
 )
 
 print(scores["test_score"])
+
+
+
+
