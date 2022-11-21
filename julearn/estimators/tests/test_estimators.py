@@ -67,6 +67,7 @@ def test_naive_bayes_estimators(model_name, model_class, model_params):
     # keep only two species
     df_binary = df_iris[df_iris["species"].isin(["setosa", "virginica"])]
     X = ["sepal_length", "sepal_width", "petal_length"]
+    X_types = dict(continuous=X)
     y = "species"
 
     ju_model_params = None
@@ -93,6 +94,7 @@ def test_naive_bayes_estimators(model_name, model_class, model_params):
     do_scoring_test(
         X,
         y,
+        X_types=X_types,
         data=t_df_binary,
         api_params=api_params,
         sklearn_model=clf,
@@ -108,6 +110,7 @@ def test_naive_bayes_estimators(model_name, model_class, model_params):
     do_scoring_test(
         X,
         y,
+        X_types=X_types,
         data=t_df,
         api_params=api_params,
         sklearn_model=clf,
@@ -127,6 +130,7 @@ def test_naive_bayes_estimators(model_name, model_class, model_params):
         do_scoring_test(
             X,
             y,
+            X_types=X_types,
             data=t_df_binary,
             api_params=api_params,
             sklearn_model=clf,
@@ -160,6 +164,7 @@ def test_classificationestimators(model_name, model_class, model_params):
     # keep only two species
     df_iris = df_iris[df_iris["species"].isin(["setosa", "virginica"])]
     X = ["sepal_length", "sepal_width", "petal_length"]
+    X_types = dict(continuous=X)
     y = "species"
 
     ju_model_params = None
@@ -177,6 +182,7 @@ def test_classificationestimators(model_name, model_class, model_params):
     do_scoring_test(
         X,
         y,
+        X_types=X_types,
         data=df_iris,
         api_params=api_params,
         sklearn_model=clf,
@@ -195,6 +201,7 @@ def test_classificationestimators(model_name, model_class, model_params):
         do_scoring_test(
             X,
             y,
+            X_types=X_types,
             data=df_iris,
             api_params=api_params,
             sklearn_model=clf,
@@ -225,6 +232,7 @@ def test_regression_estimators(model_name, model_class, model_params):
     df_iris = load_dataset("iris")
 
     X = ["sepal_length", "sepal_width", "petal_length"]
+    X_types = dict(continuous=X)
     y = "petal_width"
 
     ju_model_params = None
@@ -246,6 +254,7 @@ def test_regression_estimators(model_name, model_class, model_params):
     do_scoring_test(
         X,
         y,
+        X_types=X_types,
         data=df_iris,
         api_params=api_params,
         sklearn_model=clf,

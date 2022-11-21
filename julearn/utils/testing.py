@@ -92,7 +92,7 @@ def compare_models(clf1, clf2):  # pragma: no cover
     assert_array_equal(v1, v2)
 
 
-def do_scoring_test(X, y, data, api_params, sklearn_model, scorers, cv=None,
+def do_scoring_test(X, y, data, X_types, api_params, sklearn_model, scorers, cv=None,
                     sk_y=None):
 
     if cv is None:
@@ -105,9 +105,11 @@ def do_scoring_test(X, y, data, api_params, sklearn_model, scorers, cv=None,
     params_dict = {k: v for k, v in api_params.items()}
     if 'preprocess' not in params_dict:
         params_dict['preprocess'] = 'zscore'
+
     actual, actual_estimator = run_cross_validation(
-        X=X, y=y, data=data, scoring=scorers, cv=cv,
+        X=X, y=y, X_types=X_types, data=data, scoring=scorers, cv=cv,
         return_estimator='final', **params_dict)
+
     np.random.seed(42)
     sk_cv = prepare_cv(cv)
     expected = cross_validate(sklearn_model, sk_X, sk_y, cv=sk_cv,
