@@ -8,7 +8,8 @@ from sklearn.ensemble import (RandomForestClassifier, RandomForestRegressor,
                               AdaBoostClassifier, AdaBoostRegressor,
                               BaggingClassifier, BaggingRegressor,
                               GradientBoostingClassifier,
-                              GradientBoostingRegressor)
+                              GradientBoostingRegressor,
+                              StackingClassifier, StackingRegressor)
 from sklearn.gaussian_process import (GaussianProcessClassifier,
                                       GaussianProcessRegressor)
 from sklearn.linear_model import (LogisticRegression, LogisticRegressionCV,
@@ -93,6 +94,10 @@ _available_models = {
     },
     'ds': {
         'classification': DynamicSelection,
+    },
+    "stacking": {
+        "classification": StackingClassifier,
+        "regression": StackingRegressor,
     }
 }
 

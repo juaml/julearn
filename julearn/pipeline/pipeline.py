@@ -24,6 +24,20 @@ class NoInversePipeline(Pipeline):
         return X
 
 
+def _params_to_pipeline(param, X_types):
+    if isinstance(param, PipelineCreator):
+        param = param.to_pipeline(X_types=X_types)
+    elif isinstance(param, list):
+        param = [_params_to_pipeline(_v, X_types) for _v in param]
+    elif isinstance(param, dict):
+        param = {
+            k: _params_to_pipeline(_v, X_types) for k, _v in param.items()
+        }
+    elif isinstance(param, tuple):
+        param = tuple(_params_to_pipeline(_v, X_types) for _v in param)
+    return param
+
+
 def make_type_selector(pattern):
     def get_renamer(X_df):
         return {
@@ -61,10 +75,13 @@ class Step:
     name: str
     estimator: Any
     apply_to: Any = "continuous"
-    params: dict = None
+    params_to_tune: dict = None
+    # params_to_set: dict = None,
 
     def __post_init__(self):
-        self.params = {} if self.params is None else self.params
+        self.params_to_tune = (
+            {} if self.params_to_tune is None else self.params_to_tune
+        )
 
 
 class PipelineCreator:  # Pipeline creator
@@ -86,11 +103,6 @@ class PipelineCreator:  # Pipeline creator
         name = step if isinstance(step, str) else step.__cls__.lower()
         logger.info(f"Adding step {name} that applies to {apply_to}")
         name = self._ensure_name(name)
-        estimator = (
-            self.get_estimator_from(step, problem_type)
-            if isinstance(step, str)
-            else step
-        )
         params_to_set = dict()
         params_to_tune = dict()
         for param, vals in params.items():
@@ -107,7 +119,11 @@ class PipelineCreator:  # Pipeline creator
                 logger.info(f"Setting hyperparameter {param} = {vals}")
                 params_to_set[param] = vals
 
-        estimator = estimator.set_params(**params_to_set)
+        estimator = (
+            self.get_estimator_from(step, problem_type, **params_to_set)
+            if isinstance(step, str)
+            else step
+        )
         if apply_to == "target":
             name = f"target_{name}"
 
@@ -116,7 +132,7 @@ class PipelineCreator:  # Pipeline creator
                 name=name,
                 estimator=estimator,
                 apply_to=apply_to,
-                params=params_to_tune,
+                params_to_tune=params_to_tune,
             )
         )
         logger.info("Step added")
@@ -178,7 +194,7 @@ class PipelineCreator:  # Pipeline creator
             name_for_tuning = name
             estimator = step_dict.estimator
             logger.debug(f"\t Estimator: {estimator}")
-            step_params_to_tune = step_dict.params
+            step_params_to_tune = step_dict.params_to_tune
             logger.debug(f"\t Params to tune: {step_params_to_tune}")
 
             # Wrap in a JuTransformer if needed
@@ -199,10 +215,19 @@ class PipelineCreator:  # Pipeline creator
 
         model_name = model_step.name
         step_params_to_tune = {
-            f"{model_name}__{k}": v for k, v in model_step.params.items()
+            f"{model_name}__{k}": v
+            for k, v in model_step.params_to_tune.items()
         }
 
         logger.debug(f"Adding model {model_name}")
+        logger.debug(f"\t Estimator: {model_step.estimator}")
+        logger.debug("f\t Looking for nested pipeline creators")
+        model_params = model_step.estimator.get_params(deep=False)
+        model_params = {
+            k: _params_to_pipeline(v, X_types=X_types)
+            for k, v in model_params.items()
+        }
+        model_step.estimator.set_params(**model_params)
         logger.debug(f"\t Params to tune: {step_params_to_tune}")
 
         params_to_tune.update(step_params_to_tune)
@@ -330,11 +355,11 @@ class PipelineCreator:  # Pipeline creator
         return pattern
 
     @staticmethod
-    def get_estimator_from(name, problem_type):
+    def get_estimator_from(name, problem_type, **kwargs):
         if name in list_transformers():
-            return get_transformer(name)
+            return get_transformer(name, **kwargs)
         if name in list_models():
-            return get_model(name, problem_type)
+            return get_model(name, problem_type, **kwargs)
         raise_error(
             f"{name} is neither a registered transformer"
             "nor a registered model."
