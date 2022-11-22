@@ -1,9 +1,6 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
-from . cbpm import CBPM
-from . dataframe import DropColumns, ChangeColumnTypes
-from .. utils import raise_error, warn, logger
 from copy import deepcopy
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import (StandardScaler, RobustScaler, MaxAbsScaler,
@@ -13,6 +10,9 @@ from sklearn.feature_selection import (GenericUnivariateSelect,
                                        SelectPercentile, SelectKBest,
                                        SelectFdr, SelectFpr, SelectFwe,
                                        VarianceThreshold)
+from . cbpm import CBPM
+from . dataframe import DropColumns, ChangeColumnTypes, FilterColumns
+from .. utils import raise_error, warn, logger
 from . confounds import DataFrameConfoundRemover, TargetConfoundRemover
 from . target import TargetTransfromerWrapper, is_targettransformer
 
@@ -49,7 +49,8 @@ _available_transformers = {
         'from_transformer'
     ],
     'drop_columns': [DropColumns, 'subset'],
-    'change_column_types': [ChangeColumnTypes, 'from_transformer']
+    'change_column_types': [ChangeColumnTypes, 'from_transformer'],
+    'filter_columns': [FilterColumns, 'from_transformer']
 }
 
 _available_transformers_reset = deepcopy(_available_transformers)

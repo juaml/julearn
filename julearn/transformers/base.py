@@ -1,4 +1,5 @@
 from sklearn.base import BaseEstimator, TransformerMixin
+from ..utils.column_types import ensure_apply_to
 
 
 class JuTransformer(BaseEstimator, TransformerMixin):
@@ -11,3 +12,7 @@ class JuTransformer(BaseEstimator, TransformerMixin):
 
     def get_apply_to(self):
         return self.apply_to
+
+    @staticmethod
+    def _ensure_apply_to(apply_to):
+        return ensure_apply_to(apply_to)

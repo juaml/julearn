@@ -15,6 +15,7 @@ from ..transformers import (
 )
 from ..estimators import list_models, get_model
 from ..utils import raise_error, warn, logger, make_type_selector
+from ..utils.column_types import ensure_apply_to
 from ..prepare import prepare_hyperparameter_tuning
 
 
@@ -84,12 +85,13 @@ class PipelineCreator:  # Pipeline creator
             else:
                 logger.info(f"Setting hyperparameter {param} = {vals}")
                 params_to_set[param] = vals
-
         estimator = (
             self.get_estimator_from(step, problem_type, **params_to_set)
             if isinstance(step, str)
             else step
         )
+        if isinstance(estimator, JuTransformer):
+            estimator = estimator.set_params(apply_to=apply_to)
         if apply_to == "target":
             name = f"target_{name}"
 
@@ -308,17 +310,7 @@ class PipelineCreator:  # Pipeline creator
 
     @staticmethod
     def _ensure_apply_to(apply_to):
-        if isinstance(apply_to, list) or isinstance(apply_to, tuple):
-            types = [f"__:type:__{_type}" for _type in apply_to]
-
-            pattern = f"({types[0]}"
-            if len(types) > 1:
-                for t in types[1:]:
-                    pattern += rf"|{t}"
-            pattern += r")"
-        else:
-            pattern = f"__:type:__{apply_to}"
-        return pattern
+        return ensure_apply_to(apply_to)
 
     @staticmethod
     def get_estimator_from(name, problem_type, **kwargs):

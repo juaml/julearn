@@ -95,3 +95,20 @@ def make_type_selector(pattern):
         ]
 
     return type_selector
+
+
+def ensure_apply_to(apply_to):
+    if isinstance(apply_to, list) or isinstance(apply_to, tuple):
+        types = [f"__:type:__{_type}" for _type in apply_to]
+
+        pattern = f"(?:{types[0]}"
+        if len(types) > 1:
+            for t in types[1:]:
+                pattern += rf"|{t}"
+        pattern += r")"
+    elif "__:type:__" in apply_to or apply_to == "*":
+        pattern = apply_to
+    else:
+        pattern = f"__:type:__{apply_to}"
+
+    return pattern

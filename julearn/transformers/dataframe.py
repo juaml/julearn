@@ -60,12 +60,18 @@ class SetColumnTypes(JuTransformer):
 
 class FilterColumns(JuTransformer):
 
-    def __init__(self, apply_to, keep, needed_types=None):
+    def __init__(self, apply_to=None, keep=None, needed_types=None):
         self.apply_to = apply_to
         self.keep = keep
         self.needed_types = needed_types
 
     def fit(self, X, y=None):
+        self.apply_to = (
+            "continuous" if self.apply_to is None else self.apply_to)
+        self.keep = "continuous" if self.keep is None else self.keep
+        self.apply_to = self._ensure_apply_to(self.apply_to)
+        self.keep = self._ensure_apply_to(self.keep)
+
         inner_selector = make_type_selector(self.apply_to)
         inner_filter = ColumnTransformer(
             transformers=[
@@ -81,6 +87,7 @@ class FilterColumns(JuTransformer):
 
         )
         self.filter_columns_.fit(X, y)
+        return self
 
     def transform(self, X):
         return self.filter_columns_.transform(X)

@@ -46,8 +46,9 @@ def test_DropColumns():
 
 def test_FilterColumns():
     filter = FilterColumns(
-        apply_to=r"(__:type:__continuous|__:type:__categorical)",
-        keep="__:type:__continuous")
+        apply_to=["continuous", "categorical"],
+        keep=["continuous"]
+    )
     filter.set_output(transform="pandas").fit(X_with_types)
     X_trans = filter.transform(X_with_types)
     assert list(X_trans.columns) == [
