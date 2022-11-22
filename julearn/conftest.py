@@ -24,7 +24,7 @@ def y_iris():
     )
 
 
-@fixture(params=[dict(), dict(duck=["petal_length"]),
+@fixture(params=[None, dict(), dict(duck=["petal_length"]),
                  dict(duck=["petal_length"], confound=["petal_width"])],
          scope="module")
 def X_types_iris(request):

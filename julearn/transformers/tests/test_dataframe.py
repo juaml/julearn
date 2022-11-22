@@ -3,6 +3,7 @@
 # License: AGPL
 import numpy as np
 import pandas as pd
+import pytest
 
 from numpy.testing import assert_array_equal
 from pandas.testing import assert_frame_equal
@@ -54,11 +55,12 @@ def test_FilterColumns():
 
 
 def test_SetDtype(X_iris, X_types_iris):
+    _X_types_iris = {} if X_types_iris is None else X_types_iris
     X_iris_with_types = (X_iris
                          .copy()
                          .rename(columns={
                              col: f"{col}__:type:__{dtype}"
-                             for dtype, columns in X_types_iris.items()
+                             for dtype, columns in _X_types_iris.items()
                              for col in columns
                          })
                          .rename(
@@ -73,3 +75,10 @@ def test_SetDtype(X_iris, X_types_iris):
     Xt_iris_with_types = st.fit_transform(X_iris_with_types)
     assert_frame_equal(Xt, X_iris_with_types)
     assert_frame_equal(Xt_iris_with_types, X_iris_with_types)
+
+
+def test_SetDtype_input_validation(X_iris):
+    with pytest.raises(
+        ValueError,
+            match="Each value of X_types must be either a list or a tuple."):
+        SetColumnTypes(dict(confound="chicken")).fit(X_iris)

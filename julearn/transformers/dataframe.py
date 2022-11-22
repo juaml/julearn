@@ -10,7 +10,7 @@ from .. utils import raise_error, logger, make_type_selector
 
 class SetColumnTypes(JuTransformer):
 
-    def __init__(self, X_types):
+    def __init__(self, X_types=None):
         self.X_types = X_types
 
     def fit(self, X, y=None):

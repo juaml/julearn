@@ -81,7 +81,10 @@ def test_hyperparameter_tuning(
     pipeline_creator = PipelineCreator()
     param_grid = {}
 
-    wrap = False if list(X_types_iris.keys()) == ["continuous"] else True
+    used_types = (["continuous"]
+                  if X_types_iris is None
+                  else list(X_types_iris.keys()))
+    wrap = False if used_types == ["continuous"] else True
     for step in preprocess:
         default_params = get_default_params(step)
         pipeline_creator = pipeline_creator.add(
