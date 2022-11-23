@@ -1,9 +1,11 @@
 """
-Simple Binary Classification
-============================
+Stacking Classification
+=======================
 
-This example uses the 'iris' dataset and performs a simple binary
-classification using a Support Vector Machine classifier.
+This example uses the 'iris' dataset and performs a complex stacking
+classification. We will use two different classifiers, one applied to petal
+features and one applied to sepal features. A final logistic regression
+classifier will be applied on the predictions of the two classifiers.
 
 .. include:: ../../links.inc
 """
@@ -17,7 +19,7 @@ from julearn.utils import configure_logging
 
 ###############################################################################
 # Set the logging level to info to see extra information
-configure_logging(level="DEBUG")
+configure_logging(level="INFO")
 
 ###############################################################################
 df_iris = load_dataset("iris")
@@ -35,24 +37,25 @@ X = ["sepal_length", "sepal_width", "petal_length", "petal_width"]
 y = "species"
 
 
+# Create the pipeline for the sepal features
 model_sepal = PipelineCreator()
-model_sepal.add("filter_columns",
-                apply_to=["sepal", "petal"],
-                keep=["sepal"])
+model_sepal.add("filter_columns", apply_to="*", keep="sepal")
+model_sepal.add("zscore", apply_to="*")
 model_sepal.add("svm")
 
+# Create the pipeline for the petal features
 model_petal = PipelineCreator()
+model_petal.add("filter_columns", apply_to="*", keep="petal")
+model_petal.add("zscore", apply_to="*")
 model_petal.add("rf")
 
+# Create the stacking model
 model = PipelineCreator()
+model.add(
+    "stacking", estimators=[[("sepal", model_sepal), ("petal", model_petal)]]
+)
 
-model.add("zscore", apply_to=["sepal", "petal"])
-model.add("stacking", estimators=[[
-    ('sepal', model_sepal),
-    ('petal', model_petal)
-]])
-
-
+# Define our feature types
 X_types = {
     "sepal": ["sepal_length", "sepal_width"],
     "petal": ["petal_length", "petal_width"],
@@ -63,36 +66,3 @@ scores = run_cross_validation(
 )
 
 print(scores["test_score"])
-
-
-model_sepal = PipelineCreator()
-model_sepal.add("filter_columns", apply_to=["sepal", "petal"], keep=["sepal"])
-model_sepal.add("zscore", apply_to="sepal")
-model_sepal.add("svm")
-
-model_petal = PipelineCreator()
-model_petal.add("filter_columns", apply_to=["sepal", "petal"], keep=["petal"])
-model_petal.add("zscore", apply_to="petal")
-model_petal.add("rf")
-
-
-model = PipelineCreator()
-model.add("stacking", estimators=[[
-    ('sepal', model_sepal),
-    ('petal', model_petal)
-]])
-
-
-X_types = {
-    "sepal": ["sepal_length", "sepal_width"],
-    "petal": ["petal_length", "petal_width"],
-}
-
-scores, final_model = run_cross_validation(
-    X=X, y=y, X_types=X_types, data=df_iris, model=model,
-    return_estimator="final"
-)
-
-print(scores["test_score"])
-# check whether we really only have to features at the rf
-print(final_model[-1].estimators_[-1][-1].feature_importances_)
