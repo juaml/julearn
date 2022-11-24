@@ -13,10 +13,11 @@ from ..transformers import (
     SetColumnTypes,
     JuTransformer,
 )
-from ..estimators import list_models, get_model
-from ..utils import raise_error, warn, logger, make_type_selector
-from ..utils.column_types import ensure_apply_to
-from ..prepare import prepare_hyperparameter_tuning
+from .. estimators import list_models, get_model
+from .. utils import raise_error, warn, logger, make_type_selector
+from .. utils.column_types import ensure_apply_to
+from .. utils.typing import ModelLike
+from .. prepare import prepare_hyperparameter_tuning
 
 
 class NoInversePipeline(Pipeline):
@@ -257,30 +258,44 @@ class PipelineCreator:  # Pipeline creator
             raise_error(f"Cannot add a {step}. I don't know what it is.")
 
     def X_types_to_patterns(self, X_types: Optional[Dict] = None):
-        if X_types is not None:
-            all_types = list(X_types.keys())
-        else:
+        if X_types in [None, {}]:
             all_types = ["continuous"]
-        unique_apply_to = []
+        else:
+            all_types = list(X_types.keys())
+        needed_types = []
         for step_dict in self._steps:
+            if isinstance(step_dict.estimator, ModelLike):
+                continue
             _apply_to = step_dict.apply_to
-            if isinstance(_apply_to, str):
-                unique_apply_to.append(_apply_to.split("__")[-1])
+            # remove regex boilerplate
+            if "|" in _apply_to:
+                _needed_types = [
+                    pattern.split("__:type:__")[-1]
+                    for pattern in _apply_to[3:-1].split("|")
+
+                ]
+                needed_types.extend(_needed_types)
+
+            elif "__:type:__" in _apply_to:
+                # additional :-1 to get rid of the ) at the end of patterns
+                needed_types.append(_apply_to.split("__:type:__")[-1][:-1])
             else:
-                for _apply in _apply_to:
-                    unique_apply_to.append(_apply.split("__")[-1])
-        unique_apply_to = set(unique_apply_to)
+                needed_types.append(_apply_to)
+
+        needed_types = set(needed_types)
+        applied_to_all = (".*" in needed_types or "*" in needed_types)
         for X_type in all_types:
-            if X_type not in unique_apply_to:
+            if X_type not in needed_types and not applied_to_all:
                 warn(
                     f"{X_type} is provided but never used by a transformer. "
-                    f"Used types are {unique_apply_to}"
+                    f"Used types are {needed_types}"
                 )
 
-        # TODO:
-        # put logic here
-        # On JulearnTransformers: Raise Error if there is
-        # a needed type that is not in the X_type
+        for needed_type in needed_types:
+            if needed_type not in [*all_types, "*", ".*"]:
+                raise_error(
+                    f"{needed_type} is not in the provided X_types={X_types}"
+                )
 
         return [f"__:type:__{X_type}" for X_type in all_types]
 
