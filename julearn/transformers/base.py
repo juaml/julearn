@@ -8,7 +8,7 @@ class JuTransformer(BaseEstimator, TransformerMixin):
         self.needed_types = needed_types
 
     def get_needed_types(self):
-        return self.needed_types
+        return self.needed_types or []
 
     def get_apply_to(self):
         return self.apply_to

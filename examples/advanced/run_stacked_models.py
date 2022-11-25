@@ -41,18 +41,19 @@ y = "species"
 model_sepal = PipelineCreator()
 model_sepal.add("filter_columns", apply_to="*", keep="sepal")
 model_sepal.add("zscore", apply_to="*")
-model_sepal.add("svm")
+model_sepal.add("svm", apply_to="*")
 
 # Create the pipeline for the petal features
 model_petal = PipelineCreator()
 model_petal.add("filter_columns", apply_to="*", keep="petal")
 model_petal.add("zscore", apply_to="*")
-model_petal.add("rf")
+model_petal.add("rf", apply_to="*")
 
 # Create the stacking model
 model = PipelineCreator()
 model.add(
-    "stacking", estimators=[[("sepal", model_sepal), ("petal", model_petal)]]
+    "stacking", estimators=[[("sepal", model_sepal), ("petal", model_petal)]],
+    apply_to="*"
 )
 
 # Define our feature types

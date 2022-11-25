@@ -26,3 +26,12 @@ class TransformerLike(EstimatorLike, Protocol):
 class ModelLike(EstimatorLike, Protocol):
     def predict(self, X):
         pass
+
+
+@runtime_checkable
+class JuEstiamtorLike(EstimatorLike, Protocol):
+    def get_needed_types(self):
+        return self.needed_types
+
+    def get_apply_to(self):
+        return self.apply_to

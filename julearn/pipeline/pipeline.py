@@ -13,10 +13,9 @@ from ..transformers import (
     SetColumnTypes,
     JuTransformer,
 )
-from .. estimators import list_models, get_model
+from .. estimators import list_models, get_model, JuModel, WrapModel
 from .. utils import raise_error, warn, logger, make_type_selector
 from .. utils.column_types import ensure_apply_to
-from .. utils.typing import ModelLike
 from .. prepare import prepare_hyperparameter_tuning
 
 
@@ -44,6 +43,7 @@ class Step:
     name: str
     estimator: Any
     apply_to: Any = "continuous"
+    needed_types: Any = "continuous"
     params_to_tune: dict = None
 
     def __post_init__(self):
@@ -93,14 +93,17 @@ class PipelineCreator:  # Pipeline creator
         )
         if isinstance(estimator, JuTransformer):
             estimator = estimator.set_params(apply_to=apply_to)
-        if apply_to == "target":
+            needed_types = estimator.get_needed_types()
+        else:
+            needed_types = apply_to
+        if apply_to == "targt":
             name = f"target_{name}"
-
         self._steps.append(
             Step(
                 name=name,
                 estimator=estimator,
                 apply_to=apply_to,
+                needed_types=needed_types,
                 params_to_tune=params_to_tune,
             )
         )
@@ -183,24 +186,35 @@ class PipelineCreator:  # Pipeline creator
             )
 
         model_name = model_step.name
-        step_params_to_tune = {
-            f"{model_name}__{k}": v
-            for k, v in model_step.params_to_tune.items()
-        }
-
+        model_name_for_tuning = model_name
+        model_estimator = model_step.estimator
         logger.debug(f"Adding model {model_name}")
-        logger.debug(f"\t Estimator: {model_step.estimator}")
-        logger.debug("\t Looking for nested pipeline creators")
-        model_params = model_step.estimator.get_params(deep=False)
+
+        model_params = model_estimator.get_params(deep=False)
         model_params = {
             k: _params_to_pipeline(v, X_types=X_types)
             for k, v in model_params.items()
         }
-        model_step.estimator.set_params(**model_params)
+        model_estimator.set_params(**model_params)
+        if wrap and not isinstance(model_estimator, JuModel):
+
+            model_name_for_tuning = f"wrapped_{model_name}__{model_name}"
+            model_name = f"wrapped_{model_name}"
+
+            logger.debug(f"Wrapping {model_name}")
+            model_estimator = WrapModel(model_estimator, model_step.apply_to)
+
+        step_params_to_tune = {
+            f"{model_name_for_tuning}__{k}": v
+            for k, v in model_step.params_to_tune.items()
+        }
+
+        logger.debug(f"\t Estimator: {model_estimator}")
+        logger.debug("\t Looking for nested pipeline creators")
         logger.debug(f"\t Params to tune: {step_params_to_tune}")
 
         params_to_tune.update(step_params_to_tune)
-        pipeline_steps.append((model_name, model_step.estimator))
+        pipeline_steps.append((model_name, model_estimator))
         pipeline = Pipeline(pipeline_steps).set_output(transform="pandas")
 
         # Deal with the Hyperparameter tuning
@@ -242,6 +256,7 @@ class PipelineCreator:  # Pipeline creator
         return f"{name}_{count}" if count > 0 else name
 
     def validate_step(self, step, apply_to):
+
         if self._is_transfromer_step(step):
             if self._added_model:
                 raise_error("Cannot add a transformer after adding a model")
@@ -263,9 +278,9 @@ class PipelineCreator:  # Pipeline creator
         else:
             all_types = list(X_types.keys())
         needed_types = []
-        for step_dict in self._steps:
-            if isinstance(step_dict.estimator, ModelLike):
-                continue
+        # steps = self._steps[:-1] if self._added_model else self._steps
+        steps = self._steps
+        for step_dict in steps:
             _apply_to = step_dict.apply_to
             # remove regex boilerplate
             if "|" in _apply_to:
@@ -281,18 +296,26 @@ class PipelineCreator:  # Pipeline creator
                 needed_types.append(_apply_to.split("__:type:__")[-1][:-1])
             else:
                 needed_types.append(_apply_to)
+            if hasattr(step_dict.estimator, "get_needed_types"):
+                print(step_dict.estimator.get_needed_types())
+                print(needed_types)
+                needed_types.extend(step_dict.estimator.get_needed_types())
 
         needed_types = set(needed_types)
-        applied_to_all = (".*" in needed_types or "*" in needed_types)
+        applied_to_special = (needed_types == "continuous" or
+                              needed_types == "target" or
+                              ".*" in needed_types or
+                              "*" in needed_types)
         for X_type in all_types:
-            if X_type not in needed_types and not applied_to_all:
+            if X_type not in needed_types and not applied_to_special:
                 warn(
                     f"{X_type} is provided but never used by a transformer. "
                     f"Used types are {needed_types}"
                 )
 
         for needed_type in needed_types:
-            if needed_type not in [*all_types, "*", ".*"]:
+            if needed_type not in [
+                    *all_types, "*", ".*", "target", "continuous"]:
                 raise_error(
                     f"{needed_type} is not in the provided X_types={X_types}"
                 )

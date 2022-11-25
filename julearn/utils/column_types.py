@@ -108,7 +108,7 @@ def ensure_apply_to(apply_to):
             for t in types[1:]:
                 pattern += rf"|{t}"
         pattern += r")"
-    elif "__:type:__" in apply_to:
+    elif "__:type:__" in apply_to or apply_to in ["target", ["target"]]:
         pattern = apply_to
     else:
         pattern = f"(?:__:type:__{apply_to})"
