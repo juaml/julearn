@@ -297,8 +297,6 @@ class PipelineCreator:  # Pipeline creator
             else:
                 needed_types.append(_apply_to)
             if hasattr(step_dict.estimator, "get_needed_types"):
-                print(step_dict.estimator.get_needed_types())
-                print(needed_types)
                 needed_types.extend(step_dict.estimator.get_needed_types())
 
         needed_types = set(needed_types)
