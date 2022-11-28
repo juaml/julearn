@@ -14,7 +14,6 @@ from . cbpm import CBPM
 from . dataframe import DropColumns, ChangeColumnTypes, FilterColumns
 from .. utils import raise_error, warn, logger
 from . confounds import DataFrameConfoundRemover, TargetConfoundRemover
-from . target import TargetTransfromerWrapper, is_targettransformer
 
 """
 a dictionary containing all supported transformers
@@ -24,33 +23,30 @@ name : [sklearn transformer,
 
 _available_transformers = {
     # Decomposition
-    'pca': [PCA, 'unknown'],
+    'pca': PCA,
     # Scalers
-    'zscore': [StandardScaler, 'same'],
-    'scaler_robust': [RobustScaler, 'same'],
-    'scaler_minmax': [MinMaxScaler, 'same'],
-    'scaler_maxabs': [MaxAbsScaler, 'same'],
-    'scaler_normalizer': [Normalizer, 'same'],
-    'scaler_quantile': [QuantileTransformer, 'same'],
-    'scaler_power': [PowerTransformer, 'same'],
+    'zscore': StandardScaler,
+    'scaler_robust': RobustScaler,
+    'scaler_minmax': MinMaxScaler,
+    'scaler_maxabs': MaxAbsScaler,
+    'scaler_normalizer': Normalizer,
+    'scaler_quantile': QuantileTransformer,
+    'scaler_power': PowerTransformer,
     # Feature selection
-    'select_univariate': [GenericUnivariateSelect, 'subset'],
-    'select_percentile': [SelectPercentile, 'subset'],
-    'select_k': [SelectKBest, 'subset'],
-    'select_fdr': [SelectFdr, 'subset'],
-    'select_fpr': [SelectFpr, 'subset'],
-    'select_fwe': [SelectFwe, 'subset'],
-    'select_variance': [VarianceThreshold, 'subset'],
+    'select_univariate': GenericUnivariateSelect,
+    'select_percentile': SelectPercentile,
+    'select_k': SelectKBest,
+    'select_fdr': SelectFdr,
+    'select_fpr': SelectFpr,
+    'select_fwe': SelectFwe,
+    'select_variance': VarianceThreshold,
     # Custom
-    'cbpm': [CBPM, 'unknown'],
+    'cbpm': CBPM,
     # DataFrame operations
-    'remove_confound': [
-        DataFrameConfoundRemover,
-        'from_transformer'
-    ],
-    'drop_columns': [DropColumns, 'subset'],
-    'change_column_types': [ChangeColumnTypes, 'from_transformer'],
-    'filter_columns': [FilterColumns, 'from_transformer']
+    'remove_confound': DataFrameConfoundRemover,
+    'drop_columns': DropColumns,
+    'change_column_types': ChangeColumnTypes,
+    'filter_columns': FilterColumns,
 }
 
 _available_transformers_reset = deepcopy(_available_transformers)
@@ -66,10 +62,10 @@ _available_target_transformers = {
     'remove_confound': TargetConfoundRemover,
 }
 
-_dict_transformer_to_name = {transformer: name
-                             for name, (transformer, apply_to) in (
-                                 _available_transformers).items()
-                             }
+_dict_transformer_to_name = {
+    transformer: name
+    for name, transformer in _available_transformers.items()
+}
 
 
 def list_transformers(target=False):
@@ -94,7 +90,7 @@ def list_transformers(target=False):
     return out
 
 
-def get_transformer(name, target=False, **params):
+def get_transformer(name, **params):
     """Get a transformer
 
     Parameters
@@ -111,42 +107,13 @@ def get_transformer(name, target=False, **params):
         The transformer object.
     """
     out = None
-    if target is False:
-        if name not in _available_transformers:
-            raise_error(
-                f'The specified transformer ({name}) is not available. '
-                f'Valid options are: {list(_available_transformers.keys())}')
-        trans, *_ = _available_transformers[name]
-        out = trans(**params)
-    else:
-        if name not in _available_target_transformers:
-            raise_error(
-                f'The specified target transformer ({name}) is not available. '
-                f'Valid options are: '
-                f'{list(_available_target_transformers.keys())}')
-        trans = _available_target_transformers[name]
-        out = trans(**params)
-        if not is_targettransformer(out):
-            out = TargetTransfromerWrapper(out)
+    if name not in _available_transformers:
+        raise_error(
+            f'The specified transformer ({name}) is not available. '
+            f'Valid options are: {list(_available_transformers.keys())}')
+    trans = _available_transformers[name]
+    out = trans(**params)
     return out
-
-
-def _get_returned_features(transformer):
-    transformer_name = _dict_transformer_to_name.get(
-        transformer.__class__)
-    if transformer_name is None:
-        warn(f'The transformer {transformer} is not a registered '
-             'transformer. '
-             'Therefore, `returned_features` will be set to `unknown`.'
-             'In other words variable names cannot be preserved after this '
-             'transformer. If you want to change this use '
-             '`julearn.transformer.register_transformer` to register your'
-             'transformer'
-             )
-        returned_features = 'unknown'
-    else:
-        _, returned_features = _available_transformers.get(transformer_name)
-    return returned_features
 
 
 def _get_apply_to(transformer):
@@ -172,8 +139,7 @@ def _get_apply_to(transformer):
 
 
 def register_transformer(transformer_name, transformer_cls,
-                         returned_features, apply_to,
-                         overwrite=None):
+                         apply_to, overwrite=None):
     """Register a transformer to julearn.
     This function allows you to add a transformer to julearn.
     Afterwards, it behaves like every other julearn transformer and can
@@ -185,19 +151,6 @@ def register_transformer(transformer_name, transformer_cls,
         Name by which the transformer will be referenced by
     transformer_cls : object
         The class by which the transformer can be initialized from.
-    returned_features : str
-        Here, you can specify what features the transformer returns.
-        The returned_features can be set to one of the following options:
-
-            * 'same': leads copies the names from the original pd.DataFrame
-            * 'subset': leads to the columns being a subset of the original
-              pd.DataFrame. This functionality needs the transformer to have a
-              .get_support method following sklearn standards.
-            * 'from_transformer': the outputted columns are already defined in
-              the transformer
-            * 'unknown' leads to created column names,
-            * 'unknown_same_type' leads to created column names
-              with the same column type.
     apply_to : str | list(str)
         Defines to which columns the transformer is applied to.
         For this julearn user specified 'columns_types' from the user.
@@ -256,20 +209,18 @@ def register_transformer(transformer_name, transformer_cls,
     if apply_to != 'continuous':
         _apply_to_default_exceptions[transformer_name] = apply_to
 
-    _available_transformers[transformer_name] = [
-        transformer_cls, returned_features]
+    _available_transformers[transformer_name] = transformer_cls
 
 
 def reset_transformer_register():
     global _available_transformers
     global _dict_transformer_to_name
     global _apply_to_default_exceptions
-    _available_transformers = deepcopy(
-        _available_transformers_reset)
+    _available_transformers = deepcopy(_available_transformers_reset)
 
-    _dict_transformer_to_name = {transformer: name
-                                 for name, (transformer, apply_to) in (
-                                     _available_transformers).items()
-                                 }
+    _dict_transformer_to_name = {
+        transformer: name
+        for name, transformer in _available_transformers.items()
+    }
     _apply_to_default_exceptions = deepcopy(_apply_to_default_exceptions_reset)
     return _available_transformers
