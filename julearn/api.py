@@ -6,14 +6,14 @@ from sklearn.model_selection import cross_validate
 from sklearn.pipeline import Pipeline
 import pandas as pd
 
-from .prepare import (
+from . prepare import (
     prepare_input_data,
-    prepare_cv,
+    prepare_cv, check_consistency
 )
-from .pipeline import PipelineCreator
+from . pipeline import PipelineCreator
 
-from .utils import logger, raise_error
-from .utils.typing import ModelLike
+from . utils import logger, raise_error
+from . utils.typing import ModelLike
 
 
 def run_cross_validation(
@@ -168,7 +168,7 @@ def run_cross_validation(
         cv = "repeat:5_nfolds:5"
 
     # Interpret the input data and prepare it to be used with the library
-    df_X_conf, y, df_groups, _ = prepare_input_data(
+    df_X, y, df_groups = prepare_input_data(
         X=X,
         y=y,
         confounds=confounds,
@@ -245,15 +245,13 @@ def run_cross_validation(
     # Prepare cross validation
     cv_outer = prepare_cv(cv)
 
-    # check_consistency(pipeline, preprocess_X, preprocess_y,
-    #                   preprocess_confounds, df_X_conf, y, cv, groups,
-    #                   problem_type)
+    check_consistency(y, cv, groups, problem_type)
 
     cv_return_estimator = return_estimator in ["cv", "all"]
 
     scores = cross_validate(
         pipeline,
-        df_X_conf,
+        df_X,
         y,
         cv=cv_outer,
         scoring=scoring,
@@ -273,7 +271,7 @@ def run_cross_validation(
 
     out = pd.DataFrame(scores)
     if return_estimator in ["final", "all"]:
-        pipeline.fit(df_X_conf, y)
+        pipeline.fit(df_X, y)
         out = out, pipeline
 
     return out
