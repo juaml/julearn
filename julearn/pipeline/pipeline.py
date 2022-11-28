@@ -13,7 +13,7 @@ from ..transformers import (
     SetColumnTypes,
     JuTransformer,
 )
-from .. estimators import list_models, get_model, JuModel, WrapModel
+from .. models import list_models, get_model, JuModel, WrapModel
 from .. utils import raise_error, warn, logger, make_type_selector
 from .. utils.column_types import ensure_apply_to
 from .. prepare import prepare_hyperparameter_tuning

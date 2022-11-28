@@ -5,7 +5,7 @@
 
 import numpy as np
 import pytest
-from julearn.estimators.dynamic import DynamicSelection
+from julearn.models.dynamic import DynamicSelection
 from sklearn.ensemble import RandomForestClassifier
 from seaborn import load_dataset
 from sklearn.model_selection import train_test_split, ShuffleSplit

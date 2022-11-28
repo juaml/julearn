@@ -2,7 +2,7 @@ import warnings
 from julearn.pipeline import PipelineCreator
 from julearn.pipeline.pipeline import NoInversePipeline
 from julearn.transformers import get_transformer
-from julearn.estimators import get_model
+from julearn.models import get_model
 from sklearn.compose import ColumnTransformer
 from sklearn.model_selection import GridSearchCV
 import pytest

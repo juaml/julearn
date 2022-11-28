@@ -12,7 +12,7 @@ from sklearn.model_selection import RepeatedKFold
 from sklearn.base import clone
 from sklearn.model_selection import check_cv
 
-from .estimators import get_model
+from .models import get_model
 from .transformers import get_transformer
 from .utils import raise_error, warn, logger
 

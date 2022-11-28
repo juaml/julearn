@@ -4,7 +4,7 @@
 # License: AGPL
 
 import pytest
-from julearn.estimators import register_model, reset_model_register, get_model
+from julearn.models import register_model, reset_model_register, get_model
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 from sklearn.ensemble import RandomForestRegressor
 

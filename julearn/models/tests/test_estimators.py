@@ -47,7 +47,7 @@ from seaborn import load_dataset
 import pytest
 
 from julearn.utils.testing import do_scoring_test
-from julearn.estimators import get_model
+from julearn.models import get_model
 
 
 @pytest.mark.parametrize(

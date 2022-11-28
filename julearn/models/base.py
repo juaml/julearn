@@ -10,7 +10,7 @@ class JuModel(BaseEstimator):
         self.needed_types = needed_types
 
     def get_needed_types(self):
-        return self.needed_types or []
+        return ([] if self.needed_types is None else self.needed_types)
 
     def get_apply_to(self):
         return self.apply_to
@@ -41,8 +41,11 @@ class WrapModel(JuModel):
         self.needed_types = needed_types
 
     def fit(self, X, y=None, **fit_params):
-        self.apply_to = self.apply_to or "continuous"
-        self.needed_types = self.needed_types or self.apply_to
+        self.apply_to = ("continuous" if self.apply_to is None
+                         else self.apply_to)
+        self.needed_types = (self.apply_to if self.needed_types is None
+                             else self.needed_types
+                             )
         self._apply_to = self._ensure_apply_to(self.apply_to)
 
         Xt = self.filter_columns(X)
