@@ -33,11 +33,6 @@ from julearn.transformers import (
     get_transformer,
     reset_transformer_register,
     register_transformer,
-    DataFrameConfoundRemover,
-)
-
-from julearn.transformers.available_transformers import (
-    _get_apply_to,
 )
 
 
@@ -104,33 +99,17 @@ def test_feature_transformers(name, klass, params):
     )
 
 
-def test__get_apply_to():
-    apply_to_confound = _get_apply_to(DataFrameConfoundRemover())
-    apply_to_select = _get_apply_to(get_transformer("select_percentile"))
-    apply_to_zscore = _get_apply_to(StandardScaler())
-
-    with pytest.warns(
-        RuntimeWarning,
-        match=("is not a registered " "transformer. " "Therefore, `apply_to`"),
-    ):
-        apply_to_pass = _get_apply_to(PassThroughTransformer())
-    assert apply_to_zscore == apply_to_pass == "continuous"
-    assert apply_to_confound == ["continuous", "confound"]
-    assert apply_to_select == "all_features"
-
-
 def test_register_reset():
     reset_transformer_register()
     with pytest.raises(ValueError, match="The specified transformer"):
         get_transformer("passthrough")
 
-    register_transformer("passthrough", PassThroughTransformer, "all")
+    register_transformer("passthrough", PassThroughTransformer)
     assert get_transformer("passthrough").__class__ == PassThroughTransformer
-    assert _get_apply_to(PassThroughTransformer()) == "all"
 
     with pytest.warns(RuntimeWarning, match="Transformer named"):
         register_transformer(
-            "passthrough", PassThroughTransformer, "all"
+            "passthrough", PassThroughTransformer
         )
     reset_transformer_register()
     with pytest.raises(ValueError, match="The specified transformer"):
@@ -140,27 +119,25 @@ def test_register_reset():
         "passthrough", PassThroughTransformer, "continuous"
     )
     assert get_transformer("passthrough").__class__ == PassThroughTransformer
-    assert _get_apply_to(PassThroughTransformer()) == "continuous"
 
 
 def test_register_class_no_default_params():
 
     reset_transformer_register()
-    register_transformer("fish", fish, "unknown", "all")
+    register_transformer("fish", fish)
     get_transformer("fish", can_it_fly="dont_be_stupid")
 
 
 def test_register_warning():
     with pytest.warns(RuntimeWarning, match="Transformer name"):
-        register_transformer("zscore", fish,  "all")
+        register_transformer("zscore", fish)
     reset_transformer_register()
 
     with pytest.raises(ValueError, match="Transformer name"):
-        register_transformer("zscore", fish,  "all", overwrite=False)
+        register_transformer("zscore", fish,  overwrite=False)
     reset_transformer_register()
 
     with pytest.warns(None) as record:
-        register_transformer("zscore", fish,  "all", overwrite=True)
-
+        register_transformer("zscore", fish,   overwrite=True)
     reset_transformer_register()
     assert len(record) == 0
