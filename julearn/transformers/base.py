@@ -1,18 +1,19 @@
-from sklearn.base import BaseEstimator, TransformerMixin
-from ..utils.column_types import ensure_apply_to
+import pandas as pd
+from sklearn.base import TransformerMixin
+from .. base import JuBaseEstimator
 
 
-class JuTransformer(BaseEstimator, TransformerMixin):
-    def __init__(self, apply_to, needed_types=None):
-        self.apply_to = apply_to
-        self.needed_types = needed_types
+class JuTransformer(JuBaseEstimator, TransformerMixin):
 
-    def get_needed_types(self):
-        return self.needed_types or []
+    def _add_backed_filtered(self, X, X_trans):
+        filtered_columns = self._filter(X)
+        non_filtered_columns = [
+            col
+            for col in list(X.columns)
+            if col not in filtered_columns
 
-    def get_apply_to(self):
-        return self.apply_to
-
-    @staticmethod
-    def _ensure_apply_to(apply_to):
-        return ensure_apply_to(apply_to)
+        ]
+        return pd.concat(
+            (X[:, non_filtered_columns], X_trans),
+            axis=1
+        )

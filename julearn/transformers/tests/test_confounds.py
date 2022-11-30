@@ -118,60 +118,60 @@ def test_ignore_feature_equal_confound():
     )
 
 
-@pytest.mark.parametrize(
-    "model_class", [LinearRegression, RandomForestRegressor]
-)
-@pytest.mark.parametrize(
-    "confounds",
-    [
-        "a__:type:__continuous",
-        ["a__:type:__continuous"],
-        ["a__:type:__continuous", "b__:type:__continuous"],
-    ],
-)
-def test_confound_set_confounds(model_class, confounds):
-    features = X.drop(columns=confounds).columns
-    confound_remover = DataFrameConfoundRemover(
-        model_confound=model_class(), confounds=confounds
-    )
-
-    np.random.seed(42)
-    df_cofound_removed = confound_remover.fit_transform(X)
-
-    np.random.seed(42)
-    conf_as_feat = confounds if type(confounds) is list else [confounds]
-    confound_regressions = [
-        model_class().fit(X.loc[:, conf_as_feat], X.loc[:, feature])
-        for feature in features
-    ]
-    df_confound_removed_manual = X.drop(columns=confounds).copy()
-    # Test that each model inside of the confound removal
-    # is the same as if we would have trained the same model
-    # in sklearn
-
-    for internal_model, confound_regression, feature in zip(
-        confound_remover.models_confound_,
-        confound_regressions,
-        features,
-    ):
-
-        manual_pred = confound_regression.predict(X.loc[:, conf_as_feat])
-        df_confound_removed_manual[feature] = manual_pred
-
-        assert_array_equal(
-            internal_model.predict(X.loc[:, conf_as_feat].values),
-            manual_pred,
-        )
-
-    df_confound_removed_manual = (
-        X.drop(columns=confounds) - df_confound_removed_manual
-    )
-    # After confound removal the confound should be removed
-    assert (
-        df_cofound_removed.columns == X.drop(columns=confounds).columns
-    ).all()
-
-    assert_frame_equal(df_cofound_removed, df_confound_removed_manual)
+# @pytest.mark.parametrize(
+#     "model_class", [LinearRegression, RandomForestRegressor]
+# )
+# @pytest.mark.parametrize(
+#     "confounds",
+#     [
+#         "a__:type:__continuous",
+#         ["a__:type:__continuous"],
+#         ["a__:type:__continuous", "b__:type:__continuous"],
+#     ],
+# )
+# def test_confound_set_confounds(model_class, confounds):
+#     features = X.drop(columns=confounds).columns
+#     confound_remover = DataFrameConfoundRemover(
+#         model_confound=model_class(), confounds=confounds
+#     )
+#
+#     np.random.seed(42)
+#     df_cofound_removed = confound_remover.fit_transform(X)
+#
+#     np.random.seed(42)
+#     conf_as_feat = confounds if type(confounds) is list else [confounds]
+#     confound_regressions = [
+#         model_class().fit(X.loc[:, conf_as_feat], X.loc[:, feature])
+#         for feature in features
+#     ]
+#     df_confound_removed_manual = X.drop(columns=confounds).copy()
+#     # Test that each model inside of the confound removal
+#     # is the same as if we would have trained the same model
+#     # in sklearn
+#
+#     for internal_model, confound_regression, feature in zip(
+#         confound_remover.models_confound_,
+#         confound_regressions,
+#         features,
+#     ):
+#
+#         manual_pred = confound_regression.predict(X.loc[:, conf_as_feat])
+#         df_confound_removed_manual[feature] = manual_pred
+#
+#         assert_array_equal(
+#             internal_model.predict(X.loc[:, conf_as_feat].values),
+#             manual_pred,
+#         )
+#
+#     df_confound_removed_manual = (
+#         X.drop(columns=confounds) - df_confound_removed_manual
+#     )
+#     # After confound removal the confound should be removed
+#     assert (
+#         df_cofound_removed.columns == X.drop(columns=confounds).columns
+#     ).all()
+#
+#     assert_frame_equal(df_cofound_removed, df_confound_removed_manual)
 
 
 def test_return_confound():

@@ -3,7 +3,10 @@ import numpy as np
 from sklearn.base import TransformerMixin, BaseEstimator
 from sklearn.compose import ColumnTransformer
 
-from .. utils import pick_columns, change_column_type
+from .. utils import (
+    # pick_columns,
+    change_column_type
+)
 from . base import JuTransformer
 from .. utils import raise_error, logger, make_type_selector
 
@@ -98,37 +101,41 @@ class FilterColumns(JuTransformer):
 
 class ChangeColumnTypes(JuTransformer):
 
-    def __init__(self, X_types, new_X_type):
-        self.columns_match = X_types
-        self.new_type = new_X_type
+    def __init__(self, apply_to, X_types_renamer, needed_types=None, ):
+        self.apply_to = apply_to
+        self.needed_types = needed_types
+        self.X_types_renamer = X_types_renamer
 
     def fit(self, X, y=None):
-        self.detected_columns_ = pick_columns(self.columns_match, X.columns)
-        self.column_mapper_ = {col: change_column_type(col, self.new_type)
-                               for col in self.detected_columns_}
         return self
 
     def transform(self, X):
-        return X.copy().rename(columns=self.column_mapper_)
+        return (
+            self.fitler_columns(X)
+            .rename(columns=self.X_types_renamer)
+        )
 
 
-class DropColumns(TransformerMixin, BaseEstimator):
+class DropColumns(JuTransformer):
 
-    def __init__(self, columns):
-        self.columns = columns
+    def __init__(self, apply_to, needed_types=None):
+        self.apply_to = apply_to
+        self.needed_types = needed_types
 
     def fit(self, X, y=None):
+        self.apply_to = self._ensure_apply_to(self.apply_to)
         self.support_mask_ = pd.Series(True, index=X.columns, dtype=bool)
+
         try:
-            self.detected_columns_ = pick_columns(self.columns, X.columns)
-            self.support_mask_[self.detected_columns_] = False
+            self.drop_columns_ = self.filter_columns(X).columns
+            self.support_mask_[self.drop_columns_] = False
         except ValueError:
-            self.detected_columns_ = []
+            self.drop_columns_ = []
         self.support_mask_ = self.support_mask_.values
         return self
 
     def transform(self, X):
-        return X.drop(columns=self.detected_columns_)
+        return X.drop(columns=self.drop_columns_)
 
     def get_support(self, indices=False):
         if indices:

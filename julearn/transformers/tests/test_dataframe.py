@@ -27,8 +27,9 @@ X_with_types = pd.DataFrame(
 
 
 def test_DropColumns():
-    drop_columns = DropColumns(columns=".*__:type:__confound")
-    X_trans = drop_columns.fit_transform(X_with_types)
+    drop_columns = DropColumns(apply_to=".*__:type:__confound")
+    drop_columns.fit(X_with_types)
+    X_trans = drop_columns.transform(X_with_types)
 
     kept_cols = X_with_types.columns[drop_columns.get_support()].to_list()
     kept_cols_2 = X_with_types.iloc[

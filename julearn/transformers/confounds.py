@@ -7,12 +7,12 @@ from sklearn.base import (
     BaseEstimator,
     TransformerMixin,
     clone,
-    OneToOneFeatureMixin,
 )
 from sklearn.linear_model import LinearRegression
 
-from ..utils import raise_error, pick_columns, logger
-from .base import JuTransformer
+from .. utils import raise_error, logger
+from .. utils.column_types import make_type_selector
+from . base import JuTransformer
 
 
 class DataFrameConfoundRemover(JuTransformer):
@@ -69,6 +69,7 @@ class DataFrameConfoundRemover(JuTransformer):
         -------
         self : returns an instance of self.
         """
+        self.confounds = self._ensure_apply_to(self.confounds)
         df_X, ser_confound, _ = self._split_into_X_confound(X)
         self.feature_names_in_ = list(X.columns)
         if self.keep_confounds:
@@ -170,9 +171,8 @@ class DataFrameConfoundRemover(JuTransformer):
         df_X = X.copy()
 
         try:
-            self.detected_confounds_ = pick_columns(
-                self.confounds, df_X.columns
-            )
+            self.detected_confounds_ = make_type_selector(
+                self.confounds)(df_X)
         except ValueError:
             raise_error(
                 "No confound was found using the regex:"
@@ -209,7 +209,7 @@ class DataFrameConfoundRemover(JuTransformer):
 
 
 class TargetConfoundRemover(
-    BaseEstimator, TransformerMixin, 
+    BaseEstimator, TransformerMixin,
 ):
     def __init__(
         self,

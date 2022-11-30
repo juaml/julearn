@@ -35,3 +35,12 @@ class JuEstiamtorLike(EstimatorLike, Protocol):
 
     def get_apply_to(self):
         return self.apply_to
+
+
+@runtime_checkable
+class JuModelLike(ModelLike, Protocol):
+    def get_needed_types(self):
+        return self.needed_types
+
+    def get_apply_to(self):
+        return self.apply_to

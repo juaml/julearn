@@ -13,9 +13,10 @@ from ..transformers import (
     SetColumnTypes,
     JuTransformer,
 )
-from .. models import list_models, get_model, JuModel, WrapModel
+from .. models import list_models, get_model, WrapModel
 from .. utils import raise_error, warn, logger, make_type_selector
 from .. utils.column_types import ensure_apply_to
+from .. utils.typing import JuModelLike
 from .. prepare import prepare_hyperparameter_tuning
 
 
@@ -196,7 +197,7 @@ class PipelineCreator:  # Pipeline creator
             for k, v in model_params.items()
         }
         model_estimator.set_params(**model_params)
-        if wrap and not isinstance(model_estimator, JuModel):
+        if wrap and not isinstance(model_estimator, JuModelLike):
 
             model_name_for_tuning = f"wrapped_{model_name}__{model_name}"
             model_name = f"wrapped_{model_name}"
