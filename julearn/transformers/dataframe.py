@@ -1,6 +1,5 @@
 import pandas as pd
 import numpy as np
-from sklearn.base import TransformerMixin, BaseEstimator
 from sklearn.compose import ColumnTransformer
 
 from .. utils import (
@@ -8,7 +7,7 @@ from .. utils import (
     change_column_type
 )
 from . base import JuTransformer
-from .. utils import raise_error, logger, make_type_selector
+from .. utils import raise_error, logger
 
 
 class SetColumnTypes(JuTransformer):
@@ -72,17 +71,18 @@ class FilterColumns(JuTransformer):
         self.apply_to = (
             "continuous" if self.apply_to is None else self.apply_to)
         self.keep = "continuous" if self.keep is None else self.keep
-        self.apply_to = self._ensure_apply_to(self.apply_to)
-        self.keep = self._ensure_apply_to(self.keep)
+        self.apply_to = self._ensure_apply_to()
+        self.keep = self._ensure_column_types(self.keep)
+        self.needed_types = self._ensure_needed_types()
 
-        inner_selector = make_type_selector(self.apply_to)
+        inner_selector = self.apply_to.to_type_selector()
         inner_filter = ColumnTransformer(
             transformers=[
                 ("filter_apply_to", "passthrough", inner_selector), ],
             remainder="passthrough", verbose_feature_names_out=False,
         )
 
-        apply_to_selector = make_type_selector(self.keep)
+        apply_to_selector = self.keep.to_type_selector()
         self.filter_columns_ = ColumnTransformer(
             transformers=[
                 ("keep", inner_filter, apply_to_selector)],
@@ -123,7 +123,7 @@ class DropColumns(JuTransformer):
         self.needed_types = needed_types
 
     def fit(self, X, y=None):
-        self.apply_to = self._ensure_apply_to(self.apply_to)
+        self.apply_to = self._ensure_apply_to()
         self.support_mask_ = pd.Series(True, index=X.columns, dtype=bool)
 
         try:

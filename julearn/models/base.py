@@ -2,8 +2,6 @@ from .. base import JuBaseEstimator
 from sklearn.utils.metaestimators import available_if
 
 
-
-
 def _wrapped_model_has(attr):
 
     def check(self):
@@ -22,10 +20,8 @@ class WrapModel(JuBaseEstimator):
     def fit(self, X, y=None, **fit_params):
         self.apply_to = ("continuous" if self.apply_to is None
                          else self.apply_to)
-        self.needed_types = (self.apply_to if self.needed_types is None
-                             else self.needed_types
-                             )
-        self.apply_to = self._ensure_apply_to(self.apply_to)
+        self.apply_to = self._ensure_apply_to()
+        self.needed_types = self._ensure_needed_types()
 
         Xt = self.filter_columns(X)
         self.model_ = self.model

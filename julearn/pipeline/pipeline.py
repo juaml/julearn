@@ -70,13 +70,13 @@ class PipelineCreator:  # Pipeline creator
         apply_to = self._ensure_apply_to(apply_to)
         self.validate_step(step, apply_to)
         name = step if isinstance(step, str) else step.__cls__.lower()
-        logger.info(f"Adding step {name} that applies to {apply_to}")
         name = self._ensure_name(name)
+        logger.info(f"Adding step {name} that applies to {apply_to}")
         params_to_set = dict()
         params_to_tune = dict()
         for param, vals in params.items():
-            # If we have more than 1 value, we will tune it. If not, it will
-            # be set in the model.
+            # If we have more than 1 value, we will tune it.
+            # If not, it will be set in the model.
             if hasattr(vals, "__iter__") and not isinstance(vals, str):
                 if len(vals) > 1:
                     logger.info(f"Tuning hyperparameter {param} = {vals}")
@@ -298,7 +298,8 @@ class PipelineCreator:  # Pipeline creator
             else:
                 needed_types.append(_apply_to)
             if hasattr(step_dict.estimator, "get_needed_types"):
-                needed_types.extend(step_dict.estimator.get_needed_types())
+                if step_dict.estimator.get_needed_types() is not None:
+                    needed_types.extend(step_dict.estimator.get_needed_types())
 
         needed_types = set(needed_types)
         applied_to_special = (needed_types == "continuous" or

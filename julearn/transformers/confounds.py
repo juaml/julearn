@@ -11,15 +11,15 @@ from sklearn.base import (
 from sklearn.linear_model import LinearRegression
 
 from .. utils import raise_error, logger
-from .. utils.column_types import make_type_selector
 from . base import JuTransformer
 
 
 class DataFrameConfoundRemover(JuTransformer):
     def __init__(
         self,
+        apply_to=None,
         model_confound=None,
-        confounds=".*__:type:__confound",
+        confounds="confound",
         threshold=None,
         keep_confounds=False,
     ):
@@ -29,6 +29,8 @@ class DataFrameConfoundRemover(JuTransformer):
 
         Parameters
         ----------
+        apply_to : str or list of str
+            Which columns should be confound removed.
         model_confound : obj
             Sklearn compatible model used to predict all features independently
             using the confounds as features. The predictions of these models
@@ -50,6 +52,7 @@ class DataFrameConfoundRemover(JuTransformer):
         """
         if model_confound is None:
             model_confound = LinearRegression()
+        self.apply_to = apply_to
         self.model_confound = model_confound
         self.confounds = confounds
         self.threshold = threshold
@@ -69,14 +72,19 @@ class DataFrameConfoundRemover(JuTransformer):
         -------
         self : returns an instance of self.
         """
-        self.confounds = self._ensure_apply_to(self.confounds)
-        df_X, ser_confound, _ = self._split_into_X_confound(X)
+        self.apply_to = ("continuous"
+                         if self.apply_to is None
+                         else self.apply_to)
+        self.apply_to = self._ensure_apply_to()
+        self.confounds = self._ensure_column_types(self.confounds)
+        df_X, ser_confound = self._split_into_X_confound(X)
         self.feature_names_in_ = list(X.columns)
         if self.keep_confounds:
             self.support_mask_ = pd.Series(True, index=X.columns, dtype=bool)
         else:
             self.support_mask_ = pd.Series(False, index=X.columns, dtype=bool)
-            self.support_mask_[df_X.columns] = True
+            output_X = self._add_backed_filtered(X, df_X)
+            self.support_mask_[output_X.columns] = True
         self.support_mask_ = self.support_mask_.values
 
         def fit_confound_models(X):
@@ -102,14 +110,7 @@ class DataFrameConfoundRemover(JuTransformer):
         out : pandas.DataFrame
             Data without confounds
         """
-        df_X, df_confounds, df_feat_equal_conf = self._split_into_X_confound(X)
-        if df_feat_equal_conf.columns.to_list() != []:
-            logger.info(
-                f"{df_feat_equal_conf.columns.to_list()} are both "
-                "features and confounds. Therefore, confound removal will "
-                "ignore these features"
-            )
-
+        df_X, df_confounds = self._split_into_X_confound(X)
         df_X_prediction = pd.DataFrame(
             [
                 model.predict(df_confounds.values)
@@ -120,13 +121,15 @@ class DataFrameConfoundRemover(JuTransformer):
         ).T
         residuals = df_X - df_X_prediction
         df_out = self._apply_threshold(residuals)
+        df_out = self._add_backed_filtered(X, df_out)
 
         if self.keep_confounds:
-            df_out = pd.concat(
-                [df_out, df_confounds, df_feat_equal_conf], axis=1
-            ).reindex(columns=X.columns)
+            print(df_out.columns)
+            print("conf: ", df_confounds.columns)
+            print("all: ", X.columns)
+            df_out = df_out.reindex(columns=X.columns)
         else:
-            df_out = pd.concat([df_out, df_feat_equal_conf], axis=1).reindex(
+            df_out = df_out.reindex(
                 columns=X.drop(columns=df_confounds.columns).columns
             )
 
@@ -151,6 +154,9 @@ class DataFrameConfoundRemover(JuTransformer):
             return self.support_mask_
 
     def get_feature_names_out(self, input_features=None):
+        print("here")
+        print(self.get_feature_names_in_)
+        print(self.detected_confounds_)
         return (
             self.feature_names_in_
             if self.keep_confounds is True
@@ -168,31 +174,20 @@ class DataFrameConfoundRemover(JuTransformer):
                 "DataFrameConfoundRemover only supports DataFrames as X"
             )
 
-        df_X = X.copy()
-
         try:
-            self.detected_confounds_ = make_type_selector(
-                self.confounds)(df_X)
+            self.detected_confounds_ = self.confounds.to_type_selector()(X)
         except ValueError:
             raise_error(
                 "No confound was found using the regex:"
                 f"{self.confounds} in   the columns {X.columns}"
             )
-        df_confounds = df_X.loc[:, self.detected_confounds_]
-        df_X = df_X.drop(columns=self.detected_confounds_)
+        df_confounds = X.loc[:, self.detected_confounds_]
+        df_X = self.filter_columns(
+            X
+            .drop(columns=self.detected_confounds_)
+        )
 
-        confounds_without_type = [
-            col.split("__:type:__")[0] for col in self.detected_confounds_
-        ]
-        feature_equal_conf = [
-            col
-            for col in df_X.columns.to_list()
-            if col.split("__:type:__")[0] in confounds_without_type
-        ]
-        df_feature_equal_conf = df_X.loc[:, feature_equal_conf]
-        df_X = df_X.drop(columns=df_feature_equal_conf.columns)
-
-        return df_X, df_confounds, df_feature_equal_conf
+        return df_X, df_confounds
 
     def _apply_threshold(self, residuals):
         """Rounds residuals to 0 when smaller than

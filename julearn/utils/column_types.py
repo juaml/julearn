@@ -1,3 +1,4 @@
+from typing import Union, List
 from .logging import raise_error
 from sklearn.compose import make_column_selector
 
@@ -56,6 +57,78 @@ def ensure_apply_to(apply_to):
     elif "__:type:__" in apply_to or apply_to in ["target", ["target"]]:
         pattern = apply_to
     else:
-        pattern = f"(?:__:type:__{apply_to})"
+        pattern = f"(?__:type:__{apply_to})"
 
     return pattern
+
+
+class ColumnTypes:
+    def __init__(
+        self,
+        column_types: Union[List[Union[str, 'ColumnTypes']],
+                            str, 'ColumnTypes']
+    ):
+        self.column_types = column_types
+
+    def add(self, column_types: Union[List[str], str]):
+        column_types = self.ensure_column_types(column_types)
+        self.column_types = self.column_types.extend(column_types)
+
+    @property
+    def column_types(self):
+        return self._column_types
+
+    @column_types.setter
+    def column_types(self, column_types: Union[List[str], str]):
+        self._column_types = self.ensure_column_types(column_types)
+        self._pattern = self._to_pattern(self._column_types)
+
+    @property
+    def pattern(self):
+        return self._pattern
+
+    def to_type_selector(self):
+        return make_type_selector(self.pattern)
+
+    @staticmethod
+    def ensure_column_types(column_types):
+        if not isinstance(column_types, (list, str, ColumnTypes)):
+            raise_error(
+                "ColumnType needs to be provided a list, str or ColumnTypes,"
+                f" but got {column_types} with type = {type(column_types)}."
+            )
+        if not isinstance(column_types, list):
+            column_types = [column_types]
+
+        out = []
+        for column_type in column_types:
+            if isinstance(column_type, ColumnTypes):
+                out.extend(column_type.column_types)
+            elif isinstance(column_type, str):
+                out.append(column_type)
+            else:
+                raise_error(
+                    "Each entry of column_types needs to be a str,"
+                    f" but{column_type} is of type {type(column_type)}."
+                )
+        return out
+
+    @staticmethod
+    def _to_pattern(column_types):
+        if column_types in [".*", [".*"], "*", ["*"]]:
+            pattern = ".*"
+        elif isinstance(column_types, list) or isinstance(column_types, tuple):
+            types = [f"__:type:__{_type}" for _type in column_types]
+
+            pattern = f"(?:{types[0]}"
+            if len(types) > 1:
+                for t in types[1:]:
+                    pattern += rf"|{t}"
+            pattern += r")"
+        elif ("__:type:__" in column_types or
+              column_types in ["target", ["target"]]):
+            pattern = column_types
+        else:
+            pattern = f"(?__:type:__{column_types})"
+
+        return pattern

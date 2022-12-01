@@ -14,6 +14,6 @@ class JuTransformer(JuBaseEstimator, TransformerMixin):
 
         ]
         return pd.concat(
-            (X[:, non_filtered_columns], X_trans),
+            (X.loc[:, non_filtered_columns], X_trans),
             axis=1
         )

@@ -9,7 +9,6 @@ from numpy.testing import assert_array_equal
 
 from julearn.transformers.confounds import (
     DataFrameConfoundRemover,
-    TargetConfoundRemover,
 )
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
@@ -60,6 +59,7 @@ def test_confound_auto_find_conf():
             RandomForestRegressor(n_estimators=5),
         ]:
             confound_remover = DataFrameConfoundRemover(
+                apply_to=["continuous", "categorical"],
                 model_confound=model_to_remove
             )
 
@@ -102,20 +102,6 @@ def test_confound_auto_find_conf():
             ).all()
 
             assert_frame_equal(df_cofound_removed, df_confound_removed_manual)
-
-
-def test_ignore_feature_equal_confound():
-    X_feat_eq_conf = X.copy()
-    X_feat_eq_conf["c__:type:__continuous"] = X_feat_eq_conf[
-        "c__:type:__confound"
-    ]
-
-    X_removed = DataFrameConfoundRemover().fit_transform(X_feat_eq_conf)
-
-    assert_frame_equal(
-        X_feat_eq_conf[["c__:type:__continuous"]],
-        X_removed[["c__:type:__continuous"]],
-    )
 
 
 # @pytest.mark.parametrize(
@@ -175,7 +161,8 @@ def test_ignore_feature_equal_confound():
 
 
 def test_return_confound():
-    remover = DataFrameConfoundRemover(keep_confounds=True)
+    remover = DataFrameConfoundRemover(
+        apply_to=["categorical", "continuous"], keep_confounds=True)
     X_trans = remover.fit_transform(X)
     assert_array_equal(X_trans.columns, X.columns)
 
@@ -194,11 +181,11 @@ def test_no_dataframe_provided():
         remover.fit(X.values)
 
 
-def test_TargetConfoundRemover():
-    target_remover = TargetConfoundRemover()
-    np.random.seed(42)
-    y_transformed = target_remover.fit_transform(X, y)
-    np.random.seed(42)
-    confounds = X.loc[:, ["c__:type:__confound", "d__:type:__confound"]]
-    y_pred = LinearRegression().fit(confounds, y).predict(confounds)
-    assert_array_equal(y_transformed.values, y - y_pred)
+# def test_TargetConfoundRemover():
+#     target_remover = TargetConfoundRemover()
+#     np.random.seed(42)
+#     y_transformed = target_remover.fit_transform(X, y)
+#     np.random.seed(42)
+#     confounds = X.loc[:, ["c__:type:__confound", "d__:type:__confound"]]
+#     y_pred = LinearRegression().fit(confounds, y).predict(confounds)
+#     assert_array_equal(y_transformed.values, y - y_pred)
