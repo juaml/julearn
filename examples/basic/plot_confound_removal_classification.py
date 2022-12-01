@@ -76,8 +76,9 @@ scores_ncr = run_cross_validation(
 cv = StratifiedBootstrap(n_splits=n_bootstrap, test_size=.3, random_state=42)
 
 preprocess = PipelineCreator()
-preprocess.add('zscore', apply_to="confound")
-preprocess.add('remove_confound', apply_to="duck")
+preprocess.add('zscore', apply_to=["duck", "confound"])
+preprocess.add('remove_confound', apply_to="duck", confounds="confound")
+preprocess.add('zscore', apply_to="duck")
 
 scores_cr = run_cross_validation(
     X=X + confounds, y=y, data=df_iris, model='rf', preprocess=preprocess,

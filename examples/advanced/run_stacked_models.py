@@ -36,12 +36,18 @@ df_iris = df_iris[df_iris["species"].isin(["versicolor", "virginica"])]
 X = ["sepal_length", "sepal_width", "petal_length", "petal_width"]
 y = "species"
 
+# Define our feature types
+X_types = {
+    "sepal": ["sepal_length", "sepal_width"],
+    "petal": ["petal_length", "petal_width"],
+}
+
 
 # Create the pipeline for the sepal features
 model_sepal = PipelineCreator()
 model_sepal.add("filter_columns", apply_to="*", keep="sepal")
-model_sepal.add("zscore", apply_to="*")
-model_sepal.add("svm", apply_to="*")
+model_sepal.add("zscore", apply_to="sepal")
+model_sepal.add("svm", apply_to="sepal")
 
 # Create the pipeline for the petal features
 model_petal = PipelineCreator()
@@ -52,15 +58,12 @@ model_petal.add("rf", apply_to="*")
 # Create the stacking model
 model = PipelineCreator()
 model.add(
-    "stacking", estimators=[[("sepal", model_sepal), ("petal", model_petal)]],
+    "stacking", estimators=[[
+        ("moddel_sepal", model_sepal),
+        ("model_petal", model_petal)]
+    ],
     apply_to="*"
 )
-
-# Define our feature types
-X_types = {
-    "sepal": ["sepal_length", "sepal_width"],
-    "petal": ["petal_length", "petal_width"],
-}
 
 scores = run_cross_validation(
     X=X, y=y, X_types=X_types, data=df_iris, model=model
