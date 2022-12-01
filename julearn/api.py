@@ -22,7 +22,6 @@ def run_cross_validation(
     model,
     X_types=None,
     data=None,
-    confounds=None,
     problem_type="classification",
     preprocess=None,
     return_estimator=False,
@@ -48,11 +47,11 @@ def run_cross_validation(
     model : str or scikit-learn compatible model.
         If string, it will use one of the available models.
         See :mod:`.available_models`.
+    X_types : dict[str, list of str]
+        A dictionary containing keys with column type as a str and the
+        columns of this column type as a list of str.
     data : pandas.DataFrame | None
         DataFrame with the data (optional).
-        See https://juaml.github.io/julearn/input.html for details.
-    confounds : str, list(str) or numpy.array | None
-        The confounds.
         See https://juaml.github.io/julearn/input.html for details.
     problem_type : str
         The kind of problem to model.
@@ -66,7 +65,7 @@ def run_cross_validation(
         * "regression". Perform a regression. The target (y) has to be
           ordinal at least.
 
-    preprocess : str, scikit-learn compatible transformers or list | None
+    preprocess : str, TransformerLike or list or PipelineCreator | None
         Transformer to apply to the features. If string, use one of the
         available transformers. If list, each element can be a string or
         scikit-learn compatible transformer. If None (default), no
@@ -171,7 +170,7 @@ def run_cross_validation(
     df_X, y, df_groups = prepare_input_data(
         X=X,
         y=y,
-        confounds=confounds,
+        confounds=None,
         df=data,
         pos_labels=pos_labels,
         groups=groups,

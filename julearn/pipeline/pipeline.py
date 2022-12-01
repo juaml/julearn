@@ -66,6 +66,37 @@ class PipelineCreator:  # Pipeline creator
         problem_type="classification",
         **params,
     ):
+        """Add a step to the PipelineCreator.
+        This includes transformers and models.
+
+        Parameters
+        ----------
+        step : str or TransformerLike or ModelLike
+            The step that should be added.
+            This can be an available_transformer or
+            available_model as a str or a sklearn compatible
+            transformer or model.
+        apply_to: str or list of str
+            To what should the transformer or model be applied to.
+            This can be a str representing a column type or a list
+            of such str.
+        problem_type: {"categorical", "regression"}
+            The problem type for which this step should be created.
+            This is only relevant if there are multiple options for
+            the step depending on the problem_type. Usually this
+            is only the case for models. (default=categorical")
+        **params
+            Parameters for the step. This will mostly include hyperparameters
+            or any other parameter for initialization.
+            If you provide multiple options for hyperparameters then
+            this will lead to a pipeline with a search which is by
+            default GridSearchCV.
+
+        Returns
+        -------
+        PipelineCreator: PipelineCreator
+        returns a PipelineCreator with the added step as its last step.
+        """
 
         apply_to = self._ensure_apply_to(apply_to)
         self.validate_step(step, apply_to)
