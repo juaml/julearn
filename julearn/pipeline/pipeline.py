@@ -12,11 +12,10 @@ from ..transformers import (
     get_transformer,
     list_transformers,
     SetColumnTypes,
-    JuTransformer,
 )
-from .. models import list_models, get_model, WrapModel
+from .. models import list_models, get_model
 from .. utils import raise_error, warn, logger
-from .. utils.column_types import ColumnTypes
+from .. base import ColumnTypes, WrapModel, JuTransformer
 from .. utils.typing import JuModelLike, JuEstiamtorLike
 from .. prepare import prepare_hyperparameter_tuning
 

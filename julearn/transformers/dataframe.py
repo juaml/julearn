@@ -2,11 +2,7 @@ import pandas as pd
 import numpy as np
 from sklearn.compose import ColumnTransformer
 
-from .. utils import (
-    # pick_columns,
-    change_column_type
-)
-from . base import JuTransformer
+from .. base import JuTransformer, change_column_type
 from .. utils import raise_error, logger
 
 

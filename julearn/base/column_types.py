@@ -1,5 +1,5 @@
 from typing import Union, List
-from .logging import raise_error
+from .. utils.logging import raise_error
 from sklearn.compose import make_column_selector
 
 

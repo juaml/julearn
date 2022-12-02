@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 from numpy.testing import assert_almost_equal
-from julearn.models import WrapModel
+from julearn.base import WrapModel
 from sklearn.linear_model import LinearRegression, LogisticRegression
 from sklearn.svm import SVR, SVC
 from sklearn.tree import DecisionTreeRegressor, DecisionTreeClassifier

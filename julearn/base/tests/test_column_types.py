@@ -1,5 +1,4 @@
-from julearn.utils import make_type_selector
-from julearn.utils.column_types import ColumnTypes
+from julearn.base import ColumnTypes, make_type_selector
 import pytest
 
 

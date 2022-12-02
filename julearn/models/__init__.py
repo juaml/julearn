@@ -4,4 +4,3 @@
 from . available_models import (list_models, get_model,
                                 register_model, reset_model_register)
 
-from . base import WrapModel

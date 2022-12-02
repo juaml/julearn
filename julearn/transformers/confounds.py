@@ -10,8 +10,8 @@ from sklearn.base import (
 )
 from sklearn.linear_model import LinearRegression
 
-from .. utils import raise_error, logger
-from . base import JuTransformer
+from .. utils import raise_error
+from .. base import JuTransformer
 
 
 class DataFrameConfoundRemover(JuTransformer):
