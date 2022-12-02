@@ -4,6 +4,7 @@ from sklearn.compose import (
     TransformedTargetRegressor,
 )
 from sklearn.pipeline import Pipeline
+from sklearn.utils.validation import check_is_fitted
 from dataclasses import dataclass
 from typing import Any, Union, List, Dict, Optional, Tuple
 
@@ -14,9 +15,9 @@ from ..transformers import (
     JuTransformer,
 )
 from .. models import list_models, get_model, WrapModel
-from .. utils import raise_error, warn, logger, make_type_selector
-from .. utils.column_types import ensure_apply_to
-from .. utils.typing import JuModelLike
+from .. utils import raise_error, warn, logger
+from .. utils.column_types import ColumnTypes
+from .. utils.typing import JuModelLike, JuEstiamtorLike
 from .. prepare import prepare_hyperparameter_tuning
 
 
@@ -39,12 +40,41 @@ def _params_to_pipeline(param, X_types):
     return param
 
 
+class JuColumnTransformer(JuTransformer):
+
+    def __init__(self, name, transformer, apply_to, needed_types=None):
+        self.name = name
+        self.transformer = transformer
+        self.apply_to = apply_to
+        self.needed_types = needed_types
+
+    def fit(self, X, y=None, **fit_params):
+        self._ensure_apply_to()
+        self._ensure_needed_types()
+
+        self.column_transformer_ = ColumnTransformer(
+            [(self.name, self.transformer, self.apply_to.to_type_selector())],
+            verbose_feature_names_out=False,
+            remainder="passthrough",
+        )
+        self.column_transformer_.fit(X, y, **fit_params)
+
+        return self
+
+    def transform(self, X):
+        check_is_fitted(self)
+        return self.column_transformer_.transform(X)
+
+    def get_feature_names_out(self, input_features=None):
+        return self.column_transformer_.get_feature_names_out(input_features)
+
+
 @dataclass
 class Step:
     name: str
     estimator: Any
-    apply_to: Any = "continuous"
-    needed_types: Any = "continuous"
+    apply_to: ColumnTypes = ColumnTypes("continuous")
+    needed_types: Any = None
     params_to_tune: dict = None
 
     def __post_init__(self):
@@ -76,7 +106,7 @@ class PipelineCreator:  # Pipeline creator
             This can be an available_transformer or
             available_model as a str or a sklearn compatible
             transformer or model.
-        apply_to: str or list of str
+        apply_to: str or list of str or ColumnTypes
             To what should the transformer or model be applied to.
             This can be a str representing a column type or a list
             of such str.
@@ -98,11 +128,12 @@ class PipelineCreator:  # Pipeline creator
         returns a PipelineCreator with the added step as its last step.
         """
 
-        apply_to = self._ensure_apply_to(apply_to)
+        apply_to = ColumnTypes(apply_to)
         self.validate_step(step, apply_to)
         name = step if isinstance(step, str) else step.__cls__.lower()
         name = self._ensure_name(name)
-        logger.info(f"Adding step {name} that applies to {apply_to}")
+        logger.info(
+            f"Adding step {name} that applies to {apply_to}")
         params_to_set = dict()
         params_to_tune = dict()
         for param, vals in params.items():
@@ -123,12 +154,12 @@ class PipelineCreator:  # Pipeline creator
             if isinstance(step, str)
             else step
         )
-        if isinstance(estimator, JuTransformer):
+        if isinstance(estimator, JuEstiamtorLike):
             estimator = estimator.set_params(apply_to=apply_to)
             needed_types = estimator.get_needed_types()
         else:
             needed_types = apply_to
-        if apply_to == "targt":
+        if apply_to.column_types == "targt":
             name = f"target_{name}"
         self._steps.append(
             Step(
@@ -174,8 +205,7 @@ class PipelineCreator:  # Pipeline creator
             ("set_column_types", SetColumnTypes(X_types))
         ]
 
-        X_types_patterns = self.X_types_to_patterns(X_types)
-
+        self.check_X_types(X_types)
         transformer_steps = self._steps[:-1]
         model_step = self._steps[-1]
         target_transformer_steps = []
@@ -190,7 +220,6 @@ class PipelineCreator:  # Pipeline creator
             transformer_steps = _transformer_steps
 
         # Add transformers
-        wrap = X_types_patterns != ["__:type:__continuous"]
         params_to_tune = {}
         for step_dict in transformer_steps:
             logger.debug(f"Adding transformer {step_dict.name}")
@@ -202,7 +231,7 @@ class PipelineCreator:  # Pipeline creator
             logger.debug(f"\t Params to tune: {step_params_to_tune}")
 
             # Wrap in a JuTransformer if needed
-            if wrap and not isinstance(estimator, JuTransformer):
+            if self.wrap and not isinstance(estimator, JuTransformer):
                 estimator = self.wrap_step(name, estimator, step_dict.apply_to)
                 name_for_tuning = f"wrapped_{name}__{name}"
                 name = f"wrapped_{name}"
@@ -228,7 +257,7 @@ class PipelineCreator:  # Pipeline creator
             for k, v in model_params.items()
         }
         model_estimator.set_params(**model_params)
-        if wrap and not isinstance(model_estimator, JuModelLike):
+        if self.wrap and not isinstance(model_estimator, JuModelLike):
 
             model_name_for_tuning = f"wrapped_{model_name}__{model_name}"
             model_name = f"wrapped_{model_name}"
@@ -304,40 +333,26 @@ class PipelineCreator:  # Pipeline creator
         else:
             raise_error(f"Cannot add a {step}. I don't know what it is.")
 
-    def X_types_to_patterns(self, X_types: Optional[Dict] = None):
+    def check_X_types(self, X_types: Optional[Dict] = None):
         if X_types in [None, {}]:
-            all_types = ["continuous"]
+            all_X_types = ColumnTypes("continuous")
         else:
-            all_types = list(X_types.keys())
+            all_X_types = ColumnTypes(list(X_types.keys()))
+
         needed_types = []
         # steps = self._steps[:-1] if self._added_model else self._steps
         steps = self._steps
         for step_dict in steps:
-            _apply_to = step_dict.apply_to
-            # remove regex boilerplate
-            if "|" in _apply_to:
-                _needed_types = [
-                    pattern.split("__:type:__")[-1]
-                    for pattern in _apply_to[3:-1].split("|")
-
-                ]
-                needed_types.extend(_needed_types)
-
-            elif "__:type:__" in _apply_to:
-                # additional :-1 to get rid of the ) at the end of patterns
-                needed_types.append(_apply_to.split("__:type:__")[-1][:-1])
-            else:
-                needed_types.append(_apply_to)
-            if hasattr(step_dict.estimator, "get_needed_types"):
-                if step_dict.estimator.get_needed_types() is not None:
-                    needed_types.extend(step_dict.estimator.get_needed_types())
-
+            if step_dict.needed_types is None:
+                continue
+            needed_types.extend(step_dict.needed_types)
         needed_types = set(needed_types)
         applied_to_special = (needed_types == "continuous" or
                               needed_types == "target" or
                               ".*" in needed_types or
                               "*" in needed_types)
-        for X_type in all_types:
+        for X_type in all_X_types:
+            print(X_type)
             if X_type not in needed_types and not applied_to_special:
                 warn(
                     f"{X_type} is provided but never used by a transformer. "
@@ -345,13 +360,14 @@ class PipelineCreator:  # Pipeline creator
                 )
 
         for needed_type in needed_types:
+            print(needed_type)
             if needed_type not in [
-                    *all_types, "*", ".*", "target", "continuous"]:
+                    *all_X_types, "*", ".*", "target", "continuous"]:
                 raise_error(
                     f"{needed_type} is not in the provided X_types={X_types}"
                 )
 
-        return [f"__:type:__{X_type}" for X_type in all_types]
+        self.wrap = needed_types != set(["continuous"])
 
     @staticmethod
     def _is_transfromer_step(step):
@@ -370,16 +386,8 @@ class PipelineCreator:  # Pipeline creator
         return False
 
     @staticmethod
-    def wrap_step(name, step, pattern):
-        return ColumnTransformer(
-            [(name, step, make_type_selector(pattern))],
-            verbose_feature_names_out=False,
-            remainder="passthrough",
-        )
-
-    @staticmethod
-    def _ensure_apply_to(apply_to):
-        return ensure_apply_to(apply_to)
+    def wrap_step(name, step, column_types):
+        return JuColumnTransformer(name, step, column_types)
 
     @staticmethod
     def get_estimator_from(name, problem_type, **kwargs):

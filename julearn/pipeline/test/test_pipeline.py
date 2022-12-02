@@ -1,9 +1,8 @@
 import warnings
 from julearn.pipeline import PipelineCreator
-from julearn.pipeline.pipeline import NoInversePipeline
+from julearn.pipeline.pipeline import NoInversePipeline, JuColumnTransformer
 from julearn.transformers import get_transformer
 from julearn.models import get_model
-from sklearn.compose import ColumnTransformer
 from sklearn.model_selection import GridSearchCV
 import pytest
 
@@ -29,9 +28,9 @@ def test_construction_working(model, preprocess, problem_type
     for _preprocess, step in zip(preprocess, pipeline.steps[1:-1]):
         name, transformer = step
         assert name.startswith(f"wrapped_{_preprocess}")
-        assert isinstance(transformer, ColumnTransformer)
+        assert isinstance(transformer, JuColumnTransformer)
         assert isinstance(
-            transformer.transformers[0][1],
+            transformer.transformer,
             get_transformer(_preprocess).__class__)
 
     # check model step
@@ -131,11 +130,11 @@ def test_X_types_to_patter_warnings(apply_to, X_types, warns):
         with pytest.warns(
             match=".* is provided but never used by a transformer. "
         ):
-            pipeline_creator.X_types_to_patterns(X_types)
+            pipeline_creator.check_X_types(X_types)
     else:
         with warnings.catch_warnings():
             warnings.simplefilter("error")
-            pipeline_creator.X_types_to_patterns(X_types)
+            pipeline_creator.check_X_types(X_types)
 
 
 @pytest.mark.parametrize(
@@ -157,9 +156,9 @@ def test_X_types_to_patter_errors(apply_to, X_types, error):
     if error:
         with pytest.raises(ValueError,
                            match=".* is not in the provided X_types="):
-            pipeline_creator.X_types_to_patterns(X_types)
+            pipeline_creator.check_X_types(X_types)
     else:
-        pipeline_creator.X_types_to_patterns(X_types)
+        pipeline_creator.check_X_types(X_types)
 
 
 def test_model_uses_param():
@@ -171,16 +170,16 @@ def test_model_uses_param():
 
     with warnings.catch_warnings():
         warnings.simplefilter("error")
-        pipeline_creator.X_types_to_patterns(dict(chicken="teriyaki"))
+        pipeline_creator.check_X_types(dict(chicken="teriyaki"))
 
     with pytest.warns(
         match=".* is provided but never used by a transformer. "
     ):
-        pipeline_creator.X_types_to_patterns(
+        pipeline_creator.check_X_types(
             dict(chicken="teriyaki", duck="B"))
     with pytest.raises(ValueError,
                        match=".* is not in the provided X_types="):
-        pipeline_creator.X_types_to_patterns(dict(duck="teriyaki"))
+        pipeline_creator.check_X_types(dict(duck="teriyaki"))
 
 
 def test_added_model_target_transform():

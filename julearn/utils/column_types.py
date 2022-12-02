@@ -132,3 +132,17 @@ class ColumnTypes:
             pattern = f"(?__:type:__{column_types})"
 
         return pattern
+
+    def __eq__(self, other: Union[str, list[str], "ColumnTypes"]):
+        if not isinstance(other, (str, list, ColumnTypes)):
+            raise_error(
+                "Comparison with ColumnTypes only allowed for "
+                "following types: str, list, ColumnTypes. "
+                f"But you provided {type(other)}"
+
+            )
+        other = other if isinstance(other, ColumnTypes) else ColumnTypes(other)
+        return self.column_types == other.column_types
+
+    def __iter__(self):
+        return self.column_types.__iter__()

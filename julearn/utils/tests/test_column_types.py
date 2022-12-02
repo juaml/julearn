@@ -73,3 +73,24 @@ def test_ColumnTypes_to_column_selector(
     col_true_selected = X_iris.iloc[:, selection].columns.tolist()
     col_selected = ColumnTypes(column_types).to_type_selector()(X_iris)
     assert col_selected == col_true_selected
+
+
+@pytest.mark.parametrize(
+    "left,right,equal",
+    [
+        (ColumnTypes(["continuous"]), ["continuous"], True),
+        (ColumnTypes(["continuous"]), "continuous", True),
+        (ColumnTypes(["continuous"]), ColumnTypes("continuous"), True),
+        (ColumnTypes(["continuous", "cat"]), ["continuous", "cat"], True),
+        (ColumnTypes(["continuous", "cat"]), "continuous", False),
+        (ColumnTypes(["cont", "cat"]), ColumnTypes("continuous"), False),
+    ]
+)
+def test_ColumnTypes_equivelance(left, right, equal):
+    assert (left == right) == equal
+
+
+def test_ColumnTypes_equivelance_error():
+    with pytest.raises(ValueError,
+                       match="Comparison with ColumnTypes only"):
+        ColumnTypes(["cont"]) == 7
