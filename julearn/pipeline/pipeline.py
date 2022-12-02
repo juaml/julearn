@@ -1,10 +1,8 @@
 import numpy as np
 from sklearn.compose import (
-    ColumnTransformer,
     TransformedTargetRegressor,
 )
 from sklearn.pipeline import Pipeline
-from sklearn.utils.validation import check_is_fitted
 from dataclasses import dataclass
 from typing import Any, Union, List, Dict, Optional, Tuple
 
@@ -13,11 +11,12 @@ from ..transformers import (
     list_transformers,
     SetColumnTypes,
 )
-from .. models import list_models, get_model
-from .. utils import raise_error, warn, logger
-from .. base import ColumnTypes, WrapModel, JuTransformer
-from .. utils.typing import JuModelLike, JuEstiamtorLike
-from .. prepare import prepare_hyperparameter_tuning
+from ..models import list_models, get_model
+from ..utils import raise_error, warn, logger
+from ..base import ColumnTypes, WrapModel, JuTransformer
+from ..utils.typing import JuModelLike, JuEstiamtorLike
+from ..prepare import prepare_hyperparameter_tuning
+from ..transformers import JuColumnTransformer
 
 
 class NoInversePipeline(Pipeline):
@@ -39,35 +38,6 @@ def _params_to_pipeline(param, X_types):
     return param
 
 
-class JuColumnTransformer(JuTransformer):
-
-    def __init__(self, name, transformer, apply_to, needed_types=None):
-        self.name = name
-        self.transformer = transformer
-        self.apply_to = apply_to
-        self.needed_types = needed_types
-
-    def fit(self, X, y=None, **fit_params):
-        self._ensure_apply_to()
-        self._ensure_needed_types()
-
-        self.column_transformer_ = ColumnTransformer(
-            [(self.name, self.transformer, self.apply_to.to_type_selector())],
-            verbose_feature_names_out=False,
-            remainder="passthrough",
-        )
-        self.column_transformer_.fit(X, y, **fit_params)
-
-        return self
-
-    def transform(self, X):
-        check_is_fitted(self)
-        return self.column_transformer_.transform(X)
-
-    def get_feature_names_out(self, input_features=None):
-        return self.column_transformer_.get_feature_names_out(input_features)
-
-
 @dataclass
 class Step:
     name: str
@@ -87,11 +57,12 @@ class PipelineCreator:  # Pipeline creator
         self._steps = list()
         self._added_target_transformer = False
         self._added_model = False
+        self.apply_to = "continuous"
 
     def add(
         self,
         step,
-        apply_to="continuous",
+        apply_to=None,
         problem_type="classification",
         **params,
     ):
@@ -105,7 +76,7 @@ class PipelineCreator:  # Pipeline creator
             This can be an available_transformer or
             available_model as a str or a sklearn compatible
             transformer or model.
-        apply_to: str or list of str or ColumnTypes
+        apply_to: str or list of str or ColumnTypes, Optional
             To what should the transformer or model be applied to.
             This can be a str representing a column type or a list
             of such str.
@@ -127,6 +98,7 @@ class PipelineCreator:  # Pipeline creator
         returns a PipelineCreator with the added step as its last step.
         """
 
+        apply_to = self.apply_to if apply_to is None else apply_to
         apply_to = ColumnTypes(apply_to)
         self.validate_step(step, apply_to)
         name = step if isinstance(step, str) else step.__cls__.lower()

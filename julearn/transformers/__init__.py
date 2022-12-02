@@ -15,3 +15,4 @@ from . dataframe import (
 )
 from . target import TargetTransfromerWrapper
 from . cbpm import CBPM
+from . ju_column_transformer import JuColumnTransformer
