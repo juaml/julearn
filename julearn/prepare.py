@@ -11,12 +11,14 @@ from sklearn.model_selection import (
     RepeatedKFold,
 )
 from sklearn.model_selection import check_cv
+from sklearn import model_selection
 
 from . models import get_model
 from . utils import raise_error, warn, logger
 from . utils.typing import ModelLike
 
-from . import model_selection
+from . model_selection import (RepeatedStratifiedGroupsKFold,
+                               StratifiedGroupsKFold)
 
 
 def _validate_input_data_df(X, y, confounds, df, groups):
@@ -304,8 +306,8 @@ def check_consistency(
             model_selection.GroupShuffleSplit,
             model_selection.LeaveOneGroupOut,
             model_selection.LeavePGroupsOut,
-            model_selection.StratifiedGroupsKFold,
-            model_selection.RepeatedStratifiedGroupsKFold,
+            StratifiedGroupsKFold,
+            RepeatedStratifiedGroupsKFold,
         )
         if not isinstance(cv, valid_instances):
             warn(
