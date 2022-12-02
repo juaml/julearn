@@ -352,7 +352,6 @@ class PipelineCreator:  # Pipeline creator
                               ".*" in needed_types or
                               "*" in needed_types)
         for X_type in all_X_types:
-            print(X_type)
             if X_type not in needed_types and not applied_to_special:
                 warn(
                     f"{X_type} is provided but never used by a transformer. "
@@ -360,7 +359,6 @@ class PipelineCreator:  # Pipeline creator
                 )
 
         for needed_type in needed_types:
-            print(needed_type)
             if needed_type not in [
                     *all_X_types, "*", ".*", "target", "continuous"]:
                 raise_error(
