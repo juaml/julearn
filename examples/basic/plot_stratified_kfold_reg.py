@@ -1,6 +1,5 @@
 """
 Stratified K-fold CV for regression analysis.
-
 ============================================
 
 This example uses the 'diabetes' data from sklearn datasets to
