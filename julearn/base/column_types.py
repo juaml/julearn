@@ -133,7 +133,7 @@ class ColumnTypes:
 
         return pattern
 
-    def __eq__(self, other: Union[str, list[str], "ColumnTypes"]):
+    def __eq__(self, other: Union[str, List[str], "ColumnTypes"]):
         if not isinstance(other, (str, list, ColumnTypes)):
             raise_error(
                 "Comparison with ColumnTypes only allowed for "
