@@ -1,11 +1,11 @@
 from julearn.utils import raise_error
 
 
-def preprocess(pipeline, X, df, until=None):
+def preprocess(pipeline, X, data, until=None):
 
-    _X = df[X]
+    _X = data[X]
     if until is None:
-        return pipeline[:-1].transform(df[_X])
+        return pipeline[:-1].transform(_X)
 
     for i, (name, _) in enumerate(pipeline.steps[:-1]):
         if name.replace("wrapped_", "") == until.replace("wrapped_", ""):
