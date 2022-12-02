@@ -1,5 +1,5 @@
 """
-Stratified K-fold CV for regression analysis
+Stratified K-fold CV for regression analysis.
 ============================================
 
 This example uses the 'diabetes' data from sklearn datasets to
@@ -7,9 +7,10 @@ perform stratified Kfold CV for a regression problem,
 
 .. include:: ../../links.inc
 """
+
 # Authors: Shammi More <s.more@fz-juelich.de>
 #          Federico Raimondo <f.raimondo@fz-juelich.de>
-#
+#          Leonard Sasse <l.sasse@fz-juelich.de>
 # License: AGPL
 
 import math
@@ -72,7 +73,7 @@ groups = 'bins'
 
 cv_stratified = StratifiedGroupsKFold(n_splits=num_splits, shuffle=False)
 scores_strat, model = run_cross_validation(
-    X=X, y=y, data=data_df, preprocess_X='zscore', cv=cv_stratified,
+    X=X, y=y, data=data_df, preprocess='zscore', cv=cv_stratified,
     groups=groups, problem_type='regression', model='linreg',
     return_estimator='final', scoring='neg_mean_absolute_error')
 
@@ -81,7 +82,7 @@ scores_strat, model = run_cross_validation(
 
 cv = KFold(n_splits=num_splits, shuffle=False, random_state=None)
 scores, model = run_cross_validation(
-    X=X, y=y, data=data_df, preprocess_X='zscore', cv=cv,
+    X=X, y=y, data=data_df, preprocess='zscore', cv=cv,
     problem_type='regression', model='linreg', return_estimator='final',
     scoring='neg_mean_absolute_error')
 
