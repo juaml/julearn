@@ -8,18 +8,17 @@ from distutils.version import LooseVersion
 from pathlib import Path
 import warnings
 
-logger = logging.getLogger('julearn')
+logger = logging.getLogger("julearn")
 
 
 def _get_git_head(path):
     """Aux function to read HEAD from git"""
     if not path.exists():
-        raise_error('This path does not exist: {}'.format(path))
-    command = ('cd {gitpath}; '
-               'git rev-parse --verify HEAD').format(gitpath=path)
-    process = subprocess.Popen(command,
-                               stdout=subprocess.PIPE,
-                               shell=True)
+        raise_error("This path does not exist: {}".format(path))
+    command = ("cd {gitpath}; " "git rev-parse --verify HEAD").format(
+        gitpath=path
+    )
+    process = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
     proc_stdout = process.communicate()[0].strip()
     del process
     return proc_stdout
@@ -41,18 +40,18 @@ def get_versions(sys):
     """
     module_versions = {}
     for name, module in sys.modules.items():
-        if '.' in name:
+        if "." in name:
             continue
-        if name in ['_curses', '_glmnet']:
+        if name in ["_curses", "_glmnet"]:
             continue
-        module_version = LooseVersion(getattr(module, '__version__', None))
-        module_version = getattr(module_version, 'vstring', None)
+        module_version = LooseVersion(getattr(module, "__version__", None))
+        module_version = getattr(module_version, "vstring", None)
         if module_version is None:
             module_version = None
-        elif 'git' in module_version:
+        elif "git" in module_version:
             git_path = Path(module.__file__).resolve().parent
             head = _get_git_head(git_path)
-            module_version += '-HEAD:{}'.format(head)
+            module_version += "-HEAD:{}".format(head)
 
         module_versions[name] = module_version
     return module_versions
@@ -60,28 +59,33 @@ def get_versions(sys):
 
 def _safe_log(versions, name):
     if name in versions:
-        logger.info(f'{name}: {versions[name]}')
+        logger.info(f"{name}: {versions[name]}")
 
 
 def log_versions():
     """Log versions of the core libraries, for reproducibility purposes."""
     versions = get_versions(sys)
-    logger.info('===== Lib Versions =====')
-    _safe_log(versions, 'numpy')
-    _safe_log(versions, 'scipy')
-    _safe_log(versions, 'sklearn')
-    _safe_log(versions, 'pandas')
-    _safe_log(versions, 'julearn')
+    logger.info("===== Lib Versions =====")
+    _safe_log(versions, "numpy")
+    _safe_log(versions, "scipy")
+    _safe_log(versions, "sklearn")
+    _safe_log(versions, "pandas")
+    _safe_log(versions, "julearn")
 
-    logger.info('========================')
-
-
-_logging_types = dict(DEBUG=logging.DEBUG, INFO=logging.INFO,
-                      WARNING=logging.WARNING, ERROR=logging.ERROR)
+    logger.info("========================")
 
 
-def configure_logging(level='WARNING', fname=None, overwrite=None,
-                      output_format=None):
+_logging_types = dict(
+    DEBUG=logging.DEBUG,
+    INFO=logging.INFO,
+    WARNING=logging.WARNING,
+    ERROR=logging.ERROR,
+)
+
+
+def configure_logging(
+    level="WARNING", fname=None, overwrite=None, output_format=None
+):
     """Configure the logging functionality
 
     Parameters
@@ -109,7 +113,7 @@ def configure_logging(level='WARNING', fname=None, overwrite=None,
     """
     _close_handlers(logger)
     if output_format is None:
-        output_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        output_format = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
     formatter = logging.Formatter(output_format)
 
     if fname is not None:
@@ -117,11 +121,12 @@ def configure_logging(level='WARNING', fname=None, overwrite=None,
             fname = Path(fname)
         if fname.exists() and overwrite is None:
             warnings.warn(
-                f'File ({fname.as_posix()}) exists. '
-                'Messages will be appended. Use overwrite=True to '
-                'overwrite or overwrite=False to avoid this message')
+                f"File ({fname.as_posix()}) exists. "
+                "Messages will be appended. Use overwrite=True to "
+                "overwrite or overwrite=False to avoid this message"
+            )
             overwrite = False
-        mode = 'w' if overwrite else 'a'
+        mode = "w" if overwrite else "a"
         lh = logging.FileHandler(fname, mode=mode)
     else:
         lh = logging.StreamHandler(WrapStdOut())
