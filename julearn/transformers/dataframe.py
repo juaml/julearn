@@ -44,7 +44,7 @@ class SetColumnTypes(JuTransformer):
         return (X
                 # remove column types of input
                 .rename(columns=lambda col: col.split("__:type:__")[0])
-                # assgin new column types (previous as default)
+                # assign new column types (previous as default)
                 .rename(columns=self.column_mapper_)
                 )
 

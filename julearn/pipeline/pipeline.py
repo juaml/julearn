@@ -130,7 +130,7 @@ class PipelineCreator:  # Pipeline creator
             needed_types = estimator.get_needed_types()
         else:
             needed_types = apply_to
-        if apply_to.column_types == "targt":
+        if apply_to.column_types == "target":
             name = f"target_{name}"
         self._steps.append(
             Step(
