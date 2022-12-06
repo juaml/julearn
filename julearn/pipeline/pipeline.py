@@ -3,7 +3,7 @@ from sklearn.compose import (
     TransformedTargetRegressor,
 )
 from sklearn.pipeline import Pipeline
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, Union, List, Dict, Optional, Tuple
 
 from ..transformers import (
@@ -42,7 +42,8 @@ def _params_to_pipeline(param, X_types):
 class Step:
     name: str
     estimator: Any
-    apply_to: ColumnTypes = ColumnTypes("continuous")
+    apply_to: ColumnTypes = field(
+        default_factory=lambda:  ColumnTypes("continuous"))
     needed_types: Any = None
     params_to_tune: dict = None
 
