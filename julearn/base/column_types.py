@@ -95,7 +95,7 @@ class ColumnTypes:
 
         """
         column_types = self.ensure_column_types(column_types)
-        self.column_types = self.column_types.extend(column_types)
+        self.column_types = list(set([*self._column_types, *column_types]))
         return self
 
     @property
@@ -209,7 +209,7 @@ class ColumnTypes:
 
             )
         other = other if isinstance(other, ColumnTypes) else ColumnTypes(other)
-        return self.column_types == other.column_types
+        return set(self.column_types) == set(other.column_types)
 
     def __iter__(self):
         return self.column_types.__iter__()

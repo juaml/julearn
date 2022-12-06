@@ -93,3 +93,16 @@ def test_ColumnTypes_equivelance_error():
     with pytest.raises(ValueError,
                        match="Comparison with ColumnTypes only"):
         ColumnTypes(["cont"]) == 7
+
+
+@pytest.mark.parametrize(
+    "left,right,result",
+    [
+        (ColumnTypes(["continuous"]),
+         ["continuous"], ColumnTypes(["continuous"])),
+        (ColumnTypes(["cont"]), "cat", ColumnTypes(["cont", "cat"])),
+    ]
+)
+def test_ColumnTypes_add(left, right, result):
+    summed = (left.add(right))
+    assert summed == result

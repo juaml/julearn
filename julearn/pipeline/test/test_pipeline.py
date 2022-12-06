@@ -1,9 +1,10 @@
 import warnings
 from julearn.pipeline import PipelineCreator
-from julearn.pipeline.pipeline import JuColumnTransformer
+from julearn.pipeline.pipeline import JuColumnTransformer, NoInversePipeline
 from julearn.transformers import get_transformer
 from julearn.models import get_model
 from sklearn.model_selection import GridSearchCV
+from sklearn.pipeline import Pipeline
 import pytest
 from pytest_lazyfixture import lazy_fixture
 
@@ -181,7 +182,9 @@ def test_pipelinecreator_default_apply_to():
     ):
         pipeline_creator.check_X_types({"duck": "B"})
 
-    pipeline_creator = PipelineCreator().add("rf", apply_to=["chicken", "duck"])
+    pipeline_creator = (PipelineCreator()
+                        .add("rf", apply_to=["chicken", "duck"])
+                        )
     with pytest.warns(
         match="is not in the provided X_types"
     ):
@@ -231,3 +234,31 @@ def test_stacking(X_iris, y_iris):
     with warnings.catch_warnings():
         warnings.simplefilter("error")
         model.fit(X_iris, y_iris)
+
+
+@pytest.mark.parametrize(
+    "target_transformer,reverse_pipe",
+    [
+        ("zscore", True),
+        # ("remove_confound", False),
+    ]
+)
+def test_target_transformer(X_iris, y_iris,
+                            target_transformer, reverse_pipe):
+    model = (
+        PipelineCreator()
+        .add("zscore")
+        .add(target_transformer, apply_to="target")
+        .add("svm", problem_type="regression")
+    )
+    model = model.to_pipeline({})
+    # target transformer and model becomes one
+    assert len(model.steps) == 3
+    model.fit(X_iris, y_iris)
+    if reverse_pipe:
+        assert isinstance(model.steps[-1][1].transformer,  Pipeline)
+        assert not isinstance(
+            model.steps[-1][1].transformer,  NoInversePipeline)
+    else:
+        assert isinstance(
+            model.steps[-1][1].transformer,  NoInversePipeline)

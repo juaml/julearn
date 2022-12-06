@@ -4,13 +4,10 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
+from copy import deepcopy
 import numpy as np
 import pandas as pd
-from sklearn.base import (
-    BaseEstimator,
-    TransformerMixin,
-    clone,
-)
+from sklearn.base import clone
 from sklearn.linear_model import LinearRegression
 
 from .. utils import raise_error
@@ -83,6 +80,8 @@ class DataFrameConfoundRemover(JuTransformer):
                          else self.apply_to)
         self.apply_to = self._ensure_apply_to()
         self.confounds = self._ensure_column_types(self.confounds)
+        self.needed_types = deepcopy(self.apply_to).add(self.confounds)
+
         df_X, ser_confound = self._split_into_X_confound(X)
         self.feature_names_in_ = list(X.columns)
         if self.keep_confounds:
@@ -130,9 +129,6 @@ class DataFrameConfoundRemover(JuTransformer):
         df_out = self._add_backed_filtered(X, df_out)
 
         if self.keep_confounds:
-            print(df_out.columns)
-            print("conf: ", df_confounds.columns)
-            print("all: ", X.columns)
             df_out = df_out.reindex(columns=X.columns)
         else:
             df_out = df_out.reindex(
@@ -244,56 +240,14 @@ class DataFrameConfoundRemover(JuTransformer):
             )
         return residuals
 
+    def get_needed_types(self):
+        if hasattr(self, "needed_types"):
+            return self.needed_types
 
-class TargetConfoundRemover(
-    BaseEstimator, TransformerMixin,
-):
-    def __init__(
-        self,
-        model_confound=None,
-        confounds=".*__:type:__confound",
-        threshold=None,
-    ):
-        """Transformer which can use pd.DataFrames and remove the confounds
-        from the target by subtracting the predicted target
-        given the confounds from the actual target.
-
-        Attributes
-        ----------
-        model_confound : ModelLike
-            Model used to predict the target using the confounds as
-            features. The predictions of these models are then subtracted
-            from the actual target, default is None. Meaning the use of
-            a LinearRegression.
-        confounds : list(str) | str
-            A string representing a regular expression by which the confounds
-            can be detected from the column names.
-        threshold : float | None
-            All residual values after confound removal which fall under the
-            threshold will be set to 0. None means that no threshold will be
-            applied.
-        """
-        self.model_confound = model_confound
-        self.confounds = confounds
-        self.threshold = threshold
-        self._confound_remover = DataFrameConfoundRemover(
-            model_confound=self.model_confound,
-            confounds=self.confounds,
-            threshold=self.threshold,
-        )
-
-    def fit(self, X, y):
-
-        Xy = X.copy()
-        Xy["y"] = y.copy()
-
-        self._confound_remover.fit(X=Xy)
-
-    def transform(self, X, y):
-        Xy = X.copy()
-        Xy["y"] = y.copy()
-        return self._confound_remover.transform(Xy)["y"]
-
-    def fit_transform(self, X, y):
-        self.fit(X, y)
-        return self.transform(X, y)
+        apply_to = ("continuous"
+                    if self.apply_to is None
+                    else self.apply_to)
+        apply_to = self._ensure_column_types(apply_to)
+        confounds = self._ensure_column_types(self.confounds)
+        print(confounds._column_types, apply_to._column_types)
+        return apply_to.add(confounds._column_types)

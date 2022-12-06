@@ -180,18 +180,16 @@ class PipelineCreator:  # Pipeline creator
         ]
 
         self.check_X_types(X_types)
-        transformer_steps = self._steps[:-1]
         model_step = self._steps[-1]
-        target_transformer_steps = []
 
-        if self._added_target_transformer:
-            _transformer_steps = []
-            for _step in self._steps:
-                if _step.apply_to == "target":
-                    target_transformer_steps.append(_step)
-                else:
-                    _transformer_steps.append(_step)
-            transformer_steps = _transformer_steps
+        target_transformer_steps = []
+        transformer_steps = []
+
+        for _step in self._steps[:-1]:
+            if _step.apply_to == "target":
+                target_transformer_steps.append(_step)
+            else:
+                transformer_steps.append(_step)
 
         # Add transformers
         params_to_tune = {}
@@ -247,9 +245,17 @@ class PipelineCreator:  # Pipeline creator
         logger.debug(f"\t Estimator: {model_estimator}")
         logger.debug("\t Looking for nested pipeline creators")
         logger.debug(f"\t Params to tune: {step_params_to_tune}")
+        if self._added_target_transformer:
+            target_model_step, step_params_to_tune = self.wrap_target_model(
+                model_name, model_estimator, target_transformer_steps,
+                step_params_to_tune
+            )
+            params_to_tune.update(step_params_to_tune)
+            pipeline_steps.append(target_model_step)
+        else:
 
-        params_to_tune.update(step_params_to_tune)
-        pipeline_steps.append((model_name, model_estimator))
+            params_to_tune.update(step_params_to_tune)
+            pipeline_steps.append((model_name, model_estimator))
         pipeline = Pipeline(pipeline_steps).set_output(transform="pandas")
 
         # Deal with the Hyperparameter tuning
@@ -259,12 +265,12 @@ class PipelineCreator:  # Pipeline creator
         logger.debug("Pipeline created")
         return out
 
-    @staticmethod
+    @ staticmethod
     def prepare_hyperparameter_tuning(params_to_tune, search_params, pipeline):
         """Prepare model parameters.
 
-        For each of the model parameters, determine if it can be directly set or
-        must be tuned using hyperparameter tuning.
+        For each of the model parameters, determine if it can be directly set
+        or must be tuned using hyperparameter tuning.
 
         Parameters
         ----------
@@ -272,8 +278,9 @@ class PipelineCreator:  # Pipeline creator
             A dictionary with the model selection parameters.The dictionary can
             define the following keys:
 
-            * 'STEP__PARAMETER': A value (or several) to be used as PARAMETER for
-            STEP in the pipeline. Example: 'svm__probability': True will set
+            * 'STEP__PARAMETER': A value (or several) to be used as PARAMETER
+            for STEP in the pipeline. Example: 'svm__probability':
+            True will set
             the parameter 'probability' of the 'svm' model. If more than option
             * 'search': The kind of search algorithm to use e.g.:
             'grid' or 'random'. All valid julearn searchers can be entered.
@@ -306,9 +313,11 @@ class PipelineCreator:  # Pipeline creator
             else:
                 if isinstance(search, str):
                     raise_error(
-                        f"The searcher {search} is not a valid julearn searcher. "
+                        f"The searcher {search} is not a valid julearn"
+                        " searcher. "
                         "You can get a list of all available once by using: "
-                        "julearn.model_selection.list_searchers(). You can also "
+                        "julearn.model_selection.list_searchers(). "
+                        "You can also "
                         "enter a valid scikit-learn searcher or register it."
                     )
                 else:
@@ -338,20 +347,44 @@ class PipelineCreator:  # Pipeline creator
         logger.info("")
         return pipeline
 
-    @staticmethod
+    @ staticmethod
     def wrap_target_model(
-        model_step, target_transformer_steps, model_params=None
+        model_name, model, target_transformer_steps, model_params=None
     ):
         model_params = {} if model_params is None else model_params
-        if target_transformer_steps == []:
-            return (model_step.name, model_step.estimator), model_params
-        transformer_pipe = NoInversePipeline(target_transformer_steps)
+        model_params = {f"regressor__{param}": val for param,
+                        val in model_params.items()}
+
+        def check_has_valid_reverse(est):
+            valid_reverse = True
+            if isinstance(est, Pipeline):
+                for _step in est.steps:
+                    if not check_has_valid_reverse(_step[1]):
+                        return False
+            else:
+                if not hasattr(est, "inverse_transform"):
+                    valid_reverse = False
+                return valid_reverse
+
+        pipe_trans_steps = []
+        valid_reverse = True
+        for step in target_transformer_steps:
+            name, est = step.name, step.estimator
+            pipe_trans_steps.append([name, est])
+            if not check_has_valid_reverse(est):
+                valid_reverse = False
+
+        transformer_pipe = (
+            Pipeline(pipe_trans_steps) if valid_reverse
+            else NoInversePipeline(pipe_trans_steps)
+
+        )
         target_model = TransformedTargetRegressor(
-            transformer=transformer_pipe,
-            regressor=model_step[1],
+            transformer=transformer_pipe.set_output(transform="pandas"),
+            regressor=model,
             check_inverse=False,
         )
-        return (f"{model_step[0]}_target_transform", target_model)
+        return (f"{model_name}_target_transform", target_model), model_params
 
     def _validate_model_params(self, model_name, model_params):
 
@@ -432,7 +465,7 @@ class PipelineCreator:  # Pipeline creator
 
         self.wrap = needed_types != set(["continuous"])
 
-    @staticmethod
+    @ staticmethod
     def _is_transfromer_step(step):
         if step in list_transformers():
             return True
@@ -440,7 +473,7 @@ class PipelineCreator:  # Pipeline creator
             return True
         return False
 
-    @staticmethod
+    @ staticmethod
     def _is_model_step(step):
         if step in list_models():
             return True
@@ -448,11 +481,11 @@ class PipelineCreator:  # Pipeline creator
             return True
         return False
 
-    @staticmethod
+    @ staticmethod
     def wrap_step(name, step, column_types):
         return JuColumnTransformer(name, step, column_types)
 
-    @staticmethod
+    @ staticmethod
     def get_estimator_from(name, problem_type, **kwargs):
         if name in list_transformers():
             return get_transformer(name, **kwargs)
