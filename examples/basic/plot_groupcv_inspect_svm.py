@@ -28,13 +28,8 @@ import seaborn as sns
 from seaborn import load_dataset
 
 from julearn import run_cross_validation
-from julearn.pipeline import PipelineCreator
 from julearn.utils import configure_logging
-<<<<<<< HEAD
 from julearn.inspect import preprocess
-=======
-from julearn.inspect.preprocess import preprocess
->>>>>>> bb2154e9dd30277d2318c2a0f87305778f6f4da7
 
 ###############################################################################
 # Set the logging level to info to see extra information
@@ -98,27 +93,11 @@ df_fmri = df_fmri.pivot(
 df_fmri = df_fmri.reset_index()
 
 ###############################################################################
-<<<<<<< HEAD
 # Here we want to zscore all the features and then train a Support Vector
 # Machine classifier.
 
 scores = run_cross_validation(X=X, y=y, data=df_fmri, preprocess='zscore',
                               model='svm')
-=======
-# Use PipelineCreator object to add all pre-processing steps. Here we want to
-# zscore all the features and then train a Support Vector Machine classifier.
-# Setting "apply_to=*", will apply the preprocessing steps to all features
-
-pipleline_steps = PipelineCreator()
-pipleline_steps.add('zscore', apply_to='*')
-pipleline_steps.add('svm', probability=True, apply_to='*')
-
-###############################################################################
-# Provide the PipelineCreator object (pipleline_steps) to
-# `run_cross_validation` function
-
-scores = run_cross_validation(X=X, y=y, data=df_fmri, model=pipleline_steps)
->>>>>>> bb2154e9dd30277d2318c2a0f87305778f6f4da7
 
 print(scores['test_score'].mean())
 
@@ -147,11 +126,7 @@ print(scores['test_score'].mean())
 cv = GroupShuffleSplit(n_splits=5, test_size=0.5, random_state=42)
 
 scores, model = run_cross_validation(
-<<<<<<< HEAD
     X=X, y=y, data=df_fmri, preprocess='zscore', model='svm', cv=cv,
-=======
-    X=X, y=y, data=df_fmri, model=pipleline_steps, cv=cv,
->>>>>>> bb2154e9dd30277d2318c2a0f87305778f6f4da7
     groups='subject', return_estimator='final')
 
 print(scores['test_score'].mean())
@@ -170,7 +145,6 @@ sns.scatterplot(x='parietal', y='frontal', hue='event', data=df_fmri,
 axes[0].set_title('Raw data')
 
 # Plot the preprocessed features
-<<<<<<< HEAD
 pre_X = preprocess(model, X=X, data=df_fmri, until="zscore",
                    with_column_types=True)
 
@@ -180,13 +154,6 @@ sns.scatterplot(
     x='parietal__:type:__continuous', y='frontal__:type:__continuous',
     hue='event', data=pre_df, ax=axes[1], s=5)
 
-=======
-pre_X = preprocess(model, X=X, data=df_fmri, until="zscore")
-pre_df = pre_X.join(df_fmri[y])
-sns.scatterplot(x='parietal__:type:__continuous',
-                y='frontal__:type:__continuous',
-                hue='event', data=pre_df, ax=axes[1], s=5)
->>>>>>> bb2154e9dd30277d2318c2a0f87305778f6f4da7
 axes[1].set_title('Preprocessed data')
 
 ###############################################################################
@@ -211,11 +178,7 @@ yy = np.linspace(ylim[0], ylim[1], 30)
 YY, XX = np.meshgrid(yy, xx)
 xy = np.vstack([XX.ravel(), YY.ravel()]).T
 
-<<<<<<< HEAD
 # Create pandas dataframe
-=======
-# convert into pandas dataframe
->>>>>>> bb2154e9dd30277d2318c2a0f87305778f6f4da7
 xy_df = pd.DataFrame(
     data=xy,
     columns=['parietal__:type:__continuous', 'frontal__:type:__continuous'])
