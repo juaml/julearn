@@ -40,10 +40,9 @@ from sklearn.naive_bayes import (
     MultinomialNB,
 )
 from sklearn.base import clone, TransformerMixin, BaseEstimator
-from sklearn.model_selection import cross_validate
+from sklearn.model_selection import cross_validate, check_cv
 
 from julearn import run_cross_validation
-from julearn.prepare import prepare_cv
 
 
 def compare_models(clf1, clf2):  # pragma: no cover
@@ -166,7 +165,7 @@ def do_scoring_test(
     )
 
     np.random.seed(42)
-    sk_cv = prepare_cv(cv)
+    sk_cv = check_cv(cv)
     expected = cross_validate(
         sklearn_model, sk_X, sk_y, cv=sk_cv, scoring=scorers
     )

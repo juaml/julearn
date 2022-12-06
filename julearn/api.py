@@ -6,7 +6,7 @@ from sklearn.model_selection import cross_validate
 from sklearn.pipeline import Pipeline
 import pandas as pd
 
-from .prepare import prepare_input_data, prepare_cv, check_consistency
+from .prepare import prepare_input_data, check_consistency
 from .pipeline import PipelineCreator
 
 from .utils import logger, raise_error
@@ -242,7 +242,8 @@ def run_cross_validation(
         )
 
     # Prepare cross validation
-    cv_outer = prepare_cv(cv)
+    cv_outer = check_cv(cv)  # type: ignore
+    logger.info(f"Using outer CV scheme {cv_outer}")
 
     check_consistency(y, cv, groups, problem_type)
 

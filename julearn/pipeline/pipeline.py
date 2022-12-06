@@ -1,10 +1,12 @@
+from typing import Any, Union, List, Dict, Optional, Tuple
+
 import numpy as np
 from sklearn.compose import (
     TransformedTargetRegressor,
 )
 from sklearn.pipeline import Pipeline
+from sklearn.model_selection import check_cv
 from dataclasses import dataclass, field
-from typing import Any, Union, List, Dict, Optional, Tuple
 
 from ..transformers import (
     get_transformer,
@@ -15,8 +17,8 @@ from ..models import list_models, get_model
 from ..utils import raise_error, warn, logger
 from ..base import ColumnTypes, WrapModel, JuTransformer
 from ..utils.typing import JuModelLike, JuEstiamtorLike
-from ..prepare import prepare_hyperparameter_tuning
 from ..transformers import JuColumnTransformer
+from ..model_selection.available_searchers import list_searchers, get_searcher
 
 
 class NoInversePipeline(Pipeline):
@@ -43,9 +45,10 @@ class Step:
     name: str
     estimator: Any
     apply_to: ColumnTypes = field(
-        default_factory=lambda:  ColumnTypes("continuous"))
+        default_factory=lambda: ColumnTypes("continuous")
+    )
     needed_types: Any = None
-    params_to_tune: dict = None
+    params_to_tune: Optional[Dict] = None
 
     def __post_init__(self):
         self.params_to_tune = (
@@ -104,8 +107,7 @@ class PipelineCreator:  # Pipeline creator
         self.validate_step(step, apply_to)
         name = step if isinstance(step, str) else step.__cls__.lower()
         name = self._ensure_name(name)
-        logger.info(
-            f"Adding step {name} that applies to {apply_to}")
+        logger.info(f"Adding step {name} that applies to {apply_to}")
         params_to_set = dict()
         params_to_tune = dict()
         for param, vals in params.items():
@@ -127,7 +129,7 @@ class PipelineCreator:  # Pipeline creator
             else step
         )
         if isinstance(estimator, JuEstiamtorLike):
-            estimator = estimator.set_params(apply_to=apply_to)
+            estimator.set_params(apply_to=apply_to)
             needed_types = estimator.get_needed_types()
         else:
             needed_types = apply_to
@@ -251,11 +253,90 @@ class PipelineCreator:  # Pipeline creator
         pipeline = Pipeline(pipeline_steps).set_output(transform="pandas")
 
         # Deal with the Hyperparameter tuning
-        out = prepare_hyperparameter_tuning(
+        out = self.prepare_hyperparameter_tuning(
             params_to_tune, search_params, pipeline
         )
         logger.debug("Pipeline created")
         return out
+
+    @staticmethod
+    def prepare_hyperparameter_tuning(params_to_tune, search_params, pipeline):
+        """Prepare model parameters.
+
+        For each of the model parameters, determine if it can be directly set or
+        must be tuned using hyperparameter tuning.
+
+        Parameters
+        ----------
+        msel_dict : dict
+            A dictionary with the model selection parameters.The dictionary can
+            define the following keys:
+
+            * 'STEP__PARAMETER': A value (or several) to be used as PARAMETER for
+            STEP in the pipeline. Example: 'svm__probability': True will set
+            the parameter 'probability' of the 'svm' model. If more than option
+            * 'search': The kind of search algorithm to use e.g.:
+            'grid' or 'random'. All valid julearn searchers can be entered.
+            * 'cv': If search is going to be used, the cross-validation
+            splitting strategy to use. Defaults to same CV as for the model
+            evaluation.
+            * 'scoring': If search is going to be used, the scoring metric to
+            evaluate the performance.
+            * 'search_params': Additional parameters for the search method.
+
+        pipeline : ExtendedDataframePipeline
+            The pipeline to apply/tune the hyperparameters
+
+        Returns
+        -------
+        pipeline : ExtendedDataframePipeline
+            The modified pipeline
+        """
+        logger.info("= Model Parameters =")
+
+        search_params = {} if search_params is None else search_params
+        if len(params_to_tune) > 0:
+            search = search_params.get("kind", "grid")
+            scoring = search_params.get("scoring", None)
+            cv_inner = search_params.get("cv", None)
+
+            if search in list_searchers():
+                logger.info(f"Tuning hyperparameters using {search}")
+                search = get_searcher(search)
+            else:
+                if isinstance(search, str):
+                    raise_error(
+                        f"The searcher {search} is not a valid julearn searcher. "
+                        "You can get a list of all available once by using: "
+                        "julearn.model_selection.list_searchers(). You can also "
+                        "enter a valid scikit-learn searcher or register it."
+                    )
+                else:
+                    warn(f"{search} is not a registered searcher. ")
+                    logger.info(
+                        f"Tuning hyperparameters using not registered {search}"
+                    )
+
+            logger.info("Hyperparameters:")
+            for k, v in params_to_tune.items():
+                logger.info(f"\t{k}: {v}")
+
+            cv_inner = check_cv(cv_inner)  # type: ignore
+            logger.info(f"Using inner CV scheme {cv_inner}")
+            search_params["cv"] = cv_inner
+            search_params["scoring"] = scoring
+            logger.info("Search Parameters:")
+            for k, v in search_params.items():
+                logger.info(f"\t{k}: {v}")
+            pipeline = search(pipeline, params_to_tune, **search_params)
+        elif search_params is not None and len(search_params) > 0:
+            warn(
+                "Hyperparameter search parameters were specified, but no "
+                "hyperparameters to tune"
+            )
+        logger.info("====================")
+        logger.info("")
+        return pipeline
 
     @staticmethod
     def wrap_target_model(
@@ -306,35 +387,47 @@ class PipelineCreator:  # Pipeline creator
             raise_error(f"Cannot add a {step}. I don't know what it is.")
 
     def check_X_types(self, X_types: Optional[Dict] = None):
-        if X_types in [None, {}]:
+        # Get the set of all types in the X_types
+        if X_types is None or X_types == {}:
             all_X_types = ColumnTypes("continuous")
         else:
             all_X_types = ColumnTypes(list(X_types.keys()))
 
+        # Get the set of all needed types by the pipeline
         needed_types = []
-        # steps = self._steps[:-1] if self._added_model else self._steps
-        steps = self._steps
-        for step_dict in steps:
+        for step_dict in self._steps:
             if step_dict.needed_types is None:
                 continue
             needed_types.extend(step_dict.needed_types)
         needed_types = set(needed_types)
-        applied_to_special = (needed_types == "continuous" or
-                              needed_types == "target" or
-                              ".*" in needed_types or
-                              "*" in needed_types)
-        for X_type in all_X_types:
-            if X_type not in needed_types and not applied_to_special:
-                warn(
-                    f"{X_type} is provided but never used by a transformer. "
-                    f"Used types are {needed_types}"
+
+        skip_need_error = ".*" in needed_types or "*" in needed_types
+        # applied_to_special = (needed_types == "continuous" or
+        #                       needed_types == "target" or
+        #                       ".*" in needed_types or
+        #                       "*" in needed_types)
+        if not skip_need_error:
+            extra_types = [x for x in all_X_types if x not in needed_types]
+            if len(extra_types) > 0:
+                raise_error(
+                    f"Extra X_types were provided but never used by a "
+                    f"transformer.\n"
+                    f"\tExtra types are {extra_types}\n"
+                    f"\tUsed types are {needed_types}"
                 )
 
+        # All available types are the ones in the X_types + wildcard types +
+        # target + the ones that can be created by a transformer.
+        # So far, we only know of transformers that output continuous
+        available_types = set(
+            [*all_X_types, "*", ".*", "target", "continuous"]
+        )
         for needed_type in needed_types:
-            if needed_type not in [
-                    *all_X_types, "*", ".*", "target", "continuous"]:
-                raise_error(
-                    f"{needed_type} is not in the provided X_types={X_types}"
+            if needed_type not in available_types:
+                warn(
+                    f"{needed_type} is not in the provided X_types={X_types}. "
+                    "Make sure your pipeline has a transformer that creates "
+                    "this type."
                 )
 
         self.wrap = needed_types != set(["continuous"])
