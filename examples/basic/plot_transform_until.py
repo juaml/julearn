@@ -2,121 +2,138 @@
 Preprocessing with variance threshold, zscore and PCA
 =======================================================
 
-This example uses the 'iris' dataset, performs simple binary
-classification after the pre-processing the features including removal of low
-variance features, feature normalization using zscore and feature reduction
-using PCA. We will check the features after each preprocessing step.
-
+This example uses the 'make_regression' function to create a simple dataset,
+performs a simple regression after the pre-processing of the features
+including removal of low variance features, feature normalization for only
+two features using zscore and feature reduction using PCA.
+We will check the features after each preprocessing step.
 """
 
 # Authors: Shammi More <s.more@fz-juelich.de>
-#
+#          Leonard Sasse <l.sasse@fz-juelich.de>
 # License: AGPL
 
 import matplotlib.pyplot as plt
+import pandas as pd
 import seaborn as sns
-from seaborn import load_dataset
+from sklearn.datasets import make_regression
 
 from julearn import run_cross_validation
+from julearn.inspect.preprocess import preprocess
+from julearn.pipeline import PipelineCreator
 from julearn.utils import configure_logging
+
 
 ###############################################################################
 # Set the logging level to info to see extra information
-configure_logging(level='INFO')
+configure_logging(level="INFO")
 
 ###############################################################################
-# Load the iris data from seaborn
-df_iris = load_dataset('iris')
+# Create a dataset using sklearn's make_regression
+df = pd.DataFrame()
+X, y = [f"Feature {x}" for x in range(1, 5)], "y"
+df[X], df[y] = make_regression(
+    n_samples=100, n_features=4, n_informative=3, noise=0.3, random_state=0
+)
 
-###############################################################################
-# The dataset has three kind of species. We will keep two to perform a binary
-# classification.
+# We only want to zscore the first two features, so let's get their names.
+first_two = X[:2]
 
-df_iris = df_iris[df_iris['species'].isin(['versicolor', 'virginica'])]
-
-###############################################################################
-# We will use the sepal length, width and petal length and
-# petal width as features and predict the species
-
-X = ['sepal_length', 'sepal_width', 'petal_length', 'petal_width']
-y = 'species'
+# We can define a dictionary, in which the 'key' defines the names of our
+# different 'types' of 'X'. The 'value' determine, which features belong to
+# this type.
+X_types = {"X_to_zscore": first_two}
 
 ###############################################################################
 # Let's look at the summary statistics of the raw features
-print('Summary Statistics of the raw features : \n', df_iris.describe())
+print("Summary Statistics of the raw features : \n", df.describe())
 
 ###############################################################################
-# We will preprocess the features using variance thresholding, zscore and PCA
-# and then train a random forest model
+# We will preprocess all features using variance thresholding.
+# We will only zscore the first two features, and then perform PCA using all
+# features. We will zscore the target and then train a random forest model.
+# Since we use the PipelineCreator object we have to explicitly declare which
+# `X_types` each preprocessing step should be applied to. If we do not declare
+# the type in the 'add' method using the 'apply_to' keyword argument,
+# the step will default to 'continuous' or to another type that can be declared
+# in the 'init' method of the 'PipelineCreator'.
+# To transform the target we could set 'apply_to='target'', which is a special
+# type, that cannot be user-defined. Please note also that if a step is added
+# to transform the target, you also have to explicitly add the model that is
+# to be used in the regression to the 'PipelineCreator'.
 
-# Define the model parameters and preprocessing steps first
+# Define model parameters and preprocessing steps first
+# The hyperparameters for each step can be added as a keyword argument and
+# should be either one parameter or an iterable of multiple parameters for a
+# search.
+
 # Setting the threshold for variance to 0.15, number of PCA components to 2
 # and number of trees for random forest to 200
 
-model_params = {'select_variance__threshold': 0.15,
-                'pca__n_components': 2,
-                'rf__n_estimators': 200}
+# By setting "apply_to=*", we can apply the preprocessing step to all features.
+pipeline_creator = (
+    PipelineCreator()
+    .add("select_variance", apply_to="*", threshold=0.15)
+    .add("zscore", apply_to="X_to_zscore")
+    .add("pca", apply_to="*", n_components=2)
+    .add("rf", apply_to="*", n_estimators=200, problem_type="regression")
+)
 
-preprocess_X = ['select_variance', 'zscore', 'pca']
+# Because we have already added the model to the pipeline creator, we can
+# simply drop in the pipeline_creator as a model. If we did not add a model
+# here, we could add the pipeline_creator using the keyword argument
+# 'preprocess' and hand over a model separately.
 
 scores, model = run_cross_validation(
-    X=X, y=y, data=df_iris, model='rf', preprocess_X=preprocess_X,
-    scoring=['accuracy', 'roc_auc'], model_params=model_params,
-    return_estimator='final', seed=200)
+    X=X,
+    y=y,
+    X_types=X_types,
+    data=df,
+    model=pipeline_creator,
+    scoring=["r2", "neg_mean_absolute_error"],
+    return_estimator="final",
+    seed=200,
+)
 
-###############################################################################
-# Now let's look at the data after pre-processing. It can be done using
-# 'preprocess' method. By default it will apply all the pre-processing steps
-# (`'select_variance'`, `'zscore'`, `'pca'` in this case) and return
-# pre-processed data. Note that here we are applying pre-processing only on X.
-# Notice that the column names have changed in this new dataframe.
+# We can use the final estimator to inspect the transformed features at a
+# specific step of the pipeline. Since the PCA was the last step added to the
+# pipeline, we can simply get the model up to this step by indexing as follows:
 
-pre_X, pre_y = model.preprocess(df_iris[X], df_iris[y])
-print('Features after PCA : \n', pre_X)
+X_after_pca = model[:-1].transform(df[X])
+
+print("X after PCA:")
+print("=" * 79)
+print(X_after_pca)
+
+# We can select pipelines up to earlier steps by indexing previous elements
+# in the final estimator. For example, to inspect features after the zscoring
+# step:
+
+X_after_zscore = model[:-2].transform(df[X])
+print("X after zscore:")
+print("=" * 79)
+print(X_after_zscore)
+
+# However, to make this less confusing you can also simply use the high-level
+# function 'preprocess' to explicitly refer to a pipeline step by name:
+
+
+X_after_pca = preprocess(model, X=X, data=df, until="pca")
+X_after_zscore = preprocess(model, X=X, data=df, until="zscore")
 
 # Let's plot scatter plots for raw features and the PCA components
-pre_df = pre_X.join(pre_y)
 fig, axes = plt.subplots(1, 2, figsize=(12, 6))
-sns.scatterplot(x='sepal_length', y='sepal_width', data=df_iris, hue='species',
-                ax=axes[0])
-axes[0].set_title('Raw features')
-sns.scatterplot(x='pca_component_0', y='pca_component_1', data=pre_df,
-                hue='species', ax=axes[1])
-axes[1].set_title('PCA components')
-
-###############################################################################
-# But let's say we want to look at features after applying only one or more
-# preprocessing steps eg: only variance thresholding or till zscore.
-# To do so we can set the argument `until` to the desired preprocessing step.
-# Note that the name of the preprocessing step is the same as used in the
-# `run_cross_validation` function in `preprocess_X`.
-
-# Let's look at features after variance thresholding. We see that now we have
-# one feature less as the variance for this feature ('sepal_width') was below
-# the set threshold.
-
-var_th_X, var_th_y = model.preprocess(df_iris[X], df_iris[y],
-                                      until='select_variance')
-print('Features after variance thresholding: \n', var_th_X)
-
-###############################################################################
-# Now let's see features after variance thresholding and zscoring. We can now
-# set the `until` argument to `'zscore'`
-
-zscored_X, zscored_y = model.preprocess(df_iris[X], df_iris[y], until='zscore')
-zscored_df = zscored_X.join(zscored_y)
+sns.scatterplot(x=X[0], y=X[1], data=df, ax=axes[0])
+axes[0].set_title("Raw features")
+sns.scatterplot(x="pca0", y="pca1", data=X_after_pca, ax=axes[1])
+axes[1].set_title("PCA components")
 
 ###############################################################################
 # Let's look at the summary statistics of the zscored features. We see here
 # that the mean of all the features is zero and standard deviation is one.
-print('Summary Statistics of the zscored features : \n', zscored_df.describe())
-
-###############################################################################
-# We can also look at the features pre-processed till PCA. Since `'pca'` is the
-# last preprocessing step we don't really need the `until` argument
-# (as shown above).
-
-pre_X, pre_y = model.preprocess(df_iris[X], df_iris[y], until='pca')
-print('Features after PCA : \n', pre_X)
+print(
+    "Summary Statistics of the zscored features : \n",
+    X_after_zscore.describe(),
+)
 
 ###############################################################################
