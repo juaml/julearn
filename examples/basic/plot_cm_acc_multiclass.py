@@ -1,7 +1,7 @@
 """
-Multiclass Classification
-============================
+Multiclass Classification.
 
+============================
 This example uses the 'iris' dataset and performs multiclass
 classification using a Support Vector Machine classifier and plots
 heatmaps for cross-validation accuracies and plots confusion matrix
@@ -29,6 +29,8 @@ from julearn.utils import configure_logging
 # Set the logging level to info to see extra information
 configure_logging(level='INFO')
 
+###############################################################################
+# load the iris data from seaborn
 df_iris = load_dataset('iris')
 X = ['sepal_length', 'sepal_width', 'petal_length']
 y = 'species'
@@ -39,11 +41,41 @@ train_iris, test_iris = train_test_split(df_iris, test_size=0.2,
                                          stratify=df_iris[y])
 
 ###############################################################################
-# Perform multiclass classification as iris dataset contains 3 kinds of species
+# We want to perform multiclass classification as iris dataset contains 3 kinds
+# of species. We will first zscore all the features and then train a support
+# vector machine classifier.
+# We can use PipelineCreator object to specify preprocessing steps using the
+# add method and then pass this object to the `model` in `run_cross_validation`
+# .
+# By setting "apply_to=*", we can apply the preprocessing steps to all features
+# .
+
+pipleline_steps = PipelineCreator()
+pipleline_steps.add('zscore', apply_to='*')
+pipleline_steps.add('svm', apply_to='*')
+
 scores, model_iris = run_cross_validation(
-    X=X, y=y, data=train_iris, model='svm', preprocess_X='zscore',
-    problem_type='classification', scoring=['accuracy'],
-    return_estimator='final')
+    X=X, y=y, data=train_iris, model=pipleline_steps,
+    problem_type='classification',
+    scoring=['accuracy'], return_estimator='final')
+
+###############################################################################
+# Alternatively, we could define `X_types`. So here we can define all the
+# features (X) as `zscore_features` in `X_types` because we want to zscore all
+# the features. Now, while adding 'zscore` step in the `PipelineCreator`, we
+# can say `apply_to='zscore_features'`. Additionally, define X_types in the
+# `run_cross_validation` function.
+
+X_types = {'zscore_features': X}
+
+pipleline_steps = PipelineCreator()
+pipleline_steps.add('zscore', apply_to='zscore_features')
+pipleline_steps.add('svm', apply_to='zscore_features')
+
+scores, model_iris = run_cross_validation(
+    X=X, y=y, data=train_iris, model=pipleline_steps,
+    X_types=X_types, problem_type='classification',
+    scoring=['accuracy'], return_estimator='final')
 
 ###############################################################################
 # The scores dataframe has all the values for each CV split.
