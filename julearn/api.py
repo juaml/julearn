@@ -88,7 +88,7 @@ def run_cross_validation(
 
         Options are:
 
-        * None: defaults to 5-fold, repeated 5 times.
+        * None: defaults to 5-fold
         * int: the number of folds in a `(Stratified)KFold`
         * CV Splitter (see scikit-learn documentation on CV)
         * An iterable yielding (train, test) splits as arrays of indices.
@@ -128,6 +128,13 @@ def run_cross_validation(
     seed : int | None
         If not None, set the random seed before any operation. Useful for
         reproducibility.
+    verbose: int
+        Verbosity level of outer cross-validation.
+        Follows scikit-learn/joblib converntions.
+        0 means no additional information is printed.
+        Larger number genereally mean more information is printed.
+        Note: verbosity up to 50 will print into standard error,
+        while larger than 50 will print in standrad output.
 
     Returns
     -------
@@ -145,13 +152,7 @@ def run_cross_validation(
         Follows scikit-learn/joblib conventions.
         None is 1 unless you use a joblib.parallel_backend.
         -1 means use all available processes for parallelisation.
-    verbose: int
-        Verbosity level of outer cross-validation.
-        Follows scikit-learn/joblib converntions.
-        0 means no additional information is printed.
-        Larger number genereally mean more information is printed.
-        Note: verbosity up to 50 will print into standard error,
-        while larger than 50 will print in standrad output.
+
     """
 
     X_types = {} if X_types is None else X_types
@@ -161,16 +162,10 @@ def run_cross_validation(
         logger.info(f"Setting random seed to {seed}")
         np.random.seed(seed)
 
-    # TODO: remove default CV like this
-    # if cv is None:
-    #     logger.info("Using default CV")
-    #     cv = "repeat:5_nfolds:5"
-
     # Interpret the input data and prepare it to be used with the library
     df_X, y, df_groups = prepare_input_data(
         X=X,
         y=y,
-        confounds=None,
         df=data,
         pos_labels=pos_labels,
         groups=groups,
@@ -259,6 +254,7 @@ def run_cross_validation(
         return_estimator=cv_return_estimator,
         n_jobs=n_jobs,
         return_train_score=return_train_score,
+        verbose=verbose,
     )
 
     n_repeats = getattr(cv_outer, "n_repeats", 1)
