@@ -31,7 +31,7 @@ class DataFrameConfoundRemover(JuTransformer):
         If not specified, 'apply_to' defaults to 'continuous'. To apply
         confound removal to all features, you can use the '*' regular
         expression syntax.
-    model_confound : obj, optional
+    model_confound : ModelLike, optional
         Sklearn compatible model used to predict specified features
         independently using the confounds as features. The predictions of
         these models are then subtracted from each of the specified
@@ -69,9 +69,9 @@ class DataFrameConfoundRemover(JuTransformer):
 
         Parameters
         ----------
-        X : pandas.DataFrame
+        X : pd.DataFrame
             Training data.
-        y : pandas.Series, optional
+        y : pd.Series, optional
             Target values.
 
         Returns
@@ -108,12 +108,12 @@ class DataFrameConfoundRemover(JuTransformer):
 
         Parameters
         ----------
-        X : pandas.DataFrame
+        X : pd.DataFrame
             Data to be deconfounded.
 
         Returns
         -------
-        out : pandas.DataFrame
+        out : pd.DataFrame
             Deconfounded data.
         """
         df_X, df_confounds = self._split_into_X_confound(X)
@@ -171,7 +171,7 @@ class DataFrameConfoundRemover(JuTransformer):
         Returns
         -------
         list
-            Names of features to be kept in the output pandas.DataFrame.
+            Names of features to be kept in the output pd.DataFrame.
         """
         return (
             self.feature_names_in_
@@ -188,14 +188,14 @@ class DataFrameConfoundRemover(JuTransformer):
 
         Parameters
         ----------
-        X : pandas.DataFrame
+        X : pd.DataFrame
             Input dataframe including features and confounds.
 
         Returns
         -------
-        df_X : pandas.DataFrame
+        df_X : pd.DataFrame
             DataFrame containing only features.
-        df_confounds : pandas.DataFrame
+        df_confounds : pd.DataFrame
             DataFrame containing only confounds.
         """
         if not isinstance(X, pd.DataFrame):
@@ -260,7 +260,7 @@ class TargetConfoundRemover(
 
         Attributes
         ----------
-        model_confound : object
+        model_confound : ModelLike
             Model used to predict the target using the confounds as
             features. The predictions of these models are then subtracted
             from the actual target, default is None. Meaning the use of
