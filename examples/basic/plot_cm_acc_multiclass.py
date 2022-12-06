@@ -2,6 +2,7 @@
 Multiclass Classification.
 ==========================
 
+============================
 This example uses the 'iris' dataset and performs multiclass
 classification using a Support Vector Machine classifier and plots
 heatmaps for cross-validation accuracies and plots confusion matrix

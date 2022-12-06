@@ -28,6 +28,7 @@ import seaborn as sns
 from seaborn import load_dataset
 
 from julearn import run_cross_validation
+from julearn.pipeline import PipelineCreator
 from julearn.utils import configure_logging
 from julearn.inspect import preprocess
 
