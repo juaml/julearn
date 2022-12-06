@@ -1,6 +1,9 @@
+"""Provide sklearn compatible transformers for confound removal."""
+
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
+
 import numpy as np
 import pandas as pd
 from sklearn.base import (
@@ -15,6 +18,36 @@ from .. base import JuTransformer
 
 
 class DataFrameConfoundRemover(JuTransformer):
+    """Remove confounds from specific features.
+
+    Transformer which transforms pd.DataFrames and removes the confounds
+    from specific features by subtracting the predicted features
+    given the confounds from the actual features.
+
+    Parameters
+    ----------
+    apply_to : str or list of str, optional
+        From which feature types ('X_types') to remove confounds.
+        If not specified, 'apply_to' defaults to 'continuous'. To apply
+        confound removal to all features, you can use the '*' regular
+        expression syntax.
+    model_confound : obj, optional
+        Sklearn compatible model used to predict specified features
+        independently using the confounds as features. The predictions of
+        these models are then subtracted from each of the specified
+        features, defaults to LinearRegression().
+    confounds : str or list of str, optional
+        The name of the 'confounds' type(s), i.e. which column type(s)
+        represents the confounds. By default this is set to 'confounds'.
+    threshold : float, optional
+        All residual values after confound removal which fall under the
+        threshold will be set to 0. None (default) means that no threshold
+        will be applied.
+    keep_confounds : bool, optional
+        Whether you want to return the confound together with the confound
+        removed features, default is False.
+    """
+
     def __init__(
         self,
         apply_to=None,
@@ -23,33 +56,6 @@ class DataFrameConfoundRemover(JuTransformer):
         threshold=None,
         keep_confounds=False,
     ):
-        """Transformer which can use pd.DataFrames and remove the confounds
-        from the features by subtracting the predicted features
-        given the confounds from the actual features.
-
-        Parameters
-        ----------
-        apply_to : str or list of str
-            Which columns should be confound removed.
-        model_confound : obj
-            Sklearn compatible model used to predict all features independently
-            using the confounds as features. The predictions of these models
-            are then subtracted from each feature, defaults to
-            LinearRegression().
-        confounds : list(str) | str
-            A string representing a regular expression by which the confounds
-            can be detected from the column names.
-            You can use the exact column names or another regex.
-            The default follows the naming convention inside of julearn:
-            '.*__:type:__*.'
-        threshold : float | None
-            All residual values after confound removal which fall under the
-            threshold will be set to 0.None (default) means that no threshold
-            will be applied.
-        keep_confounds : bool, optional
-            Whether you want to return the confound together with the confound
-            removed features, default is False
-        """
         if model_confound is None:
             model_confound = LinearRegression()
         self.apply_to = apply_to
@@ -59,13 +65,13 @@ class DataFrameConfoundRemover(JuTransformer):
         self.keep_confounds = keep_confounds
 
     def fit(self, X, y=None):
-        """Fit confound remover
+        """Fit DataFrameConfoundRemover.
 
         Parameters
         ----------
         X : pandas.DataFrame
-            Training data
-        y : pandas.Series | None
+            Training data.
+        y : pandas.Series, optional
             Target values.
 
         Returns
@@ -98,17 +104,17 @@ class DataFrameConfoundRemover(JuTransformer):
         return self
 
     def transform(self, X):
-        """Removes confounds from data
+        """Remove confounds from data.
 
         Parameters
         ----------
         X : pandas.DataFrame
-            Data to be deconfounded
+            Data to be deconfounded.
 
         Returns
         -------
         out : pandas.DataFrame
-            Data without confounds
+            Deconfounded data.
         """
         df_X, df_confounds = self._split_into_X_confound(X)
         df_X_prediction = pd.DataFrame(
@@ -136,12 +142,12 @@ class DataFrameConfoundRemover(JuTransformer):
         return df_out
 
     def get_support(self, indices=False):
-        """Get the support mask
+        """Get the support mask.
 
         Parameters
         ----------
         indices : bool
-            If true, return indexes
+            If true, return indices.
 
         Returns
         -------
@@ -154,9 +160,19 @@ class DataFrameConfoundRemover(JuTransformer):
             return self.support_mask_
 
     def get_feature_names_out(self, input_features=None):
-        print("here")
-        print(self.get_feature_names_in_)
-        print(self.detected_confounds_)
+        """Get names of features to be returned.
+
+        Parameters
+        ----------
+        input_features : None
+            Parameter to ensure scikit-learn compatibility. It is not used by
+            the method.
+
+        Returns
+        -------
+        list
+            Names of features to be kept in the output pandas.DataFrame.
+        """
         return (
             self.feature_names_in_
             if self.keep_confounds is True
@@ -168,7 +184,20 @@ class DataFrameConfoundRemover(JuTransformer):
         )
 
     def _split_into_X_confound(self, X):
-        """splits the original X input into the features (X) and confounds."""
+        """Split the original X into the features (X) and confounds.
+
+        Parameters
+        ----------
+        X : pandas.DataFrame
+            Input dataframe including features and confounds.
+
+        Returns
+        -------
+        df_X : pandas.DataFrame
+            DataFrame containing only features.
+        df_confounds : pandas.DataFrame
+            DataFrame containing only confounds.
+        """
         if not isinstance(X, pd.DataFrame):
             raise_error(
                 "DataFrameConfoundRemover only supports DataFrames as X"
@@ -190,9 +219,22 @@ class DataFrameConfoundRemover(JuTransformer):
         return df_X, df_confounds
 
     def _apply_threshold(self, residuals):
-        """Rounds residuals to 0 when smaller than
-        the previously described absolute threshold.
-        This is done to prevent correlated rounding errors
+        """Round residuals to 0.
+
+        If residuals are smaller than the absolute threshold specified during
+        initialisation of the DataFrameConfoundRemover, residuals are rounded
+        down to 0. This is done to prevent correlated rounding errors.
+
+        Parameters
+        ----------
+        residuals : pd.DataFrame
+            DataFrame containing the residuals after confound removal.
+
+        Returns
+        -------
+        residuals : pd.DataFrame
+            DataFrame containing residuals after rounding down to 0 if they are
+            below the threshold.
         """
         if self.threshold is not None:
             # Accounting for correlated rounding errors for very small
