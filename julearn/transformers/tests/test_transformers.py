@@ -24,6 +24,7 @@ from sklearn.base import BaseEstimator, TransformerMixin
 from seaborn import load_dataset
 
 import pytest
+import warnings
 
 from julearn.utils.testing import (
     do_scoring_test,
@@ -108,16 +109,12 @@ def test_register_reset():
     assert get_transformer("passthrough").__class__ == PassThroughTransformer
 
     with pytest.warns(RuntimeWarning, match="Transformer named"):
-        register_transformer(
-            "passthrough", PassThroughTransformer
-        )
+        register_transformer("passthrough", PassThroughTransformer)
     reset_transformer_register()
     with pytest.raises(ValueError, match="The specified transformer"):
         get_transformer("passthrough")
 
-    register_transformer(
-        "passthrough", PassThroughTransformer, "continuous"
-    )
+    register_transformer("passthrough", PassThroughTransformer, "continuous")
     assert get_transformer("passthrough").__class__ == PassThroughTransformer
 
 
@@ -134,10 +131,10 @@ def test_register_warning():
     reset_transformer_register()
 
     with pytest.raises(ValueError, match="Transformer name"):
-        register_transformer("zscore", fish,  overwrite=False)
+        register_transformer("zscore", fish, overwrite=False)
     reset_transformer_register()
 
-    with pytest.warns(None) as record:
-        register_transformer("zscore", fish,   overwrite=True)
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        register_transformer("zscore", fish, overwrite=True)
     reset_transformer_register()
-    assert len(record) == 0

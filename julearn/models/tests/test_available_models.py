@@ -7,7 +7,7 @@ import pytest
 from julearn.models import register_model, reset_model_register, get_model
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 from sklearn.ensemble import RandomForestRegressor
-
+import warnings
 
 def test_register_model():
     register_model("dt",
@@ -35,8 +35,8 @@ def test_register_warning():
             "rf", regression_cls=RandomForestRegressor, overwrite=False)
     reset_model_register()
 
-    with pytest.warns(None) as record:
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
         register_model(
             "rf", regression_cls=RandomForestRegressor, overwrite=True)
     reset_model_register()
-    assert len(record) == 0

@@ -4,6 +4,7 @@
 import numpy as np
 from sklearn.base import clone
 from sklearn.svm import SVC, SVR
+from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 from sklearn.ensemble import (
     RandomForestClassifier,
     RandomForestRegressor,
@@ -143,7 +144,11 @@ def test_naive_bayes_estimators(model_name, model_class, model_params):
     "model_name, model_class, model_params",
     [
         ("svm", SVC, {}),
-        ("rf", RandomForestClassifier, {"n_estimators": 10}),
+        (
+            "rf",
+            RandomForestClassifier,
+            {"n_estimators": 10, "random_state": 42},
+        ),
         ("et", ExtraTreesClassifier, {"n_estimators": 10, "random_state": 42}),
         ("dummy", DummyClassifier, {"strategy": "prior"}),
         ("gauss", GaussianProcessClassifier, {}),
@@ -152,14 +157,23 @@ def test_naive_bayes_estimators(model_name, model_class, model_params):
         ("ridge", RidgeClassifier, {}),
         ("ridgecv", RidgeClassifierCV, {}),
         ("sgd", SGDClassifier, {"random_state": 2}),
-        ("adaboost", AdaBoostClassifier, {}),
-        ("bagging", BaggingClassifier, {}),
+        ("adaboost", AdaBoostClassifier, {"random_state": 42}),
+        (
+            "bagging",
+            BaggingClassifier,
+            {
+                "random_state": 42,
+                "estimator": DecisionTreeClassifier(random_state=42),
+            },
+        ),
         ("gradientboost", GradientBoostingClassifier, {}),
     ],
 )
 def test_classificationestimators(model_name, model_class, model_params):
     """Test all classification estimators"""
     df_iris = load_dataset("iris")
+
+    decimal = 5 if model_name != "sgd" else -1
 
     # keep only two species
     df_iris = df_iris[df_iris["species"].isin(["setosa", "virginica"])]
@@ -187,6 +201,7 @@ def test_classificationestimators(model_name, model_class, model_params):
         api_params=api_params,
         sklearn_model=clf,
         scorers=scorers,
+        decimal=decimal,
     )
     if model_name != "dummy":
         # now let's try target-dependent scores
@@ -207,6 +222,7 @@ def test_classificationestimators(model_name, model_class, model_params):
             sklearn_model=clf,
             scorers=scorers,
             sk_y=sk_y,
+            decimal=decimal,
         )
 
 
@@ -214,17 +230,21 @@ def test_classificationestimators(model_name, model_class, model_params):
     "model_name, model_class, model_params",
     [
         ("svm", SVR, {}),
-        ("rf", RandomForestRegressor, {"n_estimators": 10}),
-        ("et", ExtraTreesRegressor, {"n_estimators": 10}),
+        (
+            "rf",
+            RandomForestRegressor,
+            {"n_estimators": 10, "random_state": 42},
+        ),
+        ("et", ExtraTreesRegressor, {"n_estimators": 10, "random_state": 42}),
         ("dummy", DummyRegressor, {"strategy": "mean"}),
-        ("gauss", GaussianProcessRegressor, {}),
+        ("gauss", GaussianProcessRegressor, {"random_state": 42}),
         ("linreg", LinearRegression, {}),
         ("ridge", Ridge, {}),
         ("ridgecv", RidgeCV, {}),
         ("sgd", SGDRegressor, {"random_state": 2}),
         ("adaboost", AdaBoostRegressor, {"random_state": 2}),
         ("bagging", BaggingRegressor, {"random_state": 2}),
-        ("gradientboost", GradientBoostingRegressor, {}),
+        ("gradientboost", GradientBoostingRegressor, {"random_state": 42}),
     ],
 )
 def test_regression_estimators(model_name, model_class, model_params):
@@ -259,6 +279,7 @@ def test_regression_estimators(model_name, model_class, model_params):
         api_params=api_params,
         sklearn_model=clf,
         scorers=scorers,
+        decimal=2,
     )
 
 

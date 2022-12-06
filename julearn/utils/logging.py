@@ -42,20 +42,20 @@ def get_versions(sys):
     for name, module in sys.modules.items():
         if "." in name:
             continue
-        if name in ["_curses", "_glmnet"]:
+        if name in ["_curses"]:
             continue
-        module_version = LooseVersion(getattr(module, "__version__", None))
+        vstring = str(getattr(module, "__version__", None))
+        module_version = LooseVersion(vstring)
         module_version = getattr(module_version, "vstring", None)
         if module_version is None:
             module_version = None
         elif "git" in module_version:
-            git_path = Path(module.__file__).resolve().parent
+            git_path = Path(module.__file__).resolve().parent  # type: ignore
             head = _get_git_head(git_path)
-            module_version += "-HEAD:{}".format(head)
+            module_version += f"-HEAD:{head}"
 
         module_versions[name] = module_version
     return module_versions
-
 
 def _safe_log(versions, name):
     if name in versions:

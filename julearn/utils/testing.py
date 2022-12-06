@@ -40,7 +40,7 @@ from sklearn.naive_bayes import (
     MultinomialNB,
 )
 from sklearn.base import clone, TransformerMixin, BaseEstimator
-from sklearn.model_selection import cross_validate, check_cv
+from sklearn.model_selection import cross_validate, check_cv, KFold
 
 from julearn import run_cross_validation
 
@@ -139,45 +139,56 @@ def compare_models(clf1, clf2):  # pragma: no cover
 
 
 def do_scoring_test(
-    X, y, data, X_types, api_params, sklearn_model, scorers, cv=None, sk_y=None
+    X,
+    y,
+    data,
+    X_types,
+    api_params,
+    sklearn_model,
+    scorers,
+    cv=5,
+    sk_y=None,
+    decimal=5,
 ):
 
     sk_X = data[X].values
     if sk_y is None:
         sk_y = data[y].values
 
-    np.random.seed(42)
     params_dict = {k: v for k, v in api_params.items()}
     if "preprocess" not in params_dict:
         params_dict["preprocess"] = "zscore"
-
+    jucv = KFold(n_splits=cv, random_state=42, shuffle=True)
+    np.random.seed(42)
     actual, actual_estimator = run_cross_validation(
         X=X,
         y=y,
         X_types=X_types,
         data=data,
         scoring=scorers,
-        cv=cv,
+        cv=jucv,
         return_estimator="final",
         **params_dict,
     )
-
+    sk_cv = KFold(n_splits=cv, random_state=42, shuffle=True)
     np.random.seed(42)
-    sk_cv = check_cv(cv)
     expected = cross_validate(
         sklearn_model, sk_X, sk_y, cv=sk_cv, scoring=scorers
     )
 
-    for scoring in scorers:
-        s_key = f"test_{scoring}"
-        assert len(actual.columns) == len(expected) + 2
-        assert len(actual[s_key]) == len(expected[s_key])
-        assert_array_almost_equal(actual[s_key], expected[s_key], decimal=5)
+    # Compare the models
+    clf1 = actual_estimator.steps[-1][1]
+    clf2 = clone(sklearn_model).fit(sk_X, sk_y).steps[-1][1]
+    compare_models(clf1, clf2)
 
-        # Compare the models
-        clf1 = actual_estimator.steps[-1][1]
-        clf2 = clone(sklearn_model).fit(sk_X, sk_y).steps[-1][1]
-        compare_models(clf1, clf2)
+    if decimal > 0:
+        for scoring in scorers:
+            s_key = f"test_{scoring}"
+            assert len(actual.columns) == len(expected) + 2
+            assert len(actual[s_key]) == len(expected[s_key])
+            assert_array_almost_equal(
+                actual[s_key], expected[s_key], decimal=decimal
+            )
 
 
 class PassThroughTransformer(TransformerMixin, BaseEstimator):
