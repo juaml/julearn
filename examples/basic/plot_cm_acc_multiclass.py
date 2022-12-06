@@ -23,7 +23,6 @@ from sklearn.model_selection import train_test_split, RepeatedKFold
 from sklearn.metrics import confusion_matrix
 
 from julearn import run_cross_validation
-from julearn.pipeline import PipelineCreator
 from julearn.utils import configure_logging
 
 ###############################################################################
