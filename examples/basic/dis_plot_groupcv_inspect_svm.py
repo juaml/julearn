@@ -1,7 +1,7 @@
 """
-Inspecting SVM models
-=====================
+Inspecting SVM models.
 
+=====================
 This example uses the 'fmri' dataset, performs simple binary classification
 using a Support Vector Machine classifier and analyse the model.
 
@@ -28,6 +28,7 @@ import seaborn as sns
 from seaborn import load_dataset
 
 from julearn import run_cross_validation
+from julearn.pipeline import PipelineCreator
 from julearn.utils import configure_logging
 from julearn.inspect import preprocess
 
