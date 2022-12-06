@@ -142,8 +142,6 @@ def do_scoring_test(
     X, y, data, X_types, api_params, sklearn_model, scorers, cv=None, sk_y=None
 ):
 
-    if cv is None:
-        cv = "repeat:1_nfolds:2"
     sk_X = data[X].values
     if sk_y is None:
         sk_y = data[y].values

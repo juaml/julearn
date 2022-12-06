@@ -2,7 +2,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 import numpy as np
-from sklearn.model_selection import cross_validate
+from sklearn.model_selection import cross_validate, check_cv
 from sklearn.pipeline import Pipeline
 import pandas as pd
 
@@ -162,9 +162,9 @@ def run_cross_validation(
         np.random.seed(seed)
 
     # TODO: remove default CV like this
-    if cv is None:
-        logger.info("Using default CV")
-        cv = "repeat:5_nfolds:5"
+    # if cv is None:
+    #     logger.info("Using default CV")
+    #     cv = "repeat:5_nfolds:5"
 
     # Interpret the input data and prepare it to be used with the library
     df_X, y, df_groups = prepare_input_data(
