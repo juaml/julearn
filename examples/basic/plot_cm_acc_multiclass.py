@@ -22,6 +22,7 @@ from sklearn.model_selection import train_test_split, RepeatedKFold
 from sklearn.metrics import confusion_matrix
 
 from julearn import run_cross_validation
+from julearn.pipeline import PipelineCreator
 from julearn.utils import configure_logging
 
 ###############################################################################
@@ -43,10 +44,44 @@ train_iris, test_iris = train_test_split(df_iris, test_size=0.2,
 # We want to perform multiclass classification as iris dataset contains 3 kinds
 # of species. We will first zscore all the features and then train a support
 # vector machine classifier.
+<<<<<<< HEAD
 
 cv = RepeatedKFold(n_splits=5, n_repeats=5, random_state=200)
 scores, model_iris = run_cross_validation(
     X=X, y=y, data=train_iris, model='svm', preprocess='zscore', cv=cv,
+=======
+# We can use PipelineCreator object to specify preprocessing steps using the
+# add method and then pass this object to the `model` in `run_cross_validation`
+# .
+# By setting "apply_to=*", we can apply the preprocessing steps to all features
+# .
+
+pipleline_steps = PipelineCreator()
+pipleline_steps.add('zscore', apply_to='*')
+pipleline_steps.add('svm', apply_to='*')
+
+scores, model_iris = run_cross_validation(
+    X=X, y=y, data=train_iris, model=pipleline_steps,
+    problem_type='classification',
+    scoring=['accuracy'], return_estimator='final')
+
+###############################################################################
+# Alternatively, we could define `X_types`. So here we can define all the
+# features (X) as `zscore_features` in `X_types` because we want to zscore all
+# the features. Now, while adding 'zscore` step in the `PipelineCreator`, we
+# can say `apply_to='zscore_features'`. Additionally, define X_types in the
+# `run_cross_validation` function.
+
+X_types = {'zscore_features': X}
+
+pipleline_steps = PipelineCreator()
+pipleline_steps.add('zscore', apply_to='zscore_features')
+pipleline_steps.add('svm', apply_to='zscore_features')
+
+scores, model_iris = run_cross_validation(
+    X=X, y=y, data=train_iris, model=pipleline_steps,
+    X_types=X_types, problem_type='classification',
+>>>>>>> bb2154e9dd30277d2318c2a0f87305778f6f4da7
     scoring=['accuracy'], return_estimator='final')
 
 ###############################################################################
