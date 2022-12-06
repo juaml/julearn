@@ -1,7 +1,7 @@
 """
-Multiclass Classification
-============================
+Multiclass Classification.
 
+============================
 This example uses the 'iris' dataset and performs multiclass
 classification using a Support Vector Machine classifier and plots
 heatmaps for cross-validation accuracies and plots confusion matrix
@@ -18,7 +18,7 @@ import seaborn as sns
 import numpy as np
 import matplotlib.pyplot as plt
 from seaborn import load_dataset
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, RepeatedKFold
 from sklearn.metrics import confusion_matrix
 
 from julearn import run_cross_validation
@@ -28,6 +28,8 @@ from julearn.utils import configure_logging
 # Set the logging level to info to see extra information
 configure_logging(level='INFO')
 
+###############################################################################
+# load the iris data from seaborn
 df_iris = load_dataset('iris')
 X = ['sepal_length', 'sepal_width', 'petal_length']
 y = 'species'
@@ -35,14 +37,17 @@ y = 'species'
 ###############################################################################
 # Split the dataset into train and test
 train_iris, test_iris = train_test_split(df_iris, test_size=0.2,
-                                         stratify=df_iris[y])
+                                         stratify=df_iris[y], random_state=200)
 
 ###############################################################################
-# Perform multiclass classification as iris dataset contains 3 kinds of species
+# We want to perform multiclass classification as iris dataset contains 3 kinds
+# of species. We will first zscore all the features and then train a support
+# vector machine classifier.
+
+cv = RepeatedKFold(n_splits=5, n_repeats=5, random_state=200)
 scores, model_iris = run_cross_validation(
-    X=X, y=y, data=train_iris, model='svm', preprocess_X='zscore',
-    problem_type='classification', scoring=['accuracy'],
-    return_estimator='final')
+    X=X, y=y, data=train_iris, model='svm', preprocess='zscore', cv=cv,
+    scoring=['accuracy'], return_estimator='final')
 
 ###############################################################################
 # The scores dataframe has all the values for each CV split.

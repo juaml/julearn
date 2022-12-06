@@ -1,10 +1,9 @@
 """
-Inspecting SVM models
-=====================
+Inspecting SVM models.
 
+=====================
 This example uses the 'fmri' dataset, performs simple binary classification
 using a Support Vector Machine classifier and analyse the model.
-
 
 References
 ----------
@@ -15,9 +14,12 @@ cognitive control in context-dependent decision-making. Cerebral Cortex.
 .. include:: ../../links.inc
 """
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
+#          Shammi More <s.more@fz-juelich.de>
 #
 # License: AGPL
+
 import numpy as np
+import pandas as pd
 
 from sklearn.model_selection import GroupShuffleSplit
 
@@ -27,6 +29,7 @@ from seaborn import load_dataset
 
 from julearn import run_cross_validation
 from julearn.utils import configure_logging
+from julearn.inspect import preprocess
 
 ###############################################################################
 # Set the logging level to info to see extra information
@@ -69,8 +72,8 @@ print(np.unique(df_fmri.groupby(
 ###############################################################################
 # We have exactly one value per condition.
 #
-# Lets try to build a model, that given both parietal and frontal signal,
-# predicts if the event was a *cue* or a *stim*.
+# Lets try to build a model, that uses parietal and frontal signal to predicts
+# whether the event was a *cue* or a *stim*.
 #
 # First we define our X and y variables.
 X = ['parietal', 'frontal']
@@ -90,9 +93,10 @@ df_fmri = df_fmri.pivot(
 df_fmri = df_fmri.reset_index()
 
 ###############################################################################
-# We will use a Support Vector Machine.
+# Here we want to zscore all the features and then train a Support Vector
+# Machine classifier.
 
-scores = run_cross_validation(X=X, y=y, preprocess_X='zscore', data=df_fmri,
+scores = run_cross_validation(X=X, y=y, data=df_fmri, preprocess='zscore',
                               model='svm')
 
 print(scores['test_score'].mean())
@@ -122,8 +126,9 @@ print(scores['test_score'].mean())
 cv = GroupShuffleSplit(n_splits=5, test_size=0.5, random_state=42)
 
 scores, model = run_cross_validation(
-    X=X, y=y, data=df_fmri, model='svm', preprocess_X='zscore', cv=cv,
+    X=X, y=y, data=df_fmri, preprocess='zscore', model='svm', cv=cv,
     groups='subject', return_estimator='final')
+
 print(scores['test_score'].mean())
 
 ###############################################################################
@@ -132,15 +137,23 @@ print(scores['test_score'].mean())
 #
 # Lets do some visualization on how these two features interact and what
 # the preprocessing part of the model does.
+
+# Plot the raw features
 fig, axes = plt.subplots(1, 2, figsize=(8, 4))
 sns.scatterplot(x='parietal', y='frontal', hue='event', data=df_fmri,
                 ax=axes[0], s=5)
 axes[0].set_title('Raw data')
 
-pre_X, pre_y = model.preprocess(df_fmri[X], df_fmri[y])
-pre_df = pre_X.join(pre_y)
-sns.scatterplot(x='parietal', y='frontal', hue='event', data=pre_df,
-                ax=axes[1], s=5)
+# Plot the preprocessed features
+pre_X = preprocess(model, X=X, data=df_fmri, until="zscore",
+                   with_column_types=True)
+
+pre_df = pre_X.join(df_fmri[y])
+
+sns.scatterplot(
+    x='parietal__:type:__continuous', y='frontal__:type:__continuous',
+    hue='event', data=pre_df, ax=axes[1], s=5)
+
 axes[1].set_title('Preprocessed data')
 
 ###############################################################################
@@ -148,8 +161,13 @@ axes[1].set_title('Preprocessed data')
 #
 # It seems that the data is not quite linearly separable. Lets now visualize
 # how the SVM does this complex task.
-clf = model['svm']
-ax = sns.scatterplot(x='parietal', y='frontal', hue='event', data=pre_df, s=5)
+
+# get the model from the pipeline
+clf = model[2]
+fig = plt.figure()
+ax = sns.scatterplot(
+    x='parietal__:type:__continuous', y='frontal__:type:__continuous',
+    hue='event', data=pre_df, s=5)
 
 xlim = ax.get_xlim()
 ylim = ax.get_ylim()
@@ -159,6 +177,12 @@ xx = np.linspace(xlim[0], xlim[1], 30)
 yy = np.linspace(ylim[0], ylim[1], 30)
 YY, XX = np.meshgrid(yy, xx)
 xy = np.vstack([XX.ravel(), YY.ravel()]).T
-Z = clf.decision_function(xy).reshape(XX.shape)
+
+# Create pandas dataframe
+xy_df = pd.DataFrame(
+    data=xy,
+    columns=['parietal__:type:__continuous', 'frontal__:type:__continuous'])
+
+Z = clf.decision_function(xy_df).reshape(XX.shape)
 a = ax.contour(XX, YY, Z, colors='k', levels=[0], alpha=0.5, linestyles=['-'])
 ax.set_title('Preprocessed data with SVM decision function boundaries')
