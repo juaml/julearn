@@ -63,23 +63,49 @@ def ensure_apply_to(apply_to):
 
 
 class ColumnTypes:
+    """Class to hold types in regards to a pd.DataFrame Column.
+    Parameters
+    ----------
+    column_types : ColumnTypes or str or list of str or ColumnTypes
+        One str representing on type if columns or a list of these.
+        Instead of a str you can also provide a ColumnTypes itself.
+    """
+
     def __init__(
         self,
         column_types: Union[List[Union[str, 'ColumnTypes']],
-                            str, 'ColumnTypes']
-    ):
+                            str, 'ColumnTypes']):
         self.column_types = column_types
 
-    def add(self, column_types: Union[List[str], str]):
+    def add(self, column_types: Union[List[Union[str, 'ColumnTypes']],
+                                      str, 'ColumnTypes']):
+        """Add more column_types to the column_types
+
+        Parameters
+        ----------
+        column_types : ColumnTypes or str or list of str or ColumnTypes
+            One str representing on type if columns or a list of these.
+            Instead of a str you can also provide a ColumnTypes itself.
+
+
+        Returns
+        -------
+        self: ColumnTypes
+            The updates ColumnTypes.
+
+        """
         column_types = self.ensure_column_types(column_types)
         self.column_types = self.column_types.extend(column_types)
+        return self
 
     @property
     def column_types(self):
         return self._column_types
 
     @column_types.setter
-    def column_types(self, column_types: Union[List[str], str]):
+    def column_types(self, column_types: Union[List[Union[str, 'ColumnTypes']],
+                                               str, 'ColumnTypes']):
+
         self._column_types = self.ensure_column_types(column_types)
         self._pattern = self._to_pattern(self._column_types)
 
@@ -88,10 +114,34 @@ class ColumnTypes:
         return self._pattern
 
     def to_type_selector(self):
+        """Create a type selector usbale by sklearn.compose.ColumnTransformer
+        from ColumnTypes.
+        """
         return make_type_selector(self.pattern)
 
     @staticmethod
     def ensure_column_types(column_types):
+        """Checks and returns column_types as class ColumnTypes.
+
+        Parameters
+        ----------
+        column_types : Any
+            Argument that should be check to be compatible with:
+            One str representing on type if columns or a list of these.
+            Instead of a str you can also provide a ColumnTypes itself.
+
+        Raises
+        ------
+        ValueError
+            If the column_types is not a list, str or ColumnTypes.
+            Or if each elment of the list is not a str or ColumnTypes.
+
+        Returns
+        -------
+        self: ColumnTypes
+            The updates ColumnTypes.
+
+        """
         if not isinstance(column_types, (list, str, ColumnTypes)):
             raise_error(
                 "ColumnType needs to be provided a list, str or ColumnTypes,"
@@ -114,7 +164,24 @@ class ColumnTypes:
         return out
 
     @staticmethod
-    def _to_pattern(column_types):
+    def _to_pattern(column_types: Union[List[Union[str, 'ColumnTypes']],
+                                        str, 'ColumnTypes']):
+        """Converts column_types to pattern/regex usable to make a
+        column_selector.
+
+        Parameters
+        ----------
+        column_types : ColumnTypes or str or list of str or ColumnTypes
+            One str representing on type if columns or a list of these.
+            Instead of a str you can also provide a ColumnTypes itself.
+
+
+        Returns
+        -------
+        pattern: str
+            The pattern/regex
+
+        """
         if column_types in [".*", [".*"], "*", ["*"]]:
             pattern = ".*"
         elif isinstance(column_types, list) or isinstance(column_types, tuple):
