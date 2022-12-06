@@ -6,14 +6,11 @@ from sklearn.model_selection import cross_validate
 from sklearn.pipeline import Pipeline
 import pandas as pd
 
-from . prepare import (
-    prepare_input_data,
-    prepare_cv, check_consistency
-)
-from . pipeline import PipelineCreator
+from .prepare import prepare_input_data, prepare_cv, check_consistency
+from .pipeline import PipelineCreator
 
-from . utils import logger, raise_error
-from . utils.typing import ModelLike
+from .utils import logger, raise_error
+from .utils.typing import ModelLike
 
 
 def run_cross_validation(
@@ -25,6 +22,7 @@ def run_cross_validation(
     problem_type="classification",
     preprocess=None,
     return_estimator=False,
+    return_train_score=False,
     cv=None,
     groups=None,
     scoring=None,
@@ -82,7 +80,9 @@ def run_cross_validation(
           training data.
         * 'all': Return all the estimators (final and cv).
 
-
+    return_train_score : bool
+        Whether to return the training score with the test scores
+        (default is False).
     cv : int, str or cross-validation generator | None
         Cross-validation splitting strategy to use for model evaluation.
 
@@ -257,6 +257,7 @@ def run_cross_validation(
         groups=df_groups,
         return_estimator=cv_return_estimator,
         n_jobs=n_jobs,
+        return_train_score=return_train_score,
     )
 
     n_repeats = getattr(cv_outer, "n_repeats", 1)
