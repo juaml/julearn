@@ -249,5 +249,4 @@ class DataFrameConfoundRemover(JuTransformer):
                     else self.apply_to)
         apply_to = self._ensure_column_types(apply_to)
         confounds = self._ensure_column_types(self.confounds)
-        print(confounds._column_types, apply_to._column_types)
-        return apply_to.add(confounds._column_types)
+        return apply_to.add(confounds)
