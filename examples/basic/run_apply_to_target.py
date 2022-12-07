@@ -1,6 +1,5 @@
 """
 Transforming target variable with z-score.
-
 ===========================================
 
 This example uses the sklearn "diabetes" regression dataset, and transforms the
