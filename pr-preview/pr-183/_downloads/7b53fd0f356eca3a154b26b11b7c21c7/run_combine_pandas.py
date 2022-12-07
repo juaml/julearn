@@ -42,7 +42,7 @@ import pandas as pd
 #
 # Lets start with the fmri dataset.
 
-df_fmri = load_dataset('fmri')
+df_fmri = load_dataset("fmri")
 
 ###############################################################################
 # Lets see what this dataset has.
@@ -59,9 +59,8 @@ print(df_fmri.head())
 #
 # We will use the ``pivot`` method.
 df_fmri = df_fmri.pivot(
-    index=['subject', 'timepoint', 'event'],
-    columns='region',
-    values='signal')
+    index=["subject", "timepoint", "event"], columns="region", values="signal"
+)
 
 ###############################################################################
 # This method reshapes the table, keeping a the specified elements as index,
@@ -97,9 +96,9 @@ print(df_fmri.head())
 #
 # For the purpose of the example, I will create the dataframe here.
 metadata = {
-    'subject': [f's{i}' for i in range(14)],
-    'age': [23, 21, 31, 29, 43, 23, 43, 28, 48, 29, 35, 23, 34, 25],
-    'scanner': ['a'] * 6 + ['b'] * 8
+    "subject": [f"s{i}" for i in range(14)],
+    "age": [23, 21, 31, 29, 43, 23, 43, 28, 48, 29, 35, 23, 34, 25],
+    "scanner": ["a"] * 6 + ["b"] * 8,
 }
 df_meta = pd.DataFrame(metadata)
 print(df_meta)
@@ -110,8 +109,8 @@ print(df_meta)
 #
 # In this case, the matching element (or index) will be the column ``subject``.
 # We need to set the index in each dataframe before join.
-df_fmri = df_fmri.set_index('subject')
-df_meta = df_meta.set_index('subject')
+df_fmri = df_fmri.set_index("subject")
+df_meta = df_meta.set_index("subject")
 df_fmri = df_fmri.join(df_meta)
 print(df_fmri)
 
@@ -132,9 +131,10 @@ df_fmri = df_fmri.reset_index()
 #
 # We will still use the pivot, but in this case, we will have two values:
 df_fmri = df_fmri.pivot(
-    index=['subject', 'timepoint', 'age', 'scanner'],
-    columns='event',
-    values=['frontal', 'parietal'])
+    index=["subject", "timepoint", "age", "scanner"],
+    columns="event",
+    values=["frontal", "parietal"],
+)
 
 print(df_fmri)
 ###############################################################################
@@ -144,7 +144,7 @@ print(df_fmri)
 print(df_fmri.columns)
 ###############################################################################
 # The following trick will join the different levels using an underscore (*_*)
-df_fmri.columns = ['_'.join(x) for x in df_fmri.columns]
+df_fmri.columns = ["_".join(x) for x in df_fmri.columns]
 
 print(df_fmri)
 ###############################################################################
