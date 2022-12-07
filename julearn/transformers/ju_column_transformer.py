@@ -53,6 +53,11 @@ class JuColumnTransformer(JuTransformer):
                 klass=ValueError,
                 exception=e,
             )
+        if self.column_transformer_.verbose_feature_names_out:
+            out = [
+                x.replace("remainder__", "") if "remainder__" in x else x
+                for x in out
+            ]
         return out
 
     def get_params(self, deep=True):
