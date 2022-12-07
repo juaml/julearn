@@ -57,11 +57,11 @@ class Step:
 
 
 class PipelineCreator:  # Pipeline creator
-    def __init__(self):
+    def __init__(self, apply_to="continuous"):
         self._steps = list()
         self._added_target_transformer = False
         self._added_model = False
-        self.apply_to = "continuous"
+        self.apply_to = apply_to
 
     def add(
         self,

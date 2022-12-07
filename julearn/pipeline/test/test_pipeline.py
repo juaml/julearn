@@ -194,6 +194,18 @@ def test_pipelinecreator_default_apply_to():
     pipeline_creator.check_X_types({"duck": "teriyaki"})
 
 
+def test_pipelinecreator_default_constructor_apply_to():
+    """Test pipeline creator using a default apply_to in the constructor."""
+    pipeline_creator = PipelineCreator(apply_to="duck").add("rf")
+    pipeline_creator.check_X_types({"duck": "teriyaki"})
+
+    pipeline_creator = PipelineCreator(apply_to="duck")
+    pipeline_creator.add("zscore", apply_to="chicken")
+    pipeline_creator.add("rf")
+    pipeline_creator.check_X_types({"duck": "teriyaki", "chicken": "1"})
+
+
+
 def test_added_model_target_transform():
     pipeline_creator = PipelineCreator().add("zscore", apply_to="continuous")
     assert pipeline_creator._added_target_transformer is False
