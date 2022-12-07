@@ -204,7 +204,6 @@ class PipelineCreator:  # Pipeline creator
             # Wrap in a JuTransformer if needed
             if self.wrap and not isinstance(estimator, JuTransformer):
                 estimator = self.wrap_step(name, estimator, step_dict.apply_to)
-                name = f"wrapped_{name}"
 
             pipeline_steps.append((name, estimator))
 
@@ -227,7 +226,6 @@ class PipelineCreator:  # Pipeline creator
         }
         model_estimator.set_params(**model_params)
         if self.wrap and not isinstance(model_estimator, JuModelLike):
-            model_name = f"wrapped_{model_name}"
             logger.debug(f"Wrapping {model_name}")
             model_estimator = WrapModel(model_estimator, model_step.apply_to)
 
