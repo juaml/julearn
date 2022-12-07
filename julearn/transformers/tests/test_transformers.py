@@ -78,7 +78,7 @@ def test_feature_transformers(name, klass, params):
     # keep only two species
     df_iris = df_iris[df_iris["species"].isin(["setosa", "virginica"])]
     X = ["sepal_length", "sepal_width", "petal_length"]
-    X_types = dict(continuous=X)
+    X_types = {"continuous": X}
     y = "species"
 
     scorers = ["accuracy"]

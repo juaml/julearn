@@ -1,4 +1,5 @@
-from typing import Union, List
+from typing import Union, List, Set
+
 from ..utils.logging import raise_error
 from sklearn.compose import make_column_selector
 
@@ -64,26 +65,29 @@ def ensure_apply_to(apply_to):
 
 class ColumnTypes:
     """Class to hold types in regards to a pd.DataFrame Column.
+
     Parameters
     ----------
-    column_types : ColumnTypes or str or list of str or ColumnTypes
+    column_types : ColumnTypes or str or list of str or set of str
         One str representing on type if columns or a list of these.
         Instead of a str you can also provide a ColumnTypes itself.
     """
 
     def __init__(
-        self,
-        column_types: Union[
-            List[Union[str, "ColumnTypes"]], str, "ColumnTypes"
-        ],
+        self, column_types: Union[List[str], Set[str], str, "ColumnTypes"]
     ):
-        self.column_types = column_types
+        if isinstance(column_types, ColumnTypes):
+            _types = column_types._column_types
+        elif isinstance(column_types, str):
+            _types = set([column_types])
+        elif not isinstance(column_types, Set):
+            _types = set(column_types)
+        else:
+            raise_error(f"Cannot construct a ColumnType from {column_types}")
+        self._column_types = _types
 
     def add(
-        self,
-        column_types: Union[
-            List[Union[str, "ColumnTypes"]], str, "ColumnTypes"
-        ],
+        self, column_types: Union[List[str], Set[str], str, "ColumnTypes"]
     ):
         """Add more column_types to the column_types
 
@@ -100,28 +104,14 @@ class ColumnTypes:
             The updates ColumnTypes.
 
         """
-        column_types = self.ensure_column_types(column_types)
-        self.column_types = list(set([*self._column_types, *column_types]))
+        if not isinstance(column_types, ColumnTypes):
+            column_types = ColumnTypes(column_types)
+        self._column_types.update(column_types)
         return self
 
     @property
-    def column_types(self):
-        return self._column_types
-
-    @column_types.setter
-    def column_types(
-        self,
-        column_types: Union[
-            List[Union[str, "ColumnTypes"]], str, "ColumnTypes"
-        ],
-    ):
-
-        self._column_types = self.ensure_column_types(column_types)
-        self._pattern = self._to_pattern(self._column_types)
-
-    @property
     def pattern(self):
-        return self._pattern
+        return self._to_pattern()
 
     def to_type_selector(self):
         """Create a type selector usbale by sklearn.compose.ColumnTransformer
@@ -129,103 +119,39 @@ class ColumnTypes:
         """
         return make_type_selector(self.pattern)
 
-    @staticmethod
-    def ensure_column_types(column_types):
-        """Checks and returns column_types as class ColumnTypes.
-
-        Parameters
-        ----------
-        column_types : Any
-            Argument that should be check to be compatible with:
-            One str representing on type if columns or a list of these.
-            Instead of a str you can also provide a ColumnTypes itself.
-
-        Raises
-        ------
-        ValueError
-            If the column_types is not a list, str or ColumnTypes.
-            Or if each element of the list is not a str or ColumnTypes.
-
-        Returns
-        -------
-        self: ColumnTypes
-            The updates ColumnTypes.
-
-        """
-        if not isinstance(column_types, (list, str, ColumnTypes)):
-            raise_error(
-                "ColumnType needs to be provided a list, str or ColumnTypes,"
-                f" but got {column_types} with type = {type(column_types)}."
-            )
-        if not isinstance(column_types, list):
-            column_types = [column_types]
-
-        out = []
-        for column_type in column_types:
-            if isinstance(column_type, ColumnTypes):
-                out.extend(column_type.column_types)
-            elif isinstance(column_type, str):
-                out.append(column_type)
-            else:
-                raise_error(
-                    "Each entry of column_types needs to be a str,"
-                    f" but{column_type} is of type {type(column_type)}."
-                )
-        return out
-
-    @staticmethod
-    def _to_pattern(
-        column_types: Union[
-            List[Union[str, "ColumnTypes"]], str, "ColumnTypes"
-        ]
-    ):
+    def _to_pattern(self):
         """Converts column_types to pattern/regex usable to make a
         column_selector.
-
-        Parameters
-        ----------
-        column_types : ColumnTypes or str or list of str or ColumnTypes
-            One str representing on type if columns or a list of these.
-            Instead of a str you can also provide a ColumnTypes itself.
-
 
         Returns
         -------
         pattern: str
-            The pattern/regex
+            The pattern/regex that matches all the column types
 
         """
-        if column_types in [".*", [".*"], "*", ["*"]]:
+        if "*" in self._column_types or ".*" in self._column_types:
             pattern = ".*"
-        elif isinstance(column_types, list) or isinstance(column_types, tuple):
-            types = [f"__:type:__{_type}" for _type in column_types]
+        else:
+            types_patterns = []
+            for t_type in self._column_types:
+                if "__:type:__" in t_type:
+                    t_pattern = t_type
+                if "target" == t_type:
+                    t_pattern = t_type
+                else:
+                    t_pattern = f"__:type:__{t_type}"
+                types_patterns.append(t_pattern)
 
-            pattern = f"(?:{types[0]}"
-            if len(types) > 1:
-                for t in types[1:]:
+            pattern = f"(?:{types_patterns[0]}"
+            if len(types_patterns) > 1:
+                for t in types_patterns[1:]:
                     pattern += rf"|{t}"
             pattern += r")"
-        elif "__:type:__" in column_types or column_types in [
-            "target",
-            ["target"],
-        ]:
-            pattern = column_types
-        else:
-            pattern = f"(?__:type:__{column_types})"
-
         return pattern
 
-    def __eq__(
-        self, other: Union[str, List[Union[str, "ColumnTypes"]], "ColumnTypes"]
-    ):
-        if not isinstance(other, (str, list, ColumnTypes)):
-            raise_error(
-                "Comparison with ColumnTypes only allowed for "
-                "following types: str, list, ColumnTypes. "
-                f"But you provided {type(other)}"
-            )
+    def __eq__(self, other: Union["ColumnTypes", str]):
         other = other if isinstance(other, ColumnTypes) else ColumnTypes(other)
-        return set(self.column_types) == set(other.column_types)
+        return self._column_types == other._column_types
 
     def __iter__(self):
-        return self.column_types.__iter__()
+        return self._column_types.__iter__()
