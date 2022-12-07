@@ -15,8 +15,10 @@ cognitive control in context-dependent decision-making. Cerebral Cortex.
 .. include:: ../../links.inc
 """
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
-#
+#          Nieto Nicolás <n.nieto@fz-juelich.de>
 # License: AGPL
+
+# %%
 import numpy as np
 
 from sklearn.model_selection import GroupShuffleSplit
@@ -32,12 +34,10 @@ from julearn.utils import configure_logging
 # Set the logging level to info to see extra information
 configure_logging(level='INFO')
 
-
 ###############################################################################
 # Dealing with Cross-Validation techniques
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#
-
+# We will use a seaborn dataset that contains fmri data.
 df_fmri = load_dataset('fmri')
 
 ###############################################################################
@@ -52,9 +52,13 @@ print(df_fmri.head())
 #
 # Lets check how many kinds of each we have.
 
+print('Events names')
 print(df_fmri['event'].unique())
+print('Available regions')
 print(df_fmri['region'].unique())
+print('Number of timepoints')
 print(sorted(df_fmri['timepoint'].unique()))
+print('Available participants')
 print(df_fmri['subject'].unique())
 
 ###############################################################################
@@ -63,25 +67,27 @@ print(df_fmri['subject'].unique())
 # Lets see how many samples we have for each condition
 
 print(df_fmri.groupby(['subject', 'timepoint', 'event', 'region']).count())
-print(np.unique(df_fmri.groupby(
+print("Number of samples for each condition: %d" % np.unique(df_fmri.groupby(
     ['subject', 'timepoint', 'event', 'region']).count().values))
 
 ###############################################################################
 # We have exactly one value per condition.
 #
-# Lets try to build a model, that given both parietal and frontal signal,
+# We will build a model that, given both parietal and frontal signal,
 # predicts if the event was a *cue* or a *stim*.
 #
-# First we define our X and y variables.
+# First we define our X and y variables. X must be a list of strings with the
+# column names of the features used as input. y must be a string with the
+# target column name.
 X = ['parietal', 'frontal']
 y = 'event'
 
 ###############################################################################
-# In order for this to work, both *parietal* and *frontal* must be columns.
-# We need to *pivot* the table.
+# We need to *pivot* the table as both *parietal* and *frontal* must be columns
 #
 # The values of *region* will be the columns. The column *signal* will be the
 # values. And the columns *subject*, *timepoint* and *event* will be the index
+
 df_fmri = df_fmri.pivot(
     index=['subject', 'timepoint', 'event'],
     columns='region',
@@ -90,48 +96,64 @@ df_fmri = df_fmri.pivot(
 df_fmri = df_fmri.reset_index()
 
 ###############################################################################
-# We will use a Support Vector Machine.
+# We will see how the data is organized after the *pivot*.
+
+print(df_fmri.head())
+
+###############################################################################
+# Now, we will built a classification pipeline. We will preprocess the data
+# using a *zcore* and use Support Vector Machine as a classification model.
 
 scores = run_cross_validation(X=X, y=y, preprocess_X='zscore', data=df_fmri,
                               model='svm')
 
-print(scores['test_score'].mean())
+print('Mean Test Accuracy: %f' % scores['test_score'].mean())
 
 ###############################################################################
 # This results indicate that we can decode the kind of event by looking at
-# the *parietal* and *frontal* signal. However, that claim is true only if we
-# have some data from the same subject already acquired.
+# the *parietal* and *frontal* signal. However, in the current set up,
+# that claim is true only if we have some data from the same subject
+# already acquired, but we can not make a claim over an unseen participant.
 #
-# The problem is that we split the data randomly into 5 folds (default, see
-# :func:`.run_cross_validation`). This means that data from one subject could
-# be both in the training and the testing set. If this is the case, then the
-# model can learn the subjects' specific characteristics and apply it to the
-# testing set. Thus, it is not true that we can decode it for an unseen
-# subject, but for an unseen timepoint for a subject that for whom we already
-# have data.
+# The problem with the current set up is that we split the data randomly
+# into 5 folds (default, see :func:`.run_cross_validation`). This means that
+# data from one subject could be both in the training and the testing set.
+# If this is the case, then the model can learn the subjects' specific
+# characteristics and apply it to the testing set.
+# Thus, it is not true that we can decode it for an unseen subject, but for an
+# unseen timepoint for a subject that for whom we already have data.
 #
 # To test for unseen subject, we need to make sure that all the data from each
 # subject is either on the training or the testing set, but not in both.
 #
-# We can use scikit-learn's GroupShuffleSplit (see `Cross Validation`_).
-# And specify which is the grouping column using the `group` parameter.
+# For doing so we will use the scikit-learn's GroupShuffleSplit
+# (see `Cross Validation`_).
+# and specify which is the grouping column using the `group` parameter.
+# This will make that the data coming from one subject (group) are keeped only
+# in the train split *or* the test split.
 #
-# By setting `return_estimator='final'`, the :func:`.run_cross_validation`
-# function return the estimator fitted with all the data. We will use this
-# later to do some analysis.
+# We will set `return_estimator='final'` in the :func:`.run_cross_validation`s
+# function, so it will return the final estimator fitted with *all* the data.
+# We will use this # analysis the final model.
 cv = GroupShuffleSplit(n_splits=5, test_size=0.5, random_state=42)
 
 scores, model = run_cross_validation(
     X=X, y=y, data=df_fmri, model='svm', preprocess_X='zscore', cv=cv,
     groups='subject', return_estimator='final')
-print(scores['test_score'].mean())
+
+print('Mean Test Accuracy with gruped CV: %f' % scores['test_score'].mean())
 
 ###############################################################################
-# After testing on independent subjects, we can now claim that given a new
-# subject, we can predict the kind of event.
+# After testing on unseen subjects, we can now claim that given a new subject,
+# we can predict the kind of event from the `parietal` and `frontal`
+# information
 #
-# Lets do some visualization on how these two features interact and what
-# the preprocessing part of the model does.
+# Lets do a visualization on how the features interact with each other
+# and what the preprocessing part of our model is doing.
+#
+# As we aks the function :func:`.run_cross_validation`) to return the final
+# model, the 'preprocess' step is stored in our object 'model'
+
 fig, axes = plt.subplots(1, 2, figsize=(8, 4))
 sns.scatterplot(x='parietal', y='frontal', hue='event', data=df_fmri,
                 ax=axes[0], s=5)
@@ -162,3 +184,5 @@ xy = np.vstack([XX.ravel(), YY.ravel()]).T
 Z = clf.decision_function(xy).reshape(XX.shape)
 a = ax.contour(XX, YY, Z, colors='k', levels=[0], alpha=0.5, linestyles=['-'])
 ax.set_title('Preprocessed data with SVM decision function boundaries')
+plt.show()
+# %%
