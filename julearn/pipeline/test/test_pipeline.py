@@ -141,9 +141,7 @@ def test_hyperparameter_tuning(
 def test_X_types_to_pattern_warnings(X_types, apply_to, warns):
     pipeline_creator = PipelineCreator().add("zscore", apply_to=apply_to)
     if warns:
-        with pytest.warns(
-            match="is not in the provided X_types"
-        ):
+        with pytest.warns(match="is not in the provided X_types"):
             pipeline_creator.check_X_types(X_types)
     else:
         pipeline_creator.check_X_types(X_types)
@@ -165,9 +163,7 @@ def test_X_types_to_pattern_warnings(X_types, apply_to, warns):
 def test_X_types_to_pattern_errors(apply_to, X_types, error):
     pipeline_creator = PipelineCreator().add("zscore", apply_to=apply_to)
     if error:
-        with pytest.raises(
-            ValueError, match="Extra X_types were provided"
-        ):
+        with pytest.raises(ValueError, match="Extra X_types were provided"):
             pipeline_creator.check_X_types(X_types)
     else:
         pipeline_creator.check_X_types(X_types)
@@ -177,17 +173,13 @@ def test_pipelinecreator_default_apply_to():
 
     pipeline_creator = PipelineCreator().add("rf", apply_to="chicken")
 
-    with pytest.raises(
-        ValueError, match="Extra X_types were provided"
-    ):
+    with pytest.raises(ValueError, match="Extra X_types were provided"):
         pipeline_creator.check_X_types({"duck": "B"})
 
-    pipeline_creator = (PipelineCreator()
-                        .add("rf", apply_to=["chicken", "duck"])
-                        )
-    with pytest.warns(
-        match="is not in the provided X_types"
-    ):
+    pipeline_creator = PipelineCreator().add(
+        "rf", apply_to=["chicken", "duck"]
+    )
+    with pytest.warns(match="is not in the provided X_types"):
         pipeline_creator.check_X_types({"chicken": "teriyaki"})
 
     pipeline_creator = PipelineCreator().add("rf", apply_to="*")
@@ -203,7 +195,6 @@ def test_pipelinecreator_default_constructor_apply_to():
     pipeline_creator.add("zscore", apply_to="chicken")
     pipeline_creator.add("rf")
     pipeline_creator.check_X_types({"duck": "teriyaki", "chicken": "1"})
-
 
 
 def test_added_model_target_transform():
@@ -253,10 +244,9 @@ def test_stacking(X_iris, y_iris):
     [
         ("zscore", True),
         # ("remove_confound", False),
-    ]
+    ],
 )
-def test_target_transformer(X_iris, y_iris,
-                            target_transformer, reverse_pipe):
+def test_target_transformer(X_iris, y_iris, target_transformer, reverse_pipe):
     model = (
         PipelineCreator()
         .add("zscore")
@@ -268,9 +258,9 @@ def test_target_transformer(X_iris, y_iris,
     assert len(model.steps) == 3
     model.fit(X_iris, y_iris)
     if reverse_pipe:
-        assert isinstance(model.steps[-1][1].transformer,  Pipeline)
+        assert isinstance(model.steps[-1][1].transformer, Pipeline)
         assert not isinstance(
-            model.steps[-1][1].transformer,  NoInversePipeline)
+            model.steps[-1][1].transformer, NoInversePipeline
+        )
     else:
-        assert isinstance(
-            model.steps[-1][1].transformer,  NoInversePipeline)
+        assert isinstance(model.steps[-1][1].transformer, NoInversePipeline)
