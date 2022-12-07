@@ -72,6 +72,7 @@ scores_ncr = run_cross_validation(
     data=df_iris,
     model="rf",
     cv=cv,
+    problem_type="classification",
     preprocess="zscore",
     scoring=["accuracy", "roc_auc"],
     return_estimator="cv",
@@ -94,20 +95,12 @@ X_types = {"features": X, "confound": confounds}
 # We can now define a pipeline creator and add a confound removal step. This
 # step can be told which column types are the confounds ("confounds" keyword)
 # and from which column types confounds should be removed ("apply_to" keyword).
-pipeline_creator = (
-    PipelineCreator()
-    .add("zscore", apply_to=["features", "confound"])
-    .add("remove_confound", apply_to="features", confounds="confound")
-    .add("zscore", apply_to="features")
-    .add("rf", problem_type="classification", apply_to="features")
-)
-
 preprocess = (
     PipelineCreator(problem_type="classification")
     .add('zscore', apply_to=["duck", "confound"])
     .add('remove_confound', apply_to="duck", confounds="confound")
     .add('zscore', apply_to="duck")
-
+)
 scores_cr = run_cross_validation(
     X=X + confounds,
     y=y,
