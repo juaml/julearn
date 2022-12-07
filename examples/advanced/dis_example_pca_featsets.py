@@ -24,6 +24,7 @@ from sklearn.model_selection import train_test_split
 from julearn import run_cross_validation
 from julearn.utils import configure_logging
 from julearn.pipeline import PipelineCreator
+from julearn.inspect import preprocess
 
 ###############################################################################
 # Set the logging level to info to see extra information
@@ -66,7 +67,6 @@ X_types = {'pca1': ["age", "bmi", "bp"],
 # then the pipeline will not know what to do with the categorical features
 creator = PipelineCreator()
 creator.add('pca', apply_to='pca1', n_components=1)
-#creator.add('zscore', apply_to='pca2')
 creator.add('pca', apply_to='pca2', n_components=1)
 creator.add('ridge', apply_to=['continuous', 'categorical'], problem_type='regression')
 
@@ -84,22 +84,26 @@ scores, model = run_cross_validation(
     data=train_diabetes,
     model=creator,
     problem_type="regression",
-    scoring="neg_mean_absolute_error",
+    scoring="r2",
     return_estimator='final'
 )
 
 ###############################################################################
 # The scores dataframe has all the values for each CV split.
-
 print(scores.head())
 
 ###############################################################################
 # Mean value of mean absolute error across CV
 print(scores["test_score"].mean() * -1)
 
+
+###############################################################################
+# Let's see how the data looks like after preprocessing
+data_processed = preprocess(model, X, data=train_diabetes, until='pca')
+print(data_processed.head())
+
 ###############################################################################
 # Now we can get the MAE fold and repetition:
-
 df_mae = scores.set_index(["repeat", "fold"])["test_score"].unstack() * -1
 df_mae.index.name = "Repeats"
 df_mae.columns.name = "K-fold splits"
