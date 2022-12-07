@@ -1,12 +1,15 @@
 """
-Transforming target variable with z-score
+
+Transforming target variable with z-score.
+
 ==========================
 
-This example uses the sklearn "diabetes" regression dataset,
-and transforms the target variable, in this case, using z-score.
-Then, we perform a regression analysis using Ridge Regression model.
+This example uses the sklearn "diabetes" regression dataset, and transforms the
+target variable, in this case, using z-score. Then, we perform a regression
+analysis using Ridge Regression model.
 
 """
+
 # Authors: Lya K. Paas Oliveros <l.paas.oliveros@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 #
@@ -14,24 +17,25 @@ Then, we perform a regression analysis using Ridge Regression model.
 
 import pandas as pd
 import seaborn as sns
-import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.datasets import load_diabetes
-from sklearn.metrics import mean_absolute_error
 from sklearn.model_selection import train_test_split
 
 from julearn import run_cross_validation
 from julearn.utils import configure_logging
-from julearn.pipeline import PipelineCreator # this is crucial for creating the model in the new version
-from julearn.inspect import preprocess
+# this is crucial for creating the model in the new version
+from julearn.pipeline import PipelineCreator
+
 
 ###############################################################################
 # Set the logging level to info to see extra information
 configure_logging(level='INFO')
 
+
 ###############################################################################
 # Load the diabetes dataset from sklearn as a pandas dataframe
 features, target = load_diabetes(return_X_y=True, as_frame=True)
+
 
 ###############################################################################
 # Dataset contains ten variables age, sex, body mass index, average  blood
@@ -41,6 +45,7 @@ features, target = load_diabetes(return_X_y=True, as_frame=True)
 
 print('Features: \n', features.head())
 print('Target: \n', target.describe())
+
 
 ###############################################################################
 # Let's combine features and target together in one dataframe and define X
@@ -65,25 +70,27 @@ train_diabetes, test_diabetes = train_test_split(data_diabetes, test_size=0.3)
 
 
 ###############################################################################
-# Let's create the model. To note, in PipelineCreator the only reserved key is target.
-# That means, there is no need to name it, i.e., by stating apply_to="target",
-# it already knows which is the target.
-# Here, it is important that if you define the PipelineCreator you include the model and do not define the model in run_cross_validation
+# Let's create the model. To note, in PipelineCreator the only reserved key is
+# target. That means, there is no need to name it, i.e., by stating
+# apply_to="target", it already knows which is the target.
+# Here, it is important that if you define the PipelineCreator you include the
+# model and do not define the model in run_cross_validation
 creator = (PipelineCreator()
            .add("zscore", apply_to="target")
            .add("ridge", problem_type="regression")
-          )
+           )
 
 scores, model = run_cross_validation(
-            X=X,
-            y=y,
-            data=train_diabetes,
-            model=creator,
-            return_estimator="final",
-            scoring='neg_mean_absolute_error'
+    X=X,
+    y=y,
+    data=train_diabetes,
+    model=creator,
+    return_estimator="final",
+    scoring='neg_mean_absolute_error'
 )
 
 print(scores.head(5))
+
 
 ###############################################################################
 # Mean value of mean absolute error across CV
