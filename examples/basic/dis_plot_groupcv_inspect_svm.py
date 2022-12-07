@@ -1,7 +1,7 @@
 """
 Inspecting SVM models.
+======================
 
-=====================
 This example uses the 'fmri' dataset, performs simple binary classification
 using a Support Vector Machine classifier and analyse the model.
 
