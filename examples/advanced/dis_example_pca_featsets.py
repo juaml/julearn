@@ -66,8 +66,8 @@ X_types = {'pca1': ["age", "bmi", "bp"],
 # `apply_to=['continuous', 'categorical']`
 # then the pipeline will not know what to do with the categorical features
 creator = PipelineCreator()
-creator.add('pca', apply_to='pca1', n_components=1)
-creator.add('pca', apply_to='pca2', n_components=1)
+creator.add('pca', apply_to='pca1', n_components=1, name='pca_feats1')
+creator.add('pca', apply_to='pca2', n_components=1, name='pca_feats2')
 creator.add('ridge', apply_to=['continuous', 'categorical'], problem_type='regression')
 
 ###############################################################################
@@ -99,8 +99,17 @@ print(scores["test_score"].mean() * -1)
 
 ###############################################################################
 # Let's see how the data looks like after preprocessing
-data_processed = preprocess(model, X, data=train_diabetes, until='pca')
-print(data_processed.head())
+# We will process the data until the first PCA step
+# We should get the first 
+# PCA component for ['age', 'bmi', 'bp'] and other  features untouched
+data_processed1 = preprocess(model, X, data=train_diabetes, until='pca_feats1')
+print('Data after preprocessing until PCA step 1')
+print(data_processed1.head())
+# We will process the data until the second PCA step
+# We should now also get one PCA component for ['s1', 's2', 's3', 's4', 's5', 's6']
+data_processed2 = preprocess(model, X, data=train_diabetes, until='pca_feats2')
+print('Data after preprocessing until PCA step 2')
+print(data_processed2.head())
 
 ###############################################################################
 # Now we can get the MAE fold and repetition:
