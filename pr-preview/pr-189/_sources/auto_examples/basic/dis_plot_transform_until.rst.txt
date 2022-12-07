@@ -123,11 +123,11 @@ to be used in the regression to the 'PipelineCreator'.
 
     # By setting "apply_to=*", we can apply the preprocessing step to all features.
     pipeline_creator = (
-        PipelineCreator()
+        PipelineCreator(problem_type="regression")
         .add("select_variance", apply_to="*", threshold=0.15)
         .add("zscore", apply_to="X_to_zscore")
         .add("pca", apply_to="*", n_components=2)
-        .add("rf", apply_to="*", n_estimators=200, problem_type="regression")
+        .add("rf", apply_to="*", n_estimators=200)
     )
 
     # Because we have already added the model to the pipeline creator, we can

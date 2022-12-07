@@ -146,7 +146,7 @@ Note: we initialize the CV again to use the same folds as before
 
     cv = StratifiedBootstrap(n_splits=n_bootstrap, test_size=.3, random_state=42)
 
-    preprocess = PipelineCreator()
+    preprocess = PipelineCreator(problem_type="classification")
     preprocess.add('zscore', apply_to=["duck", "confound"])
     preprocess.add('remove_confound', apply_to="duck", confounds="confound")
     preprocess.add('zscore', apply_to="duck")

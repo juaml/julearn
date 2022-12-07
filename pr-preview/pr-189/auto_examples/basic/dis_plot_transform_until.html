@@ -169,11 +169,11 @@ to be used in the regression to the ‘PipelineCreator’.</p>
 
 <span class="c1"># By setting &quot;apply_to=*&quot;, we can apply the preprocessing step to all features.</span>
 <span class="n">pipeline_creator</span> <span class="o">=</span> <span class="p">(</span>
-    <span class="n">PipelineCreator</span><span class="p">()</span>
+    <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;regression&quot;</span><span class="p">)</span>
     <span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;select_variance&quot;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=</span><span class="mf">0.15</span><span class="p">)</span>
     <span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;X_to_zscore&quot;</span><span class="p">)</span>
     <span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;pca&quot;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;rf&quot;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="n">n_estimators</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;regression&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;rf&quot;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="n">n_estimators</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
 <span class="p">)</span>
 
 <span class="c1"># Because we have already added the model to the pipeline creator, we can</span>

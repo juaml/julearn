@@ -71,13 +71,13 @@ Set the logging level to info to see extra information
 
  .. code-block:: none
 
-    2022-12-07 14:38:28,033 - julearn - INFO - ===== Lib Versions =====
-    2022-12-07 14:38:28,033 - julearn - INFO - numpy: 1.23.5
-    2022-12-07 14:38:28,033 - julearn - INFO - scipy: 1.9.3
-    2022-12-07 14:38:28,033 - julearn - INFO - sklearn: 1.2.0rc1
-    2022-12-07 14:38:28,033 - julearn - INFO - pandas: 1.5.2
-    2022-12-07 14:38:28,033 - julearn - INFO - julearn: 0.0.1.dev1
-    2022-12-07 14:38:28,033 - julearn - INFO - ========================
+    2022-12-07 15:12:42,003 - julearn - INFO - ===== Lib Versions =====
+    2022-12-07 15:12:42,003 - julearn - INFO - numpy: 1.23.5
+    2022-12-07 15:12:42,003 - julearn - INFO - scipy: 1.9.3
+    2022-12-07 15:12:42,003 - julearn - INFO - sklearn: 1.2.0rc1
+    2022-12-07 15:12:42,003 - julearn - INFO - pandas: 1.5.2
+    2022-12-07 15:12:42,003 - julearn - INFO - julearn: 0.0.1.dev1
+    2022-12-07 15:12:42,003 - julearn - INFO - ========================
 
 
 
@@ -126,7 +126,7 @@ We want to perform multiclass classification as iris dataset contains 3 kinds
 of species. We will first zscore all the features and then train a support
 vector machine classifier.
 
-.. GENERATED FROM PYTHON SOURCE LINES 47-60
+.. GENERATED FROM PYTHON SOURCE LINES 47-61
 
 .. code-block:: default
 
@@ -138,6 +138,7 @@ vector machine classifier.
         data=train_iris,
         model="svm",
         preprocess="zscore",
+        problem_type="classification",
         cv=cv,
         scoring=["accuracy"],
         return_estimator="final",
@@ -151,30 +152,30 @@ vector machine classifier.
 
  .. code-block:: none
 
-    2022-12-07 14:38:28,037 - julearn - INFO - ==== Input Data ====
-    2022-12-07 14:38:28,038 - julearn - INFO - Using dataframe as input
-    2022-12-07 14:38:28,038 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length']
-    2022-12-07 14:38:28,038 - julearn - INFO -      Target: species
-    2022-12-07 14:38:28,039 - julearn - INFO - ====================
-    2022-12-07 14:38:28,039 - julearn - INFO - 
-    2022-12-07 14:38:28,039 - julearn - INFO - Adding step zscore that applies to <julearn.base.column_types.ColumnTypes object at 0x7fdd781161a0>
-    2022-12-07 14:38:28,039 - julearn - INFO - Step added
-    2022-12-07 14:38:28,039 - julearn - INFO - Adding step svm that applies to <julearn.base.column_types.ColumnTypes object at 0x7fdd781170d0>
-    2022-12-07 14:38:28,039 - julearn - INFO - Step added
-    2022-12-07 14:38:28,040 - julearn - INFO - = Model Parameters =
-    2022-12-07 14:38:28,040 - julearn - INFO - ====================
-    2022-12-07 14:38:28,040 - julearn - INFO - 
-    2022-12-07 14:38:28,040 - julearn - INFO - Using outer CV scheme RepeatedKFold(n_repeats=5, n_splits=5, random_state=200)
-    2022-12-07 14:38:28,040 - julearn - INFO - Multi-class classification problem detected #classes = 3.
+    2022-12-07 15:12:42,007 - julearn - INFO - ==== Input Data ====
+    2022-12-07 15:12:42,007 - julearn - INFO - Using dataframe as input
+    2022-12-07 15:12:42,007 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length']
+    2022-12-07 15:12:42,007 - julearn - INFO -      Target: species
+    2022-12-07 15:12:42,008 - julearn - INFO - ====================
+    2022-12-07 15:12:42,008 - julearn - INFO - 
+    2022-12-07 15:12:42,008 - julearn - INFO - Adding step zscore that applies to <julearn.base.column_types.ColumnTypes object at 0x7f1164d82200>
+    2022-12-07 15:12:42,008 - julearn - INFO - Step added
+    2022-12-07 15:12:42,008 - julearn - INFO - Adding step svm that applies to <julearn.base.column_types.ColumnTypes object at 0x7f1164d83190>
+    2022-12-07 15:12:42,009 - julearn - INFO - Step added
+    2022-12-07 15:12:42,009 - julearn - INFO - = Model Parameters =
+    2022-12-07 15:12:42,009 - julearn - INFO - ====================
+    2022-12-07 15:12:42,009 - julearn - INFO - 
+    2022-12-07 15:12:42,009 - julearn - INFO - Using outer CV scheme RepeatedKFold(n_repeats=5, n_splits=5, random_state=200)
+    2022-12-07 15:12:42,010 - julearn - INFO - Multi-class classification problem detected #classes = 3.
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 61-62
+.. GENERATED FROM PYTHON SOURCE LINES 62-63
 
 The scores dataframe has all the values for each CV split.
 
-.. GENERATED FROM PYTHON SOURCE LINES 62-65
+.. GENERATED FROM PYTHON SOURCE LINES 63-66
 
 .. code-block:: default
 
@@ -190,20 +191,20 @@ The scores dataframe has all the values for each CV split.
  .. code-block:: none
 
        fit_time  score_time  test_accuracy  repeat  fold
-    0  0.008055    0.003587       0.916667       0     0
-    1  0.007671    0.003558       0.833333       0     1
-    2  0.007528    0.003542       0.958333       0     2
-    3  0.007476    0.003478       0.916667       0     3
-    4  0.007405    0.003472       0.833333       0     4
+    0  0.007653    0.003471       0.916667       0     0
+    1  0.007339    0.003428       0.833333       0     1
+    2  0.007263    0.003448       0.958333       0     2
+    3  0.007232    0.003448       0.916667       0     3
+    4  0.007214    0.003396       0.833333       0     4
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 66-67
+.. GENERATED FROM PYTHON SOURCE LINES 67-68
 
 Now we can get the accuracy per fold and repetition:
 
-.. GENERATED FROM PYTHON SOURCE LINES 67-73
+.. GENERATED FROM PYTHON SOURCE LINES 68-74
 
 .. code-block:: default
 
@@ -232,11 +233,11 @@ Now we can get the accuracy per fold and repetition:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 74-75
+.. GENERATED FROM PYTHON SOURCE LINES 75-76
 
 Plot heatmap of accuracy over all repeats and CV splits
 
-.. GENERATED FROM PYTHON SOURCE LINES 75-80
+.. GENERATED FROM PYTHON SOURCE LINES 76-81
 
 .. code-block:: default
 
@@ -263,12 +264,12 @@ Plot heatmap of accuracy over all repeats and CV splits
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 81-83
+.. GENERATED FROM PYTHON SOURCE LINES 82-84
 
 We can also test our final model's accuracy and plot the confusion matrix
 for the test data as an annotated heatmap
 
-.. GENERATED FROM PYTHON SOURCE LINES 83-88
+.. GENERATED FROM PYTHON SOURCE LINES 84-89
 
 .. code-block:: default
 
@@ -292,12 +293,12 @@ for the test data as an annotated heatmap
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 89-91
+.. GENERATED FROM PYTHON SOURCE LINES 90-92
 
 Now that we have our confusion matrix, let's build another matrix with
 annotations.
 
-.. GENERATED FROM PYTHON SOURCE LINES 91-104
+.. GENERATED FROM PYTHON SOURCE LINES 92-105
 
 .. code-block:: default
 
@@ -321,12 +322,12 @@ annotations.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 105-107
+.. GENERATED FROM PYTHON SOURCE LINES 106-108
 
 Finally we create another dataframe with the confusion matrix and plot
 the heatmap with annotations.
 
-.. GENERATED FROM PYTHON SOURCE LINES 107-113
+.. GENERATED FROM PYTHON SOURCE LINES 108-114
 
 .. code-block:: default
 
@@ -357,7 +358,7 @@ the heatmap with annotations.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.639 seconds)
+   **Total running time of the script:** ( 0 minutes  0.612 seconds)
 
 
 .. _sphx_glr_download_auto_examples_basic_plot_cm_acc_multiclass.py:

@@ -50,6 +50,7 @@ scores, model_iris = run_cross_validation(
     data=df_iris,
     model="rf",
     preprocess="zscore",
+    problem_type="classification",
     return_estimator="final",
 )
 
@@ -86,6 +87,7 @@ scores = run_cross_validation(
     data=df_iris,
     model="rf",
     preprocess="zscore",
+    problem_type="classification",
     return_estimator="cv",
 )
 

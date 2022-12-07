@@ -52,7 +52,7 @@ Set the logging level to info to see extra information
 
 .. code-block:: default
 
-    configure_logging(level='INFO')
+    configure_logging(level="INFO")
 
 
 
@@ -62,13 +62,13 @@ Set the logging level to info to see extra information
 
  .. code-block:: none
 
-    2022-12-07 14:38:25,435 - julearn - INFO - ===== Lib Versions =====
-    2022-12-07 14:38:25,436 - julearn - INFO - numpy: 1.23.5
-    2022-12-07 14:38:25,436 - julearn - INFO - scipy: 1.9.3
-    2022-12-07 14:38:25,436 - julearn - INFO - sklearn: 1.2.0rc1
-    2022-12-07 14:38:25,436 - julearn - INFO - pandas: 1.5.2
-    2022-12-07 14:38:25,436 - julearn - INFO - julearn: 0.0.1.dev1
-    2022-12-07 14:38:25,436 - julearn - INFO - ========================
+    2022-12-07 15:12:39,761 - julearn - INFO - ===== Lib Versions =====
+    2022-12-07 15:12:39,761 - julearn - INFO - numpy: 1.23.5
+    2022-12-07 15:12:39,761 - julearn - INFO - scipy: 1.9.3
+    2022-12-07 15:12:39,761 - julearn - INFO - sklearn: 1.2.0rc1
+    2022-12-07 15:12:39,761 - julearn - INFO - pandas: 1.5.2
+    2022-12-07 15:12:39,761 - julearn - INFO - julearn: 0.0.1.dev1
+    2022-12-07 15:12:39,761 - julearn - INFO - ========================
 
 
 
@@ -77,7 +77,7 @@ Set the logging level to info to see extra information
 
 .. code-block:: default
 
-    df_iris = load_dataset('iris')
+    df_iris = load_dataset("iris")
 
 
 
@@ -95,7 +95,7 @@ classification.
 
 .. code-block:: default
 
-    df_iris = df_iris[df_iris['species'].isin(['versicolor', 'virginica'])]
+    df_iris = df_iris[df_iris["species"].isin(["versicolor", "virginica"])]
 
 
 
@@ -109,18 +109,23 @@ classification.
 As features, we will use the sepal length, width and petal length.
 We will try to predict the species.
 
-.. GENERATED FROM PYTHON SOURCE LINES 32-41
+.. GENERATED FROM PYTHON SOURCE LINES 32-46
 
 .. code-block:: default
 
 
-    X = ['sepal_length', 'sepal_width', 'petal_length']
-    y = 'species'
+    X = ["sepal_length", "sepal_width", "petal_length"]
+    y = "species"
     scores = run_cross_validation(
-        X=X, y=y, data=df_iris, model='svm',
-        preprocess='zscore')
+        X=X,
+        y=y,
+        data=df_iris,
+        model="svm",
+        problem_type="classification",
+        preprocess="zscore",
+    )
 
-    print(scores['test_score'])
+    print(scores["test_score"])
 
 
 
@@ -130,21 +135,21 @@ We will try to predict the species.
 
  .. code-block:: none
 
-    2022-12-07 14:38:25,749 - julearn - INFO - ==== Input Data ====
-    2022-12-07 14:38:25,749 - julearn - INFO - Using dataframe as input
-    2022-12-07 14:38:25,749 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length']
-    2022-12-07 14:38:25,749 - julearn - INFO -      Target: species
-    2022-12-07 14:38:25,750 - julearn - INFO - ====================
-    2022-12-07 14:38:25,750 - julearn - INFO - 
-    2022-12-07 14:38:25,750 - julearn - INFO - Adding step zscore that applies to <julearn.base.column_types.ColumnTypes object at 0x7fdd78337040>
-    2022-12-07 14:38:25,751 - julearn - INFO - Step added
-    2022-12-07 14:38:25,751 - julearn - INFO - Adding step svm that applies to <julearn.base.column_types.ColumnTypes object at 0x7fdd78336ec0>
-    2022-12-07 14:38:25,751 - julearn - INFO - Step added
-    2022-12-07 14:38:25,752 - julearn - INFO - = Model Parameters =
-    2022-12-07 14:38:25,752 - julearn - INFO - ====================
-    2022-12-07 14:38:25,752 - julearn - INFO - 
-    2022-12-07 14:38:25,752 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-    2022-12-07 14:38:25,752 - julearn - INFO - Binary classification problem detected.
+    2022-12-07 15:12:39,898 - julearn - INFO - ==== Input Data ====
+    2022-12-07 15:12:39,898 - julearn - INFO - Using dataframe as input
+    2022-12-07 15:12:39,898 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length']
+    2022-12-07 15:12:39,898 - julearn - INFO -      Target: species
+    2022-12-07 15:12:39,899 - julearn - INFO - ====================
+    2022-12-07 15:12:39,899 - julearn - INFO - 
+    2022-12-07 15:12:39,899 - julearn - INFO - Adding step zscore that applies to <julearn.base.column_types.ColumnTypes object at 0x7f1164fa3160>
+    2022-12-07 15:12:39,900 - julearn - INFO - Step added
+    2022-12-07 15:12:39,900 - julearn - INFO - Adding step svm that applies to <julearn.base.column_types.ColumnTypes object at 0x7f1164fa32e0>
+    2022-12-07 15:12:39,900 - julearn - INFO - Step added
+    2022-12-07 15:12:39,901 - julearn - INFO - = Model Parameters =
+    2022-12-07 15:12:39,901 - julearn - INFO - ====================
+    2022-12-07 15:12:39,901 - julearn - INFO - 
+    2022-12-07 15:12:39,901 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+    2022-12-07 15:12:39,901 - julearn - INFO - Binary classification problem detected.
     0    0.90
     1    0.75
     2    0.95
@@ -155,20 +160,20 @@ We will try to predict the species.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 42-46
+.. GENERATED FROM PYTHON SOURCE LINES 47-51
 
 Additionally, we can choose to assess the performance of the model using
 different scoring functions.
 
 For example, we might have an unbalanced dataset:
 
-.. GENERATED FROM PYTHON SOURCE LINES 46-50
+.. GENERATED FROM PYTHON SOURCE LINES 51-55
 
 .. code-block:: default
 
 
     df_unbalanced = df_iris[20:]  # drop the first 20 versicolor samples
-    print(df_unbalanced['species'].value_counts())
+    print(df_unbalanced["species"].value_counts())
 
 
 
@@ -185,7 +190,7 @@ For example, we might have an unbalanced dataset:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 51-56
+.. GENERATED FROM PYTHON SOURCE LINES 56-61
 
 If we compute the `accuracy`, we might not account for this imbalance. A more
 suitable metric is the `balanced_accuracy`. More information in scikit-learn:
@@ -193,16 +198,23 @@ suitable metric is the `balanced_accuracy`. More information in scikit-learn:
 
 We will also set the random seed so we always split the data in the same way.
 
-.. GENERATED FROM PYTHON SOURCE LINES 56-64
+.. GENERATED FROM PYTHON SOURCE LINES 61-76
 
 .. code-block:: default
 
     scores = run_cross_validation(
-        X=X, y=y, data=df_unbalanced, model='svm', seed=42, preprocess='zscore',
-        scoring=['accuracy', 'balanced_accuracy'])
+        X=X,
+        y=y,
+        data=df_unbalanced,
+        model="svm",
+        seed=42,
+        preprocess="zscore",
+        problem_type="classification",
+        scoring=["accuracy", "balanced_accuracy"],
+    )
 
-    print(scores['test_accuracy'].mean())
-    print(scores['test_balanced_accuracy'].mean())
+    print(scores["test_accuracy"].mean())
+    print(scores["test_balanced_accuracy"].mean())
 
 
 
@@ -213,22 +225,22 @@ We will also set the random seed so we always split the data in the same way.
 
  .. code-block:: none
 
-    2022-12-07 14:38:25,816 - julearn - INFO - Setting random seed to 42
-    2022-12-07 14:38:25,816 - julearn - INFO - ==== Input Data ====
-    2022-12-07 14:38:25,816 - julearn - INFO - Using dataframe as input
-    2022-12-07 14:38:25,816 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length']
-    2022-12-07 14:38:25,816 - julearn - INFO -      Target: species
-    2022-12-07 14:38:25,817 - julearn - INFO - ====================
-    2022-12-07 14:38:25,817 - julearn - INFO - 
-    2022-12-07 14:38:25,817 - julearn - INFO - Adding step zscore that applies to <julearn.base.column_types.ColumnTypes object at 0x7fdd78370c10>
-    2022-12-07 14:38:25,817 - julearn - INFO - Step added
-    2022-12-07 14:38:25,817 - julearn - INFO - Adding step svm that applies to <julearn.base.column_types.ColumnTypes object at 0x7fdd783373d0>
-    2022-12-07 14:38:25,817 - julearn - INFO - Step added
-    2022-12-07 14:38:25,818 - julearn - INFO - = Model Parameters =
-    2022-12-07 14:38:25,818 - julearn - INFO - ====================
-    2022-12-07 14:38:25,818 - julearn - INFO - 
-    2022-12-07 14:38:25,818 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-    2022-12-07 14:38:25,818 - julearn - INFO - Binary classification problem detected.
+    2022-12-07 15:12:39,962 - julearn - INFO - Setting random seed to 42
+    2022-12-07 15:12:39,963 - julearn - INFO - ==== Input Data ====
+    2022-12-07 15:12:39,963 - julearn - INFO - Using dataframe as input
+    2022-12-07 15:12:39,963 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length']
+    2022-12-07 15:12:39,963 - julearn - INFO -      Target: species
+    2022-12-07 15:12:39,963 - julearn - INFO - ====================
+    2022-12-07 15:12:39,963 - julearn - INFO - 
+    2022-12-07 15:12:39,964 - julearn - INFO - Adding step zscore that applies to <julearn.base.column_types.ColumnTypes object at 0x7f1164fe0970>
+    2022-12-07 15:12:39,964 - julearn - INFO - Step added
+    2022-12-07 15:12:39,964 - julearn - INFO - Adding step svm that applies to <julearn.base.column_types.ColumnTypes object at 0x7f1164fa3220>
+    2022-12-07 15:12:39,964 - julearn - INFO - Step added
+    2022-12-07 15:12:39,964 - julearn - INFO - = Model Parameters =
+    2022-12-07 15:12:39,965 - julearn - INFO - ====================
+    2022-12-07 15:12:39,965 - julearn - INFO - 
+    2022-12-07 15:12:39,965 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+    2022-12-07 15:12:39,965 - julearn - INFO - Binary classification problem detected.
     /opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_classification.py:2184: UserWarning: y_pred contains classes not in y_true
       warnings.warn("y_pred contains classes not in y_true")
     /opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_classification.py:2184: UserWarning: y_pred contains classes not in y_true
@@ -243,7 +255,7 @@ We will also set the random seed so we always split the data in the same way.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 65-75
+.. GENERATED FROM PYTHON SOURCE LINES 77-87
 
 Other kind of metrics allows us to evaluate how good our model is to detect
 specific targets. Suppose we want to create a model that correctly identifies
@@ -256,14 +268,22 @@ information in scikit-learn: `Precision`_
 For this metric to work, we need to define which are our `positive` values.
 In this example, we are interested in detecting `versicolor`.
 
-.. GENERATED FROM PYTHON SOURCE LINES 75-79
+.. GENERATED FROM PYTHON SOURCE LINES 87-99
 
 .. code-block:: default
 
     precision_scores = run_cross_validation(
-        X=X, y=y, data=df_unbalanced, model='svm', preprocess='zscore', seed=42,
-        scoring='precision', pos_labels='versicolor')
-    print(precision_scores['test_score'].mean())
+        X=X,
+        y=y,
+        data=df_unbalanced,
+        model="svm",
+        preprocess="zscore",
+        problem_type="classification",
+        seed=42,
+        scoring="precision",
+        pos_labels="versicolor",
+    )
+    print(precision_scores["test_score"].mean())
 
 
 
@@ -272,23 +292,23 @@ In this example, we are interested in detecting `versicolor`.
 
  .. code-block:: none
 
-    2022-12-07 14:38:25,882 - julearn - INFO - Setting random seed to 42
-    2022-12-07 14:38:25,883 - julearn - INFO - ==== Input Data ====
-    2022-12-07 14:38:25,883 - julearn - INFO - Using dataframe as input
-    2022-12-07 14:38:25,883 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length']
-    2022-12-07 14:38:25,883 - julearn - INFO -      Target: species
-    2022-12-07 14:38:25,884 - julearn - INFO - Setting the following as positive labels ['versicolor']
-    2022-12-07 14:38:25,884 - julearn - INFO - ====================
-    2022-12-07 14:38:25,884 - julearn - INFO - 
-    2022-12-07 14:38:25,884 - julearn - INFO - Adding step zscore that applies to <julearn.base.column_types.ColumnTypes object at 0x7fdd78337040>
-    2022-12-07 14:38:25,884 - julearn - INFO - Step added
-    2022-12-07 14:38:25,884 - julearn - INFO - Adding step svm that applies to <julearn.base.column_types.ColumnTypes object at 0x7fdd7895a410>
-    2022-12-07 14:38:25,884 - julearn - INFO - Step added
-    2022-12-07 14:38:25,885 - julearn - INFO - = Model Parameters =
-    2022-12-07 14:38:25,885 - julearn - INFO - ====================
-    2022-12-07 14:38:25,885 - julearn - INFO - 
-    2022-12-07 14:38:25,885 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-    2022-12-07 14:38:25,885 - julearn - INFO - Binary classification problem detected.
+    2022-12-07 15:12:40,027 - julearn - INFO - Setting random seed to 42
+    2022-12-07 15:12:40,027 - julearn - INFO - ==== Input Data ====
+    2022-12-07 15:12:40,027 - julearn - INFO - Using dataframe as input
+    2022-12-07 15:12:40,027 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length']
+    2022-12-07 15:12:40,027 - julearn - INFO -      Target: species
+    2022-12-07 15:12:40,028 - julearn - INFO - Setting the following as positive labels ['versicolor']
+    2022-12-07 15:12:40,028 - julearn - INFO - ====================
+    2022-12-07 15:12:40,028 - julearn - INFO - 
+    2022-12-07 15:12:40,028 - julearn - INFO - Adding step zscore that applies to <julearn.base.column_types.ColumnTypes object at 0x7f1164fa3280>
+    2022-12-07 15:12:40,028 - julearn - INFO - Step added
+    2022-12-07 15:12:40,028 - julearn - INFO - Adding step svm that applies to <julearn.base.column_types.ColumnTypes object at 0x7f11655c6a70>
+    2022-12-07 15:12:40,028 - julearn - INFO - Step added
+    2022-12-07 15:12:40,029 - julearn - INFO - = Model Parameters =
+    2022-12-07 15:12:40,029 - julearn - INFO - ====================
+    2022-12-07 15:12:40,029 - julearn - INFO - 
+    2022-12-07 15:12:40,029 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+    2022-12-07 15:12:40,029 - julearn - INFO - Binary classification problem detected.
     0.4
 
 
@@ -297,7 +317,7 @@ In this example, we are interested in detecting `versicolor`.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.517 seconds)
+   **Total running time of the script:** ( 0 minutes  0.333 seconds)
 
 
 .. _sphx_glr_download_auto_examples_basic_run_simple_binary_classification.py:

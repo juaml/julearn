@@ -16,27 +16,32 @@ from julearn.utils import configure_logging
 
 ###############################################################################
 # Set the logging level to info to see extra information
-configure_logging(level='INFO')
+configure_logging(level="INFO")
 
 ###############################################################################
-df_iris = load_dataset('iris')
+df_iris = load_dataset("iris")
 
 ###############################################################################
 # The dataset has three kind of species. We will keep two to perform a binary
 # classification.
-df_iris = df_iris[df_iris['species'].isin(['versicolor', 'virginica'])]
+df_iris = df_iris[df_iris["species"].isin(["versicolor", "virginica"])]
 
 ###############################################################################
 # As features, we will use the sepal length, width and petal length.
 # We will try to predict the species.
 
-X = ['sepal_length', 'sepal_width', 'petal_length']
-y = 'species'
+X = ["sepal_length", "sepal_width", "petal_length"]
+y = "species"
 scores = run_cross_validation(
-    X=X, y=y, data=df_iris, model='svm',
-    preprocess='zscore')
+    X=X,
+    y=y,
+    data=df_iris,
+    model="svm",
+    problem_type="classification",
+    preprocess="zscore",
+)
 
-print(scores['test_score'])
+print(scores["test_score"])
 
 ###############################################################################
 # Additionally, we can choose to assess the performance of the model using
@@ -45,7 +50,7 @@ print(scores['test_score'])
 # For example, we might have an unbalanced dataset:
 
 df_unbalanced = df_iris[20:]  # drop the first 20 versicolor samples
-print(df_unbalanced['species'].value_counts())
+print(df_unbalanced["species"].value_counts())
 
 ###############################################################################
 # If we compute the `accuracy`, we might not account for this imbalance. A more
@@ -54,11 +59,18 @@ print(df_unbalanced['species'].value_counts())
 #
 # We will also set the random seed so we always split the data in the same way.
 scores = run_cross_validation(
-    X=X, y=y, data=df_unbalanced, model='svm', seed=42, preprocess='zscore',
-    scoring=['accuracy', 'balanced_accuracy'])
+    X=X,
+    y=y,
+    data=df_unbalanced,
+    model="svm",
+    seed=42,
+    preprocess="zscore",
+    problem_type="classification",
+    scoring=["accuracy", "balanced_accuracy"],
+)
 
-print(scores['test_accuracy'].mean())
-print(scores['test_balanced_accuracy'].mean())
+print(scores["test_accuracy"].mean())
+print(scores["test_balanced_accuracy"].mean())
 
 
 ###############################################################################
@@ -73,6 +85,14 @@ print(scores['test_balanced_accuracy'].mean())
 # For this metric to work, we need to define which are our `positive` values.
 # In this example, we are interested in detecting `versicolor`.
 precision_scores = run_cross_validation(
-    X=X, y=y, data=df_unbalanced, model='svm', preprocess='zscore', seed=42,
-    scoring='precision', pos_labels='versicolor')
-print(precision_scores['test_score'].mean())
+    X=X,
+    y=y,
+    data=df_unbalanced,
+    model="svm",
+    preprocess="zscore",
+    problem_type="classification",
+    seed=42,
+    scoring="precision",
+    pos_labels="versicolor",
+)
+print(precision_scores["test_score"].mean())
