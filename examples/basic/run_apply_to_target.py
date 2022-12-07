@@ -52,15 +52,6 @@ X = ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
 y = 'target'
 
 ###############################################################################
-# Calculate correlations between the features/variables and plot it as heat map
-corr = data_diabetes.corr()
-fig, ax = plt.subplots(1, 1, figsize=(10, 7))
-sns.set(font_scale=1.2)
-sns.heatmap(corr, xticklabels=corr.columns, yticklabels=corr.columns,
-            annot=True, fmt="0.1f")
-
-
-###############################################################################
 # Split the dataset into train and test
 train_diabetes, test_diabetes = train_test_split(data_diabetes, test_size=0.3)
 
