@@ -68,7 +68,8 @@ class PipelineCreator:  # Pipeline creator
     def __init__(self, problem_type, apply_to="continuous"):
         if problem_type not in ["classification", "regression"]:
             raise_error(
-                "`problem_type` should be either 'classification' or 'regression'."
+                "`problem_type` should be either 'classification' or "
+                "'regression'."
             )
         self._steps = list()
         self._added_target_transformer = False
