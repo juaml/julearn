@@ -84,7 +84,7 @@
           <li class="breadcrumb-item"><a href="index.html">Advanced Examples</a></li>
       <li class="breadcrumb-item active">Stacking Classification</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../../_sources/auto_examples/advanced/dis_run_stacked_models.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../_sources/auto_examples/advanced/run_stacked_models.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -94,11 +94,11 @@
              
   <div class="sphx-glr-download-link-note admonition note">
 <p class="admonition-title">Note</p>
-<p>Click <a class="reference internal" href="#sphx-glr-download-auto-examples-advanced-dis-run-stacked-models-py"><span class="std std-ref">here</span></a>
+<p>Click <a class="reference internal" href="#sphx-glr-download-auto-examples-advanced-run-stacked-models-py"><span class="std std-ref">here</span></a>
 to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="stacking-classification">
-<span id="sphx-glr-auto-examples-advanced-dis-run-stacked-models-py"></span><h1>Stacking Classification<a class="headerlink" href="#stacking-classification" title="Permalink to this heading"></a></h1>
+<span id="sphx-glr-auto-examples-advanced-run-stacked-models-py"></span><h1>Stacking Classification<a class="headerlink" href="#stacking-classification" title="Permalink to this heading"></a></h1>
 <p>This example uses the ‘iris’ dataset and performs a complex stacking
 classification. We will use two different classifiers, one applied to petal
 features and one applied to sepal features. A final logistic regression
@@ -116,6 +116,15 @@ classifier will be applied on the predictions of the two classifiers.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-12-07 11:23:53,017 - julearn - INFO - ===== Lib Versions =====
+2022-12-07 11:23:53,017 - julearn - INFO - numpy: 1.23.5
+2022-12-07 11:23:53,017 - julearn - INFO - scipy: 1.9.3
+2022-12-07 11:23:53,017 - julearn - INFO - sklearn: 1.2.0rc1
+2022-12-07 11:23:53,017 - julearn - INFO - pandas: 1.5.2
+2022-12-07 11:23:53,017 - julearn - INFO - julearn: 0.0.1.dev1
+2022-12-07 11:23:53,017 - julearn - INFO - ========================
+</pre></div>
+</div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">df_iris</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;iris&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -126,11 +135,11 @@ classification.</p>
 </div>
 <p>As features, we will use the sepal length, width and petal length.
 We will try to predict the species.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;sepal_length&quot;</span><span class="p">,</span> <span class="s2">&quot;sepal_width&quot;</span><span class="p">,</span> <span class="s2">&quot;petal_length&quot;</span><span class="p">,</span> <span class="s2">&quot;petal_width&quot;</span><span class="p">]</span>
-<span class="n">y</span> <span class="o">=</span> <span class="s2">&quot;species&quot;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;sepal_length&quot;</span><span class="p">,</span> <span class="s2">&quot;sepal_width&quot;</span><span class="p">,</span> <span class="s2">&quot;petal_length&quot;</span><span class="p">,</span> <span class="s2">&quot;petal_width&quot;</span><span class="p">]</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a> <span class="o">=</span> <span class="s2">&quot;species&quot;</span>
 
 <span class="c1"># Define our feature types</span>
-<span class="n">X_types</span> <span class="o">=</span> <span class="p">{</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X_types</span></a> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;sepal&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;sepal_length&quot;</span><span class="p">,</span> <span class="s2">&quot;sepal_width&quot;</span><span class="p">],</span>
     <span class="s2">&quot;petal&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;petal_length&quot;</span><span class="p">,</span> <span class="s2">&quot;petal_width&quot;</span><span class="p">],</span>
 <span class="p">}</span>
@@ -159,19 +168,61 @@ We will try to predict the species.</p>
 <span class="p">)</span>
 
 <span class="n">scores</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
-    <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">X_types</span><span class="o">=</span><span class="n">X_types</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df_iris</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X_types</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X_types</span></a><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df_iris</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span>
 <span class="p">)</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">[</span><span class="s2">&quot;test_score&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
-<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-advanced-dis-run-stacked-models-py">
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-12-07 11:23:53,021 - julearn - INFO - Adding step filter_columns that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7f8909b239a0&gt;
+2022-12-07 11:23:53,021 - julearn - INFO - Setting hyperparameter keep = sepal
+2022-12-07 11:23:53,022 - julearn - INFO - Step added
+2022-12-07 11:23:53,022 - julearn - INFO - Adding step zscore that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7f8909946860&gt;
+2022-12-07 11:23:53,022 - julearn - INFO - Step added
+2022-12-07 11:23:53,022 - julearn - INFO - Adding step svm that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7f8909945330&gt;
+2022-12-07 11:23:53,022 - julearn - INFO - Step added
+2022-12-07 11:23:53,022 - julearn - INFO - Adding step filter_columns that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7f8909945510&gt;
+2022-12-07 11:23:53,022 - julearn - INFO - Setting hyperparameter keep = petal
+2022-12-07 11:23:53,022 - julearn - INFO - Step added
+2022-12-07 11:23:53,022 - julearn - INFO - Adding step zscore that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7f8909944a30&gt;
+2022-12-07 11:23:53,022 - julearn - INFO - Step added
+2022-12-07 11:23:53,022 - julearn - INFO - Adding step rf that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7f8909944a90&gt;
+2022-12-07 11:23:53,023 - julearn - INFO - Step added
+2022-12-07 11:23:53,023 - julearn - INFO - Adding step stacking that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7f89099449d0&gt;
+2022-12-07 11:23:53,023 - julearn - INFO - Setting hyperparameter estimators = [(&#39;model_sepal&#39;, &lt;julearn.pipeline.pipeline.PipelineCreator object at 0x7f8909b22e90&gt;), (&#39;model_petal&#39;, &lt;julearn.pipeline.pipeline.PipelineCreator object at 0x7f89099454b0&gt;)]
+2022-12-07 11:23:53,023 - julearn - INFO - Step added
+2022-12-07 11:23:53,023 - julearn - INFO - ==== Input Data ====
+2022-12-07 11:23:53,023 - julearn - INFO - Using dataframe as input
+2022-12-07 11:23:53,023 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2022-12-07 11:23:53,023 - julearn - INFO -      Target: species
+2022-12-07 11:23:53,024 - julearn - INFO - ====================
+2022-12-07 11:23:53,024 - julearn - INFO -
+2022-12-07 11:23:53,026 - julearn - INFO - = Model Parameters =
+2022-12-07 11:23:53,026 - julearn - INFO - ====================
+2022-12-07 11:23:53,026 - julearn - INFO -
+2022-12-07 11:23:53,027 - julearn - INFO - = Model Parameters =
+2022-12-07 11:23:53,027 - julearn - INFO - ====================
+2022-12-07 11:23:53,027 - julearn - INFO -
+2022-12-07 11:23:53,095 - julearn - INFO - = Model Parameters =
+2022-12-07 11:23:53,095 - julearn - INFO - ====================
+2022-12-07 11:23:53,095 - julearn - INFO -
+2022-12-07 11:23:53,095 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2022-12-07 11:23:53,095 - julearn - INFO - Binary classification problem detected.
+0    1.00
+1    0.85
+2    0.95
+3    0.95
+4    0.95
+Name: test_score, dtype: float64
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  5.427 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-advanced-run-stacked-models-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/2da948d5ed396f421145ba6841d94097/dis_run_stacked_models.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">dis_run_stacked_models.py</span></code></a></p>
+<p><a class="reference download internal" download="" href="../../_downloads/371f875a9ba712d6f8f3215d1f3ac64e/run_stacked_models.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">run_stacked_models.py</span></code></a></p>
 </div>
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/006097e42be8708bc35d082aa98efbcc/dis_run_stacked_models.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">dis_run_stacked_models.ipynb</span></code></a></p>
+<p><a class="reference download internal" download="" href="../../_downloads/b58bc9c7df24853b49b6f4c8da3f4221/run_stacked_models.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">run_stacked_models.ipynb</span></code></a></p>
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
