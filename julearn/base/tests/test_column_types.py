@@ -46,39 +46,38 @@ def test_make_column_selector(X_iris, pattern, column_types, selection):
 @pytest.mark.parametrize(
     "column_types,pattern,resulting_column_types",
     [
-        (["continuous"], "(?:__:type:__continuous)", ["continuous"]),
-        ("continuous", "(?:__:type:__continuous)", ["continuous"]),
+        (["continuous"], "(?:__:type:__continuous)", {"continuous"}),
+        ("continuous", "(?:__:type:__continuous)", {"continuous"}),
         (
             ColumnTypes("continuous"),
             "(?:__:type:__continuous)",
-            ["continuous"],
+            {"continuous"},
         ),
         (
             ["continuous", "categorical"],
-            "(?:__:type:__continuous|__:type:__categorical)",
-            ["continuous", "categorical"],
+            ["(?:__:type:__continuous|__:type:__categorical)",
+             "(?:__:type:__categorical|__:type:__continuous)"],
+            {"continuous", "categorical"},
         ),
         (
             ColumnTypes(["continuous", "categorical"]),
-            "(?:__:type:__continuous|__:type:__categorical)",
-            ["continuous", "categorical"],
+            ["(?:__:type:__continuous|__:type:__categorical)",
+             "(?:__:type:__categorical|__:type:__continuous)"],
+            {"continuous", "categorical"},
         ),
-        (
-            [ColumnTypes("continuous"), ColumnTypes(["categorical"])],
-            "(?:__:type:__continuous|__:type:__categorical)",
-            ["continuous", "categorical"],
-        ),
-        ("*", ".*", ["*"]),
-        (["*"], ".*", ["*"]),
-        (".*", ".*", [".*"]),
-        ([".*"], ".*", [".*"]),
+        ("*", ".*", {"*"}),
+        (["*"], ".*", {"*"}),
+        (".*", ".*", {".*"}),
+        ([".*"], ".*", {".*"}),
     ],
 )
 def test_ColumnTypes_basics(column_types, pattern, resulting_column_types):
 
     ct = ColumnTypes(column_types)
-    assert ct.column_types == resulting_column_types
-    assert ct.pattern == pattern
+    if not isinstance(pattern, list):
+        pattern = [pattern]
+    assert any(ct.pattern == x for x in pattern)
+    assert ct._column_types == set(resulting_column_types)
 
 
 @pytest.mark.parametrize(
@@ -140,7 +139,7 @@ def test_ColumnTypes_equivelance(left, right, equal):
 
 
 def test_ColumnTypes_equivelance_error():
-    with pytest.raises(ValueError, match="Comparison with ColumnTypes only"):
+    with pytest.raises(TypeError, match="int"):
         ColumnTypes(["cont"]) == 7
 
 

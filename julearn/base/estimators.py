@@ -93,3 +93,7 @@ class WrapModel(JuBaseEstimator):
     def decision_function(self, X):
         Xt = self.filter_columns(X)
         return self.model_.decision_function(Xt)
+
+    @property
+    def classes_(self):
+        return self.model_.classes_
