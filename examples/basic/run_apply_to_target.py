@@ -73,10 +73,9 @@ train_diabetes, test_diabetes = train_test_split(data_diabetes, test_size=0.3)
 # apply_to="target", it already knows which is the target.
 # Here, it is important that if you define the PipelineCreator you include the
 # model and do not define the model in run_cross_validation
-creator = (PipelineCreator()
-           .add("zscore", apply_to="target")
-           .add("ridge", problem_type="regression")
-           )
+creator = PipelineCreator(problem_type="regression")
+creator.add("zscore", apply_to="target")
+creator.add("ridge")
 
 scores, model = run_cross_validation(
     X=X,
