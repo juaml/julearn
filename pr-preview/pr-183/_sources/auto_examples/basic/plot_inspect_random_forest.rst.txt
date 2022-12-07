@@ -67,13 +67,13 @@ Set the logging level to info to see extra information
 
  .. code-block:: none
 
-    2022-12-07 14:38:13,508 - julearn - INFO - ===== Lib Versions =====
-    2022-12-07 14:38:13,508 - julearn - INFO - numpy: 1.23.5
-    2022-12-07 14:38:13,508 - julearn - INFO - scipy: 1.9.3
-    2022-12-07 14:38:13,508 - julearn - INFO - sklearn: 1.2.0rc1
-    2022-12-07 14:38:13,508 - julearn - INFO - pandas: 1.5.2
-    2022-12-07 14:38:13,508 - julearn - INFO - julearn: 0.0.1.dev1
-    2022-12-07 14:38:13,508 - julearn - INFO - ========================
+    2022-12-07 15:12:28,601 - julearn - INFO - ===== Lib Versions =====
+    2022-12-07 15:12:28,601 - julearn - INFO - numpy: 1.23.5
+    2022-12-07 15:12:28,601 - julearn - INFO - scipy: 1.9.3
+    2022-12-07 15:12:28,601 - julearn - INFO - sklearn: 1.2.0rc1
+    2022-12-07 15:12:28,601 - julearn - INFO - pandas: 1.5.2
+    2022-12-07 15:12:28,602 - julearn - INFO - julearn: 0.0.1.dev1
+    2022-12-07 15:12:28,602 - julearn - INFO - ========================
 
 
 
@@ -126,7 +126,7 @@ We will use a Random Forest classifier. By setting
 `return_estimator='final'`, the :func:`.run_cross_validation` function
 returns the estimator fitted with all the data.
 
-.. GENERATED FROM PYTHON SOURCE LINES 46-56
+.. GENERATED FROM PYTHON SOURCE LINES 46-57
 
 .. code-block:: default
 
@@ -137,6 +137,7 @@ returns the estimator fitted with all the data.
         data=df_iris,
         model="rf",
         preprocess="zscore",
+        problem_type="classification",
         return_estimator="final",
     )
 
@@ -148,32 +149,32 @@ returns the estimator fitted with all the data.
 
  .. code-block:: none
 
-    2022-12-07 14:38:13,512 - julearn - INFO - ==== Input Data ====
-    2022-12-07 14:38:13,512 - julearn - INFO - Using dataframe as input
-    2022-12-07 14:38:13,512 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length']
-    2022-12-07 14:38:13,512 - julearn - INFO -      Target: species
-    2022-12-07 14:38:13,513 - julearn - INFO - ====================
-    2022-12-07 14:38:13,513 - julearn - INFO - 
-    2022-12-07 14:38:13,513 - julearn - INFO - Adding step zscore that applies to <julearn.base.column_types.ColumnTypes object at 0x7fadef1054e0>
-    2022-12-07 14:38:13,513 - julearn - INFO - Step added
-    2022-12-07 14:38:13,513 - julearn - INFO - Adding step rf that applies to <julearn.base.column_types.ColumnTypes object at 0x7fadef104be0>
-    2022-12-07 14:38:13,514 - julearn - INFO - Step added
-    2022-12-07 14:38:13,514 - julearn - INFO - = Model Parameters =
-    2022-12-07 14:38:13,514 - julearn - INFO - ====================
-    2022-12-07 14:38:13,514 - julearn - INFO - 
-    2022-12-07 14:38:13,515 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-    2022-12-07 14:38:13,515 - julearn - INFO - Binary classification problem detected.
+    2022-12-07 15:12:28,605 - julearn - INFO - ==== Input Data ====
+    2022-12-07 15:12:28,605 - julearn - INFO - Using dataframe as input
+    2022-12-07 15:12:28,605 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length']
+    2022-12-07 15:12:28,605 - julearn - INFO -      Target: species
+    2022-12-07 15:12:28,606 - julearn - INFO - ====================
+    2022-12-07 15:12:28,606 - julearn - INFO - 
+    2022-12-07 15:12:28,607 - julearn - INFO - Adding step zscore that applies to <julearn.base.column_types.ColumnTypes object at 0x7f1fe2ef8fd0>
+    2022-12-07 15:12:28,607 - julearn - INFO - Step added
+    2022-12-07 15:12:28,607 - julearn - INFO - Adding step rf that applies to <julearn.base.column_types.ColumnTypes object at 0x7f1fe2ef8ca0>
+    2022-12-07 15:12:28,607 - julearn - INFO - Step added
+    2022-12-07 15:12:28,608 - julearn - INFO - = Model Parameters =
+    2022-12-07 15:12:28,608 - julearn - INFO - ====================
+    2022-12-07 15:12:28,608 - julearn - INFO - 
+    2022-12-07 15:12:28,608 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+    2022-12-07 15:12:28,608 - julearn - INFO - Binary classification problem detected.
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 57-60
+.. GENERATED FROM PYTHON SOURCE LINES 58-61
 
 This type of classifier has an internal variable that can inform us on how
 _important_ is each of the features. Caution: read the proper scikit-learn
 documentation (`Random Forest`_)
 
-.. GENERATED FROM PYTHON SOURCE LINES 60-74
+.. GENERATED FROM PYTHON SOURCE LINES 61-75
 
 .. code-block:: default
 
@@ -203,7 +204,7 @@ documentation (`Random Forest`_)
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 75-82
+.. GENERATED FROM PYTHON SOURCE LINES 76-83
 
 However, some reviewers (including myself), might wander about the
 variability of the importance of these features. In the previous example
@@ -213,7 +214,7 @@ while the performance was estimated using cross validation.
 By specifying `return_estimator='cv'`, we can get, for each fold, the fitted
 estimator.
 
-.. GENERATED FROM PYTHON SOURCE LINES 82-92
+.. GENERATED FROM PYTHON SOURCE LINES 83-94
 
 .. code-block:: default
 
@@ -224,6 +225,7 @@ estimator.
         data=df_iris,
         model="rf",
         preprocess="zscore",
+        problem_type="classification",
         return_estimator="cv",
     )
 
@@ -235,30 +237,30 @@ estimator.
 
  .. code-block:: none
 
-    2022-12-07 14:38:14,488 - julearn - INFO - ==== Input Data ====
-    2022-12-07 14:38:14,488 - julearn - INFO - Using dataframe as input
-    2022-12-07 14:38:14,488 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length']
-    2022-12-07 14:38:14,488 - julearn - INFO -      Target: species
-    2022-12-07 14:38:14,489 - julearn - INFO - ====================
-    2022-12-07 14:38:14,490 - julearn - INFO - 
-    2022-12-07 14:38:14,490 - julearn - INFO - Adding step zscore that applies to <julearn.base.column_types.ColumnTypes object at 0x7fadef104790>
-    2022-12-07 14:38:14,490 - julearn - INFO - Step added
-    2022-12-07 14:38:14,490 - julearn - INFO - Adding step rf that applies to <julearn.base.column_types.ColumnTypes object at 0x7fadef106560>
-    2022-12-07 14:38:14,490 - julearn - INFO - Step added
-    2022-12-07 14:38:14,491 - julearn - INFO - = Model Parameters =
-    2022-12-07 14:38:14,491 - julearn - INFO - ====================
-    2022-12-07 14:38:14,491 - julearn - INFO - 
-    2022-12-07 14:38:14,491 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-    2022-12-07 14:38:14,491 - julearn - INFO - Binary classification problem detected.
+    2022-12-07 15:12:29,585 - julearn - INFO - ==== Input Data ====
+    2022-12-07 15:12:29,585 - julearn - INFO - Using dataframe as input
+    2022-12-07 15:12:29,585 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length']
+    2022-12-07 15:12:29,585 - julearn - INFO -      Target: species
+    2022-12-07 15:12:29,586 - julearn - INFO - ====================
+    2022-12-07 15:12:29,587 - julearn - INFO - 
+    2022-12-07 15:12:29,587 - julearn - INFO - Adding step zscore that applies to <julearn.base.column_types.ColumnTypes object at 0x7f1fe2efa470>
+    2022-12-07 15:12:29,587 - julearn - INFO - Step added
+    2022-12-07 15:12:29,587 - julearn - INFO - Adding step rf that applies to <julearn.base.column_types.ColumnTypes object at 0x7f1fe2ef82e0>
+    2022-12-07 15:12:29,587 - julearn - INFO - Step added
+    2022-12-07 15:12:29,588 - julearn - INFO - = Model Parameters =
+    2022-12-07 15:12:29,588 - julearn - INFO - ====================
+    2022-12-07 15:12:29,588 - julearn - INFO - 
+    2022-12-07 15:12:29,588 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+    2022-12-07 15:12:29,588 - julearn - INFO - Binary classification problem detected.
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 93-94
+.. GENERATED FROM PYTHON SOURCE LINES 95-96
 
 Now we can obtain the feature importance for each estimator (CV fold)
 
-.. GENERATED FROM PYTHON SOURCE LINES 94-107
+.. GENERATED FROM PYTHON SOURCE LINES 96-109
 
 .. code-block:: default
 
@@ -282,11 +284,11 @@ Now we can obtain the feature importance for each estimator (CV fold)
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 108-109
+.. GENERATED FROM PYTHON SOURCE LINES 110-111
 
 Finally, we can plot the variable importances for each fold
 
-.. GENERATED FROM PYTHON SOURCE LINES 109-117
+.. GENERATED FROM PYTHON SOURCE LINES 111-119
 
 .. code-block:: default
 
@@ -313,7 +315,7 @@ Finally, we can plot the variable importances for each fold
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  1.847 seconds)
+   **Total running time of the script:** ( 0 minutes  1.854 seconds)
 
 
 .. _sphx_glr_download_auto_examples_basic_plot_inspect_random_forest.py:
