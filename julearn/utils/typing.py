@@ -29,7 +29,7 @@ class ModelLike(EstimatorLike, Protocol):
 
 
 @runtime_checkable
-class JuEstiamtorLike(EstimatorLike, Protocol):
+class JuEstimatorLike(EstimatorLike, Protocol):
     def get_needed_types(self):
         return self.needed_types
 

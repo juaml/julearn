@@ -1,14 +1,14 @@
 from typing import Union, List
-from .. utils.logging import raise_error
+from ..utils.logging import raise_error
 from sklearn.compose import make_column_selector
 
 
 def change_column_type(column, new_type):
-    return '__:type:__'.join(column.split('__:type:__')[0:1] + [new_type])
+    return "__:type:__".join(column.split("__:type:__")[0:1] + [new_type])
 
 
 def get_column_type(column):
-    return column.split('__:type:__')[1]
+    return column.split("__:type:__")[1]
 
 
 def make_type_selector(pattern):
@@ -73,12 +73,18 @@ class ColumnTypes:
 
     def __init__(
         self,
-        column_types: Union[List[Union[str, 'ColumnTypes']],
-                            str, 'ColumnTypes']):
+        column_types: Union[
+            List[Union[str, "ColumnTypes"]], str, "ColumnTypes"
+        ],
+    ):
         self.column_types = column_types
 
-    def add(self, column_types: Union[List[Union[str, 'ColumnTypes']],
-                                      str, 'ColumnTypes']):
+    def add(
+        self,
+        column_types: Union[
+            List[Union[str, "ColumnTypes"]], str, "ColumnTypes"
+        ],
+    ):
         """Add more column_types to the column_types
 
         Parameters
@@ -103,8 +109,12 @@ class ColumnTypes:
         return self._column_types
 
     @column_types.setter
-    def column_types(self, column_types: Union[List[Union[str, 'ColumnTypes']],
-                                               str, 'ColumnTypes']):
+    def column_types(
+        self,
+        column_types: Union[
+            List[Union[str, "ColumnTypes"]], str, "ColumnTypes"
+        ],
+    ):
 
         self._column_types = self.ensure_column_types(column_types)
         self._pattern = self._to_pattern(self._column_types)
@@ -164,8 +174,11 @@ class ColumnTypes:
         return out
 
     @staticmethod
-    def _to_pattern(column_types: Union[List[Union[str, 'ColumnTypes']],
-                                        str, 'ColumnTypes']):
+    def _to_pattern(
+        column_types: Union[
+            List[Union[str, "ColumnTypes"]], str, "ColumnTypes"
+        ]
+    ):
         """Converts column_types to pattern/regex usable to make a
         column_selector.
 
@@ -192,21 +205,24 @@ class ColumnTypes:
                 for t in types[1:]:
                     pattern += rf"|{t}"
             pattern += r")"
-        elif ("__:type:__" in column_types or
-              column_types in ["target", ["target"]]):
+        elif "__:type:__" in column_types or column_types in [
+            "target",
+            ["target"],
+        ]:
             pattern = column_types
         else:
             pattern = f"(?__:type:__{column_types})"
 
         return pattern
 
-    def __eq__(self, other: Union[str, List[str], "ColumnTypes"]):
+    def __eq__(
+        self, other: Union[str, List[Union[str, "ColumnTypes"]], "ColumnTypes"]
+    ):
         if not isinstance(other, (str, list, ColumnTypes)):
             raise_error(
                 "Comparison with ColumnTypes only allowed for "
                 "following types: str, list, ColumnTypes. "
                 f"But you provided {type(other)}"
-
             )
         other = other if isinstance(other, ColumnTypes) else ColumnTypes(other)
         return set(self.column_types) == set(other.column_types)

@@ -16,7 +16,7 @@ from ..transformers import (
 from ..models import list_models, get_model
 from ..utils import raise_error, warn, logger
 from ..base import ColumnTypes, WrapModel, JuTransformer
-from ..utils.typing import JuModelLike, JuEstiamtorLike
+from ..utils.typing import JuModelLike, JuEstimatorLike
 from ..transformers import JuColumnTransformer
 from ..model_selection.available_searchers import list_searchers, get_searcher
 
@@ -128,7 +128,7 @@ class PipelineCreator:  # Pipeline creator
             if isinstance(step, str)
             else step
         )
-        if isinstance(estimator, JuEstiamtorLike):
+        if isinstance(estimator, JuEstimatorLike):
             estimator.set_params(apply_to=apply_to)
             needed_types = estimator.get_needed_types()
         else:
@@ -247,8 +247,10 @@ class PipelineCreator:  # Pipeline creator
         logger.debug(f"\t Params to tune: {step_params_to_tune}")
         if self._added_target_transformer:
             target_model_step, step_params_to_tune = self.wrap_target_model(
-                model_name, model_estimator, target_transformer_steps,
-                step_params_to_tune
+                model_name,
+                model_estimator,
+                target_transformer_steps,
+                step_params_to_tune,
             )
             params_to_tune.update(step_params_to_tune)
             pipeline_steps.append(target_model_step)
@@ -265,7 +267,7 @@ class PipelineCreator:  # Pipeline creator
         logger.debug("Pipeline created")
         return out
 
-    @ staticmethod
+    @staticmethod
     def prepare_hyperparameter_tuning(params_to_tune, search_params, pipeline):
         """Prepare model parameters.
 
@@ -347,13 +349,14 @@ class PipelineCreator:  # Pipeline creator
         logger.info("")
         return pipeline
 
-    @ staticmethod
+    @staticmethod
     def wrap_target_model(
         model_name, model, target_transformer_steps, model_params=None
     ):
         model_params = {} if model_params is None else model_params
-        model_params = {f"regressor__{param}": val for param,
-                        val in model_params.items()}
+        model_params = {
+            f"regressor__{param}": val for param, val in model_params.items()
+        }
 
         def check_has_valid_reverse(est):
             valid_reverse = True
@@ -375,9 +378,9 @@ class PipelineCreator:  # Pipeline creator
                 valid_reverse = False
 
         transformer_pipe = (
-            Pipeline(pipe_trans_steps) if valid_reverse
+            Pipeline(pipe_trans_steps)
+            if valid_reverse
             else NoInversePipeline(pipe_trans_steps)
-
         )
         target_model = TransformedTargetRegressor(
             transformer=transformer_pipe.set_output(transform="pandas"),
@@ -465,7 +468,7 @@ class PipelineCreator:  # Pipeline creator
 
         self.wrap = needed_types != set(["continuous"])
 
-    @ staticmethod
+    @staticmethod
     def _is_transfromer_step(step):
         if step in list_transformers():
             return True
@@ -473,7 +476,7 @@ class PipelineCreator:  # Pipeline creator
             return True
         return False
 
-    @ staticmethod
+    @staticmethod
     def _is_model_step(step):
         if step in list_models():
             return True
@@ -481,11 +484,11 @@ class PipelineCreator:  # Pipeline creator
             return True
         return False
 
-    @ staticmethod
+    @staticmethod
     def wrap_step(name, step, column_types):
         return JuColumnTransformer(name, step, column_types)
 
-    @ staticmethod
+    @staticmethod
     def get_estimator_from(name, problem_type, **kwargs):
         if name in list_transformers():
             return get_transformer(name, **kwargs)
