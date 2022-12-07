@@ -80,6 +80,7 @@ class PipelineCreator:  # Pipeline creator
     def add(
         self,
         step,
+        name=None,
         apply_to=None,
         **params,
     ):
@@ -113,8 +114,9 @@ class PipelineCreator:  # Pipeline creator
         apply_to = self.apply_to if apply_to is None else apply_to
         apply_to = ColumnTypes(apply_to)
         self.validate_step(step, apply_to)
-        name = step if isinstance(step, str) else step.__cls__.lower()
-        name = self._ensure_name(name)
+        if name is None:
+            name = step if isinstance(step, str) else step.__cls__.lower()
+            name = self._ensure_name(name)
         logger.info(f"Adding step {name} that applies to {apply_to}")
         params_to_set = dict()
         params_to_tune = dict()
