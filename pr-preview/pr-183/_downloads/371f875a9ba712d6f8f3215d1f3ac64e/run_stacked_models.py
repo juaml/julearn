@@ -43,17 +43,17 @@ X_types = {
 }
 
 
-# Create the pipeline for the sepal features
-model_sepal = PipelineCreator()
+# Create the pipeline for the sepal features, by default will apply to "sepal"
+model_sepal = PipelineCreator(apply_to="sepal")
 model_sepal.add("filter_columns", apply_to="*", keep="sepal")
-model_sepal.add("zscore", apply_to="sepal")
-model_sepal.add("svm", apply_to="sepal")
+model_sepal.add("zscore")
+model_sepal.add("svm")
 
-# Create the pipeline for the petal features
-model_petal = PipelineCreator()
+# Create the pipeline for the petal features, by default will apply to "petal"
+model_petal = PipelineCreator(apply_to="petal")
 model_petal.add("filter_columns", apply_to="*", keep="petal")
-model_petal.add("zscore", apply_to="petal")
-model_petal.add("rf", apply_to="petal")
+model_petal.add("zscore")
+model_petal.add("rf")
 
 # Create the stacking model
 model = PipelineCreator()

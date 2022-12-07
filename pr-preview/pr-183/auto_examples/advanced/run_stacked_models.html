@@ -116,13 +116,13 @@ classifier will be applied on the predictions of the two classifiers.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-12-07 11:30:18,603 - julearn - INFO - ===== Lib Versions =====
-2022-12-07 11:30:18,603 - julearn - INFO - numpy: 1.23.5
-2022-12-07 11:30:18,603 - julearn - INFO - scipy: 1.9.3
-2022-12-07 11:30:18,603 - julearn - INFO - sklearn: 1.2.0rc1
-2022-12-07 11:30:18,603 - julearn - INFO - pandas: 1.5.2
-2022-12-07 11:30:18,603 - julearn - INFO - julearn: 0.0.1.dev1
-2022-12-07 11:30:18,603 - julearn - INFO - ========================
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-12-07 11:36:22,798 - julearn - INFO - ===== Lib Versions =====
+2022-12-07 11:36:22,798 - julearn - INFO - numpy: 1.23.5
+2022-12-07 11:36:22,798 - julearn - INFO - scipy: 1.9.3
+2022-12-07 11:36:22,798 - julearn - INFO - sklearn: 1.2.0rc1
+2022-12-07 11:36:22,798 - julearn - INFO - pandas: 1.5.2
+2022-12-07 11:36:22,798 - julearn - INFO - julearn: 0.0.1.dev1
+2022-12-07 11:36:22,798 - julearn - INFO - ========================
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">df_iris</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;iris&quot;</span><span class="p">)</span>
@@ -145,17 +145,17 @@ We will try to predict the species.</p>
 <span class="p">}</span>
 
 
-<span class="c1"># Create the pipeline for the sepal features</span>
-<span class="n">model_sepal</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">()</span>
+<span class="c1"># Create the pipeline for the sepal features, by default will apply to &quot;sepal&quot;</span>
+<span class="n">model_sepal</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;sepal&quot;</span><span class="p">)</span>
 <span class="n">model_sepal</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;filter_columns&quot;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="s2">&quot;sepal&quot;</span><span class="p">)</span>
-<span class="n">model_sepal</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;sepal&quot;</span><span class="p">)</span>
-<span class="n">model_sepal</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;svm&quot;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;sepal&quot;</span><span class="p">)</span>
+<span class="n">model_sepal</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">)</span>
+<span class="n">model_sepal</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;svm&quot;</span><span class="p">)</span>
 
-<span class="c1"># Create the pipeline for the petal features</span>
-<span class="n">model_petal</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">()</span>
+<span class="c1"># Create the pipeline for the petal features, by default will apply to &quot;petal&quot;</span>
+<span class="n">model_petal</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;petal&quot;</span><span class="p">)</span>
 <span class="n">model_petal</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;filter_columns&quot;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="s2">&quot;petal&quot;</span><span class="p">)</span>
-<span class="n">model_petal</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;petal&quot;</span><span class="p">)</span>
-<span class="n">model_petal</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;rf&quot;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;petal&quot;</span><span class="p">)</span>
+<span class="n">model_petal</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">)</span>
+<span class="n">model_petal</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;rf&quot;</span><span class="p">)</span>
 
 <span class="c1"># Create the stacking model</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">()</span>
@@ -174,40 +174,40 @@ We will try to predict the species.</p>
 <span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">[</span><span class="s2">&quot;test_score&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-12-07 11:30:18,607 - julearn - INFO - Adding step filter_columns that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7f018e7179a0&gt;
-2022-12-07 11:30:18,607 - julearn - INFO - Setting hyperparameter keep = sepal
-2022-12-07 11:30:18,607 - julearn - INFO - Step added
-2022-12-07 11:30:18,607 - julearn - INFO - Adding step zscore that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7f018e542860&gt;
-2022-12-07 11:30:18,607 - julearn - INFO - Step added
-2022-12-07 11:30:18,608 - julearn - INFO - Adding step svm that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7f018e541330&gt;
-2022-12-07 11:30:18,608 - julearn - INFO - Step added
-2022-12-07 11:30:18,608 - julearn - INFO - Adding step filter_columns that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7f018e541510&gt;
-2022-12-07 11:30:18,608 - julearn - INFO - Setting hyperparameter keep = petal
-2022-12-07 11:30:18,608 - julearn - INFO - Step added
-2022-12-07 11:30:18,608 - julearn - INFO - Adding step zscore that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7f018e540a30&gt;
-2022-12-07 11:30:18,608 - julearn - INFO - Step added
-2022-12-07 11:30:18,608 - julearn - INFO - Adding step rf that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7f018e540a90&gt;
-2022-12-07 11:30:18,608 - julearn - INFO - Step added
-2022-12-07 11:30:18,608 - julearn - INFO - Adding step stacking that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7f018e5409d0&gt;
-2022-12-07 11:30:18,608 - julearn - INFO - Setting hyperparameter estimators = [(&#39;model_sepal&#39;, &lt;julearn.pipeline.pipeline.PipelineCreator object at 0x7f018e716e90&gt;), (&#39;model_petal&#39;, &lt;julearn.pipeline.pipeline.PipelineCreator object at 0x7f018e5414b0&gt;)]
-2022-12-07 11:30:18,609 - julearn - INFO - Step added
-2022-12-07 11:30:18,609 - julearn - INFO - ==== Input Data ====
-2022-12-07 11:30:18,609 - julearn - INFO - Using dataframe as input
-2022-12-07 11:30:18,609 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2022-12-07 11:30:18,609 - julearn - INFO -      Target: species
-2022-12-07 11:30:18,610 - julearn - INFO - ====================
-2022-12-07 11:30:18,610 - julearn - INFO -
-2022-12-07 11:30:18,611 - julearn - INFO - = Model Parameters =
-2022-12-07 11:30:18,611 - julearn - INFO - ====================
-2022-12-07 11:30:18,611 - julearn - INFO -
-2022-12-07 11:30:18,613 - julearn - INFO - = Model Parameters =
-2022-12-07 11:30:18,613 - julearn - INFO - ====================
-2022-12-07 11:30:18,613 - julearn - INFO -
-2022-12-07 11:30:18,681 - julearn - INFO - = Model Parameters =
-2022-12-07 11:30:18,681 - julearn - INFO - ====================
-2022-12-07 11:30:18,681 - julearn - INFO -
-2022-12-07 11:30:18,681 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2022-12-07 11:30:18,681 - julearn - INFO - Binary classification problem detected.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-12-07 11:36:22,802 - julearn - INFO - Adding step filter_columns that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7f1a52334520&gt;
+2022-12-07 11:36:22,802 - julearn - INFO - Setting hyperparameter keep = sepal
+2022-12-07 11:36:22,802 - julearn - INFO - Step added
+2022-12-07 11:36:22,802 - julearn - INFO - Adding step zscore that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7f1a52334ca0&gt;
+2022-12-07 11:36:22,803 - julearn - INFO - Step added
+2022-12-07 11:36:22,803 - julearn - INFO - Adding step svm that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7f1a52334d90&gt;
+2022-12-07 11:36:22,803 - julearn - INFO - Step added
+2022-12-07 11:36:22,803 - julearn - INFO - Adding step filter_columns that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7f1a52334f70&gt;
+2022-12-07 11:36:22,803 - julearn - INFO - Setting hyperparameter keep = petal
+2022-12-07 11:36:22,803 - julearn - INFO - Step added
+2022-12-07 11:36:22,803 - julearn - INFO - Adding step zscore that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7f1a523343a0&gt;
+2022-12-07 11:36:22,803 - julearn - INFO - Step added
+2022-12-07 11:36:22,803 - julearn - INFO - Adding step rf that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7f1a52334a30&gt;
+2022-12-07 11:36:22,803 - julearn - INFO - Step added
+2022-12-07 11:36:22,804 - julearn - INFO - Adding step stacking that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7f1a528832e0&gt;
+2022-12-07 11:36:22,804 - julearn - INFO - Setting hyperparameter estimators = [(&#39;model_sepal&#39;, &lt;julearn.pipeline.pipeline.PipelineCreator object at 0x7f1a52336a40&gt;), (&#39;model_petal&#39;, &lt;julearn.pipeline.pipeline.PipelineCreator object at 0x7f1a52334eb0&gt;)]
+2022-12-07 11:36:22,804 - julearn - INFO - Step added
+2022-12-07 11:36:22,804 - julearn - INFO - ==== Input Data ====
+2022-12-07 11:36:22,804 - julearn - INFO - Using dataframe as input
+2022-12-07 11:36:22,804 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2022-12-07 11:36:22,804 - julearn - INFO -      Target: species
+2022-12-07 11:36:22,805 - julearn - INFO - ====================
+2022-12-07 11:36:22,805 - julearn - INFO -
+2022-12-07 11:36:22,806 - julearn - INFO - = Model Parameters =
+2022-12-07 11:36:22,806 - julearn - INFO - ====================
+2022-12-07 11:36:22,806 - julearn - INFO -
+2022-12-07 11:36:22,808 - julearn - INFO - = Model Parameters =
+2022-12-07 11:36:22,808 - julearn - INFO - ====================
+2022-12-07 11:36:22,808 - julearn - INFO -
+2022-12-07 11:36:22,875 - julearn - INFO - = Model Parameters =
+2022-12-07 11:36:22,876 - julearn - INFO - ====================
+2022-12-07 11:36:22,876 - julearn - INFO -
+2022-12-07 11:36:22,876 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2022-12-07 11:36:22,876 - julearn - INFO - Binary classification problem detected.
 0    1.00
 1    0.85
 2    0.95
@@ -216,7 +216,7 @@ We will try to predict the species.</p>
 Name: test_score, dtype: float64
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  5.389 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  5.354 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-advanced-run-stacked-models-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/371f875a9ba712d6f8f3215d1f3ac64e/run_stacked_models.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">run_stacked_models.py</span></code></a></p>
