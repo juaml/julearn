@@ -98,7 +98,7 @@ X_types = {"features": X, "confound": confounds}
 #
 # The first step will zscore both features and confounds.
 #
-# Te second step will remove the confounds (type "confound") from the 
+# The second step will remove the confounds (type "confound") from the 
 # "features".
 #
 # Finally, a random forest will be trained. Given the default apply_to in
