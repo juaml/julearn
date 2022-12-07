@@ -55,7 +55,7 @@ y = "target"
 # and create feature groups for PCA
 # we will keep 1 component per PCA group
 X_types = {'pca1': ["age", "bmi", "bp"], 
-          'pca2': ["s1", "s2", "s3", "s4", "s5", "s6"],
+           'pca2': ["s1", "s2", "s3", "s4", "s5", "s6"],
            'categorical': ['sex']}
 
 ###############################################################################
