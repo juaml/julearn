@@ -1,13 +1,13 @@
 """
 Transforming target variable with z-score.
-==========================================
+
+===========================================
 
 This example uses the sklearn "diabetes" regression dataset, and transforms the
 target variable, in this case, using z-score. Then, we perform a regression
 analysis using Ridge Regression model.
 
 """
-
 # Authors: Lya K. Paas Oliveros <l.paas.oliveros@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 #
@@ -40,7 +40,6 @@ features, target = load_diabetes(return_X_y=True, as_frame=True)
 # pressure, and six blood serum measurements (s1-s6) diabetes patients and
 # a quantitative measure of disease progression one year after baseline which
 # is the target we are interested in predicting.
-
 print('Features: \n', features.head())
 print('Target: \n', target.describe())
 
