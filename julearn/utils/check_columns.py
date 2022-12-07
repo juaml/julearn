@@ -27,7 +27,5 @@ def check_columns(X, X_types):
                     f'{v} of type {key} not a valid column name in X.'
                 )
 
-    print(values_all)
-
     if len(values_all) != len(set(values_all)):
         raise_error('One column defined multiple times in X_types')
