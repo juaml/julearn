@@ -92,20 +92,27 @@ X_types = {"features": X, "confound": confounds}
 
 
 ##############################################################################
-# We can now define a pipeline creator and add a confound removal step. This
-# step can be told which column types are the confounds ("confounds" keyword)
-# and from which column types confounds should be removed ("apply_to" keyword).
-preprocess = (
-    PipelineCreator(problem_type="classification")
-    .add('zscore', apply_to=["duck", "confound"])
-    .add('remove_confound', apply_to="duck", confounds="confound")
-    .add('zscore', apply_to="duck")
-)
+# We can now define a pipeline creator and add a confound removal step.
+# The pipeline creator should apply all the steps, by default, to the
+# features type.
+#
+# The first step will zscore both features and confounds.
+#
+# Te second step will remove the confounds (type "confound") from the 
+# "features".
+#
+# Finally, a random forest will be trained. Given the default apply_to in
+# the pipeline creator, the random forest will only be trained using "features".
+model = PipelineCreator(problem_type="classification", apply_to="features")
+model.add("zscore", apply_to=["features", "confound"])
+model.add("remove_confound", apply_to="features", confounds="confound")
+model.add("rf")
+
 scores_cr = run_cross_validation(
     X=X + confounds,
     y=y,
     data=df_iris,
-    model=pipeline_creator,
+    model=model,
     cv=cv,
     X_types=X_types,
     scoring=["accuracy", "roc_auc"],
