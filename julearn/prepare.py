@@ -196,9 +196,7 @@ def check_consistency(
 
 
 def check_x_types(X_types: Dict, X: List[str]) -> Dict[str, List]:
-    """ Check validity of X_types with respect to X
-
-    """
+    """Check validity of X_types with respect to X"""
     X_types = {
         k: [v] if not isinstance(v, list) else v for k, v in X_types.items()
     }
