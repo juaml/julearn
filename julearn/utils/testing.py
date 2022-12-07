@@ -40,7 +40,7 @@ from sklearn.naive_bayes import (
     MultinomialNB,
 )
 from sklearn.base import clone, TransformerMixin, BaseEstimator
-from sklearn.model_selection import cross_validate, check_cv, KFold
+from sklearn.model_selection import cross_validate, KFold
 
 from julearn import run_cross_validation
 

@@ -20,6 +20,7 @@ from sklearn.tree import DecisionTreeRegressor, DecisionTreeClassifier
 def model(request):
     return request.param
 
+
 @pytest.mark.filterwarnings("ignore::sklearn.exceptions.ConvergenceWarning")
 @pytest.mark.parametrize(
     "apply_to,column_types,selection",

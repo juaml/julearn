@@ -9,11 +9,13 @@ from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 from sklearn.ensemble import RandomForestRegressor
 import warnings
 
+
 def test_register_model():
-    register_model("dt",
-                   classification_cls=DecisionTreeClassifier,
-                   regression_cls=DecisionTreeRegressor
-                   )
+    register_model(
+        "dt",
+        classification_cls=DecisionTreeClassifier,
+        regression_cls=DecisionTreeRegressor,
+    )
     classification = get_model("dt", "classification")
     regression = get_model("dt", "regression")
 
@@ -32,11 +34,13 @@ def test_register_warning():
 
     with pytest.raises(ValueError, match="Model name"):
         register_model(
-            "rf", regression_cls=RandomForestRegressor, overwrite=False)
+            "rf", regression_cls=RandomForestRegressor, overwrite=False
+        )
     reset_model_register()
 
     with warnings.catch_warnings():
         warnings.simplefilter("error")
         register_model(
-            "rf", regression_cls=RandomForestRegressor, overwrite=True)
+            "rf", regression_cls=RandomForestRegressor, overwrite=True
+        )
     reset_model_register()

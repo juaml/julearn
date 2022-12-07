@@ -4,7 +4,7 @@
 import numpy as np
 from sklearn.base import clone
 from sklearn.svm import SVC, SVR
-from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import (
     RandomForestClassifier,
     RandomForestRegressor,

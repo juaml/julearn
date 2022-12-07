@@ -57,6 +57,7 @@ def get_versions(sys):
         module_versions[name] = module_version
     return module_versions
 
+
 def _safe_log(versions, name):
     if name in versions:
         logger.info(f"{name}: {versions[name]}")
