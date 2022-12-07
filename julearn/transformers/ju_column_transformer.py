@@ -46,7 +46,7 @@ class JuColumnTransformer(JuTransformer):
         except ValueError as e:
             raise_error(
                 "This transformer changes the names of the features. "
-                "Unfortunatelly, this feature is already present and will "
+                "Unfortunately, this feature is already present and will "
                 "create a repeated feature name. Please re-implement your "
                 "transformer, inheriting from "
                 "sklearn.base.ClassNamePrefixFeaturesOutMixin",
