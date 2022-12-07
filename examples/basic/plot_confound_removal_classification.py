@@ -28,7 +28,7 @@ from julearn.utils import configure_logging
 configure_logging(level="INFO")
 
 ###############################################################################
-# load the iris data from seaborn
+# Load the iris data from seaborn
 df_iris = load_dataset("iris")
 
 ###############################################################################
