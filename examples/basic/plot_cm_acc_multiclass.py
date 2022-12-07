@@ -52,6 +52,7 @@ scores, model_iris = run_cross_validation(
     data=train_iris,
     model="svm",
     preprocess="zscore",
+    problem_type="classification",
     cv=cv,
     scoring=["accuracy"],
     return_estimator="final",

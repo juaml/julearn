@@ -57,17 +57,29 @@ class Step:
 
 
 class PipelineCreator:  # Pipeline creator
-    def __init__(self, apply_to="continuous"):
+    """PipelineCreator class.
+
+    Parameters
+    ----------
+    problem_type: {"classification", "regression"}
+        The problem type for which this pipeline should be created.
+    """
+
+    def __init__(self, problem_type, apply_to="continuous"):
+        if problem_type not in ["classification", "regression"]:
+            raise_error(
+                "`problem_type` should be either 'classification' or 'regression'."
+            )
         self._steps = list()
         self._added_target_transformer = False
         self._added_model = False
         self.apply_to = apply_to
+        self.problem_type = problem_type
 
     def add(
         self,
         step,
         apply_to=None,
-        problem_type="classification",
         **params,
     ):
         """Add a step to the PipelineCreator.
@@ -84,11 +96,6 @@ class PipelineCreator:  # Pipeline creator
             To what should the transformer or model be applied to.
             This can be a str representing a column type or a list
             of such str.
-        problem_type: {"categorical", "regression"}
-            The problem type for which this step should be created.
-            This is only relevant if there are multiple options for
-            the step depending on the problem_type. Usually this
-            is only the case for models. (default=categorical")
         **params
             Parameters for the step. This will mostly include hyperparameters
             or any other parameter for initialization.
@@ -124,7 +131,7 @@ class PipelineCreator:  # Pipeline creator
                 logger.info(f"Setting hyperparameter {param} = {vals}")
                 params_to_set[param] = vals
         estimator = (
-            self.get_estimator_from(step, problem_type, **params_to_set)
+            self.get_estimator_from(step, self.problem_type, **params_to_set)
             if isinstance(step, str)
             else step
         )
@@ -155,8 +162,13 @@ class PipelineCreator:  # Pipeline creator
         return self._added_model
 
     @classmethod
-    def from_list(cls, transformers: Union[str, list], model_params: dict):
-        preprocessor = cls()
+    def from_list(
+        cls,
+        transformers: Union[str, list],
+        model_params: dict,
+        problem_type: str,
+    ):
+        preprocessor = cls(problem_type)
         if isinstance(transformers, str):
             transformers = [transformers]
         for transformer_name in transformers:
