@@ -6,7 +6,7 @@ from sklearn.model_selection import cross_validate, check_cv
 from sklearn.pipeline import Pipeline
 import pandas as pd
 
-from .prepare import prepare_input_data, check_consistency
+from .prepare import prepare_input_data, check_consistency, check_x_types
 from .pipeline import PipelineCreator
 
 from .utils import logger, raise_error
@@ -170,6 +170,9 @@ def run_cross_validation(
         pos_labels=pos_labels,
         groups=groups,
     )
+
+    # Validate X_types
+    X_types = check_x_types(X_types, X)
 
     if model_params is None:
         model_params = {}
