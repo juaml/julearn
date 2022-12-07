@@ -97,4 +97,3 @@ class WrapModel(JuBaseEstimator):
     @property
     def classes_(self):
         return self.model_.classes_
-
