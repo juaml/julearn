@@ -60,10 +60,11 @@ def _wrapped_model_has(attr):
 
 
 class WrapModel(JuBaseEstimator):
-    def __init__(self, model, apply_to=None, needed_types=None):
+    def __init__(self, model, apply_to=None, needed_types=None, **params):
         self.model = model
         self.apply_to = apply_to
         self.needed_types = needed_types
+        self.model.set_params(**params)
 
     def fit(self, X, y=None, **fit_params):
         self.apply_to = ("continuous" if self.apply_to is None
@@ -97,3 +98,28 @@ class WrapModel(JuBaseEstimator):
     @property
     def classes_(self):
         return self.model_.classes_
+
+    def get_params(self, deep=True):
+        return dict(
+            # **{
+            #     f"{self.model.__class__.__name__.lower()}__{param}": val
+            #     for param, val in self.model.get_params(deep).items()
+            # },
+            **self.model.get_params(deep),
+            model=self.model,
+            apply_to=self.apply_to,
+            needed_types=self.needed_types,
+        )
+
+    def set_params(self, **kwargs):
+
+        model_params = list(self.model
+                            .get_params(True)
+                            .keys()
+                            )
+
+        for param, val in kwargs.items():
+            if param in model_params:
+                self.model.set_params(**{param: val})
+            else:
+                setattr(self, param, val)

@@ -105,7 +105,7 @@ def test_hyperparameter_tuning(
         pipeline_creator = pipeline_creator.add(
             step, apply_to=used_types, **default_params
         )
-        name = f"wrapped_{step}__{step}" if wrap else step
+        name = f"wrapped_{step}" if wrap else step
         params = {
             f"{name}__{param}": val for param, val in default_params.items()
         }
@@ -115,7 +115,7 @@ def test_hyperparameter_tuning(
     pipeline_creator = pipeline_creator.add(
         model, problem_type=problem_type, **model_params
     )
-    model = f"wrapped_{model}__{model}" if wrap else model
+    model = f"wrapped_{model}" if wrap else model
     param_grid.update(
         {f"{model}__{param}": val for param, val in model_params.items()}
     )

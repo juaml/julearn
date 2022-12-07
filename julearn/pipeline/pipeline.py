@@ -196,7 +196,6 @@ class PipelineCreator:  # Pipeline creator
         for step_dict in transformer_steps:
             logger.debug(f"Adding transformer {step_dict.name}")
             name = step_dict.name
-            name_for_tuning = name
             estimator = step_dict.estimator
             logger.debug(f"\t Estimator: {estimator}")
             step_params_to_tune = step_dict.params_to_tune
@@ -205,7 +204,6 @@ class PipelineCreator:  # Pipeline creator
             # Wrap in a JuTransformer if needed
             if self.wrap and not isinstance(estimator, JuTransformer):
                 estimator = self.wrap_step(name, estimator, step_dict.apply_to)
-                name_for_tuning = f"wrapped_{name}__{name}"
                 name = f"wrapped_{name}"
 
             pipeline_steps.append((name, estimator))
@@ -213,13 +211,12 @@ class PipelineCreator:  # Pipeline creator
             # Add params to tune
             params_to_tune.update(
                 {
-                    f"{name_for_tuning}__{param}": val
+                    f"{name}__{param}": val
                     for param, val in step_params_to_tune.items()
                 }
             )
 
         model_name = model_step.name
-        model_name_for_tuning = model_name
         model_estimator = model_step.estimator
         logger.debug(f"Adding model {model_name}")
 
@@ -230,15 +227,12 @@ class PipelineCreator:  # Pipeline creator
         }
         model_estimator.set_params(**model_params)
         if self.wrap and not isinstance(model_estimator, JuModelLike):
-
-            model_name_for_tuning = f"wrapped_{model_name}__{model_name}"
             model_name = f"wrapped_{model_name}"
-
             logger.debug(f"Wrapping {model_name}")
             model_estimator = WrapModel(model_estimator, model_step.apply_to)
 
         step_params_to_tune = {
-            f"{model_name_for_tuning}__{k}": v
+            f"{model_name}__{k}": v
             for k, v in model_step.params_to_tune.items()
         }
 
