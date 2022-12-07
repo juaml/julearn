@@ -144,7 +144,7 @@ class ColumnTypes:
         ------
         ValueError
             If the column_types is not a list, str or ColumnTypes.
-            Or if each elment of the list is not a str or ColumnTypes.
+            Or if each element of the list is not a str or ColumnTypes.
 
         Returns
         -------
