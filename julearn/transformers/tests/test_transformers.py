@@ -83,7 +83,11 @@ def test_feature_transformers(name, klass, params):
 
     scorers = ["accuracy"]
 
-    api_params = {"model": "svm", "preprocess": name}
+    api_params = {
+        "model": "svm",
+        "preprocess": name,
+        "problem_type": "classification",
+    }
     model_params = {f"{name}__{k}": v for k, v in params.items()}
     api_params["model_params"] = model_params
     tr = klass(**params)
