@@ -27,6 +27,4 @@ Custom Scorers
 julearn allows the user to define any function and use it as a scorer in the 
 same way scikit-learn or julearn internal scorers work.
 
-In the example 
-:ref:`sphx_glr_auto_examples_advanced_run_custom_scorers_regression.py`
-you can see how to make use of this functionality.
+In the example (TODO: place link) you can see how to make use of this functionality.
