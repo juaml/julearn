@@ -1,8 +1,8 @@
 """
-Grouped CV
-=====================
+Grouped CV.
+===========
 
-This example uses the 'iris' dataset and performs GroupKFold
+This example uses the 'fMRI' dataset and performs GroupKFold
 Cross-Validation for classification using Random Forest Classifier.
 
 References
@@ -12,7 +12,9 @@ cognitive control in context-dependent decision-making. Cerebral Cortex.
 
 
 .. include:: ../../links.inc
+
 """
+
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Shammi More <s.more@fz-juelich.de>
 #          Kimia Nazarzadeh <k.nazarzadeh@fz-juelich.de>
@@ -22,17 +24,10 @@ cognitive control in context-dependent decision-making. Cerebral Cortex.
 # License: AGPL
 # Importing the necessary Python libraries
 import numpy as np
-import pandas as pd
-
-import matplotlib.pyplot as plt
-from matplotlib.patches import Patch
 
 from seaborn import load_dataset
 from sklearn.model_selection import GroupKFold
-from sklearn.utils import shuffle
 
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score, confusion_matrix
 from julearn.utils import configure_logging
 from julearn import run_cross_validation
 from julearn.model_selection import StratifiedGroupsKFold
@@ -107,13 +102,6 @@ scores = run_cross_validation(X=X, y=y, data=df_fmri, preprocess='zscore',
 print(scores['test_score'].mean())
 
 ###############################################################################
-# Define number of groups for CV and create group for stratification
-# number_groups = 4
-# groups = np.floor(np.linspace(0, number_groups, len(df_fmri)))
-
-# X_shuffled, y_shuffled, groups_shuffled = shuffle(X, y, groups, random_state=0)
-
-###############################################################################
 # Train classification model with stratification on data
 cv_stratified = StratifiedGroupsKFold(n_splits=2)
 scores, model = run_cross_validation(
@@ -123,18 +111,10 @@ scores, model = run_cross_validation(
 print(scores['test_score'].mean())
 
 ###############################################################################
-# Train classification model withot stratification on data
+# Train classification model without stratification on data
 cv = GroupKFold(n_splits=2)
 scores, model = run_cross_validation(
     X=X, y=y, data=df_fmri, groups='subject',
     model='rf', cv=cv, return_estimator="final")
 
 print(scores['test_score'].mean())
-
-###############################################################################
-# Now we can compare the test score for model trained with and without
-# stratification. We can combine the two outputs as pandas dataframes
-scores_strat['model'] = 'With stratification'
-scores['model'] = 'Without stratification'
-df_scores = scores_strat[['test_score', 'model']]
-df_scores  = pd.concat([df_scores, scores[['test_score', 'model']]])
