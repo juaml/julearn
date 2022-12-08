@@ -1,7 +1,15 @@
 from sklearn.utils.metaestimators import available_if
 from sklearn.base import BaseEstimator, TransformerMixin
 import pandas as pd
-from . column_types import ColumnTypes
+from .column_types import ColumnTypes
+
+
+def _wrapped_model_has(attr):
+    def check(self):
+        getattr(self.model_, attr)
+        return True
+
+    return check
 
 
 class JuBaseEstimator(BaseEstimator):
@@ -35,40 +43,24 @@ class JuBaseEstimator(BaseEstimator):
 
 
 class JuTransformer(JuBaseEstimator, TransformerMixin):
-
     def _add_backed_filtered(self, X, X_trans):
         filtered_columns = self._filter(X)
         non_filtered_columns = [
-            col
-            for col in list(X.columns)
-            if col not in filtered_columns
-
+            col for col in list(X.columns) if col not in filtered_columns
         ]
-        return pd.concat(
-            (X.loc[:, non_filtered_columns], X_trans),
-            axis=1
-        )
-
-
-def _wrapped_model_has(attr):
-
-    def check(self):
-        getattr(self.model_, attr)
-        return True
-
-    return check
+        return pd.concat((X.loc[:, non_filtered_columns], X_trans), axis=1)
 
 
 class WrapModel(JuBaseEstimator):
     def __init__(self, model, apply_to=None, needed_types=None, **params):
         self.model = model
+        if apply_to is None:
+            apply_to = "continuous"
         self.apply_to = apply_to
         self.needed_types = needed_types
         self.model.set_params(**params)
 
     def fit(self, X, y=None, **fit_params):
-        self.apply_to = ("continuous" if self.apply_to is None
-                         else self.apply_to)
         self.apply_to = self._ensure_apply_to()
         self.needed_types = self._ensure_needed_types()
 
@@ -90,7 +82,7 @@ class WrapModel(JuBaseEstimator):
         Xt = self.filter_columns(X)
         return self.model_.predict_proba(Xt)
 
-    @available_if(_wrapped_model_has("predict_proba"))
+    @available_if(_wrapped_model_has("decision_function"))
     def decision_function(self, X):
         Xt = self.filter_columns(X)
         return self.model_.decision_function(Xt)
@@ -109,10 +101,7 @@ class WrapModel(JuBaseEstimator):
 
     def set_params(self, **kwargs):
 
-        model_params = list(self.model
-                            .get_params(True)
-                            .keys()
-                            )
+        model_params = list(self.model.get_params(True).keys())
 
         for param, val in kwargs.items():
             if param in model_params:

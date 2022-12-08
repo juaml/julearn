@@ -10,16 +10,16 @@ import pandas as pd
 from sklearn.base import clone
 from sklearn.linear_model import LinearRegression
 
-from .. utils import raise_error
-from .. base import JuTransformer
+from ..utils import raise_error
+from ..base import JuTransformer
 
 
-class DataFrameConfoundRemover(JuTransformer):
+class ConfoundRemover(JuTransformer):
     """Remove confounds from specific features.
 
-    Transformer which transforms pd.DataFrames and removes the confounds
-    from specific features by subtracting the predicted features
-    given the confounds from the actual features.
+    Transformer which removes the confounds from specific features by
+    subtracting the predicted features given the confounds from the actual
+    features.
 
     Parameters
     ----------
@@ -62,7 +62,7 @@ class DataFrameConfoundRemover(JuTransformer):
         self.keep_confounds = keep_confounds
 
     def fit(self, X, y=None):
-        """Fit DataFrameConfoundRemover.
+        """Fit ConfoundRemover.
 
         Parameters
         ----------
@@ -196,7 +196,7 @@ class DataFrameConfoundRemover(JuTransformer):
         """
         if not isinstance(X, pd.DataFrame):
             raise_error(
-                "DataFrameConfoundRemover only supports DataFrames as X"
+                "ConfoundRemover only supports DataFrames as X"
             )
 
         try:
@@ -218,7 +218,7 @@ class DataFrameConfoundRemover(JuTransformer):
         """Round residuals to 0.
 
         If residuals are smaller than the absolute threshold specified during
-        initialisation of the DataFrameConfoundRemover, residuals are rounded
+        initialisation of the ConfoundRemover, residuals are rounded
         down to 0. This is done to prevent correlated rounding errors.
 
         Parameters
@@ -241,12 +241,6 @@ class DataFrameConfoundRemover(JuTransformer):
         return residuals
 
     def get_needed_types(self):
-        if hasattr(self, "needed_types"):
-            return self.needed_types
-
-        apply_to = ("continuous"
-                    if self.apply_to is None
-                    else self.apply_to)
-        apply_to = self._ensure_column_types(apply_to)
+        needed_types = super().get_needed_types()
         confounds = self._ensure_column_types(self.confounds)
-        return apply_to.add(confounds)
+        return needed_types.add(confounds)

@@ -1,6 +1,6 @@
 import warnings
 from julearn.pipeline import PipelineCreator
-from julearn.pipeline.pipeline import JuColumnTransformer, NoInversePipeline
+from julearn.pipeline.pipeline_creator import JuColumnTransformer, NoInversePipeline
 from julearn.transformers import get_transformer
 from julearn.models import get_model
 from sklearn.model_selection import GridSearchCV

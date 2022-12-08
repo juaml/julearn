@@ -19,6 +19,7 @@ from ..base import ColumnTypes, WrapModel, JuTransformer
 from ..utils.typing import JuModelLike, JuEstimatorLike
 from ..transformers import JuColumnTransformer
 from ..model_selection.available_searchers import list_searchers, get_searcher
+from .target_pipeline_creator import TargetPipelineCreator
 
 
 class NoInversePipeline(Pipeline):
@@ -116,15 +117,31 @@ class PipelineCreator:  # Pipeline creator
                 "Please provide the problem_type directly"
                 " and only to the PipelineCreator like this"
                 " PipelineCreator(problem_type=problem_type)"
-
             )
         apply_to = self.apply_to if apply_to is None else apply_to
         apply_to = ColumnTypes(apply_to)
+
+        if isinstance(step, TargetPipelineCreator):
+            if apply_to != "target":
+                raise_error(
+                    "TargetPipelineCreator can only be added to the target."
+                )
+            step = step.to_pipeline()
+
+        # Validate the step
         self.validate_step(step, apply_to)
+
+        # If the user did not give a name, we will create one.
         if name is None:
-            name = step if isinstance(step, str) else step.__cls__.lower()
+            name = (
+                step
+                if isinstance(step, str)
+                else step.__class__.__name__.lower()
+            )
             name = self._ensure_name(name)
         logger.info(f"Adding step {name} that applies to {apply_to}")
+
+        # Find which parameters should be set and which should be tuned.
         params_to_set = dict()
         params_to_tune = dict()
         for param, vals in params.items():
@@ -140,16 +157,22 @@ class PipelineCreator:  # Pipeline creator
             else:
                 logger.info(f"Setting hyperparameter {param} = {vals}")
                 params_to_set[param] = vals
-        estimator = (
-            self.get_estimator_from(step, self.problem_type, **params_to_set)
-            if isinstance(step, str)
-            else step
-        )
+
+        # Build the estimator for this step
+        estimator = step
+        if isinstance(estimator, str):
+            estimator = self.get_estimator_from(
+                step, self.problem_type, **params_to_set
+            )
+
+        # JuEstimators accept the apply_to parameter and return needed types
         if isinstance(estimator, JuEstimatorLike):
             estimator.set_params(apply_to=apply_to)
             needed_types = estimator.get_needed_types()
         else:
             needed_types = apply_to
+
+        # For target transformers we need to add the target_ prefix
         if apply_to == "target":
             name = f"target_{name}"
         self._steps.append(
@@ -260,6 +283,8 @@ class PipelineCreator:  # Pipeline creator
         logger.debug("\t Looking for nested pipeline creators")
         logger.debug(f"\t Params to tune: {step_params_to_tune}")
         if self._added_target_transformer:
+            # If we have a target transformer, we need to wrap the model
+            # in a the right "Targeted" transformer.
             target_model_step, step_params_to_tune = self.wrap_target_model(
                 model_name,
                 model_estimator,
@@ -269,7 +294,7 @@ class PipelineCreator:  # Pipeline creator
             params_to_tune.update(step_params_to_tune)
             pipeline_steps.append(target_model_step)
         else:
-
+            # if not, just add a model as the last step
             params_to_tune.update(step_params_to_tune)
             pipeline_steps.append((model_name, model_estimator))
         pipeline = Pipeline(pipeline_steps).set_output(transform="pandas")
@@ -424,10 +449,11 @@ class PipelineCreator:  # Pipeline creator
         if self._is_transfromer_step(step):
             if self._added_model:
                 raise_error("Cannot add a transformer after adding a model")
-            if self._added_target_transformer and apply_to != "target":
+            if self._added_target_transformer and not self._is_model_step(
+                step
+            ):
                 raise_error(
-                    "Cannot add a non-target transformer after adding "
-                    "a target transformer."
+                    "Only a model can be added after a target transformer."
                 )
             if apply_to == "target":
                 self._added_target_transformer = True
@@ -452,10 +478,7 @@ class PipelineCreator:  # Pipeline creator
         needed_types = set(needed_types)
 
         skip_need_error = ".*" in needed_types or "*" in needed_types
-        # applied_to_special = (needed_types == "continuous" or
-        #                       needed_types == "target" or
-        #                       ".*" in needed_types or
-        #                       "*" in needed_types)
+
         if not skip_need_error:
             extra_types = [x for x in all_X_types if x not in needed_types]
             if len(extra_types) > 0:

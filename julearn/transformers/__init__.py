@@ -1,18 +1,21 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
-from . import confounds
+from . import confound_remover
 from . import target
-from . available_transformers import (
-    list_transformers, get_transformer, register_transformer, reset_transformer_register)
+from .available_transformers import (
+    list_transformers,
+    get_transformer,
+    register_transformer,
+    reset_transformer_register,
+)
 
-from . confounds import DataFrameConfoundRemover
-from . dataframe import (
+from .confound_remover import ConfoundRemover
+from .dataframe import (
     DropColumns,
     ChangeColumnTypes,
     SetColumnTypes,
-    FilterColumns
+    FilterColumns,
 )
-from . target import TargetTransfromerWrapper
-from . cbpm import CBPM
-from . ju_column_transformer import JuColumnTransformer
+from .cbpm import CBPM
+from .ju_column_transformer import JuColumnTransformer

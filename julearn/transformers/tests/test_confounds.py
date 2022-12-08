@@ -7,8 +7,8 @@ from pandas.testing import assert_frame_equal
 import numpy as np
 from numpy.testing import assert_array_equal
 
-from julearn.transformers.confounds import (
-    DataFrameConfoundRemover,
+from julearn.transformers.confound_remover import (
+    ConfoundRemover,
 )
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
@@ -30,7 +30,7 @@ y = np.arange(10)
 
 def test__apply_threshold():
     vals = pd.DataFrame([1e-4, 1e-2, 1e-1, 0, 1])
-    confound_remover = DataFrameConfoundRemover(threshold=1e-2)
+    confound_remover = ConfoundRemover(threshold=1e-2)
     out_pos_vals = confound_remover._apply_threshold(vals)
     out_neg_vals = confound_remover._apply_threshold(-vals)
 
@@ -58,7 +58,7 @@ def test_confound_auto_find_conf():
             LinearRegression(),
             RandomForestRegressor(n_estimators=5),
         ]:
-            confound_remover = DataFrameConfoundRemover(
+            confound_remover = ConfoundRemover(
                 apply_to=["continuous", "categorical"],
                 model_confound=model_to_remove
             )
@@ -117,7 +117,7 @@ def test_confound_auto_find_conf():
 # )
 # def test_confound_set_confounds(model_class, confounds):
 #     features = X.drop(columns=confounds).columns
-#     confound_remover = DataFrameConfoundRemover(
+#     confound_remover = ConfoundRemover(
 #         model_confound=model_class(), confounds=confounds
 #     )
 #
@@ -161,7 +161,7 @@ def test_confound_auto_find_conf():
 
 
 def test_return_confound():
-    remover = DataFrameConfoundRemover(
+    remover = ConfoundRemover(
         apply_to=["categorical", "continuous"], keep_confounds=True)
     X_trans = remover.fit_transform(X)
     assert_array_equal(X_trans.columns, X.columns)
@@ -169,15 +169,15 @@ def test_return_confound():
 
 def test_no_confound_found():
     _X = pd.DataFrame(dict(a=np.arange(10)))
-    remover = DataFrameConfoundRemover()
+    remover = ConfoundRemover()
     with pytest.raises(ValueError, match="No confound was found"):
         remover.fit_transform(_X)
 
 
 def test_no_dataframe_provided():
 
-    remover = DataFrameConfoundRemover()
-    with pytest.raises(ValueError, match="DataFrameConfoundRemover only sup"):
+    remover = ConfoundRemover()
+    with pytest.raises(ValueError, match="ConfoundRemover only sup"):
         remover.fit(X.values)
 
 
