@@ -1,6 +1,7 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
+from typing import NoReturn, Type, Optional
 import logging
 import subprocess
 import sys
@@ -148,17 +149,28 @@ def _close_handlers(logger):
             logger.removeHandler(handler)
 
 
-def raise_error(msg, klass=ValueError):
-    """Raise an error, but first log it
+def raise_error(
+    msg: str,
+    klass: Type[Exception] = ValueError,
+    exception: Optional[Exception] = None,
+) -> NoReturn:
+    """Raise error, but first log it.
 
     Parameters
     ----------
     msg : str
-        Error message
-    klass : class of the error to raise. Defaults to ValueError
+        The message for the exception.
+    klass : subclass of Exception, optional
+        The subclass of Exception to raise using (default ValueError).
+    exception : Exception, optional
+        The original exception to follow up on (default None).
+
     """
     logger.error(msg)
-    raise klass(msg)
+    if exception is not None:
+        raise klass(msg) from exception
+    else:
+        raise klass(msg)
 
 
 def warn(msg, category=RuntimeWarning):
