@@ -90,6 +90,7 @@ def test_naive_bayes_estimators(model_name, model_class, model_params):
         "model": model_name,
         "model_params": ju_model_params,
         "preprocess": None,
+        "problem_type": "classification",
     }
     clf = make_pipeline(clone(t_model))
     do_scoring_test(
@@ -126,6 +127,7 @@ def test_naive_bayes_estimators(model_name, model_class, model_params):
             "pos_labels": "setosa",
             "model_params": ju_model_params,
             "preprocess": None,
+            "problem_type": "classification",
         }
         clf = make_pipeline(clone(t_model))
         do_scoring_test(
@@ -191,7 +193,11 @@ def test_classificationestimators(model_name, model_class, model_params):
     else:
         t_model = model_class()
     scorers = ["accuracy"]
-    api_params = {"model": model_name, "model_params": ju_model_params}
+    api_params = {
+        "model": model_name,
+        "model_params": ju_model_params,
+        "problem_type": "classification",
+    }
     clf = make_pipeline(StandardScaler(), clone(t_model))
     do_scoring_test(
         X,
@@ -211,6 +217,7 @@ def test_classificationestimators(model_name, model_class, model_params):
             "model": model_name,
             "pos_labels": "setosa",
             "model_params": model_params,
+            "problem_type": "classification",
         }
         clf = make_pipeline(StandardScaler(), clone(t_model))
         do_scoring_test(

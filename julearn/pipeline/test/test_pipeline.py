@@ -18,14 +18,13 @@ from pytest_lazyfixture import lazy_fixture
     ],
 )
 def test_construction_working(model, preprocess, problem_type):
-    pipeline_creator = PipelineCreator()
+    pipeline_creator = PipelineCreator(problem_type=problem_type)
     preprocess = preprocess if isinstance(preprocess, list) else [preprocess]
     for step in preprocess:
         pipeline_creator.add(step, apply_to="categorical")
-    pipeline = pipeline_creator.add(
-        model,
-        problem_type=problem_type,
-    ).to_pipeline(dict(categorical=["A"]), search_params={})
+    pipeline = pipeline_creator.add(model).to_pipeline(
+        dict(categorical=["A"]), search_params={}
+    )
 
     # check preprocessing steps
     # ignoring first step for types and last for model
@@ -62,10 +61,11 @@ def test_fit_and_transform_no_error(
 ):
 
     pipeline = (
-        PipelineCreator.from_list(preprocess, model_params={})
+        PipelineCreator.from_list(
+            preprocess, model_params={}, problem_type=problem_type
+        )
         .add(
             model,
-            problem_type=problem_type,
         )
         .to_pipeline(dict())
     )
@@ -91,7 +91,7 @@ def test_hyperparameter_tuning(
 
     preprocess = [preprocess] if isinstance(preprocess, str) else preprocess
 
-    pipeline_creator = PipelineCreator()
+    pipeline_creator = PipelineCreator(problem_type=problem_type)
     param_grid = {}
 
     used_types = (
@@ -110,9 +110,11 @@ def test_hyperparameter_tuning(
         param_grid.update(params)
 
     model_params = get_default_params(model)
+    
     pipeline_creator = pipeline_creator.add(
         model, problem_type=problem_type, **model_params
     )
+
     param_grid.update(
         {f"{model}__{param}": val for param, val in model_params.items()}
     )
@@ -136,7 +138,9 @@ def test_hyperparameter_tuning(
     ],
 )
 def test_X_types_to_pattern_warnings(X_types, apply_to, warns):
-    pipeline_creator = PipelineCreator().add("zscore", apply_to=apply_to)
+    pipeline_creator = PipelineCreator(problem_type="classification").add(
+        "zscore", apply_to=apply_to
+    )
     if warns:
         with pytest.warns(match="is not in the provided X_types"):
             pipeline_creator.check_X_types(X_types)
@@ -158,7 +162,9 @@ def test_X_types_to_pattern_warnings(X_types, apply_to, warns):
     ],
 )
 def test_X_types_to_pattern_errors(apply_to, X_types, error):
-    pipeline_creator = PipelineCreator().add("zscore", apply_to=apply_to)
+    pipeline_creator = PipelineCreator(problem_type="classification").add(
+        "zscore", apply_to=apply_to
+    )
     if error:
         with pytest.raises(ValueError, match="Extra X_types were provided"):
             pipeline_creator.check_X_types(X_types)
@@ -168,34 +174,44 @@ def test_X_types_to_pattern_errors(apply_to, X_types, error):
 
 def test_pipelinecreator_default_apply_to():
 
-    pipeline_creator = PipelineCreator().add("rf", apply_to="chicken")
+    pipeline_creator = PipelineCreator(problem_type="classification").add(
+        "rf", apply_to="chicken"
+    )
 
     with pytest.raises(ValueError, match="Extra X_types were provided"):
         pipeline_creator.check_X_types({"duck": "B"})
 
-    pipeline_creator = PipelineCreator().add(
+    pipeline_creator = PipelineCreator(problem_type="classification").add(
         "rf", apply_to=["chicken", "duck"]
     )
     with pytest.warns(match="is not in the provided X_types"):
         pipeline_creator.check_X_types({"chicken": "teriyaki"})
 
-    pipeline_creator = PipelineCreator().add("rf", apply_to="*")
+    pipeline_creator = PipelineCreator(problem_type="classification").add(
+        "rf", apply_to="*"
+    )
     pipeline_creator.check_X_types({"duck": "teriyaki"})
 
 
 def test_pipelinecreator_default_constructor_apply_to():
     """Test pipeline creator using a default apply_to in the constructor."""
-    pipeline_creator = PipelineCreator(apply_to="duck").add("rf")
+    pipeline_creator = PipelineCreator(
+        problem_type="classification", apply_to="duck"
+    ).add("rf")
     pipeline_creator.check_X_types({"duck": "teriyaki"})
 
-    pipeline_creator = PipelineCreator(apply_to="duck")
+    pipeline_creator = PipelineCreator(
+        problem_type="classification", apply_to="duck"
+    )
     pipeline_creator.add("zscore", apply_to="chicken")
     pipeline_creator.add("rf")
     pipeline_creator.check_X_types({"duck": "teriyaki", "chicken": "1"})
 
 
 def test_added_model_target_transform():
-    pipeline_creator = PipelineCreator().add("zscore", apply_to="continuous")
+    pipeline_creator = PipelineCreator(problem_type="classification").add(
+        "zscore", apply_to="continuous"
+    )
     assert pipeline_creator._added_target_transformer is False
     pipeline_creator.add("zscore", apply_to="target")
     assert pipeline_creator._added_target_transformer
@@ -211,19 +227,19 @@ def test_stacking(X_iris, y_iris):
         "petal": ["petal_length", "petal_width"],
     }
     # Create the pipeline for the sepal features
-    model_sepal = PipelineCreator()
+    model_sepal = PipelineCreator(problem_type="classification")
     model_sepal.add("filter_columns", apply_to="*", keep="sepal")
     model_sepal.add("zscore", apply_to="*")
     model_sepal.add("svm", apply_to="*")
 
     # Create the pipeline for the petal features
-    model_petal = PipelineCreator()
+    model_petal = PipelineCreator(problem_type="classification")
     model_petal.add("filter_columns", apply_to="*", keep="petal")
     model_petal.add("zscore", apply_to="*")
     model_petal.add("rf", apply_to="*")
 
     # Create the stacking model
-    model = PipelineCreator()
+    model = PipelineCreator(problem_type="classification")
     model.add(
         "stacking",
         estimators=[[("sepal", model_sepal), ("petal", model_petal)]],
@@ -245,10 +261,10 @@ def test_stacking(X_iris, y_iris):
 )
 def test_target_transformer(X_iris, y_iris, target_transformer, reverse_pipe):
     model = (
-        PipelineCreator()
+        PipelineCreator(problem_type="regression")
         .add("zscore")
         .add(target_transformer, apply_to="target")
-        .add("svm", problem_type="regression")
+        .add("svm")
     )
     model = model.to_pipeline({})
     # target transformer and model becomes one

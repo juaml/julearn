@@ -1,14 +1,18 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>prepa
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
+from typing import Dict, List
+
 import pandas as pd
 import numpy as np
 
 from sklearn import model_selection
 
-from . utils import raise_error, warn, logger
-from . model_selection import (RepeatedStratifiedGroupsKFold,
-                               StratifiedGroupsKFold)
+from .utils import raise_error, warn, logger
+from .model_selection import (
+    RepeatedStratifiedGroupsKFold,
+    StratifiedGroupsKFold,
+)
 
 
 def _validate_input_data_df(X, y, df, groups):
@@ -36,24 +40,25 @@ def _validate_input_data_df_ext(X, y, df, groups):
     # Leaving it as additional check in case the regexp match changes
     if len(missing_columns) > 0:  # pragma: no cover
         raise_error(  # pragma: no cover
-            'All elements of X must be in the dataframe. '
-            f'The following are missing: {missing_columns}')
+            "All elements of X must be in the dataframe. "
+            f"The following are missing: {missing_columns}"
+        )
 
     if y not in df.columns:
-        raise_error(
-            f"Target '{y}' (y) is not a valid column in the dataframe")
+        raise_error(f"Target '{y}' (y) is not a valid column in the dataframe")
 
     if groups is not None:
         if groups not in df.columns:
-            raise_error(f"Groups '{groups}' is not a valid column "
-                        "in the dataframe")
+            raise_error(
+                f"Groups '{groups}' is not a valid column " "in the dataframe"
+            )
         if groups == y:
             warn("y and groups are the same column")
         if groups in X:
             warn("groups is part of X")
 
     if y in X:
-        warn(f'List of features (X) contains the target {y}')
+        warn(f"List of features (X) contains the target {y}")
 
 
 def prepare_input_data(X, y, df, pos_labels, groups):
@@ -103,9 +108,7 @@ def prepare_input_data(X, y, df, pos_labels, groups):
         X = [X]
 
     if X == [":"]:
-        X_columns = [
-            x for x in df.columns if x != y
-        ]
+        X_columns = [x for x in df.columns if x != y]
         if groups is not None:
             X_columns = [x for x in X_columns if x not in groups]
     else:
@@ -190,3 +193,14 @@ def check_consistency(
                 "The parameter groups was specified but the CV strategy "
                 "will not consider them."
             )
+
+
+def check_x_types(X_types: Dict, X: List[str]) -> Dict[str, List]:
+    """Check validity of X_types with respect to X"""
+    X_types = {
+        k: [v] if not isinstance(v, list) else v for k, v in X_types.items()
+    }
+
+    # TODO: Check that X_types contains elements that are in X
+
+    return X_types

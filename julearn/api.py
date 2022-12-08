@@ -6,7 +6,7 @@ from sklearn.model_selection import cross_validate, check_cv
 from sklearn.pipeline import Pipeline
 import pandas as pd
 
-from .prepare import prepare_input_data, check_consistency
+from .prepare import prepare_input_data, check_consistency, check_x_types
 from .pipeline import PipelineCreator
 
 from .utils import logger, raise_error
@@ -19,7 +19,7 @@ def run_cross_validation(
     model,
     X_types=None,
     data=None,
-    problem_type="classification",
+    problem_type=None,
     preprocess=None,
     return_estimator=False,
     return_train_score=False,
@@ -171,6 +171,9 @@ def run_cross_validation(
         groups=groups,
     )
 
+    # Validate X_types
+    X_types = check_x_types(X_types, X)
+
     if model_params is None:
         model_params = {}
 
@@ -190,30 +193,36 @@ def run_cross_validation(
             raise_error(
                 "If model is a PipelineCreator, preprocess should be None"
             )
+        if problem_type is not None:
+            raise_error("Problem type should be set in the PipelineCreator")
         pipeline = model.to_pipeline(
             X_types=X_types, search_params=search_params
         )
+        problem_type = model.problem_type
+
     elif not isinstance(model, (str, ModelLike)):
         raise_error(
             "Model has to be a PipelineCreator, a string or a "
             "scikit-learn compatible model."
         )
     else:
+        if problem_type is None:
+            raise_error(
+                "If model is not a PipelineCreator, then `problem_type` "
+                "must be specified in run_cross_validation.")
         if isinstance(preprocess, str):
             preprocess = [preprocess]
         if isinstance(preprocess, list):
             pipeline_creator = PipelineCreator.from_list(
-                preprocess, model_params
+                preprocess, model_params, problem_type=problem_type
             )
         elif preprocess is None:
-            pipeline_creator = PipelineCreator()
-        elif not isinstance(preprocess, PipelineCreator):
+            pipeline_creator = PipelineCreator(problem_type=problem_type)
+        else:
             raise_error(
-                "preprocess has to be a PipelineCreator, a string or a "
+                "preprocess has to be a string or a "
                 "list of strings."
             )
-        else:
-            pipeline_creator = preprocess
 
         # Add the model to the pipeline creator
         t_params = {}
@@ -230,7 +239,7 @@ def run_cross_validation(
                     "Cannot use model_params with a model object. Use either "
                     "a string or a PipelineCreator"
                 )
-        pipeline_creator.add(model, problem_type=problem_type, **t_params)
+        pipeline_creator.add(model, **t_params)
 
         pipeline = pipeline_creator.to_pipeline(
             X_types=X_types, search_params=search_params
