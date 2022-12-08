@@ -131,8 +131,11 @@ class PipelineCreator:  # Pipeline creator
             else:
                 logger.info(f"Setting hyperparameter {param} = {vals}")
                 params_to_set[param] = vals
+        problem_type = (params_to_set.pop("problem_type")
+                        if "problem_type" in params_to_set
+                        else self.problem_type)
         estimator = (
-            self.get_estimator_from(step, self.problem_type, **params_to_set)
+            self.get_estimator_from(step, problem_type, **params_to_set)
             if isinstance(step, str)
             else step
         )

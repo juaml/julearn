@@ -101,10 +101,6 @@ class WrapModel(JuBaseEstimator):
 
     def get_params(self, deep=True):
         return dict(
-            # **{
-            #     f"{self.model.__class__.__name__.lower()}__{param}": val
-            #     for param, val in self.model.get_params(deep).items()
-            # },
             **self.model.get_params(deep),
             model=self.model,
             apply_to=self.apply_to,
