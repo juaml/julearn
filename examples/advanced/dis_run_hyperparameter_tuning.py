@@ -1,6 +1,7 @@
 """
-Tuning Hyperparameters
-======================
+Tuning Hyperparameters.
+
+=======================
 
 This example uses the 'fmri' dataset, performs simple binary classification
 using a Support Vector Machine classifier and analyses the model.
@@ -50,15 +51,16 @@ print(df_fmri.head())
 ###############################################################################
 # Let's do a first attempt and use a linear SVM with the default parameters and
 # z-score pre-processing applied to all X columns (per default their are all
-# considered as continous)
+# considered as continuous)
 
 X = ['frontal', 'parietal']
 y = 'event'
 
 # Create a pipeline with z-score preprocessing and SVM
-creator = (PipelineCreator(problem_type="classification")
-            .add("zscore", apply_to="*")  # all columns are considered continous
-            .add("svm", kernel="linear"))
+creator = (
+    PipelineCreator(problem_type="classification")
+    .add("zscore", apply_to="*")  # all columns are considered continuous
+    .add("svm", kernel="linear"))
 
 scores = run_cross_validation(
     X=X, y=y, data=df_fmri, model=creator)
@@ -72,9 +74,11 @@ X = ["frontal", "parietal"]
 y = "event"
 
 # Create a pipeline with z-score preprocessing and SVM and the C hyperparameter
-creator = (PipelineCreator(problem_type="classification")
-            .add("zscore", apply_to="*")
-            .add("svm", kernel="linear", C=[0.01, 0.1]))
+creator = (
+    PipelineCreator(problem_type="classification")
+    .add("zscore", apply_to="*")
+    .add("svm", kernel="linear", C=[0.01, 0.1]))
+
 model_params = {
     "cv": 2,  # speed up the example
 }
@@ -96,11 +100,11 @@ X = ["frontal", "parietal"]
 y = "event"
 
 # Create a pipeline with z-score preprocessing and SVM
-creator = (PipelineCreator(problem_type="classification")
-            .add("zscore", apply_to="*")
-            .add("svm",
-                 kernel=["linear", "rbf", "poly"],
-                 C=[0.01, 0.1]))
+creator = (
+    PipelineCreator(problem_type="classification")
+    .add("zscore", apply_to="*")
+    .add("svm", kernel=["linear", "rbf", "poly"], C=[0.01, 0.1]))
+
 model_params = {
     "cv": 2,  # speed up the example
 }
@@ -126,12 +130,11 @@ X = ["frontal", "parietal"]
 y = "event"
 
 # Create a pipeline with z-score preprocessing and SVM
-creator = (PipelineCreator(problem_type="classification")
-            .add("zscore", apply_to="*")
-            .add("svm",
-                 kernel=["rbf"],
-                 C=[0.01, 0.1],
-                 gamma=[1e-2, 1e-3]))
+creator = (
+    PipelineCreator(problem_type="classification")
+    .add("zscore", apply_to="*")
+    .add("svm", kernel=["rbf"], C=[0.01, 0.1], gamma=[1e-2, 1e-3]))
+
 model_params = {
     "cv": 2,  # speed up the example
 }
@@ -155,12 +158,11 @@ X = ["frontal", "parietal"]
 y = "event"
 
 # Create a pipeline with z-score preprocessing and SVM
-creator = (PipelineCreator(problem_type="classification")
-            .add("zscore", apply_to="*")
-            .add("svm",
-                 kernel=["rbf"],
-                 C=[0.01, 0.1],
-                 gamma=[1e-2, 1e-3, "scale"]))
+creator = (
+    PipelineCreator(problem_type="classification")
+    .add("zscore", apply_to="*")
+    .add("svm", kernel=["rbf"], C=[0.01, 0.1], gamma=[1e-2, 1e-3, "scale"]))
+
 model_params = {
     "cv": 2,  # speed up the example
 }
