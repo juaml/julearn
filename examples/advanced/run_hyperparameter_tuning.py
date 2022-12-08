@@ -1,6 +1,5 @@
 """
 Tuning Hyperparameters.
-
 =======================
 
 This example uses the 'fmri' dataset, performs simple binary classification
