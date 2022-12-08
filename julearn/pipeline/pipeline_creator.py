@@ -83,7 +83,7 @@ class PipelineCreator:  # Pipeline creator
         name=None,
         apply_to=None,
         **params,
-    ):
+    ) -> "PipelineCreator":
         """Add a step to the PipelineCreator.
         This includes transformers and models.
 
@@ -107,8 +107,8 @@ class PipelineCreator:  # Pipeline creator
 
         Returns
         -------
-        PipelineCreator: PipelineCreator
-        returns a PipelineCreator with the added step as its last step.
+        PipelineCreator
+            The PipelineCreator with the added step as its last step.
         """
 
         if "problem_type" in params:
@@ -419,7 +419,7 @@ class PipelineCreator:  # Pipeline creator
         # )
         target_model = JuTransformedTargetModel(
             model=model,
-            transformer=target_transformer_step,
+            transformer=target_transformer_step.estimator,
             # check_inverse=False,
         )
         return (f"{model_name}_target_transform", target_model)

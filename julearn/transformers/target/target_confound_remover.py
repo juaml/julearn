@@ -62,6 +62,7 @@ class TargetConfoundRemover(JuTargetTransformer):
         self.detected_confounds_ = self.confounds.to_type_selector()(X)
         X_confounds = X.loc[:, self.detected_confounds_]
         self.model_confounds_.fit(X_confounds.values, y)
+        return self
 
     def transform(self, X, y):
         """Remove confounds from the target.

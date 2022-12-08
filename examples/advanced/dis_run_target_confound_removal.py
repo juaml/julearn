@@ -41,8 +41,8 @@ df_iris = df_iris[df_iris["species"].isin(["versicolor", "virginica"])]
 # As features, we will use the sepal length, width and petal length and use
 # petal width as confound.
 
-X = ["sepal_length", "sepal_width", "petal_length"]
-y = "species"
+X = ["sepal_length", "sepal_width"]
+y = "petal_length"
 confounds = ["petal_width"]
 
 
@@ -54,7 +54,7 @@ target_creator = TargetPipelineCreator()
 target_creator.add("zscore")
 target_creator.add("confound_removal", confounds="confound")
 
-creator = PipelineCreator(problem_type="classification", apply_to="features")
+creator = PipelineCreator(problem_type="regression", apply_to="features")
 creator.add("zscore", apply_to=["features", "confound"])
 creator.add(target_creator, apply_to="target")
 creator.add("rf")
@@ -66,7 +66,9 @@ scores_cr = run_cross_validation(
     model=creator,
     cv=5,
     X_types=X_types,
-    scoring=["accuracy", "roc_auc"],
+    scoring=["r2"],
     seed=200,
     pos_labels=["virginica"],
 )
+
+print(scores_cr)
