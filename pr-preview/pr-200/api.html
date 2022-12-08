@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reference &mdash; julearn  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="_static/sg_gallery-rendered-html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Contributing to julearn" href="contributing.html" />
+    <link rel="prev" title="Return Confounds in Confound Removal" href="auto_examples/advanced/dis_run_return_confounds.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html">
+            <img src="_static/julearn_logo_it.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installing julearn</a></li>
+<li class="toctree-l1"><a class="reference internal" href="input.html">Input Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pipeline.html">Understanding the pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scoring.html">Scoring</a></li>
+<li class="toctree-l1"><a class="reference internal" href="steps.html">Available Pipeline Steps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hyperparameters.html">Hyperparameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auto_examples/basic/index.html">Basic Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="auto_examples/advanced/index.html">Advanced Examples</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-julearn.api">Main API functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#julearn.api.run_cross_validation"><code class="docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#model-functions">Model functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#julearn.models.list_models"><code class="docutils literal notranslate"><span class="pre">list_models()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#julearn.models.get_model"><code class="docutils literal notranslate"><span class="pre">get_model()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#transformer-functions">Transformer functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#julearn.transformers.list_transformers"><code class="docutils literal notranslate"><span class="pre">list_transformers()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#julearn.transformers.get_transformer"><code class="docutils literal notranslate"><span class="pre">get_transformer()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#logging">Logging</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#julearn.utils.configure_logging"><code class="docutils literal notranslate"><span class="pre">configure_logging()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#julearn.utils.warn"><code class="docutils literal notranslate"><span class="pre">warn()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#julearn.utils.raise_error"><code class="docutils literal notranslate"><span class="pre">raise_error()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">Cross-Validation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#julearn.model_selection.StratifiedBootstrap"><code class="docutils literal notranslate"><span class="pre">StratifiedBootstrap</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#julearn.model_selection.StratifiedBootstrap.split"><code class="docutils literal notranslate"><span class="pre">StratifiedBootstrap.split()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#julearn.model_selection.StratifiedGroupsKFold"><code class="docutils literal notranslate"><span class="pre">StratifiedGroupsKFold</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#julearn.model_selection.StratifiedGroupsKFold.split"><code class="docutils literal notranslate"><span class="pre">StratifiedGroupsKFold.split()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#julearn.model_selection.RepeatedStratifiedGroupsKFold"><code class="docutils literal notranslate"><span class="pre">RepeatedStratifiedGroupsKFold</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#classes">Classes</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing to julearn</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maintaining.html">Maintaining julearn</a></li>
+<li class="toctree-l1"><a class="reference internal" href="whats_new.html">What’s new</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">julearn</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">Reference</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/api.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="reference">
+<h1>Reference<a class="headerlink" href="#reference" title="Permalink to this heading"></a></h1>
+<section id="module-julearn.api">
+<span id="main-api-functions"></span><h2>Main API functions<a class="headerlink" href="#module-julearn.api" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="julearn.api.run_cross_validation">
+<span class="sig-prename descclassname"><span class="pre">julearn.api.</span></span><span class="sig-name descname"><span class="pre">run_cross_validation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">problem_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocess</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_estimator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_train_score</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.api.run_cross_validation" title="Permalink to this definition"></a></dt>
+<dd><p>Run cross validation and score.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>X</strong><span class="classifier">str, list(str) or numpy.array</span></dt><dd><p>The features to use.
+See <a class="reference external" href="https://juaml.github.io/julearn/input.html">https://juaml.github.io/julearn/input.html</a> for details.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">str or numpy.array</span></dt><dd><p>The targets to predict.
+See <a class="reference external" href="https://juaml.github.io/julearn/input.html">https://juaml.github.io/julearn/input.html</a> for details.</p>
+</dd>
+<dt><strong>model</strong><span class="classifier">str or scikit-learn compatible model.</span></dt><dd><p>If string, it will use one of the available models.
+See <code class="xref py py-mod docutils literal notranslate"><span class="pre">available_models</span></code>.</p>
+</dd>
+<dt><strong>X_types</strong><span class="classifier">dict[str, list of str]</span></dt><dd><p>A dictionary containing keys with column type as a str and the
+columns of this column type as a list of str.</p>
+</dd>
+<dt><strong>data</strong><span class="classifier">pandas.DataFrame | None</span></dt><dd><p>DataFrame with the data (optional).
+See <a class="reference external" href="https://juaml.github.io/julearn/input.html">https://juaml.github.io/julearn/input.html</a> for details.</p>
+</dd>
+<dt><strong>problem_type</strong><span class="classifier">str</span></dt><dd><p>The kind of problem to model.</p>
+<p>Options are:</p>
+<ul class="simple">
+<li><p>“classification”: Perform a classification
+in which the target (y) has categorical classes (default).
+The parameter pos_labels can be used to convert a target with
+multiple_classes into binary.</p></li>
+<li><p>“regression”. Perform a regression. The target (y) has to be
+ordinal at least.</p></li>
+</ul>
+</dd>
+<dt><strong>preprocess</strong><span class="classifier">str, TransformerLike or list or PipelineCreator | None</span></dt><dd><p>Transformer to apply to the features. If string, use one of the
+available transformers. If list, each element can be a string or
+scikit-learn compatible transformer. If None (default), no
+transformation is applied.</p>
+<p>See documentation for details.</p>
+</dd>
+<dt><strong>return_estimator</strong><span class="classifier">str | None</span></dt><dd><p>Return the fitted estimator(s).
+Options are:</p>
+<ul class="simple">
+<li><p>‘final’: Return the estimator fitted on all the data.</p></li>
+<li><p>‘cv’: Return the all the estimator from each CV split, fitted on the
+training data.</p></li>
+<li><p>‘all’: Return all the estimators (final and cv).</p></li>
+</ul>
+</dd>
+<dt><strong>return_train_score</strong><span class="classifier">bool</span></dt><dd><p>Whether to return the training score with the test scores
+(default is False).</p>
+</dd>
+<dt><strong>cv</strong><span class="classifier">int, str or cross-validation generator | None</span></dt><dd><p>Cross-validation splitting strategy to use for model evaluation.</p>
+<p>Options are:</p>
+<ul class="simple">
+<li><p>None: defaults to 5-fold</p></li>
+<li><p>int: the number of folds in a <cite>(Stratified)KFold</cite></p></li>
+<li><p>CV Splitter (see scikit-learn documentation on CV)</p></li>
+<li><p>An iterable yielding (train, test) splits as arrays of indices.</p></li>
+</ul>
+</dd>
+<dt><strong>groups</strong><span class="classifier">str or numpy.array | None</span></dt><dd><p>The grouping labels in case a Group CV is used.
+See <a class="reference external" href="https://juaml.github.io/julearn/input.html">https://juaml.github.io/julearn/input.html</a> for details.</p>
+</dd>
+<dt><strong>scoring</strong><span class="classifier">str | list(str) | obj | dict | None</span></dt><dd><p>The scoring metric to use.
+See <a class="reference external" href="https://scikit-learn.org/stable/modules/model_evaluation.html">https://scikit-learn.org/stable/modules/model_evaluation.html</a> for
+a comprehensive list of options. If None, use the model’s default
+scorer.</p>
+</dd>
+<dt><strong>pos_labels</strong><span class="classifier">str, int, float or list | None</span></dt><dd><p>The labels to interpret as positive. If not None, every element from y
+will be converted to 1 if is equal or in pos_labels and to 0 if not.</p>
+</dd>
+<dt><strong>model_params</strong><span class="classifier">dict | None</span></dt><dd><p>If not None, this dictionary specifies the model parameters to use</p>
+<p>The dictionary can define the following keys:</p>
+<ul class="simple">
+<li><p>‘STEP__PARAMETER’: A value (or several) to be used as PARAMETER for
+STEP in the pipeline. Example: ‘svm__probability’: True will set
+the parameter ‘probability’ of the ‘svm’ model. If more than option
+is provided for at least one hyperparameter, a search will be
+performed.</p></li>
+<li><p>‘search’: The kind of search algorithm to use, e.g.:
+‘grid’ or ‘random’. Can be any valid julearn searcher name or
+scikit-learn compatible searcher.</p></li>
+<li><p>‘cv’: If search is going to be used, the cross-validation
+splitting strategy to use. Defaults to same CV as for the model
+evaluation.</p></li>
+<li><p>‘scoring’: If search is going to be used, the scoring metric to
+evaluate the performance.</p></li>
+<li><p>‘search_params’: Additional parameters for the search method.</p></li>
+</ul>
+<p>See <a class="reference external" href="https://juaml.github.io/julearn/hyperparameters.html">https://juaml.github.io/julearn/hyperparameters.html</a> for details.</p>
+</dd>
+<dt><strong>seed</strong><span class="classifier">int | None</span></dt><dd><p>If not None, set the random seed before any operation. Useful for
+reproducibility.</p>
+</dd>
+<dt><strong>verbose: int</strong></dt><dd><p>Verbosity level of outer cross-validation.
+Follows scikit-learn/joblib converntions.
+0 means no additional information is printed.
+Larger number genereally mean more information is printed.
+Note: verbosity up to 50 will print into standard error,
+while larger than 50 will print in standrad output.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>scores</strong><span class="classifier">pd.DataFrame</span></dt><dd><p>The resulting scores (one column for each score specified).
+Additionally, a ‘fit_time’ column will be added.
+And, if <code class="docutils literal notranslate"><span class="pre">return_estimator='all'</span></code> or
+<code class="docutils literal notranslate"><span class="pre">return_estimator='cv'</span></code>, an ‘estimator’ columns with the
+corresponding estimators fitted for each CV split.</p>
+</dd>
+<dt><strong>final_estimator</strong><span class="classifier">object</span></dt><dd><p>The final estimator, fitted on all the data (only if
+<code class="docutils literal notranslate"><span class="pre">return_estimator='all'</span></code> or <code class="docutils literal notranslate"><span class="pre">return_estimator='final'</span></code>)</p>
+</dd>
+<dt><strong>n_jobs</strong><span class="classifier">int | None</span></dt><dd><p>Number of parallel jobs used by outer cross-validation.
+Follows scikit-learn/joblib conventions.
+None is 1 unless you use a joblib.parallel_backend.
+-1 means use all available processes for parallelisation.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="model-functions">
+<h2>Model functions<a class="headerlink" href="#model-functions" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="julearn.models.list_models">
+<span class="sig-prename descclassname"><span class="pre">julearn.models.</span></span><span class="sig-name descname"><span class="pre">list_models</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#julearn.models.list_models" title="Permalink to this definition"></a></dt>
+<dd><p>List all the available model names</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>out</strong><span class="classifier">list(str)</span></dt><dd><p>A list will all the available model names.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="julearn.models.get_model">
+<span class="sig-prename descclassname"><span class="pre">julearn.models.</span></span><span class="sig-name descname"><span class="pre">get_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">problem_type</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.models.get_model" title="Permalink to this definition"></a></dt>
+<dd><p>Get a model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>The model name</p>
+</dd>
+<dt><strong>problem_type</strong><span class="classifier">str</span></dt><dd><p>The type of problem. See <a class="reference internal" href="#julearn.api.run_cross_validation" title="julearn.api.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>out</strong><span class="classifier">scikit-learn compatible model</span></dt><dd><p>The model object.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="transformer-functions">
+<h2>Transformer functions<a class="headerlink" href="#transformer-functions" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="julearn.transformers.list_transformers">
+<span class="sig-prename descclassname"><span class="pre">julearn.transformers.</span></span><span class="sig-name descname"><span class="pre">list_transformers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#julearn.transformers.list_transformers" title="Permalink to this definition"></a></dt>
+<dd><p>List all the available transformers</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>out</strong><span class="classifier">list(str)</span></dt><dd><p>A list will all the available transformer names.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="julearn.transformers.get_transformer">
+<span class="sig-prename descclassname"><span class="pre">julearn.transformers.</span></span><span class="sig-name descname"><span class="pre">get_transformer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.transformers.get_transformer" title="Permalink to this definition"></a></dt>
+<dd><p>Get a transformer</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>The transformer name</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>out</strong><span class="classifier">scikit-learn compatible transformer</span></dt><dd><p>The transformer object.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<hr class="docutils" />
+<section id="logging">
+<h2>Logging<a class="headerlink" href="#logging" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="julearn.utils.configure_logging">
+<span class="sig-prename descclassname"><span class="pre">julearn.utils.</span></span><span class="sig-name descname"><span class="pre">configure_logging</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'WARNING'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.utils.configure_logging" title="Permalink to this definition"></a></dt>
+<dd><p>Configure the logging functionality</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>level</strong><span class="classifier">int or string</span></dt><dd><p>The level of the messages to print. If string, it will be interpreted
+as elements of logging.
+Options are: [‘DEBUG’, ‘INFO’, ‘WARNING’, ‘ERROR’]. Defaults to
+‘WARNING’.</p>
+</dd>
+<dt><strong>fname</strong><span class="classifier">str, Path or None</span></dt><dd><p>Filename of the log to print to. If None, stdout is used.</p>
+</dd>
+<dt><strong>overwrite</strong><span class="classifier">bool | None</span></dt><dd><p>Overwrite the log file (if it exists). Otherwise, statements
+will be appended to the log (default). None is the same as False,
+but additionally raises a warning to notify the user that log
+entries will be appended.</p>
+</dd>
+<dt><strong>output_format</strong><span class="classifier">str</span></dt><dd><p>Format of the output messages. See the following for examples:</p>
+<blockquote>
+<div><p><a class="reference external" href="https://docs.python.org/dev/howto/logging.html">https://docs.python.org/dev/howto/logging.html</a></p>
+</div></blockquote>
+<p>e.g., “%(asctime)s - %(levelname)s - %(message)s”.</p>
+<p>Defaults to “%(asctime)s - %(name)s - %(levelname)s - %(message)s”</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="julearn.utils.warn">
+<span class="sig-prename descclassname"><span class="pre">julearn.utils.</span></span><span class="sig-name descname"><span class="pre">warn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category=&lt;class</span> <span class="pre">'RuntimeWarning'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.utils.warn" title="Permalink to this definition"></a></dt>
+<dd><p>Warn, but first log it</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>msg</strong><span class="classifier">str</span></dt><dd><p>Warning message</p>
+</dd>
+<dt><strong>category</strong><span class="classifier">instance of Warning</span></dt><dd><p>The warning class. Defaults to <code class="docutils literal notranslate"><span class="pre">RuntimeWarning</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="julearn.utils.raise_error">
+<span class="sig-prename descclassname"><span class="pre">julearn.utils.</span></span><span class="sig-name descname"><span class="pre">raise_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">klass=&lt;class</span> <span class="pre">'ValueError'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.utils.raise_error" title="Permalink to this definition"></a></dt>
+<dd><p>Raise an error, but first log it</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>msg</strong><span class="classifier">str</span></dt><dd><p>Error message</p>
+</dd>
+<dt><strong>klass</strong><span class="classifier">class of the error to raise. Defaults to ValueError</span></dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<hr class="docutils" />
+<section id="id1">
+<h2>Cross-Validation<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="julearn.model_selection.StratifiedBootstrap">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">julearn.model_selection.</span></span><span class="sig-name descname"><span class="pre">StratifiedBootstrap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_splits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.model_selection.StratifiedBootstrap" title="Permalink to this definition"></a></dt>
+<dd><p>Stratified Bootstrap cross-validation iterator</p>
+<p>Provides train/test indices using resampling with replacement, respecting
+the distribution of samples for each class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n_splits</strong><span class="classifier">int, default=5</span></dt><dd><p>Number of re-shuffling &amp; splitting iterations.</p>
+</dd>
+<dt><strong>test_size</strong><span class="classifier">float, int, default=0.2</span></dt><dd><p>If float, should be between 0.0 and 1.0 and represent the proportion
+of groups to include in the test split (rounded up). If int,
+represents the absolute number of test groups. If None, the value is
+set to the complement of the train size.
+The default will change in version 0.21. It will remain 0.2 only
+if <code class="docutils literal notranslate"><span class="pre">train_size</span></code> is unspecified, otherwise it will complement
+the specified <code class="docutils literal notranslate"><span class="pre">train_size</span></code>.</p>
+</dd>
+<dt><strong>train_size</strong><span class="classifier">float or int, default=None</span></dt><dd><p>If float, should be between 0.0 and 1.0 and represent the
+proportion of the groups to include in the train split. If
+int, represents the absolute number of train groups. If None,
+the value is automatically set to the complement of the test size.</p>
+</dd>
+<dt><strong>random_state</strong><span class="classifier">int or RandomState instance, default=None</span></dt><dd><p>Controls the randomness of the training and testing indices produced.
+Pass an int for reproducible output across multiple function calls.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="julearn.model_selection.StratifiedBootstrap.split">
+<span class="sig-name descname"><span class="pre">split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.model_selection.StratifiedBootstrap.split" title="Permalink to this definition"></a></dt>
+<dd><p>Generate indices to split data into training and test set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_features)</span></dt><dd><p>Training data, where n_samples is the number of samples
+and n_features is the number of features.
+Note that providing <code class="docutils literal notranslate"><span class="pre">y</span></code> is sufficient to generate the splits and
+hence <code class="docutils literal notranslate"><span class="pre">np.zeros(n_samples)</span></code> may be used as a placeholder for
+<code class="docutils literal notranslate"><span class="pre">X</span></code> instead of actual training data.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">array-like of shape (n_samples,) or (n_samples, n_labels)</span></dt><dd><p>The target variable for supervised learning problems.
+Stratification is done based on the y labels.</p>
+</dd>
+<dt><strong>groups</strong><span class="classifier">object</span></dt><dd><p>Always ignored, exists for compatibility.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Yields</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>train</strong><span class="classifier">ndarray</span></dt><dd><p>The training set indices for that split.</p>
+</dd>
+<dt><strong>test</strong><span class="classifier">ndarray</span></dt><dd><p>The testing set indices for that split.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Randomized CV splitters may return different results for each call of
+split. You can make the results identical by setting <cite>random_state</cite>
+to an integer.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="julearn.model_selection.StratifiedGroupsKFold">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">julearn.model_selection.</span></span><span class="sig-name descname"><span class="pre">StratifiedGroupsKFold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_splits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shuffle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.model_selection.StratifiedGroupsKFold" title="Permalink to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="julearn.model_selection.StratifiedGroupsKFold.split">
+<span class="sig-name descname"><span class="pre">split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.model_selection.StratifiedGroupsKFold.split" title="Permalink to this definition"></a></dt>
+<dd><p>Generate indices to split data into training and test set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_features)</span></dt><dd><p>Training data, where n_samples is the number of samples
+and n_features is the number of features.
+Note that providing <code class="docutils literal notranslate"><span class="pre">y</span></code> is sufficient to generate the splits and
+hence <code class="docutils literal notranslate"><span class="pre">np.zeros(n_samples)</span></code> may be used as a placeholder for
+<code class="docutils literal notranslate"><span class="pre">X</span></code> instead of actual training data.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">array-like of shape (n_samples,)</span></dt><dd><p>Always ignored, exists for compatibility.</p>
+</dd>
+<dt><strong>groups</strong><span class="classifier">object</span></dt><dd><p>The stratification variable.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Yields</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>train</strong><span class="classifier">ndarray</span></dt><dd><p>The training set indices for that split.</p>
+</dd>
+<dt><strong>test</strong><span class="classifier">ndarray</span></dt><dd><p>The testing set indices for that split.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Randomized CV splitters may return different results for each call of
+split. You can make the results identical by setting <cite>random_state</cite>
+to an integer.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="julearn.model_selection.RepeatedStratifiedGroupsKFold">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">julearn.model_selection.</span></span><span class="sig-name descname"><span class="pre">RepeatedStratifiedGroupsKFold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_splits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_repeats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.model_selection.RepeatedStratifiedGroupsKFold" title="Permalink to this definition"></a></dt>
+<dd><p>Repeated Stratified K-Fold cross validator.
+Repeats Stratified Groups K-Fold n times with different randomization in
+each repetition.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n_splits</strong><span class="classifier">int, default=5</span></dt><dd><p>Number of folds. Must be at least 2.</p>
+</dd>
+<dt><strong>n_repeats</strong><span class="classifier">int, default=10</span></dt><dd><p>Number of times cross-validator needs to be repeated.</p>
+</dd>
+<dt><strong>random_state</strong><span class="classifier">int, RandomState instance or None, default=None</span></dt><dd><p>Controls the generation of the random states for each repetition.
+Pass an int for reproducible output across multiple function calls.
+See <a class="reference external" href="https://scikit-learn.org/stable/glossary.html#term-random_state" title="(in scikit-learn v1.1)"><span class="xref std std-term">Glossary</span></a>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Randomized CV splitters may return different results for each call of
+split. You can make the results identical by setting <cite>random_state</cite>
+to an integer.</p>
+</dd></dl>
+
+</section>
+<hr class="docutils" />
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Permalink to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="auto_examples/advanced/dis_run_return_confounds.html" class="btn btn-neutral float-left" title="Return Confounds in Confound Removal" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="contributing.html" class="btn btn-neutral float-right" title="Contributing to julearn" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Authors of julearn.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+    <!-- Theme Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CB4ETK4DBG"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-CB4ETK4DBG', {
+          'anonymize_ip': false,
+      });
+    </script> 
+
+</body>
+</html>
