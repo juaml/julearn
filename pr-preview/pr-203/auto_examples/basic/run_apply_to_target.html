@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Transforming target variable with z-score. &mdash; julearn  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery-rendered-html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Simple Binary Classification" href="run_simple_binary_classification.html" />
+    <link rel="prev" title="Parallelize Julearn" href="dis_run_n_jobs.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html">
+            <img src="../../_static/julearn_logo_it.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installing julearn</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../input.html">Input Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pipeline.html">Understanding the pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../scoring.html">Scoring</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../steps.html">Available Pipeline Steps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../hyperparameters.html">Hyperparameters</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Basic Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="dis_run_n_jobs.html">Parallelize Julearn</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Transforming target variable with z-score.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run_simple_binary_classification.html">Simple Binary Classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_inspect_random_forest.html">Inspecting Random Forest models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_cm_acc_multiclass.html">Multiclass Classification.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_stratified_kfold_reg.html">Stratified K-fold CV for regression analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dis_plot_groupcv_inspect_svm.html">Inspecting SVM models.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run_plot_example_regression.html">Regression Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dis_plot_transform_until.html">Preprocessing with variance threshold, zscore and PCA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_confound_removal_classification.html">Confound Removal (model comparison)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../advanced/index.html">Advanced Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing to julearn</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maintaining.html">Maintaining julearn</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What’s new</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">julearn</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Basic Examples</a></li>
+      <li class="breadcrumb-item active">Transforming target variable with z-score.</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/auto_examples/basic/run_apply_to_target.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-auto-examples-basic-run-apply-to-target-py"><span class="std std-ref">here</span></a>
+to download the full example code</p>
+</div>
+<section class="sphx-glr-example-title" id="transforming-target-variable-with-z-score">
+<span id="sphx-glr-auto-examples-basic-run-apply-to-target-py"></span><h1>Transforming target variable with z-score.<a class="headerlink" href="#transforming-target-variable-with-z-score" title="Permalink to this heading"></a></h1>
+<p>This example uses the sklearn “diabetes” regression dataset, and transforms the
+target variable, in this case, using z-score. Then, we perform a regression
+analysis using Ridge Regression model.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Authors: Lya K. Paas Oliveros &lt;l.paas.oliveros@fz-juelich.de&gt;</span>
+<span class="c1">#          Sami Hamdan &lt;s.hamdan@fz-juelich.de&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># License: AGPL</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_diabetes.html#sklearn.datasets.load_diabetes" title="sklearn.datasets.load_diabetes" class="sphx-glr-backref-module-sklearn-datasets sphx-glr-backref-type-py-function"><span class="n">load_diabetes</span></a>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html#sklearn.model_selection.train_test_split" title="sklearn.model_selection.train_test_split" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-function"><span class="n">train_test_split</span></a>
+
+<span class="kn">from</span> <span class="nn">julearn</span> <span class="kn">import</span> <span class="n">run_cross_validation</span>
+<span class="kn">from</span> <span class="nn">julearn.utils</span> <span class="kn">import</span> <span class="n">configure_logging</span>
+<span class="c1"># this is crucial for creating the model in the new version</span>
+<span class="kn">from</span> <span class="nn">julearn.pipeline</span> <span class="kn">import</span> <span class="n">PipelineCreator</span>
+</pre></div>
+</div>
+<p>Set the logging level to info to see extra information</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s1">&#39;INFO&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-12-08 09:43:05,278 - julearn - INFO - ===== Lib Versions =====
+2022-12-08 09:43:05,278 - julearn - INFO - numpy: 1.23.5
+2022-12-08 09:43:05,278 - julearn - INFO - scipy: 1.9.3
+2022-12-08 09:43:05,279 - julearn - INFO - sklearn: 1.2.0rc1
+2022-12-08 09:43:05,279 - julearn - INFO - pandas: 1.5.2
+2022-12-08 09:43:05,279 - julearn - INFO - julearn: 0.0.1.dev1
+2022-12-08 09:43:05,279 - julearn - INFO - ========================
+</pre></div>
+</div>
+<p>Load the diabetes dataset from sklearn as a pandas dataframe</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">features</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_diabetes.html#sklearn.datasets.load_diabetes" title="sklearn.datasets.load_diabetes" class="sphx-glr-backref-module-sklearn-datasets sphx-glr-backref-type-py-function"><span class="n">load_diabetes</span></a><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">as_frame</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Dataset contains ten variables age, sex, body mass index, average  blood
+pressure, and six blood serum measurements (s1-s6) diabetes patients and
+a quantitative measure of disease progression one year after baseline which
+is the target we are interested in predicting.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Features: </span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">features</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Target: </span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">target</span><span class="o">.</span><span class="n">describe</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Features:
+         age       sex       bmi  ...        s4        s5        s6
+0  0.038076  0.050680  0.061696  ... -0.002592  0.019907 -0.017646
+1 -0.001882 -0.044642 -0.051474  ... -0.039493 -0.068332 -0.092204
+2  0.085299  0.050680  0.044451  ... -0.002592  0.002861 -0.025930
+3 -0.089063 -0.044642 -0.011595  ...  0.034309  0.022688 -0.009362
+4  0.005383 -0.044642 -0.036385  ... -0.002592 -0.031988 -0.046641
+
+[5 rows x 10 columns]
+Target:
+ count    442.000000
+mean     152.133484
+std       77.093005
+min       25.000000
+25%       87.000000
+50%      140.500000
+75%      211.500000
+max      346.000000
+Name: target, dtype: float64
+</pre></div>
+</div>
+<p>Let’s combine features and target together in one dataframe and define X
+and y</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data_diabetes</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">features</span><span class="p">,</span> <span class="n">target</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;age&#39;</span><span class="p">,</span> <span class="s1">&#39;sex&#39;</span><span class="p">,</span> <span class="s1">&#39;bmi&#39;</span><span class="p">,</span> <span class="s1">&#39;bp&#39;</span><span class="p">,</span> <span class="s1">&#39;s1&#39;</span><span class="p">,</span> <span class="s1">&#39;s2&#39;</span><span class="p">,</span> <span class="s1">&#39;s3&#39;</span><span class="p">,</span> <span class="s1">&#39;s4&#39;</span><span class="p">,</span> <span class="s1">&#39;s5&#39;</span><span class="p">,</span> <span class="s1">&#39;s6&#39;</span><span class="p">]</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a> <span class="o">=</span> <span class="s1">&#39;target&#39;</span>
+</pre></div>
+</div>
+<p>Split the dataset into train and test</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">train_diabetes</span><span class="p">,</span> <span class="n">test_diabetes</span> <span class="o">=</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html#sklearn.model_selection.train_test_split" title="sklearn.model_selection.train_test_split" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-function"><span class="n">train_test_split</span></a><span class="p">(</span><span class="n">data_diabetes</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Let’s create the model. To note, in PipelineCreator the only reserved key is
+target. That means, there is no need to name it, i.e., by stating
+apply_to=”target”, it already knows which is the target.
+Here, it is important that if you define the PipelineCreator you include the
+model and do not define the model in run_cross_validation</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;regression&quot;</span><span class="p">)</span>
+<span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;target&quot;</span><span class="p">)</span>
+<span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;ridge&quot;</span><span class="p">)</span>
+
+<span class="n">scores</span><span class="p">,</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model</span></a> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">train_diabetes</span><span class="p">,</span>
+    <a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model</span></a><span class="o">=</span><span class="n">creator</span><span class="p">,</span>
+    <span class="n">return_estimator</span><span class="o">=</span><span class="s2">&quot;final&quot;</span><span class="p">,</span>
+    <span class="n">scoring</span><span class="o">=</span><span class="s1">&#39;neg_mean_absolute_error&#39;</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-12-08 09:43:05,300 - julearn - INFO - Adding step zscore that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7effec0ff850&gt;
+2022-12-08 09:43:05,301 - julearn - INFO - Step added
+2022-12-08 09:43:05,301 - julearn - INFO - Adding step ridge that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7effec0feb00&gt;
+2022-12-08 09:43:05,301 - julearn - INFO - Step added
+2022-12-08 09:43:05,301 - julearn - INFO - ==== Input Data ====
+2022-12-08 09:43:05,301 - julearn - INFO - Using dataframe as input
+2022-12-08 09:43:05,301 - julearn - INFO -      Features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2022-12-08 09:43:05,301 - julearn - INFO -      Target: target
+2022-12-08 09:43:05,302 - julearn - INFO - ====================
+2022-12-08 09:43:05,302 - julearn - INFO -
+2022-12-08 09:43:05,303 - julearn - INFO - = Model Parameters =
+2022-12-08 09:43:05,304 - julearn - INFO - ====================
+2022-12-08 09:43:05,304 - julearn - INFO -
+2022-12-08 09:43:05,304 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+   fit_time  score_time  test_score  repeat  fold
+0  0.008921    0.003360  -55.597915       0     0
+1  0.008117    0.003251  -47.196799       0     1
+2  0.007116    0.003263  -48.794881       0     2
+3  0.007120    0.003253  -50.584394       0     3
+4  0.007118    0.003260  -56.613460       0     4
+</pre></div>
+</div>
+<p>Mean value of mean absolute error across CV</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">[</span><span class="s1">&#39;test_score&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">*</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>51.75748986932359
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.130 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-basic-run-apply-to-target-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/1ca5c3f8a8553b78773484ea047a1ed2/run_apply_to_target.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">run_apply_to_target.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/a3c793360af51649feeb18ad86657124/run_apply_to_target.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">run_apply_to_target.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="dis_run_n_jobs.html" class="btn btn-neutral float-left" title="Parallelize Julearn" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="run_simple_binary_classification.html" class="btn btn-neutral float-right" title="Simple Binary Classification" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Authors of julearn.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+    <!-- Theme Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CB4ETK4DBG"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-CB4ETK4DBG', {
+          'anonymize_ip': false,
+      });
+    </script> 
+
+</body>
+</html>
