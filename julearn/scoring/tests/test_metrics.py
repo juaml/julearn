@@ -1,3 +1,4 @@
+"""Test the scoring metrics."""
 from julearn.scoring.metrics import r2_corr, r_pearson
 
 

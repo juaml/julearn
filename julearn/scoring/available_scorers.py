@@ -1,3 +1,4 @@
+"""Available scorers: Getting, listing, registering."""
 from copy import deepcopy
 from sklearn.metrics import _scorer, SCORERS, make_scorer
 from julearn.utils import warn, raise_error, logger
@@ -38,7 +39,7 @@ def get_scorer(name):
 
 
 def list_scorers():
-    """list all available scorers.
+    """List all available scorers.
 
     Returns
     -------
@@ -49,7 +50,7 @@ def list_scorers():
 
 
 def register_scorer(scorer_name, scorer, overwrite=None):
-    """register a scorer, so that you can access it in scoring with its name.
+    """Register a scorer, so that you can access it in scoring with its name.
 
     Parameters
     ----------

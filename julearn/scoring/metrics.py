@@ -1,7 +1,19 @@
+"""Definition of scoring metrics."""
 import numpy as np
 
 
 def ensure_1d(y):
+    """Ensure array is 1D.
+
+    Parameters
+    ----------
+    y : array
+
+    Returns
+    -------
+    y : array
+
+    """
     if isinstance(y, np.ndarray):
         if y.ndim > 1:
             y = np.squeeze(y)
