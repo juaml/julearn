@@ -6,6 +6,8 @@ from . available_scorers import get_scorer
 
 
 def ju_check_scoring(estimator, scoring):
+    if scoring is None:
+        return scoring
     if isinstance(scoring, str) or callable(scoring):
         scoring = get_scorer(scoring)
         return check_scoring(estimator, scoring=scoring)
