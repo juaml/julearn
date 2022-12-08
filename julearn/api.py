@@ -12,6 +12,8 @@ from .pipeline import PipelineCreator
 from .utils import logger, raise_error
 from .utils.typing import ModelLike
 
+from .scoring import ju_check_scoring
+
 
 def run_cross_validation(
     X,
@@ -252,6 +254,7 @@ def run_cross_validation(
     check_consistency(y, cv, groups, problem_type)
 
     cv_return_estimator = return_estimator in ["cv", "all"]
+    scoring = ju_check_scoring(pipeline, scoring)
 
     scores = cross_validate(
         pipeline,
