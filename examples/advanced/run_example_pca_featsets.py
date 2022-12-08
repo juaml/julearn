@@ -65,10 +65,10 @@ X_types = {'pca1': ["age", "bmi", "bp"],
 # For example if in the last step we do not specify 
 # `apply_to=['continuous', 'categorical']`
 # then the pipeline will not know what to do with the categorical features
-creator = PipelineCreator()
+creator = PipelineCreator(problem_type='regression')
 creator.add('pca', apply_to='pca1', n_components=1, name='pca_feats1')
 creator.add('pca', apply_to='pca2', n_components=1, name='pca_feats2')
-creator.add('ridge', apply_to=['continuous', 'categorical'], problem_type='regression')
+creator.add('ridge', apply_to=['continuous', 'categorical'])
 
 ###############################################################################
 # Split the dataset into train and test
@@ -83,7 +83,6 @@ scores, model = run_cross_validation(
     X_types=X_types,
     data=train_diabetes,
     model=creator,
-    problem_type="regression",
     scoring="r2",
     return_estimator='final'
 )
