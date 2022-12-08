@@ -98,11 +98,12 @@ X_types = {"features": X, "confound": confounds}
 #
 # The first step will zscore both features and confounds.
 #
-# The second step will remove the confounds (type "confound") from the 
+# The second step will remove the confounds (type "confound") from the
 # "features".
 #
-# Finally, a random forest will be trained. Given the default apply_to in
-# the pipeline creator, the random forest will only be trained using "features".
+# Finally, a random forest will be trained.
+# Given the default apply_to in the pipeline creator,
+# the random forest will only be trained using "features".
 model = PipelineCreator(problem_type="classification", apply_to="features")
 model.add("zscore", apply_to=["features", "confound"])
 model.add("remove_confound", apply_to="features", confounds="confound")
@@ -210,7 +211,7 @@ for i_fold, estimator in enumerate(scores_cr["estimator"]):
     this_importances = pd.DataFrame(
         {
             "feature": [x.replace("_", " ") for x in X],
-            "importance": estimator["wrapped_rf"].model.feature_importances_,
+            "importance": estimator["rf"].model.feature_importances_,
             "confounds": "Removed",
             "fold": i_fold,
         }

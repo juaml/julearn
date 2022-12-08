@@ -70,13 +70,13 @@ Set the logging level to info to see extra information
 
  .. code-block:: none
 
-    2022-12-07 15:57:03,157 - julearn - INFO - ===== Lib Versions =====
-    2022-12-07 15:57:03,157 - julearn - INFO - numpy: 1.23.5
-    2022-12-07 15:57:03,157 - julearn - INFO - scipy: 1.9.3
-    2022-12-07 15:57:03,157 - julearn - INFO - sklearn: 1.2.0rc1
-    2022-12-07 15:57:03,157 - julearn - INFO - pandas: 1.5.2
-    2022-12-07 15:57:03,157 - julearn - INFO - julearn: 0.0.1.dev1
-    2022-12-07 15:57:03,157 - julearn - INFO - ========================
+    2022-12-08 08:23:41,114 - julearn - INFO - ===== Lib Versions =====
+    2022-12-08 08:23:41,114 - julearn - INFO - numpy: 1.23.5
+    2022-12-08 08:23:41,114 - julearn - INFO - scipy: 1.9.3
+    2022-12-08 08:23:41,114 - julearn - INFO - sklearn: 1.2.0rc1
+    2022-12-08 08:23:41,115 - julearn - INFO - pandas: 1.5.2
+    2022-12-08 08:23:41,115 - julearn - INFO - julearn: 0.0.1.dev1
+    2022-12-08 08:23:41,115 - julearn - INFO - ========================
 
 
 
@@ -200,23 +200,23 @@ Note: confounds by default
 
  .. code-block:: none
 
-    2022-12-07 15:57:03,161 - julearn - INFO - Setting random seed to 200
-    2022-12-07 15:57:03,161 - julearn - INFO - ==== Input Data ====
-    2022-12-07 15:57:03,161 - julearn - INFO - Using dataframe as input
-    2022-12-07 15:57:03,161 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length']
-    2022-12-07 15:57:03,161 - julearn - INFO -      Target: species
-    2022-12-07 15:57:03,162 - julearn - INFO - ====================
-    2022-12-07 15:57:03,162 - julearn - INFO - 
-    2022-12-07 15:57:03,162 - julearn - INFO - Adding step zscore that applies to <julearn.base.column_types.ColumnTypes object at 0x7fb17536fe80>
-    2022-12-07 15:57:03,162 - julearn - INFO - Step added
-    2022-12-07 15:57:03,162 - julearn - INFO - Adding step rf that applies to <julearn.base.column_types.ColumnTypes object at 0x7fb17536ccd0>
-    2022-12-07 15:57:03,163 - julearn - INFO - Step added
-    2022-12-07 15:57:03,163 - julearn - INFO - = Model Parameters =
-    2022-12-07 15:57:03,163 - julearn - INFO - ====================
-    2022-12-07 15:57:03,163 - julearn - INFO - 
-    2022-12-07 15:57:03,164 - julearn - INFO - Using outer CV scheme StratifiedBootstrap(n_splits=20, random_state=42, test_size=0.3,
+    2022-12-08 08:23:41,119 - julearn - INFO - Setting random seed to 200
+    2022-12-08 08:23:41,119 - julearn - INFO - ==== Input Data ====
+    2022-12-08 08:23:41,119 - julearn - INFO - Using dataframe as input
+    2022-12-08 08:23:41,119 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length']
+    2022-12-08 08:23:41,119 - julearn - INFO -      Target: species
+    2022-12-08 08:23:41,120 - julearn - INFO - ====================
+    2022-12-08 08:23:41,120 - julearn - INFO - 
+    2022-12-08 08:23:41,120 - julearn - INFO - Adding step zscore that applies to <julearn.base.column_types.ColumnTypes object at 0x7feccc6161a0>
+    2022-12-08 08:23:41,120 - julearn - INFO - Step added
+    2022-12-08 08:23:41,120 - julearn - INFO - Adding step rf that applies to <julearn.base.column_types.ColumnTypes object at 0x7feccc616320>
+    2022-12-08 08:23:41,120 - julearn - INFO - Step added
+    2022-12-08 08:23:41,121 - julearn - INFO - = Model Parameters =
+    2022-12-08 08:23:41,121 - julearn - INFO - ====================
+    2022-12-08 08:23:41,121 - julearn - INFO - 
+    2022-12-08 08:23:41,121 - julearn - INFO - Using outer CV scheme StratifiedBootstrap(n_splits=20, random_state=42, test_size=0.3,
               train_size=None)
-    2022-12-07 15:57:03,164 - julearn - INFO - Binary classification problem detected.
+    2022-12-08 08:23:41,122 - julearn - INFO - Binary classification problem detected.
 
 
 
@@ -245,7 +245,7 @@ Note: we initialize the CV again to use the same folds as before
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 95-106
+.. GENERATED FROM PYTHON SOURCE LINES 95-107
 
 We can now define a pipeline creator and add a confound removal step.
 The pipeline creator should apply all the steps, by default, to the
@@ -253,13 +253,14 @@ features type.
 
 The first step will zscore both features and confounds.
 
-The second step will remove the confounds (type "confound") from the 
+The second step will remove the confounds (type "confound") from the
 "features".
 
-Finally, a random forest will be trained. Given the default apply_to in
-the pipeline creator, the random forest will only be trained using "features".
+Finally, a random forest will be trained.
+Given the default apply_to in the pipeline creator,
+the random forest will only be trained using "features".
 
-.. GENERATED FROM PYTHON SOURCE LINES 106-123
+.. GENERATED FROM PYTHON SOURCE LINES 107-124
 
 .. code-block:: default
 
@@ -288,36 +289,36 @@ the pipeline creator, the random forest will only be trained using "features".
 
  .. code-block:: none
 
-    2022-12-07 15:57:06,200 - julearn - INFO - Adding step zscore that applies to <julearn.base.column_types.ColumnTypes object at 0x7fb175ad3be0>
-    2022-12-07 15:57:06,200 - julearn - INFO - Step added
-    2022-12-07 15:57:06,200 - julearn - INFO - Adding step remove_confound that applies to <julearn.base.column_types.ColumnTypes object at 0x7fb175ad1a20>
-    2022-12-07 15:57:06,200 - julearn - INFO - Setting hyperparameter confounds = confound
-    2022-12-07 15:57:06,201 - julearn - INFO - Step added
-    2022-12-07 15:57:06,201 - julearn - INFO - Adding step rf that applies to <julearn.base.column_types.ColumnTypes object at 0x7fb17536cd00>
-    2022-12-07 15:57:06,201 - julearn - INFO - Step added
-    2022-12-07 15:57:06,201 - julearn - INFO - Setting random seed to 200
-    2022-12-07 15:57:06,201 - julearn - INFO - ==== Input Data ====
-    2022-12-07 15:57:06,201 - julearn - INFO - Using dataframe as input
-    2022-12-07 15:57:06,201 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length', 'petal_width']
-    2022-12-07 15:57:06,201 - julearn - INFO -      Target: species
-    2022-12-07 15:57:06,202 - julearn - INFO - ====================
-    2022-12-07 15:57:06,202 - julearn - INFO - 
-    2022-12-07 15:57:06,204 - julearn - INFO - = Model Parameters =
-    2022-12-07 15:57:06,204 - julearn - INFO - ====================
-    2022-12-07 15:57:06,204 - julearn - INFO - 
-    2022-12-07 15:57:06,204 - julearn - INFO - Using outer CV scheme StratifiedBootstrap(n_splits=20, random_state=42, test_size=0.3,
+    2022-12-08 08:23:44,303 - julearn - INFO - Adding step zscore that applies to <julearn.base.column_types.ColumnTypes object at 0x7feccc6175b0>
+    2022-12-08 08:23:44,303 - julearn - INFO - Step added
+    2022-12-08 08:23:44,303 - julearn - INFO - Adding step remove_confound that applies to <julearn.base.column_types.ColumnTypes object at 0x7feccc617e50>
+    2022-12-08 08:23:44,303 - julearn - INFO - Setting hyperparameter confounds = confound
+    2022-12-08 08:23:44,303 - julearn - INFO - Step added
+    2022-12-08 08:23:44,303 - julearn - INFO - Adding step rf that applies to <julearn.base.column_types.ColumnTypes object at 0x7feccc614e80>
+    2022-12-08 08:23:44,304 - julearn - INFO - Step added
+    2022-12-08 08:23:44,304 - julearn - INFO - Setting random seed to 200
+    2022-12-08 08:23:44,304 - julearn - INFO - ==== Input Data ====
+    2022-12-08 08:23:44,304 - julearn - INFO - Using dataframe as input
+    2022-12-08 08:23:44,304 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length', 'petal_width']
+    2022-12-08 08:23:44,304 - julearn - INFO -      Target: species
+    2022-12-08 08:23:44,305 - julearn - INFO - ====================
+    2022-12-08 08:23:44,305 - julearn - INFO - 
+    2022-12-08 08:23:44,307 - julearn - INFO - = Model Parameters =
+    2022-12-08 08:23:44,307 - julearn - INFO - ====================
+    2022-12-08 08:23:44,307 - julearn - INFO - 
+    2022-12-08 08:23:44,307 - julearn - INFO - Using outer CV scheme StratifiedBootstrap(n_splits=20, random_state=42, test_size=0.3,
               train_size=None)
-    2022-12-07 15:57:06,204 - julearn - INFO - Binary classification problem detected.
+    2022-12-08 08:23:44,307 - julearn - INFO - Binary classification problem detected.
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 124-126
+.. GENERATED FROM PYTHON SOURCE LINES 125-127
 
 Now we can compare the accuracies. We can combine the two outputs as
 pandas dataframes
 
-.. GENERATED FROM PYTHON SOURCE LINES 126-129
+.. GENERATED FROM PYTHON SOURCE LINES 127-130
 
 .. code-block:: default
 
@@ -331,12 +332,12 @@ pandas dataframes
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 130-132
+.. GENERATED FROM PYTHON SOURCE LINES 131-133
 
 Now we convert the metrics to a column for easier seaborn plotting (convert
 to long format)
 
-.. GENERATED FROM PYTHON SOURCE LINES 132-149
+.. GENERATED FROM PYTHON SOURCE LINES 133-150
 
 .. code-block:: default
 
@@ -364,11 +365,11 @@ to long format)
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 150-151
+.. GENERATED FROM PYTHON SOURCE LINES 151-152
 
 And finally plot the results
 
-.. GENERATED FROM PYTHON SOURCE LINES 151-156
+.. GENERATED FROM PYTHON SOURCE LINES 152-157
 
 .. code-block:: default
 
@@ -389,7 +390,7 @@ And finally plot the results
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 157-164
+.. GENERATED FROM PYTHON SOURCE LINES 158-165
 
 While this plot allows us to see the mean performance values and compare
 them, these samples are paired. In order to see if there is a systematic
@@ -399,7 +400,7 @@ the models.
 First we remove the column "confounds" from the index and make the difference
 between the metrics
 
-.. GENERATED FROM PYTHON SOURCE LINES 164-171
+.. GENERATED FROM PYTHON SOURCE LINES 165-172
 
 .. code-block:: default
 
@@ -417,12 +418,12 @@ between the metrics
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 172-174
+.. GENERATED FROM PYTHON SOURCE LINES 173-175
 
 Now we can finally plot the difference, setting the whiskers of the box plot
 at 2.5 and 97.5 to see the 95% CI.
 
-.. GENERATED FROM PYTHON SOURCE LINES 174-180
+.. GENERATED FROM PYTHON SOURCE LINES 175-181
 
 .. code-block:: default
 
@@ -444,7 +445,7 @@ at 2.5 and 97.5 to see the 95% CI.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 181-194
+.. GENERATED FROM PYTHON SOURCE LINES 182-195
 
 We can see that while it seems that the accuracy and ROC AUC scores are
 higher when confounds are not removed. We can not really claim (using this
@@ -460,7 +461,7 @@ if there is a change in the feature importances.
 First, we need to collect the feature importances for each model, for each
 fold.
 
-.. GENERATED FROM PYTHON SOURCE LINES 194-223
+.. GENERATED FROM PYTHON SOURCE LINES 195-224
 
 .. code-block:: default
 
@@ -483,7 +484,7 @@ fold.
         this_importances = pd.DataFrame(
             {
                 "feature": [x.replace("_", " ") for x in X],
-                "importance": estimator["wrapped_rf"].model.feature_importances_,
+                "importance": estimator["rf"].model.feature_importances_,
                 "confounds": "Removed",
                 "fold": i_fold,
             }
@@ -500,11 +501,11 @@ fold.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 224-225
+.. GENERATED FROM PYTHON SOURCE LINES 225-226
 
 We can now plot the importances
 
-.. GENERATED FROM PYTHON SOURCE LINES 225-236
+.. GENERATED FROM PYTHON SOURCE LINES 226-237
 
 .. code-block:: default
 
@@ -531,12 +532,12 @@ We can now plot the importances
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 237-239
+.. GENERATED FROM PYTHON SOURCE LINES 238-240
 
 And check the differences in importances. We can now see that there is
 a difference in importances.
 
-.. GENERATED FROM PYTHON SOURCE LINES 239-248
+.. GENERATED FROM PYTHON SOURCE LINES 240-249
 
 .. code-block:: default
 
@@ -564,7 +565,7 @@ a difference in importances.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  7.862 seconds)
+   **Total running time of the script:** ( 0 minutes  8.217 seconds)
 
 
 .. _sphx_glr_download_auto_examples_basic_plot_confound_removal_classification.py:

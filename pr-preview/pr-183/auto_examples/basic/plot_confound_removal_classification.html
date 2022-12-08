@@ -126,13 +126,13 @@ with and without confound removal using a Random Forest classifier.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-12-07 15:57:03,157 - julearn - INFO - ===== Lib Versions =====
-2022-12-07 15:57:03,157 - julearn - INFO - numpy: 1.23.5
-2022-12-07 15:57:03,157 - julearn - INFO - scipy: 1.9.3
-2022-12-07 15:57:03,157 - julearn - INFO - sklearn: 1.2.0rc1
-2022-12-07 15:57:03,157 - julearn - INFO - pandas: 1.5.2
-2022-12-07 15:57:03,157 - julearn - INFO - julearn: 0.0.1.dev1
-2022-12-07 15:57:03,157 - julearn - INFO - ========================
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-12-08 08:23:41,114 - julearn - INFO - ===== Lib Versions =====
+2022-12-08 08:23:41,114 - julearn - INFO - numpy: 1.23.5
+2022-12-08 08:23:41,114 - julearn - INFO - scipy: 1.9.3
+2022-12-08 08:23:41,114 - julearn - INFO - sklearn: 1.2.0rc1
+2022-12-08 08:23:41,115 - julearn - INFO - pandas: 1.5.2
+2022-12-08 08:23:41,115 - julearn - INFO - julearn: 0.0.1.dev1
+2022-12-08 08:23:41,115 - julearn - INFO - ========================
 </pre></div>
 </div>
 <p>Load the iris data from seaborn</p>
@@ -183,23 +183,23 @@ Note: confounds by default</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-12-07 15:57:03,161 - julearn - INFO - Setting random seed to 200
-2022-12-07 15:57:03,161 - julearn - INFO - ==== Input Data ====
-2022-12-07 15:57:03,161 - julearn - INFO - Using dataframe as input
-2022-12-07 15:57:03,161 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2022-12-07 15:57:03,161 - julearn - INFO -      Target: species
-2022-12-07 15:57:03,162 - julearn - INFO - ====================
-2022-12-07 15:57:03,162 - julearn - INFO -
-2022-12-07 15:57:03,162 - julearn - INFO - Adding step zscore that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7fb17536fe80&gt;
-2022-12-07 15:57:03,162 - julearn - INFO - Step added
-2022-12-07 15:57:03,162 - julearn - INFO - Adding step rf that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7fb17536ccd0&gt;
-2022-12-07 15:57:03,163 - julearn - INFO - Step added
-2022-12-07 15:57:03,163 - julearn - INFO - = Model Parameters =
-2022-12-07 15:57:03,163 - julearn - INFO - ====================
-2022-12-07 15:57:03,163 - julearn - INFO -
-2022-12-07 15:57:03,164 - julearn - INFO - Using outer CV scheme StratifiedBootstrap(n_splits=20, random_state=42, test_size=0.3,
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-12-08 08:23:41,119 - julearn - INFO - Setting random seed to 200
+2022-12-08 08:23:41,119 - julearn - INFO - ==== Input Data ====
+2022-12-08 08:23:41,119 - julearn - INFO - Using dataframe as input
+2022-12-08 08:23:41,119 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2022-12-08 08:23:41,119 - julearn - INFO -      Target: species
+2022-12-08 08:23:41,120 - julearn - INFO - ====================
+2022-12-08 08:23:41,120 - julearn - INFO -
+2022-12-08 08:23:41,120 - julearn - INFO - Adding step zscore that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7feccc6161a0&gt;
+2022-12-08 08:23:41,120 - julearn - INFO - Step added
+2022-12-08 08:23:41,120 - julearn - INFO - Adding step rf that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7feccc616320&gt;
+2022-12-08 08:23:41,120 - julearn - INFO - Step added
+2022-12-08 08:23:41,121 - julearn - INFO - = Model Parameters =
+2022-12-08 08:23:41,121 - julearn - INFO - ====================
+2022-12-08 08:23:41,121 - julearn - INFO -
+2022-12-08 08:23:41,121 - julearn - INFO - Using outer CV scheme StratifiedBootstrap(n_splits=20, random_state=42, test_size=0.3,
           train_size=None)
-2022-12-07 15:57:03,164 - julearn - INFO - Binary classification problem detected.
+2022-12-08 08:23:41,122 - julearn - INFO - Binary classification problem detected.
 </pre></div>
 </div>
 <p>Next, we train a model after performing confound removal on the features
@@ -218,8 +218,9 @@ features type.</p>
 <p>The first step will zscore both features and confounds.</p>
 <p>The second step will remove the confounds (type “confound”) from the
 “features”.</p>
-<p>Finally, a random forest will be trained. Given the default apply_to in
-the pipeline creator, the random forest will only be trained using “features”.</p>
+<p>Finally, a random forest will be trained.
+Given the default apply_to in the pipeline creator,
+the random forest will only be trained using “features”.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;classification&quot;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;features&quot;</span><span class="p">)</span>
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;features&quot;</span><span class="p">,</span> <span class="s2">&quot;confound&quot;</span><span class="p">])</span>
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;remove_confound&quot;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;features&quot;</span><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">confounds</span></a><span class="o">=</span><span class="s2">&quot;confound&quot;</span><span class="p">)</span>
@@ -238,26 +239,26 @@ the pipeline creator, the random forest will only be trained using “features�
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-12-07 15:57:06,200 - julearn - INFO - Adding step zscore that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7fb175ad3be0&gt;
-2022-12-07 15:57:06,200 - julearn - INFO - Step added
-2022-12-07 15:57:06,200 - julearn - INFO - Adding step remove_confound that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7fb175ad1a20&gt;
-2022-12-07 15:57:06,200 - julearn - INFO - Setting hyperparameter confounds = confound
-2022-12-07 15:57:06,201 - julearn - INFO - Step added
-2022-12-07 15:57:06,201 - julearn - INFO - Adding step rf that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7fb17536cd00&gt;
-2022-12-07 15:57:06,201 - julearn - INFO - Step added
-2022-12-07 15:57:06,201 - julearn - INFO - Setting random seed to 200
-2022-12-07 15:57:06,201 - julearn - INFO - ==== Input Data ====
-2022-12-07 15:57:06,201 - julearn - INFO - Using dataframe as input
-2022-12-07 15:57:06,201 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2022-12-07 15:57:06,201 - julearn - INFO -      Target: species
-2022-12-07 15:57:06,202 - julearn - INFO - ====================
-2022-12-07 15:57:06,202 - julearn - INFO -
-2022-12-07 15:57:06,204 - julearn - INFO - = Model Parameters =
-2022-12-07 15:57:06,204 - julearn - INFO - ====================
-2022-12-07 15:57:06,204 - julearn - INFO -
-2022-12-07 15:57:06,204 - julearn - INFO - Using outer CV scheme StratifiedBootstrap(n_splits=20, random_state=42, test_size=0.3,
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-12-08 08:23:44,303 - julearn - INFO - Adding step zscore that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7feccc6175b0&gt;
+2022-12-08 08:23:44,303 - julearn - INFO - Step added
+2022-12-08 08:23:44,303 - julearn - INFO - Adding step remove_confound that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7feccc617e50&gt;
+2022-12-08 08:23:44,303 - julearn - INFO - Setting hyperparameter confounds = confound
+2022-12-08 08:23:44,303 - julearn - INFO - Step added
+2022-12-08 08:23:44,303 - julearn - INFO - Adding step rf that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7feccc614e80&gt;
+2022-12-08 08:23:44,304 - julearn - INFO - Step added
+2022-12-08 08:23:44,304 - julearn - INFO - Setting random seed to 200
+2022-12-08 08:23:44,304 - julearn - INFO - ==== Input Data ====
+2022-12-08 08:23:44,304 - julearn - INFO - Using dataframe as input
+2022-12-08 08:23:44,304 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2022-12-08 08:23:44,304 - julearn - INFO -      Target: species
+2022-12-08 08:23:44,305 - julearn - INFO - ====================
+2022-12-08 08:23:44,305 - julearn - INFO -
+2022-12-08 08:23:44,307 - julearn - INFO - = Model Parameters =
+2022-12-08 08:23:44,307 - julearn - INFO - ====================
+2022-12-08 08:23:44,307 - julearn - INFO -
+2022-12-08 08:23:44,307 - julearn - INFO - Using outer CV scheme StratifiedBootstrap(n_splits=20, random_state=42, test_size=0.3,
           train_size=None)
-2022-12-07 15:57:06,204 - julearn - INFO - Binary classification problem detected.
+2022-12-08 08:23:44,307 - julearn - INFO - Binary classification problem detected.
 </pre></div>
 </div>
 <p>Now we can compare the accuracies. We can combine the two outputs as
@@ -341,7 +342,7 @@ fold.</p>
     <span class="n">this_importances</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
         <span class="p">{</span>
             <span class="s2">&quot;feature&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">],</span>
-            <span class="s2">&quot;importance&quot;</span><span class="p">:</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">estimator</span></a><span class="p">[</span><span class="s2">&quot;wrapped_rf&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">feature_importances_</span><span class="p">,</span>
+            <span class="s2">&quot;importance&quot;</span><span class="p">:</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">estimator</span></a><span class="p">[</span><span class="s2">&quot;rf&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">feature_importances_</span><span class="p">,</span>
             <span class="s2">&quot;confounds&quot;</span><span class="p">:</span> <span class="s2">&quot;Removed&quot;</span><span class="p">,</span>
             <span class="s2">&quot;fold&quot;</span><span class="p">:</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">i_fold</span></a><span class="p">,</span>
         <span class="p">}</span>
@@ -378,7 +379,7 @@ a difference in importances.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_confound_removal_classification_004.png" srcset="../../_images/sphx_glr_plot_confound_removal_classification_004.png" alt="plot confound removal classification" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  7.862 seconds)</p>
+<img src="../../_images/sphx_glr_plot_confound_removal_classification_004.png" srcset="../../_images/sphx_glr_plot_confound_removal_classification_004.png" alt="plot confound removal classification" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  8.217 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-basic-plot-confound-removal-classification-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/a04a8d098f83972da74112b5a7f757ed/plot_confound_removal_classification.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_confound_removal_classification.py</span></code></a></p>
