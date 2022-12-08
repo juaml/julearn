@@ -284,6 +284,7 @@ class PipelineCreator:  # Pipeline creator
         if self._added_target_transformer:
             # If we have a target transformer, we need to wrap the model
             # in a the right "Targeted" transformer.
+            # TODO: Deal with hyperparemeters in the model (@samihamdan )
             target_model_step = self.wrap_target_model(
                 model_name,
                 model_estimator,
