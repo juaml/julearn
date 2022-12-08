@@ -24,7 +24,7 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Custom Scoring Function for Regression" href="dis_run_custom_scorers_regression.html" />
+    <link rel="next" title="Grouped CV." href="dis_run_grouped_cv.html" />
     <link rel="prev" title="Working with pandas" href="run_combine_pandas.html" /> 
 </head>
 
@@ -56,6 +56,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Advanced Examples</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="run_combine_pandas.html">Working with pandas</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Stacking Classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dis_run_grouped_cv.html">Grouped CV.</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dis_run_custom_scorers_regression.html">Custom Scoring Function for Regression</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dis_run_hyperparameter_tuning.html">Tuning Hyperparameters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dis_run_return_confounds.html">Return Confounds in Confound Removal</a></li>
@@ -117,13 +118,13 @@ classifier will be applied on the predictions of the two classifiers.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-12-08 10:04:59,629 - julearn - INFO - ===== Lib Versions =====
-2022-12-08 10:04:59,629 - julearn - INFO - numpy: 1.23.5
-2022-12-08 10:04:59,629 - julearn - INFO - scipy: 1.9.3
-2022-12-08 10:04:59,629 - julearn - INFO - sklearn: 1.2.0rc1
-2022-12-08 10:04:59,629 - julearn - INFO - pandas: 1.5.2
-2022-12-08 10:04:59,629 - julearn - INFO - julearn: 0.0.1.dev1
-2022-12-08 10:04:59,629 - julearn - INFO - ========================
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-12-08 11:49:06,868 - julearn - INFO - ===== Lib Versions =====
+2022-12-08 11:49:06,868 - julearn - INFO - numpy: 1.23.5
+2022-12-08 11:49:06,868 - julearn - INFO - scipy: 1.9.3
+2022-12-08 11:49:06,868 - julearn - INFO - sklearn: 1.2.0rc1
+2022-12-08 11:49:06,868 - julearn - INFO - pandas: 1.5.2
+2022-12-08 11:49:06,868 - julearn - INFO - julearn: 0.1.dev1
+2022-12-08 11:49:06,868 - julearn - INFO - ========================
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">df_iris</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;iris&quot;</span><span class="p">)</span>
@@ -175,40 +176,40 @@ We will try to predict the species.</p>
 <span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">[</span><span class="s2">&quot;test_score&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-12-08 10:04:59,634 - julearn - INFO - Adding step filter_columns that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7fecf416a830&gt;
-2022-12-08 10:04:59,634 - julearn - INFO - Setting hyperparameter keep = sepal
-2022-12-08 10:04:59,634 - julearn - INFO - Step added
-2022-12-08 10:04:59,634 - julearn - INFO - Adding step zscore that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7fecf416af20&gt;
-2022-12-08 10:04:59,634 - julearn - INFO - Step added
-2022-12-08 10:04:59,634 - julearn - INFO - Adding step svm that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7fecf416ae30&gt;
-2022-12-08 10:04:59,634 - julearn - INFO - Step added
-2022-12-08 10:04:59,635 - julearn - INFO - Adding step filter_columns that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7fecf4168790&gt;
-2022-12-08 10:04:59,635 - julearn - INFO - Setting hyperparameter keep = petal
-2022-12-08 10:04:59,635 - julearn - INFO - Step added
-2022-12-08 10:04:59,635 - julearn - INFO - Adding step zscore that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7fecf416a530&gt;
-2022-12-08 10:04:59,635 - julearn - INFO - Step added
-2022-12-08 10:04:59,635 - julearn - INFO - Adding step rf that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7fecf416a3b0&gt;
-2022-12-08 10:04:59,635 - julearn - INFO - Step added
-2022-12-08 10:04:59,635 - julearn - INFO - Adding step stacking that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7fecf4168b80&gt;
-2022-12-08 10:04:59,635 - julearn - INFO - Setting hyperparameter estimators = [(&#39;model_sepal&#39;, &lt;julearn.pipeline.pipeline.PipelineCreator object at 0x7fecf416b940&gt;), (&#39;model_petal&#39;, &lt;julearn.pipeline.pipeline.PipelineCreator object at 0x7fecf4168b20&gt;)]
-2022-12-08 10:04:59,635 - julearn - INFO - Step added
-2022-12-08 10:04:59,635 - julearn - INFO - ==== Input Data ====
-2022-12-08 10:04:59,635 - julearn - INFO - Using dataframe as input
-2022-12-08 10:04:59,636 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2022-12-08 10:04:59,636 - julearn - INFO -      Target: species
-2022-12-08 10:04:59,636 - julearn - INFO - ====================
-2022-12-08 10:04:59,637 - julearn - INFO -
-2022-12-08 10:04:59,638 - julearn - INFO - = Model Parameters =
-2022-12-08 10:04:59,638 - julearn - INFO - ====================
-2022-12-08 10:04:59,638 - julearn - INFO -
-2022-12-08 10:04:59,640 - julearn - INFO - = Model Parameters =
-2022-12-08 10:04:59,640 - julearn - INFO - ====================
-2022-12-08 10:04:59,640 - julearn - INFO -
-2022-12-08 10:04:59,756 - julearn - INFO - = Model Parameters =
-2022-12-08 10:04:59,756 - julearn - INFO - ====================
-2022-12-08 10:04:59,756 - julearn - INFO -
-2022-12-08 10:04:59,756 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2022-12-08 10:04:59,756 - julearn - INFO - Binary classification problem detected.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-12-08 11:49:06,873 - julearn - INFO - Adding step filter_columns that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7ff79871c7f0&gt;
+2022-12-08 11:49:06,873 - julearn - INFO - Setting hyperparameter keep = sepal
+2022-12-08 11:49:06,873 - julearn - INFO - Step added
+2022-12-08 11:49:06,873 - julearn - INFO - Adding step zscore that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7ff79871db40&gt;
+2022-12-08 11:49:06,873 - julearn - INFO - Step added
+2022-12-08 11:49:06,873 - julearn - INFO - Adding step svm that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7ff79871dbd0&gt;
+2022-12-08 11:49:06,873 - julearn - INFO - Step added
+2022-12-08 11:49:06,874 - julearn - INFO - Adding step filter_columns that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7ff79871c760&gt;
+2022-12-08 11:49:06,874 - julearn - INFO - Setting hyperparameter keep = petal
+2022-12-08 11:49:06,874 - julearn - INFO - Step added
+2022-12-08 11:49:06,874 - julearn - INFO - Adding step zscore that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7ff79871f550&gt;
+2022-12-08 11:49:06,874 - julearn - INFO - Step added
+2022-12-08 11:49:06,874 - julearn - INFO - Adding step rf that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7ff79871d2a0&gt;
+2022-12-08 11:49:06,874 - julearn - INFO - Step added
+2022-12-08 11:49:06,874 - julearn - INFO - Adding step stacking that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7ff79871d390&gt;
+2022-12-08 11:49:06,874 - julearn - INFO - Setting hyperparameter estimators = [(&#39;model_sepal&#39;, &lt;julearn.pipeline.pipeline.PipelineCreator object at 0x7ff79871ca90&gt;), (&#39;model_petal&#39;, &lt;julearn.pipeline.pipeline.PipelineCreator object at 0x7ff79871c700&gt;)]
+2022-12-08 11:49:06,874 - julearn - INFO - Step added
+2022-12-08 11:49:06,874 - julearn - INFO - ==== Input Data ====
+2022-12-08 11:49:06,874 - julearn - INFO - Using dataframe as input
+2022-12-08 11:49:06,875 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2022-12-08 11:49:06,875 - julearn - INFO -      Target: species
+2022-12-08 11:49:06,876 - julearn - INFO - ====================
+2022-12-08 11:49:06,876 - julearn - INFO -
+2022-12-08 11:49:06,877 - julearn - INFO - = Model Parameters =
+2022-12-08 11:49:06,877 - julearn - INFO - ====================
+2022-12-08 11:49:06,878 - julearn - INFO -
+2022-12-08 11:49:06,879 - julearn - INFO - = Model Parameters =
+2022-12-08 11:49:06,879 - julearn - INFO - ====================
+2022-12-08 11:49:06,879 - julearn - INFO -
+2022-12-08 11:49:06,995 - julearn - INFO - = Model Parameters =
+2022-12-08 11:49:06,996 - julearn - INFO - ====================
+2022-12-08 11:49:06,996 - julearn - INFO -
+2022-12-08 11:49:06,996 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2022-12-08 11:49:06,996 - julearn - INFO - Binary classification problem detected.
 0    1.00
 1    0.85
 2    0.95
@@ -217,7 +218,7 @@ We will try to predict the species.</p>
 Name: test_score, dtype: float64
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  5.799 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  5.872 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-advanced-run-stacked-models-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/371f875a9ba712d6f8f3215d1f3ac64e/run_stacked_models.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">run_stacked_models.py</span></code></a></p>
@@ -234,7 +235,7 @@ Name: test_score, dtype: float64
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="run_combine_pandas.html" class="btn btn-neutral float-left" title="Working with pandas" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="dis_run_custom_scorers_regression.html" class="btn btn-neutral float-right" title="Custom Scoring Function for Regression" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="dis_run_grouped_cv.html" class="btn btn-neutral float-right" title="Grouped CV." accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
