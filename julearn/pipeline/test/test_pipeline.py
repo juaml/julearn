@@ -111,7 +111,7 @@ def test_hyperparameter_tuning(
 
     model_params = get_default_params(model)
     pipeline_creator = pipeline_creator.add(
-        model, problem_type=problem_type, **model_params
+        model,  **model_params
     )
 
     param_grid.update(
