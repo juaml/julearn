@@ -1,16 +1,17 @@
 from copy import deepcopy
 from sklearn.metrics import _scorer, SCORERS, make_scorer
 from julearn.utils import warn, raise_error, logger
-from . metrics import r2_corr
+from . metrics import r2_corr, r_pearson
 _extra_available_scorers = {
-    'r2_corr': make_scorer(r2_corr)
+    'r2_corr': make_scorer(r2_corr),
+    'r_pearson': make_scorer(r_pearson),
 }
 
 _extra_available_scorers_reset = deepcopy(_extra_available_scorers)
 
 
 def get_scorer(name):
-    """get available scorer by name
+    """Get available scorer by name.
 
     Parameters
     ----------
