@@ -30,7 +30,7 @@ def test_construction_working(model, preprocess, problem_type):
     # ignoring first step for types and last for model
     for _preprocess, step in zip(preprocess, pipeline.steps[1:-1]):
         name, transformer = step
-        assert name.startswith(f"wrapped_{_preprocess}")
+        assert name.startswith(f"{_preprocess}")
         assert isinstance(transformer, JuColumnTransformer)
         assert isinstance(
             transformer.transformer, get_transformer(_preprocess).__class__
@@ -41,7 +41,7 @@ def test_construction_working(model, preprocess, problem_type):
     assert isinstance(
         model.model,
         get_model(
-            model_name.replace("wrapped_", ""),
+            model_name,
             problem_type=problem_type,
         ).__class__,
     )
@@ -99,21 +99,21 @@ def test_hyperparameter_tuning(
         if X_types_iris in [None, dict()]
         else list(X_types_iris.keys())
     )
-    wrap = False if used_types == ["continuous"] else True
     for step in preprocess:
         default_params = get_default_params(step)
         pipeline_creator = pipeline_creator.add(
             step, apply_to=used_types, **default_params
         )
-        name = f"wrapped_{step}__{step}" if wrap else step
         params = {
-            f"{name}__{param}": val for param, val in default_params.items()
+            f"{step}__{param}": val for param, val in default_params.items()
         }
         param_grid.update(params)
 
     model_params = get_default_params(model)
-    pipeline_creator = pipeline_creator.add(model, **model_params)
-    model = f"wrapped_{model}__{model}" if wrap else model
+    pipeline_creator = pipeline_creator.add(
+        model, problem_type=problem_type, **model_params
+    )
+
     param_grid.update(
         {f"{model}__{param}": val for param, val in model_params.items()}
     )
