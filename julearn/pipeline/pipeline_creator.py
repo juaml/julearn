@@ -1,9 +1,7 @@
 from typing import Any, Union, List, Dict, Optional, Tuple
 
 import numpy as np
-from sklearn.compose import (
-    TransformedTargetRegressor,
-)
+
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import check_cv
 from dataclasses import dataclass, field
@@ -20,11 +18,12 @@ from ..utils.typing import JuModelLike, JuEstimatorLike
 from ..transformers import JuColumnTransformer
 from ..model_selection.available_searchers import list_searchers, get_searcher
 from .target_pipeline_creator import TargetPipelineCreator
+from ..transformers.target import JuTransformedTargetModel
 
 
-class NoInversePipeline(Pipeline):
-    def inverse_transform(self, X):
-        return X
+# class NoInversePipeline(Pipeline):
+#     def inverse_transform(self, X):
+#         return X
 
 
 def _params_to_pipeline(param, X_types):
@@ -227,12 +226,12 @@ class PipelineCreator:  # Pipeline creator
         self.check_X_types(X_types)
         model_step = self._steps[-1]
 
-        target_transformer_steps = []
+        target_transformer_step = None
         transformer_steps = []
 
         for _step in self._steps[:-1]:
             if _step.apply_to == "target":
-                target_transformer_steps.append(_step)
+                target_transformer_step = _step
             else:
                 transformer_steps.append(_step)
 
@@ -285,13 +284,11 @@ class PipelineCreator:  # Pipeline creator
         if self._added_target_transformer:
             # If we have a target transformer, we need to wrap the model
             # in a the right "Targeted" transformer.
-            target_model_step, step_params_to_tune = self.wrap_target_model(
+            target_model_step = self.wrap_target_model(
                 model_name,
                 model_estimator,
-                target_transformer_steps,
-                step_params_to_tune,
-            )
-            params_to_tune.update(step_params_to_tune)
+                target_transformer_step
+                )
             pipeline_steps.append(target_model_step)
         else:
             # if not, just add a model as the last step
@@ -389,44 +386,43 @@ class PipelineCreator:  # Pipeline creator
         return pipeline
 
     @staticmethod
-    def wrap_target_model(
-        model_name, model, target_transformer_steps, model_params=None
-    ):
-        model_params = {} if model_params is None else model_params
-        model_params = {
-            f"regressor__{param}": val for param, val in model_params.items()
-        }
+    def wrap_target_model(model_name, model, target_transformer_step):
+        # model_params = {} if model_params is None else model_params
+        # model_params = {
+        #     f"regressor__{param}": val for param, val in model_params.items()
+        # }
+        # TODO: Wrap into the JuTranformedTargetModel
+        # TODO: Deal with the reverse in the JuTransformedTargetModel
+        # def check_has_valid_reverse(est):
+        #     valid_reverse = True
+        #     if isinstance(est, Pipeline):
+        #         for _step in est.steps:
+        #             if not check_has_valid_reverse(_step[1]):
+        #                 return False
+        #     else:
+        #         if not hasattr(est, "inverse_transform"):
+        #             valid_reverse = False
+        #         return valid_reverse
 
-        def check_has_valid_reverse(est):
-            valid_reverse = True
-            if isinstance(est, Pipeline):
-                for _step in est.steps:
-                    if not check_has_valid_reverse(_step[1]):
-                        return False
-            else:
-                if not hasattr(est, "inverse_transform"):
-                    valid_reverse = False
-                return valid_reverse
+        # pipe_trans_steps = []
+        # valid_reverse = True
+        # for step in target_transformer_steps:
+        #     name, est = step.name, step.estimator
+        #     pipe_trans_steps.append([name, est])
+        #     if not check_has_valid_reverse(est):
+        #         valid_reverse = False
 
-        pipe_trans_steps = []
-        valid_reverse = True
-        for step in target_transformer_steps:
-            name, est = step.name, step.estimator
-            pipe_trans_steps.append([name, est])
-            if not check_has_valid_reverse(est):
-                valid_reverse = False
-
-        transformer_pipe = (
-            Pipeline(pipe_trans_steps)
-            if valid_reverse
-            else NoInversePipeline(pipe_trans_steps)
+        # transformer_pipe = (
+        #     Pipeline(pipe_trans_steps)
+        #     if valid_reverse
+        #     else NoInversePipeline(pipe_trans_steps)
+        # )
+        target_model = JuTransformedTargetModel(
+            model=model,
+            transformer=target_transformer_step,
+            # check_inverse=False,
         )
-        target_model = TransformedTargetRegressor(
-            transformer=transformer_pipe.set_output(transform="pandas"),
-            regressor=model,
-            check_inverse=False,
-        )
-        return (f"{model_name}_target_transform", target_model), model_params
+        return (f"{model_name}_target_transform", target_model)
 
     def _validate_model_params(self, model_name, model_params):
 

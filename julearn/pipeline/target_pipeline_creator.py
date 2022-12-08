@@ -7,7 +7,7 @@ from ..transformers.target import (
 )
 from ..transformers import get_transformer
 
-from .target_pipeline import TargetPipeline
+from .target_pipeline import JuTargetPipeline
 
 
 class TargetPipelineCreator:  # Pipeline creator
@@ -41,16 +41,16 @@ class TargetPipelineCreator:  # Pipeline creator
         self._steps.append((name, estimator))
         return self
 
-    def to_pipeline(self) -> TargetPipeline:
+    def to_pipeline(self) -> JuTargetPipeline:
         """Create a pipeline from the steps.
 
         Returns
         -------
-        out : TargetPipeline
+        out : JuTargetPipeline
             The pipeline object.
         """
 
-        return TargetPipeline(self._steps)
+        return JuTargetPipeline(self._steps)
 
     def _ensure_name(self, name: str) -> str:
         """Ensure that the name is unique.

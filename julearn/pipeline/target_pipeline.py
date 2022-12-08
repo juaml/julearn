@@ -4,7 +4,7 @@ from ..transformers.target import JuTargetTransformer
 from ..utils.typing import TransformerLike
 
 
-class TargetPipeline:
+class JuTargetPipeline:
     def __init__(
         self,
         steps: List[Tuple[str, Union[JuTargetTransformer, TransformerLike]]],

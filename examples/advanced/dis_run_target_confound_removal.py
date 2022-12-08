@@ -68,4 +68,5 @@ scores_cr = run_cross_validation(
     X_types=X_types,
     scoring=["accuracy", "roc_auc"],
     seed=200,
+    pos_labels=["virginica"],
 )
