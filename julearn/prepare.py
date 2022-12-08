@@ -1,3 +1,4 @@
+"""Validility checks for input data."""
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>prepa
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
@@ -62,7 +63,7 @@ def _validate_input_data_df_ext(X, y, df, groups):
 
 
 def prepare_input_data(X, y, df, pos_labels, groups):
-    """Prepare the input data and variables for the pipeline
+    """Prepare the input data and variables for the pipeline.
 
     Parameters
     ----------
@@ -150,7 +151,7 @@ def check_consistency(
     groups,
     problem_type,
 ):
-    """Check the consistency of the parameters/input"""
+    """Check the consistency of the parameters/input."""
 
     # Check problem type and the target.
     n_classes = np.unique(y.values).shape[0]
@@ -196,11 +197,28 @@ def check_consistency(
 
 
 def check_x_types(X_types: Dict, X: List[str]) -> Dict[str, List]:
-    """Check validity of X_types with respect to X"""
-    X_types = {
-        k: [v] if not isinstance(v, list) else v for k, v in X_types.items()
-    }
+    """Check validity of X_types.
 
-    # TODO: Check that X_types contains elements that are in X
+    Parameters
+    ----------
+    X : str or list of str
+        Names of features (X).
+    X_types: dict
+        Dictionary of X_types.
+    """
+    if isinstance(X, str):
+        X = [X]
+    values_all = []
+    for key, value in X_types.items():
+        print(key, value)
+        if isinstance(value, str):
+            value = [value]
+        values_all += value
+        for v in value:
+            if v not in X:
+                raise_error(
+                    f'{v} of type {key} not a valid column name in X.'
+                )
 
-    return X_types
+    if len(values_all) != len(set(values_all)):
+        raise_error('One column defined multiple times in X_types')
