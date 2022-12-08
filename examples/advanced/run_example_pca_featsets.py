@@ -93,7 +93,7 @@ print(scores.head())
 
 ###############################################################################
 # Mean value of mean absolute error across CV
-print(scores["test_score"].mean() * -1)
+print(scores["test_score"].mean())
 
 
 ###############################################################################
