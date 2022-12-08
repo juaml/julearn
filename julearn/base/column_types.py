@@ -1,25 +1,99 @@
-from typing import Union, List, Set
+"""Implement column types."""
+
+# Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
+#          Sami Hamdan <s.hamdan@fz-juelich.de>
+# License: AGPL
+
+from typing import Union, List, Set, Callable
 
 from ..utils.logging import raise_error
 from sklearn.compose import make_column_selector
 
 
-def change_column_type(column, new_type):
+def change_column_type(column: str, new_type: str):
+    """Change the type of a column.
+
+    Parameters
+    ----------
+    column : str
+        The column to change the type of.
+    new_type : str
+        The new type of the column.
+
+    Returns
+    -------
+    str
+        The new column name with the type changed.
+    """
     return "__:type:__".join(column.split("__:type:__")[0:1] + [new_type])
 
 
 def get_column_type(column):
+    """Get the type of a column.
+
+    Parameters
+    ----------
+    column : str
+        The column to get the type of.
+
+    Returns
+    -------
+    str
+        The type of the column.
+    """
     return column.split("__:type:__")[1]
 
 
 def make_type_selector(pattern):
+    """Make a type selector.
+
+    This type selector is to be used with
+    :class:`sklearn.compose.ColumnTransformer`
+
+    Parameters
+    ----------
+    pattern : str
+        The pattern to select the columns.
+
+    Returns
+    -------
+    function
+        The type selector.
+    """
+
     def get_renamer(X_df):
+        """Get the dictionary that will rename the columns to add the type.
+
+        Parameters
+        ----------
+        X_df : pd.DataFrame
+            The dataframe to rename the columns of.
+
+        Returns
+        -------
+        dict
+            The dictionary that will rename the columns.
+
+        """
         return {
             x: (x if "__:type:__" in x else f"{x}__:type:__continuous")
             for x in X_df.columns
         }
 
     def type_selector(X_df):
+        """Select the columns based on the pattern.
+
+        Parameters
+        ----------
+        X_df : pd.DataFrame
+            The dataframe to select the columns of.
+
+        Returns
+        -------
+        list
+            The list of selected columns.
+
+        """
         # Rename the columns to add the type if not present
         renamer = get_renamer(X_df)
         _X_df = X_df.rename(columns=renamer)
@@ -42,25 +116,6 @@ def make_type_selector(pattern):
         ]
 
     return type_selector
-
-
-def ensure_apply_to(apply_to):
-    if apply_to in [".*", [".*"], "*", ["*"]]:
-        pattern = ".*"
-    elif isinstance(apply_to, list) or isinstance(apply_to, tuple):
-        types = [f"__:type:__{_type}" for _type in apply_to]
-
-        pattern = f"(?:{types[0]}"
-        if len(types) > 1:
-            for t in types[1:]:
-                pattern += rf"|{t}"
-        pattern += r")"
-    elif "__:type:__" in apply_to or apply_to in ["target", ["target"]]:
-        pattern = apply_to
-    else:
-        pattern = f"(?__:type:__{apply_to})"
-
-    return pattern
 
 
 class ColumnTypes:
@@ -88,8 +143,8 @@ class ColumnTypes:
 
     def add(
         self, column_types: Union[List[str], Set[str], str, "ColumnTypes"]
-    ):
-        """Add more column_types to the column_types
+    ) -> "ColumnTypes":
+        """Add more column_types to the column_types.
 
         Parameters
         ----------
@@ -110,18 +165,28 @@ class ColumnTypes:
         return self
 
     @property
-    def pattern(self):
+    def pattern(self) -> str:
+        """Get the pattern/regex that matches all the column types."""
         return self._to_pattern()
 
-    def to_type_selector(self):
-        """Create a type selector usbale by sklearn.compose.ColumnTransformer
-        from ColumnTypes.
+    def to_type_selector(self) -> Callable:
+        """Create a type selector from the ColumnType.
+
+        The type selector is usable by
+        :class:`sklearn.compose.ColumnTransformer`
+
+
+        Returns
+        -------
+        Callable
+            The type selector.
         """
         return make_type_selector(self.pattern)
 
     def _to_pattern(self):
-        """Converts column_types to pattern/regex usable to make a
-        column_selector.
+        """Convert column_types to pattern/regex.
+
+        This pattern is usable to make a column_selector.
 
         Returns
         -------
@@ -150,8 +215,22 @@ class ColumnTypes:
         return pattern
 
     def __eq__(self, other: Union["ColumnTypes", str]):
+        """Check if the column_types are equal to another column_types.
+
+        Parameters
+        ----------
+        other : ColumnTypes or str
+            The other column_types to compare to.
+
+        Returns
+        -------
+        bool
+            True if the column_types are equal, False otherwise.
+        """
         other = other if isinstance(other, ColumnTypes) else ColumnTypes(other)
         return self._column_types == other._column_types
 
     def __iter__(self):
+        """Iterate over the column_types."""
+
         return self._column_types.__iter__()

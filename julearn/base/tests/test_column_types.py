@@ -1,5 +1,11 @@
-from julearn.base import ColumnTypes, make_type_selector
+"""Provides tests for ColumnTypes."""
+
+# Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
+#          Sami Hamdan <s.hamdan@fz-juelich.de>
+# License: AGPL
 import pytest
+
+from julearn.base import ColumnTypes, make_type_selector
 
 
 @pytest.mark.parametrize(
