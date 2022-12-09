@@ -4,10 +4,12 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Union, List, Set, Callable
+from typing import Union, Set, Callable
+
+from sklearn.compose import make_column_selector
 
 from ..utils.logging import raise_error
-from sklearn.compose import make_column_selector
+from ..utils.typing import ColumnTypesLike
 
 
 def change_column_type(column: str, new_type: str):
@@ -128,9 +130,7 @@ class ColumnTypes:
         Instead of a str you can also provide a ColumnTypes itself.
     """
 
-    def __init__(
-        self, column_types: Union[List[str], Set[str], str, "ColumnTypes"]
-    ):
+    def __init__(self, column_types: ColumnTypesLike):
         if isinstance(column_types, ColumnTypes):
             _types = column_types._column_types
         elif isinstance(column_types, str):
@@ -141,9 +141,7 @@ class ColumnTypes:
             raise_error(f"Cannot construct a ColumnType from {column_types}")
         self._column_types = _types
 
-    def add(
-        self, column_types: Union[List[str], Set[str], str, "ColumnTypes"]
-    ) -> "ColumnTypes":
+    def add(self, column_types: ColumnTypesLike) -> "ColumnTypes":
         """Add more column_types to the column_types.
 
         Parameters

@@ -3,9 +3,13 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
+from typing import List, Set
+
 import pytest
+import pandas as pd
 
 from julearn.base import ColumnTypes, make_type_selector
+from julearn.utils.typing import ColumnTypesLike
 
 
 @pytest.mark.parametrize(
@@ -38,12 +42,31 @@ from julearn.base import ColumnTypes, make_type_selector
         ),
     ],
 )
-def test_make_column_selector(X_iris, pattern, column_types, selection):
+def test_make_column_selector(
+    X_iris: pd.DataFrame,
+    pattern: str,
+    column_types: List[str],
+    selection: slice,
+) -> None:
+    """Test the make_column_selector function.
+
+    Parameters
+    ----------
+    X_iris : pd.DataFrame
+        The iris dataset features.
+    pattern : str
+        The pattern to test.
+    column_types : list of
+        The column types to set in X_iris.
+    selection : slice
+        The columns that the selector should select.
+    """
     column_types = [col or "continuous" for col in column_types]
-    X_iris.columns = [
-        f"{col.split('__:type:__')[0]}__:type:__{ctype}"
+    to_rename = {
+        col: f"{col.split('__:type:__')[0]}__:type:__{ctype}"
         for col, ctype in zip(X_iris.columns, column_types)
-    ]
+    }
+    X_iris.rename(columns=to_rename, inplace=True)
     col_true_selected = X_iris.iloc[:, selection].columns.tolist()
     col_selected = make_type_selector(pattern)(X_iris)
     assert col_selected == col_true_selected
@@ -61,14 +84,18 @@ def test_make_column_selector(X_iris, pattern, column_types, selection):
         ),
         (
             ["continuous", "categorical"],
-            ["(?:__:type:__continuous|__:type:__categorical)",
-             "(?:__:type:__categorical|__:type:__continuous)"],
+            [
+                "(?:__:type:__continuous|__:type:__categorical)",
+                "(?:__:type:__categorical|__:type:__continuous)",
+            ],
             {"continuous", "categorical"},
         ),
         (
             ColumnTypes(["continuous", "categorical"]),
-            ["(?:__:type:__continuous|__:type:__categorical)",
-             "(?:__:type:__categorical|__:type:__continuous)"],
+            [
+                "(?:__:type:__continuous|__:type:__categorical)",
+                "(?:__:type:__categorical|__:type:__continuous)",
+            ],
             {"continuous", "categorical"},
         ),
         ("*", ".*", {"*"}),
@@ -77,17 +104,31 @@ def test_make_column_selector(X_iris, pattern, column_types, selection):
         ([".*"], ".*", {".*"}),
     ],
 )
-def test_ColumnTypes_basics(column_types, pattern, resulting_column_types):
+def test_ColumnTypes_patterns(
+    column_types: ColumnTypesLike,
+    pattern: List[str],
+    resulting_column_types: Set[str],
+) -> None:
+    """Test the ColumnTypes patterns.
 
+    Parameters
+    ----------
+    column_types : list of str
+        The column types to test.
+    pattern : list of str
+        The patterns that should match the column types.
+    resulting_column_types : set of str
+        The resulting column types.
+    """
     ct = ColumnTypes(column_types)
     if not isinstance(pattern, list):
         pattern = [pattern]
     assert any(ct.pattern == x for x in pattern)
-    assert ct._column_types == set(resulting_column_types)
+    assert ct._column_types == resulting_column_types
 
 
 @pytest.mark.parametrize(
-    "column_types,resulting_column_types,selection",
+    "selected_column_types,data_column_types,selection",
     [
         (
             ["continuous"],
@@ -117,15 +158,36 @@ def test_ColumnTypes_basics(column_types, pattern, resulting_column_types):
     ],
 )
 def test_ColumnTypes_to_column_selector(
-    X_iris, column_types, resulting_column_types, selection
-):
-    _column_types = [col or "continuous" for col in resulting_column_types]
-    X_iris.columns = [
-        f"{col.split('__:type:__')[0]}__:type:__{ctype}"
+    X_iris: pd.DataFrame,
+    selected_column_types: ColumnTypesLike,
+    data_column_types: List[str],
+    selection: slice,
+) -> None:
+    """Test the ColumnTyes.to_column_selector method.
+
+    Parameters
+    ----------
+    X_iris : pd.DataFrame
+        The iris dataset features.
+    pattern : str
+        The pattern to test.
+    selected_column_types : list of
+        The column types to set in X_iris.
+    data_column_types : set of str
+        The resulting column types.
+    selection : slice
+        The columns that the selector should select.
+    """
+    _column_types = [col or "continuous" for col in data_column_types]
+    to_rename = {
+        col: f"{col.split('__:type:__')[0]}__:type:__{ctype}"
         for col, ctype in zip(X_iris.columns, _column_types)
-    ]
+    }
+    X_iris.rename(columns=to_rename, inplace=True)
     col_true_selected = X_iris.iloc[:, selection].columns.tolist()
-    col_selected = ColumnTypes(column_types).to_type_selector()(X_iris)
+    col_selected = ColumnTypes(selected_column_types).to_type_selector()(
+        X_iris
+    )
     assert col_selected == col_true_selected
 
 
@@ -140,26 +202,49 @@ def test_ColumnTypes_to_column_selector(
         (ColumnTypes(["cont", "cat"]), ColumnTypes("continuous"), False),
     ],
 )
-def test_ColumnTypes_equivelance(left, right, equal):
+def test_ColumnTypes_equivalence(
+    left: ColumnTypesLike, right: ColumnTypesLike, equal: bool
+) -> None:
+    """Test the ColumnTypes equivalence.
+
+    Parameters
+    ----------
+    left : ColumnTypesLike
+        The left hand side of the comparison.
+    right : ColumnTypesLike
+        The right hand side of the comparison.
+    equal : bool
+        Whether the comparison should be equal.
+    """
     assert (left == right) == equal
-
-
-def test_ColumnTypes_equivelance_error():
-    with pytest.raises(TypeError, match="int"):
-        ColumnTypes(["cont"]) == 7
 
 
 @pytest.mark.parametrize(
     "left,right,result",
     [
         (
-            ColumnTypes(["continuous"]),
             ["continuous"],
-            ColumnTypes(["continuous"]),
+            ["continuous"],
+            ["continuous"],
         ),
-        (ColumnTypes(["cont"]), "cat", ColumnTypes(["cont", "cat"])),
+        ["cont"],
+        "cat",
+        ["cont", "cat"],
     ],
 )
-def test_ColumnTypes_add(left, right, result):
-    summed = left.add(right)
-    assert summed == result
+def test_ColumnTypes_add(
+    left: ColumnTypesLike, right: ColumnTypesLike, result: ColumnTypesLike
+) -> None:
+    """Test the ColumnTypes addition.
+
+    Parameters
+    ----------
+    left : ColumnTypesLike
+        The left hand side of the addition.
+    right : ColumnTypesLike
+        The right hand side of the addition.
+    result : ColumnTypes
+        The expected result.
+    """
+    summed = ColumnTypes(left).add(right)
+    assert summed == ColumnTypes(result)

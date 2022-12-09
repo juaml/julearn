@@ -47,6 +47,7 @@ class TransformerLike(EstimatorLike, Protocol):
 @runtime_checkable
 class ModelLike(EstimatorLike, Protocol):
     classes_: np.ndarray
+
     def predict(self, X) -> DataLike:
         return np.zeros(1)
 

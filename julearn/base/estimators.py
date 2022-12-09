@@ -85,6 +85,11 @@ class JuBaseEstimator(BaseEstimator):
     they should be able to provide the column types they need and the column
     types they apply to.
 
+    The main difference between this class and
+    :class:`sklearn.base.BaseEstimator` is that this class knows which columns
+    to use from the data for its purpose. That is, the `apply_to` and
+    `needed_types` attributes.
+
     Parameters
     ----------
     apply_to : str or list of str or set of str or ColumnTypes

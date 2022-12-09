@@ -1,3 +1,8 @@
+"""Provide imports for base module."""
+# Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
+#          Sami Hamdan <s.hamdan@fz-juelich.de>
+# License: AGPL
+
 from .column_types import (
     change_column_type,
     get_column_type,

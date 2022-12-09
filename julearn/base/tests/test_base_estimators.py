@@ -4,7 +4,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import List
+from typing import List, Type
 import pytest
 import numpy as np
 from numpy.testing import assert_almost_equal
@@ -77,7 +77,7 @@ def model(request):
 def test_WrapModel(
     X_iris: pd.DataFrame,
     y_iris: pd.DataFrame,
-    model: ModelLike,
+    model: Type[ModelLike],
     apply_to: ColumnTypesLike,
     column_types: List[str],
     selection: slice,
@@ -108,13 +108,12 @@ def test_WrapModel(
     X_iris_selected = X_iris.iloc[:, selection]
 
     np.random.seed(42)
-    # TODO: samihamdan: fix the protocol
-    lr = model().fit(X_iris_selected, y_iris)  # type: ignore
+    lr = model()
+    lr.fit(X_iris_selected, y_iris)
     pred_sk = lr.predict(X_iris_selected)
 
     np.random.seed(42)
-    # TODO: samihamdan: fix the protocol
-    wlr = WrapModel(model(), apply_to=apply_to)  # type: ignore
+    wlr = WrapModel(model(), apply_to=apply_to)
     wlr.fit(X_iris, y_iris)
     pred_ju = wlr.predict(X_iris)
 
