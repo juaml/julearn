@@ -11,12 +11,10 @@ from typing import (
 import numpy as np
 import pandas as pd
 
+
 from ..base import ColumnTypes
 
-
 DataLike = Union[np.ndarray, pd.DataFrame, pd.Series]
-ColumnTypesLike = Union[List[str], Set[str], str, ColumnTypes]
-
 
 @runtime_checkable
 class EstimatorLike(Protocol):

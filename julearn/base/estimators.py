@@ -11,8 +11,8 @@ import pandas as pd
 from sklearn.utils.metaestimators import available_if
 from sklearn.base import BaseEstimator, TransformerMixin
 
-from .column_types import ColumnTypes
-from ..utils.typing import ModelLike, ColumnTypesLike, DataLike
+from .column_types import ColumnTypes, ColumnTypesLike
+from ..utils.typing import ModelLike, DataLike
 
 
 def _wrapped_model_has(attr):

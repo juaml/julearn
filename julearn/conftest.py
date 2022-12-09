@@ -22,8 +22,15 @@ def df_typed_iris() -> pd.DataFrame:
     """
     df = load_dataset("iris")
     df = typing.cast(pd.DataFrame, df)
-    # TODO: add types
-    return df
+
+    rename = {
+        "sepal_length": "sepal_length__:type:__continuous",
+        "sepal_width": "sepal_width__:type:__continuous",
+        "petal_length": "petal_length__:type:__continuous",
+        "petal_width": "petal_width__:type:__continuous",
+    }
+
+    return df.rename(columns=rename)
 
 
 @fixture(scope="module")

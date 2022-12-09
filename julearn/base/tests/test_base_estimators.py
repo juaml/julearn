@@ -14,8 +14,8 @@ from sklearn.linear_model import LinearRegression, LogisticRegression
 from sklearn.svm import SVR, SVC
 from sklearn.tree import DecisionTreeRegressor, DecisionTreeClassifier
 
-from julearn.base import WrapModel
-from julearn.utils.typing import ModelLike, ColumnTypesLike
+from julearn.base import WrapModel, ColumnTypesLike
+from julearn.utils.typing import ModelLike
 
 
 @pytest.fixture(

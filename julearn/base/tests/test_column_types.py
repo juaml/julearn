@@ -8,8 +8,7 @@ from typing import List, Set
 import pytest
 import pandas as pd
 
-from julearn.base import ColumnTypes, make_type_selector
-from julearn.utils.typing import ColumnTypesLike
+from julearn.base import ColumnTypes, make_type_selector, ColumnTypesLike
 
 
 @pytest.mark.parametrize(
@@ -227,9 +226,11 @@ def test_ColumnTypes_equivalence(
             ["continuous"],
             ["continuous"],
         ),
-        ["cont"],
-        "cat",
-        ["cont", "cat"],
+        (
+            ["cont"],
+            "cat",
+            ["cont", "cat"],
+        ),
     ],
 )
 def test_ColumnTypes_add(
