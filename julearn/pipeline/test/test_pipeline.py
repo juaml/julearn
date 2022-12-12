@@ -4,7 +4,6 @@ from julearn.pipeline.pipeline_creator import JuColumnTransformer
 from julearn.transformers import get_transformer
 from julearn.models import get_model
 from sklearn.model_selection import GridSearchCV
-from sklearn.pipeline import Pipeline
 import pytest
 from pytest_lazyfixture import lazy_fixture
 
@@ -258,7 +257,8 @@ def test_stacking(X_iris, y_iris):
 #         # ("remove_confound", False),
 #     ],
 # )
-# def test_target_transformer(X_iris, y_iris, target_transformer, reverse_pipe):
+# def test_target_transformer(X_iris, y_iris, target_transformer,
+# reverse_pipe):
 #     model = (
 #         PipelineCreator(problem_type="regression")
 #         .add("zscore")

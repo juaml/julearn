@@ -114,7 +114,7 @@ def get_target_transformer(name: str, **params: Any) -> JuTargetTransformer:
 #             is_targettrans = False
 #     else:
 #         raise_error(f'is_targettransformer can only be applied to '
-#                     f'sklearn compatible transformers. Object {trans} has no '
+#                     f'sklearn compatible transformers. Object {trans} has no'
 #                     '.transform method. Therefore, it is no transformer.')
 
 #     return is_targettrans

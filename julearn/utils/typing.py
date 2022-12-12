@@ -5,8 +5,6 @@ from typing import (
     Any,
     Dict,
     Union,
-    List,
-    Set,
 )
 import numpy as np
 import pandas as pd
@@ -15,6 +13,7 @@ import pandas as pd
 from ..base import ColumnTypes
 
 DataLike = Union[np.ndarray, pd.DataFrame, pd.Series]
+
 
 @runtime_checkable
 class EstimatorLike(Protocol):
@@ -51,6 +50,7 @@ class ModelLike(EstimatorLike, Protocol):
 
     def score(self, X, y, sample_weight=None) -> float:
         return 0.0
+
 
 @runtime_checkable
 class JuEstimatorLike(EstimatorLike, Protocol):
