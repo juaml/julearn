@@ -1,4 +1,10 @@
-from typing import Optional
+"""TargetPipelineCreator class."""
+
+# Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
+#          Sami Hamdan <s.hamdan@fz-juelich.de>
+# License: AGPL
+
+from typing import Optional, Union
 import numpy as np
 
 from ..transformers.target import (
@@ -8,10 +14,16 @@ from ..transformers.target import (
 from ..transformers import get_transformer
 
 from .target_pipeline import JuTargetPipeline
+from ..utils.typing import EstimatorLike
 
 
-class TargetPipelineCreator:  # Pipeline creator
-    """TargetPipelineCreator class."""
+class TargetPipelineCreator:
+    """TargetPipelineCreator class.
+
+    Analogous to the PipelineCreator class, this class allows to create
+    :class:`julearn.pipeline.target_pipeline.JuTargetPipeline` objects in an
+    easy way.
+    """
 
     def __init__(self) -> None:
         self._steps = []
@@ -25,6 +37,12 @@ class TargetPipelineCreator:  # Pipeline creator
         ----------
         step : str
             The step to add to the pipeline.
+        name : str, optional
+            The name of the step. If None, the name will be obtained from
+            the step (default is None).
+        **params
+            Parameters for the step. This will mostly include
+            hyperparameters or any other parameter for initialization.
         """
         # If the user did not give a name, we will create one.
         if name is None:
@@ -33,7 +51,7 @@ class TargetPipelineCreator:  # Pipeline creator
                 if isinstance(step, str)
                 else step.__class__.__name__.lower()
             )
-            name = self._ensure_name(name)
+        name = self._get_step_name(name, step)
         if step in list_target_transformers():
             estimator = get_target_transformer(step, **params)
         else:
@@ -49,21 +67,28 @@ class TargetPipelineCreator:  # Pipeline creator
         out : JuTargetPipeline
             The pipeline object.
         """
-
         return JuTargetPipeline(self._steps)
 
-    def _ensure_name(self, name: str) -> str:
-        """Ensure that the name is unique.
+    def _get_step_name(
+        self, name: Optional[str], step: Union[EstimatorLike, str]
+    ) -> str:
+        """Get the name of a step, with a count if it is repeated.
 
         Parameters
         ----------
-        name : str
-            The name to check.
+        step : EstimatorLike or str
+            The step to get the name for.
 
         Returns
         -------
-        str
-            The name with a number appended if it is not unique.
+        name : str
+            The name of the step.
         """
+        if name is None:
+            name = (
+                step
+                if isinstance(step, str)
+                else step.__class__.__name__.lower()
+            )
         count = np.array([_step[0] == name for _step in self._steps]).sum()
         return f"{name}_{count}" if count > 0 else name

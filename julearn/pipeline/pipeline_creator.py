@@ -106,8 +106,13 @@ class Step:
         )
 
 
-class PipelineCreator:  # Pipeline creator
+class PipelineCreator:
     """PipelineCreator class.
+
+    This class is used to create pipelines. As the creation of a pipeline
+    is a bit more complicated than just adding steps to a pipeline, this
+    helper class is provided so the user can easily create complex
+    :class:`sklearn.pipeline.Pipeline` objects.
 
     Parameters
     ----------
@@ -148,6 +153,9 @@ class PipelineCreator:  # Pipeline creator
             This can be an available_transformer or
             available_model as a str or a sklearn compatible
             transformer or model.
+        name : str, optional
+            The name of the step. If None, the name will be obtained from
+            the step (default is None).
         apply_to: ColumnTypesLike, optional
             To what should the transformer or model be applied to.
             This can be a str representing a column type or a list
@@ -189,7 +197,7 @@ class PipelineCreator:  # Pipeline creator
             step = step.to_pipeline()  # type: ignore
 
         # Validate the step
-        self.validate_step(step, apply_to)
+        self._validate_step(step, apply_to)
 
         # If the user did not give a name, we will create one.
         name = self._get_step_name(name, step)
@@ -387,7 +395,7 @@ class PipelineCreator:  # Pipeline creator
             # in a the right "Targeted" transformer.
             # TODO: Deal with hyperparemeters in the model (@samihamdan)
             # TODO: @samihamdan: Fix the model_estimator typing hints
-            target_model_step = self.wrap_target_model(
+            target_model_step = self._wrap_target_model(
                 model_name,
                 model_estimator,  # type: ignore
                 target_transformer_step,  # type: ignore
@@ -497,7 +505,7 @@ class PipelineCreator:  # Pipeline creator
         return pipeline
 
     @staticmethod
-    def wrap_target_model(
+    def _wrap_target_model(
         model_name: str, model: ModelLike, target_transformer_step: Step
     ) -> Tuple[str, JuTransformedTargetModel]:
         """Wrap the model in a JuTransformedTargetModel.
@@ -585,7 +593,7 @@ class PipelineCreator:  # Pipeline creator
         count = np.array([_step.name == name for _step in self._steps]).sum()
         return f"{name}_{count}" if count > 0 else name
 
-    def validate_step(
+    def _validate_step(
         self, step: Union[EstimatorLike, str], apply_to: ColumnTypesLike
     ) -> None:
         """Validate a step.

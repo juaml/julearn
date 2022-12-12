@@ -43,7 +43,7 @@ _available_transformers = {
     # Custom
     'cbpm': CBPM,
     # DataFrame operations
-    'remove_confound': ConfoundRemover,
+    'confound_removal': ConfoundRemover,
     'drop_columns': DropColumns,
     'change_column_types': ChangeColumnTypes,
     'filter_columns': FilterColumns,
