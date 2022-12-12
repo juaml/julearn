@@ -128,13 +128,13 @@ analysis using Ridge Regression model.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s1">&#39;INFO&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-12-08 11:48:52,286 - julearn - INFO - ===== Lib Versions =====
-2022-12-08 11:48:52,286 - julearn - INFO - numpy: 1.23.5
-2022-12-08 11:48:52,286 - julearn - INFO - scipy: 1.9.3
-2022-12-08 11:48:52,286 - julearn - INFO - sklearn: 1.2.0rc1
-2022-12-08 11:48:52,286 - julearn - INFO - pandas: 1.5.2
-2022-12-08 11:48:52,287 - julearn - INFO - julearn: 0.1.dev1
-2022-12-08 11:48:52,287 - julearn - INFO - ========================
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-12-12 13:39:21,864 - julearn - INFO - ===== Lib Versions =====
+2022-12-12 13:39:21,864 - julearn - INFO - numpy: 1.23.5
+2022-12-12 13:39:21,864 - julearn - INFO - scipy: 1.9.3
+2022-12-12 13:39:21,864 - julearn - INFO - sklearn: 1.2.0rc1
+2022-12-12 13:39:21,864 - julearn - INFO - pandas: 1.5.2
+2022-12-12 13:39:21,864 - julearn - INFO - julearn: 0.1.dev1
+2022-12-12 13:39:21,864 - julearn - INFO - ========================
 </pre></div>
 </div>
 <p>Load the diabetes dataset from sklearn as a pandas dataframe</p>
@@ -203,36 +203,111 @@ model and do not define the model in run_cross_validation</p>
 <span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-12-08 11:48:52,310 - julearn - INFO - Adding step zscore that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7ff7860ff8b0&gt;
-2022-12-08 11:48:52,310 - julearn - INFO - Step added
-2022-12-08 11:48:52,310 - julearn - INFO - Adding step ridge that applies to &lt;julearn.base.column_types.ColumnTypes object at 0x7ff7860feb60&gt;
-2022-12-08 11:48:52,310 - julearn - INFO - Step added
-2022-12-08 11:48:52,310 - julearn - INFO - ==== Input Data ====
-2022-12-08 11:48:52,310 - julearn - INFO - Using dataframe as input
-2022-12-08 11:48:52,310 - julearn - INFO -      Features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
-2022-12-08 11:48:52,310 - julearn - INFO -      Target: target
-2022-12-08 11:48:52,311 - julearn - INFO - ====================
-2022-12-08 11:48:52,311 - julearn - INFO -
-2022-12-08 11:48:52,313 - julearn - INFO - = Model Parameters =
-2022-12-08 11:48:52,313 - julearn - INFO - ====================
-2022-12-08 11:48:52,313 - julearn - INFO -
-2022-12-08 11:48:52,313 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-12-12 13:39:21,887 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;target&#39;}; pattern=(?:target)&gt;
+2022-12-12 13:39:21,887 - julearn - INFO - Step added
+2022-12-12 13:39:21,887 - julearn - INFO - Adding step ridge that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2022-12-12 13:39:21,887 - julearn - INFO - Step added
+2022-12-12 13:39:21,888 - julearn - INFO - ==== Input Data ====
+2022-12-12 13:39:21,888 - julearn - INFO - Using dataframe as input
+2022-12-12 13:39:21,888 - julearn - INFO -      Features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2022-12-12 13:39:21,888 - julearn - INFO -      Target: target
+2022-12-12 13:39:21,889 - julearn - INFO - ====================
+2022-12-12 13:39:21,889 - julearn - INFO -
+2022-12-12 13:39:21,890 - julearn - INFO - = Model Parameters =
+2022-12-12 13:39:21,890 - julearn - INFO - ====================
+2022-12-12 13:39:21,890 - julearn - INFO -
+2022-12-12 13:39:21,890 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py:776: UserWarning: Scoring failed. The score on this train-test partition for these parameters will be set to nan. Details:
+Traceback (most recent call last):
+  File &quot;/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py&quot;, line 767, in _score
+    scores = scorer(estimator, X_test, y_test)
+  File &quot;/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_scorer.py&quot;, line 220, in __call__
+    return self._score(
+  File &quot;/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_scorer.py&quot;, line 268, in _score
+    return self._sign * self._score_func(y_true, y_pred, **self._kwargs)
+  File &quot;/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_regression.py&quot;, line 196, in mean_absolute_error
+    y_type, y_true, y_pred, multioutput = _check_reg_targets(
+  File &quot;/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_regression.py&quot;, line 111, in _check_reg_targets
+    raise ValueError(
+ValueError: y_true and y_pred have different number of output (1!=10)
+
+  warnings.warn(
+/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py:776: UserWarning: Scoring failed. The score on this train-test partition for these parameters will be set to nan. Details:
+Traceback (most recent call last):
+  File &quot;/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py&quot;, line 767, in _score
+    scores = scorer(estimator, X_test, y_test)
+  File &quot;/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_scorer.py&quot;, line 220, in __call__
+    return self._score(
+  File &quot;/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_scorer.py&quot;, line 268, in _score
+    return self._sign * self._score_func(y_true, y_pred, **self._kwargs)
+  File &quot;/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_regression.py&quot;, line 196, in mean_absolute_error
+    y_type, y_true, y_pred, multioutput = _check_reg_targets(
+  File &quot;/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_regression.py&quot;, line 111, in _check_reg_targets
+    raise ValueError(
+ValueError: y_true and y_pred have different number of output (1!=10)
+
+  warnings.warn(
+/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py:776: UserWarning: Scoring failed. The score on this train-test partition for these parameters will be set to nan. Details:
+Traceback (most recent call last):
+  File &quot;/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py&quot;, line 767, in _score
+    scores = scorer(estimator, X_test, y_test)
+  File &quot;/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_scorer.py&quot;, line 220, in __call__
+    return self._score(
+  File &quot;/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_scorer.py&quot;, line 268, in _score
+    return self._sign * self._score_func(y_true, y_pred, **self._kwargs)
+  File &quot;/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_regression.py&quot;, line 196, in mean_absolute_error
+    y_type, y_true, y_pred, multioutput = _check_reg_targets(
+  File &quot;/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_regression.py&quot;, line 111, in _check_reg_targets
+    raise ValueError(
+ValueError: y_true and y_pred have different number of output (1!=10)
+
+  warnings.warn(
+/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py:776: UserWarning: Scoring failed. The score on this train-test partition for these parameters will be set to nan. Details:
+Traceback (most recent call last):
+  File &quot;/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py&quot;, line 767, in _score
+    scores = scorer(estimator, X_test, y_test)
+  File &quot;/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_scorer.py&quot;, line 220, in __call__
+    return self._score(
+  File &quot;/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_scorer.py&quot;, line 268, in _score
+    return self._sign * self._score_func(y_true, y_pred, **self._kwargs)
+  File &quot;/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_regression.py&quot;, line 196, in mean_absolute_error
+    y_type, y_true, y_pred, multioutput = _check_reg_targets(
+  File &quot;/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_regression.py&quot;, line 111, in _check_reg_targets
+    raise ValueError(
+ValueError: y_true and y_pred have different number of output (1!=10)
+
+  warnings.warn(
+/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py:776: UserWarning: Scoring failed. The score on this train-test partition for these parameters will be set to nan. Details:
+Traceback (most recent call last):
+  File &quot;/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py&quot;, line 767, in _score
+    scores = scorer(estimator, X_test, y_test)
+  File &quot;/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_scorer.py&quot;, line 220, in __call__
+    return self._score(
+  File &quot;/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_scorer.py&quot;, line 268, in _score
+    return self._sign * self._score_func(y_true, y_pred, **self._kwargs)
+  File &quot;/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_regression.py&quot;, line 196, in mean_absolute_error
+    y_type, y_true, y_pred, multioutput = _check_reg_targets(
+  File &quot;/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_regression.py&quot;, line 111, in _check_reg_targets
+    raise ValueError(
+ValueError: y_true and y_pred have different number of output (1!=10)
+
+  warnings.warn(
    fit_time  score_time  test_score  repeat  fold
-0  0.009848    0.003534  -45.975447       0     0
-1  0.008728    0.003501  -44.766836       0     1
-2  0.007692    0.003501  -55.565397       0     2
-3  0.007533    0.003423  -50.495938       0     3
-4  0.007506    0.003395  -60.249163       0     4
+0  0.010072    0.004076         NaN       0     0
+1  0.008115    0.003229         NaN       0     1
+2  0.007975    0.003174         NaN       0     2
+3  0.007916    0.003201         NaN       0     3
+4  0.007872    0.003167         NaN       0     4
 </pre></div>
 </div>
 <p>Mean value of mean absolute error across CV</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">[</span><span class="s1">&#39;test_score&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">*</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>51.41055609328796
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>nan
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.138 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.141 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-basic-run-apply-to-target-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/1ca5c3f8a8553b78773484ea047a1ed2/run_apply_to_target.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">run_apply_to_target.py</span></code></a></p>

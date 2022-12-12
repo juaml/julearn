@@ -72,13 +72,13 @@ Set the logging level to info to see extra information
 
  .. code-block:: none
 
-    2022-12-08 11:48:52,286 - julearn - INFO - ===== Lib Versions =====
-    2022-12-08 11:48:52,286 - julearn - INFO - numpy: 1.23.5
-    2022-12-08 11:48:52,286 - julearn - INFO - scipy: 1.9.3
-    2022-12-08 11:48:52,286 - julearn - INFO - sklearn: 1.2.0rc1
-    2022-12-08 11:48:52,286 - julearn - INFO - pandas: 1.5.2
-    2022-12-08 11:48:52,287 - julearn - INFO - julearn: 0.1.dev1
-    2022-12-08 11:48:52,287 - julearn - INFO - ========================
+    2022-12-12 13:39:21,864 - julearn - INFO - ===== Lib Versions =====
+    2022-12-12 13:39:21,864 - julearn - INFO - numpy: 1.23.5
+    2022-12-12 13:39:21,864 - julearn - INFO - scipy: 1.9.3
+    2022-12-12 13:39:21,864 - julearn - INFO - sklearn: 1.2.0rc1
+    2022-12-12 13:39:21,864 - julearn - INFO - pandas: 1.5.2
+    2022-12-12 13:39:21,864 - julearn - INFO - julearn: 0.1.dev1
+    2022-12-12 13:39:21,864 - julearn - INFO - ========================
 
 
 
@@ -222,26 +222,101 @@ model and do not define the model in run_cross_validation
 
  .. code-block:: none
 
-    2022-12-08 11:48:52,310 - julearn - INFO - Adding step zscore that applies to <julearn.base.column_types.ColumnTypes object at 0x7ff7860ff8b0>
-    2022-12-08 11:48:52,310 - julearn - INFO - Step added
-    2022-12-08 11:48:52,310 - julearn - INFO - Adding step ridge that applies to <julearn.base.column_types.ColumnTypes object at 0x7ff7860feb60>
-    2022-12-08 11:48:52,310 - julearn - INFO - Step added
-    2022-12-08 11:48:52,310 - julearn - INFO - ==== Input Data ====
-    2022-12-08 11:48:52,310 - julearn - INFO - Using dataframe as input
-    2022-12-08 11:48:52,310 - julearn - INFO -      Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2022-12-08 11:48:52,310 - julearn - INFO -      Target: target
-    2022-12-08 11:48:52,311 - julearn - INFO - ====================
-    2022-12-08 11:48:52,311 - julearn - INFO - 
-    2022-12-08 11:48:52,313 - julearn - INFO - = Model Parameters =
-    2022-12-08 11:48:52,313 - julearn - INFO - ====================
-    2022-12-08 11:48:52,313 - julearn - INFO - 
-    2022-12-08 11:48:52,313 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+    2022-12-12 13:39:21,887 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'target'}; pattern=(?:target)>
+    2022-12-12 13:39:21,887 - julearn - INFO - Step added
+    2022-12-12 13:39:21,887 - julearn - INFO - Adding step ridge that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2022-12-12 13:39:21,887 - julearn - INFO - Step added
+    2022-12-12 13:39:21,888 - julearn - INFO - ==== Input Data ====
+    2022-12-12 13:39:21,888 - julearn - INFO - Using dataframe as input
+    2022-12-12 13:39:21,888 - julearn - INFO -      Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2022-12-12 13:39:21,888 - julearn - INFO -      Target: target
+    2022-12-12 13:39:21,889 - julearn - INFO - ====================
+    2022-12-12 13:39:21,889 - julearn - INFO - 
+    2022-12-12 13:39:21,890 - julearn - INFO - = Model Parameters =
+    2022-12-12 13:39:21,890 - julearn - INFO - ====================
+    2022-12-12 13:39:21,890 - julearn - INFO - 
+    2022-12-12 13:39:21,890 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+    /opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py:776: UserWarning: Scoring failed. The score on this train-test partition for these parameters will be set to nan. Details: 
+    Traceback (most recent call last):
+      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py", line 767, in _score
+        scores = scorer(estimator, X_test, y_test)
+      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_scorer.py", line 220, in __call__
+        return self._score(
+      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_scorer.py", line 268, in _score
+        return self._sign * self._score_func(y_true, y_pred, **self._kwargs)
+      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_regression.py", line 196, in mean_absolute_error
+        y_type, y_true, y_pred, multioutput = _check_reg_targets(
+      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_regression.py", line 111, in _check_reg_targets
+        raise ValueError(
+    ValueError: y_true and y_pred have different number of output (1!=10)
+
+      warnings.warn(
+    /opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py:776: UserWarning: Scoring failed. The score on this train-test partition for these parameters will be set to nan. Details: 
+    Traceback (most recent call last):
+      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py", line 767, in _score
+        scores = scorer(estimator, X_test, y_test)
+      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_scorer.py", line 220, in __call__
+        return self._score(
+      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_scorer.py", line 268, in _score
+        return self._sign * self._score_func(y_true, y_pred, **self._kwargs)
+      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_regression.py", line 196, in mean_absolute_error
+        y_type, y_true, y_pred, multioutput = _check_reg_targets(
+      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_regression.py", line 111, in _check_reg_targets
+        raise ValueError(
+    ValueError: y_true and y_pred have different number of output (1!=10)
+
+      warnings.warn(
+    /opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py:776: UserWarning: Scoring failed. The score on this train-test partition for these parameters will be set to nan. Details: 
+    Traceback (most recent call last):
+      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py", line 767, in _score
+        scores = scorer(estimator, X_test, y_test)
+      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_scorer.py", line 220, in __call__
+        return self._score(
+      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_scorer.py", line 268, in _score
+        return self._sign * self._score_func(y_true, y_pred, **self._kwargs)
+      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_regression.py", line 196, in mean_absolute_error
+        y_type, y_true, y_pred, multioutput = _check_reg_targets(
+      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_regression.py", line 111, in _check_reg_targets
+        raise ValueError(
+    ValueError: y_true and y_pred have different number of output (1!=10)
+
+      warnings.warn(
+    /opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py:776: UserWarning: Scoring failed. The score on this train-test partition for these parameters will be set to nan. Details: 
+    Traceback (most recent call last):
+      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py", line 767, in _score
+        scores = scorer(estimator, X_test, y_test)
+      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_scorer.py", line 220, in __call__
+        return self._score(
+      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_scorer.py", line 268, in _score
+        return self._sign * self._score_func(y_true, y_pred, **self._kwargs)
+      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_regression.py", line 196, in mean_absolute_error
+        y_type, y_true, y_pred, multioutput = _check_reg_targets(
+      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_regression.py", line 111, in _check_reg_targets
+        raise ValueError(
+    ValueError: y_true and y_pred have different number of output (1!=10)
+
+      warnings.warn(
+    /opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py:776: UserWarning: Scoring failed. The score on this train-test partition for these parameters will be set to nan. Details: 
+    Traceback (most recent call last):
+      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py", line 767, in _score
+        scores = scorer(estimator, X_test, y_test)
+      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_scorer.py", line 220, in __call__
+        return self._score(
+      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_scorer.py", line 268, in _score
+        return self._sign * self._score_func(y_true, y_pred, **self._kwargs)
+      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_regression.py", line 196, in mean_absolute_error
+        y_type, y_true, y_pred, multioutput = _check_reg_targets(
+      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_regression.py", line 111, in _check_reg_targets
+        raise ValueError(
+    ValueError: y_true and y_pred have different number of output (1!=10)
+
+      warnings.warn(
        fit_time  score_time  test_score  repeat  fold
-    0  0.009848    0.003534  -45.975447       0     0
-    1  0.008728    0.003501  -44.766836       0     1
-    2  0.007692    0.003501  -55.565397       0     2
-    3  0.007533    0.003423  -50.495938       0     3
-    4  0.007506    0.003395  -60.249163       0     4
+    0  0.010072    0.004076         NaN       0     0
+    1  0.008115    0.003229         NaN       0     1
+    2  0.007975    0.003174         NaN       0     2
+    3  0.007916    0.003201         NaN       0     3
+    4  0.007872    0.003167         NaN       0     4
 
 
 
@@ -263,7 +338,7 @@ Mean value of mean absolute error across CV
 
  .. code-block:: none
 
-    51.41055609328796
+    nan
 
 
 
@@ -271,7 +346,7 @@ Mean value of mean absolute error across CV
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.138 seconds)
+   **Total running time of the script:** ( 0 minutes  0.141 seconds)
 
 
 .. _sphx_glr_download_auto_examples_basic_run_apply_to_target.py:
