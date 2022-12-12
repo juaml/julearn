@@ -1,39 +1,55 @@
+"""Provide registry for target transformers."""
+
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
-from typing import List, Any
+
+from typing import List, Any, Optional, Dict, Type
+
+from copy import deepcopy
+
 from .ju_target_transformer import JuTargetTransformer
-from ...utils import raise_error
 from .target_confound_remover import TargetConfoundRemover
 
-_available_target_transformers = {
+from ...utils import raise_error, logger, warn
+
+_available_target_transformers: Dict[str, Type[JuTargetTransformer]] = {
     "confound_removal": TargetConfoundRemover,
 }
 
+_available_target_transformers_reset = deepcopy(_available_target_transformers)
+
 
 def list_target_transformers() -> List[str]:
-    """List all the available target transformers
+    """List all the available target transformers.
 
     Returns
     -------
-    out : list(str)
+    out : list of str
         A list will all the available transformer names.
     """
     return list(_available_target_transformers.keys())
 
 
 def get_target_transformer(name: str, **params: Any) -> JuTargetTransformer:
-    """Get a transformer
+    """Get a target transformer by name.
 
     Parameters
     ----------
     name : str
-        The transformer name
+        The target transformer name
+    **params
+        Parameters for the transformer.
 
     Returns
     -------
-    out : scikit-learn compatible transformer
+    JuTargetTransformer
         The transformer object.
+
+    Raises
+    ------
+    ValueError
+        If the specified target transformer name is not available.
     """
     out = None
     if name not in _available_target_transformers:
@@ -42,79 +58,67 @@ def get_target_transformer(name: str, **params: Any) -> JuTargetTransformer:
             f"Valid options are: {list(_available_target_transformers.keys())}"
         )
     trans = _available_target_transformers[name]
-    out = trans(**params)
+    # TODO: @samihamdan: fix this typing issue
+    out = trans(**params)  # type: ignore
     return out
 
 
-# class TargetTransfromerWrapper(TransformerMixin, BaseEstimator):
+def register_target_transformer(
+    transformer_name: str,
+    transformer_cls: Type[JuTargetTransformer],
+    overwrite: Optional[bool] = None,
+):
+    """Register a target transformer to julearn.
 
-#     def __init__(self, transformer, **params):
-#         """Using a sklearn transformer and applying them to the target/y.
+    Parameters
+    ----------
+    transformer_name : str
+        Name by which the transformer will be referenced by
+    transformer_cls : class(JuTargetTransformer)
+        The class by which the transformer can be initialized from.
+    overwrite : bool, optional
+        decides whether overwrite should be allowed.
+        Options are:
 
-#         Parameters
-#         ----------
-#         transformer : sklearn.base.TransformerMixin
-#             Any sklearn compatible transformer.
-#         """
-#         self.transformer = transformer
-#         self.transformer.set_params(**params)
+        * None : overwrite is possible, but warns the user
+        * True : overwrite is possible without any warning
+        * False : overwrite is not possible, error is raised instead
+    (default is None)
 
-#     def fit(self, X=None, y=None):
+    Raises
+    ------
+    ValueError
+        If `transformer_name` is already registered and `overwrite` is False.
 
-#         self._validate_XY_input(X, y)
-#         if type(y) == pd.Series:
-#             self.transformer.fit(pd.DataFrame(y))
-#         else:
-#             self.transformer.fit(y.reshape(-1, 1))
+    Warns
+    -----
+    RuntimeWarning
+        If `transformer_name` is already registered and `overwrite` is None.
+    """
+    if _available_target_transformers.get(transformer_name) is not None:
 
-#         return self
+        if overwrite is None:
+            warn(
+                f"Target transformer named {transformer_name} already exists. "
+                f"Therefore, {transformer_name} will be overwritten. To "
+                "remove this warning set overwrite=True."
+            )
+        elif overwrite is False:
+            raise_error(
+                f"Target transformer named {transformer_name} already exists "
+                "and overwrite is set to False. Set `overwrite=True` "
+                "in case you want to overwrite an existing target "
+                "transformer."
+            )
 
-#     def transform(self, X=None, y=None):
-#         self._validate_XY_input(X, y)
-#         if type(y) == pd.Series:
-#             _y = pd.DataFrame(y)
-#         else:
-#             _y = y.reshape(-1, 1)
-#         _y = self.transformer.transform(_y)
+    logger.info(f"registering transformer named {transformer_name}.")
 
-#         if type(_y) == pd.DataFrame:
-#             return _y.iloc[:, 0]
-#         else:
-#             return _y.reshape(-1)
-
-#     def fit_transform(self, X=None, y=None):
-#         self.fit(X, y)
-#         return self.transform(X, y)
-
-#     def get_params(self, deep=True):
-#         params = self.transformer.get_params()
-#         params['transformer'] = self.transformer
-#         return params
-
-#     def set_params(self, **params):
-#         if params.get('transformer') is None:
-#             self.transformer.set_params(**params)
-#         else:
-#             self.transformer = params.pop('transformer')
-#             self.transformer.set_params(**params)
-#         return self
-
-#     def _validate_XY_input(self, X, y):
-#         if y is None:
-#             raise_error('y should not be None when transforming it')
+    _available_target_transformers[transformer_name] = transformer_cls
 
 
-# def is_targettransformer(trans):
-
-#     is_targettrans = True
-#     if hasattr(trans, 'transform'):
-#         try:
-#             signature(trans.transform).parameters['y']
-#         except KeyError:
-#             is_targettrans = False
-#     else:
-#         raise_error(f'is_targettransformer can only be applied to '
-#                     f'sklearn compatible transformers. Object {trans} has no'
-#                     '.transform method. Therefore, it is no transformer.')
-
-#     return is_targettrans
+def reset_target_transformer_register() -> None:
+    """Reset the target transformer register to its initial state."""
+    global _available_target_transformers
+    _available_target_transformers = deepcopy(
+        _available_target_transformers_reset
+    )

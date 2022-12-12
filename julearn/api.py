@@ -12,7 +12,7 @@ from .pipeline import PipelineCreator
 from .utils import logger, raise_error
 from .utils.typing import ModelLike
 
-from .scoring import ju_check_scoring
+from .scoring import check_scoring
 
 
 def run_cross_validation(
@@ -98,7 +98,7 @@ def run_cross_validation(
     groups : str or numpy.array | None
         The grouping labels in case a Group CV is used.
         See https://juaml.github.io/julearn/input.html for details.
-    scoring : str | list(str) | obj | dict | None
+    scoring : ScorerLike, optional
         The scoring metric to use.
         See https://scikit-learn.org/stable/modules/model_evaluation.html for
         a comprehensive list of options. If None, use the model's default
@@ -254,7 +254,7 @@ def run_cross_validation(
     check_consistency(y, cv, groups, problem_type)
 
     cv_return_estimator = return_estimator in ["cv", "all"]
-    scoring = ju_check_scoring(pipeline, scoring)
+    scoring = check_scoring(pipeline, scoring)
 
     scores = cross_validate(
         pipeline,

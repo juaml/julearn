@@ -200,14 +200,24 @@ def register_model(
     regression_cls : ModelLike
         The class which will be used for
          regression problem_type.
-    overwrite : bool | None, optional
-        decides whether overwrite should be allowed, by default None.
+    overwrite : bool, optional
+        decides whether overwrite should be allowed.
         Options are:
 
         * None : overwrite is possible, but warns the user
         * True : overwrite is possible without any warning
         * False : overwrite is not possible, error is raised instead
+    (default is None)
 
+    Raises
+    ------
+    ValueError
+        If `model_name` is already registered and `overwrite` is False.
+
+    Warns
+    -----
+    RuntimeWarning
+        If `model_name` is already registered and `overwrite` is None.
     """
     problem_types = ["classification", "regression"]
     for cls, problem_type in zip(
@@ -254,14 +264,7 @@ def register_model(
                 _available_models[model_name] = {problem_type: cls}
 
 
-def reset_model_register() -> Dict[str, Dict[str, Type[ModelLike]]]:
-    """Reset the model register to the default state.
-
-    Returns
-    -------
-    ModelLike
-        The model register after reset
-    """
+def reset_model_register() -> None:
+    """Reset the model register to the default state."""
     global _available_models
     _available_models = deepcopy(_available_models_reset)
-    return _available_models

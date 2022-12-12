@@ -9,11 +9,17 @@ from typing import (
 import numpy as np
 import pandas as pd
 
+from sklearn.metrics._scorer import (
+    _ProbaScorer,
+    _ThresholdScorer,
+    _PredictScorer,
+)
 
 from ..base import ColumnTypes
 
 DataLike = Union[np.ndarray, pd.DataFrame, pd.Series]
 
+ScorerLike = Union[_ProbaScorer, _ThresholdScorer, _PredictScorer]
 
 @runtime_checkable
 class EstimatorLike(Protocol):

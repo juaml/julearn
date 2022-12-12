@@ -16,9 +16,10 @@ from ..utils.typing import TransformerLike, DataLike
 class JuTargetPipeline:
     """Class for pipelines that work on the target.
 
-    Unlike the sklearn pipeline, this pipeline fits and tranforms using both
-    X and y. This is useful for pipelines that work on the target but require
-    information from the input data, such as the TargetConfoundRemover or
+    Unlike the :class:`sklearn.pipeline.Pipeline`, this pipeline fits and
+    tranforms using both X and y. This is useful for pipelines that work on
+    the target but require information from the input data, such as the
+    :class:`julearn.transformers.target.TargetConfoundRemover` or
     a target encoder that requires one of the features to be present.
 
     IMPORTANT: Using any of the transformers that transforms the target
@@ -35,6 +36,8 @@ class JuTargetPipeline:
         self,
         steps: List[Tuple[str, Union[JuTargetTransformer, TransformerLike]]],
     ):
+        if not isinstance(steps, List):
+            raise TypeError("steps must be a list")
         self.steps = steps
 
     def fit_transform(self, X: pd.DataFrame, y: DataLike) -> DataLike:
@@ -87,6 +90,7 @@ class JuTargetPipeline:
             The input data.
         y : DataLike
             The target.
+
         Returns
         -------
         y : DataLike
@@ -100,3 +104,40 @@ class JuTargetPipeline:
             else:
                 y = t_step.transform(y[:, None])[:, 0]
         return y
+
+    def inverse_transform(self, X: pd.DataFrame, y: DataLike) -> DataLike:
+        """Inverse transform the target.
+
+        Parameters
+        ----------
+        X : pd.DataFrame
+            The input data.
+        y : DataLike
+            The target.
+
+        Returns
+        -------
+        y : DataLike
+            The inverse transformed target.
+        """
+        if not isinstance(y, np.ndarray):
+            y = np.array(y)
+        for _, t_step in reversed(self.steps):
+            if isinstance(t_step, JuTargetTransformer):
+                y = t_step.inverse_transform(X, y)  # type: ignore
+            else:
+                y = t_step.inverse_transform(y[:, None])[:, 0]  # type: ignore
+        return y
+
+    def can_inverse_transform(self) -> bool:
+        """Check if the pipeline can inverse transform.
+
+        Returns
+        -------
+        bool
+            True if the pipeline can inverse transform.
+        """
+        for _, t_step in self.steps:
+            if not hasattr(t_step, "inverse_transform"):
+                return False
+        return True

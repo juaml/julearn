@@ -650,10 +650,11 @@ class PipelineCreator:
             If there are extra types in the X_types that are not needed / used
             by the pipeline.
 
-        Warnings
-        --------
-        If there are extra types in the pipeline that are not specified in the
-        X_types.
+        Warns
+        -----
+        RuntimeWarning
+            If there are extra types in the pipeline that are not specified in
+            the X_types.
         """
         if X_types is None:
             X_types = {}

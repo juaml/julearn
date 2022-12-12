@@ -235,7 +235,6 @@ class WrapModel(JuBaseEstimator):
         -------
         DataLike
             The predictions.
-
         """
         Xt = self.filter_columns(X)
         return self.model_.predict(Xt)

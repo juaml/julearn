@@ -14,6 +14,8 @@ from sklearn.preprocessing import StandardScaler
 from julearn.transformers.target import JuTargetTransformer
 from julearn.pipeline.target_pipeline import JuTargetPipeline
 
+import pytest
+
 
 def test_target_pipeline_sklearn(
     X_iris: pd.DataFrame, y_iris: pd.Series
@@ -147,3 +149,12 @@ def test_target_pipeline_multiple_sk_ju(
     y_demeaned = y_scaled - mean  # type: ignore
 
     assert_array_equal(y_transformed, y_demeaned)
+
+
+def test_target_pipeline_errors() -> None:
+    """Test the target pipeline errors."""
+
+    steps = ("scaler", StandardScaler())
+
+    with pytest.raises(TypeError, match="steps must be a list"):
+        JuTargetPipeline(steps)  # type: ignore

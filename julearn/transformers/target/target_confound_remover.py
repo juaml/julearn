@@ -3,11 +3,18 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
+import typing
 from typing import Optional
+
+import numpy as np
+import pandas as pd
+
 from sklearn.base import clone
 from sklearn.linear_model import LinearRegression
 
+from ...base.column_types import ensure_column_types, ColumnTypesLike
 from .ju_target_transformer import JuTargetTransformer
+
 from ...utils.typing import ModelLike
 
 
@@ -33,51 +40,60 @@ class TargetConfoundRemover(JuTargetTransformer):
     def __init__(
         self,
         model_confound: Optional[ModelLike] = None,
-        confounds: str = "confound",
+        confounds: ColumnTypesLike = "confound",
         threshold: Optional[float] = None,
     ):
         if model_confound is None:
-            model_confound = LinearRegression()
+            # TODO: @samihamdan: fix the protocol
+            model_confound = LinearRegression()  # type: ignore
         self.model_confound = model_confound
-        self.confounds = confounds
+        self.confounds = ensure_column_types(confounds)
         self.threshold = threshold
 
-    def fit(self, X, y=None):
+    def fit(self, X: pd.DataFrame, y: pd.Series) -> "TargetConfoundRemover":
         """Fit ConfoundRemover.
 
         Parameters
         ----------
         X : pd.DataFrame
             Training data for the confound remover.
-        y : pd.Series, optional
+        y : pd.Series
             Training target values.
 
         Returns
         -------
-        self : returns an instance of self.
+        TargetConfoundRemover
+            The fitted target confound remover.
         """
-        self.confounds = self._ensure_column_types(self.confounds)
-
         self.model_confounds_ = clone(self.model_confound)
         self.detected_confounds_ = self.confounds.to_type_selector()(X)
         X_confounds = X.loc[:, self.detected_confounds_]
-        self.model_confounds_.fit(X_confounds.values, y)
+        # TODO: @samihamdan: fix the protocol and typings
+        self.model_confounds_.fit(X_confounds.values, y)  # type: ignore
         return self
 
-    def transform(self, X, y):
+    def transform(self, X: pd.DataFrame, y: pd.Series) -> pd.Series:
         """Remove confounds from the target.
 
         Parameters
         ----------
         X : pd.DataFrame
             Testing data for the confound remover.
-        y : pd.Series, optional
+        y : pd.Series
             Target values.
 
+        Returns
+        -------
+        pd.Series
+            The target with confounds removed.
         """
         X_confounds = X.loc[:, self.detected_confounds_]
-        y_pred = self.model_confounds_.predict(X_confounds.values)
+        # TODO: @samihamdan: fix the protocol and typings
+        y_pred = self.model_confounds_.predict(  # type: ignore
+            X_confounds.values
+        )
+        y_pred = typing.cast(pd.Series, y_pred)
         residuals = y - y_pred
         if self.threshold is not None:
-            residuals[abs(residuals) < self.threshold] = 0
+            residuals[np.abs(residuals) < self.threshold] = 0
         return residuals
