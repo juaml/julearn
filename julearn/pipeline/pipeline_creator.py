@@ -1,3 +1,9 @@
+"""PipelineCreator class."""
+
+# Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
+#          Sami Hamdan <s.hamdan@fz-juelich.de>
+# License: AGPL
+
 from typing import Any, Union, List, Dict, Optional, Tuple
 
 import numpy as np
@@ -13,44 +19,88 @@ from ..transformers import (
 )
 from ..models import list_models, get_model
 from ..utils import raise_error, warn, logger
-from ..base import ColumnTypes, WrapModel, JuTransformer
-from ..utils.typing import JuModelLike, JuEstimatorLike
+from ..base import ColumnTypes, WrapModel, JuTransformer, ColumnTypesLike
+from ..utils.typing import (
+    JuModelLike,
+    JuEstimatorLike,
+    EstimatorLike,
+    ModelLike,
+)
 from ..transformers import JuColumnTransformer
 from ..model_selection.available_searchers import list_searchers, get_searcher
 from .target_pipeline_creator import TargetPipelineCreator
+from .target_pipeline import JuTargetPipeline
 from ..transformers.target import JuTransformedTargetModel
 
 
-# class NoInversePipeline(Pipeline):
-#     def inverse_transform(self, X):
-#         return X
+def _params_to_pipeline(
+    param: Any, X_types: Dict[str, List], search_params: Optional[Dict]
+):
+    """Recursively convert params to pipelines.
 
+    Parameters
+    ----------
+    param : Any
+        The parameter to convert.
+    X_types : Dict[str, List]
+        The types of the columns in the data.
+    search_params : Optional[Dict]
+        The parameters to tune for this step, by default None
 
-def _params_to_pipeline(param, X_types):
+    Returns
+    -------
+    Any
+        The converted parameter.
+    """
     if isinstance(param, PipelineCreator):
-        param = param.to_pipeline(X_types=X_types)
+        param = param.to_pipeline(X_types=X_types, search_params=search_params)
     elif isinstance(param, list):
-        param = [_params_to_pipeline(_v, X_types) for _v in param]
+        param = [
+            _params_to_pipeline(_v, X_types, search_params) for _v in param
+        ]
     elif isinstance(param, dict):
         param = {
-            k: _params_to_pipeline(_v, X_types) for k, _v in param.items()
+            k: _params_to_pipeline(_v, X_types, search_params)
+            for k, _v in param.items()
         }
     elif isinstance(param, tuple):
-        param = tuple(_params_to_pipeline(_v, X_types) for _v in param)
+        param = tuple(
+            _params_to_pipeline(_v, X_types, search_params) for _v in param
+        )
     return param
 
 
 @dataclass
 class Step:
+    """Step class.
+
+    This class represents a step in a pipeline.
+
+
+    Parameters
+    ----------
+    name : str
+        The name of the step.
+    estimator : Any
+        The estimator to use.
+    apply_to : ColumnTypesLike
+        The types to apply this step to, by default "continuous"
+    needed_types : Any, optional
+        The types needed by this step (default is None)
+    params_to_tune : Optional[Dict], optional
+        The parameters to tune for this step, by default None
+    """
+
     name: str
-    estimator: Any
+    estimator: Union[JuEstimatorLike, EstimatorLike]
     apply_to: ColumnTypes = field(
         default_factory=lambda: ColumnTypes("continuous")
     )
-    needed_types: Any = None
+    needed_types: Optional[ColumnTypesLike] = None
     params_to_tune: Optional[Dict] = None
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
+        """Post init."""
         self.params_to_tune = (
             {} if self.params_to_tune is None else self.params_to_tune
         )
@@ -62,16 +112,21 @@ class PipelineCreator:  # Pipeline creator
     Parameters
     ----------
     problem_type: {"classification", "regression"}
-        The problem type for which this pipeline should be created.
+        The problem type for which the pipeline should be created.
+    apply_to: ColumnTypesLike, optional
+        To what should the transformers be applied to if not specified in
+        the `add` method (default is continuous).
     """
 
-    def __init__(self, problem_type, apply_to="continuous"):
+    def __init__(
+        self, problem_type: str, apply_to: ColumnTypesLike = "continuous"
+    ):
         if problem_type not in ["classification", "regression"]:
             raise_error(
                 "`problem_type` should be either 'classification' or "
                 "'regression'."
             )
-        self._steps = list()
+        self._steps = []
         self._added_target_transformer = False
         self._added_model = False
         self.apply_to = apply_to
@@ -79,36 +134,41 @@ class PipelineCreator:  # Pipeline creator
 
     def add(
         self,
-        step,
-        name=None,
-        apply_to=None,
-        **params,
+        step: Union[EstimatorLike, str],
+        name: Optional[str] = None,
+        apply_to: Optional[ColumnTypesLike] = None,
+        **params: Any,
     ) -> "PipelineCreator":
         """Add a step to the PipelineCreator.
-        This includes transformers and models.
 
         Parameters
         ----------
-        step : str or TransformerLike or ModelLike
+        step : EstimatorLike
             The step that should be added.
             This can be an available_transformer or
             available_model as a str or a sklearn compatible
             transformer or model.
-        apply_to: str or list of str or ColumnTypes, Optional
+        apply_to: ColumnTypesLike, optional
             To what should the transformer or model be applied to.
             This can be a str representing a column type or a list
-            of such str.
+            of such str (defaults to the `PipelineCreator.apply_to` attribute).
         **params
-            Parameters for the step. This will mostly include hyperparameters
-            or any other parameter for initialization.
+            Parameters for the step. This will mostly include
+            hyperparameters or any other parameter for initialization.
             If you provide multiple options for hyperparameters then
-            this will lead to a pipeline with a search which is by
-            default GridSearchCV.
+            this will lead to a pipeline with a search.
 
         Returns
         -------
         PipelineCreator
             The PipelineCreator with the added step as its last step.
+
+        Raises
+        ------
+        ValueError
+            If the step is not a valid step, if the problem_type is
+            specified in the params or if the step is a
+            TargetPipelineCreator and the apply_to is not "target".
         """
 
         if "problem_type" in params:
@@ -125,19 +185,14 @@ class PipelineCreator:  # Pipeline creator
                 raise_error(
                     "TargetPipelineCreator can only be added to the target."
                 )
-            step = step.to_pipeline()
+            # TODO: @samihamdan fix the protocol
+            step = step.to_pipeline()  # type: ignore
 
         # Validate the step
         self.validate_step(step, apply_to)
 
         # If the user did not give a name, we will create one.
-        if name is None:
-            name = (
-                step
-                if isinstance(step, str)
-                else step.__class__.__name__.lower()
-            )
-            name = self._ensure_name(name)
+        name = self._get_step_name(name, step)
         logger.info(f"Adding step {name} that applies to {apply_to}")
 
         # Find which parameters should be set and which should be tuned.
@@ -158,28 +213,28 @@ class PipelineCreator:  # Pipeline creator
                 params_to_set[param] = vals
 
         # Build the estimator for this step
-        estimator = step
-        if isinstance(estimator, str):
-            estimator = self.get_estimator_from(
+        if isinstance(step, str):
+            step = self._get_estimator_from(
                 step, self.problem_type, **params_to_set
             )
 
         # JuEstimators accept the apply_to parameter and return needed types
-
-        if isinstance(estimator, JuEstimatorLike):
-            if "apply_to" in estimator.get_params(deep=False):
-                estimator.set_params(apply_to=apply_to)
-            needed_types = estimator.get_needed_types()
+        if isinstance(step, JuEstimatorLike):
+            # But some JuEstimators might fix the apply_to parameter
+            if "apply_to" in step.get_params(deep=False):
+                step.set_params(apply_to=apply_to)
+            needed_types = step.get_needed_types()
         else:
             needed_types = apply_to
 
         # For target transformers we need to add the target_ prefix
         if apply_to == "target":
             name = f"target_{name}"
+
         self._steps.append(
             Step(
                 name=name,
-                estimator=estimator,
+                estimator=step,
                 apply_to=apply_to,
                 needed_types=needed_types,
                 params_to_tune=params_to_tune,
@@ -189,10 +244,12 @@ class PipelineCreator:  # Pipeline creator
         return self
 
     @property
-    def steps(self):
+    def steps(self) -> List[Step]:
+        """Get the steps that have been added to the PipelineCreator."""
         return self._steps
 
     def has_model(self) -> bool:
+        """Whether the PipelineCreator has a model."""
         return self._added_model
 
     @classmethod
@@ -201,8 +258,31 @@ class PipelineCreator:  # Pipeline creator
         transformers: Union[str, list],
         model_params: dict,
         problem_type: str,
-    ):
-        preprocessor = cls(problem_type)
+        apply_to: ColumnTypesLike = "continuous",
+    ) -> "PipelineCreator":
+        """Create a PipelineCreator from a list of transformers and parameters.
+
+        Parameters
+        ----------
+        transformers : Union[str, list]
+            The transformers that should be added to the PipelineCreator.
+            This can be a str or a list of str.
+        model_params : dict
+            The parameters for the model and the transformers.
+            This should be a dict with the keys being the name of the
+            transformer or the model and the values being a dict with
+            the parameters for that transformer or model.
+        problem_type : str
+            The problem_type for which the piepline should be created.
+        apply_to : ColumnTypesLike, optional
+            To what should the transformers be applied to if not specified in
+            the `add` method (default is continuous).
+        Returns
+        -------
+        PipelineCreator
+            The PipelineCreator with the steps added
+        """
+        creator = cls(problem_type=problem_type, apply_to=apply_to)
         if isinstance(transformers, str):
             transformers = [transformers]
         for transformer_name in transformers:
@@ -211,13 +291,28 @@ class PipelineCreator:  # Pipeline creator
                 for x, y in model_params.items()
                 if x.startswith(f"{transformer_name}__")
             }
-            preprocessor.add(transformer_name, **t_params)
-        return preprocessor
+            creator.add(transformer_name, **t_params)
+        return creator
 
     def to_pipeline(
-        self, X_types: Optional[Dict[str, List]] = None, search_params=None
-    ):
+        self,
+        X_types: Optional[Dict[str, List]] = None,
+        search_params: Optional[Dict[str, Any]] = None,
+    ) -> Pipeline:
+        """Create a pipeline from the PipelineCreator.
 
+        Parameters
+        ----------
+        X_types : Optional[Dict[str, List]], optional
+            The types of the columns in the data, by default None
+        search_params : Optional[Dict], optional
+            The parameters for the search, by default None
+
+        Returns
+        -------
+        sklearn.pipeline.Pipeline
+            The pipeline created from the PipelineCreator
+        """
         logger.debug("Creating pipeline")
         if not self.has_model():
             raise_error("Cannot create a pipeline without a model")
@@ -225,7 +320,7 @@ class PipelineCreator:  # Pipeline creator
             ("set_column_types", SetColumnTypes(X_types))
         ]
 
-        self.check_X_types(X_types)
+        X_types = self._check_X_types(X_types)
         model_step = self._steps[-1]
 
         target_transformer_step = None
@@ -249,7 +344,9 @@ class PipelineCreator:  # Pipeline creator
 
             # Wrap in a JuTransformer if needed
             if self.wrap and not isinstance(estimator, JuTransformer):
-                estimator = self.wrap_step(name, estimator, step_dict.apply_to)
+                estimator = self._wrap_step(
+                    name, estimator, step_dict.apply_to
+                )
 
             pipeline_steps.append((name, estimator))
 
@@ -267,7 +364,9 @@ class PipelineCreator:  # Pipeline creator
 
         model_params = model_estimator.get_params(deep=False)
         model_params = {
-            k: _params_to_pipeline(v, X_types=X_types)
+            k: _params_to_pipeline(
+                v, X_types=X_types, search_params=search_params
+            )
             for k, v in model_params.items()
         }
         model_estimator.set_params(**model_params)
@@ -286,12 +385,13 @@ class PipelineCreator:  # Pipeline creator
         if self._added_target_transformer:
             # If we have a target transformer, we need to wrap the model
             # in a the right "Targeted" transformer.
-            # TODO: Deal with hyperparemeters in the model (@samihamdan )
+            # TODO: Deal with hyperparemeters in the model (@samihamdan)
+            # TODO: @samihamdan: Fix the model_estimator typing hints
             target_model_step = self.wrap_target_model(
                 model_name,
-                model_estimator,
-                target_transformer_step
-                )
+                model_estimator,  # type: ignore
+                target_transformer_step,  # type: ignore
+            )
             pipeline_steps.append(target_model_step)
         else:
             # if not, just add a model as the last step
@@ -300,49 +400,53 @@ class PipelineCreator:  # Pipeline creator
         pipeline = Pipeline(pipeline_steps).set_output(transform="pandas")
 
         # Deal with the Hyperparameter tuning
-        out = self.prepare_hyperparameter_tuning(
+        out = self._prepare_hyperparameter_tuning(
             params_to_tune, search_params, pipeline
         )
         logger.debug("Pipeline created")
         return out
 
     @staticmethod
-    def prepare_hyperparameter_tuning(params_to_tune, search_params, pipeline):
-        """Prepare model parameters.
-
-        For each of the model parameters, determine if it can be directly set
-        or must be tuned using hyperparameter tuning.
+    def _prepare_hyperparameter_tuning(
+        params_to_tune: Dict[str, Any],
+        search_params: Optional[Dict[str, Any]],
+        pipeline: Pipeline,
+    ):
+        """Prepare hyperparameter tuning in the pipeline.
 
         Parameters
         ----------
-        msel_dict : dict
-            A dictionary with the model selection parameters.The dictionary can
-            define the following keys:
+        params_to_tune : dict
+            A dictionary with the parameters to tune. The keys of the
+            dictionary should be named 'STEP__PARAMETER', to be used as
+            PARAMETER for STEP in the pipeline. Example:
+            'svm__probability': True will set the parameter 'probability' of
+            the 'svm' step. The value of the parameter must be a list of
+            values to test.
 
-            * 'STEP__PARAMETER': A value (or several) to be used as PARAMETER
-            for STEP in the pipeline. Example: 'svm__probability':
-            True will set
-            the parameter 'probability' of the 'svm' model. If more than option
+        search_params : dict
+            The parameters for the search. The following keys are accepted:
+
             * 'search': The kind of search algorithm to use e.g.:
-            'grid' or 'random'. All valid julearn searchers can be entered.
+              'grid' or 'random'. All valid julearn searchers can be entered.
             * 'cv': If search is going to be used, the cross-validation
-            splitting strategy to use. Defaults to same CV as for the model
-            evaluation.
+              splitting strategy to use. Defaults to same CV as for the model
+              evaluation.
             * 'scoring': If search is going to be used, the scoring metric to
-            evaluate the performance.
-            * 'search_params': Additional parameters for the search method.
+              evaluate the performance.
 
-        pipeline : ExtendedDataframePipeline
+        pipeline : sklearn.pipeline.Pipeline
             The pipeline to apply/tune the hyperparameters
 
         Returns
         -------
-        pipeline : ExtendedDataframePipeline
+        sklearn.pipeline.Pipeline
             The modified pipeline
         """
         logger.info("= Model Parameters =")
 
-        search_params = {} if search_params is None else search_params
+        if search_params is None:
+            search_params = {}
         if len(params_to_tune) > 0:
             search = search_params.get("kind", "grid")
             scoring = search_params.get("scoring", None)
@@ -378,7 +482,11 @@ class PipelineCreator:  # Pipeline creator
             logger.info("Search Parameters:")
             for k, v in search_params.items():
                 logger.info(f"\t{k}: {v}")
-            pipeline = search(pipeline, params_to_tune, **search_params)
+
+            # TODO: missing searcher typing
+            pipeline = search(  # type: ignore
+                pipeline, params_to_tune, **search_params
+            )
         elif search_params is not None and len(search_params) > 0:
             warn(
                 "Hyperparameter search parameters were specified, but no "
@@ -389,46 +497,61 @@ class PipelineCreator:  # Pipeline creator
         return pipeline
 
     @staticmethod
-    def wrap_target_model(model_name, model, target_transformer_step):
-        # model_params = {} if model_params is None else model_params
-        # model_params = {
-        #     f"regressor__{param}": val for param, val in model_params.items()
-        # }
-        # TODO: Wrap into the JuTranformedTargetModel
-        # TODO: Deal with the reverse in the JuTransformedTargetModel
-        # def check_has_valid_reverse(est):
-        #     valid_reverse = True
-        #     if isinstance(est, Pipeline):
-        #         for _step in est.steps:
-        #             if not check_has_valid_reverse(_step[1]):
-        #                 return False
-        #     else:
-        #         if not hasattr(est, "inverse_transform"):
-        #             valid_reverse = False
-        #         return valid_reverse
+    def wrap_target_model(
+        model_name: str, model: ModelLike, target_transformer_step: Step
+    ) -> Tuple[str, JuTransformedTargetModel]:
+        """Wrap the model in a JuTransformedTargetModel.
 
-        # pipe_trans_steps = []
-        # valid_reverse = True
-        # for step in target_transformer_steps:
-        #     name, est = step.name, step.estimator
-        #     pipe_trans_steps.append([name, est])
-        #     if not check_has_valid_reverse(est):
-        #         valid_reverse = False
+        Parameters
+        ----------
+        model_name : str
+            The name of the model
+        model : ModelLike
+            The model to wrap
+        target_transformer_step : Step
+            The step with the target transformer.
 
-        # transformer_pipe = (
-        #     Pipeline(pipe_trans_steps)
-        #     if valid_reverse
-        #     else NoInversePipeline(pipe_trans_steps)
-        # )
+        Returns
+        -------
+        str :
+            The name of the model.
+        JuTransformedTargetModel :
+            The wrapped model.
+
+        Raises
+        ------
+        ValueError
+            If the target transformer is not a JuTargetPipeline.
+        """
+        transformer = target_transformer_step.estimator
+        if not isinstance(transformer, JuTargetPipeline):
+            raise_error(
+                "The target transformer should be a JuTargetPipeline. "
+                f"Got {type(transformer)}"
+            )
         target_model = JuTransformedTargetModel(
             model=model,
-            transformer=target_transformer_step.estimator,
-            # check_inverse=False,
+            transformer=transformer,
         )
         return (f"{model_name}_target_transform", target_model)
 
-    def _validate_model_params(self, model_name, model_params):
+    def _validate_model_params(
+        self, model_name: str, model_params: Dict[str, Any]
+    ) -> None:
+        """Validate the model parameters.
 
+        Parameters
+        ----------
+        model_name : str
+            The name of the model.
+        model_params : dict
+            The parameters of the model to validate.
+
+        Raises
+        ------
+        ValueError
+            If the model parameters are not valid.
+        """
         for param in model_params.keys():
             if "__" in param:
                 est_name = param.split("__")[0]
@@ -438,13 +561,50 @@ class PipelineCreator:  # Pipeline creator
                         f"Got {param} for {est_name}."
                     )
 
-    def _ensure_name(self, name):
+    def _get_step_name(
+        self, name: Optional[str], step: Union[EstimatorLike, str]
+    ) -> str:
+        """Get the name of a step, with a count if it is repeated.
 
+        Parameters
+        ----------
+        step : EstimatorLike or str
+            The step to get the name for.
+
+        Returns
+        -------
+        name : str
+            The name of the step.
+        """
+        if name is None:
+            name = (
+                step
+                if isinstance(step, str)
+                else step.__class__.__name__.lower()
+            )
         count = np.array([_step.name == name for _step in self._steps]).sum()
         return f"{name}_{count}" if count > 0 else name
 
-    def validate_step(self, step, apply_to):
+    def validate_step(
+        self, step: Union[EstimatorLike, str], apply_to: ColumnTypesLike
+    ) -> None:
+        """Validate a step.
 
+        Parameters
+        ----------
+        step : EstimatorLike or str
+            The step to validate.
+        apply_to : str
+            The type of data the step is applied to.
+
+        Raises
+        ------
+        ValueError
+            If the step is not a valid step, if the tranformer is added after
+            adding a model, or if a transformer is added after a target
+            transformer.
+
+        """
         if self._is_transfromer_step(step):
             if self._added_model:
                 raise_error("Cannot add a transformer after adding a model")
@@ -461,9 +621,36 @@ class PipelineCreator:  # Pipeline creator
         else:
             raise_error(f"Cannot add a {step}. I don't know what it is.")
 
-    def check_X_types(self, X_types: Optional[Dict] = None):
+    def _check_X_types(
+        self, X_types: Optional[Dict] = None
+    ) -> Dict[str, List[str]]:
+        """Check the X_types against the pipeline creator settings.
+
+        Parameters
+        ----------
+        X_types : dict, optional
+            The types of the columns in the data.
+
+        Returns
+        -------
+        X_types : dict
+            The types of the columns in the data after the check.
+
+        Raises
+        ------
+        ValueError
+            If there are extra types in the X_types that are not needed / used
+            by the pipeline.
+
+        Warnings
+        --------
+        If there are extra types in the pipeline that are not specified in the
+        X_types.
+        """
+        if X_types is None:
+            X_types = {}
         # Get the set of all types in the X_types
-        if X_types is None or X_types == {}:
+        if X_types == {}:
             all_X_types = ColumnTypes("continuous")
         else:
             all_X_types = ColumnTypes(list(X_types.keys()))
@@ -503,9 +690,11 @@ class PipelineCreator:  # Pipeline creator
                 )
 
         self.wrap = needed_types != set(["continuous"])
+        return X_types
 
     @staticmethod
-    def _is_transfromer_step(step):
+    def _is_transfromer_step(step: Union[str, EstimatorLike]) -> bool:
+        """Check if a step is a transformer."""
         if step in list_transformers():
             return True
         if hasattr(step, "fit") and hasattr(step, "transform"):
@@ -513,7 +702,8 @@ class PipelineCreator:  # Pipeline creator
         return False
 
     @staticmethod
-    def _is_model_step(step):
+    def _is_model_step(step: Union[EstimatorLike, str]) -> bool:
+        """Check if a step is a model."""
         if step in list_models():
             return True
         if hasattr(step, "fit") and hasattr(step, "predict"):
@@ -521,11 +711,46 @@ class PipelineCreator:  # Pipeline creator
         return False
 
     @staticmethod
-    def wrap_step(name, step, column_types):
+    def _wrap_step(name, step, column_types) -> JuColumnTransformer:
+        """Wrap a step in a JuColumnTransformer.
+
+        Parameters
+        ----------
+        name : str
+            The name of the step.
+        step : EstimatorLike
+            The step to wrap.
+        column_types : ColumnTypesLike
+            The types of the columns the step is applied to.
+        """
         return JuColumnTransformer(name, step, column_types)
 
     @staticmethod
-    def get_estimator_from(name, problem_type, **kwargs):
+    def _get_estimator_from(
+        name: str, problem_type: str, **kwargs: Any
+    ) -> EstimatorLike:
+        """Get an estimator from a name.
+
+        Parameters
+        ----------
+        name : str
+            The name of the estimator.
+        problem_type : str
+            The problem type.
+        **kwargs : dict
+            The keyword arguments to pass to the estimator constructor.
+
+        Returns
+        -------
+        estimator : EstimatorLike
+            The estimator.
+
+        Raises
+        ------
+        ValueError
+            If the name is not a registered transformer or model.
+
+        """
         if name in list_transformers():
             return get_transformer(name, **kwargs)
         if name in list_models():

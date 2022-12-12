@@ -1,9 +1,24 @@
+"""Provides tests for the pipeline creator module."""
+
+# Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
+#          Sami Hamdan <s.hamdan@fz-juelich.de>
+# License: AGPL
+
+from typing import List, Dict, Callable
+
+import pandas as pd
+
+from sklearn.model_selection import GridSearchCV
+
 import warnings
+
+from julearn.base import WrapModel, ColumnTypesLike
 from julearn.pipeline import PipelineCreator
 from julearn.pipeline.pipeline_creator import JuColumnTransformer
 from julearn.transformers import get_transformer
 from julearn.models import get_model
-from sklearn.model_selection import GridSearchCV
+
+
 import pytest
 from pytest_lazyfixture import lazy_fixture
 
@@ -16,14 +31,27 @@ from pytest_lazyfixture import lazy_fixture
         )
     ],
 )
-def test_construction_working(model, preprocess, problem_type):
-    pipeline_creator = PipelineCreator(problem_type=problem_type)
+def test_construction_working(
+    model: str, preprocess: List[str], problem_type: str
+) -> None:
+    """Test that the pipeline constructions works as epxected.
+
+    Parameters
+    ----------
+    model : str
+        The model to test.
+    preprocess : List[str]
+        The preprocessing steps to test.
+    problem_type : str
+        The problem type to test.
+    """
+    creator = PipelineCreator(problem_type=problem_type)
     preprocess = preprocess if isinstance(preprocess, list) else [preprocess]
     for step in preprocess:
-        pipeline_creator.add(step, apply_to="categorical")
-    pipeline = pipeline_creator.add(model).to_pipeline(
-        dict(categorical=["A"]), search_params={}
-    )
+        creator.add(step, apply_to="categorical")
+    creator.add(model)
+    X_types = {"categorical": ["A"]}
+    pipeline = creator.to_pipeline(X_types=X_types)
 
     # check preprocessing steps
     # ignoring first step for types and last for model
@@ -37,6 +65,7 @@ def test_construction_working(model, preprocess, problem_type):
 
     # check model step
     model_name, model = pipeline.steps[-1]
+    assert isinstance(model, WrapModel)
     assert isinstance(
         model.model,
         get_model(
@@ -56,18 +85,32 @@ def test_construction_working(model, preprocess, problem_type):
     ],
 )
 def test_fit_and_transform_no_error(
-    X_iris, y_iris, model, preprocess, problem_type
-):
+    X_iris: pd.DataFrame,
+    y_iris: pd.Series,
+    model: str,
+    preprocess: List[str],
+    problem_type: str,
+) -> None:
+    """Test that the pipeline fit and transform does not give an error.
 
-    pipeline = (
-        PipelineCreator.from_list(
-            preprocess, model_params={}, problem_type=problem_type
-        )
-        .add(
-            model,
-        )
-        .to_pipeline(dict())
+    Parameters
+    ----------
+    X_iris : pd.DataFrame
+        The iris dataset features
+    y_iris : pd.Series
+        The iris dataset target variable.
+    model : str
+        The model to test.
+    preprocess : List[str]
+        The preprocessing steps to test.
+    problem_type : str
+        The problem type to test.
+    """
+    creator = PipelineCreator.from_list(
+        preprocess, model_params={}, problem_type=problem_type
     )
+    creator.add(model)
+    pipeline = creator.to_pipeline({})
     pipeline.fit(X_iris, y_iris)
     pipeline[:-1].transform(X_iris)
 
@@ -81,16 +124,31 @@ def test_fit_and_transform_no_error(
     ],
 )
 def test_hyperparameter_tuning(
-    X_types_iris,
-    model,
-    preprocess,
-    problem_type,
-    get_tunning_params,
-):
+    X_types_iris: Dict[str, List[str]],
+    model: str,
+    preprocess: List[str],
+    problem_type: str,
+    get_tuning_params: Callable,
+) -> None:
+    """Test that the pipeline hyperparameter tuning works as expected.
 
-    preprocess = [preprocess] if isinstance(preprocess, str) else preprocess
+    Parameters
+    ----------
+    X_types_iris : Dict[str, List[str]]
+        The iris dataset features types.
+    model : str
+        The model to test.
+    preprocess : List[str]
+        The preprocessing steps to test.
+    problem_type : str
+        The problem type to test.
+    get_tuning_params : Callable
+        A function that returns the tuning hyperparameters for a given step.
+    """
+    if isinstance(preprocess, str):
+        preprocess = [preprocess]
 
-    pipeline_creator = PipelineCreator(problem_type=problem_type)
+    creator = PipelineCreator(problem_type=problem_type)
     param_grid = {}
 
     used_types = (
@@ -99,24 +157,20 @@ def test_hyperparameter_tuning(
         else list(X_types_iris.keys())
     )
     for step in preprocess:
-        default_params = get_tunning_params(step)
-        pipeline_creator = pipeline_creator.add(
-            step, apply_to=used_types, **default_params
-        )
+        default_params = get_tuning_params(step)
+        creator.add(step, apply_to=used_types, **default_params)
         params = {
             f"{step}__{param}": val for param, val in default_params.items()
         }
         param_grid.update(params)
 
-    model_params = get_tunning_params(model)
-    pipeline_creator = pipeline_creator.add(
-        model,  **model_params
-    )
+    model_params = get_tuning_params(model)
+    creator.add(model, **model_params)
 
     param_grid.update(
         {f"{model}__{param}": val for param, val in model_params.items()}
     )
-    pipeline = pipeline_creator.to_pipeline(X_types=X_types_iris)
+    pipeline = creator.to_pipeline(X_types=X_types_iris)
 
     assert isinstance(pipeline, GridSearchCV)
     assert pipeline.param_grid == param_grid
@@ -135,15 +189,28 @@ def test_hyperparameter_tuning(
         ({"continuous": "A", "cat": "B"}, [".*"], False),
     ],
 )
-def test_X_types_to_pattern_warnings(X_types, apply_to, warns):
+def test_X_types_to_pattern_warnings(
+    X_types: Dict[str, List[str]], apply_to: ColumnTypesLike, warns: bool
+) -> None:
+    """Test that the X_types raises the expected warnings.
+
+    Parameters
+    ----------
+    X_types : Dict[str, List[str]]
+        The X_types to test.
+    apply_to : ColumnTypesLike
+        The apply_to to test.
+    warns : bool
+        Whether the test should raise a warning.
+    """
     pipeline_creator = PipelineCreator(problem_type="classification").add(
         "zscore", apply_to=apply_to
     )
     if warns:
         with pytest.warns(match="is not in the provided X_types"):
-            pipeline_creator.check_X_types(X_types)
+            pipeline_creator._check_X_types(X_types)
     else:
-        pipeline_creator.check_X_types(X_types)
+        pipeline_creator._check_X_types(X_types)
 
 
 @pytest.mark.parametrize(
@@ -159,54 +226,69 @@ def test_X_types_to_pattern_warnings(X_types, apply_to, warns):
         ({"continuous": "A", "cat": "B"}, [".*"], False),
     ],
 )
-def test_X_types_to_pattern_errors(apply_to, X_types, error):
+def test_X_types_to_pattern_errors(
+    X_types: Dict[str, List[str]], apply_to: ColumnTypesLike, error: bool
+) -> None:
+    """Test that the X_types raises the expected errors.
+
+    Parameters
+    ----------
+    X_types : Dict[str, List[str]]
+        The X_types to test.
+    apply_to : ColumnTypesLike
+        The apply_to to test.
+    error : bool
+        Whether the test should raise a warning.
+    """
     pipeline_creator = PipelineCreator(problem_type="classification").add(
         "zscore", apply_to=apply_to
     )
     if error:
         with pytest.raises(ValueError, match="Extra X_types were provided"):
-            pipeline_creator.check_X_types(X_types)
+            pipeline_creator._check_X_types(X_types)
     else:
-        pipeline_creator.check_X_types(X_types)
+        pipeline_creator._check_X_types(X_types)
 
 
-def test_pipelinecreator_default_apply_to():
+def test_pipelinecreator_default_apply_to() -> None:
+    """Test pipeline creator using the default apply_to."""
 
     pipeline_creator = PipelineCreator(problem_type="classification").add(
         "rf", apply_to="chicken"
     )
 
     with pytest.raises(ValueError, match="Extra X_types were provided"):
-        pipeline_creator.check_X_types({"duck": "B"})
+        pipeline_creator._check_X_types({"duck": "B"})
 
     pipeline_creator = PipelineCreator(problem_type="classification").add(
         "rf", apply_to=["chicken", "duck"]
     )
     with pytest.warns(match="is not in the provided X_types"):
-        pipeline_creator.check_X_types({"chicken": "teriyaki"})
+        pipeline_creator._check_X_types({"chicken": "teriyaki"})
 
     pipeline_creator = PipelineCreator(problem_type="classification").add(
         "rf", apply_to="*"
     )
-    pipeline_creator.check_X_types({"duck": "teriyaki"})
+    pipeline_creator._check_X_types({"duck": "teriyaki"})
 
 
-def test_pipelinecreator_default_constructor_apply_to():
+def test_pipelinecreator_default_constructor_apply_to() -> None:
     """Test pipeline creator using a default apply_to in the constructor."""
     pipeline_creator = PipelineCreator(
         problem_type="classification", apply_to="duck"
     ).add("rf")
-    pipeline_creator.check_X_types({"duck": "teriyaki"})
+    pipeline_creator._check_X_types({"duck": "teriyaki"})
 
     pipeline_creator = PipelineCreator(
         problem_type="classification", apply_to="duck"
     )
     pipeline_creator.add("zscore", apply_to="chicken")
     pipeline_creator.add("rf")
-    pipeline_creator.check_X_types({"duck": "teriyaki", "chicken": "1"})
+    pipeline_creator._check_X_types({"duck": "teriyaki", "chicken": "1"})
 
 
-def test_added_model_target_transform():
+def test_added_model_target_transform() -> None:
+    """Test that the added model and target transformer are set correctly."""
     pipeline_creator = PipelineCreator(problem_type="classification").add(
         "zscore", apply_to="continuous"
     )
@@ -218,7 +300,8 @@ def test_added_model_target_transform():
     assert pipeline_creator._added_model
 
 
-def test_stacking(X_iris, y_iris):
+def test_stacking(X_iris: pd.DataFrame, y_iris: pd.Series) -> None:
+    """Test that the stacking model works correctly."""
     # Define our feature types
     X_types = {
         "sepal": ["sepal_length", "sepal_width"],
@@ -250,29 +333,4 @@ def test_stacking(X_iris, y_iris):
         model.fit(X_iris, y_iris)
 
 
-# @pytest.mark.parametrize(
-#     "target_transformer,reverse_pipe",
-#     [
-#         ("zscore", True),
-#         # ("remove_confound", False),
-#     ],
-# )
-# def test_target_transformer(X_iris, y_iris, target_transformer,
-# reverse_pipe):
-#     model = (
-#         PipelineCreator(problem_type="regression")
-#         .add("zscore")
-#         .add(target_transformer, apply_to="target")
-#         .add("svm")
-#     )
-#     model = model.to_pipeline({})
-#     # target transformer and model becomes one
-#     assert len(model.steps) == 3
-#     model.fit(X_iris, y_iris)
-#     if reverse_pipe:
-#         assert isinstance(model.steps[-1][1].transformer, Pipeline)
-#         assert not isinstance(
-#             model.steps[-1][1].transformer, NoInversePipeline
-#         )
-#     else:
-#         assert isinstance(model.steps[-1][1].transformer, NoInversePipeline)
+# TODO: Test adding target transformers

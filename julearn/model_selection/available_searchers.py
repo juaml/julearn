@@ -29,6 +29,7 @@ def list_searchers() -> List[str]:
     return list(_available_searchers)
 
 
+# TODO: @samihamdan: add a searcher typing hint in julearn.typing
 def get_searcher(name: str) -> object:
     """Get a searcher by name.
 

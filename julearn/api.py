@@ -241,7 +241,7 @@ def run_cross_validation(
                     "Cannot use model_params with a model object. Use either "
                     "a string or a PipelineCreator"
                 )
-        pipeline_creator.add(model, **t_params)
+        pipeline_creator.add(step=model, **t_params)
 
         pipeline = pipeline_creator.to_pipeline(
             X_types=X_types, search_params=search_params

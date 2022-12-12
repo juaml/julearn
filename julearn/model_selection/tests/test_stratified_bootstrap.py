@@ -41,7 +41,5 @@ def test_stratified_bootstrap(n_classes: int, test_size: float) -> None:
             n_y = (y == i).sum()
             n_y_train = (y_train == i).sum()
             n_y_test = (y_test == i).sum()
-            print(n_y_test)
-            print(n_y_train)
             assert abs(n_y_train - (n_y * (1 - test_size))) < 1
             assert abs(n_y_test - (n_y * test_size)) < 1

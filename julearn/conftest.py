@@ -169,7 +169,7 @@ _tuning_params = {
 
 
 @fixture(scope="module")
-def get_tunning_params() -> Callable:
+def get_tuning_params() -> Callable:
     """Return a function that returns the parameters to tune for a given step.
 
     Returns
