@@ -205,7 +205,7 @@ class WrapModel(JuBaseEstimator):
         X : pd.DataFrame
             The data to fit the model on.
         y : DataLike, optional
-            The target data, by default None
+            The target data (default is None).
         **fit_params : Any
             Additional parameters to pass to the model's fit method.
 

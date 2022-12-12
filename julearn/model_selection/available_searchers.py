@@ -1,7 +1,9 @@
 """Provide registry of searchers."""
+
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
+
 from typing import List, Optional
 
 from copy import deepcopy

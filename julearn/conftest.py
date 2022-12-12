@@ -34,6 +34,37 @@ def df_typed_iris() -> pd.DataFrame:
 
 
 @fixture(scope="module")
+def df_iris() -> pd.DataFrame:
+    """Return the iris dataset.
+
+    Returns
+    -------
+    df : pd.DataFrame
+        The iris dataset with types.
+    """
+    df = load_dataset("iris")
+    df = typing.cast(pd.DataFrame, df)
+
+    return df
+
+
+@fixture(scope="module")
+def df_binary() -> pd.DataFrame:
+    """Return the iris dataset as a binary classification problem.
+
+    Returns
+    -------
+    df : pd.DataFrame
+        The iris dataset with types.
+    """
+    df_iris = load_dataset("iris")
+    df_iris = typing.cast(pd.DataFrame, df_iris)
+    df_binary = df_iris[df_iris["species"].isin(["setosa", "virginica"])]
+
+    return df_binary
+
+
+@fixture(scope="module")
 def X_iris() -> pd.DataFrame:
     """Return the iris dataset features.
 

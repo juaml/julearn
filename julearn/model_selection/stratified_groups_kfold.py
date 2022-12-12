@@ -1,7 +1,9 @@
 """Stratified-Groups K-Fold cross validators for regression problems."""
+
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
+
 from typing import Optional, Union
 import numpy as np
 from numpy.random import RandomState
