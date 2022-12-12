@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Regression Analysis &mdash; julearn  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery-rendered-html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Reference" href="../../api.html" />
+    <link rel="prev" title="Return Confounds in Confound Removal" href="dis_run_return_confounds.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html">
+            <img src="../../_static/julearn_logo_it.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installing julearn</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../input.html">Input Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../pipeline.html">Understanding the pipeline</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../scoring.html">Scoring</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../steps.html">Available Pipeline Steps</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../hyperparameters.html">Hyperparameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../basic/index.html">Basic Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Advanced Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="run_combine_pandas.html">Working with pandas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dis_run_target_confound_removal.html">Confound Removal (model comparison)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run_stacked_models.html">Stacking Classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dis_run_grouped_cv.html">Grouped CV.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dis_run_custom_scorers_regression.html">Custom Scoring Function for Regression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dis_run_hyperparameter_tuning.html">Tuning Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dis_run_return_confounds.html">Return Confounds in Confound Removal</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Regression Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing to julearn</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maintaining.html">Maintaining julearn</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What’s new</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">julearn</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Advanced Examples</a></li>
+      <li class="breadcrumb-item active">Regression Analysis</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/auto_examples/advanced/run_example_pca_featsets.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-auto-examples-advanced-run-example-pca-featsets-py"><span class="std std-ref">here</span></a>
+to download the full example code</p>
+</div>
+<section class="sphx-glr-example-title" id="regression-analysis">
+<span id="sphx-glr-auto-examples-advanced-run-example-pca-featsets-py"></span><h1>Regression Analysis<a class="headerlink" href="#regression-analysis" title="Permalink to this heading"></a></h1>
+<p>This example uses the ‘diabetes’ data from sklearn datasets and performs
+a regression analysis using a Ridge Regression model.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Authors: Georgios Antonopoulos &lt;g.antonopoulos@fz-juelich.de&gt;</span>
+<span class="c1">#          Kaustubh R. Patil &lt;k.patil@fz-juelich.de&gt;</span>
+<span class="c1"># Original: Shammi More &lt;s.more@fz-juelich.de&gt;</span>
+<span class="c1">#          Federico Raimondo &lt;f.raimondo@fz-juelich.de&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># License: AGPL</span>
+
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_diabetes.html#sklearn.datasets.load_diabetes" title="sklearn.datasets.load_diabetes" class="sphx-glr-backref-module-sklearn-datasets sphx-glr-backref-type-py-function"><span class="n">load_diabetes</span></a>
+<span class="kn">from</span> <span class="nn">sklearn.metrics</span> <span class="kn">import</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.metrics.mean_absolute_error.html#sklearn.metrics.mean_absolute_error" title="sklearn.metrics.mean_absolute_error" class="sphx-glr-backref-module-sklearn-metrics sphx-glr-backref-type-py-function"><span class="n">mean_absolute_error</span></a>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html#sklearn.model_selection.train_test_split" title="sklearn.model_selection.train_test_split" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-function"><span class="n">train_test_split</span></a>
+
+<span class="kn">from</span> <span class="nn">julearn</span> <span class="kn">import</span> <span class="n">run_cross_validation</span>
+<span class="kn">from</span> <span class="nn">julearn.utils</span> <span class="kn">import</span> <span class="n">configure_logging</span>
+<span class="kn">from</span> <span class="nn">julearn.pipeline</span> <span class="kn">import</span> <span class="n">PipelineCreator</span>
+<span class="kn">from</span> <span class="nn">julearn.inspect</span> <span class="kn">import</span> <span class="n">preprocess</span>
+</pre></div>
+</div>
+<p>Set the logging level to info to see extra information</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-12-12 13:35:58,947 - julearn - INFO - ===== Lib Versions =====
+2022-12-12 13:35:58,947 - julearn - INFO - numpy: 1.23.5
+2022-12-12 13:35:58,947 - julearn - INFO - scipy: 1.9.3
+2022-12-12 13:35:58,947 - julearn - INFO - sklearn: 1.2.0rc1
+2022-12-12 13:35:58,947 - julearn - INFO - pandas: 1.5.2
+2022-12-12 13:35:58,947 - julearn - INFO - julearn: 0.0.1.dev1
+2022-12-12 13:35:58,947 - julearn - INFO - ========================
+</pre></div>
+</div>
+<p>load the diabetes data from sklearn as a pandas dataframe</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">features</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_diabetes.html#sklearn.datasets.load_diabetes" title="sklearn.datasets.load_diabetes" class="sphx-glr-backref-module-sklearn-datasets sphx-glr-backref-type-py-function"><span class="n">load_diabetes</span></a><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">as_frame</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Dataset contains ten variables age, sex, body mass index, average  blood
+pressure, and six blood serum measurements (s1-s6) diabetes patients and
+a quantitative measure of disease progression one year after baseline which
+is the target we are interested in predicting.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Features: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">features</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Target: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">target</span><span class="o">.</span><span class="n">describe</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Features:
+         age       sex       bmi  ...        s4        s5        s6
+0  0.038076  0.050680  0.061696  ... -0.002592  0.019907 -0.017646
+1 -0.001882 -0.044642 -0.051474  ... -0.039493 -0.068332 -0.092204
+2  0.085299  0.050680  0.044451  ... -0.002592  0.002861 -0.025930
+3 -0.089063 -0.044642 -0.011595  ...  0.034309  0.022688 -0.009362
+4  0.005383 -0.044642 -0.036385  ... -0.002592 -0.031988 -0.046641
+
+[5 rows x 10 columns]
+Target:
+ count    442.000000
+mean     152.133484
+std       77.093005
+min       25.000000
+25%       87.000000
+50%      140.500000
+75%      211.500000
+max      346.000000
+Name: target, dtype: float64
+</pre></div>
+</div>
+<p>Let’s combine features and target together in one dataframe and define X
+and y</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data_diabetes</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">features</span><span class="p">,</span> <span class="n">target</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;age&quot;</span><span class="p">,</span> <span class="s2">&quot;sex&quot;</span><span class="p">,</span> <span class="s2">&quot;bmi&quot;</span><span class="p">,</span> <span class="s2">&quot;bp&quot;</span><span class="p">,</span> <span class="s2">&quot;s1&quot;</span><span class="p">,</span> <span class="s2">&quot;s2&quot;</span><span class="p">,</span> <span class="s2">&quot;s3&quot;</span><span class="p">,</span> <span class="s2">&quot;s4&quot;</span><span class="p">,</span> <span class="s2">&quot;s5&quot;</span><span class="p">,</span> <span class="s2">&quot;s6&quot;</span><span class="p">]</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a> <span class="o">=</span> <span class="s2">&quot;target&quot;</span>
+</pre></div>
+</div>
+<p>Assign types to the features
+and create feature groups for PCA
+we will keep 1 component per PCA group</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X_types</span></a> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;pca1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;age&quot;</span><span class="p">,</span> <span class="s2">&quot;bmi&quot;</span><span class="p">,</span> <span class="s2">&quot;bp&quot;</span><span class="p">],</span>
+           <span class="s1">&#39;pca2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;s1&quot;</span><span class="p">,</span> <span class="s2">&quot;s2&quot;</span><span class="p">,</span> <span class="s2">&quot;s3&quot;</span><span class="p">,</span> <span class="s2">&quot;s4&quot;</span><span class="p">,</span> <span class="s2">&quot;s5&quot;</span><span class="p">,</span> <span class="s2">&quot;s6&quot;</span><span class="p">],</span>
+           <span class="s1">&#39;categorical&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;sex&#39;</span><span class="p">]}</span>
+</pre></div>
+</div>
+<p>Create a pipeline to process the data and the fit a model
+We must specify how each X_type will be used
+For example if in the last step we do not specify
+<cite>apply_to=[‘continuous’, ‘categorical’]</cite>
+then the pipeline will not know what to do with the categorical features</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s1">&#39;regression&#39;</span><span class="p">)</span>
+<span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;pca&#39;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s1">&#39;pca1&#39;</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;pca_feats1&#39;</span><span class="p">)</span>
+<span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;pca&#39;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s1">&#39;pca2&#39;</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;pca_feats2&#39;</span><span class="p">)</span>
+<span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;ridge&#39;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;continuous&#39;</span><span class="p">,</span> <span class="s1">&#39;categorical&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-12-12 13:35:58,968 - julearn - INFO - Adding step pca_feats1 that applies to ColumnTypes&lt;types={&#39;pca1&#39;}; pattern=(?:__:type:__pca1)&gt;
+2022-12-12 13:35:58,968 - julearn - INFO - Setting hyperparameter n_components = 1
+2022-12-12 13:35:58,969 - julearn - INFO - Step added
+2022-12-12 13:35:58,969 - julearn - INFO - Adding step pca_feats2 that applies to ColumnTypes&lt;types={&#39;pca2&#39;}; pattern=(?:__:type:__pca2)&gt;
+2022-12-12 13:35:58,969 - julearn - INFO - Setting hyperparameter n_components = 1
+2022-12-12 13:35:58,969 - julearn - INFO - Step added
+2022-12-12 13:35:58,969 - julearn - INFO - Adding step ridge that applies to ColumnTypes&lt;types={&#39;categorical&#39;, &#39;continuous&#39;}; pattern=(?:__:type:__categorical|__:type:__continuous)&gt;
+2022-12-12 13:35:58,969 - julearn - INFO - Step added
+
+&lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7f83ac7d8e20&gt;
+</pre></div>
+</div>
+<p>Split the dataset into train and test</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">train_diabetes</span><span class="p">,</span> <span class="n">test_diabetes</span> <span class="o">=</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html#sklearn.model_selection.train_test_split" title="sklearn.model_selection.train_test_split" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-function"><span class="n">train_test_split</span></a><span class="p">(</span><span class="n">data_diabetes</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Train a ridge regression model on train dataset and use mean absolute error
+for scoring</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">scores</span><span class="p">,</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model</span></a> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X_types</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X_types</span></a><span class="p">,</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">train_diabetes</span><span class="p">,</span>
+    <a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model</span></a><span class="o">=</span><span class="n">creator</span><span class="p">,</span>
+    <span class="n">scoring</span><span class="o">=</span><span class="s2">&quot;r2&quot;</span><span class="p">,</span>
+    <span class="n">return_estimator</span><span class="o">=</span><span class="s1">&#39;final&#39;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-12-12 13:35:58,970 - julearn - INFO - ==== Input Data ====
+2022-12-12 13:35:58,971 - julearn - INFO - Using dataframe as input
+2022-12-12 13:35:58,971 - julearn - INFO -      Features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2022-12-12 13:35:58,971 - julearn - INFO -      Target: target
+2022-12-12 13:35:58,972 - julearn - INFO - ====================
+2022-12-12 13:35:58,972 - julearn - INFO -
+2022-12-12 13:35:58,973 - julearn - INFO - = Model Parameters =
+2022-12-12 13:35:58,973 - julearn - INFO - ====================
+2022-12-12 13:35:58,973 - julearn - INFO -
+2022-12-12 13:35:58,974 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+</pre></div>
+</div>
+<p>The scores dataframe has all the values for each CV split.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>   fit_time  score_time  test_score  repeat  fold
+0  0.021780    0.008960    0.357761       0     0
+1  0.021235    0.008985    0.258557       0     1
+2  0.021091    0.009140    0.175047       0     2
+3  0.021374    0.009432    0.142032       0     3
+4  0.021090    0.009042    0.267244       0     4
+</pre></div>
+</div>
+<p>Mean value of mean absolute error across CV</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">[</span><span class="s2">&quot;test_score&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.24012827860483918
+</pre></div>
+</div>
+<p>Let’s see how the data looks like after preprocessing
+We will process the data until the first PCA step
+We should get the first
+PCA component for [‘age’, ‘bmi’, ‘bp’] and other  features untouched</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data_processed1</span> <span class="o">=</span> <span class="n">preprocess</span><span class="p">(</span><a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">train_diabetes</span><span class="p">,</span> <span class="n">until</span><span class="o">=</span><span class="s1">&#39;pca_feats1&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Data after preprocessing until PCA step 1&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data_processed1</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="c1"># We will process the data until the second PCA step</span>
+<span class="c1"># We should now also get one PCA component for [&#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]</span>
+<span class="n">data_processed2</span> <span class="o">=</span> <span class="n">preprocess</span><span class="p">(</span><a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">train_diabetes</span><span class="p">,</span> <span class="n">until</span><span class="o">=</span><span class="s1">&#39;pca_feats2&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Data after preprocessing until PCA step 2&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">data_processed2</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Data after preprocessing until PCA step 1
+     pca_feats1__pca0       sex        s1  ...        s4        s5        s6
+129         -0.019585 -0.044642  0.009439  ...  0.034309  0.038968  0.119043
+435          0.041017 -0.044642 -0.016704  ... -0.002592 -0.038460 -0.038357
+38          -0.098466  0.050680  0.087868  ...  0.071210  0.071429  0.023775
+113         -0.063011  0.050680  0.014942  ...  0.034309  0.046662  0.090049
+159         -0.076617 -0.044642  0.013567  ... -0.002592  0.042341 -0.017646
+
+[5 rows x 8 columns]
+Data after preprocessing until PCA step 2
+     pca_feats2__pca0  pca_feats1__pca0       sex
+129          0.089504         -0.019585 -0.044642
+435         -0.027415          0.041017 -0.044642
+38           0.149376         -0.098466  0.050680
+113          0.096089         -0.063011  0.050680
+159          0.023801         -0.076617 -0.044642
+</pre></div>
+</div>
+<p>Now we can get the MAE fold and repetition:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">df_mae</span> <span class="o">=</span> <span class="n">scores</span><span class="o">.</span><span class="n">set_index</span><span class="p">([</span><span class="s2">&quot;repeat&quot;</span><span class="p">,</span> <span class="s2">&quot;fold&quot;</span><span class="p">])[</span><span class="s2">&quot;test_score&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unstack</span><span class="p">()</span> <span class="o">*</span> <span class="o">-</span><span class="mi">1</span>
+<span class="n">df_mae</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;Repeats&quot;</span>
+<span class="n">df_mae</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;K-fold splits&quot;</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">df_mae</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>K-fold splits         0         1         2         3         4
+Repeats
+0             -0.357761 -0.258557 -0.175047 -0.142032 -0.267244
+</pre></div>
+</div>
+<p>Plot heatmap of mean absolute error (MAE) over all repeats and CV splits</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span><span class="n">df_mae</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;YlGnBu&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Cross-validation MAE&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img src="../../_images/sphx_glr_run_example_pca_featsets_001.png" srcset="../../_images/sphx_glr_run_example_pca_featsets_001.png" alt="Cross-validation MAE" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Cross-validation MAE&#39;)
+</pre></div>
+</div>
+<p>Use the final model to make predictions on test data and plot scatterplot
+of true values vs predicted values</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">y_true</span> <span class="o">=</span> <span class="n">test_diabetes</span><span class="p">[</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">]</span>
+<span class="n">y_pred</span> <span class="o">=</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline.predict" title="sklearn.pipeline.Pipeline.predict" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-method"><span class="n">model</span><span class="o">.</span><span class="n">predict</span></a><span class="p">(</span><span class="n">test_diabetes</span><span class="p">[</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">])</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mae</span></a> <span class="o">=</span> <span class="nb">format</span><span class="p">(</span><a href="https://scikit-learn.org/stable/modules/generated/sklearn.metrics.mean_absolute_error.html#sklearn.metrics.mean_absolute_error" title="sklearn.metrics.mean_absolute_error" class="sphx-glr-backref-module-sklearn-metrics sphx-glr-backref-type-py-function"><span class="n">mean_absolute_error</span></a><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">),</span> <span class="s2">&quot;.2f&quot;</span><span class="p">)</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">corr</span></a> <span class="o">=</span> <span class="nb">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">y_pred</span><span class="p">,</span> <span class="n">y_true</span><span class="p">)[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;.2f&quot;</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s2">&quot;darkgrid&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_true</span><span class="p">)</span>
+<span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()</span>
+<span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">text</span></a> <span class="o">=</span> <span class="s2">&quot;MAE: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mae</span></a><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;   CORR: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">corr</span></a><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;True values&quot;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;Predicted values&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Actual vs Predicted&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">text</span></a><span class="p">(</span>
+    <span class="n">xmax</span> <span class="o">-</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="n">xmax</span><span class="p">,</span>
+    <span class="n">ymax</span> <span class="o">-</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="n">ymax</span><span class="p">,</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">text</span></a><span class="p">,</span>
+    <span class="n">verticalalignment</span><span class="o">=</span><span class="s2">&quot;top&quot;</span><span class="p">,</span>
+    <span class="n">horizontalalignment</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span>
+    <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">&quot;scaled&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img src="../../_images/sphx_glr_run_example_pca_featsets_002.png" srcset="../../_images/sphx_glr_run_example_pca_featsets_002.png" alt="Actual vs Predicted" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>(9.2, 356.8, 9.2, 356.8)
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.547 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-advanced-run-example-pca-featsets-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/429133fd8a806e927ce8d40c7b316a67/run_example_pca_featsets.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">run_example_pca_featsets.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/f68e3b3a7883ec3b92d4802041100245/run_example_pca_featsets.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">run_example_pca_featsets.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="dis_run_return_confounds.html" class="btn btn-neutral float-left" title="Return Confounds in Confound Removal" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../api.html" class="btn btn-neutral float-right" title="Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2020, Authors of julearn.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+    <!-- Theme Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CB4ETK4DBG"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-CB4ETK4DBG', {
+          'anonymize_ip': false,
+      });
+    </script> 
+
+</body>
+</html>
