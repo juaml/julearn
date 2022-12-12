@@ -13,7 +13,7 @@ from sklearn.feature_selection import (GenericUnivariateSelect,
 from . cbpm import CBPM
 from . dataframe import DropColumns, ChangeColumnTypes, FilterColumns
 from .. utils import raise_error, warn, logger
-from . confounds import DataFrameConfoundRemover
+from .confound_remover import ConfoundRemover
 
 """
 a dictionary containing all supported transformers
@@ -43,7 +43,7 @@ _available_transformers = {
     # Custom
     'cbpm': CBPM,
     # DataFrame operations
-    'remove_confound': DataFrameConfoundRemover,
+    'remove_confound': ConfoundRemover,
     'drop_columns': DropColumns,
     'change_column_types': ChangeColumnTypes,
     'filter_columns': FilterColumns,

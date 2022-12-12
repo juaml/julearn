@@ -1,10 +1,21 @@
+"""Provides tests for the base estimators."""
+
+# Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
+#          Sami Hamdan <s.hamdan@fz-juelich.de>
+# License: AGPL
+
+from typing import List, Type
 import pytest
 import numpy as np
 from numpy.testing import assert_almost_equal
-from julearn.base import WrapModel
+import pandas as pd
+
 from sklearn.linear_model import LinearRegression, LogisticRegression
 from sklearn.svm import SVR, SVC
 from sklearn.tree import DecisionTreeRegressor, DecisionTreeClassifier
+
+from julearn.base import WrapModel, ColumnTypesLike
+from julearn.utils.typing import ModelLike
 
 
 @pytest.fixture(
@@ -18,6 +29,7 @@ from sklearn.tree import DecisionTreeRegressor, DecisionTreeClassifier
     ]
 )
 def model(request):
+    """Fixture for the models."""
     return request.param
 
 
@@ -62,17 +74,42 @@ def model(request):
         ),
     ],
 )
-def test_WrapModel(X_iris, y_iris, model, apply_to, column_types, selection):
+def test_WrapModel(
+    X_iris: pd.DataFrame,
+    y_iris: pd.DataFrame,
+    model: Type[ModelLike],
+    apply_to: ColumnTypesLike,
+    column_types: List[str],
+    selection: slice,
+) -> None:
+    """Test the WrapModel class.
 
+    Parameters
+    ----------
+    X_iris : pd.DataFrame
+        The iris dataset features.
+    y_iris : pd.DataFrame
+        The iris dataset labels.
+    model : ModelLike
+        The model to test.
+    apply_to : ColumnTypesLike
+        The column types to apply the model to.
+    column_types : list of
+        The column types to set in X_iris.
+    selection : slice
+        The columns that the apply_to selector should select.
+    """
     column_types = [col or "continuous" for col in column_types]
-    X_iris.columns = [
-        f"{col.split('__:type:__')[0]}__:type:__{ctype}"
+    to_rename = {
+        col: f"{col.split('__:type:__')[0]}__:type:__{ctype}"
         for col, ctype in zip(X_iris.columns, column_types)
-    ]
+    }
+    X_iris.rename(columns=to_rename, inplace=True)
     X_iris_selected = X_iris.iloc[:, selection]
 
     np.random.seed(42)
-    lr = model().fit(X_iris_selected, y_iris)
+    lr = model()
+    lr.fit(X_iris_selected, y_iris)
     pred_sk = lr.predict(X_iris_selected)
 
     np.random.seed(42)

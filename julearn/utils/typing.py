@@ -1,46 +1,70 @@
-from typing import runtime_checkable, Protocol
+from typing import (
+    runtime_checkable,
+    Protocol,
+    Optional,
+    Any,
+    Dict,
+    Union,
+)
+import numpy as np
+import pandas as pd
+
+
+from ..base import ColumnTypes
+
+DataLike = Union[np.ndarray, pd.DataFrame, pd.Series]
 
 
 @runtime_checkable
 class EstimatorLike(Protocol):
-    def fit(self, X, y=None):
-        pass
+    def fit(self, X, y, **kwargs: Any) -> "EstimatorLike":
+        return self
 
-    def get_params(self, deep=True):
-        pass
+    def get_params(self, deep=True) -> Dict:
+        return {}
 
-    def set_params(self, **set_params):
-        pass
+    def set_params(self, **params) -> "EstimatorLike":
+        return self
 
 
 @runtime_checkable
 class TransformerLike(EstimatorLike, Protocol):
-    def transform(self, X):
+    def fit(self, X, y=None, **fit_params):
         pass
 
-    def fit_transform(self, X, y=None):
-        pass
+    def transform(self, X: DataLike) -> DataLike:
+        return X
+
+    def fit_transform(
+        self, X: DataLike, y: Optional[DataLike] = None
+    ) -> DataLike:
+        return X
 
 
 @runtime_checkable
 class ModelLike(EstimatorLike, Protocol):
-    def predict(self, X):
-        pass
+    classes_: np.ndarray
+
+    def predict(self, X) -> DataLike:
+        return np.zeros(1)
+
+    def score(self, X, y, sample_weight=None) -> float:
+        return 0.0
 
 
 @runtime_checkable
 class JuEstimatorLike(EstimatorLike, Protocol):
-    def get_needed_types(self):
-        return self.needed_types
+    def get_needed_types(self) -> ColumnTypes:
+        return ColumnTypes("placeholder")
 
-    def get_apply_to(self):
-        return self.apply_to
+    def get_apply_to(self) -> ColumnTypes:
+        return ColumnTypes("placeholder")
 
 
 @runtime_checkable
 class JuModelLike(ModelLike, Protocol):
-    def get_needed_types(self):
-        return self.needed_types
+    def get_needed_types(self) -> ColumnTypes:
+        return ColumnTypes("placeholder")
 
-    def get_apply_to(self):
-        return self.apply_to
+    def get_apply_to(self) -> ColumnTypes:
+        return ColumnTypes("placeholder")

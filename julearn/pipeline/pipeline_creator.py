@@ -1,9 +1,7 @@
 from typing import Any, Union, List, Dict, Optional, Tuple
 
 import numpy as np
-from sklearn.compose import (
-    TransformedTargetRegressor,
-)
+
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import check_cv
 from dataclasses import dataclass, field
@@ -19,11 +17,13 @@ from ..base import ColumnTypes, WrapModel, JuTransformer
 from ..utils.typing import JuModelLike, JuEstimatorLike
 from ..transformers import JuColumnTransformer
 from ..model_selection.available_searchers import list_searchers, get_searcher
+from .target_pipeline_creator import TargetPipelineCreator
+from ..transformers.target import JuTransformedTargetModel
 
 
-class NoInversePipeline(Pipeline):
-    def inverse_transform(self, X):
-        return X
+# class NoInversePipeline(Pipeline):
+#     def inverse_transform(self, X):
+#         return X
 
 
 def _params_to_pipeline(param, X_types):
@@ -83,7 +83,7 @@ class PipelineCreator:  # Pipeline creator
         name=None,
         apply_to=None,
         **params,
-    ):
+    ) -> "PipelineCreator":
         """Add a step to the PipelineCreator.
         This includes transformers and models.
 
@@ -107,8 +107,8 @@ class PipelineCreator:  # Pipeline creator
 
         Returns
         -------
-        PipelineCreator: PipelineCreator
-        returns a PipelineCreator with the added step as its last step.
+        PipelineCreator
+            The PipelineCreator with the added step as its last step.
         """
 
         if "problem_type" in params:
@@ -116,15 +116,31 @@ class PipelineCreator:  # Pipeline creator
                 "Please provide the problem_type directly"
                 " and only to the PipelineCreator like this"
                 " PipelineCreator(problem_type=problem_type)"
-
             )
         apply_to = self.apply_to if apply_to is None else apply_to
         apply_to = ColumnTypes(apply_to)
+
+        if isinstance(step, TargetPipelineCreator):
+            if apply_to != "target":
+                raise_error(
+                    "TargetPipelineCreator can only be added to the target."
+                )
+            step = step.to_pipeline()
+
+        # Validate the step
         self.validate_step(step, apply_to)
+
+        # If the user did not give a name, we will create one.
         if name is None:
-            name = step if isinstance(step, str) else step.__cls__.lower()
+            name = (
+                step
+                if isinstance(step, str)
+                else step.__class__.__name__.lower()
+            )
             name = self._ensure_name(name)
         logger.info(f"Adding step {name} that applies to {apply_to}")
+
+        # Find which parameters should be set and which should be tuned.
         params_to_set = dict()
         params_to_tune = dict()
         for param, vals in params.items():
@@ -140,16 +156,24 @@ class PipelineCreator:  # Pipeline creator
             else:
                 logger.info(f"Setting hyperparameter {param} = {vals}")
                 params_to_set[param] = vals
-        estimator = (
-            self.get_estimator_from(step, self.problem_type, **params_to_set)
-            if isinstance(step, str)
-            else step
-        )
+
+        # Build the estimator for this step
+        estimator = step
+        if isinstance(estimator, str):
+            estimator = self.get_estimator_from(
+                step, self.problem_type, **params_to_set
+            )
+
+        # JuEstimators accept the apply_to parameter and return needed types
+
         if isinstance(estimator, JuEstimatorLike):
-            estimator.set_params(apply_to=apply_to)
+            if "apply_to" in estimator.get_params(deep=False):
+                estimator.set_params(apply_to=apply_to)
             needed_types = estimator.get_needed_types()
         else:
             needed_types = apply_to
+
+        # For target transformers we need to add the target_ prefix
         if apply_to == "target":
             name = f"target_{name}"
         self._steps.append(
@@ -204,12 +228,12 @@ class PipelineCreator:  # Pipeline creator
         self.check_X_types(X_types)
         model_step = self._steps[-1]
 
-        target_transformer_steps = []
+        target_transformer_step = None
         transformer_steps = []
 
         for _step in self._steps[:-1]:
             if _step.apply_to == "target":
-                target_transformer_steps.append(_step)
+                target_transformer_step = _step
             else:
                 transformer_steps.append(_step)
 
@@ -260,16 +284,17 @@ class PipelineCreator:  # Pipeline creator
         logger.debug("\t Looking for nested pipeline creators")
         logger.debug(f"\t Params to tune: {step_params_to_tune}")
         if self._added_target_transformer:
-            target_model_step, step_params_to_tune = self.wrap_target_model(
+            # If we have a target transformer, we need to wrap the model
+            # in a the right "Targeted" transformer.
+            # TODO: Deal with hyperparemeters in the model (@samihamdan )
+            target_model_step = self.wrap_target_model(
                 model_name,
                 model_estimator,
-                target_transformer_steps,
-                step_params_to_tune,
-            )
-            params_to_tune.update(step_params_to_tune)
+                target_transformer_step
+                )
             pipeline_steps.append(target_model_step)
         else:
-
+            # if not, just add a model as the last step
             params_to_tune.update(step_params_to_tune)
             pipeline_steps.append((model_name, model_estimator))
         pipeline = Pipeline(pipeline_steps).set_output(transform="pandas")
@@ -364,44 +389,43 @@ class PipelineCreator:  # Pipeline creator
         return pipeline
 
     @staticmethod
-    def wrap_target_model(
-        model_name, model, target_transformer_steps, model_params=None
-    ):
-        model_params = {} if model_params is None else model_params
-        model_params = {
-            f"regressor__{param}": val for param, val in model_params.items()
-        }
+    def wrap_target_model(model_name, model, target_transformer_step):
+        # model_params = {} if model_params is None else model_params
+        # model_params = {
+        #     f"regressor__{param}": val for param, val in model_params.items()
+        # }
+        # TODO: Wrap into the JuTranformedTargetModel
+        # TODO: Deal with the reverse in the JuTransformedTargetModel
+        # def check_has_valid_reverse(est):
+        #     valid_reverse = True
+        #     if isinstance(est, Pipeline):
+        #         for _step in est.steps:
+        #             if not check_has_valid_reverse(_step[1]):
+        #                 return False
+        #     else:
+        #         if not hasattr(est, "inverse_transform"):
+        #             valid_reverse = False
+        #         return valid_reverse
 
-        def check_has_valid_reverse(est):
-            valid_reverse = True
-            if isinstance(est, Pipeline):
-                for _step in est.steps:
-                    if not check_has_valid_reverse(_step[1]):
-                        return False
-            else:
-                if not hasattr(est, "inverse_transform"):
-                    valid_reverse = False
-                return valid_reverse
+        # pipe_trans_steps = []
+        # valid_reverse = True
+        # for step in target_transformer_steps:
+        #     name, est = step.name, step.estimator
+        #     pipe_trans_steps.append([name, est])
+        #     if not check_has_valid_reverse(est):
+        #         valid_reverse = False
 
-        pipe_trans_steps = []
-        valid_reverse = True
-        for step in target_transformer_steps:
-            name, est = step.name, step.estimator
-            pipe_trans_steps.append([name, est])
-            if not check_has_valid_reverse(est):
-                valid_reverse = False
-
-        transformer_pipe = (
-            Pipeline(pipe_trans_steps)
-            if valid_reverse
-            else NoInversePipeline(pipe_trans_steps)
+        # transformer_pipe = (
+        #     Pipeline(pipe_trans_steps)
+        #     if valid_reverse
+        #     else NoInversePipeline(pipe_trans_steps)
+        # )
+        target_model = JuTransformedTargetModel(
+            model=model,
+            transformer=target_transformer_step.estimator,
+            # check_inverse=False,
         )
-        target_model = TransformedTargetRegressor(
-            transformer=transformer_pipe.set_output(transform="pandas"),
-            regressor=model,
-            check_inverse=False,
-        )
-        return (f"{model_name}_target_transform", target_model), model_params
+        return (f"{model_name}_target_transform", target_model)
 
     def _validate_model_params(self, model_name, model_params):
 
@@ -424,10 +448,11 @@ class PipelineCreator:  # Pipeline creator
         if self._is_transfromer_step(step):
             if self._added_model:
                 raise_error("Cannot add a transformer after adding a model")
-            if self._added_target_transformer and apply_to != "target":
+            if self._added_target_transformer and not self._is_model_step(
+                step
+            ):
                 raise_error(
-                    "Cannot add a non-target transformer after adding "
-                    "a target transformer."
+                    "Only a model can be added after a target transformer."
                 )
             if apply_to == "target":
                 self._added_target_transformer = True
@@ -452,10 +477,7 @@ class PipelineCreator:  # Pipeline creator
         needed_types = set(needed_types)
 
         skip_need_error = ".*" in needed_types or "*" in needed_types
-        # applied_to_special = (needed_types == "continuous" or
-        #                       needed_types == "target" or
-        #                       ".*" in needed_types or
-        #                       "*" in needed_types)
+
         if not skip_need_error:
             extra_types = [x for x in all_X_types if x not in needed_types]
             if len(extra_types) > 0:

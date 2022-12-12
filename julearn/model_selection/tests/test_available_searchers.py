@@ -1,6 +1,9 @@
+"""Provides tests for the available searchers."""
+
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
+
 import pytest
 from sklearn.model_selection import GridSearchCV
 from julearn.model_selection import (
@@ -10,7 +13,7 @@ from julearn.model_selection import (
 )
 
 
-def test_register_searcher():
+def test_register_searcher() -> None:
     """Test registering a searcher."""
     with pytest.raises(ValueError, match="The specified searcher "):
         get_searcher("custom_grid")
@@ -32,7 +35,7 @@ def test_register_searcher():
     reset_searcher_register()
 
 
-def test_reset_searcher():
+def test_reset_searcher() -> None:
     """Test resetting the searcher registry."""
     register_searcher("custom_grid", GridSearchCV)
     get_searcher("custom_grid")

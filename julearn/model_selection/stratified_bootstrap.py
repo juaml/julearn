@@ -1,17 +1,20 @@
+"""Class for Stratified Bootstrap cross-validation iterator."""
+
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
-import numpy as np
 
-from sklearn.model_selection._split import (BaseShuffleSplit,
-                                            StratifiedKFold,
-                                            _RepeatedSplits,
-                                            _validate_shuffle_split)
-from sklearn.utils.validation import check_array
+from typing import Optional, Union
+
+import numpy as np
+from numpy.random import RandomState
+
+from sklearn.model_selection import BaseShuffleSplit
+from sklearn.model_selection._split import _validate_shuffle_split
 
 
 class StratifiedBootstrap(BaseShuffleSplit):
-    """Stratified Bootstrap cross-validation iterator
+    """Stratified Bootstrap cross-validation iterator.
 
     Provides train/test indices using resampling with replacement, respecting
     the distribution of samples for each class.
@@ -38,22 +41,54 @@ class StratifiedBootstrap(BaseShuffleSplit):
         Pass an int for reproducible output across multiple function calls.
     """
 
-    def __init__(self, n_splits=5, *, test_size=0.5, train_size=None,
-                 random_state=None):
+    def __init__(
+        self,
+        n_splits: int = 5,
+        test_size: float = 0.5,
+        train_size: Optional[float] = None,
+        random_state: Optional[Union[int, RandomState]] = None,
+    ):
         super().__init__(
             n_splits=n_splits,
             test_size=test_size,
             train_size=train_size,
-            random_state=random_state)
+            random_state=random_state,
+        )
 
-    def _iter_indices(self, X, y, groups=None):
+    def _iter_indices(
+        self, X: np.ndarray, y: np.ndarray, groups: Optional[np.ndarray] = None
+    ):
+        """Generate (train, test) indices.
+
+        Parameters
+        ----------
+        X : array-like of shape (n_samples, n_features)
+            Training vectors, where n_samples is the number of samples
+            and n_features is the number of features.
+        y : array-like of shape (n_samples,)
+            The target variable for supervised learning problems.
+        groups : array-like of shape (n_samples,), default=None
+            Group labels for stratifying the samples used while splitting the
+            dataset into train/test set.
+
+        Yields
+        ------
+        train : ndarray
+            The training set indices for that split.
+        test : ndarray
+            The testing set indices for that split.
+        """
         y_labels = np.unique(y)
         y_inds = [np.where(y == t_y)[0] for t_y in y_labels]
         n_samples = [
             _validate_shuffle_split(
-                len(t_inds), self.test_size, self.train_size,
-                default_test_size=self._default_test_size)
-            for t_inds in y_inds]
+                len(t_inds),
+                self.test_size,
+                self.train_size,
+                default_test_size=self._default_test_size,
+            )
+            for t_inds in y_inds
+        ]
         for _ in range(self.n_splits):
             train = []
             test = []
@@ -64,7 +99,9 @@ class StratifiedBootstrap(BaseShuffleSplit):
 
             yield train, test
 
-    def split(self, X, y=None, groups=None):
+    def split(
+        self, X: np.ndarray, y: np.ndarray, groups: Optional[np.ndarray] = None
+    ):
         """Generate indices to split data into training and test set.
 
         Parameters
@@ -78,8 +115,9 @@ class StratifiedBootstrap(BaseShuffleSplit):
         y : array-like of shape (n_samples,) or (n_samples, n_labels)
             The target variable for supervised learning problems.
             Stratification is done based on the y labels.
-        groups : object
-            Always ignored, exists for compatibility.
+        groups : array-like of shape (n_samples,), default=None
+            Group labels for stratifying the samples used while splitting the
+            dataset into train/test set.
 
         Yields
         ------
@@ -95,67 +133,3 @@ class StratifiedBootstrap(BaseShuffleSplit):
         to an integer.
         """
         return super().split(X, y, groups)
-
-
-class StratifiedGroupsKFold(StratifiedKFold):
-    def split(self, X, y, groups=None):
-        """Generate indices to split data into training and test set.
-
-        Parameters
-        ----------
-        X : array-like of shape (n_samples, n_features)
-            Training data, where n_samples is the number of samples
-            and n_features is the number of features.
-            Note that providing ``y`` is sufficient to generate the splits and
-            hence ``np.zeros(n_samples)`` may be used as a placeholder for
-            ``X`` instead of actual training data.
-        y : array-like of shape (n_samples,)
-            Always ignored, exists for compatibility.
-        groups : object
-            The stratification variable.
-
-        Yields
-        ------
-        train : ndarray
-            The training set indices for that split.
-        test : ndarray
-            The testing set indices for that split.
-
-        Notes
-        -----
-        Randomized CV splitters may return different results for each call of
-        split. You can make the results identical by setting `random_state`
-        to an integer.
-        """
-        groups = check_array(groups, ensure_2d=False, dtype=None)
-        return super().split(X, groups, None)
-
-
-class RepeatedStratifiedGroupsKFold(_RepeatedSplits):
-    """Repeated Stratified K-Fold cross validator.
-    Repeats Stratified Groups K-Fold n times with different randomization in
-    each repetition.
-
-    Parameters
-    ----------
-    n_splits : int, default=5
-        Number of folds. Must be at least 2.
-    n_repeats : int, default=10
-        Number of times cross-validator needs to be repeated.
-    random_state : int, RandomState instance or None, default=None
-        Controls the generation of the random states for each repetition.
-        Pass an int for reproducible output across multiple function calls.
-        See :term:`Glossary <random_state>`.
-
-    Notes
-    -----
-    Randomized CV splitters may return different results for each call of
-    split. You can make the results identical by setting `random_state`
-    to an integer.
-
-    """
-    def __init__(self, *, n_splits=5, n_repeats=10, random_state=None):
-        super().__init__(
-            StratifiedGroupsKFold, n_repeats=n_repeats,
-            random_state=random_state,
-            n_splits=n_splits)
