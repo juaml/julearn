@@ -236,7 +236,9 @@ class ColumnTypes:
 
     def __repr__(self):
         """Get the representation of the ColumnTypes."""
-        return f"ColumnTypes<types={self._column_types}; pattern={self.pattern}>"
+        return (
+            f"ColumnTypes<types={self._column_types}; pattern={self.pattern}>"
+        )
 
     def copy(self) -> "ColumnTypes":
         """Get a copy of the ColumnTypes.
