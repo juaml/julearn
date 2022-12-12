@@ -133,7 +133,7 @@ class ColumnTypes:
 
     def __init__(self, column_types: ColumnTypesLike):
         if isinstance(column_types, ColumnTypes):
-            _types = column_types._column_types
+            _types = column_types._column_types.copy()
         elif isinstance(column_types, str):
             _types = set([column_types])
         elif not isinstance(column_types, Set):
@@ -233,3 +233,33 @@ class ColumnTypes:
         """Iterate over the column_types."""
 
         return self._column_types.__iter__()
+
+    def __repr__(self):
+        """Get the representation of the ColumnTypes."""
+        return f"ColumnTypes<types={self._column_types}; pattern={self.pattern}>"
+
+    def copy(self) -> "ColumnTypes":
+        """Get a copy of the ColumnTypes.
+
+        Returns
+        -------
+        ColumnTypes
+            The copy of the ColumnTypes.
+        """
+        return ColumnTypes(self)
+
+
+def ensure_column_types(attr: ColumnTypesLike) -> ColumnTypes:
+    """Ensure that the attribute is a ColumnTypes.
+
+    Parameters
+    ----------
+    attr : ColumnTypes or str
+        The attribute to check.
+
+    Returns
+    -------
+    ColumnTypes
+        The attribute as a ColumnTypes.
+    """
+    return ColumnTypes(attr) if not isinstance(attr, ColumnTypes) else attr

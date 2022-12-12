@@ -85,7 +85,7 @@ def test_hyperparameter_tuning(
     model,
     preprocess,
     problem_type,
-    get_default_params,
+    get_tunning_params,
 ):
 
     preprocess = [preprocess] if isinstance(preprocess, str) else preprocess
@@ -99,7 +99,7 @@ def test_hyperparameter_tuning(
         else list(X_types_iris.keys())
     )
     for step in preprocess:
-        default_params = get_default_params(step)
+        default_params = get_tunning_params(step)
         pipeline_creator = pipeline_creator.add(
             step, apply_to=used_types, **default_params
         )
@@ -108,7 +108,7 @@ def test_hyperparameter_tuning(
         }
         param_grid.update(params)
 
-    model_params = get_default_params(model)
+    model_params = get_tunning_params(model)
     pipeline_creator = pipeline_creator.add(
         model,  **model_params
     )
@@ -225,16 +225,16 @@ def test_stacking(X_iris, y_iris):
         "petal": ["petal_length", "petal_width"],
     }
     # Create the pipeline for the sepal features
-    model_sepal = PipelineCreator(problem_type="classification")
-    model_sepal.add("filter_columns", apply_to="*", keep="sepal")
-    model_sepal.add("zscore", apply_to="*")
-    model_sepal.add("svm", apply_to="*")
+    model_sepal = PipelineCreator(problem_type="classification", apply_to="*")
+    model_sepal.add("filter_columns", keep="sepal")
+    model_sepal.add("zscore")
+    model_sepal.add("svm")
 
     # Create the pipeline for the petal features
-    model_petal = PipelineCreator(problem_type="classification")
-    model_petal.add("filter_columns", apply_to="*", keep="petal")
-    model_petal.add("zscore", apply_to="*")
-    model_petal.add("rf", apply_to="*")
+    model_petal = PipelineCreator(problem_type="classification", apply_to="*")
+    model_petal.add("filter_columns", keep="petal")
+    model_petal.add("zscore")
+    model_petal.add("rf")
 
     # Create the stacking model
     model = PipelineCreator(problem_type="classification")

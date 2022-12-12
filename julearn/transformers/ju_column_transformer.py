@@ -17,9 +17,6 @@ class JuColumnTransformer(JuTransformer):
         self.set_params(**params)
 
     def fit(self, X, y=None, **fit_params):
-        self._ensure_apply_to()
-        self._ensure_needed_types()
-
         verbose_feature_names_out = isinstance(
             self.transformer, ClassNamePrefixFeaturesOutMixin
         )

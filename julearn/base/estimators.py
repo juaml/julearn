@@ -11,7 +11,7 @@ import pandas as pd
 from sklearn.utils.metaestimators import available_if
 from sklearn.base import BaseEstimator, TransformerMixin
 
-from .column_types import ColumnTypes, ColumnTypesLike
+from .column_types import ColumnTypes, ColumnTypesLike, ensure_column_types
 from ..utils.typing import ModelLike, DataLike
 
 
@@ -44,22 +44,6 @@ def _wrapped_model_has(attr):
         return hasattr(self.model_, attr)
 
     return check
-
-
-def _ensure_column_types(attr: ColumnTypesLike) -> ColumnTypes:
-    """Ensure that the attribute is a ColumnTypes.
-
-    Parameters
-    ----------
-    attr : ColumnTypes or str
-        The attribute to check.
-
-    Returns
-    -------
-    ColumnTypes
-        The attribute as a ColumnTypes.
-    """
-    return ColumnTypes(attr) if not isinstance(attr, ColumnTypes) else attr
 
 
 def _ensure_dataframe(X: DataLike) -> pd.DataFrame:
@@ -115,9 +99,9 @@ class JuBaseEstimator(BaseEstimator):
         ColumnTypes
             The column types needed by the estimator.
         """
-        needed_types = self.get_apply_to()
+        needed_types = self.get_apply_to().copy()
         if self.needed_types is not None:
-            needed_types.add(_ensure_column_types(self.needed_types))
+            needed_types.add(ensure_column_types(self.needed_types))
         return needed_types
 
     def get_apply_to(self) -> ColumnTypes:
@@ -128,7 +112,7 @@ class JuBaseEstimator(BaseEstimator):
         ColumnTypes
             The column types the estimator applies to.
         """
-        return _ensure_column_types(self.apply_to)
+        return ensure_column_types(self.apply_to)
 
     def filter_columns(self, X: pd.DataFrame) -> pd.DataFrame:
         """Get the `apply_to` columns of a pandas DataFrame.
@@ -203,9 +187,10 @@ class WrapModel(JuBaseEstimator):
         self.model = model
         if apply_to is None:
             apply_to = "continuous"
-        self.apply_to = apply_to
-        self.needed_types = needed_types
+        # self.apply_to = apply_to
+        # self.needed_types = needed_types
         self.model.set_params(**params)
+        super().__init__(apply_to=apply_to, needed_types=needed_types)
 
     def fit(
         self, X: pd.DataFrame, y: Optional[DataLike] = None, **fit_params: Any
@@ -229,9 +214,9 @@ class WrapModel(JuBaseEstimator):
         WrapModel
             The fitted model.
         """
-        self.apply_to = _ensure_column_types(self.apply_to)
+        self.apply_to = ensure_column_types(self.apply_to)
         if self.needed_types is not None:
-            self.needed_types = _ensure_column_types(self.needed_types)
+            self.needed_types = ensure_column_types(self.needed_types)
 
         Xt = self.filter_columns(X)
         self.model_ = self.model
@@ -331,12 +316,10 @@ class WrapModel(JuBaseEstimator):
         params : dict
             Parameter names mapped to their values.
         """
-        return dict(
-            **self.model.get_params(deep),
-            model=self.model,
-            apply_to=self.apply_to,
-            needed_types=self.needed_types,
-        )
+        params = super().get_params(deep=False)
+        model_params = self.model.get_params(deep)
+        params.update(model_params)
+        return params
 
     def set_params(self, **kwargs: Any) -> "WrapModel":
         """Set the parameters of this model.

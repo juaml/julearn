@@ -165,8 +165,10 @@ class PipelineCreator:  # Pipeline creator
             )
 
         # JuEstimators accept the apply_to parameter and return needed types
+
         if isinstance(estimator, JuEstimatorLike):
-            estimator.set_params(apply_to=apply_to)
+            if "apply_to" in estimator.get_params(deep=False):
+                estimator.set_params(apply_to=apply_to)
             needed_types = estimator.get_needed_types()
         else:
             needed_types = apply_to

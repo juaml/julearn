@@ -9,6 +9,7 @@ from .column_types import (
     make_type_selector,
     ColumnTypes,
     ColumnTypesLike,
+    ensure_column_types,
 )
 
 from .estimators import (
