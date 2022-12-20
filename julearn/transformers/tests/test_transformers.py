@@ -20,7 +20,7 @@ from sklearn.feature_selection import (
     SelectFwe,
     VarianceThreshold,
 )
-from sklearn.base import BaseEstimator, TransformerMixin
+
 from seaborn import load_dataset
 
 import pytest
@@ -37,15 +37,6 @@ from julearn.transformers import (
 )
 
 
-class fish(BaseEstimator, TransformerMixin):
-    def __init__(self, can_it_fly):
-        self.can_it_fly = can_it_fly
-
-    def fit(self, X, y=None):
-        return self
-
-    def transform(self, X):
-        return X
 
 
 reset_transformer_register()
@@ -104,41 +95,3 @@ def test_feature_transformers(name, klass, params):
     )
 
 
-def test_register_reset():
-    reset_transformer_register()
-    with pytest.raises(ValueError, match="The specified transformer"):
-        get_transformer("passthrough")
-
-    register_transformer("passthrough", PassThroughTransformer)
-    assert get_transformer("passthrough").__class__ == PassThroughTransformer
-
-    with pytest.warns(RuntimeWarning, match="Transformer named"):
-        register_transformer("passthrough", PassThroughTransformer)
-    reset_transformer_register()
-    with pytest.raises(ValueError, match="The specified transformer"):
-        get_transformer("passthrough")
-
-    register_transformer("passthrough", PassThroughTransformer, "continuous")
-    assert get_transformer("passthrough").__class__ == PassThroughTransformer
-
-
-def test_register_class_no_default_params():
-
-    reset_transformer_register()
-    register_transformer("fish", fish)
-    get_transformer("fish", can_it_fly="dont_be_stupid")
-
-
-def test_register_warning():
-    with pytest.warns(RuntimeWarning, match="Transformer name"):
-        register_transformer("zscore", fish)
-    reset_transformer_register()
-
-    with pytest.raises(ValueError, match="Transformer name"):
-        register_transformer("zscore", fish, overwrite=False)
-    reset_transformer_register()
-
-    with warnings.catch_warnings():
-        warnings.simplefilter("error")
-        register_transformer("zscore", fish, overwrite=True)
-    reset_transformer_register()

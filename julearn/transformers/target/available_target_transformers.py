@@ -80,10 +80,9 @@ def register_target_transformer(
         decides whether overwrite should be allowed.
         Options are:
 
-        * None : overwrite is possible, but warns the user
-        * True : overwrite is possible without any warning
-        * False : overwrite is not possible, error is raised instead
-    (default is None)
+        * None : overwrite is possible, but warns the user (default).
+        * True : overwrite is possible without any warning.
+        * False : overwrite is not possible, error is raised instead.
 
     Raises
     ------

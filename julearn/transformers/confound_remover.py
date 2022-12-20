@@ -1,4 +1,4 @@
-"""Provide sklearn compatible transformers for confound removal."""
+"""Provide scikit-learn-compatible transformers for confound removal."""
 
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>

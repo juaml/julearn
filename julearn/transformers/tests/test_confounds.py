@@ -1,34 +1,81 @@
+"""Provide tests for the ConfoundRemover transformer."""
+
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
-import pandas as pd
-import pytest
-from pandas.testing import assert_frame_equal
-import numpy as np
-from numpy.testing import assert_array_equal
 
-from julearn.transformers.confound_remover import (
-    ConfoundRemover,
-)
+from typing import Optional, List
+import pytest
+from pytest import fixture, FixtureRequest
+
+import numpy as np
+import pandas as pd
+from numpy.testing import assert_array_equal
+from pandas.testing import assert_frame_equal
+
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.base import clone
 
-X = pd.DataFrame(
-    {
-        "a__:type:__continuous": np.arange(10),
-        "b__:type:__continuous": np.arange(10, 20),
-        "c__:type:__confound": np.arange(30, 40),
-        "d__:type:__confound": np.arange(40, 50),
-        "e__:type:__categorical": np.arange(40, 50),
-        "f__:type:__categorical": np.arange(40, 50),
-    }
+from julearn.models import get_model
+from julearn.transformers.confound_remover import (
+    ConfoundRemover,
 )
 
-y = np.arange(10)
+
+@fixture(params=["rf", "linreg"], scope="module")
+def models_confound_remover(request: FixtureRequest) -> str:
+    """Return different models that work with classification and regression.
+
+    Parameters
+    ----------
+    request : pytest.FixtureRequest
+        The request object.
+
+    Returns
+    -------
+    str
+        The name of the model.
+    """
+    return request.param
+
+@fixture
+def df_X_confounds() -> pd.DataFrame:
+    """Create a dataframe with confounds.
+
+    Returns
+    -------
+    pd.DataFrame
+        A dataframe with confounds.
+    """
+    X = pd.DataFrame(
+        {
+            "a__:type:__continuous": np.arange(10),
+            "b__:type:__continuous": np.arange(10, 20),
+            "c__:type:__confound": np.arange(30, 40),
+            "d__:type:__confound": np.arange(40, 50),
+            "e__:type:__categorical": np.arange(40, 50),
+            "f__:type:__categorical": np.arange(40, 50),
+        }
+    )
+    return X
 
 
-def test__apply_threshold():
+@fixture
+def y_confounds() -> np.ndarray:
+    """The y variable for the df_X_confounds fixture.
+
+    Returns
+    -------
+    np.ndarray
+        The y variable for the df_X_confounds fixture.
+    """
+    y = np.arange(10)
+    return y
+
+
+def test_ConfoundRemover__apply_threshold() -> None:
+    """Test the _apply_threshold method."""
     vals = pd.DataFrame([1e-4, 1e-2, 1e-1, 0, 1])
     confound_remover = ConfoundRemover(threshold=1e-2)
     out_pos_vals = confound_remover._apply_threshold(vals)
@@ -43,65 +90,78 @@ def test__apply_threshold():
     assert (out_neg_vals.values == [0, 0, -1e-1, 0, -1]).all
 
 
-def test_confound_auto_find_conf():
+@pytest.mark.parametrize(
+    "drop,confounds",
+    [
+        [None, ["c__:type:__confound", "d__:type:__confound"]],
+        ["c__:type:__confound", ["d__:type:__confound"]],
+    ],
+)
+def test_ConfoundRemover_confound_auto_find_conf(
+    df_X_confounds: pd.DataFrame,
+    drop: Optional[List[str]],
+    confounds: Optional[List[str]],
+    models_confound_remover: str,
+) -> None:
+    """Test finding confounds in the data types."""
+    # for _X, confounds in [
+    #     [X.copy(), ["c__:type:__confound", "d__:type:__confound"]],
+    #     [
+    #         X.drop(columns="d__:type:__confound").copy(),
+    #         ["c__:type:__confound"],
+    #     ],
+    # ]:
+    if drop is not None:
+        df_X = df_X_confounds.drop(columns=drop)
+    else:
+        df_X = df_X_confounds
 
-    for _X, confounds in [
-        [X.copy(), ["c__:type:__confound", "d__:type:__confound"]],
-        [
-            X.drop(columns="d__:type:__confound").copy(),
-            ["c__:type:__confound"],
-        ],
-    ]:
-        features = _X.drop(columns=confounds).columns
+    features = df_X.drop(columns=confounds).columns
 
-        for model_to_remove in [
-            LinearRegression(),
-            RandomForestRegressor(n_estimators=5),
-        ]:
-            confound_remover = ConfoundRemover(
-                apply_to=["continuous", "categorical"],
-                model_confound=model_to_remove
-            )
+    model = get_model(models_confound_remover, "regression")
+    confound_remover = ConfoundRemover(
+        apply_to=["continuous", "categorical"],
+        model_confound=model,
+    )
 
-            np.random.seed(42)
+    np.random.seed(42)
+    df_cofound_removed = confound_remover.fit_transform(df_X)
+    np.random.seed(42)
+    confound_regressions = [
+        clone(model).fit(
+            df_X.loc[:, confounds], df_X.loc[:, feature]
+        )
+        for feature in features
+    ]
 
-            df_cofound_removed = confound_remover.fit_transform(_X)
-            np.random.seed(42)
-            confound_regressions = [
-                clone(model_to_remove).fit(
-                    _X.loc[:, confounds], _X.loc[:, feature]
-                )
-                for feature in features
-            ]
+    df_confound_removed_manual = df_X.drop(columns=confounds).copy()
+    # Test that each model inside of the confound removal
+    # is the same as if we would have trained the same model
+    # in sklearn
+    for internal_model, confound_regression, feature in zip(
+        confound_remover.models_confound_,
+        confound_regressions,
+        features,
+    ):
 
-            df_confound_removed_manual = _X.drop(columns=confounds).copy()
-            # Test that each model inside of the confound removal
-            # is the same as if we would have trained the same model
-            # in sklearn
-            for internal_model, confound_regression, feature in zip(
-                confound_remover.models_confound_,
-                confound_regressions,
-                features,
-            ):
+        manual_pred = confound_regression.predict(df_X.loc[:, confounds])
+        df_confound_removed_manual[feature] = manual_pred
 
-                manual_pred = confound_regression.predict(_X.loc[:, confounds])
-                df_confound_removed_manual[feature] = manual_pred
+        assert_array_equal(
+            internal_model.predict(df_X.loc[:, confounds].values),
+            manual_pred,
+        )
+    df_confound_removed_manual = (
+        _X.drop(columns=confounds) - df_confound_removed_manual
+    )
 
-                assert_array_equal(
-                    internal_model.predict(_X.loc[:, confounds].values),
-                    manual_pred,
-                )
-            df_confound_removed_manual = (
-                _X.drop(columns=confounds) - df_confound_removed_manual
-            )
+    # After confound removal the confound should be removed
+    assert (
+        df_cofound_removed.columns
+        == df_X.drop(columns=confounds).columns
+    ).all()
 
-            # After confound removal the confound should be removed
-            assert (
-                df_cofound_removed.columns
-                == _X.drop(columns=confounds).columns
-            ).all()
-
-            assert_frame_equal(df_cofound_removed, df_confound_removed_manual)
+    assert_frame_equal(df_cofound_removed, df_confound_removed_manual)
 
 
 # @pytest.mark.parametrize(
@@ -162,7 +222,8 @@ def test_confound_auto_find_conf():
 
 def test_return_confound():
     remover = ConfoundRemover(
-        apply_to=["categorical", "continuous"], keep_confounds=True)
+        apply_to=["categorical", "continuous"], keep_confounds=True
+    )
     X_trans = remover.fit_transform(X)
     assert_array_equal(X_trans.columns, X.columns)
 
