@@ -95,4 +95,12 @@ random combinations.
 
 For more information, see scikit-learn's `Hyperparameter Tuning`_.
 
+Finding the Hyperparameters for your model
+******************************************
+You might ask yourself: What hyperparameters has the model I am using. 
+Finding this out is quite easy. First go to :ref:`steps`.
+Search for the name of the step you are using. E.g. you use svm as a model, search for svm. 
+Now use the entry under Class. This will link you to the scikit-learn class for this step. 
+In the scikit-learn documentation for this class you will find the Parameters section. 
+This will give you an overview over all usable hyperparameters. 
 
