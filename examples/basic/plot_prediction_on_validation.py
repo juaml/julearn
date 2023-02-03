@@ -6,8 +6,8 @@ This example use the 'diabetes' database and
 peridict the estimators on extracted validation sets from CV.
 
 # Authors:  Kimia Nazarzadeh <k.nazarzadeh@fz-juelich.de>
-            Kaustubh Patil <k.patil@fz-juelich.de>
-#
+#           Kaustubh Patil <k.patil@fz-juelich.de>
+
 # License: AGPL
 """
 
