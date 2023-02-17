@@ -200,7 +200,7 @@ class ColumnTypes:
             for t_type in self._column_types:
                 if "__:type:__" in t_type:
                     t_pattern = t_type
-                if "target" == t_type:
+                elif "target" == t_type:
                     t_pattern = t_type
                 else:
                     t_pattern = f"__:type:__{t_type}"

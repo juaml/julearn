@@ -180,15 +180,14 @@ class ConfoundRemover(JuTransformer):
         list
             Names of features to be kept in the output pd.DataFrame.
         """
-        return (
-            self.feature_names_in_
-            if self.keep_confounds is True
-            else [
+        out = self.feature_names_in_
+        if self.keep_confounds is False:
+            out = [
                 feat
                 for feat in self.feature_names_in_
                 if feat not in self.detected_confounds_
             ]
-        )
+        return out  # type: ignore
 
     def _split_into_X_confound(
         self, X: pd.DataFrame
