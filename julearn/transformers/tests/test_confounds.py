@@ -280,13 +280,3 @@ def test_no_dataframe_provided() -> None:
     remover = ConfoundRemover()
     with pytest.raises(ValueError, match="ConfoundRemover only sup"):
         remover.fit(X)  # type: ignore
-
-
-# def test_TargetConfoundRemover():
-#     target_remover = TargetConfoundRemover()
-#     np.random.seed(42)
-#     y_transformed = target_remover.fit_transform(X, y)
-#     np.random.seed(42)
-#     confounds = X.loc[:, ["c__:type:__confound", "d__:type:__confound"]]
-#     y_pred = LinearRegression().fit(confounds, y).predict(confounds)
-#     assert_array_equal(y_transformed.values, y - y_pred)
