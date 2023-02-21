@@ -1,3 +1,5 @@
+"""Protocols for type checking."""
+
 from typing import (
     runtime_checkable,
     Protocol,
@@ -20,6 +22,7 @@ from ..base import ColumnTypes
 DataLike = Union[np.ndarray, pd.DataFrame, pd.Series]
 
 ScorerLike = Union[_ProbaScorer, _ThresholdScorer, _PredictScorer]
+
 
 @runtime_checkable
 class EstimatorLike(Protocol):

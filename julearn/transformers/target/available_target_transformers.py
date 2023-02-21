@@ -11,7 +11,7 @@ from copy import deepcopy
 from .ju_target_transformer import JuTargetTransformer
 from .target_confound_remover import TargetConfoundRemover
 
-from ...utils import raise_error, logger, warn
+from ...utils import raise_error, logger, warn_with_log
 
 _available_target_transformers: Dict[str, Type[JuTargetTransformer]] = {
     "confound_removal": TargetConfoundRemover,
@@ -97,7 +97,7 @@ def register_target_transformer(
     if _available_target_transformers.get(transformer_name) is not None:
 
         if overwrite is None:
-            warn(
+            warn_with_log(
                 f"Target transformer named {transformer_name} already exists. "
                 f"Therefore, {transformer_name} will be overwritten. To "
                 "remove this warning set overwrite=True."

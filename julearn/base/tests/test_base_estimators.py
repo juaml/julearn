@@ -101,7 +101,7 @@ def test_WrapModel(
     """
     column_types = [col or "continuous" for col in column_types]
     to_rename = {
-        col: f"{col.split('__:type:__')[0]}__:type:__{ctype}"
+        col: f"{col.split('__:type:__')[0]}__:type:__{ctype}"  # type:ignore
         for col, ctype in zip(X_iris.columns, column_types)
     }
     X_iris.rename(columns=to_rename, inplace=True)

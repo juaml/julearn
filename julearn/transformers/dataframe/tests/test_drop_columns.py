@@ -36,7 +36,8 @@ def test_DropColumns() -> None:
         "f__:type:__categorical",
     ]
 
-    assert_frame_equal(X_trans, X_with_types[non_confound])
+    X_non_confound = X_with_types[non_confound]
+    assert_frame_equal(X_trans, X_non_confound)
     assert_frame_equal(
         X_with_types.drop(
             columns=["c__:type:__confound", "d__:type:__confound"]

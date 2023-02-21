@@ -35,6 +35,7 @@ def test_target_pipeline_sklearn(
     pipeline = JuTargetPipeline(steps)  # type: ignore
     y_transformed = pipeline.fit_transform(X_iris, y_iris)
 
+    assert isinstance(y_transformed, np.ndarray)
     assert y_transformed.shape == y_iris.shape
 
     scaler = StandardScaler()

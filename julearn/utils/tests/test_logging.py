@@ -1,7 +1,10 @@
+"""Test for the logging module."""
+
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
-from julearn.utils import logger, configure_logging, raise_error, warn
+
+from julearn.utils import logger, configure_logging, raise_error, warn_with_log
 from julearn.utils.logging import _close_handlers
 import pytest
 import tempfile
@@ -10,8 +13,8 @@ from pathlib import Path
 
 # TODO: Fix this deprecation warning issue by fixing the real problem
 @pytest.mark.filterwarnings("ignore::DeprecationWarning")
-def test_log_file():
-    """Test logging to a file"""
+def test_log_file() -> None:
+    """Test logging to a file."""
     with tempfile.TemporaryDirectory() as tmp:
         tmpdir = Path(tmp)
         configure_logging(fname=tmpdir / "test1.log")
@@ -105,7 +108,7 @@ def test_log_file():
             assert any("Error3 message" in line for line in lines)
 
         with pytest.warns(RuntimeWarning, match=r"Warn raised"):
-            warn("Warn raised")
+            warn_with_log("Warn raised")
         with pytest.raises(ValueError, match=r"Error raised"):
             raise_error("Error raised")
         with open(tmpdir / "test4.log") as f:
@@ -115,15 +118,15 @@ def test_log_file():
 
 
 @pytest.mark.filterwarnings("ignore::DeprecationWarning")
-def test_log():
-    """Simple log test"""
+def test_log() -> None:
+    """Simple log test."""
     configure_logging()
     logger.info("Testing")
 
 
 @pytest.mark.filterwarnings("ignore::DeprecationWarning")
-def test_lib_logging():
-    """Test logging versions"""
+def test_lib_logging() -> None:
+    """Test logging versions."""
 
     import numpy as np  # noqa
     import scipy  # noqa

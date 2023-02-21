@@ -35,4 +35,5 @@ def test_FilterColumns() -> None:
     filter.set_output(transform="pandas").fit(X_with_types)
     X_expected = X_with_types.copy()[kept_columns]
     X_trans = filter.transform(X_with_types)
+    assert isinstance(X_expected, pd.DataFrame)
     assert_frame_equal(X_expected, X_trans)

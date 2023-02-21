@@ -1,9 +1,16 @@
+"""Testing utilities for julearn."""
+
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
+
+from typing import List, Dict, Any, Optional
+
 import warnings
 import numpy as np
 from numpy.testing import assert_array_equal, assert_array_almost_equal
+import pandas as pd
+
 from sklearn.svm import SVC, SVR
 from sklearn.ensemble import (
     RandomForestClassifier,
@@ -43,14 +50,33 @@ from sklearn.base import clone, TransformerMixin, BaseEstimator
 from sklearn.model_selection import cross_validate, KFold
 
 from julearn import run_cross_validation
+from julearn.utils.typing import EstimatorLike, DataLike, ScorerLike
 
 
-def compare_models(clf1, clf2):  # pragma: no cover
+def compare_models(  # pragma: no cover
+    clf1: EstimatorLike, clf2: EstimatorLike
+) -> None:
+    """Compare two models.
+
+    Parameters
+    ----------
+    clf1 : EstimatorLike
+        The first model.
+    clf2 : EstimatorLike
+        The second model.
+
+    Raises
+    ------
+    AssertionError
+        If the models are not equal.
+    """
+    if clf1.__class__ != clf2.__class__:
+        raise AssertionError("Different classes")
     if isinstance(clf1, (SVC, SVR)):
         idx1 = np.argsort(clf1.support_)
         v1 = clf1.support_vectors_[idx1]
-        idx2 = np.argsort(clf2.support_)
-        v2 = clf2.support_vectors_[idx2]
+        idx2 = np.argsort(clf2.support_)  # type: ignore
+        v2 = clf2.support_vectors_[idx2]  # type: ignore
     elif isinstance(
         clf1,
         (
@@ -63,33 +89,35 @@ def compare_models(clf1, clf2):  # pragma: no cover
         ),
     ):
         v1 = clf1.feature_importances_
-        v2 = clf1.feature_importances_
+        v2 = clf2.feature_importances_  # type: ignore
     elif isinstance(clf1, (DummyClassifier, DummyRegressor)):
         v1 = None
         v2 = None
         if hasattr(clf1, "_strategy"):
-            assert clf1._strategy == clf2._strategy
+            assert clf1._strategy == clf2._strategy  # type: ignore
         if hasattr(clf1, "strategy"):
-            assert clf1.strategy == clf2.strategy
+            assert clf1.strategy == clf2.strategy  # type: ignore
         if hasattr(clf1, "class_prior_"):
-            assert_array_equal(clf1.class_prior_, clf2.class_prior_)
+            assert_array_equal(
+                clf1.class_prior_, clf2.class_prior_  # type: ignore
+            )
         if hasattr(clf1, "constant_"):
-            assert clf1.constant_ == clf2.constant_
+            assert clf1.constant_ == clf2.constant_  # type: ignore
         if hasattr(clf1, "classes_"):
-            assert_array_equal(clf1.classes_, clf2.classes_)
+            assert_array_equal(clf1.classes_, clf2.classes_)  # type: ignore
     elif isinstance(clf1, GaussianProcessClassifier):
         if hasattr(clf1.base_estimator_, "estimators_"):
             # Multiclass
-            est1 = clf1.base_estimator_.estimators_
-            v1 = np.array([x.pi_ for x in est1])
-            est2 = clf2.base_estimator_.estimators_
+            est1 = clf1.base_estimator_.estimators_  # type: ignore
+            v1 = np.array([x.pi_ for x in est1])  # type: ignore
+            est2 = clf2.base_estimator_.estimators_  # type: ignore
             v2 = np.array([x.pi_ for x in est2])
         else:
-            v1 = clf1.base_estimator_.pi_
-            v2 = clf2.base_estimator_.pi_
+            v1 = clf1.base_estimator_.pi_  # type: ignore
+            v2 = clf2.base_estimator_.pi_  # type: ignore
     elif isinstance(clf1, GaussianProcessRegressor):
         v1 = np.c_[clf1.L_, clf1.alpha_]
-        v2 = np.c_[clf2.L_, clf2.alpha_]
+        v2 = np.c_[clf2.L_, clf2.alpha_]  # type: ignore
     elif isinstance(
         clf1,
         (
@@ -117,7 +145,7 @@ def compare_models(clf1, clf2):  # pragma: no cover
             assert_array_equal(c1, c2)
     elif isinstance(clf1, GaussianNB):
         v1 = clf1.var_
-        v2 = clf2.var_
+        v2 = clf2.var_  # type: ignore
     elif isinstance(
         clf1,
         (
@@ -128,32 +156,56 @@ def compare_models(clf1, clf2):  # pragma: no cover
         ),
     ):
         est1 = clf1.estimators_
-        v1 = np.array([x.feature_importances_ for x in est1])
-        est2 = clf2.estimators_
-        v2 = np.array([x.feature_importances_ for x in est2])
+        v1 = np.array([x.feature_importances_ for x in est1])  # type: ignore
+        est2 = clf2.estimators_  # type: ignore
+        v2 = np.array([x.feature_importances_ for x in est2])  # type: ignore
     else:
         raise NotImplementedError(
             f"Model comparison for {clf1} not yet implemented."
         )
-    assert_array_equal(v1, v2)
+    assert_array_equal(v1, v2)  # type: ignore
 
 
 def do_scoring_test(
-    X,
-    y,
-    data,
-    X_types,
-    api_params,
-    sklearn_model,
-    scorers,
-    cv=5,
-    sk_y=None,
-    decimal=5,
+    X: List[str],
+    y: str,
+    data: pd.DataFrame,
+    X_types: Dict[str, List[str]],
+    api_params: Dict[str, Any],
+    sklearn_model: EstimatorLike,
+    scorers: List[str],
+    cv: int = 5,
+    sk_y: Optional[np.ndarray] = None,
+    decimal: int = 5,
 ):
+    """Test scoring for a model, using the julearn and sklearn API.
 
+    Parameters
+    ----------
+    X : List[str]
+        The feature names.
+    y : str
+        The target name.
+    data : pd.DataFrame
+        The data.
+    X_types : Dict[str, List[str]]
+        The feature types.
+    api_params : Dict[str, Any]
+        The parameters for the julearn API.
+    sklearn_model : EstimatorLike
+        The sklearn model.
+    scorers : list of str
+        The scorers to use.
+    cv : int, optional
+        The number of folds to use, by default 5.
+    sk_y : np.ndarray, optional
+        The target values, by default None.
+    decimal : int, optional
+        The number of decimals to use for the comparison, by default 5.
+    """
     sk_X = data[X].values
     if sk_y is None:
-        sk_y = data[y].values
+        sk_y = data[y].values  # type: ignore
 
     params_dict = {k: v for k, v in api_params.items()}
     if "preprocess" not in params_dict:
@@ -177,49 +229,121 @@ def do_scoring_test(
     )
 
     # Compare the models
-    clf1 = actual_estimator.steps[-1][1]
-    clf2 = clone(sklearn_model).fit(sk_X, sk_y).steps[-1][1]
+    clf1 = actual_estimator.steps[-1][1]  # type: ignore
+    clf2 = clone(sklearn_model).fit(sk_X, sk_y).steps[-1][1]  # type: ignore
     compare_models(clf1, clf2)
 
     if decimal > 0:
         for scoring in scorers:
             s_key = f"test_{scoring}"
-            assert len(actual.columns) == len(expected) + 2
-            assert len(actual[s_key]) == len(expected[s_key])
+            assert len(actual.columns) == len(expected) + 2  # type: ignore
+            assert len(actual[s_key]) == len(expected[s_key])  # type: ignore
             assert_array_almost_equal(
-                actual[s_key], expected[s_key], decimal=decimal
+                actual[s_key], expected[s_key], decimal=decimal  # type: ignore
             )
 
 
 class PassThroughTransformer(TransformerMixin, BaseEstimator):
+    """A transformer doing nothing."""
+
     def __init__(self):
         pass
 
-    def fit(self, X, y=None):
+    def fit(
+        self, X: DataLike, y: Optional[DataLike] = None
+    ) -> "PassThroughTransformer":
+        """Fit the transformer.
+
+        Parameters
+        ----------
+        X : DataLike
+            The data.
+        y : Optional[DataLike], optional
+            The target, by default None.
+
+        Returns
+        -------
+        PassThroughTransformer
+            The fitted transformer.
+
+        """
         return self
 
-    def transform(self, X):
+    def transform(self, X: DataLike) -> DataLike:
+        """Transform the data.
+
+        Parameters
+        ----------
+        X : DataLike
+            The data.
+
+        Returns
+        -------
+        DataLike
+            The transformed data.
+        """
         return X
 
 
 class TargetPassThroughTransformer(PassThroughTransformer):
-    def __init__(self):
-        """A target transformer doing nothing.
-        It only returns the target as it is.
+    """A target transformer doing nothing."""
 
-        """
+    def __init__(self):
         super().__init__()
 
-    def transform(self, X=None, y=None):
+    def transform(
+        self, X: Optional[DataLike] = None, y: Optional[DataLike] = None
+    ) -> Optional[DataLike]:
+        """Transform the data.
+
+        Parameters
+        ----------
+        X : DataLike, optional
+            The data, by default None.
+        y : DataLike, optional
+            The target, by default None.
+
+        Returns
+        -------
+        DataLike or None
+            The target.
+        """
         return y
 
-    def fit_transform(self, X=None, y=None):
-        self.fit(X, y)
+    def fit_transform(
+        self, X: Optional[DataLike] = None, y: Optional[DataLike] = None
+    ) -> Optional[DataLike]:
+        """Fit the model and transform the data.
+
+        Parameters
+        ----------
+        X : DataLike, optional
+            The data, by default None.
+        y : DataLike, optional
+            The target, by default None.
+
+        Returns
+        -------
+        DataLike or None
+            The target.
+        """
+        self.fit(X, y)  # type: ignore
         return self.transform(X, y)
 
 
-def _get_coef_over_versions(clf):
+def _get_coef_over_versions(clf: EstimatorLike) -> np.ndarray:
+    """Get the coefficients of a model, skipping warnings.
 
+    Parameters
+    ----------
+    clf : EstimatorLike
+        The model.
+
+    Returns
+    -------
+    np.ndarray
+        The coefficients.
+    """
     if isinstance(
         clf, (BernoulliNB, ComplementNB, MultinomialNB, CategoricalNB)
     ):
@@ -227,6 +351,6 @@ def _get_coef_over_versions(clf):
         with warnings.catch_warnings():
             warnings.filterwarnings("error", category=FutureWarning)
             warnings.filterwarnings("error", category=DeprecationWarning)
-            return clf.feature_log_prob_
+            return clf.feature_log_prob_  # type: ignore
     else:
-        return clf.coef_
+        return clf.coef_  # type: ignore

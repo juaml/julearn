@@ -10,7 +10,7 @@ from joblib import Parallel, delayed
 from scipy.stats import pearsonr
 from sklearn.base import BaseEstimator, TransformerMixin
 from ..utils.versions import _joblib_parallel_args
-from ..utils import warn
+from ..utils import warn_with_log
 
 
 class CBPM(BaseEstimator, TransformerMixin):
@@ -214,7 +214,7 @@ class CBPM(BaseEstimator, TransformerMixin):
             self.used_corr_sign_ = "pos"
             self.used_significant_mask_ = self.pos_significant_mask_
             if not have_pos_feat:
-                warn(
+                warn_with_log(
                     "No feature with significant positive correlations was "
                     "present. Therefore, the mean of the target will be used "
                     "for prediction instead."
@@ -223,7 +223,7 @@ class CBPM(BaseEstimator, TransformerMixin):
             self.used_corr_sign_ = "neg"
             self.used_significant_mask_ = self.neg_significant_mask_
             if not have_neg_feat:
-                warn(
+                warn_with_log(
                     "No feature with significant negative correlations was "
                     "present. Therefore, the mean of the target will be used "
                     "for prediction instead."
@@ -234,7 +234,7 @@ class CBPM(BaseEstimator, TransformerMixin):
                 self.used_significant_mask_ = np.zeros(
                     self.significant_mask_.shape, dtype=bool
                 )
-                warn(
+                warn_with_log(
                     "No feature with significant negative or positive "
                     "correlations was present. Therefore, the mean of the "
                     "target will be used for prediction instead."
@@ -242,7 +242,7 @@ class CBPM(BaseEstimator, TransformerMixin):
             elif not have_pos_feat:
                 self.used_corr_sign_ = "neg"
                 self.used_significant_mask_ = self.neg_significant_mask_
-                warn(
+                warn_with_log(
                     "No feature with significant positive correlations was "
                     "present. Only features with negative correlations will "
                     "be used. To get rid of this message, set "
@@ -251,7 +251,7 @@ class CBPM(BaseEstimator, TransformerMixin):
             elif not have_neg_feat:
                 self.used_corr_sign_ = "pos"
                 self.used_significant_mask_ = self.pos_significant_mask_
-                warn(
+                warn_with_log(
                     "No feature with significant negative correlations was "
                     "present. Only features with positive correlations will "
                     "be used. To get rid of this message, set "

@@ -8,7 +8,7 @@ import numpy as np
 
 from sklearn import model_selection
 
-from .utils import raise_error, warn, logger
+from .utils import raise_error, warn_with_log, logger
 from .model_selection import (
     RepeatedStratifiedGroupsKFold,
     StratifiedGroupsKFold,
@@ -53,12 +53,12 @@ def _validate_input_data_df_ext(X, y, df, groups):
                 f"Groups '{groups}' is not a valid column " "in the dataframe"
             )
         if groups == y:
-            warn("y and groups are the same column")
+            warn_with_log("y and groups are the same column")
         if groups in X:
-            warn("groups is part of X")
+            warn_with_log("groups is part of X")
 
     if y in X:
-        warn(f"List of features (X) contains the target {y}")
+        warn_with_log(f"List of features (X) contains the target {y}")
 
 
 def prepare_input_data(X, y, df, pos_labels, groups):
@@ -137,7 +137,7 @@ def prepare_input_data(X, y, df, pos_labels, groups):
         if not isinstance(pos_labels, list):
             pos_labels = [pos_labels]
         logger.info(f"Setting the following as positive labels {pos_labels}")
-        # TODO: Warn if pos_labels are not in df_y
+        # TODO: warn_with_log if pos_labels are not in df_y
         df_y = df_y.isin(pos_labels).astype(np.int64)
     logger.info("====================")
     logger.info("")
@@ -167,14 +167,14 @@ def check_consistency(
         # Regression
         is_numeric = np.issubdtype(y.values.dtype, np.number)
         if not is_numeric:
-            warn(
+            warn_with_log(
                 f"The kind of values in y ({y.values.dtype}) is not "
                 "suitable for a regression."
             )
         else:
             n_classes = np.unique(y.values).shape[0]
             if n_classes == 2:
-                warn(
+                warn_with_log(
                     "A regression will be performed but only 2 "
                     "distinct values are defined in y."
                 )
@@ -189,7 +189,7 @@ def check_consistency(
             RepeatedStratifiedGroupsKFold,
         )
         if not isinstance(cv, valid_instances):
-            warn(
+            warn_with_log(
                 "The parameter groups was specified but the CV strategy "
                 "will not consider them."
             )

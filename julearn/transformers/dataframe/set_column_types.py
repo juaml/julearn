@@ -27,6 +27,7 @@ class SetColumnTypes(JuTransformer):
     def __init__(self, X_types: Optional[Dict[str, List[str]]] = None):
         if X_types is None:
             X_types = {}
+
         for X_type, columns in X_types.items():
             if not isinstance(columns, list):
                 raise_error(

@@ -78,7 +78,7 @@ class JuTargetPipeline:
             if isinstance(t_step, JuTargetTransformer):
                 y = t_step.fit_transform(X, y)
             else:
-                y = t_step.fit_transform(y[:, None])[:, 0]
+                y = t_step.fit_transform(y[:, None])[:, 0]  # type: ignore
         return self
 
     def transform(self, X: pd.DataFrame, y: DataLike) -> DataLike:
@@ -102,7 +102,7 @@ class JuTargetPipeline:
             if isinstance(t_step, JuTargetTransformer):
                 y = t_step.transform(X, y)
             else:
-                y = t_step.transform(y[:, None])[:, 0]
+                y = t_step.transform(y[:, None])[:, 0]  # type: ignore
         return y
 
     def inverse_transform(self, X: pd.DataFrame, y: DataLike) -> DataLike:

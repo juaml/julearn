@@ -4,7 +4,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Dict, Optional, Any
+from typing import Dict, Optional, Any, cast
 import numpy as np
 import pandas as pd
 
@@ -339,7 +339,7 @@ class WrapModel(JuBaseEstimator):
             WrapModel instance.
         """
         model_params = list(self.model.get_params(True).keys())
-
+        kwargs = cast(Dict[str, Any], kwargs)
         for param, val in kwargs.items():
             if param in model_params:
                 self.model.set_params(**{param: val})

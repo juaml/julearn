@@ -15,7 +15,7 @@ from sklearn.utils.metaestimators import available_if
 
 from ...base import JuBaseEstimator, _wrapped_model_has
 
-from ...utils import raise_error, warn
+from ...utils import raise_error, warn_with_log
 from ...utils.typing import ModelLike, DataLike
 
 
@@ -92,7 +92,7 @@ class JuTransformedTargetModel(JuBaseEstimator):
         if self.transformer.can_inverse_transform():
             y_pred = self.transformer.inverse_transform(X, y_pred)
         else:
-            warn(
+            warn_with_log(
                 "The target has been transformed to fit the model, but cannot "
                 "inverse the model's prediction. The output of `predict(X)` "
                 "is still in the transformed space. To remove this warning, "

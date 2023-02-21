@@ -18,7 +18,7 @@ from ..transformers import (
     SetColumnTypes,
 )
 from ..models import list_models, get_model
-from ..utils import raise_error, warn, logger
+from ..utils import raise_error, warn_with_log, logger
 from ..base import ColumnTypes, WrapModel, JuTransformer, ColumnTypesLike
 from ..utils.typing import (
     JuModelLike,
@@ -474,7 +474,7 @@ class PipelineCreator:
                         "enter a valid scikit-learn searcher or register it."
                     )
                 else:
-                    warn(f"{search} is not a registered searcher. ")
+                    warn_with_log(f"{search} is not a registered searcher. ")
                     logger.info(
                         f"Tuning hyperparameters using not registered {search}"
                     )
@@ -496,7 +496,7 @@ class PipelineCreator:
                 pipeline, params_to_tune, **search_params
             )
         elif search_params is not None and len(search_params) > 0:
-            warn(
+            warn_with_log(
                 "Hyperparameter search parameters were specified, but no "
                 "hyperparameters to tune"
             )
@@ -692,7 +692,7 @@ class PipelineCreator:
         )
         for needed_type in needed_types:
             if needed_type not in available_types:
-                warn(
+                warn_with_log(
                     f"{needed_type} is not in the provided X_types={X_types}. "
                     "Make sure your pipeline has a transformer that creates "
                     "this type."

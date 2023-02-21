@@ -15,7 +15,7 @@ from sklearn.metrics._scorer import (
     _check_multimetric_scoring,
 )
 
-from ..utils import warn, raise_error, logger
+from ..utils import warn_with_log, raise_error, logger
 from ..utils.typing import ScorerLike, EstimatorLike
 
 from .metrics import r2_corr
@@ -98,7 +98,7 @@ def register_scorer(
     """
     if scorer_name in list_scorers():
         if overwrite is None:
-            warn(
+            warn_with_log(
                 f"scorer named {scorer_name} already exists. "
                 f"Therefore, {scorer_name} will be overwritten. "
                 "To remove this warning set overwrite=True "

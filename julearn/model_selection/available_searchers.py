@@ -8,7 +8,7 @@ from typing import List, Optional
 
 from copy import deepcopy
 
-from julearn.utils.logging import raise_error, logger, warn
+from julearn.utils.logging import raise_error, logger, warn_with_log
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 
 
@@ -77,7 +77,7 @@ def register_searcher(
         Options are:
 
         * None : overwrite is possible, but warns the user
-        * True : overwrite is possible without any warning
+        * True : overwrite is possible without any warns
         * False : overwrite is not possible, error is raised instead
 
     Raises
@@ -88,10 +88,10 @@ def register_searcher(
     """
     if searcher_name in list_searchers():
         if overwrite is None:
-            warn(
+            warn_with_log(
                 f"searcher named {searcher_name} already exists. "
                 f"Therefore, {searcher_name} will be overwritten. "
-                "To remove this warning set `overwrite=True`. "
+                "To remove this warn_with_loging set `overwrite=True`. "
             )
         elif overwrite is False:
             raise_error(

@@ -61,7 +61,8 @@ def preprocess(
         )
     if not with_column_types:
         rename_dict = {
-            col: col.split("__:type:__")[0] for col in df_out.columns
+            col: col.split("__:type:__")[0]  # type: ignore
+            for col in df_out.columns
         }
         df_out.rename(columns=rename_dict, inplace=True)
     return df_out

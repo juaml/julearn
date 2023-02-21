@@ -4,7 +4,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import List, Type, Any
+from typing import List, Any
 
 from copy import deepcopy
 from sklearn.decomposition import PCA
@@ -28,7 +28,7 @@ from sklearn.feature_selection import (
 )
 from .cbpm import CBPM
 from .dataframe import DropColumns, ChangeColumnTypes, FilterColumns
-from ..utils import raise_error, warn, logger
+from ..utils import raise_error, warn_with_log, logger
 from .confound_remover import ConfoundRemover
 from ..utils.typing import TransformerLike
 
@@ -75,7 +75,7 @@ def list_transformers() -> List[str]:
     return list(_available_transformers.keys())
 
 
-def get_transformer(name: str, **params: Any) -> Type[TransformerLike]:
+def get_transformer(name: str, **params: Any) -> TransformerLike:
     """Get a transformer.
 
     Parameters
@@ -131,7 +131,7 @@ def register_transformer(transformer_name, transformer_cls, overwrite=None):
     """
     if _available_transformers.get(transformer_name) is not None:
         if overwrite is None:
-            warn(
+            warn_with_log(
                 f"Transformer named {transformer_name} already exists. "
                 f"Therefore, {transformer_name} will be overwritten. To "
                 "remove this warning set overwrite=True."

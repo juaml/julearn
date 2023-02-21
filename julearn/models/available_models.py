@@ -45,7 +45,7 @@ from sklearn.naive_bayes import (
 )
 from sklearn.dummy import DummyClassifier, DummyRegressor
 
-from ..utils import raise_error, warn, logger
+from ..utils import raise_error, warn_with_log, logger
 from ..utils.typing import ModelLike
 from .dynamic import DynamicSelection
 
@@ -227,7 +227,7 @@ def register_model(
             if (t_available := _available_models.get(model_name)) is not None:
                 if t_available.get(problem_type):
                     if overwrite is None:
-                        warn(
+                        warn_with_log(
                             f"Model named {model_name} with"
                             " problem type {problem_type}"
                             " already exists. "

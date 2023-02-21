@@ -55,8 +55,8 @@ def test_construction_working(
 
     # check preprocessing steps
     # ignoring first step for types and last for model
-    for _preprocess, step in zip(preprocess, pipeline.steps[1:-1]):
-        name, transformer = step
+    for element in zip(preprocess, pipeline.steps[1:-1]):
+        _preprocess, (name, transformer) = element
         assert name.startswith(f"{_preprocess}")
         assert isinstance(transformer, JuColumnTransformer)
         assert isinstance(
@@ -336,15 +336,12 @@ def test_stacking(X_iris: pd.DataFrame, y_iris: pd.Series) -> None:
 def test_added_repeated_transformers() -> None:
     """Test that the repeated transformers names are set correctly."""
     pipeline_creator = PipelineCreator(problem_type="classification")
-    pipeline_creator.add(
-        "zscore", apply_to="continuous"
-    )
-    pipeline_creator.add(
-        "zscore", apply_to="duck"
-    )
+    pipeline_creator.add("zscore", apply_to="continuous")
+    pipeline_creator.add("zscore", apply_to="duck")
     pipeline_creator.add("rf")
     assert len(pipeline_creator._steps) == 3
     assert pipeline_creator._steps[0].name == "zscore"
     assert pipeline_creator._steps[1].name == "zscore_1"
+
 
 # TODO: Test adding target transformers

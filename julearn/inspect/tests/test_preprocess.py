@@ -4,7 +4,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Optional, List
+from typing import Optional, List, cast
 
 import pytest
 
@@ -79,6 +79,7 @@ def test_preprocess_sklearn(
         The transformer to stop at.
     """
     X = list(X_iris.columns)
+    X = cast(List[str], X)
     pipeline.fit(X_iris, y=y_iris)
 
     X_train = X_iris.copy()
@@ -110,6 +111,7 @@ def test_preprocess_sklearn_nodataframe(
 
     """
     X = list(X_iris.columns)
+    X = cast(List[str], X)
     pipeline = Pipeline([("scaler", StandardScaler()), ("svm", SVC())])
     pipeline.fit(X_iris, y=y_iris)
 

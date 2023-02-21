@@ -4,7 +4,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Dict, Type
+from typing import Dict, Type, Any
 
 import numpy as np
 
@@ -72,7 +72,7 @@ def test_naive_bayes_estimators(
     df_iris: pd.DataFrame,
     model_name: str,
     model_class: Type[ModelLike],
-    model_params: Dict,
+    model_params: Dict[str, Any],
 ) -> None:
     """Test all naive bayes estimators.
 
@@ -91,7 +91,7 @@ def test_naive_bayes_estimators(
 
     # keep only two species
     X = ["sepal_length", "sepal_width", "petal_length"]
-    X_types = dict(continuous=X)
+    X_types = {"continuous": X}
     y = "species"
 
     ju_model_params = None

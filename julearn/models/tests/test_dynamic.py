@@ -1,4 +1,4 @@
-"""Pytest for DynamicSelection."""
+"""Provide tests for DynamicSelection."""
 
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
@@ -98,7 +98,8 @@ def test_algorithms(
         Name of the algorithm.
     """
 
-    df_iris = df_iris[df_iris["species"].isin(["versicolor", "virginica"])]
+    df_iris = df_iris[
+        df_iris["species"].isin(["versicolor", "virginica"])]
     X = ["sepal_length", "sepal_width", "petal_length"]
     y = "species"
 

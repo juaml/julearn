@@ -3,5 +3,5 @@
 # License: AGPL
 from . import logging
 
-from . logging import logger, configure_logging, raise_error, warn
+from . logging import logger, configure_logging, raise_error, warn_with_log
 
