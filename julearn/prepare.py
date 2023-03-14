@@ -210,6 +210,16 @@ def prepare_input_data(
     df_groups : pandas.Series
         A series with the grouping variable for each sample (if specified
         in the groups parameter).
+
+    Raises
+    ------
+    ValueError
+        If there is any error on the input data and parameters validation.
+
+    Warns
+    -----
+    RuntimeWarning
+        If the input data and parameters might have inconsistencies.
     """
     logger.info("==== Input Data ====")
 
@@ -282,7 +292,7 @@ def check_consistency(
     cv : Union[int, BaseCrossValidator, BaseShuffleSplit, _RepeatedSplits],
     groups : Optional[pd.Series],
     problem_type : str,
-):
+) -> None:
     """Check the consistency of the parameters/input.
 
     Parameters
@@ -301,9 +311,9 @@ def check_consistency(
     ValueError
         If there is any inconsistency between the parameters and the data.
 
-    Warnings
-    --------
-    UserWarning
+    Warns
+    -----
+    RuntimeWarning
         If there might be an inconsistency between the parameters and the data
         but the pipeline can still run.
     """
@@ -379,6 +389,18 @@ def check_x_types(X_types: Optional[Dict], X: List[str]) -> Dict[str, List]:
     -------
     X_types : dict[str, list]
         A dictionary with the types of the features, ready to use
+
+    Raises
+    ------
+    ValueError
+        If there are columns in X_types that are not defined in X.
+
+    Warns
+    -----
+    RuntimeWarning
+        If there are columns in X that are not defined in X_types or if X_types
+        is None.
+
     """
     if X_types is None:
         warn_with_log(
