@@ -435,7 +435,7 @@ class PipelineCreator:
         search_params : dict
             The parameters for the search. The following keys are accepted:
 
-            * 'search': The kind of search algorithm to use e.g.:
+            * 'kind': The kind of search algorithm to use e.g.:
               'grid' or 'random'. All valid julearn searchers can be entered.
             * 'cv': If search is going to be used, the cross-validation
               splitting strategy to use. Defaults to same CV as for the model

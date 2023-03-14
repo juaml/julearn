@@ -48,6 +48,7 @@ from sklearn.naive_bayes import (
 )
 from sklearn.base import clone, TransformerMixin, BaseEstimator
 from sklearn.model_selection import cross_validate, KFold
+from sklearn.pipeline import Pipeline
 
 from julearn import run_cross_validation
 from julearn.utils.typing import EstimatorLike, DataLike, ScorerLike
@@ -77,6 +78,8 @@ def compare_models(  # pragma: no cover
         v1 = clf1.support_vectors_[idx1]
         idx2 = np.argsort(clf2.support_)  # type: ignore
         v2 = clf2.support_vectors_[idx2]  # type: ignore
+        if hasattr(clf1, "probability"):
+            assert clf1.probability == clf2.probability
     elif isinstance(
         clf1,
         (
@@ -170,10 +173,10 @@ def do_scoring_test(
     X: List[str],
     y: str,
     data: pd.DataFrame,
-    X_types: Dict[str, List[str]],
     api_params: Dict[str, Any],
     sklearn_model: EstimatorLike,
     scorers: List[str],
+    X_types: Optional[Dict[str, List[str]]] = None,
     cv: int = 5,
     sk_y: Optional[np.ndarray] = None,
     decimal: int = 5,
@@ -208,8 +211,6 @@ def do_scoring_test(
         sk_y = data[y].values  # type: ignore
 
     params_dict = {k: v for k, v in api_params.items()}
-    if "preprocess" not in params_dict:
-        params_dict["preprocess"] = "zscore"
     jucv = KFold(n_splits=cv, random_state=42, shuffle=True)
     np.random.seed(42)
     actual, actual_estimator = run_cross_validation(
@@ -229,8 +230,15 @@ def do_scoring_test(
     )
 
     # Compare the models
-    clf1 = actual_estimator.steps[-1][1]  # type: ignore
-    clf2 = clone(sklearn_model).fit(sk_X, sk_y).steps[-1][1]  # type: ignore
+    if isinstance(actual_estimator, Pipeline):
+        clf1 = actual_estimator.steps[-1][1]  # type: ignore
+    else:
+        clf1 = actual_estimator
+
+    if isinstance(sklearn_model, Pipeline):
+        clf2 = clone(sklearn_model).fit(sk_X, sk_y).steps[-1][1]  # type: ignore
+    else:
+        clf2 = clone(sklearn_model).fit(sk_X, sk_y)
     compare_models(clf1, clf2)
 
     if decimal > 0:

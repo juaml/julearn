@@ -4,6 +4,8 @@
 import numpy as np
 from sklearn.model_selection import cross_validate, check_cv
 from sklearn.pipeline import Pipeline
+from sklearn.base import BaseEstimator
+
 import pandas as pd
 
 from .prepare import prepare_input_data, check_consistency, check_x_types
@@ -30,6 +32,7 @@ def run_cross_validation(
     scoring=None,
     pos_labels=None,
     model_params=None,
+    search_params=None,
     seed=None,
     n_jobs=None,
     verbose=0,
@@ -116,15 +119,17 @@ def run_cross_validation(
           the parameter 'probability' of the 'svm' model. If more than option
           is provided for at least one hyperparameter, a search will be
           performed.
-        * 'search': The kind of search algorithm to use, e.g.:
-          'grid' or 'random'. Can be any valid julearn searcher name or
-          scikit-learn compatible searcher.
-        * 'cv': If search is going to be used, the cross-validation
-          splitting strategy to use. Defaults to same CV as for the model
-          evaluation.
-        * 'scoring': If search is going to be used, the scoring metric to
-          evaluate the performance.
-        * 'search_params': Additional parameters for the search method.
+    search_params : dict | None
+        Additional parameters in case Hyperparameter Tunning is performed, with
+        the following keys:
+        * 'kind': The kind of search algorithm to use, e.g.:
+            'grid' or 'random'. Can be any valid julearn searcher name or
+            scikit-learn compatible searcher.
+        * 'cv': If a searcher is going to be used, the cross-validation
+            splitting strategy to use. Defaults to same CV as for the model
+            evaluation.
+        * 'scoring': If a searcher is going to be used, the scoring metric to
+            evaluate the performance.
 
         See https://juaml.github.io/julearn/hyperparameters.html for details.
     seed : int | None
@@ -179,9 +184,8 @@ def run_cross_validation(
     if model_params is None:
         model_params = {}
 
-    search_params = {}
-    if "search_params" in model_params:
-        search_params = model_params.pop("search_params")
+    if search_params is None:
+        search_params = {}
 
     # Deal with model and preprocess
     if isinstance(model, Pipeline):
@@ -197,12 +201,19 @@ def run_cross_validation(
             )
         if problem_type is not None:
             raise_error("Problem type should be set in the PipelineCreator")
+
+        if len(model_params) > 0:
+            raise_error(
+                "If model is a PipelineCreator, model_params must be None. "
+                f"Currently, it contains {model_params.keys()}"
+            )
+
         pipeline = model.to_pipeline(
             X_types=X_types, search_params=search_params
         )
         problem_type = model.problem_type
 
-    elif not isinstance(model, (str, ModelLike)):
+    elif not isinstance(model, (str, BaseEstimator)):
         raise_error(
             "Model has to be a PipelineCreator, a string or a "
             "scikit-learn compatible model."
@@ -243,6 +254,21 @@ def run_cross_validation(
                 )
         pipeline_creator.add(step=model, **t_params)
 
+        # Check for extra model_params that are not used
+        unused_params = []
+        for t_param in model_params:
+            used = False
+            for step in pipeline_creator.steps:
+                if t_param.startswith(f"{step.name}__"):
+                    used = True
+                    break
+            if not used:
+                unused_params.append(t_param)
+        if len(unused_params) > 0:
+            raise_error(
+                "The following model_params are incorrect: "
+                f"{unused_params}"
+            )
         pipeline = pipeline_creator.to_pipeline(
             X_types=X_types, search_params=search_params
         )
