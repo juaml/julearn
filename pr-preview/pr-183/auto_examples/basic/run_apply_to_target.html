@@ -132,13 +132,13 @@ analysis using Ridge Regression model.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-03-14 15:39:59,368 - julearn - INFO - ===== Lib Versions =====
-2023-03-14 15:39:59,368 - julearn - INFO - numpy: 1.23.5
-2023-03-14 15:39:59,368 - julearn - INFO - scipy: 1.10.1
-2023-03-14 15:39:59,368 - julearn - INFO - sklearn: 1.2.0rc1
-2023-03-14 15:39:59,368 - julearn - INFO - pandas: 1.5.3
-2023-03-14 15:39:59,369 - julearn - INFO - julearn: 0.1.dev1
-2023-03-14 15:39:59,369 - julearn - INFO - ========================
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-03-14 15:45:47,618 - julearn - INFO - ===== Lib Versions =====
+2023-03-14 15:45:47,619 - julearn - INFO - numpy: 1.23.5
+2023-03-14 15:45:47,619 - julearn - INFO - scipy: 1.10.1
+2023-03-14 15:45:47,619 - julearn - INFO - sklearn: 1.2.0rc1
+2023-03-14 15:45:47,619 - julearn - INFO - pandas: 1.5.3
+2023-03-14 15:45:47,619 - julearn - INFO - julearn: 0.1.dev1
+2023-03-14 15:45:47,619 - julearn - INFO - ========================
 </pre></div>
 </div>
 <p>Load the diabetes dataset from sklearn as a pandas dataframe</p>
@@ -186,13 +186,13 @@ and y</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">train_diabetes</span><span class="p">,</span> <span class="n">test_diabetes</span> <span class="o">=</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html#sklearn.model_selection.train_test_split" title="sklearn.model_selection.train_test_split" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-function"><span class="n">train_test_split</span></a><span class="p">(</span><span class="n">data_diabetes</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Let’s create the model. Since we will be tranforming the target variable
+<p>Let’s create the model. Since we will be transforming the target variable
 we will first need to create a TargetPipelineCreator for this.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">target_creator</span> <span class="o">=</span> <span class="n">TargetPipelineCreator</span><span class="p">()</span>
 <span class="n">target_creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;julearn.pipeline.target_pipeline_creator.TargetPipelineCreator object at 0x7fd57e076e30&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;julearn.pipeline.target_pipeline_creator.TargetPipelineCreator object at 0x7f9ef0431e70&gt;
 </pre></div>
 </div>
 <p>Now we can create the pipeline using a PipelineCreator.</p>
@@ -212,39 +212,39 @@ we will first need to create a TargetPipelineCreator for this.</p>
 <span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-03-14 15:39:59,401 - julearn - INFO - Adding step jutargetpipeline that applies to ColumnTypes&lt;types={&#39;target&#39;}; pattern=(?:target)&gt;
-2023-03-14 15:39:59,401 - julearn - INFO - Step added
-2023-03-14 15:39:59,401 - julearn - INFO - Adding step ridge that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2023-03-14 15:39:59,402 - julearn - INFO - Step added
-2023-03-14 15:39:59,402 - julearn - INFO - ==== Input Data ====
-2023-03-14 15:39:59,402 - julearn - INFO - Using dataframe as input
-2023-03-14 15:39:59,402 - julearn - INFO -      Features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
-2023-03-14 15:39:59,402 - julearn - INFO -      Target: target
-2023-03-14 15:39:59,404 - julearn - INFO - ====================
-2023-03-14 15:39:59,404 - julearn - INFO -
-2023-03-14 15:39:59,404 - julearn - WARNING - The following columns are not defined in X_types: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]. They will be treated as continuous.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-03-14 15:45:47,641 - julearn - INFO - Adding step jutargetpipeline that applies to ColumnTypes&lt;types={&#39;target&#39;}; pattern=(?:target)&gt;
+2023-03-14 15:45:47,641 - julearn - INFO - Step added
+2023-03-14 15:45:47,641 - julearn - INFO - Adding step ridge that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-03-14 15:45:47,641 - julearn - INFO - Step added
+2023-03-14 15:45:47,641 - julearn - INFO - ==== Input Data ====
+2023-03-14 15:45:47,641 - julearn - INFO - Using dataframe as input
+2023-03-14 15:45:47,641 - julearn - INFO -      Features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2023-03-14 15:45:47,641 - julearn - INFO -      Target: target
+2023-03-14 15:45:47,643 - julearn - INFO - ====================
+2023-03-14 15:45:47,643 - julearn - INFO -
+2023-03-14 15:45:47,643 - julearn - WARNING - The following columns are not defined in X_types: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]. They will be treated as continuous.
 /home/runner/work/julearn/julearn/julearn/utils/logging.py:238: RuntimeWarning: The following columns are not defined in X_types: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]. They will be treated as continuous.
   warn(msg, category=category)
-2023-03-14 15:39:59,406 - julearn - INFO - = Model Parameters =
-2023-03-14 15:39:59,406 - julearn - INFO - ====================
-2023-03-14 15:39:59,406 - julearn - INFO -
-2023-03-14 15:39:59,407 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2023-03-14 15:45:47,644 - julearn - INFO - = Model Parameters =
+2023-03-14 15:45:47,644 - julearn - INFO - ====================
+2023-03-14 15:45:47,644 - julearn - INFO -
+2023-03-14 15:45:47,644 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
    fit_time  score_time  test_score  repeat  fold
-0  0.011503    0.004287  -54.196197       0     0
-1  0.009348    0.004137  -48.899402       0     1
-2  0.008908    0.003968  -45.653579       0     2
-3  0.009091    0.003951  -55.768887       0     3
-4  0.008876    0.004193  -50.157147       0     4
+0  0.008181    0.003183  -54.196197       0     0
+1  0.006521    0.002963  -48.899402       0     1
+2  0.006450    0.002947  -45.653579       0     2
+3  0.006258    0.002872  -55.768887       0     3
+4  0.006391    0.002920  -50.157147       0     4
 </pre></div>
 </div>
 <p>Mean value of mean absolute error across CV</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">[</span><span class="s2">&quot;test_score&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">*</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>50.9350422035232
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>50.935042203523196
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.175 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.127 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-basic-run-apply-to-target-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/1ca5c3f8a8553b78773484ea047a1ed2/run_apply_to_target.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">run_apply_to_target.py</span></code></a></p>
