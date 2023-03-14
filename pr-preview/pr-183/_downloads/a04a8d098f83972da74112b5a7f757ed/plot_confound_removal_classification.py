@@ -104,16 +104,16 @@ X_types = {"features": X, "confound": confounds}
 # Finally, a random forest will be trained.
 # Given the default apply_to in the pipeline creator,
 # the random forest will only be trained using "features".
-model = PipelineCreator(problem_type="classification", apply_to="features")
-model.add("zscore", apply_to=["features", "confound"])
-model.add("remove_confound", apply_to="features", confounds="confound")
-model.add("rf")
+creator = PipelineCreator(problem_type="classification", apply_to="features")
+creator.add("zscore", apply_to=["features", "confound"])
+creator.add("confound_removal", apply_to="features", confounds="confound")
+creator.add("rf")
 
 scores_cr = run_cross_validation(
     X=X + confounds,
     y=y,
     data=df_iris,
-    model=model,
+    model=creator,
     cv=cv,
     X_types=X_types,
     scoring=["accuracy", "roc_auc"],

@@ -69,13 +69,13 @@ Set the logging level to info to see extra information
 
  .. code-block:: none
 
-    2022-12-12 15:16:05,155 - julearn - INFO - ===== Lib Versions =====
-    2022-12-12 15:16:05,155 - julearn - INFO - numpy: 1.23.5
-    2022-12-12 15:16:05,155 - julearn - INFO - scipy: 1.9.3
-    2022-12-12 15:16:05,155 - julearn - INFO - sklearn: 1.2.0rc1
-    2022-12-12 15:16:05,155 - julearn - INFO - pandas: 1.5.2
-    2022-12-12 15:16:05,155 - julearn - INFO - julearn: 0.1.dev1
-    2022-12-12 15:16:05,155 - julearn - INFO - ========================
+    2023-03-14 15:37:06,540 - julearn - INFO - ===== Lib Versions =====
+    2023-03-14 15:37:06,541 - julearn - INFO - numpy: 1.23.5
+    2023-03-14 15:37:06,541 - julearn - INFO - scipy: 1.10.1
+    2023-03-14 15:37:06,541 - julearn - INFO - sklearn: 1.2.0rc1
+    2023-03-14 15:37:06,541 - julearn - INFO - pandas: 1.5.3
+    2023-03-14 15:37:06,541 - julearn - INFO - julearn: 0.1.dev1
+    2023-03-14 15:37:06,541 - julearn - INFO - ========================
 
 
 
@@ -198,7 +198,7 @@ calculate correlations between the features/variables and plot it as heat map
  .. code-block:: none
 
 
-    <AxesSubplot: >
+    <Axes: >
 
 
 
@@ -247,20 +247,23 @@ for scoring
 
  .. code-block:: none
 
-    2022-12-12 15:16:05,426 - julearn - INFO - ==== Input Data ====
-    2022-12-12 15:16:05,426 - julearn - INFO - Using dataframe as input
-    2022-12-12 15:16:05,426 - julearn - INFO -      Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2022-12-12 15:16:05,426 - julearn - INFO -      Target: target
-    2022-12-12 15:16:05,427 - julearn - INFO - ====================
-    2022-12-12 15:16:05,427 - julearn - INFO - 
-    2022-12-12 15:16:05,427 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2022-12-12 15:16:05,427 - julearn - INFO - Step added
-    2022-12-12 15:16:05,427 - julearn - INFO - Adding step ridge that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2022-12-12 15:16:05,428 - julearn - INFO - Step added
-    2022-12-12 15:16:05,428 - julearn - INFO - = Model Parameters =
-    2022-12-12 15:16:05,428 - julearn - INFO - ====================
-    2022-12-12 15:16:05,428 - julearn - INFO - 
-    2022-12-12 15:16:05,428 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+    2023-03-14 15:37:07,008 - julearn - INFO - ==== Input Data ====
+    2023-03-14 15:37:07,008 - julearn - INFO - Using dataframe as input
+    2023-03-14 15:37:07,008 - julearn - INFO -      Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2023-03-14 15:37:07,008 - julearn - INFO -      Target: target
+    2023-03-14 15:37:07,010 - julearn - INFO - ====================
+    2023-03-14 15:37:07,010 - julearn - INFO - 
+    2023-03-14 15:37:07,010 - julearn - WARNING - The following columns are not defined in X_types: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']. They will be treated as continuous.
+    /home/runner/work/julearn/julearn/julearn/utils/logging.py:238: RuntimeWarning: The following columns are not defined in X_types: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']. They will be treated as continuous.
+      warn(msg, category=category)
+    2023-03-14 15:37:07,010 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2023-03-14 15:37:07,011 - julearn - INFO - Step added
+    2023-03-14 15:37:07,011 - julearn - INFO - Adding step ridge that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2023-03-14 15:37:07,011 - julearn - INFO - Step added
+    2023-03-14 15:37:07,012 - julearn - INFO - = Model Parameters =
+    2023-03-14 15:37:07,012 - julearn - INFO - ====================
+    2023-03-14 15:37:07,012 - julearn - INFO - 
+    2023-03-14 15:37:07,012 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
 
 
 
@@ -285,11 +288,11 @@ The scores dataframe has all the values for each CV split.
  .. code-block:: none
 
        fit_time  score_time  test_score  repeat  fold
-    0  0.007125    0.002918  -48.783874       0     0
-    1  0.006655    0.002913  -47.573568       0     1
-    2  0.006697    0.002866  -37.617474       0     2
-    3  0.006583    0.002895  -47.686852       0     3
-    4  0.006618    0.002871  -45.558655       0     4
+    0  0.022268    0.004951  -44.256043       0     0
+    1  0.009983    0.004398  -43.385323       0     1
+    2  0.017099    0.004671  -44.505920       0     2
+    3  0.011487    0.004524  -43.006172       0     3
+    4  0.011204    0.004549  -47.674577       0     4
 
 
 
@@ -312,7 +315,7 @@ Mean value of mean absolute error across CV
 
  .. code-block:: none
 
-    45.444084441470615
+    44.56560710477117
 
 
 
@@ -340,9 +343,9 @@ Now we can get the MAE fold and repetition:
 
  .. code-block:: none
 
-    K-fold splits          0          1          2          3          4
-    Repeats                                                             
-    0              48.783874  47.573568  37.617474  47.686852  45.558655
+    K-fold splits          0          1         2          3          4
+    Repeats                                                            
+    0              44.256043  43.385323  44.50592  43.006172  47.674577
 
 
 
@@ -463,14 +466,14 @@ of true values vs predicted values
  .. code-block:: none
 
 
-    (9.649999999999999, 347.35, 9.649999999999999, 347.35)
+    (9.2, 356.8, 9.2, 356.8)
 
 
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.727 seconds)
+   **Total running time of the script:** ( 0 minutes  1.215 seconds)
 
 
 .. _sphx_glr_download_auto_examples_basic_run_plot_example_regression.py:

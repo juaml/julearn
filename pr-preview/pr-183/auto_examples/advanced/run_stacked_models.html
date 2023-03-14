@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Stacking Classification &mdash; julearn  documentation</title>
@@ -24,7 +24,7 @@
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Grouped CV." href="dis_run_grouped_cv.html" />
+    <link rel="next" title="Grouped CV." href="run_grouped_cv.html" />
     <link rel="prev" title="Confound Removal (model comparison)" href="dis_run_target_confound_removal.html" /> 
 </head>
 
@@ -33,12 +33,16 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html">
-            <img src="../../_static/julearn_logo_it.png" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/julearn_logo_it.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -57,11 +61,12 @@
 <li class="toctree-l2"><a class="reference internal" href="run_combine_pandas.html">Working with pandas</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dis_run_target_confound_removal.html">Confound Removal (model comparison)</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Stacking Classification</a></li>
-<li class="toctree-l2"><a class="reference internal" href="dis_run_grouped_cv.html">Grouped CV.</a></li>
-<li class="toctree-l2"><a class="reference internal" href="dis_run_custom_scorers_regression.html">Custom Scoring Function for Regression</a></li>
-<li class="toctree-l2"><a class="reference internal" href="dis_run_hyperparameter_tuning.html">Tuning Hyperparameters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run_grouped_cv.html">Grouped CV.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run_custom_scorers_regression.html">Custom Scoring Function for Regression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run_hyperparameter_tuning.html">Tuning Hyperparameters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dis_run_return_confounds.html">Return Confounds in Confound Removal</a></li>
 <li class="toctree-l2"><a class="reference internal" href="run_example_pca_featsets.html">Regression Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_transform_until.html">Preprocessing with variance threshold, zscore and PCA</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../api.html">Reference</a></li>
@@ -83,7 +88,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a></li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="index.html">Advanced Examples</a></li>
       <li class="breadcrumb-item active">Stacking Classification</li>
       <li class="wy-breadcrumbs-aside">
@@ -119,13 +124,13 @@ classifier will be applied on the predictions of the two classifiers.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-12-12 15:16:14,292 - julearn - INFO - ===== Lib Versions =====
-2022-12-12 15:16:14,292 - julearn - INFO - numpy: 1.23.5
-2022-12-12 15:16:14,292 - julearn - INFO - scipy: 1.9.3
-2022-12-12 15:16:14,292 - julearn - INFO - sklearn: 1.2.0rc1
-2022-12-12 15:16:14,292 - julearn - INFO - pandas: 1.5.2
-2022-12-12 15:16:14,292 - julearn - INFO - julearn: 0.1.dev1
-2022-12-12 15:16:14,292 - julearn - INFO - ========================
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-03-14 15:37:22,355 - julearn - INFO - ===== Lib Versions =====
+2023-03-14 15:37:22,355 - julearn - INFO - numpy: 1.23.5
+2023-03-14 15:37:22,355 - julearn - INFO - scipy: 1.10.1
+2023-03-14 15:37:22,355 - julearn - INFO - sklearn: 1.2.0rc1
+2023-03-14 15:37:22,355 - julearn - INFO - pandas: 1.5.3
+2023-03-14 15:37:22,355 - julearn - INFO - julearn: 0.1.dev1
+2023-03-14 15:37:22,355 - julearn - INFO - ========================
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">df_iris</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;iris&quot;</span><span class="p">)</span>
@@ -163,11 +168,9 @@ We will try to predict the species.</p>
 <span class="c1"># Create the stacking model</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;classification&quot;</span><span class="p">)</span>
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
-    <span class="s2">&quot;stacking&quot;</span><span class="p">,</span> <span class="n">estimators</span><span class="o">=</span><span class="p">[[</span>
-        <span class="p">(</span><span class="s2">&quot;model_sepal&quot;</span><span class="p">,</span> <span class="n">model_sepal</span><span class="p">),</span>
-        <span class="p">(</span><span class="s2">&quot;model_petal&quot;</span><span class="p">,</span> <span class="n">model_petal</span><span class="p">)]</span>
-    <span class="p">],</span>
-    <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;*&quot;</span>
+    <span class="s2">&quot;stacking&quot;</span><span class="p">,</span>
+    <span class="n">estimators</span><span class="o">=</span><span class="p">[[(</span><span class="s2">&quot;model_sepal&quot;</span><span class="p">,</span> <span class="n">model_sepal</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;model_petal&quot;</span><span class="p">,</span> <span class="n">model_petal</span><span class="p">)]],</span>
+    <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="n">scores</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
@@ -177,40 +180,40 @@ We will try to predict the species.</p>
 <span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">[</span><span class="s2">&quot;test_score&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-12-12 15:16:14,296 - julearn - INFO - Adding step filter_columns that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
-2022-12-12 15:16:14,296 - julearn - INFO - Setting hyperparameter keep = sepal
-2022-12-12 15:16:14,296 - julearn - INFO - Step added
-2022-12-12 15:16:14,296 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;sepal&#39;}; pattern=(?:__:type:__sepal)&gt;
-2022-12-12 15:16:14,296 - julearn - INFO - Step added
-2022-12-12 15:16:14,296 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;sepal&#39;}; pattern=(?:__:type:__sepal)&gt;
-2022-12-12 15:16:14,297 - julearn - INFO - Step added
-2022-12-12 15:16:14,297 - julearn - INFO - Adding step filter_columns that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
-2022-12-12 15:16:14,297 - julearn - INFO - Setting hyperparameter keep = petal
-2022-12-12 15:16:14,297 - julearn - INFO - Step added
-2022-12-12 15:16:14,297 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;petal&#39;}; pattern=(?:__:type:__petal)&gt;
-2022-12-12 15:16:14,297 - julearn - INFO - Step added
-2022-12-12 15:16:14,297 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={&#39;petal&#39;}; pattern=(?:__:type:__petal)&gt;
-2022-12-12 15:16:14,297 - julearn - INFO - Step added
-2022-12-12 15:16:14,297 - julearn - INFO - Adding step stacking that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
-2022-12-12 15:16:14,297 - julearn - INFO - Setting hyperparameter estimators = [(&#39;model_sepal&#39;, &lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fdf89fd67d0&gt;), (&#39;model_petal&#39;, &lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fdf89138d30&gt;)]
-2022-12-12 15:16:14,297 - julearn - INFO - Step added
-2022-12-12 15:16:14,297 - julearn - INFO - ==== Input Data ====
-2022-12-12 15:16:14,298 - julearn - INFO - Using dataframe as input
-2022-12-12 15:16:14,298 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2022-12-12 15:16:14,298 - julearn - INFO -      Target: species
-2022-12-12 15:16:14,298 - julearn - INFO - ====================
-2022-12-12 15:16:14,299 - julearn - INFO -
-2022-12-12 15:16:14,300 - julearn - INFO - = Model Parameters =
-2022-12-12 15:16:14,300 - julearn - INFO - ====================
-2022-12-12 15:16:14,300 - julearn - INFO -
-2022-12-12 15:16:14,302 - julearn - INFO - = Model Parameters =
-2022-12-12 15:16:14,302 - julearn - INFO - ====================
-2022-12-12 15:16:14,302 - julearn - INFO -
-2022-12-12 15:16:14,424 - julearn - INFO - = Model Parameters =
-2022-12-12 15:16:14,424 - julearn - INFO - ====================
-2022-12-12 15:16:14,424 - julearn - INFO -
-2022-12-12 15:16:14,425 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2022-12-12 15:16:14,425 - julearn - INFO - Binary classification problem detected.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-03-14 15:37:22,361 - julearn - INFO - Adding step filter_columns that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
+2023-03-14 15:37:22,361 - julearn - INFO - Setting hyperparameter keep = sepal
+2023-03-14 15:37:22,361 - julearn - INFO - Step added
+2023-03-14 15:37:22,361 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;sepal&#39;}; pattern=(?:__:type:__sepal)&gt;
+2023-03-14 15:37:22,361 - julearn - INFO - Step added
+2023-03-14 15:37:22,362 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;sepal&#39;}; pattern=(?:__:type:__sepal)&gt;
+2023-03-14 15:37:22,362 - julearn - INFO - Step added
+2023-03-14 15:37:22,362 - julearn - INFO - Adding step filter_columns that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
+2023-03-14 15:37:22,362 - julearn - INFO - Setting hyperparameter keep = petal
+2023-03-14 15:37:22,362 - julearn - INFO - Step added
+2023-03-14 15:37:22,362 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;petal&#39;}; pattern=(?:__:type:__petal)&gt;
+2023-03-14 15:37:22,362 - julearn - INFO - Step added
+2023-03-14 15:37:22,362 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={&#39;petal&#39;}; pattern=(?:__:type:__petal)&gt;
+2023-03-14 15:37:22,363 - julearn - INFO - Step added
+2023-03-14 15:37:22,363 - julearn - INFO - Adding step stacking that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
+2023-03-14 15:37:22,363 - julearn - INFO - Setting hyperparameter estimators = [(&#39;model_sepal&#39;, &lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7f76553a8340&gt;), (&#39;model_petal&#39;, &lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7f76553a8490&gt;)]
+2023-03-14 15:37:22,363 - julearn - INFO - Step added
+2023-03-14 15:37:22,363 - julearn - INFO - ==== Input Data ====
+2023-03-14 15:37:22,363 - julearn - INFO - Using dataframe as input
+2023-03-14 15:37:22,363 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2023-03-14 15:37:22,363 - julearn - INFO -      Target: species
+2023-03-14 15:37:22,364 - julearn - INFO - ====================
+2023-03-14 15:37:22,365 - julearn - INFO -
+2023-03-14 15:37:22,366 - julearn - INFO - = Model Parameters =
+2023-03-14 15:37:22,367 - julearn - INFO - ====================
+2023-03-14 15:37:22,367 - julearn - INFO -
+2023-03-14 15:37:22,368 - julearn - INFO - = Model Parameters =
+2023-03-14 15:37:22,369 - julearn - INFO - ====================
+2023-03-14 15:37:22,369 - julearn - INFO -
+2023-03-14 15:37:22,556 - julearn - INFO - = Model Parameters =
+2023-03-14 15:37:22,556 - julearn - INFO - ====================
+2023-03-14 15:37:22,556 - julearn - INFO -
+2023-03-14 15:37:22,556 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2023-03-14 15:37:22,557 - julearn - INFO - Binary classification problem detected.
 0    1.00
 1    0.85
 2    0.95
@@ -219,7 +222,7 @@ We will try to predict the species.</p>
 Name: test_score, dtype: float64
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  5.248 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  8.236 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-advanced-run-stacked-models-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/371f875a9ba712d6f8f3215d1f3ac64e/run_stacked_models.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">run_stacked_models.py</span></code></a></p>
@@ -236,7 +239,7 @@ Name: test_score, dtype: float64
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="dis_run_target_confound_removal.html" class="btn btn-neutral float-left" title="Confound Removal (model comparison)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="dis_run_grouped_cv.html" class="btn btn-neutral float-right" title="Grouped CV." accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="run_grouped_cv.html" class="btn btn-neutral float-right" title="Grouped CV." accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

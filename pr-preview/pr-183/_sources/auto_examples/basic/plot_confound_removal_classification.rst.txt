@@ -70,13 +70,13 @@ Set the logging level to info to see extra information
 
  .. code-block:: none
 
-    2022-12-12 15:16:06,044 - julearn - INFO - ===== Lib Versions =====
-    2022-12-12 15:16:06,044 - julearn - INFO - numpy: 1.23.5
-    2022-12-12 15:16:06,044 - julearn - INFO - scipy: 1.9.3
-    2022-12-12 15:16:06,044 - julearn - INFO - sklearn: 1.2.0rc1
-    2022-12-12 15:16:06,045 - julearn - INFO - pandas: 1.5.2
-    2022-12-12 15:16:06,045 - julearn - INFO - julearn: 0.1.dev1
-    2022-12-12 15:16:06,045 - julearn - INFO - ========================
+    2023-03-14 15:37:09,383 - julearn - INFO - ===== Lib Versions =====
+    2023-03-14 15:37:09,384 - julearn - INFO - numpy: 1.23.5
+    2023-03-14 15:37:09,384 - julearn - INFO - scipy: 1.10.1
+    2023-03-14 15:37:09,384 - julearn - INFO - sklearn: 1.2.0rc1
+    2023-03-14 15:37:09,384 - julearn - INFO - pandas: 1.5.3
+    2023-03-14 15:37:09,384 - julearn - INFO - julearn: 0.1.dev1
+    2023-03-14 15:37:09,384 - julearn - INFO - ========================
 
 
 
@@ -200,23 +200,26 @@ Note: confounds by default
 
  .. code-block:: none
 
-    2022-12-12 15:16:06,048 - julearn - INFO - Setting random seed to 200
-    2022-12-12 15:16:06,049 - julearn - INFO - ==== Input Data ====
-    2022-12-12 15:16:06,049 - julearn - INFO - Using dataframe as input
-    2022-12-12 15:16:06,049 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length']
-    2022-12-12 15:16:06,049 - julearn - INFO -      Target: species
-    2022-12-12 15:16:06,050 - julearn - INFO - ====================
-    2022-12-12 15:16:06,050 - julearn - INFO - 
-    2022-12-12 15:16:06,050 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2022-12-12 15:16:06,050 - julearn - INFO - Step added
-    2022-12-12 15:16:06,050 - julearn - INFO - Adding step rf that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2022-12-12 15:16:06,050 - julearn - INFO - Step added
-    2022-12-12 15:16:06,051 - julearn - INFO - = Model Parameters =
-    2022-12-12 15:16:06,051 - julearn - INFO - ====================
-    2022-12-12 15:16:06,051 - julearn - INFO - 
-    2022-12-12 15:16:06,051 - julearn - INFO - Using outer CV scheme StratifiedBootstrap(n_splits=20, random_state=42, test_size=0.3,
+    2023-03-14 15:37:09,389 - julearn - INFO - Setting random seed to 200
+    2023-03-14 15:37:09,390 - julearn - INFO - ==== Input Data ====
+    2023-03-14 15:37:09,390 - julearn - INFO - Using dataframe as input
+    2023-03-14 15:37:09,390 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length']
+    2023-03-14 15:37:09,390 - julearn - INFO -      Target: species
+    2023-03-14 15:37:09,391 - julearn - INFO - ====================
+    2023-03-14 15:37:09,391 - julearn - INFO - 
+    2023-03-14 15:37:09,391 - julearn - WARNING - The following columns are not defined in X_types: ['sepal_length', 'sepal_width', 'petal_length']. They will be treated as continuous.
+    /home/runner/work/julearn/julearn/julearn/utils/logging.py:238: RuntimeWarning: The following columns are not defined in X_types: ['sepal_length', 'sepal_width', 'petal_length']. They will be treated as continuous.
+      warn(msg, category=category)
+    2023-03-14 15:37:09,391 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2023-03-14 15:37:09,392 - julearn - INFO - Step added
+    2023-03-14 15:37:09,392 - julearn - INFO - Adding step rf that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2023-03-14 15:37:09,392 - julearn - INFO - Step added
+    2023-03-14 15:37:09,393 - julearn - INFO - = Model Parameters =
+    2023-03-14 15:37:09,393 - julearn - INFO - ====================
+    2023-03-14 15:37:09,393 - julearn - INFO - 
+    2023-03-14 15:37:09,393 - julearn - INFO - Using outer CV scheme StratifiedBootstrap(n_splits=20, random_state=42, test_size=0.3,
               train_size=None)
-    2022-12-12 15:16:06,051 - julearn - INFO - Binary classification problem detected.
+    2023-03-14 15:37:09,393 - julearn - INFO - Binary classification problem detected.
 
 
 
@@ -264,16 +267,16 @@ the random forest will only be trained using "features".
 
 .. code-block:: default
 
-    model = PipelineCreator(problem_type="classification", apply_to="features")
-    model.add("zscore", apply_to=["features", "confound"])
-    model.add("remove_confound", apply_to="features", confounds="confound")
-    model.add("rf")
+    creator = PipelineCreator(problem_type="classification", apply_to="features")
+    creator.add("zscore", apply_to=["features", "confound"])
+    creator.add("confound_removal", apply_to="features", confounds="confound")
+    creator.add("rf")
 
     scores_cr = run_cross_validation(
         X=X + confounds,
         y=y,
         data=df_iris,
-        model=model,
+        model=creator,
         cv=cv,
         X_types=X_types,
         scoring=["accuracy", "roc_auc"],
@@ -289,26 +292,26 @@ the random forest will only be trained using "features".
 
  .. code-block:: none
 
-    2022-12-12 15:16:09,041 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'confound', 'features'}; pattern=(?:__:type:__confound|__:type:__features)>
-    2022-12-12 15:16:09,041 - julearn - INFO - Step added
-    2022-12-12 15:16:09,041 - julearn - INFO - Adding step remove_confound that applies to ColumnTypes<types={'features'}; pattern=(?:__:type:__features)>
-    2022-12-12 15:16:09,041 - julearn - INFO - Setting hyperparameter confounds = confound
-    2022-12-12 15:16:09,042 - julearn - INFO - Step added
-    2022-12-12 15:16:09,042 - julearn - INFO - Adding step rf that applies to ColumnTypes<types={'features'}; pattern=(?:__:type:__features)>
-    2022-12-12 15:16:09,042 - julearn - INFO - Step added
-    2022-12-12 15:16:09,042 - julearn - INFO - Setting random seed to 200
-    2022-12-12 15:16:09,042 - julearn - INFO - ==== Input Data ====
-    2022-12-12 15:16:09,042 - julearn - INFO - Using dataframe as input
-    2022-12-12 15:16:09,042 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length', 'petal_width']
-    2022-12-12 15:16:09,042 - julearn - INFO -      Target: species
-    2022-12-12 15:16:09,043 - julearn - INFO - ====================
-    2022-12-12 15:16:09,043 - julearn - INFO - 
-    2022-12-12 15:16:09,045 - julearn - INFO - = Model Parameters =
-    2022-12-12 15:16:09,045 - julearn - INFO - ====================
-    2022-12-12 15:16:09,045 - julearn - INFO - 
-    2022-12-12 15:16:09,045 - julearn - INFO - Using outer CV scheme StratifiedBootstrap(n_splits=20, random_state=42, test_size=0.3,
+    2023-03-14 15:37:14,271 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'confound', 'features'}; pattern=(?:__:type:__confound|__:type:__features)>
+    2023-03-14 15:37:14,271 - julearn - INFO - Step added
+    2023-03-14 15:37:14,271 - julearn - INFO - Adding step confound_removal that applies to ColumnTypes<types={'features'}; pattern=(?:__:type:__features)>
+    2023-03-14 15:37:14,271 - julearn - INFO - Setting hyperparameter confounds = confound
+    2023-03-14 15:37:14,272 - julearn - INFO - Step added
+    2023-03-14 15:37:14,272 - julearn - INFO - Adding step rf that applies to ColumnTypes<types={'features'}; pattern=(?:__:type:__features)>
+    2023-03-14 15:37:14,272 - julearn - INFO - Step added
+    2023-03-14 15:37:14,272 - julearn - INFO - Setting random seed to 200
+    2023-03-14 15:37:14,272 - julearn - INFO - ==== Input Data ====
+    2023-03-14 15:37:14,272 - julearn - INFO - Using dataframe as input
+    2023-03-14 15:37:14,272 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length', 'petal_width']
+    2023-03-14 15:37:14,272 - julearn - INFO -      Target: species
+    2023-03-14 15:37:14,273 - julearn - INFO - ====================
+    2023-03-14 15:37:14,274 - julearn - INFO - 
+    2023-03-14 15:37:14,276 - julearn - INFO - = Model Parameters =
+    2023-03-14 15:37:14,276 - julearn - INFO - ====================
+    2023-03-14 15:37:14,276 - julearn - INFO - 
+    2023-03-14 15:37:14,276 - julearn - INFO - Using outer CV scheme StratifiedBootstrap(n_splits=20, random_state=42, test_size=0.3,
               train_size=None)
-    2022-12-12 15:16:09,045 - julearn - INFO - Binary classification problem detected.
+    2023-03-14 15:37:14,277 - julearn - INFO - Binary classification problem detected.
 
 
 
@@ -565,7 +568,7 @@ a difference in importances.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  7.634 seconds)
+   **Total running time of the script:** ( 0 minutes  12.543 seconds)
 
 
 .. _sphx_glr_download_auto_examples_basic_plot_confound_removal_classification.py:

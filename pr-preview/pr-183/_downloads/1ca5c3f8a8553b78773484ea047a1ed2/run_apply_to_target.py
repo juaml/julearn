@@ -20,13 +20,14 @@ from sklearn.model_selection import train_test_split
 
 from julearn import run_cross_validation
 from julearn.utils import configure_logging
+
 # this is crucial for creating the model in the new version
-from julearn.pipeline import PipelineCreator
+from julearn.pipeline import PipelineCreator, TargetPipelineCreator
 
 
 ###############################################################################
 # Set the logging level to info to see extra information
-configure_logging(level='INFO')
+configure_logging(level="INFO")
 
 
 ###############################################################################
@@ -39,8 +40,8 @@ features, target = load_diabetes(return_X_y=True, as_frame=True)
 # pressure, and six blood serum measurements (s1-s6) diabetes patients and
 # a quantitative measure of disease progression one year after baseline which
 # is the target we are interested in predicting.
-print('Features: \n', features.head())
-print('Target: \n', target.describe())
+print("Features: \n", features.head())
+print("Target: \n", target.describe())
 
 
 ###############################################################################
@@ -48,8 +49,8 @@ print('Target: \n', target.describe())
 # and y
 data_diabetes = pd.concat([features, target], axis=1)
 
-X = ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-y = 'target'
+X = ["age", "sex", "bmi", "bp", "s1", "s2", "s3", "s4", "s5", "s6"]
+y = "target"
 
 ###############################################################################
 # Split the dataset into train and test
@@ -57,13 +58,17 @@ train_diabetes, test_diabetes = train_test_split(data_diabetes, test_size=0.3)
 
 
 ###############################################################################
-# Let's create the model. To note, in PipelineCreator the only reserved key is
-# target. That means, there is no need to name it, i.e., by stating
-# apply_to="target", it already knows which is the target.
-# Here, it is important that if you define the PipelineCreator you include the
-# model and do not define the model in run_cross_validation
+# Let's create the model. Since we will be tranforming the target variable
+# we will first need to create a TargetPipelineCreator for this.
+
+target_creator = TargetPipelineCreator()
+target_creator.add("zscore")
+
+
+##############################################################################
+# Now we can create the pipeline using a PipelineCreator.
 creator = PipelineCreator(problem_type="regression")
-creator.add("zscore", apply_to="target")
+creator.add(target_creator, apply_to="target")
 creator.add("ridge")
 
 scores, model = run_cross_validation(
@@ -72,12 +77,11 @@ scores, model = run_cross_validation(
     data=train_diabetes,
     model=creator,
     return_estimator="final",
-    scoring='neg_mean_absolute_error'
+    scoring="neg_mean_absolute_error",
 )
 
 print(scores.head(5))
 
-
 ###############################################################################
 # Mean value of mean absolute error across CV
-print(scores['test_score'].mean() * -1)
+print(scores["test_score"].mean() * -1)

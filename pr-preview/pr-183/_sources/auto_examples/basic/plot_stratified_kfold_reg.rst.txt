@@ -62,7 +62,7 @@ Set the logging level to info to see extra information
 
 .. code-block:: default
 
-    configure_logging(level='INFO')
+    configure_logging(level="INFO")
 
 
 
@@ -72,13 +72,13 @@ Set the logging level to info to see extra information
 
  .. code-block:: none
 
-    2022-12-12 15:16:04,739 - julearn - INFO - ===== Lib Versions =====
-    2022-12-12 15:16:04,739 - julearn - INFO - numpy: 1.23.5
-    2022-12-12 15:16:04,739 - julearn - INFO - scipy: 1.9.3
-    2022-12-12 15:16:04,739 - julearn - INFO - sklearn: 1.2.0rc1
-    2022-12-12 15:16:04,739 - julearn - INFO - pandas: 1.5.2
-    2022-12-12 15:16:04,739 - julearn - INFO - julearn: 0.1.dev1
-    2022-12-12 15:16:04,739 - julearn - INFO - ========================
+    2023-03-14 15:37:05,919 - julearn - INFO - ===== Lib Versions =====
+    2023-03-14 15:37:05,919 - julearn - INFO - numpy: 1.23.5
+    2023-03-14 15:37:05,920 - julearn - INFO - scipy: 1.10.1
+    2023-03-14 15:37:05,920 - julearn - INFO - sklearn: 1.2.0rc1
+    2023-03-14 15:37:05,920 - julearn - INFO - pandas: 1.5.3
+    2023-03-14 15:37:05,920 - julearn - INFO - julearn: 0.1.dev1
+    2023-03-14 15:37:05,920 - julearn - INFO - ========================
 
 
 
@@ -112,8 +112,8 @@ is the target we are interested in predicting.
 .. code-block:: default
 
 
-    print('Features: \n', features.head())
-    print('Target: \n', target.describe())
+    print("Features: \n", features.head())
+    print("Target: \n", target.describe())
 
 
 
@@ -161,13 +161,13 @@ stratification
 
     # Create outliers for test purpose
     new_df = data_df[(data_df.target > 145) & (data_df.target <= 150)]
-    new_df['target'] = [590, 580, 597, 595, 590, 590, 600]
+    new_df["target"] = [590, 580, 597, 595, 590, 590, 600]
     data_df = pd.concat([data_df, new_df], axis=0)
-    data_df =  data_df.reset_index(drop=True)
+    data_df = data_df.reset_index(drop=True)
 
     # define X, y
-    X = ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    y = 'target'
+    X = ["age", "sex", "bmi", "bp", "s1", "s2", "s3", "s4", "s5", "s6"]
+    y = "target"
 
 
 
@@ -182,7 +182,7 @@ stratification
     Try using .loc[row_indexer,col_indexer] = value instead
 
     See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-      new_df['target'] = [590, 580, 597, 595, 590, 590, 600]
+      new_df["target"] = [590, 580, 597, 595, 590, 590, 600]
 
 
 
@@ -200,8 +200,8 @@ Define number of splits for CV and create bins/group for stratification
     num_bins = math.floor(len(data_df) / num_splits)  # num of bins to be created
     bins_on = data_df.target  # variable to be used for stratification
     qc = pd.cut(bins_on.tolist(), num_bins)  # divides data in bins
-    data_df['bins'] = qc.codes
-    groups = 'bins'
+    data_df["bins"] = qc.codes
+    groups = "bins"
 
 
 
@@ -214,16 +214,24 @@ Define number of splits for CV and create bins/group for stratification
 
 Train a linear regression model with stratification on target
 
-.. GENERATED FROM PYTHON SOURCE LINES 73-80
+.. GENERATED FROM PYTHON SOURCE LINES 73-88
 
 .. code-block:: default
 
 
     cv_stratified = StratifiedGroupsKFold(n_splits=num_splits, shuffle=False)
     scores_strat, model = run_cross_validation(
-        X=X, y=y, data=data_df, preprocess='zscore', cv=cv_stratified,
-        groups=groups, problem_type='regression', model='linreg',
-        return_estimator='final', scoring='neg_mean_absolute_error')
+        X=X,
+        y=y,
+        data=data_df,
+        preprocess="zscore",
+        cv=cv_stratified,
+        groups=groups,
+        problem_type="regression",
+        model="linreg",
+        return_estimator="final",
+        scoring="neg_mean_absolute_error",
+    )
 
 
 
@@ -233,41 +241,51 @@ Train a linear regression model with stratification on target
 
  .. code-block:: none
 
-    2022-12-12 15:16:04,762 - julearn - INFO - ==== Input Data ====
-    2022-12-12 15:16:04,763 - julearn - INFO - Using dataframe as input
-    2022-12-12 15:16:04,763 - julearn - INFO -      Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2022-12-12 15:16:04,763 - julearn - INFO -      Target: target
-    2022-12-12 15:16:04,763 - julearn - INFO - Using bins as groups
-    2022-12-12 15:16:04,764 - julearn - INFO - ====================
-    2022-12-12 15:16:04,764 - julearn - INFO - 
-    2022-12-12 15:16:04,764 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2022-12-12 15:16:04,764 - julearn - INFO - Step added
-    2022-12-12 15:16:04,764 - julearn - INFO - Adding step linreg that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2022-12-12 15:16:04,764 - julearn - INFO - Step added
-    2022-12-12 15:16:04,765 - julearn - INFO - = Model Parameters =
-    2022-12-12 15:16:04,765 - julearn - INFO - ====================
-    2022-12-12 15:16:04,765 - julearn - INFO - 
-    2022-12-12 15:16:04,765 - julearn - INFO - Using outer CV scheme StratifiedGroupsKFold(n_splits=7, random_state=None, shuffle=False)
-    /opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=7.
+    2023-03-14 15:37:05,955 - julearn - INFO - ==== Input Data ====
+    2023-03-14 15:37:05,955 - julearn - INFO - Using dataframe as input
+    2023-03-14 15:37:05,956 - julearn - INFO -      Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2023-03-14 15:37:05,956 - julearn - INFO -      Target: target
+    2023-03-14 15:37:05,957 - julearn - INFO - Using bins as groups
+    2023-03-14 15:37:05,957 - julearn - INFO - ====================
+    2023-03-14 15:37:05,958 - julearn - INFO - 
+    2023-03-14 15:37:05,958 - julearn - WARNING - The following columns are not defined in X_types: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']. They will be treated as continuous.
+    /home/runner/work/julearn/julearn/julearn/utils/logging.py:238: RuntimeWarning: The following columns are not defined in X_types: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']. They will be treated as continuous.
+      warn(msg, category=category)
+    2023-03-14 15:37:05,958 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2023-03-14 15:37:05,958 - julearn - INFO - Step added
+    2023-03-14 15:37:05,958 - julearn - INFO - Adding step linreg that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2023-03-14 15:37:05,958 - julearn - INFO - Step added
+    2023-03-14 15:37:05,959 - julearn - INFO - = Model Parameters =
+    2023-03-14 15:37:05,959 - julearn - INFO - ====================
+    2023-03-14 15:37:05,959 - julearn - INFO - 
+    2023-03-14 15:37:05,960 - julearn - INFO - Using outer CV scheme StratifiedGroupsKFold(n_splits=7, random_state=None, shuffle=False)
+    /opt/hostedtoolcache/Python/3.10.10/x64/lib/python3.10/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=7.
       warnings.warn(
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 81-82
+.. GENERATED FROM PYTHON SOURCE LINES 89-90
 
 Train a linear regression model without stratification on target
 
-.. GENERATED FROM PYTHON SOURCE LINES 82-89
+.. GENERATED FROM PYTHON SOURCE LINES 90-104
 
 .. code-block:: default
 
 
     cv = KFold(n_splits=num_splits, shuffle=False, random_state=None)
     scores, model = run_cross_validation(
-        X=X, y=y, data=data_df, preprocess='zscore', cv=cv,
-        problem_type='regression', model='linreg', return_estimator='final',
-        scoring='neg_mean_absolute_error')
+        X=X,
+        y=y,
+        data=data_df,
+        preprocess="zscore",
+        cv=cv,
+        problem_type="regression",
+        model="linreg",
+        return_estimator="final",
+        scoring="neg_mean_absolute_error",
+    )
 
 
 
@@ -277,38 +295,41 @@ Train a linear regression model without stratification on target
 
  .. code-block:: none
 
-    2022-12-12 15:16:04,846 - julearn - INFO - ==== Input Data ====
-    2022-12-12 15:16:04,846 - julearn - INFO - Using dataframe as input
-    2022-12-12 15:16:04,846 - julearn - INFO -      Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2022-12-12 15:16:04,846 - julearn - INFO -      Target: target
-    2022-12-12 15:16:04,847 - julearn - INFO - ====================
-    2022-12-12 15:16:04,847 - julearn - INFO - 
-    2022-12-12 15:16:04,847 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2022-12-12 15:16:04,848 - julearn - INFO - Step added
-    2022-12-12 15:16:04,848 - julearn - INFO - Adding step linreg that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2022-12-12 15:16:04,848 - julearn - INFO - Step added
-    2022-12-12 15:16:04,848 - julearn - INFO - = Model Parameters =
-    2022-12-12 15:16:04,848 - julearn - INFO - ====================
-    2022-12-12 15:16:04,848 - julearn - INFO - 
-    2022-12-12 15:16:04,848 - julearn - INFO - Using outer CV scheme KFold(n_splits=7, random_state=None, shuffle=False)
+    2023-03-14 15:37:06,089 - julearn - INFO - ==== Input Data ====
+    2023-03-14 15:37:06,089 - julearn - INFO - Using dataframe as input
+    2023-03-14 15:37:06,089 - julearn - INFO -      Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2023-03-14 15:37:06,089 - julearn - INFO -      Target: target
+    2023-03-14 15:37:06,091 - julearn - INFO - ====================
+    2023-03-14 15:37:06,092 - julearn - INFO - 
+    2023-03-14 15:37:06,092 - julearn - WARNING - The following columns are not defined in X_types: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']. They will be treated as continuous.
+    /home/runner/work/julearn/julearn/julearn/utils/logging.py:238: RuntimeWarning: The following columns are not defined in X_types: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']. They will be treated as continuous.
+      warn(msg, category=category)
+    2023-03-14 15:37:06,092 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2023-03-14 15:37:06,092 - julearn - INFO - Step added
+    2023-03-14 15:37:06,092 - julearn - INFO - Adding step linreg that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2023-03-14 15:37:06,092 - julearn - INFO - Step added
+    2023-03-14 15:37:06,093 - julearn - INFO - = Model Parameters =
+    2023-03-14 15:37:06,093 - julearn - INFO - ====================
+    2023-03-14 15:37:06,093 - julearn - INFO - 
+    2023-03-14 15:37:06,093 - julearn - INFO - Using outer CV scheme KFold(n_splits=7, random_state=None, shuffle=False)
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 90-92
+.. GENERATED FROM PYTHON SOURCE LINES 105-107
 
 Now we can compare the test score for model trained with and without
 stratification. We can combine the two outputs as pandas dataframes
 
-.. GENERATED FROM PYTHON SOURCE LINES 92-98
+.. GENERATED FROM PYTHON SOURCE LINES 107-113
 
 .. code-block:: default
 
 
-    scores_strat['model'] = 'With stratification'
-    scores['model'] = 'Without stratification'
-    df_scores = scores_strat[['test_score', 'model']]
-    df_scores  = pd.concat([df_scores, scores[['test_score', 'model']]])
+    scores_strat["model"] = "With stratification"
+    scores["model"] = "Without stratification"
+    df_scores = scores_strat[["test_score", "model"]]
+    df_scores = pd.concat([df_scores, scores[["test_score", "model"]]])
 
 
 
@@ -317,20 +338,20 @@ stratification. We can combine the two outputs as pandas dataframes
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 99-102
+.. GENERATED FROM PYTHON SOURCE LINES 114-117
 
 Plot a boxplot with test scores from both the models. We see here that
 the variance for the test score is much higher when CV splits were not
 stratified
 
-.. GENERATED FROM PYTHON SOURCE LINES 102-107
+.. GENERATED FROM PYTHON SOURCE LINES 117-122
 
 .. code-block:: default
 
 
     fig, ax = plt.subplots(1, 1, figsize=(10, 7))
     sns.set_style("darkgrid")
-    ax = sns.boxplot(x='model', y='test_score', data=df_scores)
+    ax = sns.boxplot(x="model", y="test_score", data=df_scores)
     ax = sns.swarmplot(x="model", y="test_score", data=df_scores, color=".25")
 
 
@@ -347,7 +368,7 @@ stratified
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.284 seconds)
+   **Total running time of the script:** ( 0 minutes  0.449 seconds)
 
 
 .. _sphx_glr_download_auto_examples_basic_plot_stratified_kfold_reg.py:

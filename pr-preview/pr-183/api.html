@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Reference &mdash; julearn  documentation</title>
@@ -25,7 +25,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Contributing to julearn" href="contributing.html" />
-    <link rel="prev" title="Regression Analysis" href="auto_examples/advanced/run_example_pca_featsets.html" /> 
+    <link rel="prev" title="Preprocessing with variance threshold, zscore and PCA" href="auto_examples/advanced/plot_transform_until.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -33,12 +33,16 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html">
-            <img src="_static/julearn_logo_it.png" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="index.html">
+            
+              <img src="_static/julearn_logo_it.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -71,7 +75,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#logging">Logging</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#julearn.utils.configure_logging"><code class="docutils literal notranslate"><span class="pre">configure_logging()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#julearn.utils.warn"><code class="docutils literal notranslate"><span class="pre">warn()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#julearn.utils.warn_with_log"><code class="docutils literal notranslate"><span class="pre">warn_with_log()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#julearn.utils.raise_error"><code class="docutils literal notranslate"><span class="pre">raise_error()</span></code></a></li>
 </ul>
 </li>
@@ -108,7 +112,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a></li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
       <li class="breadcrumb-item active">Reference</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/api.rst.txt" rel="nofollow"> View page source</a>
@@ -125,10 +129,10 @@
 <span id="main-api-functions"></span><h2>Main API functions<a class="headerlink" href="#module-julearn.api" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="julearn.api.run_cross_validation">
-<span class="sig-prename descclassname"><span class="pre">julearn.api.</span></span><span class="sig-name descname"><span class="pre">run_cross_validation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">problem_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocess</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_estimator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_train_score</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.api.run_cross_validation" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">julearn.api.</span></span><span class="sig-name descname"><span class="pre">run_cross_validation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">problem_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preprocess</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_estimator</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_train_score</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">search_params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.api.run_cross_validation" title="Permalink to this definition"></a></dt>
 <dd><p>Run cross validation and score.</p>
 <dl class="field-list">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
 <dt><strong>X</strong><span class="classifier">str, list(str) or numpy.array</span></dt><dd><p>The features to use.
 See <a class="reference external" href="https://juaml.github.io/julearn/input.html">https://juaml.github.io/julearn/input.html</a> for details.</p>
@@ -186,7 +190,7 @@ training data.</p></li>
 <dt><strong>groups</strong><span class="classifier">str or numpy.array | None</span></dt><dd><p>The grouping labels in case a Group CV is used.
 See <a class="reference external" href="https://juaml.github.io/julearn/input.html">https://juaml.github.io/julearn/input.html</a> for details.</p>
 </dd>
-<dt><strong>scoring</strong><span class="classifier">str | list(str) | obj | dict | None</span></dt><dd><p>The scoring metric to use.
+<dt><strong>scoring</strong><span class="classifier">ScorerLike, optional</span></dt><dd><p>The scoring metric to use.
 See <a class="reference external" href="https://scikit-learn.org/stable/modules/model_evaluation.html">https://scikit-learn.org/stable/modules/model_evaluation.html</a> for
 a comprehensive list of options. If None, use the model’s default
 scorer.</p>
@@ -202,15 +206,28 @@ STEP in the pipeline. Example: ‘svm__probability’: True will set
 the parameter ‘probability’ of the ‘svm’ model. If more than option
 is provided for at least one hyperparameter, a search will be
 performed.</p></li>
-<li><p>‘search’: The kind of search algorithm to use, e.g.:
-‘grid’ or ‘random’. Can be any valid julearn searcher name or
-scikit-learn compatible searcher.</p></li>
-<li><p>‘cv’: If search is going to be used, the cross-validation
-splitting strategy to use. Defaults to same CV as for the model
-evaluation.</p></li>
-<li><p>‘scoring’: If search is going to be used, the scoring metric to
-evaluate the performance.</p></li>
-<li><p>‘search_params’: Additional parameters for the search method.</p></li>
+</ul>
+</dd>
+<dt><strong>search_params</strong><span class="classifier">dict | None</span></dt><dd><p>Additional parameters in case Hyperparameter Tunning is performed, with
+the following keys:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>‘kind’: The kind of search algorithm to use, e.g.:</dt><dd><p>‘grid’ or ‘random’. Can be any valid julearn searcher name or
+scikit-learn compatible searcher.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>‘cv’: If a searcher is going to be used, the cross-validation</dt><dd><p>splitting strategy to use. Defaults to same CV as for the model
+evaluation.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>‘scoring’: If a searcher is going to be used, the scoring metric to</dt><dd><p>evaluate the performance.</p>
+</dd>
+</dl>
+</li>
 </ul>
 <p>See <a class="reference external" href="https://juaml.github.io/julearn/hyperparameters.html">https://juaml.github.io/julearn/hyperparameters.html</a> for details.</p>
 </dd>
@@ -226,7 +243,7 @@ while larger than 50 will print in standrad output.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>scores</strong><span class="classifier">pd.DataFrame</span></dt><dd><p>The resulting scores (one column for each score specified).
 Additionally, a ‘fit_time’ column will be added.
@@ -255,7 +272,7 @@ None is 1 unless you use a joblib.parallel_backend.
 <span class="sig-prename descclassname"><span class="pre">julearn.models.</span></span><span class="sig-name descname"><span class="pre">list_models</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.11)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#julearn.models.list_models" title="Permalink to this definition"></a></dt>
 <dd><p>List all the available model names.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt>list of str</dt><dd><p>A list will all the available model names.</p>
 </dd>
@@ -269,7 +286,7 @@ None is 1 unless you use a joblib.parallel_backend.
 <span class="sig-prename descclassname"><span class="pre">julearn.models.</span></span><span class="sig-name descname"><span class="pre">get_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">problem_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.11)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ModelLike</span></span></span><a class="headerlink" href="#julearn.models.get_model" title="Permalink to this definition"></a></dt>
 <dd><p>Get a model.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>The model name</p>
 </dd>
@@ -277,7 +294,7 @@ None is 1 unless you use a joblib.parallel_backend.
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>ModelLike</dt><dd><p>The model object.</p>
 </dd>
@@ -291,12 +308,12 @@ None is 1 unless you use a joblib.parallel_backend.
 <h2>Transformer functions<a class="headerlink" href="#transformer-functions" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="julearn.transformers.list_transformers">
-<span class="sig-prename descclassname"><span class="pre">julearn.transformers.</span></span><span class="sig-name descname"><span class="pre">list_transformers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#julearn.transformers.list_transformers" title="Permalink to this definition"></a></dt>
-<dd><p>List all the available transformers</p>
+<span class="sig-prename descclassname"><span class="pre">julearn.transformers.</span></span><span class="sig-name descname"><span class="pre">list_transformers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.11)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#julearn.transformers.list_transformers" title="Permalink to this definition"></a></dt>
+<dd><p>List all the available transformers.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>out</strong><span class="classifier">list(str)</span></dt><dd><p>A list will all the available transformer names.</p>
+<dt>list o str</dt><dd><p>A list will all the available transformer names.</p>
 </dd>
 </dl>
 </dd>
@@ -305,16 +322,16 @@ None is 1 unless you use a joblib.parallel_backend.
 
 <dl class="py function">
 <dt class="sig sig-object py" id="julearn.transformers.get_transformer">
-<span class="sig-prename descclassname"><span class="pre">julearn.transformers.</span></span><span class="sig-name descname"><span class="pre">get_transformer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.transformers.get_transformer" title="Permalink to this definition"></a></dt>
-<dd><p>Get a transformer</p>
+<span class="sig-prename descclassname"><span class="pre">julearn.transformers.</span></span><span class="sig-name descname"><span class="pre">get_transformer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.11)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">TransformerLike</span></span></span><a class="headerlink" href="#julearn.transformers.get_transformer" title="Permalink to this definition"></a></dt>
+<dd><p>Get a transformer.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>The transformer name</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>out</strong><span class="classifier">scikit-learn compatible transformer</span></dt><dd><p>The transformer object.</p>
 </dd>
@@ -329,29 +346,27 @@ None is 1 unless you use a joblib.parallel_backend.
 <h2>Logging<a class="headerlink" href="#logging" title="Permalink to this heading"></a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="julearn.utils.configure_logging">
-<span class="sig-prename descclassname"><span class="pre">julearn.utils.</span></span><span class="sig-name descname"><span class="pre">configure_logging</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'WARNING'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.utils.configure_logging" title="Permalink to this definition"></a></dt>
-<dd><p>Configure the logging functionality</p>
-<dl class="field-list">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dl>
-<dt><strong>level</strong><span class="classifier">int or string</span></dt><dd><p>The level of the messages to print. If string, it will be interpreted
-as elements of logging.
-Options are: [‘DEBUG’, ‘INFO’, ‘WARNING’, ‘ERROR’]. Defaults to
-‘WARNING’.</p>
+<span class="sig-prename descclassname"><span class="pre">julearn.utils.</span></span><span class="sig-name descname"><span class="pre">configure_logging</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.11)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.11)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'WARNING'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.11)"><span class="pre">Union</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/pathlib.html#pathlib.Path" title="(in Python v3.11)"><span class="pre">Path</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.11)"><span class="pre">bool</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#julearn.utils.configure_logging" title="Permalink to this definition"></a></dt>
+<dd><p>Configure the logging functionality.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>level</strong><span class="classifier">int or {“DEBUG”, “INFO”, “WARNING”, “ERROR”}</span></dt><dd><p>The level of the messages to print. If string, it will be interpreted
+as elements of logging (default “WARNING”).</p>
 </dd>
-<dt><strong>fname</strong><span class="classifier">str, Path or None</span></dt><dd><p>Filename of the log to print to. If None, stdout is used.</p>
+<dt><strong>fname</strong><span class="classifier">str or pathlib.Path, optional</span></dt><dd><p>Filename of the log to print to. If None, stdout is used
+(default None).</p>
 </dd>
-<dt><strong>overwrite</strong><span class="classifier">bool | None</span></dt><dd><p>Overwrite the log file (if it exists). Otherwise, statements
+<dt><strong>overwrite</strong><span class="classifier">bool, optional</span></dt><dd><p>Overwrite the log file (if it exists). Otherwise, statements
 will be appended to the log (default). None is the same as False,
 but additionally raises a warning to notify the user that log
-entries will be appended.</p>
+entries will be appended (default None).</p>
 </dd>
-<dt><strong>output_format</strong><span class="classifier">str</span></dt><dd><p>Format of the output messages. See the following for examples:</p>
-<blockquote>
-<div><p><a class="reference external" href="https://docs.python.org/dev/howto/logging.html">https://docs.python.org/dev/howto/logging.html</a></p>
-</div></blockquote>
-<p>e.g., “%(asctime)s - %(levelname)s - %(message)s”.</p>
-<p>Defaults to “%(asctime)s - %(name)s - %(levelname)s - %(message)s”</p>
+<dt><strong>output_format</strong><span class="classifier">str, optional</span></dt><dd><p>Format of the output messages. See the following for examples:
+<a class="reference external" href="https://docs.python.org/dev/howto/logging.html">https://docs.python.org/dev/howto/logging.html</a>
+e.g., <code class="docutils literal notranslate"><span class="pre">&quot;%(asctime)s</span> <span class="pre">-</span> <span class="pre">%(levelname)s</span> <span class="pre">-</span> <span class="pre">%(message)s&quot;</span></code>.
+If None, default string format is used
+(default <code class="docutils literal notranslate"><span class="pre">&quot;%(asctime)s</span> <span class="pre">-</span> <span class="pre">%(name)s</span> <span class="pre">-</span> <span class="pre">%(levelname)s</span> <span class="pre">-</span> <span class="pre">%(message)s&quot;</span></code>).</p>
 </dd>
 </dl>
 </dd>
@@ -359,15 +374,15 @@ entries will be appended.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="julearn.utils.warn">
-<span class="sig-prename descclassname"><span class="pre">julearn.utils.</span></span><span class="sig-name descname"><span class="pre">warn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category=&lt;class</span> <span class="pre">'RuntimeWarning'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.utils.warn" title="Permalink to this definition"></a></dt>
-<dd><p>Warn, but first log it</p>
+<dt class="sig sig-object py" id="julearn.utils.warn_with_log">
+<span class="sig-prename descclassname"><span class="pre">julearn.utils.</span></span><span class="sig-name descname"><span class="pre">warn_with_log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">category:</span> <span class="pre">~typing.Optional[~typing.Type[Warning]]</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'RuntimeWarning'&gt;</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#julearn.utils.warn_with_log" title="Permalink to this definition"></a></dt>
+<dd><p>Warn, but first log it.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>msg</strong><span class="classifier">str</span></dt><dd><p>Warning message</p>
+<dt><strong>msg</strong><span class="classifier">str</span></dt><dd><p>Warning message.</p>
 </dd>
-<dt><strong>category</strong><span class="classifier">instance of Warning</span></dt><dd><p>The warning class. Defaults to <code class="docutils literal notranslate"><span class="pre">RuntimeWarning</span></code>.</p>
+<dt><strong>category</strong><span class="classifier">subclass of Warning, optional</span></dt><dd><p>The warning subclass (default RuntimeWarning).</p>
 </dd>
 </dl>
 </dd>
@@ -379,7 +394,7 @@ entries will be appended.</p>
 <span class="sig-prename descclassname"><span class="pre">julearn.utils.</span></span><span class="sig-name descname"><span class="pre">raise_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">msg:</span> <span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">klass:</span> <span class="pre">~typing.Type[Exception]</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'ValueError'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exception:</span> <span class="pre">~typing.Optional[Exception]</span> <span class="pre">=</span> <span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NoReturn" title="(in Python v3.11)"><span class="pre">NoReturn</span></a></span></span><a class="headerlink" href="#julearn.utils.raise_error" title="Permalink to this definition"></a></dt>
 <dd><p>Raise error, but first log it.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>msg</strong><span class="classifier">str</span></dt><dd><p>The message for the exception.</p>
 </dd>
@@ -403,7 +418,7 @@ entries will be appended.</p>
 <p>Provides train/test indices using resampling with replacement, respecting
 the distribution of samples for each class.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>n_splits</strong><span class="classifier">int, default=5</span></dt><dd><p>Number of re-shuffling &amp; splitting iterations.</p>
 </dd>
@@ -431,7 +446,7 @@ Pass an int for reproducible output across multiple function calls.</p>
 <span class="sig-name descname"><span class="pre">split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.model_selection.StratifiedBootstrap.split" title="Permalink to this definition"></a></dt>
 <dd><p>Generate indices to split data into training and test set.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_features)</span></dt><dd><p>Training data, where n_samples is the number of samples
 and n_features is the number of features.
@@ -447,7 +462,7 @@ dataset into train/test set.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Yields</dt>
+<dt class="field-even">Yields<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>train</strong><span class="classifier">ndarray</span></dt><dd><p>The training set indices for that split.</p>
 </dd>
@@ -473,7 +488,7 @@ each repetition. This particular implementation ensures that the
 groups are stratified. That is, each group is represented in each
 fold.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>n_splits</strong><span class="classifier">int, default=5</span></dt><dd><p>Number of folds. Must be at least 2.</p>
 </dd>
@@ -493,7 +508,7 @@ to an integer.</p>
 <span class="sig-name descname"><span class="pre">split</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.11)"><span class="pre">Optional</span></a><span class="p"><span class="pre">[</span></span><span class="pre">ndarray</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.model_selection.StratifiedGroupsKFold.split" title="Permalink to this definition"></a></dt>
 <dd><p>Generate indices to split data into training and test set.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_features)</span></dt><dd><p>Training data, where n_samples is the number of samples
 and n_features is the number of features.
@@ -507,7 +522,7 @@ hence <code class="docutils literal notranslate"><span class="pre">np.zeros(n_sa
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Yields</dt>
+<dt class="field-even">Yields<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>train</strong><span class="classifier">ndarray</span></dt><dd><p>The training set indices for that split.</p>
 </dd>
@@ -515,7 +530,7 @@ hence <code class="docutils literal notranslate"><span class="pre">np.zeros(n_sa
 </dd>
 </dl>
 </dd>
-<dt class="field-odd">Raises</dt>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt>ValueError</dt><dd><p>If the <cite>groups</cite> parameter is None.</p>
 </dd>
@@ -537,7 +552,7 @@ to an integer.</p>
 <p>Repeats <a class="reference internal" href="#julearn.model_selection.StratifiedGroupsKFold" title="julearn.model_selection.StratifiedGroupsKFold"><code class="xref py py-class docutils literal notranslate"><span class="pre">julearn.model_selection.StratifiedGroupsKFold</span></code></a> n times with
 different randomization in each repetition.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>n_splits</strong><span class="classifier">int, default=5</span></dt><dd><p>Number of folds. Must be at least 2.</p>
 </dd>
@@ -567,7 +582,7 @@ to an intege</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="auto_examples/advanced/run_example_pca_featsets.html" class="btn btn-neutral float-left" title="Regression Analysis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="auto_examples/advanced/plot_transform_until.html" class="btn btn-neutral float-left" title="Preprocessing with variance threshold, zscore and PCA" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="contributing.html" class="btn btn-neutral float-right" title="Contributing to julearn" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

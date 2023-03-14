@@ -25,7 +25,7 @@ This example uses the sklearn "diabetes" regression dataset, and transforms the
 target variable, in this case, using z-score. Then, we perform a regression
 analysis using Ridge Regression model.
 
-.. GENERATED FROM PYTHON SOURCE LINES 10-27
+.. GENERATED FROM PYTHON SOURCE LINES 10-28
 
 .. code-block:: default
 
@@ -42,8 +42,9 @@ analysis using Ridge Regression model.
 
     from julearn import run_cross_validation
     from julearn.utils import configure_logging
+
     # this is crucial for creating the model in the new version
-    from julearn.pipeline import PipelineCreator
+    from julearn.pipeline import PipelineCreator, TargetPipelineCreator
 
 
 
@@ -53,15 +54,15 @@ analysis using Ridge Regression model.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 28-29
+.. GENERATED FROM PYTHON SOURCE LINES 29-30
 
 Set the logging level to info to see extra information
 
-.. GENERATED FROM PYTHON SOURCE LINES 29-32
+.. GENERATED FROM PYTHON SOURCE LINES 30-33
 
 .. code-block:: default
 
-    configure_logging(level='INFO')
+    configure_logging(level="INFO")
 
 
 
@@ -72,22 +73,22 @@ Set the logging level to info to see extra information
 
  .. code-block:: none
 
-    2022-12-12 15:16:01,075 - julearn - INFO - ===== Lib Versions =====
-    2022-12-12 15:16:01,075 - julearn - INFO - numpy: 1.23.5
-    2022-12-12 15:16:01,076 - julearn - INFO - scipy: 1.9.3
-    2022-12-12 15:16:01,076 - julearn - INFO - sklearn: 1.2.0rc1
-    2022-12-12 15:16:01,076 - julearn - INFO - pandas: 1.5.2
-    2022-12-12 15:16:01,076 - julearn - INFO - julearn: 0.1.dev1
-    2022-12-12 15:16:01,076 - julearn - INFO - ========================
+    2023-03-14 15:37:01,530 - julearn - INFO - ===== Lib Versions =====
+    2023-03-14 15:37:01,530 - julearn - INFO - numpy: 1.23.5
+    2023-03-14 15:37:01,530 - julearn - INFO - scipy: 1.10.1
+    2023-03-14 15:37:01,531 - julearn - INFO - sklearn: 1.2.0rc1
+    2023-03-14 15:37:01,531 - julearn - INFO - pandas: 1.5.3
+    2023-03-14 15:37:01,531 - julearn - INFO - julearn: 0.1.dev1
+    2023-03-14 15:37:01,531 - julearn - INFO - ========================
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 33-34
+.. GENERATED FROM PYTHON SOURCE LINES 34-35
 
 Load the diabetes dataset from sklearn as a pandas dataframe
 
-.. GENERATED FROM PYTHON SOURCE LINES 34-37
+.. GENERATED FROM PYTHON SOURCE LINES 35-38
 
 .. code-block:: default
 
@@ -101,19 +102,19 @@ Load the diabetes dataset from sklearn as a pandas dataframe
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 38-42
+.. GENERATED FROM PYTHON SOURCE LINES 39-43
 
 Dataset contains ten variables age, sex, body mass index, average  blood
 pressure, and six blood serum measurements (s1-s6) diabetes patients and
 a quantitative measure of disease progression one year after baseline which
 is the target we are interested in predicting.
 
-.. GENERATED FROM PYTHON SOURCE LINES 42-46
+.. GENERATED FROM PYTHON SOURCE LINES 43-47
 
 .. code-block:: default
 
-    print('Features: \n', features.head())
-    print('Target: \n', target.describe())
+    print("Features: \n", features.head())
+    print("Target: \n", target.describe())
 
 
 
@@ -147,19 +148,19 @@ is the target we are interested in predicting.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 47-49
+.. GENERATED FROM PYTHON SOURCE LINES 48-50
 
 Let's combine features and target together in one dataframe and define X
 and y
 
-.. GENERATED FROM PYTHON SOURCE LINES 49-54
+.. GENERATED FROM PYTHON SOURCE LINES 50-55
 
 .. code-block:: default
 
     data_diabetes = pd.concat([features, target], axis=1)
 
-    X = ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    y = 'target'
+    X = ["age", "sex", "bmi", "bp", "s1", "s2", "s3", "s4", "s5", "s6"]
+    y = "target"
 
 
 
@@ -168,11 +169,11 @@ and y
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 55-56
+.. GENERATED FROM PYTHON SOURCE LINES 56-57
 
 Split the dataset into train and test
 
-.. GENERATED FROM PYTHON SOURCE LINES 56-59
+.. GENERATED FROM PYTHON SOURCE LINES 57-60
 
 .. code-block:: default
 
@@ -186,20 +187,43 @@ Split the dataset into train and test
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 60-65
+.. GENERATED FROM PYTHON SOURCE LINES 61-63
 
-Let's create the model. To note, in PipelineCreator the only reserved key is
-target. That means, there is no need to name it, i.e., by stating
-apply_to="target", it already knows which is the target.
-Here, it is important that if you define the PipelineCreator you include the
-model and do not define the model in run_cross_validation
+Let's create the model. Since we will be tranforming the target variable
+we will first need to create a TargetPipelineCreator for this.
 
-.. GENERATED FROM PYTHON SOURCE LINES 65-81
+.. GENERATED FROM PYTHON SOURCE LINES 63-68
+
+.. code-block:: default
+
+
+    target_creator = TargetPipelineCreator()
+    target_creator.add("zscore")
+
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+
+    <julearn.pipeline.target_pipeline_creator.TargetPipelineCreator object at 0x7f764fbbe3e0>
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 69-70
+
+Now we can create the pipeline using a PipelineCreator.
+
+.. GENERATED FROM PYTHON SOURCE LINES 70-85
 
 .. code-block:: default
 
     creator = PipelineCreator(problem_type="regression")
-    creator.add("zscore", apply_to="target")
+    creator.add(target_creator, apply_to="target")
     creator.add("ridge")
 
     scores, model = run_cross_validation(
@@ -208,7 +232,7 @@ model and do not define the model in run_cross_validation
         data=train_diabetes,
         model=creator,
         return_estimator="final",
-        scoring='neg_mean_absolute_error'
+        scoring="neg_mean_absolute_error",
     )
 
     print(scores.head(5))
@@ -217,119 +241,46 @@ model and do not define the model in run_cross_validation
 
 
 
-
 .. rst-class:: sphx-glr-script-out
 
  .. code-block:: none
 
-    2022-12-12 15:16:01,097 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'target'}; pattern=(?:target)>
-    2022-12-12 15:16:01,098 - julearn - INFO - Step added
-    2022-12-12 15:16:01,098 - julearn - INFO - Adding step ridge that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2022-12-12 15:16:01,098 - julearn - INFO - Step added
-    2022-12-12 15:16:01,098 - julearn - INFO - ==== Input Data ====
-    2022-12-12 15:16:01,098 - julearn - INFO - Using dataframe as input
-    2022-12-12 15:16:01,098 - julearn - INFO -      Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2022-12-12 15:16:01,098 - julearn - INFO -      Target: target
-    2022-12-12 15:16:01,099 - julearn - INFO - ====================
-    2022-12-12 15:16:01,099 - julearn - INFO - 
-    2022-12-12 15:16:01,100 - julearn - INFO - = Model Parameters =
-    2022-12-12 15:16:01,100 - julearn - INFO - ====================
-    2022-12-12 15:16:01,101 - julearn - INFO - 
-    2022-12-12 15:16:01,101 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-    /opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py:776: UserWarning: Scoring failed. The score on this train-test partition for these parameters will be set to nan. Details: 
-    Traceback (most recent call last):
-      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py", line 767, in _score
-        scores = scorer(estimator, X_test, y_test)
-      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_scorer.py", line 220, in __call__
-        return self._score(
-      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_scorer.py", line 268, in _score
-        return self._sign * self._score_func(y_true, y_pred, **self._kwargs)
-      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_regression.py", line 196, in mean_absolute_error
-        y_type, y_true, y_pred, multioutput = _check_reg_targets(
-      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_regression.py", line 111, in _check_reg_targets
-        raise ValueError(
-    ValueError: y_true and y_pred have different number of output (1!=10)
-
-      warnings.warn(
-    /opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py:776: UserWarning: Scoring failed. The score on this train-test partition for these parameters will be set to nan. Details: 
-    Traceback (most recent call last):
-      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py", line 767, in _score
-        scores = scorer(estimator, X_test, y_test)
-      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_scorer.py", line 220, in __call__
-        return self._score(
-      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_scorer.py", line 268, in _score
-        return self._sign * self._score_func(y_true, y_pred, **self._kwargs)
-      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_regression.py", line 196, in mean_absolute_error
-        y_type, y_true, y_pred, multioutput = _check_reg_targets(
-      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_regression.py", line 111, in _check_reg_targets
-        raise ValueError(
-    ValueError: y_true and y_pred have different number of output (1!=10)
-
-      warnings.warn(
-    /opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py:776: UserWarning: Scoring failed. The score on this train-test partition for these parameters will be set to nan. Details: 
-    Traceback (most recent call last):
-      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py", line 767, in _score
-        scores = scorer(estimator, X_test, y_test)
-      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_scorer.py", line 220, in __call__
-        return self._score(
-      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_scorer.py", line 268, in _score
-        return self._sign * self._score_func(y_true, y_pred, **self._kwargs)
-      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_regression.py", line 196, in mean_absolute_error
-        y_type, y_true, y_pred, multioutput = _check_reg_targets(
-      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_regression.py", line 111, in _check_reg_targets
-        raise ValueError(
-    ValueError: y_true and y_pred have different number of output (1!=10)
-
-      warnings.warn(
-    /opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py:776: UserWarning: Scoring failed. The score on this train-test partition for these parameters will be set to nan. Details: 
-    Traceback (most recent call last):
-      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py", line 767, in _score
-        scores = scorer(estimator, X_test, y_test)
-      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_scorer.py", line 220, in __call__
-        return self._score(
-      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_scorer.py", line 268, in _score
-        return self._sign * self._score_func(y_true, y_pred, **self._kwargs)
-      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_regression.py", line 196, in mean_absolute_error
-        y_type, y_true, y_pred, multioutput = _check_reg_targets(
-      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_regression.py", line 111, in _check_reg_targets
-        raise ValueError(
-    ValueError: y_true and y_pred have different number of output (1!=10)
-
-      warnings.warn(
-    /opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py:776: UserWarning: Scoring failed. The score on this train-test partition for these parameters will be set to nan. Details: 
-    Traceback (most recent call last):
-      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py", line 767, in _score
-        scores = scorer(estimator, X_test, y_test)
-      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_scorer.py", line 220, in __call__
-        return self._score(
-      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_scorer.py", line 268, in _score
-        return self._sign * self._score_func(y_true, y_pred, **self._kwargs)
-      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_regression.py", line 196, in mean_absolute_error
-        y_type, y_true, y_pred, multioutput = _check_reg_targets(
-      File "/opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_regression.py", line 111, in _check_reg_targets
-        raise ValueError(
-    ValueError: y_true and y_pred have different number of output (1!=10)
-
-      warnings.warn(
+    2023-03-14 15:37:01,560 - julearn - INFO - Adding step jutargetpipeline that applies to ColumnTypes<types={'target'}; pattern=(?:target)>
+    2023-03-14 15:37:01,561 - julearn - INFO - Step added
+    2023-03-14 15:37:01,561 - julearn - INFO - Adding step ridge that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2023-03-14 15:37:01,561 - julearn - INFO - Step added
+    2023-03-14 15:37:01,561 - julearn - INFO - ==== Input Data ====
+    2023-03-14 15:37:01,561 - julearn - INFO - Using dataframe as input
+    2023-03-14 15:37:01,561 - julearn - INFO -      Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2023-03-14 15:37:01,561 - julearn - INFO -      Target: target
+    2023-03-14 15:37:01,563 - julearn - INFO - ====================
+    2023-03-14 15:37:01,563 - julearn - INFO - 
+    2023-03-14 15:37:01,563 - julearn - WARNING - The following columns are not defined in X_types: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']. They will be treated as continuous.
+    /home/runner/work/julearn/julearn/julearn/utils/logging.py:238: RuntimeWarning: The following columns are not defined in X_types: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']. They will be treated as continuous.
+      warn(msg, category=category)
+    2023-03-14 15:37:01,564 - julearn - INFO - = Model Parameters =
+    2023-03-14 15:37:01,565 - julearn - INFO - ====================
+    2023-03-14 15:37:01,565 - julearn - INFO - 
+    2023-03-14 15:37:01,565 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
        fit_time  score_time  test_score  repeat  fold
-    0  0.009430    0.003831         NaN       0     0
-    1  0.007838    0.003122         NaN       0     1
-    2  0.007654    0.003036         NaN       0     2
-    3  0.007727    0.003043         NaN       0     3
-    4  0.007674    0.003084         NaN       0     4
+    0  0.011961    0.004967  -54.196197       0     0
+    1  0.009880    0.004317  -48.899402       0     1
+    2  0.009917    0.004306  -45.653579       0     2
+    3  0.009445    0.004158  -55.768887       0     3
+    4  0.008873    0.004278  -50.157147       0     4
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 82-83
+.. GENERATED FROM PYTHON SOURCE LINES 86-87
 
 Mean value of mean absolute error across CV
 
-.. GENERATED FROM PYTHON SOURCE LINES 83-84
+.. GENERATED FROM PYTHON SOURCE LINES 87-88
 
 .. code-block:: default
 
-    print(scores['test_score'].mean() * -1)
+    print(scores["test_score"].mean() * -1)
 
 
 
@@ -338,7 +289,7 @@ Mean value of mean absolute error across CV
 
  .. code-block:: none
 
-    nan
+    50.9350422035232
 
 
 
@@ -346,7 +297,7 @@ Mean value of mean absolute error across CV
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.136 seconds)
+   **Total running time of the script:** ( 0 minutes  0.182 seconds)
 
 
 .. _sphx_glr_download_auto_examples_basic_run_apply_to_target.py:

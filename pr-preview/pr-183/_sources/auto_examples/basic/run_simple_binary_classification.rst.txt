@@ -62,13 +62,13 @@ Set the logging level to info to see extra information
 
  .. code-block:: none
 
-    2022-12-12 15:16:01,264 - julearn - INFO - ===== Lib Versions =====
-    2022-12-12 15:16:01,264 - julearn - INFO - numpy: 1.23.5
-    2022-12-12 15:16:01,264 - julearn - INFO - scipy: 1.9.3
-    2022-12-12 15:16:01,264 - julearn - INFO - sklearn: 1.2.0rc1
-    2022-12-12 15:16:01,264 - julearn - INFO - pandas: 1.5.2
-    2022-12-12 15:16:01,264 - julearn - INFO - julearn: 0.1.dev1
-    2022-12-12 15:16:01,264 - julearn - INFO - ========================
+    2023-03-14 15:37:01,084 - julearn - INFO - ===== Lib Versions =====
+    2023-03-14 15:37:01,085 - julearn - INFO - numpy: 1.23.5
+    2023-03-14 15:37:01,085 - julearn - INFO - scipy: 1.10.1
+    2023-03-14 15:37:01,085 - julearn - INFO - sklearn: 1.2.0rc1
+    2023-03-14 15:37:01,085 - julearn - INFO - pandas: 1.5.3
+    2023-03-14 15:37:01,085 - julearn - INFO - julearn: 0.1.dev1
+    2023-03-14 15:37:01,085 - julearn - INFO - ========================
 
 
 
@@ -135,21 +135,24 @@ We will try to predict the species.
 
  .. code-block:: none
 
-    2022-12-12 15:16:01,913 - julearn - INFO - ==== Input Data ====
-    2022-12-12 15:16:01,914 - julearn - INFO - Using dataframe as input
-    2022-12-12 15:16:01,914 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length']
-    2022-12-12 15:16:01,914 - julearn - INFO -      Target: species
-    2022-12-12 15:16:01,914 - julearn - INFO - ====================
-    2022-12-12 15:16:01,915 - julearn - INFO - 
-    2022-12-12 15:16:01,915 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2022-12-12 15:16:01,915 - julearn - INFO - Step added
-    2022-12-12 15:16:01,915 - julearn - INFO - Adding step svm that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2022-12-12 15:16:01,915 - julearn - INFO - Step added
-    2022-12-12 15:16:01,916 - julearn - INFO - = Model Parameters =
-    2022-12-12 15:16:01,916 - julearn - INFO - ====================
-    2022-12-12 15:16:01,916 - julearn - INFO - 
-    2022-12-12 15:16:01,916 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-    2022-12-12 15:16:01,916 - julearn - INFO - Binary classification problem detected.
+    2023-03-14 15:37:01,090 - julearn - INFO - ==== Input Data ====
+    2023-03-14 15:37:01,090 - julearn - INFO - Using dataframe as input
+    2023-03-14 15:37:01,090 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length']
+    2023-03-14 15:37:01,090 - julearn - INFO -      Target: species
+    2023-03-14 15:37:01,091 - julearn - INFO - ====================
+    2023-03-14 15:37:01,091 - julearn - INFO - 
+    2023-03-14 15:37:01,091 - julearn - WARNING - The following columns are not defined in X_types: ['sepal_length', 'sepal_width', 'petal_length']. They will be treated as continuous.
+    /home/runner/work/julearn/julearn/julearn/utils/logging.py:238: RuntimeWarning: The following columns are not defined in X_types: ['sepal_length', 'sepal_width', 'petal_length']. They will be treated as continuous.
+      warn(msg, category=category)
+    2023-03-14 15:37:01,092 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2023-03-14 15:37:01,092 - julearn - INFO - Step added
+    2023-03-14 15:37:01,092 - julearn - INFO - Adding step svm that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2023-03-14 15:37:01,092 - julearn - INFO - Step added
+    2023-03-14 15:37:01,093 - julearn - INFO - = Model Parameters =
+    2023-03-14 15:37:01,093 - julearn - INFO - ====================
+    2023-03-14 15:37:01,093 - julearn - INFO - 
+    2023-03-14 15:37:01,093 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+    2023-03-14 15:37:01,094 - julearn - INFO - Binary classification problem detected.
     0    0.90
     1    0.75
     2    0.95
@@ -225,29 +228,32 @@ We will also set the random seed so we always split the data in the same way.
 
  .. code-block:: none
 
-    2022-12-12 15:16:01,972 - julearn - INFO - Setting random seed to 42
-    2022-12-12 15:16:01,972 - julearn - INFO - ==== Input Data ====
-    2022-12-12 15:16:01,972 - julearn - INFO - Using dataframe as input
-    2022-12-12 15:16:01,972 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length']
-    2022-12-12 15:16:01,972 - julearn - INFO -      Target: species
-    2022-12-12 15:16:01,973 - julearn - INFO - ====================
-    2022-12-12 15:16:01,973 - julearn - INFO - 
-    2022-12-12 15:16:01,973 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2022-12-12 15:16:01,973 - julearn - INFO - Step added
-    2022-12-12 15:16:01,973 - julearn - INFO - Adding step svm that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2022-12-12 15:16:01,973 - julearn - INFO - Step added
-    2022-12-12 15:16:01,974 - julearn - INFO - = Model Parameters =
-    2022-12-12 15:16:01,974 - julearn - INFO - ====================
-    2022-12-12 15:16:01,974 - julearn - INFO - 
-    2022-12-12 15:16:01,974 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-    2022-12-12 15:16:01,974 - julearn - INFO - Binary classification problem detected.
-    /opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_classification.py:2184: UserWarning: y_pred contains classes not in y_true
+    2023-03-14 15:37:01,181 - julearn - INFO - Setting random seed to 42
+    2023-03-14 15:37:01,181 - julearn - INFO - ==== Input Data ====
+    2023-03-14 15:37:01,182 - julearn - INFO - Using dataframe as input
+    2023-03-14 15:37:01,182 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length']
+    2023-03-14 15:37:01,182 - julearn - INFO -      Target: species
+    2023-03-14 15:37:01,183 - julearn - INFO - ====================
+    2023-03-14 15:37:01,183 - julearn - INFO - 
+    2023-03-14 15:37:01,183 - julearn - WARNING - The following columns are not defined in X_types: ['sepal_length', 'sepal_width', 'petal_length']. They will be treated as continuous.
+    /home/runner/work/julearn/julearn/julearn/utils/logging.py:238: RuntimeWarning: The following columns are not defined in X_types: ['sepal_length', 'sepal_width', 'petal_length']. They will be treated as continuous.
+      warn(msg, category=category)
+    2023-03-14 15:37:01,183 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2023-03-14 15:37:01,183 - julearn - INFO - Step added
+    2023-03-14 15:37:01,184 - julearn - INFO - Adding step svm that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2023-03-14 15:37:01,184 - julearn - INFO - Step added
+    2023-03-14 15:37:01,185 - julearn - INFO - = Model Parameters =
+    2023-03-14 15:37:01,185 - julearn - INFO - ====================
+    2023-03-14 15:37:01,185 - julearn - INFO - 
+    2023-03-14 15:37:01,185 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+    2023-03-14 15:37:01,185 - julearn - INFO - Binary classification problem detected.
+    /opt/hostedtoolcache/Python/3.10.10/x64/lib/python3.10/site-packages/sklearn/metrics/_classification.py:2184: UserWarning: y_pred contains classes not in y_true
       warnings.warn("y_pred contains classes not in y_true")
-    /opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_classification.py:2184: UserWarning: y_pred contains classes not in y_true
+    /opt/hostedtoolcache/Python/3.10.10/x64/lib/python3.10/site-packages/sklearn/metrics/_classification.py:2184: UserWarning: y_pred contains classes not in y_true
       warnings.warn("y_pred contains classes not in y_true")
-    /opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_classification.py:2184: UserWarning: y_pred contains classes not in y_true
+    /opt/hostedtoolcache/Python/3.10.10/x64/lib/python3.10/site-packages/sklearn/metrics/_classification.py:2184: UserWarning: y_pred contains classes not in y_true
       warnings.warn("y_pred contains classes not in y_true")
-    /opt/hostedtoolcache/Python/3.10.8/x64/lib/python3.10/site-packages/sklearn/metrics/_classification.py:2184: UserWarning: y_pred contains classes not in y_true
+    /opt/hostedtoolcache/Python/3.10.10/x64/lib/python3.10/site-packages/sklearn/metrics/_classification.py:2184: UserWarning: y_pred contains classes not in y_true
       warnings.warn("y_pred contains classes not in y_true")
     0.8625
     0.8678571428571429
@@ -292,23 +298,26 @@ In this example, we are interested in detecting `versicolor`.
 
  .. code-block:: none
 
-    2022-12-12 15:16:02,032 - julearn - INFO - Setting random seed to 42
-    2022-12-12 15:16:02,032 - julearn - INFO - ==== Input Data ====
-    2022-12-12 15:16:02,032 - julearn - INFO - Using dataframe as input
-    2022-12-12 15:16:02,032 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length']
-    2022-12-12 15:16:02,032 - julearn - INFO -      Target: species
-    2022-12-12 15:16:02,033 - julearn - INFO - Setting the following as positive labels ['versicolor']
-    2022-12-12 15:16:02,033 - julearn - INFO - ====================
-    2022-12-12 15:16:02,033 - julearn - INFO - 
-    2022-12-12 15:16:02,033 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2022-12-12 15:16:02,033 - julearn - INFO - Step added
-    2022-12-12 15:16:02,033 - julearn - INFO - Adding step svm that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2022-12-12 15:16:02,034 - julearn - INFO - Step added
-    2022-12-12 15:16:02,034 - julearn - INFO - = Model Parameters =
-    2022-12-12 15:16:02,034 - julearn - INFO - ====================
-    2022-12-12 15:16:02,034 - julearn - INFO - 
-    2022-12-12 15:16:02,034 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-    2022-12-12 15:16:02,035 - julearn - INFO - Binary classification problem detected.
+    2023-03-14 15:37:01,271 - julearn - INFO - Setting random seed to 42
+    2023-03-14 15:37:01,272 - julearn - INFO - ==== Input Data ====
+    2023-03-14 15:37:01,272 - julearn - INFO - Using dataframe as input
+    2023-03-14 15:37:01,272 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length']
+    2023-03-14 15:37:01,272 - julearn - INFO -      Target: species
+    2023-03-14 15:37:01,273 - julearn - INFO - Setting the following as positive labels ['versicolor']
+    2023-03-14 15:37:01,274 - julearn - INFO - ====================
+    2023-03-14 15:37:01,274 - julearn - INFO - 
+    2023-03-14 15:37:01,274 - julearn - WARNING - The following columns are not defined in X_types: ['sepal_length', 'sepal_width', 'petal_length']. They will be treated as continuous.
+    /home/runner/work/julearn/julearn/julearn/utils/logging.py:238: RuntimeWarning: The following columns are not defined in X_types: ['sepal_length', 'sepal_width', 'petal_length']. They will be treated as continuous.
+      warn(msg, category=category)
+    2023-03-14 15:37:01,274 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2023-03-14 15:37:01,274 - julearn - INFO - Step added
+    2023-03-14 15:37:01,275 - julearn - INFO - Adding step svm that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2023-03-14 15:37:01,275 - julearn - INFO - Step added
+    2023-03-14 15:37:01,276 - julearn - INFO - = Model Parameters =
+    2023-03-14 15:37:01,276 - julearn - INFO - ====================
+    2023-03-14 15:37:01,276 - julearn - INFO - 
+    2023-03-14 15:37:01,276 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+    2023-03-14 15:37:01,276 - julearn - INFO - Binary classification problem detected.
     0.4
 
 
@@ -317,7 +326,7 @@ In this example, we are interested in detecting `versicolor`.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.829 seconds)
+   **Total running time of the script:** ( 0 minutes  0.280 seconds)
 
 
 .. _sphx_glr_download_auto_examples_basic_run_simple_binary_classification.py:
