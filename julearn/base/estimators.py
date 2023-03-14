@@ -169,7 +169,7 @@ class WrapModel(JuBaseEstimator):
         The model to wrap.
     apply_to : str or list of str or set of str or ColumnTypes
         The column types to apply the model to. If None, the model is
-        applied to `continous` type (default is None).
+        applied to `continuous` type (default is None).
     needed_types : str or list of str or set of str or ColumnTypes
         The column types needed by the model. If None, there are no
         needed types (default is None)

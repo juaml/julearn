@@ -17,7 +17,7 @@ class JuTargetPipeline:
     """Class for pipelines that work on the target.
 
     Unlike the :class:`sklearn.pipeline.Pipeline`, this pipeline fits and
-    tranforms using both X and y. This is useful for pipelines that work on
+    transforms using both X and y. This is useful for pipelines that work on
     the target but require information from the input data, such as the
     :class:`julearn.transformers.target.TargetConfoundRemover` or
     a target encoder that requires one of the features to be present.

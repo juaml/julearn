@@ -123,7 +123,7 @@ def run_cross_validation(
           performed.
 
     search_params : dict | None
-        Additional parameters in case Hyperparameter Tunning is performed, with
+        Additional parameters in case Hyperparameter Tuning is performed, with
         the following keys:
 
         * 'kind': The kind of search algorithm to use, e.g.:

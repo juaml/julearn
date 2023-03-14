@@ -21,10 +21,10 @@ def test_TargetConfoundRemover(
     """
 
     to_rename = {
-        "sepal_length": "sepal_length__:type:__continous",
+        "sepal_length": "sepal_length__:type:__continuous",
         "sepal_width": "sepal_width__:type:__confound",
-        "petal_length": "petal_length__:type:__continous",
-        "petal_width": "petal_width__:type:__continous",
+        "petal_length": "petal_length__:type:__continuous",
+        "petal_width": "petal_width__:type:__continuous",
     }
     X_iris.rename(columns=to_rename, inplace=True)
 

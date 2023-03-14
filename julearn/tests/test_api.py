@@ -286,7 +286,7 @@ def test_run_cv_errors(df_iris: pd.DataFrame) -> None:
     model = "svm"
     model_params = {"svm__C": 1}
     search_params = {"kind": "grid", "cv": 3}
-    with pytest.raises(ValueError, match="earch parameters were specified"):
+    with pytest.raises(ValueError, match="search parameters were specified"):
         run_cross_validation(
             X=X,
             y=y,
@@ -300,7 +300,7 @@ def test_run_cv_errors(df_iris: pd.DataFrame) -> None:
 
 
 def test_tune_hyperparam_gridsearch(df_iris: pd.DataFrame) -> None:
-    """Test a run_cross_validation with hyperparameter tunning (gridsearch).
+    """Test a run_cross_validation with hyperparameter tuning (gridsearch).
 
     Parameters
     ----------
@@ -364,7 +364,7 @@ def test_tune_hyperparam_gridsearch(df_iris: pd.DataFrame) -> None:
 
 
 def test_tune_hyperparam_randomsearch(df_iris: pd.DataFrame) -> None:
-    """Test a run_cross_validation with hyperparameter tunning (randomsearch).
+    """Test a run_cross_validation with hyperparameter tuning (randomsearch).
 
     Parameters
     ----------

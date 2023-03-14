@@ -34,7 +34,7 @@ from pytest_lazyfixture import lazy_fixture
 def test_construction_working(
     model: str, preprocess: List[str], problem_type: str
 ) -> None:
-    """Test that the pipeline constructions works as epxected.
+    """Test that the pipeline constructions works as expected.
 
     Parameters
     ----------

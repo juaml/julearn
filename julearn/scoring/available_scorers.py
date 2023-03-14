@@ -68,7 +68,7 @@ def list_scorers() -> List[str]:
 def register_scorer(
     scorer_name: str, scorer: ScorerLike, overwrite: Optional[bool] = None
 ) -> None:
-    """Register a scorer, so that it can be accesed by name.
+    """Register a scorer, so that it can be accessed by name.
 
     Parameters
     ----------

@@ -63,7 +63,7 @@ class CBPM(BaseEstimator, TransformerMixin):
     Attributes
     ----------
     y_mean_ : np.array
-        Contans the mean of the target, to be used for the transformation in
+        Contains the mean of the target, to be used for the transformation in
         case that there are no significant correlations.
     used_corr_sign_ : str
         This will show you whether pos, neg or posneg was applied.

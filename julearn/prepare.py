@@ -405,7 +405,7 @@ def check_x_types(X_types: Optional[Dict], X: List[str]) -> Dict[str, List]:
     if X_types is None:
         warn_with_log(
             "X_types is None. No type checking will be performed and all "
-            "features will be treated as continous."
+            "features will be treated as continuous."
         )
         return {}
     X_types = {

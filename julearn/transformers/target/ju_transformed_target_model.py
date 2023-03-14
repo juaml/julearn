@@ -1,4 +1,4 @@
-"""Class that provides a model that supports tranforming the target."""
+"""Class that provides a model that supports transforming the target."""
 
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
@@ -28,7 +28,7 @@ class TransformedTargetWarning(RuntimeWarning):
 
 
 class JuTransformedTargetModel(JuBaseEstimator):
-    """Class that provides a model that supports tranforming the target.
+    """Class that provides a model that supports transforming the target.
 
     This _model_ is a wrapper that will transform the target before fitting.
 

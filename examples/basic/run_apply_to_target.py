@@ -58,7 +58,7 @@ train_diabetes, test_diabetes = train_test_split(data_diabetes, test_size=0.3)
 
 
 ###############################################################################
-# Let's create the model. Since we will be tranforming the target variable
+# Let's create the model. Since we will be transforming the target variable
 # we will first need to create a TargetPipelineCreator for this.
 
 target_creator = TargetPipelineCreator()
