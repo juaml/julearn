@@ -19,7 +19,7 @@ class CBPM(BaseEstimator, TransformerMixin):
     This transformer means together all features significantly
     correlated to the target.
 
-    Significant negative and positive correlations are meaned separately.
+    Significant negative and positive correlations' mean are done separately.
     Non-significant ones are dropped.
 
     User can choose to use negative, positive or both correlations.
