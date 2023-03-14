@@ -291,8 +291,10 @@ def test_prepare_input_data_pos_labels() -> None:
     target = t_df[y]
     high_mask = df[y] > 0.8
     low_mask = df[y] < 0.2
-    target[high_mask] = "high"
-    target[low_mask] = "low"
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        target.loc[high_mask] = "high"
+        target.loc[low_mask] = "low"
     t_df[y] = target
 
     bin_y = (target == "high").astype(int)

@@ -237,6 +237,7 @@ def test_classificationestimators(
         "model": model_name,
         "model_params": ju_model_params,
         "problem_type": "classification",
+        "preprocess": "zscore",
     }
     clf = make_pipeline(StandardScaler(), clone(t_model))
     do_scoring_test(
@@ -256,8 +257,9 @@ def test_classificationestimators(
         api_params = {
             "model": model_name,
             "pos_labels": "setosa",
-            "model_params": model_params,
+            "model_params": ju_model_params,
             "problem_type": "classification",
+            "preprocess": "zscore",
         }
         clf = make_pipeline(StandardScaler(), clone(t_model))
         do_scoring_test(
@@ -331,6 +333,7 @@ def test_regression_estimators(
     api_params = {
         "model": model_name,
         "model_params": ju_model_params,
+        "preprocess": "zscore",
         "problem_type": "regression",
     }
     clf = make_pipeline(StandardScaler(), clone(t_model))

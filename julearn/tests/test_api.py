@@ -162,6 +162,7 @@ def test_run_cv_errors(df_iris: pd.DataFrame) -> None:
     X = ["sepal_length", "sepal_width", "petal_length"]
     y = "species"
 
+    X_types = {"continuous": X}
     # test error when model is a pipeline
     model = make_pipeline(SVC())
     with pytest.raises(ValueError, match="a scikit-learn pipeline"):
@@ -169,6 +170,7 @@ def test_run_cv_errors(df_iris: pd.DataFrame) -> None:
             X=X,
             y=y,
             data=df_iris,
+            X_types=X_types,
             model=model,
             problem_type="classification",
         )
@@ -180,6 +182,7 @@ def test_run_cv_errors(df_iris: pd.DataFrame) -> None:
             X=X,
             y=y,
             data=df_iris,
+            X_types=X_types,
             model=model,
             preprocess="zscore",
         )
@@ -188,7 +191,12 @@ def test_run_cv_errors(df_iris: pd.DataFrame) -> None:
     model = PipelineCreator(problem_type="classification")
     with pytest.raises(ValueError, match="Problem type should be set"):
         run_cross_validation(
-            X=X, y=y, data=df_iris, model=model, problem_type="classification"
+            X=X,
+            y=y,
+            data=df_iris,
+            X_types=X_types,
+            model=model,
+            problem_type="classification",
         )
 
     model = 2
@@ -197,6 +205,7 @@ def test_run_cv_errors(df_iris: pd.DataFrame) -> None:
             X=X,
             y=y,
             data=df_iris,
+            X_types=X_types,
             model=model,
         )
 
@@ -206,6 +215,7 @@ def test_run_cv_errors(df_iris: pd.DataFrame) -> None:
             X=X,
             y=y,
             data=df_iris,
+            X_types=X_types,
             model=model,
         )
 
@@ -215,6 +225,7 @@ def test_run_cv_errors(df_iris: pd.DataFrame) -> None:
             X=X,
             y=y,
             data=df_iris,
+            X_types=X_types,
             model=model,
             preprocess=2,
             problem_type="classification",
@@ -229,6 +240,7 @@ def test_run_cv_errors(df_iris: pd.DataFrame) -> None:
             X=X,
             y=y,
             data=df_iris,
+            X_types=X_types,
             model=model,
             model_params=model_params,
             problem_type="classification",
@@ -241,6 +253,7 @@ def test_run_cv_errors(df_iris: pd.DataFrame) -> None:
             X=X,
             y=y,
             data=df_iris,
+            X_types=X_types,
             model=model,
             model_params=model_params,
         )
@@ -252,6 +265,7 @@ def test_run_cv_errors(df_iris: pd.DataFrame) -> None:
             X=X,
             y=y,
             data=df_iris,
+            X_types=X_types,
             model=model,
             model_params=model_params,
             problem_type="classification",
@@ -264,6 +278,7 @@ def test_run_cv_errors(df_iris: pd.DataFrame) -> None:
             X=X,
             y=y,
             data=df_iris,
+            X_types=X_types,
             model=model,
             model_params=model_params,
             problem_type="classification",
@@ -277,6 +292,7 @@ def test_run_cv_errors(df_iris: pd.DataFrame) -> None:
             X=X,
             y=y,
             data=df_iris,
+            X_types=X_types,
             model=model,
             model_params=model_params,
             search_params=search_params,
@@ -296,6 +312,7 @@ def test_tune_hyperparam_gridsearch(df_iris: pd.DataFrame) -> None:
     df_iris = df_iris[df_iris["species"].isin(["versicolor", "virginica"])]
     X = ["sepal_length", "sepal_width", "petal_length"]
     y = "species"
+    X_types = {"continuous": X}
 
     sk_X = df_iris[X].values
     sk_y = df_iris[y].values
@@ -312,6 +329,7 @@ def test_tune_hyperparam_gridsearch(df_iris: pd.DataFrame) -> None:
         X=X,
         y=y,
         data=df_iris,
+        X_types=X_types,
         model="svm",
         model_params=model_params,
         cv=cv_outer,
@@ -358,6 +376,7 @@ def test_tune_hyperparam_randomsearch(df_iris: pd.DataFrame) -> None:
     df_iris = df_iris[df_iris["species"].isin(["versicolor", "virginica"])]
     X = ["sepal_length", "sepal_width", "petal_length"]
     y = "species"
+    X_types = {"continuous": X}
 
     sk_X = df_iris[X].values
     sk_y = df_iris[y].values
@@ -380,6 +399,7 @@ def test_tune_hyperparam_randomsearch(df_iris: pd.DataFrame) -> None:
         X=X,
         y=y,
         data=df_iris,
+        X_types=X_types,
         model="svm",
         model_params=model_params,
         search_params=search_params,
@@ -427,6 +447,7 @@ def test_return_estimators(df_iris: pd.DataFrame) -> None:
     df_iris = df_iris[df_iris["species"].isin(["versicolor", "virginica"])]
     X = ["sepal_length", "sepal_width", "petal_length"]
     y = "species"
+    X_types = {"continuous": X}
 
     cv = StratifiedKFold(2)
 
@@ -434,6 +455,7 @@ def test_return_estimators(df_iris: pd.DataFrame) -> None:
         X=X,
         y=y,
         data=df_iris,
+        X_types=X_types,
         model="svm",
         problem_type="classification",
         cv=cv,
@@ -447,6 +469,7 @@ def test_return_estimators(df_iris: pd.DataFrame) -> None:
         X=X,
         y=y,
         data=df_iris,
+        X_types=X_types,
         model="svm",
         problem_type="classification",
         cv=cv,
@@ -461,6 +484,7 @@ def test_return_estimators(df_iris: pd.DataFrame) -> None:
         X=X,
         y=y,
         data=df_iris,
+        X_types=X_types,
         model="svm",
         problem_type="classification",
         cv=cv,
@@ -474,6 +498,7 @@ def test_return_estimators(df_iris: pd.DataFrame) -> None:
         X=X,
         y=y,
         data=df_iris,
+        X_types=X_types,
         model="svm",
         problem_type="classification",
         cv=cv,
@@ -500,15 +525,16 @@ def test_return_train_scores(df_iris: pd.DataFrame) -> None:
     scoring = ["accuracy", "precision", "recall"]
     cv = StratifiedKFold(2)
 
-    scores = run_cross_validation(
-        X=X,
-        y=y,
-        data=df_iris,
-        model="svm",
-        problem_type="classification",
-        cv=cv,
-        scoring=scoring,
-    )
+    with pytest.warns(RuntimeWarning, match="treated as continuous"):
+        scores = run_cross_validation(
+            X=X,
+            y=y,
+            data=df_iris,
+            model="svm",
+            problem_type="classification",
+            cv=cv,
+            scoring=scoring,
+        )
 
     train_scores = [f"train_{s}" for s in scoring]
     test_scores = [f"test_{s}" for s in scoring]
@@ -516,16 +542,17 @@ def test_return_train_scores(df_iris: pd.DataFrame) -> None:
     assert all([s not in scores.columns for s in train_scores])
     assert all([s in scores.columns for s in test_scores])
 
-    scores = run_cross_validation(
-        X=X,
-        y=y,
-        data=df_iris,
-        model="svm",
-        problem_type="classification",
-        cv=cv,
-        scoring=scoring,
-        return_train_score=True,
-    )
+    with pytest.warns(RuntimeWarning, match="treated as continuous"):
+        scores = run_cross_validation(
+            X=X,
+            y=y,
+            data=df_iris,
+            model="svm",
+            problem_type="classification",
+            cv=cv,
+            scoring=scoring,
+            return_train_score=True,
+        )
 
     train_scores = [f"train_{s}" for s in scoring]
     test_scores = [f"test_{s}" for s in scoring]

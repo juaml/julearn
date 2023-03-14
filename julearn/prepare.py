@@ -418,16 +418,15 @@ def check_x_types(X_types: Optional[Dict], X: List[str]) -> Dict[str, List]:
     undefined_columns = [x for x in X if x not in defined_columns]
     missing_columns = [x for x in defined_columns if x not in X]
 
-    if len(undefined_columns) > 0:
-        warn_with_log(
-            f"The following columns are not defined in X_types: "
-            f"{undefined_columns}. They will be treated as continuous.",
-        )
     if len(missing_columns) > 0:
         raise_error(
             f"The following columns are defined in X_types but not in X: "
             f"{missing_columns}",
             ValueError
         )
-
+    if len(undefined_columns) > 0:
+        warn_with_log(
+            f"The following columns are not defined in X_types: "
+            f"{undefined_columns}. They will be treated as continuous.",
+        )
     return X_types
