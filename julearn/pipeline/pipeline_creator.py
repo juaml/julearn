@@ -455,9 +455,10 @@ class PipelineCreator:
 
         if search_params is None:
             search_params = {}
+        else:
+            search_params = search_params.copy()
         if len(params_to_tune) > 0:
-            search = search_params.get("kind", "grid")
-            scoring = search_params.get("scoring", None)
+            search = search_params.pop("kind", "grid")
             cv_inner = search_params.get("cv", None)
 
             if search in list_searchers():
@@ -486,7 +487,6 @@ class PipelineCreator:
             cv_inner = check_cv(cv_inner)  # type: ignore
             logger.info(f"Using inner CV scheme {cv_inner}")
             search_params["cv"] = cv_inner
-            search_params["scoring"] = scoring
             logger.info("Search Parameters:")
             for k, v in search_params.items():
                 logger.info(f"\t{k}: {v}")
@@ -496,7 +496,7 @@ class PipelineCreator:
                 pipeline, params_to_tune, **search_params
             )
         elif search_params is not None and len(search_params) > 0:
-            warn_with_log(
+            raise_error(
                 "Hyperparameter search parameters were specified, but no "
                 "hyperparameters to tune"
             )

@@ -157,6 +157,31 @@ def all_problem_types(request: FixtureRequest) -> str:
 
     return request.param
 
+@fixture(
+    params=[
+        None,
+        dict(),
+        dict(kind="grid"),
+        dict(kind="random", n_iter=2),
+        dict(kind="random", n_iter=2, cv=3),
+    ],
+    scope="module",
+)
+def search_params(request: FixtureRequest) -> Optional[Dict]:
+    """Return different possibiblites for the search_params argument.
+
+    Parameters
+    ----------
+    request : pytest.FixtureRequest
+        The request object.
+
+    Returns
+    -------
+    dict or None
+        A dictionary with the search_params argument.
+    """
+    return request.param
+
 
 _tuning_params = {
     "zscore": {"with_mean": [True, False]},

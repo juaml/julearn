@@ -8,7 +8,7 @@ from typing import List, Dict, Callable
 
 import pandas as pd
 
-from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 
 import warnings
 
@@ -129,6 +129,7 @@ def test_hyperparameter_tuning(
     preprocess: List[str],
     problem_type: str,
     get_tuning_params: Callable,
+    search_params: Dict[str, List],
 ) -> None:
     """Test that the pipeline hyperparameter tuning works as expected.
 
@@ -170,10 +171,20 @@ def test_hyperparameter_tuning(
     param_grid.update(
         {f"{model}__{param}": val for param, val in model_params.items()}
     )
-    pipeline = creator.to_pipeline(X_types=X_types_iris)
+    pipeline = creator.to_pipeline(
+        X_types=X_types_iris,
+        search_params=search_params)
 
-    assert isinstance(pipeline, GridSearchCV)
-    assert pipeline.param_grid == param_grid
+    kind = "grid"
+    if search_params is not None:
+        kind = search_params.get("kind", "grid")
+    if kind == "grid":
+        assert isinstance(pipeline, GridSearchCV)
+        assert pipeline.param_grid == param_grid
+    else:
+        assert isinstance(pipeline, RandomizedSearchCV)
+        assert pipeline.param_distributions == param_grid
+
 
 
 @pytest.mark.parametrize(

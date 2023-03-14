@@ -23,21 +23,45 @@ DataLike = Union[np.ndarray, pd.DataFrame, pd.Series]
 
 ScorerLike = Union[_ProbaScorer, _ThresholdScorer, _PredictScorer]
 
-
 @runtime_checkable
-class EstimatorLike(Protocol):
-    def fit(self, X, y, **kwargs: Any) -> "EstimatorLike":
+class EstimatorLikeFit1(Protocol):
+    def fit(self, X, y, **kwargs: Any) -> "EstimatorLikeFit1":
         return self
 
     def get_params(self, deep=True) -> Dict:
         return {}
 
-    def set_params(self, **params) -> "EstimatorLike":
+    def set_params(self, **params) -> "EstimatorLikeFit1":
+        return self
+
+@runtime_checkable
+class EstimatorLikeFit2(Protocol):
+    def fit(self, X, y) -> "EstimatorLikeFit2":
+        return self
+
+    def get_params(self, deep=True) -> Dict:
+        return {}
+
+    def set_params(self, **params) -> "EstimatorLikeFit2":
+        return self
+
+@runtime_checkable
+class EstimatorLikeFity(Protocol):
+    def fit(self, y) -> "EstimatorLikeFity":
+        return self
+
+    def get_params(self, deep=True) -> Dict:
+        return {}
+
+    def set_params(self, **params) -> "EstimatorLikeFity":
         return self
 
 
+EstimatorLike = Union[EstimatorLikeFit1, EstimatorLikeFit2, EstimatorLikeFity]
+
+
 @runtime_checkable
-class TransformerLike(EstimatorLike, Protocol):
+class TransformerLike(EstimatorLikeFit1, Protocol):
     def fit(self, X, y=None, **fit_params):
         pass
 
@@ -51,7 +75,7 @@ class TransformerLike(EstimatorLike, Protocol):
 
 
 @runtime_checkable
-class ModelLike(EstimatorLike, Protocol):
+class ModelLike(EstimatorLikeFit1, Protocol):
     classes_: np.ndarray
 
     def predict(self, X) -> DataLike:
@@ -62,7 +86,7 @@ class ModelLike(EstimatorLike, Protocol):
 
 
 @runtime_checkable
-class JuEstimatorLike(EstimatorLike, Protocol):
+class JuEstimatorLike(EstimatorLikeFit1, Protocol):
     def get_needed_types(self) -> ColumnTypes:
         return ColumnTypes("placeholder")
 

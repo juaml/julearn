@@ -79,7 +79,7 @@ def compare_models(  # pragma: no cover
         idx2 = np.argsort(clf2.support_)  # type: ignore
         v2 = clf2.support_vectors_[idx2]  # type: ignore
         if hasattr(clf1, "probability"):
-            assert clf1.probability == clf2.probability
+            assert clf1.probability == clf2.probability  # type: ignore
     elif isinstance(
         clf1,
         (
