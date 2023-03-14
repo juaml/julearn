@@ -51,7 +51,7 @@ from sklearn.model_selection import cross_validate, KFold
 from sklearn.pipeline import Pipeline
 
 from julearn import run_cross_validation
-from julearn.utils.typing import EstimatorLike, DataLike, ScorerLike
+from julearn.utils.typing import EstimatorLike, DataLike
 
 
 def compare_models(  # pragma: no cover
@@ -236,7 +236,7 @@ def do_scoring_test(
         clf1 = actual_estimator
 
     if isinstance(sklearn_model, Pipeline):
-        clf2 = clone(sklearn_model).fit(sk_X, sk_y).steps[-1][1]  # type: ignore
+        clf2 = clone(sklearn_model).fit(sk_X, sk_y).steps[-1][1]
     else:
         clf2 = clone(sklearn_model).fit(sk_X, sk_y)
     compare_models(clf1, clf2)

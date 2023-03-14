@@ -157,6 +157,7 @@ def all_problem_types(request: FixtureRequest) -> str:
 
     return request.param
 
+
 @fixture(
     params=[
         None,

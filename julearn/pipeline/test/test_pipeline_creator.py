@@ -172,8 +172,8 @@ def test_hyperparameter_tuning(
         {f"{model}__{param}": val for param, val in model_params.items()}
     )
     pipeline = creator.to_pipeline(
-        X_types=X_types_iris,
-        search_params=search_params)
+        X_types=X_types_iris, search_params=search_params
+    )
 
     kind = "grid"
     if search_params is not None:
@@ -184,7 +184,6 @@ def test_hyperparameter_tuning(
     else:
         assert isinstance(pipeline, RandomizedSearchCV)
         assert pipeline.param_distributions == param_grid
-
 
 
 @pytest.mark.parametrize(

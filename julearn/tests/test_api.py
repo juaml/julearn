@@ -8,7 +8,6 @@ import pandas as pd
 import numpy as np
 
 import pytest
-import warnings
 
 from sklearn.svm import SVC
 from sklearn.base import clone

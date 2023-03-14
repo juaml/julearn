@@ -1,6 +1,9 @@
+"""API for julearn."""
+
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
+
 import numpy as np
 from sklearn.model_selection import cross_validate, check_cv
 from sklearn.pipeline import Pipeline
@@ -12,7 +15,6 @@ from .prepare import prepare_input_data, check_consistency, check_x_types
 from .pipeline import PipelineCreator
 
 from .utils import logger, raise_error
-from .utils.typing import ModelLike
 
 from .scoring import check_scoring
 
