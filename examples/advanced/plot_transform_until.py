@@ -71,13 +71,12 @@ print("Summary Statistics of the raw features : \n", df.describe())
 # and number of trees for random forest to 200
 
 # By setting "apply_to=*", we can apply the preprocessing step to all features.
-pipeline_creator = (
-    PipelineCreator(problem_type="regression")
-    .add("select_variance", apply_to="*", threshold=0.15)
-    .add("zscore", apply_to="X_to_zscore")
-    .add("pca", apply_to="*", n_components=2)
-    .add("rf", apply_to="*", n_estimators=200)
-)
+pipeline_creator = PipelineCreator(problem_type="regression")
+
+pipeline_creator.add("select_variance", apply_to="*", threshold=0.15)
+pipeline_creator.add("zscore", apply_to="X_to_zscore")
+pipeline_creator.add("pca", apply_to="*", n_components=2)
+pipeline_creator.add("rf", apply_to="*", n_estimators=200)
 
 # Because we have already added the model to the pipeline creator, we can
 # simply drop in the pipeline_creator as a model. If we did not add a model
@@ -117,7 +116,6 @@ print(X_after_zscore)
 # However, to make this less confusing you can also simply use the high-level
 # function 'preprocess' to explicitly refer to a pipeline step by name:
 
-
 X_after_pca = preprocess(model, X=X, data=df, until="pca")
 X_after_zscore = preprocess(model, X=X, data=df, until="zscore")
 
@@ -125,7 +123,7 @@ X_after_zscore = preprocess(model, X=X, data=df, until="zscore")
 fig, axes = plt.subplots(1, 2, figsize=(12, 6))
 sns.scatterplot(x=X[0], y=X[1], data=df, ax=axes[0])
 axes[0].set_title("Raw features")
-sns.scatterplot(x="pca0", y="pca1", data=X_after_pca, ax=axes[1])
+sns.scatterplot(x="pca__pca0", y="pca__pca1", data=X_after_pca, ax=axes[1])
 axes[1].set_title("PCA components")
 
 ###############################################################################

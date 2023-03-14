@@ -139,7 +139,7 @@ class PipelineCreator:
 
     def add(
         self,
-        step: Union[EstimatorLike, str],
+        step: Union[EstimatorLike, str, TargetPipelineCreator],
         name: Optional[str] = None,
         apply_to: Optional[ColumnTypesLike] = None,
         **params: Any,

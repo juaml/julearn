@@ -26,7 +26,7 @@ Transformer functions
 Logging
 ^^^^^^^
 .. autofunction:: julearn.utils.configure_logging
-.. autofunction:: julearn.utils.warn
+.. autofunction:: julearn.utils.warn_with_log
 .. autofunction:: julearn.utils.raise_error
 
 =======

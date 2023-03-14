@@ -41,7 +41,7 @@ configure_logging(level="INFO")
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 #
 
-df_fmri = load_dataset('fmri')
+df_fmri = load_dataset("fmri")
 
 ###############################################################################
 # First, lets get some information on what the dataset has:
@@ -55,19 +55,24 @@ print(df_fmri.head())
 # brain regions.
 #
 # Lets check how many kinds of each we have.
-print(df_fmri['event'].unique())
-print(df_fmri['region'].unique())
-print(sorted(df_fmri['timepoint'].unique()))
-print(df_fmri['subject'].unique())
+print(df_fmri["event"].unique())
+print(df_fmri["region"].unique())
+print(sorted(df_fmri["timepoint"].unique()))
+print(df_fmri["subject"].unique())
 
 ###############################################################################
 # We have data from parietal and frontal regions during 2 types of events
 # (*cue* and *stim*) during 18 timepoints and for 14 subjects.
 # Lets see how many samples we have for each condition
 
-print(df_fmri.groupby(['subject', 'timepoint', 'event', 'region']).count())
-print(np.unique(df_fmri.groupby(
-    ['subject', 'timepoint', 'event', 'region']).count().values))
+print(df_fmri.groupby(["subject", "timepoint", "event", "region"]).count())
+print(
+    np.unique(
+        df_fmri.groupby(["subject", "timepoint", "event", "region"])
+        .count()
+        .values
+    )
+)
 
 ###############################################################################
 # We have exactly one value per condition.
@@ -76,8 +81,8 @@ print(np.unique(df_fmri.groupby(
 # whether the event was a *cue* or a *stim*.
 #
 # First we define our X and y variables.
-X = ['parietal', 'frontal']
-y = 'event'
+X = ["parietal", "frontal"]
+y = "event"
 
 ###############################################################################
 # In order for this to work, both *parietal* and *frontal* must be columns.
@@ -86,9 +91,8 @@ y = 'event'
 # The values of *region* will be the columns. The column *signal* will be the
 # values. And the columns *subject*, *timepoint* and *event* will be the index
 df_fmri = df_fmri.pivot(
-    index=['subject', 'timepoint', 'event'],
-    columns='region',
-    values='signal')
+    index=["subject", "timepoint", "event"], columns="region", values="signal"
+)
 
 df_fmri = df_fmri.reset_index()
 
@@ -96,25 +100,45 @@ df_fmri = df_fmri.reset_index()
 # Here we want to zscore all the features and then train a Support Vector
 # Machine classifier.
 
-scores = run_cross_validation(X=X, y=y, data=df_fmri, preprocess='zscore',
-                              model='rf')
+scores = run_cross_validation(
+    X=X,
+    y=y,
+    data=df_fmri,
+    preprocess="zscore",
+    model="rf",
+    problem_type="classification",
+)
 
-print(scores['test_score'].mean())
+print(scores["test_score"].mean())
 
 ###############################################################################
 # Train classification model with stratification on data
 cv_stratified = StratifiedGroupsKFold(n_splits=2)
 scores, model = run_cross_validation(
-    X=X, y=y, data=df_fmri, groups='subject',
-    model='rf', cv=cv_stratified, return_estimator="final")
+    X=X,
+    y=y,
+    data=df_fmri,
+    groups="subject",
+    model="rf",
+    problem_type="classification",
+    cv=cv_stratified,
+    return_estimator="final",
+)
 
-print(scores['test_score'].mean())
+print(scores["test_score"].mean())
 
 ###############################################################################
 # Train classification model without stratification on data
 cv = GroupKFold(n_splits=2)
 scores, model = run_cross_validation(
-    X=X, y=y, data=df_fmri, groups='subject',
-    model='rf', cv=cv, return_estimator="final")
+    X=X,
+    y=y,
+    data=df_fmri,
+    groups="subject",
+    model="rf",
+    problem_type="classification",
+    cv=cv,
+    return_estimator="final",
+)
 
-print(scores['test_score'].mean())
+print(scores["test_score"].mean())

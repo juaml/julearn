@@ -119,9 +119,11 @@ def run_cross_validation(
           the parameter 'probability' of the 'svm' model. If more than option
           is provided for at least one hyperparameter, a search will be
           performed.
+
     search_params : dict | None
         Additional parameters in case Hyperparameter Tunning is performed, with
         the following keys:
+
         * 'kind': The kind of search algorithm to use, e.g.:
             'grid' or 'random'. Can be any valid julearn searcher name or
             scikit-learn compatible searcher.

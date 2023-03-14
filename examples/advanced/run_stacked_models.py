@@ -58,11 +58,9 @@ model_petal.add("rf")
 # Create the stacking model
 model = PipelineCreator(problem_type="classification")
 model.add(
-    "stacking", estimators=[[
-        ("model_sepal", model_sepal),
-        ("model_petal", model_petal)]
-    ],
-    apply_to="*"
+    "stacking",
+    estimators=[[("model_sepal", model_sepal), ("model_petal", model_petal)]],
+    apply_to="*",
 )
 
 scores = run_cross_validation(

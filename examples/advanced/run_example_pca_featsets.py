@@ -7,7 +7,7 @@ a regression analysis using a Ridge Regression model.
 
 """
 # Authors: Georgios Antonopoulos <g.antonopoulos@fz-juelich.de>
-#          Kaustubh R. Patil <k.patil@fz-juelich.de> 
+#          Kaustubh R. Patil <k.patil@fz-juelich.de>
 # Original: Shammi More <s.more@fz-juelich.de>
 #          Federico Raimondo <f.raimondo@fz-juelich.de>
 #
@@ -55,20 +55,21 @@ y = "target"
 # Assign types to the features
 # and create feature groups for PCA
 # we will keep 1 component per PCA group
-X_types = {'pca1': ["age", "bmi", "bp"], 
-           'pca2': ["s1", "s2", "s3", "s4", "s5", "s6"],
-           'categorical': ['sex']}
+X_types = {
+    "pca1": ["age", "bmi", "bp"],
+    "pca2": ["s1", "s2", "s3", "s4", "s5", "s6"],
+    "categorical": ["sex"],
+}
 
 ###############################################################################
-# Create a pipeline to process the data and the fit a model
-# We must specify how each X_type will be used
-# For example if in the last step we do not specify 
-# `apply_to=['continuous', 'categorical']`
-# then the pipeline will not know what to do with the categorical features
-creator = PipelineCreator(problem_type='regression')
-creator.add('pca', apply_to='pca1', n_components=1, name='pca_feats1')
-creator.add('pca', apply_to='pca2', n_components=1, name='pca_feats2')
-creator.add('ridge', apply_to=['continuous', 'categorical'])
+# Create a pipeline to process the data and the fit a model. We must specify 
+# how each X_type will be used. For example if in the last step we do not 
+# specify `apply_to=['continuous', 'categorical']`, then the pipeline will not
+# know what to do with the categorical features.
+creator = PipelineCreator(problem_type="regression")
+creator.add("pca", apply_to="pca1", n_components=1, name="pca_feats1")
+creator.add("pca", apply_to="pca2", n_components=1, name="pca_feats2")
+creator.add("ridge", apply_to=["continuous", "categorical"])
 
 ###############################################################################
 # Split the dataset into train and test
@@ -76,7 +77,7 @@ train_diabetes, test_diabetes = train_test_split(data_diabetes, test_size=0.3)
 
 ###############################################################################
 # Train a ridge regression model on train dataset and use mean absolute error
-# for scoring
+# for scoring/
 scores, model = run_cross_validation(
     X=X,
     y=y,
@@ -84,7 +85,7 @@ scores, model = run_cross_validation(
     data=train_diabetes,
     model=creator,
     scoring="r2",
-    return_estimator='final'
+    return_estimator="final",
 )
 
 ###############################################################################
@@ -99,15 +100,15 @@ print(scores["test_score"].mean())
 ###############################################################################
 # Let's see how the data looks like after preprocessing
 # We will process the data until the first PCA step
-# We should get the first 
+# We should get the first
 # PCA component for ['age', 'bmi', 'bp'] and other  features untouched
-data_processed1 = preprocess(model, X, data=train_diabetes, until='pca_feats1')
-print('Data after preprocessing until PCA step 1')
+data_processed1 = preprocess(model, X, data=train_diabetes, until="pca_feats1")
+print("Data after preprocessing until PCA step 1")
 print(data_processed1.head())
 # We will process the data until the second PCA step
 # We should now also get one PCA component for ['s1', 's2', 's3', 's4', 's5', 's6']
-data_processed2 = preprocess(model, X, data=train_diabetes, until='pca_feats2')
-print('Data after preprocessing until PCA step 2')
+data_processed2 = preprocess(model, X, data=train_diabetes, until="pca_feats2")
+print("Data after preprocessing until PCA step 2")
 print(data_processed2.head())
 
 ###############################################################################

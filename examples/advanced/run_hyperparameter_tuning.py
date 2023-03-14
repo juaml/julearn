@@ -22,10 +22,11 @@ from seaborn import load_dataset
 
 from julearn import run_cross_validation
 from julearn.utils import configure_logging
+from julearn.pipeline import PipelineCreator
 
 ###############################################################################
 # Set the logging level to info to see extra information
-configure_logging(level="DEBUG")
+configure_logging(level="INFO")
 
 ###############################################################################
 # Set the random seed to always have the same example
@@ -46,34 +47,40 @@ df_fmri = df_fmri.pivot(
 df_fmri = df_fmri.reset_index()
 print(df_fmri.head())
 
+X = ["frontal", "parietal"]
+y = "event"
+
 ###############################################################################
 # Lets do a first attempt and use a linear SVM with the default parameters.
-model_params = {'svm__kernel': 'linear'}
-X = ['frontal', 'parietal']
-y = 'event'
-scores = run_cross_validation(
-    X=X, y=y, data=df_fmri, model='svm', preprocess='zscore',
-    model_params=model_params)
 
-print(scores['test_score'].mean())
+creator = PipelineCreator(problem_type="classification")
+creator.add("zscore")
+creator.add("svm", kernel="linear")
+
+scores = run_cross_validation(X=X, y=y, data=df_fmri, model=creator)
+
+print(scores["test_score"].mean())
 
 ###############################################################################
 # The score is not so good. Lets try to see if there is an optimal
 # regularization parameter (C) for the linear SVM.
-model_params = {
-    "svm__kernel": "linear",
-    "svm__C": [0.01, 0.1],
-    "cv": 2,
-}  # CV=2 too speed up the example
-X = ["frontal", "parietal"]
-y = "event"
+# We will use a grid search to find the best C.
+
+creator = PipelineCreator(problem_type="classification")
+creator.add("zscore")
+creator.add("svm", kernel="linear", C=[0.01, 0.1])
+
+search_params = {
+    "kind": "grid",
+    "cv": 2,  # to speed up the example
+}
+
 scores, estimator = run_cross_validation(
     X=X,
     y=y,
     data=df_fmri,
-    model="svm",
-    preprocess="zscore",
-    model_params=model_params,
+    model=creator,
+    search_params=search_params,
     return_estimator="final",
 )
 
@@ -81,20 +88,17 @@ print(scores["test_score"].mean())
 
 ###############################################################################
 # This did not change much, lets explore other kernels too.
-model_params = {
-    "svm__kernel": ["linear", "rbf", "poly"],
-    "svm__C": [0.01, 0.1],
-    "cv": 2,
-}  # CV=2 too speed up the example
-X = ["frontal", "parietal"]
-y = "event"
+
+creator = PipelineCreator(problem_type="classification")
+creator.add("zscore")
+creator.add("svm", kernel=["linear", "rbf", "poly"], C=[0.01, 0.1])
+
 scores, estimator = run_cross_validation(
     X=X,
     y=y,
     data=df_fmri,
-    model="svm",
-    preprocess="zscore",
-    model_params=model_params,
+    model=creator,
+    search_params=search_params,
     return_estimator="final",
 )
 
@@ -106,21 +110,19 @@ print(estimator.best_params_)
 ###############################################################################
 # Now that we know that a RBF kernel is better, lest test different *gamma*
 # parameters.
-model_params = {
-    "svm__kernel": "rbf",
-    "svm__C": [0.01, 0.1],
-    "svm__gamma": [1e-2, 1e-3],
-    "cv": 2,
-}  # CV=2 too speed up the example
-X = ["frontal", "parietal"]
-y = "event"
+
+creator = PipelineCreator(problem_type="classification")
+creator.add("zscore")
+creator.add(
+    "svm", kernel="rbf", C=[0.01, 0.1], gamma=[1e-2, 1e-3]
+)
+
 scores, estimator = run_cross_validation(
     X=X,
     y=y,
     data=df_fmri,
-    model="svm",
-    preprocess="zscore",
-    model_params=model_params,
+    model=creator,
+    search_params=search_params,
     return_estimator="final",
 )
 
@@ -130,27 +132,28 @@ print(estimator.best_params_)
 ###############################################################################
 # It seems that without tuning the gamma parameter we had a better accuracy.
 # Let's add the default value and see what happens.
-model_params = {
-    "svm__kernel": "rbf",
-    "svm__C": [0.01, 0.1],
-    "svm__gamma": [1e-2, 1e-3, "scale"],
-    "cv": 2,
-}  # CV=2 too speed up the example
+
+creator = PipelineCreator(problem_type="classification")
+creator.add("zscore")
+creator.add(
+    "svm", kernel="rbf", C=[0.01, 0.1], gamma=[1e-2, 1e-3, "scale"]
+)
 X = ["frontal", "parietal"]
 y = "event"
+
+search_params = {"cv": 2}
+
 scores, estimator = run_cross_validation(
     X=X,
     y=y,
     data=df_fmri,
-    model="svm",
-    preprocess="zscore",
-    model_params=model_params,
+    model=creator,
     return_estimator="final",
+    search_params=search_params,
 )
 
 print(scores["test_score"].mean())
 print(estimator.best_params_)
 
 ###############################################################################
-# So what was the best ``gamma`` in the end?
 print(estimator.best_estimator_["svm"]._gamma)
