@@ -51,7 +51,6 @@ def run_cross_validation(
         See https://juaml.github.io/julearn/input.html for details.
     model : str or scikit-learn compatible model.
         If string, it will use one of the available models.
-        See :mod:`.available_models`.
     X_types : dict[str, list of str]
         A dictionary containing keys with column type as a str and the
         columns of this column type as a list of str.
