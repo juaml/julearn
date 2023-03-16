@@ -4,7 +4,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Dict, Optional, List
+from typing import Dict, Optional, List, Union
 
 import pandas as pd
 
@@ -33,7 +33,7 @@ class ChangeColumnTypes(JuTransformer):
         self.X_types_renamer = X_types_renamer
         super().__init__(apply_to=apply_to, needed_types=None)
 
-    def fit(
+    def _fit(
         self, X: pd.DataFrame, y: Optional[DataLike] = None
     ) -> "ChangeColumnTypes":
         """Fit the transformer.

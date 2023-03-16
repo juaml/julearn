@@ -37,7 +37,7 @@ class FilterColumns(JuTransformer):
         self.keep: ColumnTypes = ensure_column_types(keep)
         super().__init__(apply_to="*", needed_types=keep)
 
-    def fit(
+    def _fit(
         self, X: pd.DataFrame, y: Optional[DataLike] = None
     ) -> "FilterColumns":
         """Fit the transformer.

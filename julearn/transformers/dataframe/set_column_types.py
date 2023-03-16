@@ -39,7 +39,7 @@ class SetColumnTypes(JuTransformer):
         self.X_types = X_types
         super().__init__(apply_to="*", needed_types=None)
 
-    def fit(
+    def _fit(
         self, X: pd.DataFrame, y: Optional[DataLike] = None
     ) -> "SetColumnTypes":
         """Fit the transformer.

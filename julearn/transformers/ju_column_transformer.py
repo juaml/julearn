@@ -4,7 +4,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Optional, Dict, Any, List
+from typing import Optional, Dict, Any, List, Union
 import pandas as pd
 from sklearn.base import ClassNamePrefixFeaturesOutMixin
 from sklearn.compose import ColumnTransformer
@@ -31,6 +31,11 @@ class JuColumnTransformer(JuTransformer):
         To which column types the transformer needs to be applied to.
     needed_types : ColumnTypesLike, optional
         Which feature types are needed for the transformer to work.
+    row_select_col : str or list of str or set of str or ColumnTypes
+        The column types needed to select rows (default is None)
+    row_select_vals : str, int, bool or list of str, int, bool
+        The value(s) which should be selected in the row_select_col
+        to select the rows used for training (default is None)
     """
     def __init__(
         self,
@@ -38,15 +43,19 @@ class JuColumnTransformer(JuTransformer):
         transformer: EstimatorLike,
         apply_to: ColumnTypesLike,
         needed_types: Optional[ColumnTypesLike] = None,
+        row_select_col:  Optional[ColumnTypesLike] = None,
+        row_select_vals:  Optional[Union[str, int, List, bool]] = None,
         **params: Any,
     ):
         self.name = name
         self.transformer = transformer
         self.apply_to = ensure_column_types(apply_to)
         self.needed_types = needed_types
+        self.row_select_col = row_select_col
+        self.row_select_vals = row_select_vals
         self.set_params(**params)
 
-    def fit(
+    def _fit(
         self, X: pd.DataFrame, y: Optional[DataLike] = None, **fit_params: Any
     ) -> "JuColumnTransformer":
         """Fit the transformer.

@@ -4,15 +4,19 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Dict, Optional, Any, cast
+from typing import Dict, Optional, Any, cast, Union
 import numpy as np
 import pandas as pd
 
 from sklearn.utils.metaestimators import available_if
 from sklearn.base import BaseEstimator, TransformerMixin
+from sklearn.utils.validation import _check_fit_params
+from sklearn.compose import make_column_selector
+
 
 from .column_types import ColumnTypes, ColumnTypesLike, ensure_column_types
 from ..utils.typing import ModelLike, DataLike
+from ..utils import raise_error
 
 
 def _wrapped_model_has(attr):
@@ -133,7 +137,48 @@ class JuBaseEstimator(BaseEstimator):
 
 
 class JuTransformer(JuBaseEstimator, TransformerMixin):
-    """Base class for julearn transformers."""
+    """Base class for julearn transformers.
+
+    Parameters
+    ----------
+    apply_to : str or list of str or set of str or ColumnTypes
+        The column types to apply the estimator to.
+    needed_types : str or list of str or set of str or ColumnTypes
+        The column types needed by the estimator. If None, there are no
+        needed types (default is None)
+    row_select_col : str or list of str or set of str or ColumnTypes
+        The column types needed to select rows (default is None)
+    row_select_vals : str, int, bool or list of str, int, bool
+        The value(s) which should be selected in the row_select_col
+        to select the rows used for training (default is None)
+    """
+
+    def __init__(
+        self,
+        apply_to: ColumnTypesLike,
+        needed_types: Optional[ColumnTypesLike] = None,
+        row_select_col:  Optional[ColumnTypesLike] = None,
+        row_select_vals:  Optional[Union[str, int, list, bool]] = None,
+    ):
+        self.apply_to = apply_to
+        self.needed_types = needed_types
+        self.row_select_col = row_select_col
+        self.row_select_vals = row_select_vals
+
+    def fit(self, X, y=None, **fit_params):
+
+        if self.row_select_vals is None:
+            return self._fit(X, y, **fit_params)
+
+        self._col_to_select_rows = make_column_selector(
+            ColumnTypes(self.row_select_col)._to_pattern())(X)
+        if len(self._col_to_select_rows) != 1:
+            raise_error("Only, one column can be selected for row_select_col.")
+        self._col_to_select_rows = self._col_to_select_rows[0]
+
+        if not isinstance(self.row_select_vals, list):
+            self.row_select_vals = [self.row_select_vals]
+        return self._fit(**self._select_rows(X, y, **fit_params))
 
     def _add_backed_filtered(
         self, X: pd.DataFrame, X_trans: pd.DataFrame
@@ -158,6 +203,33 @@ class JuTransformer(JuBaseEstimator, TransformerMixin):
             col for col in list(X.columns) if col not in filtered_columns
         ]
         return pd.concat((X.loc[:, non_filtered_columns], X_trans), axis=1)
+
+    def _select_rows(self, X, y, **fit_params):
+        idx = X.query(
+            f"`{self._col_to_select_rows}` in @self.row_select_vals"
+        ).index.values
+        _X = X.loc[idx, :]
+        _y = y if y is None else y.loc[idx, :]
+        fit_params = _check_fit_params(_X, fit_params)
+
+        return dict(X=_X, y=_y, **fit_params)
+
+    def get_needed_types(self) -> ColumnTypes:
+        """Get the column types needed by the estimator.
+
+        Returns
+        -------
+        ColumnTypes
+            The column types needed by the estimator.
+        """
+        needed_types = super().get_needed_types()
+        if self.row_select_col is None:
+            return needed_types
+
+        if needed_types is None:
+            return ColumnTypes(self.row_select_vals)
+
+        return needed_types.add(self.row_select_col)
 
 
 class WrapModel(JuBaseEstimator):
