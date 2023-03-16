@@ -88,7 +88,7 @@ Confound Removal
        by subtracting the prediction of each feature given all confounds.
        By default this is equal to "independently regressing out 
        the confounds from the features" 
-     - :class:`.confounds.ConfoundRemover`
+     - confounds.ConfoundRemover
 
 Decomposition
 ^^^^^^^^^^^^^
@@ -134,7 +134,7 @@ Target Confound Removal
        by subtracting the prediction of the target given all confounds.
        By default this is equal to "regressing out 
        the confounds from the target"
-     - :class:`.TargetConfoundRemover`
+     - TargetConfoundRemover
 
 Models
 ------
