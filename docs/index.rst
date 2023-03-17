@@ -45,15 +45,17 @@ Why not just using `scikit-learn`? Julearn offers **three essential benefits**:
    * Easy to implement **confound removal**  # TODO Link to example
    * Data type **typing**  # TODO Link to example, name in a bette way
 
-Julearn's backbone - `run_cross_validation`
--------------------------------------------
+Julearn's backbone - :func:`.run_cross_validation`
+--------------------------------------------------
 
-The backbone of Julearn is the function `run_cross_validation`, which let's you 
+The backbone of Julearn is the function :func:`.run_cross_validation`, which let's you 
 do all the magic.  # TODO Add more?, link to most essential part in docu on runcv
+
+Table of Contents
+-----------------
 
 .. toctree::
    :maxdepth: 2
-   :caption: What you can find in this documentation:
    :numbered:
 
    getting_started
