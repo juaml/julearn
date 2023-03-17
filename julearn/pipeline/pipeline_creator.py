@@ -87,10 +87,10 @@ class Step:
         The types to apply this step to, by default "continuous"
     needed_types : Any, optional
         The types needed by this step (default is None)
-    row_select_col : str or list of str or set of str or ColumnTypes
+    row_select_col_type : str or list of str or set of str or ColumnTypes
         The column types needed to select rows (default is None)
     row_select_vals : str, int, bool or list of str, int, bool
-        The value(s) which should be selected in the row_select_col
+        The value(s) which should be selected in the row_select_col_type
         to select the rows used for training (default is None)
     params_to_tune : Optional[Dict], optional
         The parameters to tune for this step, by default None
@@ -104,7 +104,7 @@ class Step:
     needed_types: Optional[ColumnTypesLike] = None
     params_to_tune: Optional[Dict] = None
 
-    row_select_col:  Optional[ColumnTypesLike] = None
+    row_select_col_type:  Optional[ColumnTypesLike] = None
     row_select_vals:  Optional[Union[str, int, list, bool]] = None
 
     def __post_init__(self) -> None:
@@ -150,7 +150,7 @@ class PipelineCreator:
         step: Union[EstimatorLike, str, TargetPipelineCreator],
         name: Optional[str] = None,
         apply_to: Optional[ColumnTypesLike] = None,
-        row_select_col:  Optional[ColumnTypesLike] = None,
+        row_select_col_type:  Optional[ColumnTypesLike] = None,
         row_select_vals:  Optional[Union[str, int, list, bool]] = None,
         **params: Any,
     ) -> "PipelineCreator":
@@ -170,10 +170,10 @@ class PipelineCreator:
             To what should the transformer or model be applied to.
             This can be a str representing a column type or a list
             of such str (defaults to the `PipelineCreator.apply_to` attribute).
-        row_select_col : str or list of str or set of str or ColumnTypes
+        row_select_col_type : str or list of str or set of str or ColumnTypes
             The column types needed to select rows (default is None)
         row_select_vals : str, int, bool or list of str, int, bool
-            The value(s) which should be selected in the row_select_col
+            The value(s) which should be selected in the row_select_col_type
             to select the rows used for training (default is None)
         **params
             Parameters for the step. This will mostly include
@@ -252,9 +252,11 @@ class PipelineCreator:
 
         if isinstance(step, JuTransformer):
             step.set_params(
-                row_select_col=row_select_col,
+                row_select_col_type=row_select_col_type,
                 row_select_vals=row_select_vals
             )
+
+            needed_types = step.get_needed_types()
 
         # For target transformers we need to add the target_ prefix
         if apply_to == "target":
@@ -267,7 +269,7 @@ class PipelineCreator:
                 apply_to=apply_to,
                 needed_types=needed_types,
                 params_to_tune=params_to_tune,
-                row_select_col=row_select_col,
+                row_select_col_type=row_select_col_type,
                 row_select_vals=row_select_vals,
             )
         )
@@ -377,7 +379,7 @@ class PipelineCreator:
             if self.wrap and not isinstance(estimator, JuTransformer):
                 estimator = self._wrap_step(
                     name, estimator, step_dict.apply_to,
-                    row_select_col=step_dict.row_select_col,
+                    row_select_col_type=step_dict.row_select_col_type,
                     row_select_vals=step_dict.row_select_vals
                 )
 
@@ -748,7 +750,7 @@ class PipelineCreator:
     def _wrap_step(
             name, step,
             column_types,
-            row_select_col, row_select_vals) -> JuColumnTransformer:
+            row_select_col_type, row_select_vals) -> JuColumnTransformer:
         """Wrap a step in a JuColumnTransformer.
 
         Parameters
@@ -762,7 +764,7 @@ class PipelineCreator:
         """
         return JuColumnTransformer(
             name, step, column_types,
-            row_select_col=row_select_col,
+            row_select_col_type=row_select_col_type,
             row_select_vals=row_select_vals)
 
     @staticmethod

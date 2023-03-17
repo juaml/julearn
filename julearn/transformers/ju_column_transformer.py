@@ -31,10 +31,10 @@ class JuColumnTransformer(JuTransformer):
         To which column types the transformer needs to be applied to.
     needed_types : ColumnTypesLike, optional
         Which feature types are needed for the transformer to work.
-    row_select_col : str or list of str or set of str or ColumnTypes
+    row_select_col_type : str or list of str or set of str or ColumnTypes
         The column types needed to select rows (default is None)
     row_select_vals : str, int, bool or list of str, int, bool
-        The value(s) which should be selected in the row_select_col
+        The value(s) which should be selected in the row_select_col_type
         to select the rows used for training (default is None)
     """
     def __init__(
@@ -43,7 +43,7 @@ class JuColumnTransformer(JuTransformer):
         transformer: EstimatorLike,
         apply_to: ColumnTypesLike,
         needed_types: Optional[ColumnTypesLike] = None,
-        row_select_col:  Optional[ColumnTypesLike] = None,
+        row_select_col_type:  Optional[ColumnTypesLike] = None,
         row_select_vals:  Optional[Union[str, int, List, bool]] = None,
         **params: Any,
     ):
@@ -51,7 +51,7 @@ class JuColumnTransformer(JuTransformer):
         self.transformer = transformer
         self.apply_to = ensure_column_types(apply_to)
         self.needed_types = needed_types
-        self.row_select_col = row_select_col
+        self.row_select_col_type = row_select_col_type
         self.row_select_vals = row_select_vals
         self.set_params(**params)
 
@@ -164,7 +164,7 @@ class JuColumnTransformer(JuTransformer):
             name=self.name,
             apply_to=self.apply_to,
             needed_types=self.needed_types,
-            row_select_col=self.row_select_col,
+            row_select_col_type=self.row_select_col_type,
             row_select_vals=self.row_select_vals,
             transformer=self.transformer,
         )

@@ -128,7 +128,7 @@ def test_row_select():
         name="zscore",
         transformer=StandardScaler(),
         apply_to="continuous",
-        row_select_col=["healthy"],
+        row_select_col_type=["healthy"],
         row_select_vals=1
     )
 
@@ -136,7 +136,7 @@ def test_row_select():
         name="zscore",
         transformer=StandardScaler(),
         apply_to="continuous",
-        row_select_col=["healthy"],
+        row_select_col_type=["healthy"],
         row_select_vals=0
     )
 
@@ -144,7 +144,7 @@ def test_row_select():
         name="zscore",
         transformer=StandardScaler(),
         apply_to="continuous",
-        row_select_col=["healthy"],
+        row_select_col_type=["healthy"],
         row_select_vals=[0, 1]
     )
     mean_healthy = (

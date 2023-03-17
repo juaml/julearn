@@ -50,10 +50,10 @@ class ConfoundRemover(JuTransformer):
     keep_confounds : bool, optional
         Whether you want to return the confound together with the confound
         removed features, default is False.
-    row_select_col : str or list of str or set of str or ColumnTypes
+    row_select_col_type : str or list of str or set of str or ColumnTypes
         The column types needed to select rows (default is None)
     row_select_vals : str, int, bool or list of str, int, bool
-        The value(s) which should be selected in the row_select_col
+        The value(s) which should be selected in the row_select_col_type
         to select the rows used for training (default is None)
     """
 
@@ -64,7 +64,7 @@ class ConfoundRemover(JuTransformer):
         confounds: ColumnTypesLike = "confound",
         threshold: Optional[float] = None,
         keep_confounds: bool = False,
-        row_select_col:  Optional[ColumnTypesLike] = None,
+        row_select_col_type:  Optional[ColumnTypesLike] = None,
         row_select_vals:  Optional[Union[str, int, List, bool]] = None,
     ):
         if model_confound is None:
@@ -77,7 +77,7 @@ class ConfoundRemover(JuTransformer):
         super().__init__(
             apply_to=apply_to,
             needed_types=confounds,
-            row_select_col=row_select_col,
+            row_select_col_type=row_select_col_type,
             row_select_vals=row_select_vals
         )
 
