@@ -43,9 +43,11 @@ a basic pipeline and basic model evaluation:
    pipeline.rst
    model_evaluation.rst
 
-If you want to do more fancy stuff and pick and select specific topics see
-`chapter 4 to be inserted`.
-:ref:`model_evaluation_usage`
-.. _selected_deeper_topics:
-If you are just interested in seeing all parameters of :func:`.run_cross_validation`
-have a lool at the `api`.
+If you are just interested in seeing all parameters of :func:`.run_cross_validation`, 
+click on the function to have a look at all its parameters in the `api`.
+
+If you are already familiar with how to set up a basic workflow using Julearn 
+and want to do more fancy stuff, go to :ref:`selected_deeper_topics` to pick 
+and select specific topics.
+
+
