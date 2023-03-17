@@ -30,7 +30,9 @@
 ..     X = df.iloc[:,:-1].columns.tolist()
 ..     y = "species"
 
-.. Your dataframe, X and y should look like this now:
+.. Let's inspect what your variables should look like.
+
+.. The dataframe:
 
 .. .. code-block:: python
 
@@ -40,6 +42,8 @@
 ..     :width: 600
 ..     :alt: iris_df
 
+.. The feature columns:
+
 .. .. code-block:: python
 
 ..     X
@@ -47,6 +51,8 @@
 .. .. image:: ../images/iris_X.png
 ..     :width: 600
 ..     :alt: iris_X
+
+.. The target column:
 
 .. .. code-block:: python
 
@@ -56,19 +62,10 @@
 ..     :width: 600
 ..     :alt: iris_y
 
-.. .. code-block:: python
-
-..     from seaborn import load_dataset
-    
-..     df = load_dataset('iris')
-..     X = df.iloc[:,:-1].columns.tolist()
-..     y = "species"
-
 
 
 .. content to treat: X, y, DF, typing
 
-.. .. include:: links.inc
 
 .. Input Data
 .. ==========
