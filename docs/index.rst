@@ -75,8 +75,7 @@ Table of Contents
    scoring
    steps
    hyperparameters
-   auto_examples/basic/index.rst
-   auto_examples/advanced/index.rst
+
    api
    contributing
    maintaining
