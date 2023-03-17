@@ -210,7 +210,7 @@ class JuTransformer(JuBaseEstimator, TransformerMixin):
         ).index.values
         _X = X.loc[idx, :]
         _y = y if y is None else y.loc[idx, :]
-        fit_params = _check_fit_params(_X, fit_params)
+        fit_params = _check_fit_params(X, fit_params, indices=idx)
 
         return dict(X=_X, y=_y, **fit_params)
 
@@ -223,13 +223,9 @@ class JuTransformer(JuBaseEstimator, TransformerMixin):
             The column types needed by the estimator.
         """
         needed_types = super().get_needed_types()
-        if self.row_select_col is None:
-            return needed_types
-
-        if needed_types is None:
-            return ColumnTypes(self.row_select_vals)
-
-        return needed_types.add(self.row_select_col)
+        if self.row_select_col is not None:
+            needed_types = needed_types.add(self.row_select_col)
+        return needed_types
 
 
 class WrapModel(JuBaseEstimator):
