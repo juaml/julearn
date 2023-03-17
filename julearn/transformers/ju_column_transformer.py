@@ -164,6 +164,8 @@ class JuColumnTransformer(JuTransformer):
             name=self.name,
             apply_to=self.apply_to,
             needed_types=self.needed_types,
+            row_select_col=self.row_select_col,
+            row_select_vals=self.row_select_vals,
             transformer=self.transformer,
         )
 

@@ -4,7 +4,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Dict, Optional, List
+from typing import Dict, Optional, List, Union
 
 import pandas as pd
 
@@ -23,15 +23,29 @@ class ChangeColumnTypes(JuTransformer):
         set all the column types to `continuous` (default is None).
     apply_to : ColumnTypesLike, optional
         From which feature types ('X_types') to remove confounds.
+    row_select_col : str or list of str or set of str or ColumnTypes
+        The column types needed to select rows (default is None)
+        Not really useful for this one, but here for compatibility.
+    row_select_vals : str, int, bool or list of str, int, bool
+        The value(s) which should be selected in the row_select_col
+        to select the rows used for training (default is None)
+        Not really useful for this one, but here for compatibility.
     """
 
     def __init__(
         self,
         X_types_renamer: Dict[str, str],
         apply_to: ColumnTypesLike,
+        row_select_col:  Optional[ColumnTypesLike] = None,
+        row_select_vals:  Optional[Union[
+            str, int, list, bool]] = None,
     ):
         self.X_types_renamer = X_types_renamer
-        super().__init__(apply_to=apply_to, needed_types=None)
+        super().__init__(
+            apply_to=apply_to, needed_types=None,
+            row_select_col=row_select_col, row_select_vals=row_select_vals
+
+        )
 
     def _fit(
         self, X: pd.DataFrame, y: Optional[DataLike] = None
