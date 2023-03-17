@@ -1,4 +1,4 @@
-.. include:: links.inc
+.. include:: ../links.inc
 
 Connectome-based Predictive Modeling (CBPM)
 ===========================================
@@ -69,7 +69,8 @@ Pearson correlation between each feature and the target, and select the features
 for which the p-value of the correlation falls below the default significance
 threshold of 0.01. It will then group the features into negatively and positively
 correlated features, and sum up the features within each of these groups using
-:func:`np.sum`_. That is, the linear model is fitted on two features:
+:func:`numpy.sum`. That is, the linear model in this case is fitted on two
+features:
 
 1. sum of features that are positively correlated to the target
 2. sum of features that are negatively correlated to the target
@@ -119,21 +120,12 @@ that specifies each of these parameters may look as follows:
 As you may have guessed, this pipeline will use a Spearman correlation and a 
 significance level of 0.05 for feature selection. It will only select features
 that are positively correlated to the target and aggregate them using the
-`:func:np.average`_ aggregation function.
+`:func:numpy.average` aggregation function.
 
 .. topic:: References:
 
-	.. [#1] Shen, Xilin, et al., `"Using connectome-based predictive modeling 
-	to predict individual behavior from brain connectivity"
-	<https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5526681/>`_,
-	Nat Protoc. 2017 Mar; 12(3): 506–518.
+	.. [#1] Shen, Xilin, et al., `"Using connectome-based predictive modeling to predict individual behavior from brain connectivity" <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5526681/>`_, Nat Protoc. 2017 Mar; 12(3): 506–518.
 
-	.. [#2] Finn, Emily S., et al., `"Functional connectome fingerprinting:
-	identifying individuals using patterns of brain connectivity"
-	<https://pubmed.ncbi.nlm.nih.gov/26457551/>`_,
-	Nat Neurosci. 2015 Nov;18(11):1664-71. 
+	.. [#2] Finn, Emily S., et al., `"Functional connectome fingerprinting: identifying individuals using patterns of brain connectivity" <https://pubmed.ncbi.nlm.nih.gov/26457551/>`_, Nat Neurosci. 2015 Nov;18(11):1664-71. 
 	
-	.. [#3] Rosenberg, Monica D., et al., `"A neuromarker of sustained attention
-	from whole-brain functional connectivity"
-	<https://pubmed.ncbi.nlm.nih.gov/26595653/>`_,
-	Nat Neurosci. 2016 Jan; 19(1):165-71.
+	.. [#3] Rosenberg, Monica D., et al., `"A neuromarker of sustained attention from whole-brain functional connectivity" <https://pubmed.ncbi.nlm.nih.gov/26595653/>`_, Nat Neurosci. 2016 Jan; 19(1):165-71.
