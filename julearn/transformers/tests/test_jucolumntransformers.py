@@ -139,13 +139,37 @@ def test_row_select():
         row_select_col=["healthy"],
         row_select_vals=0
     )
+
+    transformer_both = JuColumnTransformer(
+        name="zscore",
+        transformer=StandardScaler(),
+        apply_to="continuous",
+        row_select_col=["healthy"],
+        row_select_vals=[0, 1]
+    )
     mean_healthy = (
         transformer_healthy.fit(X)
         .column_transformer_.transformers_[0][1].mean_
     )
-    mean_unhealthy = (transformer_unhealthy.fit(X)
-                      .column_transformer_.transformers_[0][1].mean_
-                      )
+    mean_unhealthy = (
+        transformer_unhealthy.fit(X)
+        .column_transformer_.transformers_[0][1].mean_
+    )
+
+    mean_both = (transformer_both.fit(X)
+                 .column_transformer_.transformers_[0][1].mean_
+                 )
+
+    assert_almost_equal(
+        transformer_healthy._select_rows(X, y=None)["X"].index.values,
+        [0, 1])
+    assert_almost_equal(
+        transformer_unhealthy._select_rows(X, None)["X"].index.values,
+        [2, 3])
+    assert_almost_equal(
+        transformer_both._select_rows(X, None)["X"].index.values,
+        [0, 1, 2, 3])
 
     assert_almost_equal(mean_unhealthy, [1])
     assert_almost_equal(mean_healthy, [0])
+    assert_almost_equal(mean_both, [0.5])
