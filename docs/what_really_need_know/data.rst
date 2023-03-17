@@ -2,8 +2,20 @@
 
 .. _data_usage:
 
-Data
-====
+How to give data to :func:`.run_cross_validation`
+=================================================
+
+Julearn deals with data in the form of pandas DataFrames. Therefore, 
+:func:`.run_cross_validation` needs to know the name of the DataFrame that 
+contains the features and the target or label. Additionally, one has to specify 
+a list of string(s) referring to the column names of the columns containing the 
+feature(s) or the target, respectively. This leads to the following **parameters 
+for inputting data**:
+
+- ``data``: Name of the dataframe containing the features and the target or label
+- ``X``: List of strings containing the column names of the features
+- ``y``: String containing the name of the column wiht the target or label
+
 
 content to treat: X, y, DF, typing
 
@@ -12,10 +24,24 @@ content to treat: X, y, DF, typing
 Input Data
 ==========
 
-While in the past, julearn supported two kinds of data input configurations, 
-we have ditched the support for Nunmpy arrays in favor of Pandas dataframes.
 
-The function :func:`.run_cross_validation` takes as input the following variables:
+The parameters `X`, `y`, `confounds` and `groups` are interpteted as columns in the
+dataframe (specified in `df`).
+
+For example, using the 'iris' dataset, we can specify:
+
+from seaborn import load_dataset
+from julearn import run_cross_validation
+df = load_dataset("iris")
+df.head()
+X = df.iloc[:,:-1].columns.tolist()
+y = "species"
+X -> ['sepal_length', 'sepal_width', 'petal_length', 'petal_width']
+y -> 'species'
+run_cross_validation(
+    X=X, y=y, data=df, 
+    model = "svm"
+)
 
 - `X`: Features
 - `y`: Target or labels
@@ -23,12 +49,6 @@ The function :func:`.run_cross_validation` takes as input the following variable
    metrics)
 - `groups`: Grouping variables to avoid data leakage in some cross-validation
    schemes. See `Cross Validation`_ for more information.
-
-
-The parameters `X`, `y`, `confounds` and `groups` are interpteted as columns in the
-dataframe (specified in `df`).
-
-For example, using the 'iris' dataset, we can specify:
 
 .. code-block:: python
 
