@@ -4,7 +4,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Dict, Optional, List, Union
+from typing import Dict, Optional, List
 
 import pandas as pd
 
