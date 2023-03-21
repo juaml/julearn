@@ -9,6 +9,7 @@ import numpy as np
 import pandas as pd
 from numpy.testing import assert_array_equal
 from scipy.stats import spearmanr
+from pandas.testing import assert_frame_equal
 
 from julearn.transformers import CBPM
 
@@ -229,3 +230,95 @@ def test_CBPM_spearman(X_iris: pd.DataFrame, y_iris: pd.DataFrame) -> None:
         [trans_man_pos.reshape(-1, 1), trans_man_neg.reshape(-1, 1)], axis=1
     )
     assert_array_equal(trans_posneg, trans_man)
+
+
+def test_CBPM_set_output_posneg(
+    X_iris: pd.DataFrame, y_iris: pd.DataFrame,
+) -> None:
+    """
+
+    Parameters
+    ----------
+    X_iris : pd.DataFrame
+        The iris dataset features
+    y_iris : pd.Series
+        The iris dataset target
+    """
+
+    X_pos = ["sepal_length", "petal_length", "petal_width"]
+    X_neg = ["sepal_width"]
+
+    # I have checked before all are still significant with spearman
+    trans_posneg = (CBPM(corr_method=spearmanr,
+                         agg_method=np.mean,
+                         corr_sign="posneg"
+                         )
+                    .set_output(transform="pandas")
+                    .fit_transform(X_iris, y_iris)
+                    )
+
+    trans_man_pos = X_iris[X_pos].values.mean(axis=1)
+    trans_man_neg = X_iris[X_neg].values.mean(axis=1)
+    trans_man = np.concatenate(
+        [trans_man_pos.reshape(-1, 1), trans_man_neg.reshape(-1, 1)], axis=1
+    )
+    df_trans_man = pd.DataFrame(trans_man, columns=["positive", "negative"])
+    assert_frame_equal(trans_posneg, df_trans_man)
+
+
+def test_CBPM_set_output_pos(
+    X_iris: pd.DataFrame, y_iris: pd.DataFrame,
+) -> None:
+    """
+
+    Parameters
+    ----------
+    X_iris : pd.DataFrame
+        The iris dataset features
+    y_iris : pd.Series
+        The iris dataset target
+    """
+
+    X_pos = ["sepal_length", "petal_length", "petal_width"]
+
+    # I have checked before all are still significant with spearman
+    trans_pos = (CBPM(corr_method=spearmanr,
+                      agg_method=np.mean,
+                      corr_sign="pos"
+                      )
+                 .set_output(transform="pandas")
+                 .fit_transform(X_iris, y_iris)
+                 )
+
+    trans_man_pos = X_iris[X_pos].values.mean(axis=1)
+    df_trans_man = pd.DataFrame(trans_man_pos, columns=["positive"])
+    assert_frame_equal(trans_pos, df_trans_man)
+
+
+def test_CBPM_set_output_neg(
+    X_iris: pd.DataFrame, y_iris: pd.DataFrame,
+) -> None:
+    """
+
+    Parameters
+    ----------
+    X_iris : pd.DataFrame
+        The iris dataset features
+    y_iris : pd.Series
+        The iris dataset target
+    """
+
+    X_neg = ["sepal_width"]
+
+    # I have checked before all are still significant with spearman
+    trans_neg = (CBPM(corr_method=spearmanr,
+                      agg_method=np.mean,
+                      corr_sign="neg"
+                      )
+                 .set_output(transform="pandas")
+                 .fit_transform(X_iris, y_iris)
+                 )
+
+    trans_man_neg = X_iris[X_neg].values.mean(axis=1)
+    df_trans_man = pd.DataFrame(trans_man_neg, columns=["negative"])
+    assert_frame_equal(trans_neg, df_trans_man)

@@ -9,6 +9,7 @@ import numpy as np
 from joblib import Parallel, delayed
 from scipy.stats import pearsonr
 from sklearn.base import BaseEstimator, TransformerMixin
+from sklearn.utils.validation import check_is_fitted
 from ..utils.versions import _joblib_parallel_args
 from ..utils import warn_with_log
 
@@ -269,3 +270,11 @@ class CBPM(BaseEstimator, TransformerMixin):
 
     def aggregate(self, X, mask):
         return self.agg_method(X[:, mask], axis=1)
+
+    def get_feature_names_out(self, input_features=None):
+        check_is_fitted(self)
+        cols = (["positive"] if self.used_corr_sign_ == "pos" else
+                ["negative"] if self.used_corr_sign_ == "neg" else
+                ["positive", "negative"]
+                )
+        return np.array(cols, dtype=object)
