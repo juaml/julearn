@@ -12,8 +12,8 @@ Main API functions
 Model functions
 ^^^^^^^^^^^^^^^
 
-.. autofunction:: julearn.estimators.list_models
-.. autofunction:: julearn.estimators.get_model
+.. autofunction:: julearn.models.list_models
+.. autofunction:: julearn.models.get_model
 
 Transformer functions
 ^^^^^^^^^^^^^^^^^^^^^
@@ -26,7 +26,7 @@ Transformer functions
 Logging
 ^^^^^^^
 .. autofunction:: julearn.utils.configure_logging
-.. autofunction:: julearn.utils.warn
+.. autofunction:: julearn.utils.warn_with_log
 .. autofunction:: julearn.utils.raise_error
 
 =======
@@ -47,10 +47,3 @@ Cross-Validation
 
 Classes
 ^^^^^^^
-
-.. autoclass:: julearn.transformers.confounds.DataFrameConfoundRemover
-   :members: 
-.. autoclass:: julearn.transformers.confounds.TargetConfoundRemover
-   :members: 
-.. autoclass:: julearn.pipeline.ExtendedDataFramePipeline
-   :members:

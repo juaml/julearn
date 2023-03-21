@@ -1,20 +1,25 @@
+"""Provide registry of searchers."""
+
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
+
+from typing import List, Optional
+
 from copy import deepcopy
-from julearn.utils.logging import raise_error, logger, warn
+
+from julearn.utils.logging import raise_error, logger, warn_with_log
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 
 
-_available_searchers = {
-    'grid': GridSearchCV,
-    'random': RandomizedSearchCV
-}
+_available_searchers = {"grid": GridSearchCV, "random": RandomizedSearchCV}
+
+# Keep a copy for reset
 _available_searchers_reset = deepcopy(_available_searchers)
 
 
-def list_searchers():
-    """ List all available searching algorithms
+def list_searchers() -> List[str]:
+    """List all available searching algorithms.
 
     Returns
     -------
@@ -24,7 +29,8 @@ def list_searchers():
     return list(_available_searchers)
 
 
-def get_searcher(name):
+# TODO: @samihamdan: add a searcher typing hint in julearn.typing
+def get_searcher(name: str) -> object:
     """Get a searcher by name.
 
     Parameters
@@ -34,22 +40,30 @@ def get_searcher(name):
 
     Returns
     -------
-    out : obj
+    obj
         scikit-learn compatible searcher.
+
+    Raises
+    ------
+    ValueError
+        If the specified searcher is not available.
     """
     if name not in _available_searchers:
         raise_error(
-            f'The specified searcher ({name}) is not available. '
-            f'Valid options are: {list(_available_searchers.keys())}'
+            f"The specified searcher ({name}) is not available. "
+            f"Valid options are: {list(_available_searchers.keys())}"
         )
     out = _available_searchers[name]
     return out
 
 
-def register_searcher(searcher_name, searcher, overwrite=None):
+def register_searcher(
+    searcher_name: str, searcher: object, overwrite: Optional[bool] = None
+) -> None:
     """Register searcher to julearn.
+
     This function allows you to add a scikit-learn compatible searching
-    algorithm to julearn. Afterwars, you can call it as all other searchers in
+    algorithm to julearn. After, you can call it as all other searchers in
     julearn.
 
     Parameters
@@ -63,29 +77,35 @@ def register_searcher(searcher_name, searcher, overwrite=None):
         Options are:
 
         * None : overwrite is possible, but warns the user
-        * True : overwrite is possible without any warning
+        * True : overwrite is possible without any warns
         * False : overwrite is not possible, error is raised instead
 
+    Raises
+    ------
+    ValueError
+        If the specified searcher is already available and overwrite is set to
+        False.
     """
     if searcher_name in list_searchers():
         if overwrite is None:
-            warn(
-                f'searcher named {searcher_name} already exists. '
-                f'Therefore, {searcher_name} will be overwritten. '
-                'To remove this warning set `overwrite=True`. '
+            warn_with_log(
+                f"searcher named {searcher_name} already exists. "
+                f"Therefore, {searcher_name} will be overwritten. "
+                "To remove this warn_with_loging set `overwrite=True`. "
             )
         elif overwrite is False:
             raise_error(
-                f'searcher named {searcher_name} already exists and '
-                'overwrite is set to False, therefore you cannot overwrite '
-                'existing searchers. '
-                'Set `overwrite=True` in case you want to '
-                'overwrite existing searchers.'
+                f"searcher named {searcher_name} already exists and "
+                "overwrite is set to False, therefore you cannot overwrite "
+                "existing searchers. "
+                "Set `overwrite=True` in case you want to "
+                "overwrite existing searchers."
             )
-    logger.info(f'Registering new searcher: {searcher_name}')
+    logger.info(f"Registering new searcher: {searcher_name}")
     _available_searchers[searcher_name] = searcher
 
 
-def reset_searcher_register():
+def reset_searcher_register() -> None:
+    """Reset the searcher register to its initial state."""
     global _available_searchers
     _available_searchers = deepcopy(_available_searchers_reset)

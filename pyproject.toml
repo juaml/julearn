@@ -1,9 +1,78 @@
 [build-system]
-requires = ["setuptools>=42", "wheel", "setuptools_scm[toml]>=3.4"]
+requires = [
+  "setuptools >= 61.0.0",
+  "wheel",
+  "setuptools_scm[toml] >= 6.2"
+]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "julearn"
+description = "Juelich Machine Learning Library"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "AGPL-3.0-only"}
+authors = [
+    {name = "Fede Raimondo", email = "f.raimondo@fz-juelich.de"},
+    {name = "Sami Hamdan", email = "s.hamdan@fz-juelich.de"},
+]
+maintainers = [
+    {name = "Sami Hamdan", email = "s.hamdan@fz-juelich.de"},
+]
+keywords = [
+    "machine-learning",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved",
+    "Natural Language :: English",
+    "Topic :: Software Development",
+    "Topic :: Scientific/Engineering",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+dependencies = [
+    "numpy>=1.22,<1.24",
+    "pandas>=1.4.0,<1.6",
+    "scikit-learn==1.2.0rc1",
+]
+dynamic = ["version"]
+
+[project.urls]
+homepage = "https://juaml.github.io/julearn"
+documentation = "https://juaml.github.io/julearn"
+repository = "https://github.com/juaml/julearn"
+
+[project.optional-dependencies]
+dev = ["tox"]
+docs = [
+    "seaborn>=0.11.2,<0.12",
+    "Sphinx>=5.3.0,<5.4",
+    "sphinx-gallery>=0.11.0,<0.12",
+    "sphinx_rtd_theme",
+    "sphinx-multiversion>=0.2.4,<0.3",
+    "numpydoc>=1.5.0,<1.6",
+]
+deslib = ["deslib>=0.3.5,<0.4"]
+
+################
+# Tool configs #
+################
+
+[tool.setuptools]
+packages = ["julearn"]
 
 [tool.setuptools_scm]
 version_scheme = "python-simplified-semver"
 local_scheme = "no-local-version"
 write_to = "julearn/_version.py"
 write_to_template = "__version__ = '{version}'\n"
+
+[tool.black]
+line-length = 79
+target-version = ["py38"]

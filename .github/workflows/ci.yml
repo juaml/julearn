@@ -1,41 +1,38 @@
 name: Run Tests
 
-on: [push, pull_request]
+on:
+  push:
+    paths:
+      - 'julearn/**'
+  pull_request:
+    paths:
+      - 'julearn/**'
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-        python-version: ['3.7', '3.8', '3.9', '3.10']
+        python-version: ['3.8', '3.9', '3.10', '3.11']
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install -r test-requirements.txt
-        pip install -r requirements.txt
-    - name: Install julearn
-      shell: bash -el {0}
+        python -m pip install --upgrade pip setuptools wheel
+        python -m pip install tox tox-gh-actions
+    - name: Test with tox
       run: |
-          python setup.py build
-          python setup.py install
-    - name: Lint with flake8
-      run: |
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count  --show-source --statistics
-    - name: Spell check
-      run: |
-        codespell julearn/ docs/ examples/
-    - name: Test with pytest
-      run: |
-        PYTHONPATH="." pytest --cov=julearn --cov-report xml -vv julearn/
-    - name: 'Upload coverage to CodeCov'
-      uses: codecov/codecov-action@master
-      if: success() && matrix.python-version == 3.8
+        tox
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        fail_ci_if_error: true
+        flags: junifer
+      if: success() && matrix.python-version == 3.10

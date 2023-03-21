@@ -27,9 +27,9 @@ When using :func:`.run_cross_validation` you have to answer at least
     argument from :func:`.run_cross_validation` 
   * What problem type do you want to answer?
     In machine learning their are different problems you want to handle.
-    Julearn supports ``binary_classification``, ``multiclass_classification``
-    and ``regression`` problems. You shout set ``problem_type`` to one of these
-    3 problem typed. By default, julearn uses the ``binary_classification``
+    Julearn supports ``classification`` and ``regression`` problems.
+    You shout set ``problem_type`` to one of these
+    2 problem types. By default, julearn uses the ``classification``
     type.
 
 What model do you want to use and what problem type do you want to use
@@ -65,10 +65,6 @@ To do so you can set the following arguments in the
     By default features will will not be preprocessed and confound removed in 
     case a confound was specified.
 
-  * ``preprocess_y``: specifies how to transform the target.
-    Currently, this is limited to one available transformer.
-    By default no preprocessing is applied.
-
   * ``preprocess_confounds``: specifies how to transform the confounds.
     Here, you use the same lists of available transformers as in 
     ``preprocess_X``. By default confounds will not be preprocessed.
@@ -84,7 +80,7 @@ In other words we need to set:
   * ``preprocess_target = 'zscore'``
   * ``preprocess_X = ['pca', 'remove_confound']``
 
-Additionally, we know that we are facing a multiclass_classification problem
+Additionally, we know that we are facing a multiclass classification problem
 and want to use a svm model.
 Put together with an example from the :doc:`input <input>` the code looks
 like this:
@@ -104,7 +100,7 @@ like this:
     preprocess_X = ['pca', 'remove_confound']
     run_cross_validation(
       X=X, y=y, data=df_iris, confounds=confounds,
-      model='svm', problem_type='multiclass_classification',
+      model='svm', problem_type='classification',
       preprocess_X=preprocess_X,
       preprocess_confounds=preprocess_confounds,
       preprocess_target=preprocess_target)
