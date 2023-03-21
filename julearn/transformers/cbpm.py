@@ -84,6 +84,7 @@ class CBPM(BaseEstimator, TransformerMixin):
         Array of bools showing which of the original features will be used
         by this transformer.
    '''
+
     def __init__(
         self,
         significance_threshold: float = 0.05,
