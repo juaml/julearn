@@ -34,12 +34,12 @@ from julearn.prepare import (
     prepare_input_data,
     _pick_columns,
     check_consistency,
-    check_x_types,
+    _check_x_types,
 )
 
 
 def _check_df_input(prepared, X, y, groups, df):
-    df_X, df_y, df_groups = prepared
+    df_X, df_y, df_groups, _ = prepared
 
     assert_array_equal(df[X].values, df_X[X].values)
     assert_array_equal(df_y.values, df[y].values)
@@ -56,9 +56,10 @@ def test_prepare_input_data() -> None:
     X = columns[:-2]
     y = columns[-1]
     df = pd.DataFrame(data=data, columns=columns)
+    X_types = {"continuous": X}
 
     prepared = prepare_input_data(
-        X=X, y=y, df=df, pos_labels=None, groups=None
+        X=X, y=y, df=df, pos_labels=None, groups=None, X_types=X_types
     )
     _check_df_input(prepared, X=X, y=y, groups=None, df=df)
 
@@ -66,9 +67,9 @@ def test_prepare_input_data() -> None:
     X = columns[:5]
     y = columns[7]
     groups = columns[8]
-
+    X_types = {"continuous": X}
     prepared = prepare_input_data(
-        X=X, y=y, df=df, pos_labels=None, groups=groups
+        X=X, y=y, df=df, pos_labels=None, groups=groups, X_types=X_types
     )
     _check_df_input(prepared, X=X, y=y, groups=groups, df=df)
 
@@ -76,9 +77,9 @@ def test_prepare_input_data() -> None:
     X = columns[:5]
     y = columns[6]
     groups = columns[7]
-
+    X_types = {"continuous": X}
     prepared = prepare_input_data(
-        X=X, y=y, df=df, pos_labels=None, groups=groups
+        X=X, y=y, df=df, pos_labels=None, groups=groups, X_types=X_types
     )
     _check_df_input(prepared, X=X, y=y, groups=groups, df=df)
 
@@ -86,9 +87,9 @@ def test_prepare_input_data() -> None:
     X = columns[2]
     y = columns[6]
     groups = columns[7]
-
+    X_types = {"continuous": X}
     prepared = prepare_input_data(
-        X=X, y=y, df=df, pos_labels=None, groups=groups
+        X=X, y=y, df=df, pos_labels=None, groups=groups, X_types=X_types
     )
     _check_df_input(prepared, X=X, y=y, groups=groups, df=df)
 
@@ -96,8 +97,9 @@ def test_prepare_input_data() -> None:
     X = columns[:-1]
     y = columns[-1]
     groups = None
+    X_types = {"continuous": X}
     prepared = prepare_input_data(
-        X=[":"], y=y, df=df, pos_labels=None, groups=groups
+        X=[":"], y=y, df=df, pos_labels=None, groups=groups, X_types=X_types
     )
     _check_df_input(prepared, X=X, y=y, groups=groups, df=df)
 
@@ -105,8 +107,9 @@ def test_prepare_input_data() -> None:
     X = columns[:-2]
     y = columns[-2]
     groups = columns[-1]
+    X_types = {"continuous": X}
     prepared = prepare_input_data(
-        X=[":"], y=y, df=df, pos_labels=None, groups=groups
+        X=[":"], y=y, df=df, pos_labels=None, groups=groups, X_types=X_types
     )
     _check_df_input(prepared, X=X, y=y, groups=groups, df=df)
 
@@ -119,13 +122,39 @@ def test_prepare_input_data() -> None:
     X = columns[:-2]
     y = "t_8"
     groups = "g_9"
+    X_types = {"continuous": X}
     prepared = prepare_input_data(
-        X="f_.*", y=y, df=df, pos_labels=None, groups=groups
+        X="f_.*", y=y, df=df, pos_labels=None, groups=groups, X_types=X_types
     )
     _check_df_input(prepared, X=X, y=y, groups=groups, df=df)
 
     prepared = prepare_input_data(
-        X=["f_.*"], y=y, df=df, pos_labels=None, groups=groups
+        X=["f_.*"], y=y, df=df, pos_labels=None, groups=groups, X_types=X_types
+    )
+    _check_df_input(prepared, X=X, y=y, groups=groups, df=df)
+
+    # Now use regular expressions for X_types too
+    X_types = {"continuous": "f_.*"}
+    prepared = prepare_input_data(
+        X=["f_.*"], y=y, df=df, pos_labels=None, groups=groups, X_types=X_types
+    )
+    _check_df_input(prepared, X=X, y=y, groups=groups, df=df)
+
+    X_types = {"continuous": ["f_.*"]}
+    prepared = prepare_input_data(
+        X=["f_.*"], y=y, df=df, pos_labels=None, groups=groups, X_types=X_types
+    )
+    _check_df_input(prepared, X=X, y=y, groups=groups, df=df)
+
+    X_types = {"continuous": ["f_.*"]}
+    prepared = prepare_input_data(
+        X="f_.*", y=y, df=df, pos_labels=None, groups=groups, X_types=X_types
+    )
+    _check_df_input(prepared, X=X, y=y, groups=groups, df=df)
+
+    X_types = {"continuous": "f_.*"}
+    prepared = prepare_input_data(
+        X="f_.*", y=y, df=df, pos_labels=None, groups=groups, X_types=X_types
     )
     _check_df_input(prepared, X=X, y=y, groups=groups, df=df)
 
@@ -153,6 +182,7 @@ def test_prepare_input_data_erors() -> None:
             df=df_wrong_cols,
             pos_labels=None,
             groups=None,
+            X_types=None,
         )
 
     # Wrong types for X
@@ -162,7 +192,12 @@ def test_prepare_input_data_erors() -> None:
         X = 2
         y = columns[6]
         prepared = prepare_input_data(
-            X=X, y=y, df=df, pos_labels=None, groups=None  # type: ignore
+            X=X,
+            y=y,
+            df=df,
+            pos_labels=None,
+            groups=None,
+            X_types=None,  # type: ignore
         )
 
     # Wrong types for y
@@ -170,7 +205,12 @@ def test_prepare_input_data_erors() -> None:
         X = columns[:5]
         y = ["bad"]
         prepared = prepare_input_data(
-            X=X, y=y, df=df, pos_labels=None, groups=None  # type: ignore
+            X=X,
+            y=y,
+            df=df,
+            pos_labels=None,
+            groups=None,
+            X_types=None,  # type: ignore
         )
 
     # Wrong types for groups
@@ -179,7 +219,12 @@ def test_prepare_input_data_erors() -> None:
         y = columns[6]
         groups = 2
         prepared = prepare_input_data(
-            X=X, y=y, df=df, pos_labels=None, groups=groups  # type: ignore
+            X=X,
+            y=y,
+            df=df,
+            pos_labels=None,
+            groups=groups,
+            X_types=None,  # type: ignore
         )
 
     # Wrong types for df
@@ -187,7 +232,12 @@ def test_prepare_input_data_erors() -> None:
         X = columns[:5]
         y = columns[6]
         prepared = prepare_input_data(
-            X=X, y=y, df=dict(), pos_labels=None, groups=None  # type: ignore
+            X=X,
+            y=y,
+            df=dict(),
+            pos_labels=None,
+            groups=None,
+            X_types=None,  # type: ignore
         )
 
     # Missing column in dataframe
@@ -196,11 +246,7 @@ def test_prepare_input_data_erors() -> None:
     groups = columns[7]
     with pytest.raises(ValueError, match=r"missing: \['wrong'\]"):
         prepared = prepare_input_data(
-            X=X,
-            y=y,
-            df=df,
-            pos_labels=None,
-            groups=groups,
+            X=X, y=y, df=df, pos_labels=None, groups=groups, X_types=None
         )
 
     # Missing target in dataframe
@@ -209,11 +255,7 @@ def test_prepare_input_data_erors() -> None:
     groups = columns[7]
     with pytest.raises(ValueError, match=r"not a valid column"):
         prepared = prepare_input_data(
-            X=X,
-            y=y,
-            df=df,
-            pos_labels=None,
-            groups=groups,
+            X=X, y=y, df=df, pos_labels=None, groups=groups, X_types=None
         )
 
     # Missing groups in dataframe
@@ -222,11 +264,7 @@ def test_prepare_input_data_erors() -> None:
     groups = "wrong"
     with pytest.raises(ValueError, match=r"is not a valid column"):
         prepared = prepare_input_data(
-            X=X,
-            y=y,
-            df=df,
-            pos_labels=None,
-            groups=groups,
+            X=X, y=y, df=df, pos_labels=None, groups=groups, X_types=None
         )
 
     # Test overlapping X, y and groups
@@ -237,7 +275,7 @@ def test_prepare_input_data_erors() -> None:
     groups = columns[7]
     with pytest.warns(RuntimeWarning, match="contains the target"):
         prepared = prepare_input_data(
-            X=X, y=y, df=df, pos_labels=None, groups=groups
+            X=X, y=y, df=df, pos_labels=None, groups=groups, X_types=None
         )
     _check_df_input(prepared, X=X, y=y, groups=groups, df=df)
 
@@ -249,7 +287,7 @@ def test_prepare_input_data_erors() -> None:
         RuntimeWarning, match="y and groups are the same column"
     ):
         prepared = prepare_input_data(
-            X=X, y=y, df=df, pos_labels=None, groups=groups
+            X=X, y=y, df=df, pos_labels=None, groups=groups, X_types=None
         )
         _check_df_input(prepared, X=X, y=y, groups=groups, df=df)
 
@@ -259,7 +297,7 @@ def test_prepare_input_data_erors() -> None:
     groups = columns[3]
     with pytest.warns(RuntimeWarning, match="groups is part of X"):
         prepared = prepare_input_data(
-            X=X, y=y, df=df, pos_labels=None, groups=groups
+            X=X, y=y, df=df, pos_labels=None, groups=groups, X_types=None
         )
         _check_df_input(prepared, X=X, y=y, groups=groups, df=df)
 
@@ -271,17 +309,17 @@ def test_prepare_input_data_pos_labels() -> None:
     df = pd.DataFrame(data=data, columns=columns)
     X = columns[:-1]
     y = columns[-1]
-
+    X_types = {"continuous": X}
     # Test pos_labels as int
     t_df = df.copy()
     t_df[y] = (t_df[y] > 0.5).astype(int)
-    _, prep_y, _ = prepare_input_data(
-        X=X, y=y, df=t_df, pos_labels=1, groups=None
+    _, prep_y, _, _ = prepare_input_data(
+        X=X, y=y, df=t_df, pos_labels=1, groups=None, X_types=X_types
     )
     assert_series_equal(prep_y, t_df[y])
 
-    _, prep_y, _ = prepare_input_data(
-        X=X, y=y, df=t_df, pos_labels=0, groups=None
+    _, prep_y, _, _ = prepare_input_data(
+        X=X, y=y, df=t_df, pos_labels=0, groups=None, X_types=X_types
     )
     assert_series_equal(prep_y, 1 - t_df[y])
 
@@ -300,32 +338,37 @@ def test_prepare_input_data_pos_labels() -> None:
     bin_y = (target == "high").astype(int)
     assert 0 in bin_y.values
     assert 1 in bin_y.values
-    _, prep_y, _ = prepare_input_data(
-        X=X, y=y, df=t_df, pos_labels="high", groups=None
+    _, prep_y, _, _ = prepare_input_data(
+        X=X, y=y, df=t_df, pos_labels="high", groups=None, X_types=X_types
     )
     assert_series_equal(prep_y, bin_y)
 
     bin_y = (target == "low").astype(int)
     assert 0 in bin_y.values
     assert 1 in bin_y.values
-    _, prep_y, _ = prepare_input_data(
-        X=X, y=y, df=t_df, pos_labels="low", groups=None
+    _, prep_y, _, _ = prepare_input_data(
+        X=X, y=y, df=t_df, pos_labels="low", groups=None, X_types=X_types
     )
     assert_series_equal(prep_y, bin_y)
 
     bin_y = (target == "mid").astype(int)
     assert 0 in bin_y.values
     assert 1 in bin_y.values
-    _, prep_y, _ = prepare_input_data(
-        X=X, y=y, df=t_df, pos_labels="mid", groups=None
+    _, prep_y, _, _ = prepare_input_data(
+        X=X, y=y, df=t_df, pos_labels="mid", groups=None, X_types=X_types
     )
     assert_series_equal(prep_y, bin_y)
 
     bin_y = target.isin(["low", "mid"]).astype(int)
     assert 0 in bin_y.values
     assert 1 in bin_y.values
-    _, prep_y, _ = prepare_input_data(
-        X=X, y=y, df=t_df, pos_labels=["low", "mid"], groups=None
+    _, prep_y, _, _ = prepare_input_data(
+        X=X,
+        y=y,
+        df=t_df,
+        pos_labels=["low", "mid"],
+        groups=None,
+        X_types=X_types,
     )
     assert_series_equal(prep_y, bin_y)
 
@@ -333,8 +376,13 @@ def test_prepare_input_data_pos_labels() -> None:
         bin_y = (target == "low").astype(int)
         assert 0 in bin_y.values
         assert 1 in bin_y.values
-        _, prep_y, _ = prepare_input_data(
-            X=X, y=y, df=t_df, pos_labels=["low", "missing"], groups=None
+        _, prep_y, _, _ = prepare_input_data(
+            X=X,
+            y=y,
+            df=t_df,
+            pos_labels=["low", "missing"],
+            groups=None,
+            X_types=X_types,
         )
         assert_series_equal(prep_y, bin_y)
 
@@ -342,8 +390,13 @@ def test_prepare_input_data_pos_labels() -> None:
         bin_y = target.isin(["low", "mid", "high"]).astype(int)
         assert 0 not in bin_y.values
         assert 1 in bin_y.values
-        _, prep_y, _ = prepare_input_data(
-            X=X, y=y, df=t_df, pos_labels=["low", "mid", "high"], groups=None
+        _, prep_y, _, _ = prepare_input_data(
+            X=X,
+            y=y,
+            df=t_df,
+            pos_labels=["low", "mid", "high"],
+            groups=None,
+            X_types=X_types,
         )
         assert_series_equal(prep_y, bin_y)
 
@@ -351,8 +404,13 @@ def test_prepare_input_data_pos_labels() -> None:
         bin_y = target.isin(["wrong"]).astype(int)
         assert 0 in bin_y.values
         assert 1 not in bin_y.values
-        _, prep_y, _ = prepare_input_data(
-            X=X, y=y, df=t_df, pos_labels=["wrong"], groups=None
+        _, prep_y, _, _ = prepare_input_data(
+            X=X,
+            y=y,
+            df=t_df,
+            pos_labels=["wrong"],
+            groups=None,
+            X_types=X_types,
         )
         assert_series_equal(prep_y, bin_y)
 
@@ -441,65 +499,70 @@ def test_prepare_data_pick_regexp():
     X = columns[:-1]
     y = columns[-1]
     df = pd.DataFrame(data=data, columns=columns)
-
+    X_types = {"numerical": ["_a_b.*"], "categorical": ["_a[2-3]_b.*"]}
     prepared = prepare_input_data(
-        X=X, y=y, df=df, pos_labels=None, groups=None
+        X=X, y=y, df=df, pos_labels=None, groups=None, X_types=X_types
     )
 
-    df_X, df_y, _ = prepared
+    df_X, df_y, _, prep_X_types = prepared
 
     assert all([x in df_X.columns for x in X])
     assert y not in df_X.columns
     assert df_y.name == y
+    assert X_types == prep_X_types
 
     prepared = prepare_input_data(
-        X=[":"], y=y, df=df, pos_labels=None, groups=None
+        X=[":"], y=y, df=df, pos_labels=None, groups=None, X_types=X_types
     )
 
-    df_X, df_y, _ = prepared
+    df_X, df_y, _, prep_X_types = prepared
 
     assert all([x in df_X.columns for x in X])
     assert y not in df_X.columns
     assert df_y.name == y
+    assert X_types == prep_X_types
 
     X = columns[:6]
     y = "_a3_b2_c7_"
     prepared = prepare_input_data(
-        X=[":"], y=y, df=df, pos_labels=None, groups=None
+        X=[":"], y=y, df=df, pos_labels=None, groups=None, X_types=X_types
     )
 
-    df_X, df_y, _ = prepared
+    df_X, df_y, _, prep_X_types = prepared
 
     assert all([x in df_X.columns for x in X])
     assert y not in df_X.columns
     assert df_y.name == y
+    assert X_types == prep_X_types
 
     X = columns[:6]
     y = "_a3_b2_c7_"
     groups = columns[-1]
     prepared = prepare_input_data(
-        X=[":"], y=y, df=df, pos_labels=None, groups=groups
+        X=[":"], y=y, df=df, pos_labels=None, groups=groups, X_types=X_types
     )
 
-    df_X, df_y, df_groups = prepared
+    df_X, df_y, df_groups, prep_X_types = prepared
 
     assert all([x in df_X.columns for x in X])
     assert y not in df_X.columns
     assert groups not in df_X.columns
     assert df_y.name == y
     assert df_groups.name == groups  # type: ignore
+    assert X_types == prep_X_types
 
     X = columns[:6]
     y = "_a3_b2_c7_"
     prepared = prepare_input_data(
-        X=["_a_.*"], y=y, df=df, pos_labels=None, groups=None
+        X=["_a_.*"], y=y, df=df, pos_labels=None, groups=None, X_types=X_types
     )
 
-    df_X, df_y, _ = prepared
+    df_X, df_y, _, prep_X_types = prepared
 
     assert all([x in df_X.columns for x in X])
     assert y not in df_X.columns
     assert df_y.name == y
+    assert X_types == prep_X_types
 
     X = columns[:6]
     y = "_a3_b2_c7_"
@@ -509,13 +572,15 @@ def test_prepare_data_pick_regexp():
         df=df,
         pos_labels=None,
         groups=None,
+        X_types=X_types,
     )
 
-    df_X, df_y, _ = prepared
+    df_X, df_y, _, prep_X_types = prepared
 
     assert all([x in df_X.columns for x in X])
     assert y not in df_X.columns
     assert df_y.name == y
+    assert X_types == prep_X_types
 
 
 def test_check_consstency() -> None:
@@ -626,7 +691,7 @@ def test_check_consstency() -> None:
             )
 
 
-def test_check_x_types() -> None:
+def test__check_x_types() -> None:
     """Test checking for valid X types."""
 
     X = ["a", "b", "c"]
@@ -634,7 +699,7 @@ def test_check_x_types() -> None:
 
     with warnings.catch_warnings():
         warnings.simplefilter("error")
-        checked_X_types = check_x_types(X=X, X_types=X_types)
+        checked_X_types = _check_x_types(X=X, X_types=X_types)
         assert X_types == checked_X_types
 
     X = ["a", "b", "c"]
@@ -642,25 +707,72 @@ def test_check_x_types() -> None:
     expected_X_types = {"categorical": ["a", "b"], "continuous": ["c"]}
     with warnings.catch_warnings():
         warnings.simplefilter("error")
-        checked_X_types = check_x_types(X=X, X_types=X_types)
+        checked_X_types = _check_x_types(X=X, X_types=X_types)
         assert expected_X_types == checked_X_types
 
     with pytest.warns(
         RuntimeWarning, match="No type checking will be performed"
     ):
-        checked_X_types = check_x_types(X=X, X_types=None)
+        checked_X_types = _check_x_types(X=X, X_types=None)
         assert {} == checked_X_types
 
     X = ["a", "b", "c"]
     X_types = {"categorical": ["a", "b"]}
 
-    with pytest.warns(
-        RuntimeWarning, match="will be treated as continuous"
-    ):
-        checked_X_types = check_x_types(X=X, X_types=X_types)
+    with pytest.warns(RuntimeWarning, match="will be treated as continuous"):
+        checked_X_types = _check_x_types(X=X, X_types=X_types)
         assert X_types == checked_X_types
 
     X = ["a", "b", "c"]
     X_types = {"categorical": ["a", "b", "d"]}
     with pytest.raises(ValueError, match="in X_types but not in X"):
-        check_x_types(X=X, X_types=X_types)
+        _check_x_types(X=X, X_types=X_types)
+
+    X = ["a", "b", "c"]
+    X_types = {"categorical": ["a", "b"], "continuous": ["a", "c"]}
+
+    with pytest.raises(ValueError, match="more than once in X_types"):
+        _check_x_types(X=X, X_types=X_types)
+
+
+def test__check_x_types_regexp() -> None:
+    """Test checking for valid X types using regexp."""
+    X = [
+        "_a_b_c1_",
+        "_a_b_c2_",
+        "_a_b2_c3_",
+        "_a_b2_c4_",
+        "_a_b3_c5_",
+        "_a_b3_c6_",
+        "_a3_b2_c7_",
+        "_a2_b_c7_",
+        "_a2_b_c8_",
+        "_a2_b_c9_",
+    ]
+    X_types = {"categorical": [".*a_b.*", "_a2.*"], "continuous": ["_a3.*"]}
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        checked_X_types = _check_x_types(X=X, X_types=X_types)
+        assert X_types == checked_X_types
+
+    X_types = {
+        "categorical": [".*a_b.*", "_a2.*"],
+        "continuous": ["_a2_b_c7_"],
+    }
+    with pytest.raises(ValueError, match="more than once in X_types"):
+        _check_x_types(X=X, X_types=X_types)
+
+    X_types = {"categorical": [".*a_b.*"], "continuous": ["_a2_b_c7_"]}
+    with pytest.warns(RuntimeWarning, match="not defined in X_types"):
+        checked_X_types = _check_x_types(X=X, X_types=X_types)
+        assert X_types == checked_X_types
+
+    # Two matching regexp in the same type should not be an issue
+    X_types = {
+        "categorical": [".*a_b.*", "_a2.*", "_a_b_c.*"],
+        "continuous": ["_a3.*"],
+    }
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        checked_X_types = _check_x_types(X=X, X_types=X_types)
+        assert X_types == checked_X_types

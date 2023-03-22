@@ -11,7 +11,7 @@ from sklearn.base import BaseEstimator
 
 import pandas as pd
 
-from .prepare import prepare_input_data, check_consistency, check_x_types
+from .prepare import prepare_input_data, check_consistency
 from .pipeline import PipelineCreator
 
 from .utils import logger, raise_error
@@ -174,16 +174,15 @@ def run_cross_validation(
         np.random.seed(seed)
 
     # Interpret the input data and prepare it to be used with the library
-    df_X, y, df_groups = prepare_input_data(
+    df_X, y, df_groups, X_types = prepare_input_data(
         X=X,
         y=y,
         df=data,
         pos_labels=pos_labels,
         groups=groups,
+        X_types=X_types,
     )
 
-    # Validate X_types
-    X_types = check_x_types(X_types, X)
 
     if model_params is None:
         model_params = {}
@@ -276,6 +275,20 @@ def run_cross_validation(
         pipeline = pipeline_creator.to_pipeline(
             X_types=X_types, search_params=search_params
         )
+
+    # Log some information
+    logger.info("= Data Information =")
+    logger.info(f"\tProblem type: {problem_type}")
+    logger.info(f"\tNumber of samples: {len(df_X)}")
+    logger.info(f"\tNumber of features: {len(df_X.columns)}")
+
+    if problem_type == "classification":
+        logger.info(f"\tNumber of classes: {len(np.unique(y))}")
+        logger.info(f"\tTarget type: {y.dtype}")
+        logger.info(f"\tClass distributions: {y.value_counts()}")
+    elif problem_type == "regression":
+        logger.info(f"\tTarget type: {y.dtype}")
+
 
     # Prepare cross validation
     cv_outer = check_cv(cv)  # type: ignore
