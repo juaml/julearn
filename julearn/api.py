@@ -281,6 +281,8 @@ def run_cross_validation(
     logger.info(f"\tProblem type: {problem_type}")
     logger.info(f"\tNumber of samples: {len(df_X)}")
     logger.info(f"\tNumber of features: {len(df_X.columns)}")
+    logger.info("====================")
+    logger.info("")
 
     if problem_type == "classification":
         logger.info(f"\tNumber of classes: {len(np.unique(y))}")
