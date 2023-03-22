@@ -192,7 +192,7 @@ def test_prepare_input_data_erors() -> None:
         X = 2
         y = columns[6]
         prepared = prepare_input_data(
-            X=X,
+            X=X,  # type: ignore
             y=y,
             df=df,
             pos_labels=None,
@@ -206,7 +206,7 @@ def test_prepare_input_data_erors() -> None:
         y = ["bad"]
         prepared = prepare_input_data(
             X=X,
-            y=y,
+            y=y,  # type: ignore
             df=df,
             pos_labels=None,
             groups=None,
@@ -223,7 +223,7 @@ def test_prepare_input_data_erors() -> None:
             y=y,
             df=df,
             pos_labels=None,
-            groups=groups,
+            groups=groups,  # type: ignore
             X_types=None,  # type: ignore
         )
 
@@ -234,7 +234,7 @@ def test_prepare_input_data_erors() -> None:
         prepared = prepare_input_data(
             X=X,
             y=y,
-            df=dict(),
+            df=dict(),  # type: ignore
             pos_labels=None,
             groups=None,
             X_types=None,  # type: ignore
@@ -553,6 +553,7 @@ def test_prepare_data_pick_regexp():
 
     X = columns[:6]
     y = "_a3_b2_c7_"
+    X_types = {"numerical": ["_a_b.*"]}
     prepared = prepare_input_data(
         X=["_a_.*"], y=y, df=df, pos_labels=None, groups=None, X_types=X_types
     )
@@ -566,6 +567,7 @@ def test_prepare_data_pick_regexp():
 
     X = columns[:6]
     y = "_a3_b2_c7_"
+    X_types = {"numerical": ["_a_b.*"], "categorical": ["_a[2-3]_b.*"]}
     prepared = prepare_input_data(
         X=[".*_b_.*", ".*a_b2_.*", ".*b3_.*"],
         y=y,

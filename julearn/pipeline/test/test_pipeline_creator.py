@@ -312,6 +312,7 @@ def test_added_model_target_transform() -> None:
 
 def test_stacking(X_iris: pd.DataFrame, y_iris: pd.Series) -> None:
     """Test that the stacking model works correctly."""
+    print(X_iris.columns)
     # Define our feature types
     X_types = {
         "sepal": ["sepal_length", "sepal_width"],
