@@ -1,0 +1,181 @@
+from typing import List, Optional, Tuple, Union
+
+from itertools import combinations
+from statsmodels.stats.multitest import multipletests
+import pandas as pd
+import numpy as np
+
+from scipy.stats import t
+
+from .utils.logging import warn_with_log, logger, raise_error
+
+
+def _corrected_std(
+    differences: np.ndarray, n_train: int, n_test: int
+) -> float:
+    """Corrects standard deviation using Nadeau and Bengio's approach.
+
+    Parameters
+    ----------
+    differences : ndarray of shape (n_samples,)
+        Vector containing the differences in the score metrics of two models.
+    n_train : int
+        Number of samples in the training set.
+    n_test : int
+        Number of samples in the testing set.
+
+    Returns
+    -------
+    corrected_std : float
+        Variance-corrected standard deviation of the set of differences.
+    """
+    # kr = k times r, r times repeated k-fold crossvalidation,
+    # kr equals the number of times the model was evaluated
+    kr = len(differences)
+    corrected_var = np.var(differences, ddof=1) * (1 / kr + n_test / n_train)
+    corrected_std = np.sqrt(corrected_var)
+    return corrected_std
+
+
+def _compute_corrected_ttest(
+    differences: np.ndarray,
+    n_train: int,
+    n_test: int,
+    df: Optional[int] = None,
+) -> Tuple[float, float]:
+    """Computes right-tailed paired t-test with corrected variance.
+
+    Parameters
+    ----------
+    differences : array-like of shape (n_samples,)
+        Vector containing the differences in the score metrics of two models.
+    df : int
+        Degrees of freedom.
+    n_train : int
+        Number of samples in the training set.
+    n_test : int
+        Number of samples in the testing set.
+
+    Returns
+    -------
+    t_stat : float
+        Variance-corrected t-statistic.
+    p_val : float
+        Variance-corrected p-value.
+    """
+    mean = differences.mean(axis=0)
+    if df is None:
+        df = len(differences) - 1
+    std = _corrected_std(differences, n_train, n_test)
+    t_stat = mean / std
+    p_val = t.sf(np.abs(t_stat), df)  # right-tailed t-test
+    return t_stat, p_val
+
+
+def corrected_ttest(
+    *scores: pd.DataFrame,
+    df: Optional[int] = None,
+    method: str = "bonferroni",
+    maxiter: int = 1,
+) -> pd.DataFrame:
+    """Performs corrected t-test on the scores of two or more models.
+    
+    
+    Parameters
+    ----------
+    *scores : pd.DataFrame
+        DataFrames containing the scores of the models. The DataFrames must
+        be the output of `run_cross_validation`
+    df: int
+        Degrees of freedom.
+    method : str
+        Method used for testing and adjustment of pvalues. Can be either the
+        full name or initial letters. Available methods are:
+
+        - `bonferroni` : one-step correction
+        - `sidak` : one-step correction
+        - `holm-sidak` : step down method using Sidak adjustments
+        - `holm` : step-down method using Bonferroni adjustments
+        - `simes-hochberg` : step-up method  (independent)
+        - `hommel` : closed method based on Simes tests (non-negative)
+        - `fdr_bh` : Benjamini/Hochberg  (non-negative)
+        - `fdr_by` : Benjamini/Yekutieli (negative)
+        - `fdr_tsbh` : two stage fdr correction (non-negative)
+        - `fdr_tsbky` : two stage fdr correction (non-negative)
+    """
+    cv_mdsums = np.unique(np.hstack([x["cv_mdsum"].unique() for x in scores]))
+    if cv_mdsums.size > 1:
+        raise_error(
+            "The CVs are not the same. Can't do a t-test on different CVs."
+        )
+
+    t_scores = [x.set_index(["fold", "repeat"]) for x in scores]
+
+    all_stats = []
+
+    for model_i, model_k in combinations(range(len(t_scores)), 2):
+        i_scores = t_scores[model_i]
+        k_scores = t_scores[model_k]
+        model_i_name = (
+            i_scores["model"].iloc[0]
+            if "model" in i_scores
+            else f"model_{model_i}"
+        )
+        model_k_name = (
+            k_scores["model"].iloc[0]
+            if "model" in k_scores
+            else f"model_{model_k}"
+        )
+        n_train = i_scores["n_train"].values
+        n_test = i_scores["n_test"].values
+
+        if np.unique(n_train).size > 1:
+            warn_with_log(
+                "The training set sizes are not the same. Will use a rounded "
+                "average."
+            )
+            n_train = int(np.mean(n_train).round())
+        else:
+            n_train = n_train[0]
+
+        if np.unique(n_test).size > 1:
+            warn_with_log(
+                "The testing set sizes are not the same. Will use a rounded "
+                "average."
+            )
+            n_test = int(np.mean(n_test).round())
+        else:
+            n_test = n_test[0]
+
+        to_skip = ["cv_mdsum", "n_train", "n_test", "model"]
+
+        to_keep = [x for x in i_scores.columns if x not in to_skip]
+        df1 = i_scores[to_keep]
+        df2 = k_scores[to_keep]
+        differences = df1 - df2
+        t_stat, p_val = _compute_corrected_ttest(
+            differences, n_train=n_train, n_test=n_test, df=df
+        )
+        stat_df = t_stat.to_frame("t-stat")
+        stat_df["p-val"] = p_val
+        stat_df["model_1"] = model_i_name
+        stat_df["model_2"] = model_k_name
+
+        all_stats.append(stat_df)
+
+    all_stats_df = pd.concat(all_stats)
+    all_stats_df.index.name = "metric"
+    all_stats_df = all_stats_df.reset_index()
+
+    if len(scores) > 2:
+        corrected_stats = []
+        for t_metric in all_stats_df["metric"].unique():
+            metric_df = all_stats_df[all_stats_df["metric"] == t_metric].copy()
+            corrected = multipletests(
+                metric_df["p-val"], method=method)
+            metric_df["p-val-corrected"] = corrected[1]
+            corrected_stats.append(metric_df)
+
+        all_stats_df = pd.concat(corrected_stats)
+
+    return all_stats_df

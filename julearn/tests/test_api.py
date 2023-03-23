@@ -13,17 +13,34 @@ from sklearn.svm import SVC
 from sklearn.base import clone
 from sklearn.pipeline import make_pipeline
 from sklearn.model_selection import (
-    StratifiedKFold,
-    GridSearchCV,
+    GroupKFold,
+    GroupShuffleSplit,
+    KFold,
+    LeaveOneGroupOut,
+    LeavePGroupsOut,
+    LeaveOneOut,
+    LeavePOut,
+    PredefinedSplit,
     RepeatedKFold,
-    cross_validate,
+    RepeatedStratifiedKFold,
+    ShuffleSplit,
+    StratifiedKFold,
+    StratifiedShuffleSplit,
+    StratifiedGroupKFold,
+    GridSearchCV,
     RandomizedSearchCV,
+    cross_validate,
+    check_cv,
 )
 
 from julearn import run_cross_validation
 from julearn.utils.testing import do_scoring_test, compare_models
 from julearn.pipeline import PipelineCreator
-
+from julearn.api import _compute_cvmdsum
+from julearn.model_selection import (
+    StratifiedGroupsKFold,
+    RepeatedStratifiedGroupsKFold,
+)
 
 def test_run_cv_simple_binary(
     df_binary: pd.DataFrame, df_iris: pd.DataFrame
@@ -558,3 +575,209 @@ def test_return_train_scores(df_iris: pd.DataFrame) -> None:
 
     assert all([s in scores.columns for s in train_scores])
     assert all([s in scores.columns for s in test_scores])
+
+
+@pytest.mark.parametrize(
+    "cv1, cv2, expected",
+    [
+        (GroupKFold(2), KFold(3), False),
+        (GroupKFold(2), GroupKFold(3), False),
+        (GroupKFold(3), GroupKFold(3), True),
+        (GroupShuffleSplit(2), GroupShuffleSplit(3), "non-reproducible"),
+        (
+            GroupShuffleSplit(2, random_state=32),
+            GroupShuffleSplit(3, random_state=32),
+            False,
+        ),
+        (
+            GroupShuffleSplit(3, random_state=32),
+            GroupShuffleSplit(3, random_state=32),
+            True,
+        ),
+        (
+            GroupShuffleSplit(3, random_state=33),
+            GroupShuffleSplit(3, random_state=32),
+            False,
+        ),
+        (KFold(2), KFold(3), False),
+        (
+            KFold(2, shuffle=True),
+            KFold(2, shuffle=True),
+            "non-reproducible",
+        ),
+        (
+            KFold(3, random_state=32, shuffle=True),
+            KFold(3, random_state=32, shuffle=True),
+            True,
+        ),
+        (
+            KFold(3, random_state=33, shuffle=True),
+            KFold(3, random_state=32, shuffle=True),
+            False,
+        ),
+        (LeaveOneGroupOut(), LeaveOneGroupOut(), True),
+        (LeavePGroupsOut(3), LeavePGroupsOut(3), True),
+        (LeavePGroupsOut(3), LeavePGroupsOut(2), False),
+        (LeaveOneOut(), LeaveOneOut(), True),
+        (LeavePOut(2), LeavePOut(2), True),
+        (LeavePOut(2), LeavePOut(3), False),
+        (PredefinedSplit([1, 2, 3]), PredefinedSplit([1, 2, 3]), True),
+        (PredefinedSplit([1, 2, 3]), PredefinedSplit([1, 2, 4]), False),
+        (
+            RepeatedKFold(n_splits=2),
+            RepeatedKFold(n_splits=2),
+            "non-reproducible",
+        ),
+        (
+            RepeatedKFold(n_splits=2, random_state=32),
+            RepeatedKFold(n_splits=3, random_state=32),
+            False,
+        ),
+        (
+            RepeatedKFold(n_splits=2, random_state=32),
+            RepeatedKFold(n_splits=2, random_state=32),
+            True,
+        ),
+        (
+            RepeatedKFold(n_splits=2, n_repeats=2, random_state=32),
+            RepeatedKFold(n_splits=2, n_repeats=3, random_state=32),
+            False,
+        ),
+        (
+            RepeatedStratifiedKFold(n_splits=2),
+            RepeatedStratifiedKFold(n_splits=2),
+            "non-reproducible",
+        ),
+        (
+            RepeatedStratifiedKFold(n_splits=2, random_state=32),
+            RepeatedStratifiedKFold(n_splits=3, random_state=32),
+            False,
+        ),
+        (
+            RepeatedStratifiedKFold(n_splits=2, random_state=32),
+            RepeatedStratifiedKFold(n_splits=2, random_state=32),
+            True,
+        ),
+        (
+            RepeatedStratifiedKFold(n_splits=2, n_repeats=2, random_state=32),
+            RepeatedStratifiedKFold(n_splits=2, n_repeats=3, random_state=32),
+            False,
+        ),
+        (
+            ShuffleSplit(n_splits=2),
+            ShuffleSplit(n_splits=2),
+            "non-reproducible",
+        ),
+        (
+            ShuffleSplit(n_splits=2, random_state=32),
+            ShuffleSplit(n_splits=3, random_state=32),
+            False,
+        ),
+        (
+            ShuffleSplit(n_splits=2, random_state=32),
+            ShuffleSplit(n_splits=2, random_state=32),
+            True,
+        ),
+        (
+            ShuffleSplit(n_splits=2, test_size=2, random_state=32),
+            ShuffleSplit(n_splits=2, test_size=3, random_state=32),
+            False,
+        ),
+        (
+            ShuffleSplit(n_splits=2, train_size=2, random_state=32),
+            ShuffleSplit(n_splits=2, train_size=3, random_state=32),
+            False,
+        ),
+        (StratifiedKFold(2), StratifiedKFold(3), False),
+        (
+            StratifiedKFold(2, shuffle=True),
+            StratifiedKFold(2, shuffle=True),
+            "non-reproducible",
+        ),
+        (
+            StratifiedKFold(3, random_state=32, shuffle=True),
+            StratifiedKFold(3, random_state=32, shuffle=True),
+            True,
+        ),
+        (
+            StratifiedKFold(3, random_state=33, shuffle=True),
+            StratifiedKFold(3, random_state=32, shuffle=True),
+            False,
+        ),
+        (
+            StratifiedShuffleSplit(n_splits=2),
+            StratifiedShuffleSplit(n_splits=2),
+            "non-reproducible",
+        ),
+        (
+            StratifiedShuffleSplit(n_splits=2, random_state=32),
+            StratifiedShuffleSplit(n_splits=3, random_state=32),
+            False,
+        ),
+        (
+            StratifiedShuffleSplit(n_splits=2, random_state=32),
+            StratifiedShuffleSplit(n_splits=2, random_state=32),
+            True,
+        ),
+        (
+            StratifiedShuffleSplit(n_splits=2, test_size=2, random_state=32),
+            StratifiedShuffleSplit(n_splits=2, test_size=3, random_state=32),
+            False,
+        ),
+        (
+            StratifiedShuffleSplit(n_splits=2, train_size=2, random_state=32),
+            StratifiedShuffleSplit(n_splits=2, train_size=3, random_state=32),
+            False,
+        ),
+        (StratifiedGroupKFold(2), StratifiedGroupKFold(3), False),
+        (StratifiedGroupKFold(3), StratifiedGroupKFold(3), True),
+        (StratifiedGroupsKFold(2), StratifiedGroupsKFold(3), False),
+        (
+            StratifiedGroupsKFold(2, shuffle=True),
+            StratifiedGroupsKFold(2, shuffle=True),
+            "non-reproducible",
+        ),
+        (
+            StratifiedGroupsKFold(3, random_state=32, shuffle=True),
+            StratifiedGroupsKFold(3, random_state=32, shuffle=True),
+            True,
+        ),
+        (
+            StratifiedGroupsKFold(3, random_state=33, shuffle=True),
+            StratifiedGroupsKFold(3, random_state=32, shuffle=True),
+            False,
+        ),
+        (
+            RepeatedStratifiedGroupsKFold(n_splits=2),
+            RepeatedStratifiedGroupsKFold(n_splits=2),
+            "non-reproducible",
+        ),
+        (
+            RepeatedStratifiedGroupsKFold(n_splits=2, random_state=32),
+            RepeatedStratifiedGroupsKFold(n_splits=3, random_state=32),
+            False,
+        ),
+        (
+            RepeatedStratifiedGroupsKFold(n_splits=2, random_state=32),
+            RepeatedStratifiedGroupsKFold(n_splits=2, random_state=32),
+            True,
+        ),
+        (
+            RepeatedStratifiedGroupsKFold(n_splits=2, n_repeats=2, random_state=32),
+            RepeatedStratifiedGroupsKFold(n_splits=2, n_repeats=3, random_state=32),
+            False,
+        ),
+
+    ],
+)
+def test__compute_cvmdsum(cv1, cv2, expected):
+    """Test _compute_cvmdsum."""
+    cv1 = check_cv(cv1)
+    cv2 = check_cv(cv2)
+    md1 = _compute_cvmdsum(cv1)
+    md2 = _compute_cvmdsum(cv2)
+    if expected == "non-reproducible":
+        assert md1 == md2
+        assert md1 == expected
+    else:
+        assert (md1 == md2) is expected
