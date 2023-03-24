@@ -232,6 +232,10 @@ class PipelineCreator:
             if "apply_to" in step.get_params(deep=False):
                 step.set_params(apply_to=apply_to)
             needed_types = step.get_needed_types()
+        elif isinstance(step, JuTargetPipeline):
+            needed_types = apply_to
+            if step.needed_types is not None:
+                needed_types.add(step.needed_types)
         else:
             needed_types = apply_to
 
@@ -335,7 +339,7 @@ class PipelineCreator:
         transformer_steps = []
 
         for _step in self._steps[:-1]:
-            if _step.apply_to == "target":
+            if "target" in _step.apply_to:
                 target_transformer_step = _step
             else:
                 transformer_steps.append(_step)

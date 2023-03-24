@@ -138,6 +138,8 @@ class ColumnTypes:
             _types = set([column_types])
         elif not isinstance(column_types, Set):
             _types = set(column_types)
+        elif isinstance(column_types, Set):
+            _types = column_types
         else:
             raise_error(f"Cannot construct a ColumnType from {column_types}")
         self._column_types = _types

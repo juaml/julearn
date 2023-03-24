@@ -50,6 +50,11 @@ class TargetConfoundRemover(JuTargetTransformer):
         self.confounds = ensure_column_types(confounds)
         self.threshold = threshold
 
+    @property
+    def needed_types(self) -> ColumnTypesLike:
+        """Get the needed column types."""
+        return self.confounds
+
     def fit(self, X: pd.DataFrame, y: pd.Series) -> "TargetConfoundRemover":
         """Fit ConfoundRemover.
 
