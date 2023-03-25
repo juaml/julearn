@@ -198,7 +198,7 @@ In particular, controlling for some variables that are not confounds, but in fac
 colliders, may introduce spurious relationships between your features and your targets [#6]_.
 Lastly, there is also some evidence that removing confounds
 can leak information about the target into the features, biasing the resulting
-predictive models [#7]_. into the Ultimately, the decision to perform confound
+predictive models [#7]_. Ultimately, the decision to perform confound
 regression in a machine learning pipeline should be based on careful
 consideration of the specific dataset and research question at hand, as well as
 a thorough understanding of the strengths and limitations of this technique.
