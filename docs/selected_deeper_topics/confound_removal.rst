@@ -26,7 +26,7 @@ the target) allowing the user to implement complex machine learning pipelines wi
 relatively little code while avoiding test-to-train leakage during confound removal.
 Let us initially consider removing a confounding variable from the features.
 
-Removing Confounds from the features
+Removing Confounds from the Features
 ************************************
 
 The first scenario involves confound regression on the features. In order to do this
@@ -143,7 +143,7 @@ function to perform confound removal on the features in a cross-validation consi
 Now, what if we want to remove the confounds from the target rather than the
 features instead?
 
-Removing Confounds from the target
+Removing Confounds from the Target
 **********************************
 
 If we want to remove the confounds from the target rather than from the features,
