@@ -3,8 +3,12 @@
 Overview of available Pipeline Steps
 ====================================
 
-The following is a list of all the available steps that can be used to create
-a pipeline by name.
+The following is a list of all available steps that can be used to create
+a pipeline by name. The overview is sorted based on the type of the step: 
+:ref:`available_feature_preprocessing`, :ref:`available_target_preprocessing`,
+:ref:`available_models`.
+
+.. _available_feature_preprocessing:
 
 Features Preprocessing
 ----------------------
@@ -103,6 +107,8 @@ Decomposition
      - Principal Component Analysis
      - `PCA`_
 
+.. _available_target_preprocessing:
+
 Target Preprocessing
 --------------------
 
@@ -135,6 +141,7 @@ Target Confound Removal
        By default this is equal to "regressing out 
        the confounds from the target"
      - TargetConfoundRemover
+
 
 .. _available_models:
 
