@@ -90,6 +90,8 @@ significance threshold during feature selection one may set the
 Julearn also allows this to be tuned as a hyperparameter in a nested
 cross-validation. Simply hand over an iterable of values:
 
+.. code-block:: python
+
 	# prepare a pipeline creator:
 	cbpm_pipeline_creator = PipelineCreator()
 	cbpm_pipeline_creator.add("cbpm", significance_threshold=[0.01, 0.05])
