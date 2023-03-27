@@ -78,7 +78,7 @@ Give the feature columns a specific type
 ----------------------------------------
 
 A nice add-on that Julearn offers is to specify costum-based types for the 
-features. This comes in handy if within the machine learning workflow one 
+features. This comes in handy, if within the machine learning workflow one 
 wants to apply certain processing steps only to certain types of variables. 
 We go into depth of such a scenario in :ref:`apply_to_feature_types`. If we for 
 example later want to apply certain processing steps only to the variables/columns 
@@ -114,5 +114,5 @@ it look like this:
 So far we saw in what form Julearn's :func:`.run_cross_validation` needs to 
 and can get input data. However, we want to do machine learning with these data.
 In the next section we will therefore focus on basic options to use 
-:func:`.run_cross_validation` to do different pipelines in a cross-validation
+:func:`.run_cross_validation` to make different pipelines in a cross-validation
 consistent manner.
