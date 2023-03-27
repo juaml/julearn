@@ -66,7 +66,7 @@ a basic pipeline and basic model evaluation:
    :maxdepth: 2
    :caption: Table of Contents
    :numbered:
-
+   
    data.rst
    pipeline.rst
    model_evaluation.rst

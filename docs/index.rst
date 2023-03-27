@@ -55,27 +55,16 @@ Table of Contents
 -----------------
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :numbered:
 
    getting_started
+
    what_really_need_know/index.rst
-   what_really_need_know/data.rst
-   what_really_need_know/pipeline.rst
-   what_really_need_know/model_evaluation.rst
+
    selected_deeper_topics/index.rst
-   selected_deeper_topics/confound_removal.rst
-   selected_deeper_topics/HPT.rst
-   selected_deeper_topics/model_inspect.rst
-   selected_deeper_topics/stacked_models.rst
-   selected_deeper_topics/CBPM.rst
 
-   input
-   pipeline
-   scoring
-   steps
-   hyperparameters
-
+   available_pipeline_steps.rst
    api
    contributing
    maintaining
