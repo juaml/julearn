@@ -17,7 +17,7 @@ from seaborn import load_dataset
 from sklearn.model_selection import RepeatedStratifiedKFold
 from julearn import run_cross_validation
 from julearn.utils import configure_logging
-from julearn.stats import corrected_ttest
+from julearn.stats.corrected_ttest import corrected_ttest
 
 ###############################################################################
 # Set the logging level to info to see extra information
@@ -113,7 +113,6 @@ scores3 = run_cross_validation(
 )
 
 scores3["model"] = "svm_linear"
-
 
 stats_df = corrected_ttest(scores1, scores2, scores3)
 print(stats_df)

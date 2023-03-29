@@ -1,13 +1,18 @@
-from typing import List, Optional, Tuple, Union
+# Author: Authors of scikit-learn
+#         Martina G. Vilas <https://github.com/martinagvilas>
+#         Federico Raimondo <f.raimondo@fz-juelich.de>
+# License: BSD 3 clause
 
 from itertools import combinations
-from statsmodels.stats.multitest import multipletests
-import pandas as pd
+from typing import Optional, Tuple
+
 import numpy as np
-
+import pandas as pd
 from scipy.stats import t
+import scipy.special as special
+from statsmodels.stats.multitest import multipletests
 
-from .utils.logging import warn_with_log, logger, raise_error
+from ..utils.logging import raise_error, warn_with_log
 
 
 def _corrected_std(
@@ -42,8 +47,9 @@ def _compute_corrected_ttest(
     n_train: int,
     n_test: int,
     df: Optional[int] = None,
+    alternative: str = "two-sided",
 ) -> Tuple[float, float]:
-    """Computes right-tailed paired t-test with corrected variance.
+    """Computes paired t-test with corrected variance.
 
     Parameters
     ----------
@@ -55,6 +61,17 @@ def _compute_corrected_ttest(
         Number of samples in the training set.
     n_test : int
         Number of samples in the testing set.
+    alternative : {'two-sided', 'less', 'greater'}, optional
+        Defines the alternative hypothesis.
+        The following options are available (default is 'two-sided'):
+        * 'two-sided': the means of the distributions underlying the samples
+          are unequal.
+        * 'less': the mean of the distribution underlying the first sample
+          is less than the mean of the distribution underlying the second
+          sample.
+        * 'greater': the mean of the distribution underlying the first
+          sample is greater than the mean of the distribution underlying
+          the second sample.
 
     Returns
     -------
@@ -66,21 +83,31 @@ def _compute_corrected_ttest(
     mean = differences.mean(axis=0)
     if df is None:
         df = len(differences) - 1
-    std = _corrected_std(differences, n_train, n_test)
+    std = _corrected_std(differences, n_train=n_train, n_test=n_test)
     t_stat = mean / std
-    p_val = t.sf(np.abs(t_stat), df)  # right-tailed t-test
-    return t_stat, p_val
+    if alternative == "less":
+        p_val = special.stdtr(df, t_stat)
+    elif alternative == "greater":
+        p_val = special.stdtr(df, -t_stat)
+    elif alternative == "two-sided":
+        p_val = special.stdtr(df, -np.abs(t_stat)) * 2
+    else:
+        raise_error(
+            f"Invalid alternative {alternative}. Should be "
+            "'two-sided', 'less' or 'greater'."
+        )
+    return t_stat, p_val  # type: ignore
 
 
 def corrected_ttest(
     *scores: pd.DataFrame,
     df: Optional[int] = None,
     method: str = "bonferroni",
-    maxiter: int = 1,
+    alternative: str = "two-sided",
 ) -> pd.DataFrame:
     """Performs corrected t-test on the scores of two or more models.
-    
-    
+
+
     Parameters
     ----------
     *scores : pd.DataFrame
@@ -102,11 +129,51 @@ def corrected_ttest(
         - `fdr_by` : Benjamini/Yekutieli (negative)
         - `fdr_tsbh` : two stage fdr correction (non-negative)
         - `fdr_tsbky` : two stage fdr correction (non-negative)
+    alternative : {'two-sided', 'less', 'greater'}, optional
+        Defines the alternative hypothesis.
+        The following options are available (default is 'two-sided'):
+        * 'two-sided': the means of the distributions underlying the samples
+          are unequal.
+        * 'less': the mean of the distribution underlying the first sample
+          is less than the mean of the distribution underlying the second
+          sample.
+        * 'greater': the mean of the distribution underlying the first
+          sample is greater than the mean of the distribution underlying
+          the second sample.
     """
+    if any("cv_mdsum" not in x for x in scores):
+        raise_error(
+            "The DataFrames must be the output of `run_cross_validation`. "
+            "Some of the DataFrames are missing the `cv_mdsum` column."
+        )
+    if any("fold" not in x for x in scores):
+        raise_error(
+            "The DataFrames must be the output of `run_cross_validation`. "
+            "Some of the DataFrames are missing the `fold` column."
+        )
+    if any("repeat" not in x for x in scores):
+        raise_error(
+            "The DataFrames must be the output of `run_cross_validation`. "
+            "Some of the DataFrames are missing the `repeat` column."
+        )
+    if any("n_train" not in x for x in scores):
+        raise_error(
+            "The DataFrames must be the output of `run_cross_validation`. "
+            "Some of the DataFrames are missing the `n_train` column."
+        )
+    if any("n_test" not in x for x in scores):
+        raise_error(
+            "The DataFrames must be the output of `run_cross_validation`. "
+            "Some of the DataFrames are missing the `n_test` column."
+        )
     cv_mdsums = np.unique(np.hstack([x["cv_mdsum"].unique() for x in scores]))
     if cv_mdsums.size > 1:
         raise_error(
             "The CVs are not the same. Can't do a t-test on different CVs."
+        )
+    if len(scores) > 2 and alternative != "two-sided":
+        raise_error(
+            "Only two-sided tests are supported for more than two models."
         )
 
     t_scores = [x.set_index(["fold", "repeat"]) for x in scores]
@@ -167,12 +234,11 @@ def corrected_ttest(
     all_stats_df.index.name = "metric"
     all_stats_df = all_stats_df.reset_index()
 
-    if len(scores) > 2:
+    if len(t_scores) > 2:
         corrected_stats = []
         for t_metric in all_stats_df["metric"].unique():
             metric_df = all_stats_df[all_stats_df["metric"] == t_metric].copy()
-            corrected = multipletests(
-                metric_df["p-val"], method=method)
+            corrected = multipletests(metric_df["p-val"], method=method)
             metric_df["p-val-corrected"] = corrected[1]
             corrected_stats.append(metric_df)
 
