@@ -365,7 +365,7 @@ def test_tune_hyperparam_gridsearch(df_iris: pd.DataFrame) -> None:
 
     expected = cross_validate(gs, sk_X, sk_y, cv=cv_outer, scoring=[scoring])
 
-    assert len(actual.columns) == len(expected) + 2
+    assert len(actual.columns) == len(expected) + 5
     assert len(actual["test_accuracy"]) == len(expected["test_accuracy"])
     assert all(
         [
@@ -437,7 +437,7 @@ def test_tune_hyperparam_randomsearch(df_iris: pd.DataFrame) -> None:
 
     expected = cross_validate(gs, sk_X, sk_y, cv=cv_outer, scoring=[scoring])
 
-    assert len(actual.columns) == len(expected) + 2
+    assert len(actual.columns) == len(expected) + 5
     assert len(actual["test_accuracy"]) == len(expected["test_accuracy"])
     assert all(
         [

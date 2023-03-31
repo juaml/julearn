@@ -244,7 +244,7 @@ def do_scoring_test(
     if decimal > 0:
         for scoring in scorers:
             s_key = f"test_{scoring}"
-            assert len(actual.columns) == len(expected) + 2  # type: ignore
+            assert len(actual.columns) == len(expected) + 5  # type: ignore
             assert len(actual[s_key]) == len(expected[s_key])  # type: ignore
             assert_array_almost_equal(
                 actual[s_key], expected[s_key], decimal=decimal  # type: ignore
