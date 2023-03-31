@@ -31,6 +31,16 @@ from .utils import logger, raise_error
 from .scoring import check_scoring
 
 
+def _recurse_to_list(a):
+    """Recursively convert a to a list."""
+    if isinstance(a, (list, tuple)):
+        return [_recurse_to_list(i) for i in a]
+    elif isinstance(a, np.ndarray):
+        return a.tolist()
+    else:
+        return a
+
+
 def _compute_cvmdsum(cv):
     """Compute the sum of the CV generator."""
     params = {k: v for k, v in vars(cv).items()}
@@ -47,13 +57,13 @@ def _compute_cvmdsum(cv):
 
     if isinstance(cv, _CVIterableWrapper):
         splits = params.pop("cv")
-        params["cv"] = [[y.tolist() for y in x] for x in splits]
+        params["cv"] = _recurse_to_list(splits)
     if isinstance(cv, PredefinedSplit):
         params["test_fold"] = params["test_fold"].tolist()
         params["unique_folds"] = params["unique_folds"].tolist()
 
     if "cv" in params:
-        if issubclass(params["cv"], BaseCrossValidator):
+        if issubclass(params["cv"].__class__, BaseCrossValidator):
             params["cv"] = params["cv"].__class__.__name__
 
     if out is None:

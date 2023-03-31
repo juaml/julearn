@@ -767,6 +767,24 @@ def test_return_train_scores(df_iris: pd.DataFrame) -> None:
             RepeatedStratifiedGroupsKFold(n_splits=2, n_repeats=3, random_state=32),
             False,
         ),
+        (
+            [(np.arange(2, 9), np.arange(0, 2)),
+             (np.arange(0, 7), np.arange(7, 9)),
+             ],
+            [(np.arange(2, 9), np.arange(0, 2)),
+             (np.arange(0, 7), np.arange(7, 9)),
+             ],
+            True,
+        ),
+        (
+            [(np.arange(3, 9), np.arange(0, 3)),
+             (np.arange(0, 7), np.arange(7, 9)),
+             ],
+            [(np.arange(2, 9), np.arange(0, 2)),
+             (np.arange(0, 7), np.arange(7, 9)),
+             ],
+            False,
+        ),
 
     ],
 )
