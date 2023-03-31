@@ -25,7 +25,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Multiclass Classification." href="plot_cm_acc_multiclass.html" />
-    <link rel="prev" title="Transforming target variable with z-score." href="run_apply_to_target.html" /> 
+    <link rel="prev" title="Simple Model Comparison" href="run_simple_model_comparison.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -60,6 +60,7 @@
 <li class="toctree-l2"><a class="reference internal" href="run_n_jobs.html">Parallelize Julearn</a></li>
 <li class="toctree-l2"><a class="reference internal" href="run_simple_binary_classification.html">Simple Binary Classification</a></li>
 <li class="toctree-l2"><a class="reference internal" href="run_apply_to_target.html">Transforming target variable with z-score.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="run_simple_model_comparison.html">Simple Model Comparison</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Inspecting Random Forest models</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#random-forest-variable-importance">Random Forest variable importance</a></li>
 </ul>
@@ -129,13 +130,13 @@ using a Random Forest classifier and analyse the model.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-03-24 13:07:06,229 - julearn - INFO - ===== Lib Versions =====
-2023-03-24 13:07:06,229 - julearn - INFO - numpy: 1.23.5
-2023-03-24 13:07:06,229 - julearn - INFO - scipy: 1.10.1
-2023-03-24 13:07:06,229 - julearn - INFO - sklearn: 1.2.2
-2023-03-24 13:07:06,229 - julearn - INFO - pandas: 1.5.3
-2023-03-24 13:07:06,229 - julearn - INFO - julearn: 0.1.dev1
-2023-03-24 13:07:06,229 - julearn - INFO - ========================
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-03-31 12:59:42,376 - julearn - INFO - ===== Lib Versions =====
+2023-03-31 12:59:42,377 - julearn - INFO - numpy: 1.23.5
+2023-03-31 12:59:42,377 - julearn - INFO - scipy: 1.10.1
+2023-03-31 12:59:42,377 - julearn - INFO - sklearn: 1.2.2
+2023-03-31 12:59:42,377 - julearn - INFO - pandas: 1.5.3
+2023-03-31 12:59:42,377 - julearn - INFO - julearn: 0.1.dev1
+2023-03-31 12:59:42,377 - julearn - INFO - ========================
 </pre></div>
 </div>
 <section id="random-forest-variable-importance">
@@ -165,37 +166,37 @@ returns the estimator fitted with all the data.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-03-24 13:07:06,233 - julearn - INFO - ==== Input Data ====
-2023-03-24 13:07:06,233 - julearn - INFO - Using dataframe as input
-2023-03-24 13:07:06,233 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2023-03-24 13:07:06,233 - julearn - INFO -      Target: species
-2023-03-24 13:07:06,233 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2023-03-24 13:07:06,233 - julearn - INFO -      X_types:{}
-2023-03-24 13:07:06,233 - julearn - WARNING - The following columns are not defined in X_types: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]. They will be treated as continuous.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-03-31 12:59:42,380 - julearn - INFO - ==== Input Data ====
+2023-03-31 12:59:42,380 - julearn - INFO - Using dataframe as input
+2023-03-31 12:59:42,380 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2023-03-31 12:59:42,380 - julearn - INFO -      Target: species
+2023-03-31 12:59:42,381 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2023-03-31 12:59:42,381 - julearn - INFO -      X_types:{}
+2023-03-31 12:59:42,381 - julearn - WARNING - The following columns are not defined in X_types: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]. They will be treated as continuous.
 /home/runner/work/julearn/julearn/julearn/utils/logging.py:238: RuntimeWarning: The following columns are not defined in X_types: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]. They will be treated as continuous.
   warn(msg, category=category)
-2023-03-24 13:07:06,234 - julearn - INFO - ====================
-2023-03-24 13:07:06,234 - julearn - INFO -
-2023-03-24 13:07:06,234 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2023-03-24 13:07:06,234 - julearn - INFO - Step added
-2023-03-24 13:07:06,234 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2023-03-24 13:07:06,235 - julearn - INFO - Step added
-2023-03-24 13:07:06,235 - julearn - INFO - = Model Parameters =
-2023-03-24 13:07:06,235 - julearn - INFO - ====================
-2023-03-24 13:07:06,235 - julearn - INFO -
-2023-03-24 13:07:06,235 - julearn - INFO - = Data Information =
-2023-03-24 13:07:06,235 - julearn - INFO -      Problem type: classification
-2023-03-24 13:07:06,236 - julearn - INFO -      Number of samples: 100
-2023-03-24 13:07:06,236 - julearn - INFO -      Number of features: 3
-2023-03-24 13:07:06,236 - julearn - INFO - ====================
-2023-03-24 13:07:06,236 - julearn - INFO -
-2023-03-24 13:07:06,236 - julearn - INFO -      Number of classes: 2
-2023-03-24 13:07:06,236 - julearn - INFO -      Target type: object
-2023-03-24 13:07:06,237 - julearn - INFO -      Class distributions: versicolor    50
+2023-03-31 12:59:42,381 - julearn - INFO - ====================
+2023-03-31 12:59:42,382 - julearn - INFO -
+2023-03-31 12:59:42,382 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-03-31 12:59:42,382 - julearn - INFO - Step added
+2023-03-31 12:59:42,382 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-03-31 12:59:42,382 - julearn - INFO - Step added
+2023-03-31 12:59:42,383 - julearn - INFO - = Model Parameters =
+2023-03-31 12:59:42,383 - julearn - INFO - ====================
+2023-03-31 12:59:42,383 - julearn - INFO -
+2023-03-31 12:59:42,383 - julearn - INFO - = Data Information =
+2023-03-31 12:59:42,383 - julearn - INFO -      Problem type: classification
+2023-03-31 12:59:42,383 - julearn - INFO -      Number of samples: 100
+2023-03-31 12:59:42,383 - julearn - INFO -      Number of features: 3
+2023-03-31 12:59:42,383 - julearn - INFO - ====================
+2023-03-31 12:59:42,383 - julearn - INFO -
+2023-03-31 12:59:42,383 - julearn - INFO -      Number of classes: 2
+2023-03-31 12:59:42,383 - julearn - INFO -      Target type: object
+2023-03-31 12:59:42,384 - julearn - INFO -      Class distributions: versicolor    50
 virginica     50
 Name: species, dtype: int64
-2023-03-24 13:07:06,237 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2023-03-24 13:07:06,237 - julearn - INFO - Binary classification problem detected.
+2023-03-31 12:59:42,384 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2023-03-31 12:59:42,384 - julearn - INFO - Binary classification problem detected.
 </pre></div>
 </div>
 <p>This type of classifier has an internal variable that can inform us on how
@@ -233,37 +234,37 @@ estimator.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-03-24 13:07:07,133 - julearn - INFO - ==== Input Data ====
-2023-03-24 13:07:07,133 - julearn - INFO - Using dataframe as input
-2023-03-24 13:07:07,133 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2023-03-24 13:07:07,133 - julearn - INFO -      Target: species
-2023-03-24 13:07:07,133 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2023-03-24 13:07:07,133 - julearn - INFO -      X_types:{}
-2023-03-24 13:07:07,134 - julearn - WARNING - The following columns are not defined in X_types: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]. They will be treated as continuous.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-03-31 12:59:43,266 - julearn - INFO - ==== Input Data ====
+2023-03-31 12:59:43,266 - julearn - INFO - Using dataframe as input
+2023-03-31 12:59:43,266 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2023-03-31 12:59:43,266 - julearn - INFO -      Target: species
+2023-03-31 12:59:43,266 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2023-03-31 12:59:43,266 - julearn - INFO -      X_types:{}
+2023-03-31 12:59:43,266 - julearn - WARNING - The following columns are not defined in X_types: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]. They will be treated as continuous.
 /home/runner/work/julearn/julearn/julearn/utils/logging.py:238: RuntimeWarning: The following columns are not defined in X_types: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]. They will be treated as continuous.
   warn(msg, category=category)
-2023-03-24 13:07:07,134 - julearn - INFO - ====================
-2023-03-24 13:07:07,135 - julearn - INFO -
-2023-03-24 13:07:07,135 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2023-03-24 13:07:07,135 - julearn - INFO - Step added
-2023-03-24 13:07:07,135 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2023-03-24 13:07:07,135 - julearn - INFO - Step added
-2023-03-24 13:07:07,136 - julearn - INFO - = Model Parameters =
-2023-03-24 13:07:07,136 - julearn - INFO - ====================
-2023-03-24 13:07:07,136 - julearn - INFO -
-2023-03-24 13:07:07,136 - julearn - INFO - = Data Information =
-2023-03-24 13:07:07,136 - julearn - INFO -      Problem type: classification
-2023-03-24 13:07:07,136 - julearn - INFO -      Number of samples: 100
-2023-03-24 13:07:07,136 - julearn - INFO -      Number of features: 3
-2023-03-24 13:07:07,136 - julearn - INFO - ====================
-2023-03-24 13:07:07,136 - julearn - INFO -
-2023-03-24 13:07:07,136 - julearn - INFO -      Number of classes: 2
-2023-03-24 13:07:07,136 - julearn - INFO -      Target type: object
-2023-03-24 13:07:07,137 - julearn - INFO -      Class distributions: versicolor    50
+2023-03-31 12:59:43,267 - julearn - INFO - ====================
+2023-03-31 12:59:43,268 - julearn - INFO -
+2023-03-31 12:59:43,268 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-03-31 12:59:43,268 - julearn - INFO - Step added
+2023-03-31 12:59:43,268 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-03-31 12:59:43,268 - julearn - INFO - Step added
+2023-03-31 12:59:43,269 - julearn - INFO - = Model Parameters =
+2023-03-31 12:59:43,269 - julearn - INFO - ====================
+2023-03-31 12:59:43,269 - julearn - INFO -
+2023-03-31 12:59:43,269 - julearn - INFO - = Data Information =
+2023-03-31 12:59:43,269 - julearn - INFO -      Problem type: classification
+2023-03-31 12:59:43,269 - julearn - INFO -      Number of samples: 100
+2023-03-31 12:59:43,269 - julearn - INFO -      Number of features: 3
+2023-03-31 12:59:43,269 - julearn - INFO - ====================
+2023-03-31 12:59:43,269 - julearn - INFO -
+2023-03-31 12:59:43,269 - julearn - INFO -      Number of classes: 2
+2023-03-31 12:59:43,269 - julearn - INFO -      Target type: object
+2023-03-31 12:59:43,270 - julearn - INFO -      Class distributions: versicolor    50
 virginica     50
 Name: species, dtype: int64
-2023-03-24 13:07:07,137 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2023-03-24 13:07:07,137 - julearn - INFO - Binary classification problem detected.
+2023-03-31 12:59:43,270 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2023-03-31 12:59:43,270 - julearn - INFO - Binary classification problem detected.
 </pre></div>
 </div>
 <p>Now we can obtain the feature importance for each estimator (CV fold)</p>
@@ -291,7 +292,7 @@ Name: species, dtype: int64
 <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_inspect_random_forest_002.png" srcset="../../_images/sphx_glr_plot_inspect_random_forest_002.png" alt="Distribution of variable Importances for Random Forest Classifier across folds" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.701 seconds)</p>
+<img src="../../_images/sphx_glr_plot_inspect_random_forest_002.png" srcset="../../_images/sphx_glr_plot_inspect_random_forest_002.png" alt="Distribution of variable Importances for Random Forest Classifier across folds" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.682 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-basic-plot-inspect-random-forest-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/f7a96073e75f8e520bb1e3aebe3a5b0f/plot_inspect_random_forest.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_inspect_random_forest.py</span></code></a></p>
@@ -308,7 +309,7 @@ Name: species, dtype: int64
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="run_apply_to_target.html" class="btn btn-neutral float-left" title="Transforming target variable with z-score." accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="run_simple_model_comparison.html" class="btn btn-neutral float-left" title="Simple Model Comparison" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="plot_cm_acc_multiclass.html" class="btn btn-neutral float-right" title="Multiclass Classification." accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
