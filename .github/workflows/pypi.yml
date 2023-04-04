@@ -10,7 +10,8 @@ jobs:
     name: Build and publish to PyPI
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
+    - name: Checkout source
+      uses: actions/checkout@v3
       with:
         fetch-depth: 0
     - name: Set up Python 3.10
@@ -23,12 +24,12 @@ jobs:
     - name: Build a binary wheel and a source tarball
       run:
         python -m build --sdist --wheel --outdir dist/ .
-    - name: Publish distribution 📦 to Test PyPI
-      uses: pypa/gh-action-pypi-publish@master
-      with:
-        password: ${{ secrets.testpypi_token }}
-        repository_url: https://test.pypi.org/legacy/
+    # - name: Publish distribution 📦 to Test PyPI
+    #   uses: pypa/gh-action-pypi-publish@master
+    #   with:
+    #     password: ${{ secrets.testpypi_token }}
+    #     repository_url: https://test.pypi.org/legacy/
     - name: Publish distribution 📦 to PyPI
-      uses: pypa/gh-action-pypi-publish@master
+      uses: pypa/gh-action-pypi-publish@release/v1
       with:
         password: ${{ secrets.pypi_token }}
