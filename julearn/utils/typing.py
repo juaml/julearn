@@ -1,23 +1,17 @@
 """Protocols for type checking."""
 
-from typing import (
-    runtime_checkable,
-    Protocol,
-    Optional,
-    Any,
-    Dict,
-    Union,
-)
+from typing import Any, Dict, Optional, Protocol, Union, runtime_checkable
+
 import numpy as np
 import pandas as pd
-
 from sklearn.metrics._scorer import (
+    _PredictScorer,
     _ProbaScorer,
     _ThresholdScorer,
-    _PredictScorer,
 )
 
 from ..base import ColumnTypes
+
 
 DataLike = Union[np.ndarray, pd.DataFrame, pd.Series]
 

@@ -3,19 +3,17 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL
 
+import warnings
 from typing import Optional
 
 import pytest
-import warnings
-
 from sklearn.base import BaseEstimator, TransformerMixin
 
 from julearn.transformers.available_transformers import (
-    reset_transformer_register,
-    register_transformer,
     get_transformer,
+    register_transformer,
+    reset_transformer_register,
 )
-
 from julearn.utils.testing import PassThroughTransformer
 from julearn.utils.typing import DataLike
 

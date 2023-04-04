@@ -4,9 +4,9 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from sklearn.preprocessing import StandardScaler, MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
-from julearn.pipeline import TargetPipelineCreator, JuTargetPipeline
+from julearn.pipeline import JuTargetPipeline, TargetPipelineCreator
 from julearn.transformers.target import TargetConfoundRemover
 
 

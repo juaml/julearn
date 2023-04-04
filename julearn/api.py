@@ -12,10 +12,7 @@ import numpy as np
 import pandas as pd
 from sklearn.base import BaseEstimator
 from sklearn.model_selection import check_cv, cross_validate
-from sklearn.model_selection._split import (
-    PredefinedSplit,
-    _CVIterableWrapper,
-)
+from sklearn.model_selection._split import PredefinedSplit, _CVIterableWrapper
 from sklearn.pipeline import Pipeline
 
 from .pipeline import PipelineCreator

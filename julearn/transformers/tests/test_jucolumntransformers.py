@@ -5,27 +5,24 @@
 
 from typing import Dict, Type
 
-from numpy.testing import assert_array_equal
+import numpy as np
 import pandas as pd
+import pytest
+from numpy.testing import assert_array_equal
 from pandas.testing import assert_frame_equal
-
+from pytest import fixture
 from sklearn.preprocessing import (
-    StandardScaler,
-    RobustScaler,
     MaxAbsScaler,
     MinMaxScaler,
     Normalizer,
-    QuantileTransformer,
     PowerTransformer,
+    QuantileTransformer,
+    RobustScaler,
+    StandardScaler,
 )
-
-import pytest
-from pytest import fixture
 
 from julearn.transformers import JuColumnTransformer
 from julearn.utils.typing import EstimatorLike
-
-import numpy as np
 
 
 @fixture

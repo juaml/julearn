@@ -4,37 +4,35 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-import numpy as np
-from numpy.testing import assert_array_equal
-import pandas as pd
-from pandas.testing import assert_series_equal
+import warnings
 
+import numpy as np
+import pandas as pd
+import pytest
+from numpy.testing import assert_array_equal
+from pandas.testing import assert_series_equal
 from sklearn.model_selection import (
     GroupKFold,
     GroupShuffleSplit,
     LeaveOneGroupOut,
+    LeaveOneOut,
     LeavePGroupsOut,
-    StratifiedGroupKFold,
+    LeavePOut,
     ShuffleSplit,
+    StratifiedGroupKFold,
     StratifiedKFold,
     StratifiedShuffleSplit,
-    LeaveOneOut,
-    LeavePOut,
 )
 
 from julearn.model_selection import (
     RepeatedStratifiedGroupsKFold,
     StratifiedGroupsKFold,
 )
-
-import warnings
-import pytest
-
 from julearn.prepare import (
-    prepare_input_data,
+    _check_x_types,
     _pick_columns,
     check_consistency,
-    _check_x_types,
+    prepare_input_data,
 )
 
 

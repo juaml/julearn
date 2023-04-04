@@ -6,10 +6,11 @@
 
 import pytest
 from sklearn.model_selection import GridSearchCV
+
 from julearn.model_selection import (
+    get_searcher,
     register_searcher,
     reset_searcher_register,
-    get_searcher,
 )
 
 

@@ -4,19 +4,17 @@
 #          Federico Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL
 
-from numpy.testing import assert_array_equal
 import pandas as pd
-
-from sklearn.preprocessing import StandardScaler, Normalizer
+import pytest
+from numpy.testing import assert_array_equal
+from sklearn.preprocessing import Normalizer, StandardScaler
 from sklearn.svm import SVR
 
+from julearn.pipeline import JuTargetPipeline
 from julearn.transformers.target import (
     JuTransformedTargetModel,
     TransformedTargetWarning,
 )
-from julearn.pipeline import JuTargetPipeline
-
-import pytest
 
 
 def test_JuTransformedTargetModel(

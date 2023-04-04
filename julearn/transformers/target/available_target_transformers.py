@@ -4,14 +4,13 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import List, Any, Optional, Dict, Type
-
 from copy import deepcopy
+from typing import Any, Dict, List, Optional, Type
 
+from ...utils import logger, raise_error, warn_with_log
 from .ju_target_transformer import JuTargetTransformer
 from .target_confound_remover import TargetConfoundRemover
 
-from ...utils import raise_error, logger, warn_with_log
 
 _available_target_transformers: Dict[str, Type[JuTargetTransformer]] = {
     "confound_removal": TargetConfoundRemover,

@@ -4,11 +4,12 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 import typing
-from typing import Optional, Dict, Callable, Union, List
-from seaborn import load_dataset
-import pandas as pd
-from pytest import fixture, FixtureRequest
 from copy import copy
+from typing import Callable, Dict, List, Optional, Union
+
+import pandas as pd
+from pytest import FixtureRequest, fixture
+from seaborn import load_dataset
 
 
 @fixture(scope="function")

@@ -8,10 +8,10 @@ import pytest
 
 from julearn.transformers.target import (
     JuTargetTransformer,
-    register_target_transformer,
-    reset_target_transformer_register,
     get_target_transformer,
     list_target_transformers,
+    register_target_transformer,
+    reset_target_transformer_register,
 )
 
 

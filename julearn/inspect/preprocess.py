@@ -7,7 +7,6 @@
 from typing import List, Optional
 
 import pandas as pd
-
 from sklearn.pipeline import Pipeline
 
 from ..utils import raise_error

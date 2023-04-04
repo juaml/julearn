@@ -6,7 +6,7 @@
 
 from _pytest.monkeypatch import MonkeyPatch
 
-from julearn.utils.versions import check_version, _joblib_parallel_args
+from julearn.utils.versions import _joblib_parallel_args, check_version
 
 
 def test_major_true() -> None:

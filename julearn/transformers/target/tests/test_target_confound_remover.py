@@ -2,9 +2,9 @@
 
 import pandas as pd
 from pandas.testing import assert_series_equal
+from sklearn.linear_model import LinearRegression
 
 from julearn.transformers.target import TargetConfoundRemover
-from sklearn.linear_model import LinearRegression
 
 
 def test_TargetConfoundRemover(

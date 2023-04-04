@@ -5,11 +5,10 @@
 # License: AGPL
 
 import pytest
-
 from sklearn.metrics import make_scorer
 
-from julearn.scoring import register_scorer, reset_scorer_register, get_scorer
-from julearn.utils.typing import EstimatorLike, DataLike
+from julearn.scoring import get_scorer, register_scorer, reset_scorer_register
+from julearn.utils.typing import DataLike, EstimatorLike
 
 
 def _return_1(estimator: EstimatorLike, X: DataLike, y: DataLike) -> float:

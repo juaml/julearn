@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 
 from ..transformers.target import JuTargetTransformer
-from ..utils.typing import TransformerLike, DataLike
+from ..utils.typing import DataLike, TransformerLike
 
 
 class JuTargetPipeline:

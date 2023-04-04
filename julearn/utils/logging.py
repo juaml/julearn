@@ -4,14 +4,14 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Dict, NoReturn, Optional, Type, Union
-
 import logging
 import sys
 from distutils.version import LooseVersion
 from pathlib import Path
 from subprocess import PIPE, Popen, TimeoutExpired
+from typing import Dict, NoReturn, Optional, Type, Union
 from warnings import warn
+
 
 logger = logging.getLogger("julearn")
 

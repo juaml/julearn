@@ -4,11 +4,12 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Union, Set, Callable, List
+from typing import Callable, List, Set, Union
 
 from sklearn.compose import make_column_selector
 
 from ..utils.logging import raise_error
+
 
 ColumnTypesLike = Union[List[str], Set[str], str, "ColumnTypes"]
 

@@ -5,16 +5,16 @@
 # License: AGPL
 
 from typing import Optional, Union
+
 import numpy as np
 
+from ..transformers import get_transformer
 from ..transformers.target import (
     get_target_transformer,
     list_target_transformers,
 )
-from ..transformers import get_transformer
-
-from .target_pipeline import JuTargetPipeline
 from ..utils.typing import EstimatorLike
+from .target_pipeline import JuTargetPipeline
 
 
 class TargetPipelineCreator:

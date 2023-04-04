@@ -4,23 +4,19 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import List, Dict, Callable
+import warnings
+from typing import Callable, Dict, List
 
 import pandas as pd
-
+import pytest
+from pytest_lazyfixture import lazy_fixture
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 
-import warnings
-
-from julearn.base import WrapModel, ColumnTypesLike
+from julearn.base import ColumnTypesLike, WrapModel
+from julearn.models import get_model
 from julearn.pipeline import PipelineCreator
 from julearn.pipeline.pipeline_creator import JuColumnTransformer
 from julearn.transformers import get_transformer
-from julearn.models import get_model
-
-
-import pytest
-from pytest_lazyfixture import lazy_fixture
 
 
 @pytest.mark.parametrize(

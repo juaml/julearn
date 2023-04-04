@@ -4,43 +4,42 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-import pandas as pd
 import numpy as np
-
+import pandas as pd
 import pytest
-
-from sklearn.svm import SVC
 from sklearn.base import clone
-from sklearn.pipeline import make_pipeline
 from sklearn.model_selection import (
+    GridSearchCV,
     GroupKFold,
     GroupShuffleSplit,
     KFold,
     LeaveOneGroupOut,
-    LeavePGroupsOut,
     LeaveOneOut,
+    LeavePGroupsOut,
     LeavePOut,
     PredefinedSplit,
+    RandomizedSearchCV,
     RepeatedKFold,
     RepeatedStratifiedKFold,
     ShuffleSplit,
+    StratifiedGroupKFold,
     StratifiedKFold,
     StratifiedShuffleSplit,
-    StratifiedGroupKFold,
-    GridSearchCV,
-    RandomizedSearchCV,
-    cross_validate,
     check_cv,
+    cross_validate,
 )
+from sklearn.pipeline import make_pipeline
+from sklearn.svm import SVC
 
 from julearn import run_cross_validation
-from julearn.utils.testing import do_scoring_test, compare_models
-from julearn.pipeline import PipelineCreator
 from julearn.api import _compute_cvmdsum
 from julearn.model_selection import (
-    StratifiedGroupsKFold,
     RepeatedStratifiedGroupsKFold,
+    StratifiedGroupsKFold,
 )
+from julearn.pipeline import PipelineCreator
+from julearn.utils.testing import compare_models, do_scoring_test
+
 
 def test_run_cv_simple_binary(
     df_binary: pd.DataFrame, df_iris: pd.DataFrame

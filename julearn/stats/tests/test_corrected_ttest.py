@@ -1,13 +1,13 @@
-import numpy as np
-import pandas as pd
 import warnings
 
+import numpy as np
+import pandas as pd
 import pytest
 from scipy import stats
 
 from julearn.stats.corrected_ttest import (
-    corrected_ttest,
     _compute_corrected_ttest,
+    corrected_ttest,
 )
 
 

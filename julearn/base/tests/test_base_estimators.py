@@ -5,16 +5,16 @@
 # License: AGPL
 
 from typing import List, Type
-import pytest
+
 import numpy as np
-from numpy.testing import assert_almost_equal
 import pandas as pd
-
+import pytest
+from numpy.testing import assert_almost_equal
 from sklearn.linear_model import LinearRegression, LogisticRegression
-from sklearn.svm import SVR, SVC
-from sklearn.tree import DecisionTreeRegressor, DecisionTreeClassifier
+from sklearn.svm import SVC, SVR
+from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 
-from julearn.base import WrapModel, ColumnTypesLike
+from julearn.base import ColumnTypesLike, WrapModel
 from julearn.utils.typing import ModelLike
 
 

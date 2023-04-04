@@ -4,33 +4,32 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Any, Union, List, Dict, Optional, Tuple
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
-
-from sklearn.pipeline import Pipeline
 from sklearn.model_selection import check_cv
-from dataclasses import dataclass, field
+from sklearn.pipeline import Pipeline
 
+from ..base import ColumnTypes, ColumnTypesLike, JuTransformer, WrapModel
+from ..model_selection.available_searchers import get_searcher, list_searchers
+from ..models import get_model, list_models
 from ..transformers import (
+    JuColumnTransformer,
+    SetColumnTypes,
     get_transformer,
     list_transformers,
-    SetColumnTypes,
 )
-from ..models import list_models, get_model
-from ..utils import raise_error, warn_with_log, logger
-from ..base import ColumnTypes, WrapModel, JuTransformer, ColumnTypesLike
+from ..transformers.target import JuTransformedTargetModel
+from ..utils import logger, raise_error, warn_with_log
 from ..utils.typing import (
-    JuModelLike,
-    JuEstimatorLike,
     EstimatorLike,
+    JuEstimatorLike,
+    JuModelLike,
     ModelLike,
 )
-from ..transformers import JuColumnTransformer
-from ..model_selection.available_searchers import list_searchers, get_searcher
-from .target_pipeline_creator import TargetPipelineCreator
 from .target_pipeline import JuTargetPipeline
-from ..transformers.target import JuTransformedTargetModel
+from .target_pipeline_creator import TargetPipelineCreator
 
 
 def _params_to_pipeline(
