@@ -110,6 +110,4 @@ def test_jucolumntransformer(
     manual = sk_trans.fit_transform(df_X_confounds[trans])  # type: ignore
 
     assert_frame_equal(df_X_transformed[kept], df_X_confounds[kept])
-    assert_array_equal(
-        df_X_transformed[trans].values, manual
-    )
+    assert_array_equal(df_X_transformed[trans].values, manual)

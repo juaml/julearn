@@ -45,7 +45,7 @@ def preprocess(
         i = -1
     else:
         i = 1
-        for (name, _) in pipeline.steps[:-1]:
+        for name, _ in pipeline.steps[:-1]:
             if name == until:
                 break
             i += 1

@@ -28,8 +28,7 @@ def test_JuTransformedTargetModel(
 
     # TODO: @samihamdan: fix the protocol error
     ju_transformed_target_model = JuTransformedTargetModel(
-        transformer=transformer,
-        model=model  # type: ignore
+        transformer=transformer, model=model  # type: ignore
     )
 
     ju_transformed_target_model.fit(X_iris, y_iris)
@@ -60,7 +59,7 @@ def test_JuTransformedTargetModel_noinverse(
     ju_transformed_target_model.fit(X_iris, y_iris)
     with pytest.warns(
         TransformedTargetWarning,
-        match=r"has been transformed to fit the model"
+        match=r"has been transformed to fit the model",
     ):
         y_pred = ju_transformed_target_model.predict(X_iris)
 

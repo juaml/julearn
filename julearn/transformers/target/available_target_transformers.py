@@ -94,7 +94,6 @@ def register_target_transformer(
         If `transformer_name` is already registered and `overwrite` is None.
     """
     if _available_target_transformers.get(transformer_name) is not None:
-
         if overwrite is None:
             warn_with_log(
                 f"Target transformer named {transformer_name} already exists. "

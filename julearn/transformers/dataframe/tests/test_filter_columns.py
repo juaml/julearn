@@ -25,9 +25,7 @@ X_with_types = pd.DataFrame(
 
 def test_FilterColumns() -> None:
     """Test FilterColumns."""
-    filter = FilterColumns(
-        keep=["continuous"]
-    )
+    filter = FilterColumns(keep=["continuous"])
     kept_columns = [
         "a__:type:__continuous",
         "b__:type:__continuous",

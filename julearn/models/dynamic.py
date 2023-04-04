@@ -226,5 +226,6 @@ class DynamicSelection(BaseEstimator):
         out = ds_algo(  # type: ignore # noqa: F821
             pool_classifiers=self.ensemble,
             random_state=self.random_state_algorithm,
-            **self._ds_params)
+            **self._ds_params,
+        )
         return out

@@ -17,6 +17,7 @@ DataLike = Union[np.ndarray, pd.DataFrame, pd.Series]
 
 ScorerLike = Union[_ProbaScorer, _ThresholdScorer, _PredictScorer]
 
+
 @runtime_checkable
 class EstimatorLikeFit1(Protocol):
     def fit(self, X, y, **kwargs: Any) -> "EstimatorLikeFit1":
@@ -28,6 +29,7 @@ class EstimatorLikeFit1(Protocol):
     def set_params(self, **params) -> "EstimatorLikeFit1":
         return self
 
+
 @runtime_checkable
 class EstimatorLikeFit2(Protocol):
     def fit(self, X, y) -> "EstimatorLikeFit2":
@@ -38,6 +40,7 @@ class EstimatorLikeFit2(Protocol):
 
     def set_params(self, **params) -> "EstimatorLikeFit2":
         return self
+
 
 @runtime_checkable
 class EstimatorLikeFity(Protocol):

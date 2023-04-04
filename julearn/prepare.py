@@ -422,7 +422,8 @@ def _check_x_types(X_types: Optional[Dict], X: List[str]) -> Dict[str, List]:
             if any([re.fullmatch(exp, col) for exp in columns])
         ]
         t_missing = [
-            exp for exp in columns 
+            exp
+            for exp in columns
             if not any([re.fullmatch(exp, col) for col in X])
         ]
         defined_columns.extend(t_columns)

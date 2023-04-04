@@ -141,4 +141,5 @@ def check_scoring(
         scorer_names = typing.cast(List[str], scoring)
         scoring_dict = {score: get_scorer(score) for score in scorer_names}
         return _check_multimetric_scoring(  # type: ignore
-            estimator, scoring_dict)
+            estimator, scoring_dict
+        )

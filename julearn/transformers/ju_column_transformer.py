@@ -33,6 +33,7 @@ class JuColumnTransformer(JuTransformer):
     needed_types : ColumnTypesLike, optional
         Which feature types are needed for the transformer to work.
     """
+
     def __init__(
         self,
         name: str,

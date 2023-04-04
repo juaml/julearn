@@ -50,9 +50,7 @@ def test_register_target_transformer() -> None:
 
 def test_reset_target_transformer() -> None:
     """Test resetting the target transformers registry."""
-    with pytest.raises(
-        ValueError, match=r"\(useless\) is not available"
-    ):
+    with pytest.raises(ValueError, match=r"\(useless\) is not available"):
         get_target_transformer("useless")
 
     class MyTransformer(JuTargetTransformer):
@@ -61,7 +59,5 @@ def test_reset_target_transformer() -> None:
     register_target_transformer("useless", MyTransformer)
     get_target_transformer("useless")
     reset_target_transformer_register()
-    with pytest.raises(
-        ValueError, match=r"\(useless\) is not available"
-    ):
+    with pytest.raises(ValueError, match=r"\(useless\) is not available"):
         get_target_transformer("useless")

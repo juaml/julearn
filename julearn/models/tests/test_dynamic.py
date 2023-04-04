@@ -98,8 +98,7 @@ def test_algorithms(
         Name of the algorithm.
     """
 
-    df_iris = df_iris[
-        df_iris["species"].isin(["versicolor", "virginica"])]
+    df_iris = df_iris[df_iris["species"].isin(["versicolor", "virginica"])]
     X = ["sepal_length", "sepal_width", "petal_length"]
     y = "species"
 

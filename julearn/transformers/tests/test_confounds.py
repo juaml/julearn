@@ -146,7 +146,6 @@ def test_ConfoundRemover_confound_auto_find_conf(
         confound_regressions,
         features,
     ):
-
         manual_pred = confound_regression.predict(  # type: ignore
             df_X.loc[:, confounds]  # type: ignore
         )

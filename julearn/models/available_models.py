@@ -258,7 +258,6 @@ def register_model(
 
                 _available_models[model_name][problem_type] = cls
             else:
-
                 logger.info(
                     f"registering model named {model_name} "
                     f"with problem_type {problem_type}"

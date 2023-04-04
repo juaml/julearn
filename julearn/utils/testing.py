@@ -354,7 +354,6 @@ def _get_coef_over_versions(clf: EstimatorLike) -> np.ndarray:
     if isinstance(
         clf, (BernoulliNB, ComplementNB, MultinomialNB, CategoricalNB)
     ):
-
         with warnings.catch_warnings():
             warnings.filterwarnings("error", category=FutureWarning)
             warnings.filterwarnings("error", category=DeprecationWarning)
