@@ -9,7 +9,6 @@ from typing import Optional, Tuple
 import numpy as np
 import pandas as pd
 import scipy.special as special
-from scipy.stats import t
 from statsmodels.stats.multitest import multipletests
 
 from ..utils.logging import raise_error, warn_with_log
