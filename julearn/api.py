@@ -4,31 +4,24 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-import numpy as np
-from sklearn.model_selection import (
-    cross_validate,
-    check_cv,
-)
-from sklearn.model_selection._split import (
-    _CVIterableWrapper,
-    PredefinedSplit,
-    BaseCrossValidator,
-)
-
-from sklearn.pipeline import Pipeline
-from sklearn.base import BaseEstimator
-
 import hashlib
+import inspect
 import json
 
+import numpy as np
 import pandas as pd
+from sklearn.base import BaseEstimator
+from sklearn.model_selection import check_cv, cross_validate
+from sklearn.model_selection._split import (
+    PredefinedSplit,
+    _CVIterableWrapper,
+)
+from sklearn.pipeline import Pipeline
 
-from .prepare import prepare_input_data, check_consistency
 from .pipeline import PipelineCreator
-
-from .utils import logger, raise_error
-
+from .prepare import check_consistency, prepare_input_data
 from .scoring import check_scoring
+from .utils import logger, raise_error
 
 
 def _recurse_to_list(a):
@@ -63,7 +56,7 @@ def _compute_cvmdsum(cv):
         params["unique_folds"] = params["unique_folds"].tolist()
 
     if "cv" in params:
-        if issubclass(params["cv"].__class__, BaseCrossValidator):
+        if inspect.isclass(params["cv"]):
             params["cv"] = params["cv"].__class__.__name__
 
     if out is None:
@@ -238,7 +231,6 @@ def run_cross_validation(
         X_types=X_types,
     )
 
-
     if model_params is None:
         model_params = {}
 
@@ -344,7 +336,6 @@ def run_cross_validation(
         logger.info(f"\tClass distributions: {y.value_counts()}")
     elif problem_type == "regression":
         logger.info(f"\tTarget type: {y.dtype}")
-
 
     # Prepare cross validation
     cv_outer = check_cv(cv)  # type: ignore
