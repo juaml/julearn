@@ -4,9 +4,11 @@ on:
   push:
     paths:
       - 'julearn/**'
+      - '.github/workflows/**'
   pull_request:
     paths:
       - 'julearn/**'
+      - '.github/workflows/**'
 
 jobs:
   build:
@@ -17,7 +19,8 @@ jobs:
         python-version: ['3.8', '3.9', '3.10', '3.11']
 
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v4
       with:
@@ -34,5 +37,5 @@ jobs:
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         fail_ci_if_error: true
-        flags: junifer
+        flags: julearn
       if: success() && matrix.python-version == 3.10
