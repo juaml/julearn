@@ -4,6 +4,8 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
+from typing import List, Optional, Union, Dict
+
 import hashlib
 import inspect
 import json
@@ -66,24 +68,24 @@ def _compute_cvmdsum(cv):
 
 
 def run_cross_validation(
-    X,
-    y,
-    model,
-    X_types=None,
-    data=None,
-    problem_type=None,
-    preprocess=None,
-    return_estimator=False,
-    return_train_score=False,
-    cv=None,
-    groups=None,
-    scoring=None,
-    pos_labels=None,
-    model_params=None,
-    search_params=None,
-    seed=None,
-    n_jobs=None,
-    verbose=0,
+    X: List[str],
+    y: str,
+    model: Union[str, PipelineCreator, BaseEstimator],
+    X_types: Optional[Dict] = None,
+    data: Optional[pd.DataFrame] = None,
+    problem_type: Optional[str] = None,
+    preprocess: Union[None, str, List[str]] = None,
+    return_estimator: Optional[str] = None,
+    return_train_score: bool = False,
+    cv: Union[None, int] = None,
+    groups: Optional[str] = None,
+    scoring: Union[str, List[str], None] = None,
+    pos_labels: Union[str, List[str], None] = None,
+    model_params: Optional[Dict] = None,
+    search_params: Optional[Dict] = None,
+    seed: Optional[int] = None,
+    n_jobs: Optional[int] = None,
+    verbose: Optional[int] = 0,
 ):
     """Run cross validation and score.
 
@@ -211,6 +213,13 @@ def run_cross_validation(
         -1 means use all available processes for parallelisation.
 
     """
+
+    # Validate parameters
+    if return_estimator not in [None, "final", "cv", "all"]:
+        raise_error(
+            f"return_estimator must be one of None, 'final', 'cv', 'all'. "
+            f"Got {return_estimator}."
+        )
 
     X_types = {} if X_types is None else X_types
     if seed is not None:

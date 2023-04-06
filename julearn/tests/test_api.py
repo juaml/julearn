@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 import pytest
 from sklearn.base import clone
+from sklearn.datasets import make_regression
 from sklearn.model_selection import (
     GridSearchCV,
     GroupKFold,
@@ -596,6 +597,18 @@ def test_return_estimators(df_iris: pd.DataFrame) -> None:
 
     cv = StratifiedKFold(2)
 
+    with pytest.raises(ValueError, match="must be one of"):
+        scores = run_cross_validation(
+            X=X,
+            y=y,
+            data=df_iris,
+            X_types=X_types,
+            model="svm",
+            problem_type="classification",
+            cv=cv,
+            return_estimator=True,
+        )
+
     scores = run_cross_validation(
         X=X,
         y=y,
@@ -935,3 +948,57 @@ def test__compute_cvmdsum(cv1, cv2, expected):
         assert md1 == expected
     else:
         assert (md1 == md2) is expected
+
+
+def test_api_stacking_models() -> None:
+    """"Test API of stacking models."""
+    # prepare data
+    X, y = make_regression(n_features=6, n_samples=50)
+
+    # prepare feature names and types
+    X_types = {
+        "type1": [f"type1_{x}" for x in range(1, 4)],
+        "type2": [f"type2_{x}" for x in range(1, 4)],
+    }
+    X_names = X_types["type1"] + X_types["type2"]
+
+    # make df
+    data = pd.DataFrame(X)
+    data.columns = X_names
+    data["target"] = y
+
+    # create individual models
+    model_1 = PipelineCreator(problem_type="regression", apply_to="type1")
+    model_1.add("filter_columns", apply_to="*", keep="type1")
+    model_1.add("svm", C=[1, 2])
+
+    model_2 = PipelineCreator(problem_type="regression", apply_to="type2")
+    model_2.add("filter_columns", apply_to="*", keep="type2")
+    model_2.add("rf")
+
+    # Create the stacking model
+    model = PipelineCreator(problem_type="regression")
+    model.add(
+        "stacking", estimators=[[
+            ("model_1", model_1),
+            ("model_2", model_2)]
+        ],
+        apply_to="*"
+    )
+
+    # run
+    _, final = run_cross_validation(
+        X=X_names,
+        X_types=X_types,
+        y="target",
+        data=data,
+        model=model,
+        seed=200,
+        return_estimator="final",
+    )
+
+    # The final model should be a stacking model im which the first estimator
+    # is a grid search
+    assert isinstance(
+        final.steps[1][1].model.estimators[0][1], GridSearchCV
+    )
