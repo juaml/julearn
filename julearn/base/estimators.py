@@ -415,3 +415,7 @@ class WrapModel(JuBaseEstimator):
             else:
                 setattr(self, param, val)
         return self
+
+    @property
+    def _estimator_type(self):
+        return getattr(self.model, "_estimator_type", None)
