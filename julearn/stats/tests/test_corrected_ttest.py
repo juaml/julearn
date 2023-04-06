@@ -153,6 +153,13 @@ def test_corrected_ttest_errors() -> None:
     with pytest.raises(ValueError, match="different CVs"):
         corrected_ttest(scores1, scores2)
 
+    scores1["cv_mdsum"] = "non-reproducible"
+    scores2["cv_mdsum"] = "non-reproducible"
+
+    with pytest.raises(ValueError, match="non-reproducible"):
+        corrected_ttest(scores1, scores2)
+
+    scores1["cv_mdsum"] = "maradona"
     scores2["cv_mdsum"] = "maradona"
     scores3 = scores2
 

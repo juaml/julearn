@@ -170,6 +170,10 @@ def corrected_ttest(
         raise_error(
             "The CVs are not the same. Can't do a t-test on different CVs."
         )
+    if cv_mdsums[0] == "non-reproducible":
+        raise_error(
+            "The CV is non-reproducible. Can't reproduce the CV folds."
+        )
     if len(scores) > 2 and alternative != "two-sided":
         raise_error(
             "Only two-sided tests are supported for more than two models."
