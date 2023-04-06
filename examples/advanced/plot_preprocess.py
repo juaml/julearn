@@ -19,7 +19,7 @@ import seaborn as sns
 from sklearn.datasets import make_regression
 
 from julearn import run_cross_validation
-from julearn.inspect.preprocess import preprocess
+from julearn.inspect import preprocess
 from julearn.pipeline import PipelineCreator
 from julearn.utils import configure_logging
 

@@ -223,7 +223,9 @@ class PipelineCreator:
         for param, vals in params.items():
             # If we have more than 1 value, we will tune it.
             # If not, it will be set in the model.
-            if hasattr(vals, "__iter__") and not isinstance(vals, str):
+            if (hasattr(vals, "__iter__")
+                    and not hasattr(vals, "fit")
+                    and not isinstance(vals, str)):
                 if len(vals) > 1:
                     logger.info(f"Tuning hyperparameter {param} = {vals}")
                     params_to_tune[param] = vals
@@ -279,7 +281,7 @@ class PipelineCreator:
         logger.info("Step added")
         return self
 
-    @property
+    @ property
     def steps(self) -> List[Step]:
         """Get the steps that have been added to the PipelineCreator."""
         return self._steps
@@ -288,7 +290,7 @@ class PipelineCreator:
         """Whether the PipelineCreator has a model."""
         return self._added_model
 
-    @classmethod
+    @ classmethod
     def from_list(
         cls,
         transformers: Union[str, list],

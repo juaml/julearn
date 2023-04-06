@@ -14,7 +14,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 
-from julearn.inspect.preprocess import preprocess
+from julearn.inspect import preprocess
 from julearn.utils.typing import TransformerLike
 
 

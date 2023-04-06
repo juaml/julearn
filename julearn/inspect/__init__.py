@@ -2,4 +2,5 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from .preprocess import preprocess
+from ._preprocess import preprocess
+from .pipeline_inspector import PipelineInspector, _EstimatorInspector
