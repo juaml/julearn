@@ -22,12 +22,29 @@ class DropColumns(JuTransformer):
     ----------
     apply_to : ColumnTypesLike
         The feature types ('X_types') to drop.
+    row_select_col_type : str or list of str or set of str or ColumnTypes
+        The column types needed to select rows (default is None)
+        Not really useful for this one, but here for compatibility.
+    row_select_vals : str, int, bool or list of str, int, bool
+        The value(s) which should be selected in the row_select_col_type
+        to select the rows used for training (default is None)
+        Not really useful for this one, but here for compatibility.
     """
 
-    def __init__(self, apply_to: ColumnTypesLike):
-        super().__init__(apply_to=apply_to, needed_types=None)
+    def __init__(
+        self,
+            apply_to: ColumnTypesLike,
+            row_select_col_type:  Optional[ColumnTypesLike] = None,
+            row_select_vals:  Optional[Union[str,
+                                             int, list, bool]] = None,
+    ):
+        super().__init__(
+            apply_to=apply_to, needed_types=None,
+            row_select_col_type=row_select_col_type,
+            row_select_vals=row_select_vals
+        )
 
-    def fit(
+    def _fit(
         self, X: pd.DataFrame, y: Optional[DataLike] = None
     ) -> "DropColumns":
         """Fit the transformer.

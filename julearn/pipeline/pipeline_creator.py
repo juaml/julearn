@@ -86,6 +86,11 @@ class Step:
         The types to apply this step to, by default "continuous"
     needed_types : Any, optional
         The types needed by this step (default is None)
+    row_select_col_type : str or list of str or set of str or ColumnTypes
+        The column types needed to select rows (default is None)
+    row_select_vals : str, int, bool or list of str, int, bool
+        The value(s) which should be selected in the row_select_col_type
+        to select the rows used for training (default is None)
     params_to_tune : Optional[Dict], optional
         The parameters to tune for this step, by default None
     """
@@ -97,6 +102,9 @@ class Step:
     )
     needed_types: Optional[ColumnTypesLike] = None
     params_to_tune: Optional[Dict] = None
+
+    row_select_col_type:  Optional[ColumnTypesLike] = None
+    row_select_vals:  Optional[Union[str, int, list, bool]] = None
 
     def __post_init__(self) -> None:
         """Post init."""
@@ -141,6 +149,8 @@ class PipelineCreator:
         step: Union[EstimatorLike, str, TargetPipelineCreator],
         name: Optional[str] = None,
         apply_to: Optional[ColumnTypesLike] = None,
+        row_select_col_type:  Optional[ColumnTypesLike] = None,
+        row_select_vals:  Optional[Union[str, int, list, bool]] = None,
         **params: Any,
     ) -> "PipelineCreator":
         """Add a step to the PipelineCreator.
@@ -159,6 +169,11 @@ class PipelineCreator:
             To what should the transformer or model be applied to.
             This can be a str representing a column type or a list
             of such str (defaults to the `PipelineCreator.apply_to` attribute).
+        row_select_col_type : str or list of str or set of str or ColumnTypes
+            The column types needed to select rows (default is None)
+        row_select_vals : str, int, bool or list of str, int, bool
+            The value(s) which should be selected in the row_select_col_type
+            to select the rows used for training (default is None)
         **params
             Parameters for the step. This will mostly include
             hyperparameters or any other parameter for initialization.
@@ -238,6 +253,14 @@ class PipelineCreator:
         else:
             needed_types = apply_to
 
+        if isinstance(step, JuTransformer):
+            step.set_params(
+                row_select_col_type=row_select_col_type,
+                row_select_vals=row_select_vals
+            )
+
+            needed_types = step.get_needed_types()
+
         # For target transformers we need to add the target_ prefix
         if apply_to == "target":
             name = f"target_{name}"
@@ -249,6 +272,8 @@ class PipelineCreator:
                 apply_to=apply_to,
                 needed_types=needed_types,
                 params_to_tune=params_to_tune,
+                row_select_col_type=row_select_col_type,
+                row_select_vals=row_select_vals,
             )
         )
         logger.info("Step added")
@@ -356,7 +381,9 @@ class PipelineCreator:
             # Wrap in a JuTransformer if needed
             if self.wrap and not isinstance(estimator, JuTransformer):
                 estimator = self._wrap_step(
-                    name, estimator, step_dict.apply_to
+                    name, estimator, step_dict.apply_to,
+                    row_select_col_type=step_dict.row_select_col_type,
+                    row_select_vals=step_dict.row_select_vals
                 )
 
             pipeline_steps.append((name, estimator))
@@ -723,7 +750,10 @@ class PipelineCreator:
         return False
 
     @staticmethod
-    def _wrap_step(name, step, column_types) -> JuColumnTransformer:
+    def _wrap_step(
+            name, step,
+            column_types,
+            row_select_col_type, row_select_vals) -> JuColumnTransformer:
         """Wrap a step in a JuColumnTransformer.
 
         Parameters
@@ -735,7 +765,10 @@ class PipelineCreator:
         column_types : ColumnTypesLike
             The types of the columns the step is applied to.
         """
-        return JuColumnTransformer(name, step, column_types)
+        return JuColumnTransformer(
+            name, step, column_types,
+            row_select_col_type=row_select_col_type,
+            row_select_vals=row_select_vals)
 
     @staticmethod
     def _get_estimator_from(
