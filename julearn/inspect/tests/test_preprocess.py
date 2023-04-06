@@ -4,16 +4,14 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Optional, List, cast
+from typing import List, Optional, cast
 
-import pytest
-
-from numpy.testing import assert_array_equal
 import pandas as pd
-
+import pytest
+from numpy.testing import assert_array_equal
+from sklearn.decomposition import PCA
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
-from sklearn.decomposition import PCA
 from sklearn.svm import SVC
 
 from julearn.inspect.preprocess import preprocess

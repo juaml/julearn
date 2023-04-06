@@ -4,15 +4,16 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Optional, Dict, Any, List, Union
+from typing import Any, Dict, List, Optional, Union
+
 import pandas as pd
 from sklearn.base import ClassNamePrefixFeaturesOutMixin
 from sklearn.compose import ColumnTransformer
 from sklearn.utils.validation import check_is_fitted
 
-from ..base import JuTransformer, ColumnTypesLike, ensure_column_types
+from ..base import ColumnTypesLike, JuTransformer, ensure_column_types
 from ..utils.logging import raise_error
-from ..utils.typing import EstimatorLike, DataLike
+from ..utils.typing import DataLike, EstimatorLike
 
 
 class JuColumnTransformer(JuTransformer):
@@ -37,6 +38,7 @@ class JuColumnTransformer(JuTransformer):
         The value(s) which should be selected in the row_select_col_type
         to select the rows used for training (default is None)
     """
+
     def __init__(
         self,
         name: str,

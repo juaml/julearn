@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 
 from ..transformers.target import JuTargetTransformer
-from ..utils.typing import TransformerLike, DataLike
+from ..utils.typing import DataLike, TransformerLike
 
 
 class JuTargetPipeline:
@@ -141,3 +141,19 @@ class JuTargetPipeline:
             if not hasattr(t_step, "inverse_transform"):
                 return False
         return True
+
+    @property
+    def needed_types(self):
+        """Get the needed types for the pipeline.
+
+        Returns
+        -------
+        needed_types : Set of str or None
+            The needed types for the pipeline.
+        """
+        needed_types = []
+        for _, t_step in self.steps:
+            if getattr(t_step, "needed_types", None) is not None:
+                needed_types.extend(t_step.needed_types)
+        needed_types = set(needed_types)
+        return needed_types if len(needed_types) > 0 else None

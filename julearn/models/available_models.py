@@ -5,19 +5,20 @@
 # License: AGPL
 
 from copy import deepcopy
-from typing import Dict, Any, List, Optional, Type
-from sklearn.svm import SVC, SVR
+from typing import Any, Dict, List, Optional, Type
+
+from sklearn.dummy import DummyClassifier, DummyRegressor
 from sklearn.ensemble import (
-    RandomForestClassifier,
-    RandomForestRegressor,
-    ExtraTreesClassifier,
-    ExtraTreesRegressor,
     AdaBoostClassifier,
     AdaBoostRegressor,
     BaggingClassifier,
     BaggingRegressor,
+    ExtraTreesClassifier,
+    ExtraTreesRegressor,
     GradientBoostingClassifier,
     GradientBoostingRegressor,
+    RandomForestClassifier,
+    RandomForestRegressor,
     StackingClassifier,
     StackingRegressor,
 )
@@ -26,15 +27,15 @@ from sklearn.gaussian_process import (
     GaussianProcessRegressor,
 )
 from sklearn.linear_model import (
+    LinearRegression,
     LogisticRegression,
     LogisticRegressionCV,
-    LinearRegression,
     Ridge,
     RidgeClassifier,
-    RidgeCV,
     RidgeClassifierCV,
-    SGDRegressor,
+    RidgeCV,
     SGDClassifier,
+    SGDRegressor,
 )
 from sklearn.naive_bayes import (
     BernoulliNB,
@@ -43,11 +44,12 @@ from sklearn.naive_bayes import (
     GaussianNB,
     MultinomialNB,
 )
-from sklearn.dummy import DummyClassifier, DummyRegressor
+from sklearn.svm import SVC, SVR
 
-from ..utils import raise_error, warn_with_log, logger
+from ..utils import logger, raise_error, warn_with_log
 from ..utils.typing import ModelLike
 from .dynamic import DynamicSelection
+
 
 # TODO: @samihamdan: fix the protocol. Any shgould be Type[ModelLike]
 _available_models: Dict[str, Dict[str, Any]] = {
@@ -256,7 +258,6 @@ def register_model(
 
                 _available_models[model_name][problem_type] = cls
             else:
-
                 logger.info(
                     f"registering model named {model_name} "
                     f"with problem_type {problem_type}"

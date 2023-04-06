@@ -8,7 +8,6 @@ from typing import Optional, Union
 
 import numpy as np
 from numpy.random import RandomState
-
 from sklearn.model_selection import BaseShuffleSplit
 from sklearn.model_selection._split import _validate_shuffle_split
 

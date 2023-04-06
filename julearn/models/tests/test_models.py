@@ -4,42 +4,39 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Dict, Type, Any
+from typing import Any, Dict, Type
 
 import numpy as np
-
 import pandas as pd
-
+import pytest
 from sklearn.base import clone
-from sklearn.svm import SVC, SVR
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.dummy import DummyClassifier, DummyRegressor
 from sklearn.ensemble import (
-    RandomForestClassifier,
-    RandomForestRegressor,
-    ExtraTreesClassifier,
-    ExtraTreesRegressor,
     AdaBoostClassifier,
     AdaBoostRegressor,
     BaggingClassifier,
     BaggingRegressor,
+    ExtraTreesClassifier,
+    ExtraTreesRegressor,
     GradientBoostingClassifier,
     GradientBoostingRegressor,
+    RandomForestClassifier,
+    RandomForestRegressor,
 )
-from sklearn.dummy import DummyClassifier, DummyRegressor
 from sklearn.gaussian_process import (
     GaussianProcessClassifier,
     GaussianProcessRegressor,
 )
 from sklearn.linear_model import (
+    LinearRegression,
     LogisticRegression,
     LogisticRegressionCV,
-    LinearRegression,
     Ridge,
     RidgeClassifier,
-    RidgeCV,
     RidgeClassifierCV,
-    SGDRegressor,
+    RidgeCV,
     SGDClassifier,
+    SGDRegressor,
 )
 from sklearn.naive_bayes import (
     BernoulliNB,
@@ -48,14 +45,14 @@ from sklearn.naive_bayes import (
     GaussianNB,
     MultinomialNB,
 )
-from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import SVC, SVR
+from sklearn.tree import DecisionTreeClassifier
 
-import pytest
-
+from julearn.models import get_model
 from julearn.utils.testing import do_scoring_test
 from julearn.utils.typing import ModelLike
-from julearn.models import get_model
 
 
 @pytest.mark.parametrize(

@@ -3,13 +3,14 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL
 
-from julearn.model_selection.stratified_groups_kfold import (
-    StratifiedGroupsKFold,
-    RepeatedStratifiedGroupsKFold,
-)
 import numpy as np
 from numpy.testing._private.utils import assert_array_equal
-from sklearn.model_selection import StratifiedKFold, RepeatedStratifiedKFold
+from sklearn.model_selection import RepeatedStratifiedKFold, StratifiedKFold
+
+from julearn.model_selection.stratified_groups_kfold import (
+    RepeatedStratifiedGroupsKFold,
+    StratifiedGroupsKFold,
+)
 
 
 def test_stratified_groups_kfold() -> None:

@@ -4,12 +4,13 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
+import re
 from typing import Dict, List, Optional, Union
 
 import pandas as pd
 
-from ...base import JuTransformer, change_column_type, ColumnTypesLike
-from ...utils import raise_error, logger
+from ...base import ColumnTypesLike, JuTransformer, change_column_type
+from ...utils import logger, raise_error
 from ...utils.typing import DataLike
 
 
@@ -47,7 +48,6 @@ class SetColumnTypes(JuTransformer):
                     "Each value of X_types must be a list. "
                     f"Found {X_type} with value {columns} "
                     f"of type {type(columns)}"
-
                 )
         self.X_types = X_types
         super().__init__(
@@ -92,8 +92,13 @@ class SetColumnTypes(JuTransformer):
 
         # Now update the column_mapper_ with the X_types of self
         for X_type, columns in self.X_types.items():
+            t_columns = [
+                col
+                for col in X.columns
+                if any([re.fullmatch(exp, col) for exp in columns])
+            ]
             column_mapper_.update(
-                {col: change_column_type(col, X_type) for col in columns}
+                {col: change_column_type(col, X_type) for col in t_columns}
             )
 
         logger.debug(f"\tColumn mappers for {column_mapper_}")

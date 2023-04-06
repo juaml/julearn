@@ -5,10 +5,9 @@
 # License: AGPL
 
 import numpy as np
-
 import pytest
 
-from julearn.scoring.metrics import r2_corr, ensure_1d
+from julearn.scoring.metrics import ensure_1d, r2_corr
 
 
 def test_ensure_1d() -> None:

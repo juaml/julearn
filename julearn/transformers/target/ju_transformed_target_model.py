@@ -9,14 +9,12 @@ from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import pandas as pd
-
 from sklearn.base import clone
 from sklearn.utils.metaestimators import available_if
 
 from ...base import JuBaseEstimator, _wrapped_model_has
-
 from ...utils import raise_error, warn_with_log
-from ...utils.typing import ModelLike, DataLike
+from ...utils.typing import DataLike, ModelLike
 
 
 if TYPE_CHECKING:

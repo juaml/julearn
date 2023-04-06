@@ -4,19 +4,18 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Dict, Optional, Any, cast, Union
+from typing import Any, Dict, Optional, Union, cast
+
 import numpy as np
 import pandas as pd
-
-from sklearn.utils.metaestimators import available_if
 from sklearn.base import BaseEstimator, TransformerMixin
+from sklearn.utils.metaestimators import available_if
 from sklearn.utils.validation import _check_fit_params
 
-
-from .column_types import ColumnTypes, ColumnTypesLike, ensure_column_types
-from ..utils.typing import ModelLike, DataLike
-from ..utils import raise_error
 from ..base.column_types import make_type_selector
+from ..utils import raise_error
+from ..utils.typing import DataLike, ModelLike
+from .column_types import ColumnTypes, ColumnTypesLike, ensure_column_types
 
 
 def _wrapped_model_has(attr):

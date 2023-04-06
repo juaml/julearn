@@ -4,24 +4,21 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Optional, List, Type
-import pytest
-from pytest import fixture, FixtureRequest
+from typing import List, Optional, Type
 
 import numpy as np
 import pandas as pd
+import pytest
 from numpy.testing import assert_array_equal
 from pandas.testing import assert_frame_equal
-
-from sklearn.linear_model import LinearRegression
-from sklearn.ensemble import RandomForestRegressor
+from pytest import FixtureRequest, fixture
 from sklearn.base import clone
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.linear_model import LinearRegression
 
-from julearn.utils.typing import ModelLike
 from julearn.models import get_model
-from julearn.transformers.confound_remover import (
-    ConfoundRemover,
-)
+from julearn.transformers.confound_remover import ConfoundRemover
+from julearn.utils.typing import ModelLike
 
 
 @fixture(params=["rf", "linreg"], scope="module")
@@ -149,7 +146,6 @@ def test_ConfoundRemover_confound_auto_find_conf(
         confound_regressions,
         features,
     ):
-
         manual_pred = confound_regression.predict(  # type: ignore
             df_X.loc[:, confounds]  # type: ignore
         )

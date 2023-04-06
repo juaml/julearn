@@ -2,9 +2,9 @@
 
 import pandas as pd
 from pandas.testing import assert_series_equal
+from sklearn.linear_model import LinearRegression
 
 from julearn.transformers.target import TargetConfoundRemover
-from sklearn.linear_model import LinearRegression
 
 
 def test_TargetConfoundRemover(
@@ -31,7 +31,8 @@ def test_TargetConfoundRemover(
     remover = TargetConfoundRemover()
 
     y_removed: pd.Series = remover.fit_transform(  # type: ignore
-        X_iris, y_iris)
+        X_iris, y_iris
+    )
 
     assert y_removed.shape == y_iris.shape
 
@@ -57,5 +58,6 @@ def test_TargetConfoundRemover(
     X_iris.rename(columns=to_rename, inplace=True)
 
     y_removed2: pd.Series = remover2.fit_transform(  # type: ignore
-        X_iris, y_iris)
+        X_iris, y_iris
+    )
     assert_series_equal(y_removed, y_removed2)

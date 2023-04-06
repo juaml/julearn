@@ -6,10 +6,10 @@
 
 from typing import List, Set
 
-import pytest
 import pandas as pd
+import pytest
 
-from julearn.base import ColumnTypes, make_type_selector, ColumnTypesLike
+from julearn.base import ColumnTypes, ColumnTypesLike, make_type_selector
 
 
 @pytest.mark.parametrize(

@@ -4,19 +4,64 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
+import hashlib
+import inspect
+import json
+
 import numpy as np
-from sklearn.model_selection import cross_validate, check_cv
-from sklearn.pipeline import Pipeline
-from sklearn.base import BaseEstimator
-
 import pandas as pd
+from sklearn.base import BaseEstimator
+from sklearn.model_selection import check_cv, cross_validate
+from sklearn.model_selection._split import PredefinedSplit, _CVIterableWrapper
+from sklearn.pipeline import Pipeline
 
-from .prepare import prepare_input_data, check_consistency, check_x_types
 from .pipeline import PipelineCreator
-
+from .prepare import check_consistency, prepare_input_data
+from .scoring import check_scoring
 from .utils import logger, raise_error
 
-from .scoring import check_scoring
+
+def _recurse_to_list(a):
+    """Recursively convert a to a list."""
+    if isinstance(a, (list, tuple)):
+        return [_recurse_to_list(i) for i in a]
+    elif isinstance(a, np.ndarray):
+        return a.tolist()
+    else:
+        return a
+
+
+def _compute_cvmdsum(cv):
+    """Compute the sum of the CV generator."""
+    params = {k: v for k, v in vars(cv).items()}
+    params["class"] = cv.__class__.__name__
+
+    out = None
+
+    # Check for special cases that might not be comparable
+    if "random_state" in params:
+        if params["random_state"] is None:
+            if params.get("shuffle", True) is True:
+                # If it's shuffled and the random seed is None
+                out = "non-reproducible"
+
+    if isinstance(cv, _CVIterableWrapper):
+        splits = params.pop("cv")
+        params["cv"] = _recurse_to_list(splits)
+    if isinstance(cv, PredefinedSplit):
+        params["test_fold"] = params["test_fold"].tolist()
+        params["unique_folds"] = params["unique_folds"].tolist()
+
+    if "cv" in params:
+        if inspect.isclass(params["cv"]):
+            params["cv"] = params["cv"].__class__.__name__
+
+    if out is None:
+        out = hashlib.md5(
+            json.dumps(params, sort_keys=True).encode("utf-8")
+        ).hexdigest()
+
+    return out
 
 
 def run_cross_validation(
@@ -174,16 +219,14 @@ def run_cross_validation(
         np.random.seed(seed)
 
     # Interpret the input data and prepare it to be used with the library
-    df_X, y, df_groups = prepare_input_data(
+    df_X, y, df_groups, X_types = prepare_input_data(
         X=X,
         y=y,
         df=data,
         pos_labels=pos_labels,
         groups=groups,
+        X_types=X_types,
     )
-
-    # Validate X_types
-    X_types = check_x_types(X_types, X)
 
     if model_params is None:
         model_params = {}
@@ -226,7 +269,8 @@ def run_cross_validation(
         if problem_type is None:
             raise_error(
                 "If model is not a PipelineCreator, then `problem_type` "
-                "must be specified in run_cross_validation.")
+                "must be specified in run_cross_validation."
+            )
         if isinstance(preprocess, str):
             preprocess = [preprocess]
         if isinstance(preprocess, list):
@@ -237,8 +281,7 @@ def run_cross_validation(
             pipeline_creator = PipelineCreator(problem_type=problem_type)
         else:
             raise_error(
-                "preprocess has to be a string or a "
-                "list of strings."
+                "preprocess has to be a string or a " "list of strings."
             )
 
         # Add the model to the pipeline creator
@@ -270,12 +313,26 @@ def run_cross_validation(
                 unused_params.append(t_param)
         if len(unused_params) > 0:
             raise_error(
-                "The following model_params are incorrect: "
-                f"{unused_params}"
+                "The following model_params are incorrect: " f"{unused_params}"
             )
         pipeline = pipeline_creator.to_pipeline(
             X_types=X_types, search_params=search_params
         )
+
+    # Log some information
+    logger.info("= Data Information =")
+    logger.info(f"\tProblem type: {problem_type}")
+    logger.info(f"\tNumber of samples: {len(df_X)}")
+    logger.info(f"\tNumber of features: {len(df_X.columns)}")
+    logger.info("====================")
+    logger.info("")
+
+    if problem_type == "classification":
+        logger.info(f"\tNumber of classes: {len(np.unique(y))}")
+        logger.info(f"\tTarget type: {y.dtype}")
+        logger.info(f"\tClass distributions: {y.value_counts()}")
+    elif problem_type == "regression":
+        logger.info(f"\tTarget type: {y.dtype}")
 
     # Prepare cross validation
     cv_outer = check_cv(cv)  # type: ignore
@@ -285,6 +342,8 @@ def run_cross_validation(
 
     cv_return_estimator = return_estimator in ["cv", "all"]
     scoring = check_scoring(pipeline, scoring)
+
+    cv_mdsum = _compute_cvmdsum(cv_outer)
 
     scores = cross_validate(
         pipeline,
@@ -305,8 +364,14 @@ def run_cross_validation(
     repeats = np.repeat(np.arange(n_repeats), n_folds)
     folds = np.tile(np.arange(n_folds), n_repeats)
 
+    fold_sizes = np.array(
+        [list(map(len, x)) for x in cv_outer.split(df_X, y, groups=df_groups)]
+    )
+    scores["n_train"] = fold_sizes[:, 0]
+    scores["n_test"] = fold_sizes[:, 1]
     scores["repeat"] = repeats
     scores["fold"] = folds
+    scores["cv_mdsum"] = cv_mdsum
 
     out = pd.DataFrame(scores)
     if return_estimator in ["final", "all"]:

@@ -5,11 +5,14 @@
 #          Shammi More <s.more@fz-juelich.de>
 # License: AGPL
 
-import pytest
-from julearn.models import register_model, reset_model_register, get_model
-from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
-from sklearn.ensemble import RandomForestRegressor
 import warnings
+
+import pytest
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
+
+from julearn.models import get_model, register_model, reset_model_register
+
 
 # TODO: @samihamdan: Fix the ModelLike protocol to avoid all this type: ignore
 

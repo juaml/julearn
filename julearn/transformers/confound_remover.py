@@ -4,21 +4,18 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Optional, Union, List, Tuple
+from typing import List, Optional, Tuple, Union
 
 import numpy as np
-from numpy.typing import ArrayLike
-
 import pandas as pd
+from numpy.typing import ArrayLike
 from pandas._typing import Scalar
-
 from sklearn.base import clone
 from sklearn.linear_model import LinearRegression
 
+from ..base import ColumnTypesLike, JuTransformer, ensure_column_types
 from ..utils import raise_error
-from ..utils.typing import ModelLike, DataLike
-
-from ..base import JuTransformer, ensure_column_types, ColumnTypesLike
+from ..utils.typing import DataLike, ModelLike
 
 
 class ConfoundRemover(JuTransformer):

@@ -7,10 +7,10 @@
 from typing import Optional, Union
 
 import numpy as np
-from numpy.typing import ArrayLike
 import pandas as pd
+from numpy.typing import ArrayLike
 
-from ...base import JuTransformer, ColumnTypesLike
+from ...base import ColumnTypesLike, JuTransformer
 from ...utils import logger
 from ...utils.typing import DataLike
 

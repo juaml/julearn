@@ -1,6 +1,6 @@
 """Utils for handling scikit-learn versions."""
 
-from typing import Callable, Any, Optional
+from typing import Any, Callable, Optional
 
 import sklearn
 
@@ -64,7 +64,7 @@ def _joblib_parallel_args(**kwargs: Any) -> Any:
         return kwargs
     else:
         from sklearn.utils.fixes import (
-            _joblib_parallel_args as _sk_parallel  # type: ignore[attr-defined]
+            _joblib_parallel_args as _sk_parallel,  # type: ignore
         )
 
         return _sk_parallel(**kwargs)

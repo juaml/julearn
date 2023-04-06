@@ -7,7 +7,6 @@
 from typing import List, Optional
 
 import pandas as pd
-
 from sklearn.pipeline import Pipeline
 
 from ..utils import raise_error
@@ -46,12 +45,12 @@ def preprocess(
         i = -1
     else:
         i = 1
-        for (name, _) in pipeline.steps[:-1]:
+        for name, _ in pipeline.steps[:-1]:
             if name == until:
                 break
             i += 1
         else:
-            raise_error(f"No stepe named {until} found.")
+            raise_error(f"No step named {until} found.")
     df_out = pipeline[:i].transform(_X)
 
     if not isinstance(df_out, pd.DataFrame) and with_column_types is False:

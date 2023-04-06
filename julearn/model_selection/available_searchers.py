@@ -4,12 +4,12 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
+from copy import deepcopy
 from typing import List, Optional
 
-from copy import deepcopy
-
-from julearn.utils.logging import raise_error, logger, warn_with_log
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
+
+from julearn.utils.logging import logger, raise_error, warn_with_log
 
 
 _available_searchers = {"grid": GridSearchCV, "random": RandomizedSearchCV}

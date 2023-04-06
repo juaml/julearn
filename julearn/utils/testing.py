@@ -4,41 +4,41 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import List, Dict, Any, Optional
-
 import warnings
-import numpy as np
-from numpy.testing import assert_array_equal, assert_array_almost_equal
-import pandas as pd
+from typing import Any, Dict, List, Optional
 
-from sklearn.svm import SVC, SVR
+import numpy as np
+import pandas as pd
+from numpy.testing import assert_array_almost_equal, assert_array_equal
+from sklearn.base import BaseEstimator, TransformerMixin, clone
+from sklearn.dummy import DummyClassifier, DummyRegressor
 from sklearn.ensemble import (
-    RandomForestClassifier,
-    RandomForestRegressor,
-    ExtraTreesClassifier,
-    ExtraTreesRegressor,
     AdaBoostClassifier,
     AdaBoostRegressor,
     BaggingClassifier,
     BaggingRegressor,
+    ExtraTreesClassifier,
+    ExtraTreesRegressor,
     GradientBoostingClassifier,
     GradientBoostingRegressor,
+    RandomForestClassifier,
+    RandomForestRegressor,
 )
-from sklearn.dummy import DummyClassifier, DummyRegressor
 from sklearn.gaussian_process import (
     GaussianProcessClassifier,
     GaussianProcessRegressor,
 )
 from sklearn.linear_model import (
-    LogisticRegression,
     LinearRegression,
+    LogisticRegression,
     Ridge,
     RidgeClassifier,
-    RidgeCV,
     RidgeClassifierCV,
-    SGDRegressor,
+    RidgeCV,
     SGDClassifier,
+    SGDRegressor,
 )
+from sklearn.model_selection import KFold, cross_validate
 from sklearn.naive_bayes import (
     BernoulliNB,
     CategoricalNB,
@@ -46,12 +46,12 @@ from sklearn.naive_bayes import (
     GaussianNB,
     MultinomialNB,
 )
-from sklearn.base import clone, TransformerMixin, BaseEstimator
-from sklearn.model_selection import cross_validate, KFold
 from sklearn.pipeline import Pipeline
+from sklearn.svm import SVC, SVR
 
 from julearn import run_cross_validation
-from julearn.utils.typing import EstimatorLike, DataLike
+from julearn.base import WrapModel
+from julearn.utils.typing import DataLike, EstimatorLike
 
 
 def compare_models(  # pragma: no cover
@@ -71,6 +71,10 @@ def compare_models(  # pragma: no cover
     AssertionError
         If the models are not equal.
     """
+    if isinstance(clf1, WrapModel):
+        clf1 = clf1.model
+    if isinstance(clf2, WrapModel):
+        clf2 = clf2.model
     if clf1.__class__ != clf2.__class__:
         raise AssertionError("Different classes")
     if isinstance(clf1, (SVC, SVR)):
@@ -244,7 +248,7 @@ def do_scoring_test(
     if decimal > 0:
         for scoring in scorers:
             s_key = f"test_{scoring}"
-            assert len(actual.columns) == len(expected) + 2  # type: ignore
+            assert len(actual.columns) == len(expected) + 5  # type: ignore
             assert len(actual[s_key]) == len(expected[s_key])  # type: ignore
             assert_array_almost_equal(
                 actual[s_key], expected[s_key], decimal=decimal  # type: ignore
@@ -355,7 +359,6 @@ def _get_coef_over_versions(clf: EstimatorLike) -> np.ndarray:
     if isinstance(
         clf, (BernoulliNB, ComplementNB, MultinomialNB, CategoricalNB)
     ):
-
         with warnings.catch_warnings():
             warnings.filterwarnings("error", category=FutureWarning)
             warnings.filterwarnings("error", category=DeprecationWarning)

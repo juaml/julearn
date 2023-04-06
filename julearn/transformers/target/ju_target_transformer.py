@@ -5,6 +5,7 @@
 # License: AGPL
 
 import pandas as pd
+
 from ...utils.typing import DataLike
 
 

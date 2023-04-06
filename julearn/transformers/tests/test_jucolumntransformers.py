@@ -5,27 +5,24 @@
 
 from typing import Dict, Type
 
-from numpy.testing import assert_array_equal, assert_almost_equal
+import numpy as np
 import pandas as pd
+import pytest
+from numpy.testing import assert_almost_equal, assert_array_equal
 from pandas.testing import assert_frame_equal
-
+from pytest import fixture
 from sklearn.preprocessing import (
-    StandardScaler,
-    RobustScaler,
     MaxAbsScaler,
     MinMaxScaler,
     Normalizer,
-    QuantileTransformer,
     PowerTransformer,
+    QuantileTransformer,
+    RobustScaler,
+    StandardScaler,
 )
-
-import pytest
-from pytest import fixture
 
 from julearn.transformers import JuColumnTransformer
 from julearn.utils.typing import EstimatorLike
-
-import numpy as np
 
 
 @fixture
@@ -113,9 +110,7 @@ def test_jucolumntransformer(
     manual = sk_trans.fit_transform(df_X_confounds[trans])  # type: ignore
 
     assert_frame_equal(df_X_transformed[kept], df_X_confounds[kept])
-    assert_array_equal(
-        df_X_transformed[trans].values, manual
-    )
+    assert_array_equal(df_X_transformed[trans].values, manual)
 
 
 def test_row_select():

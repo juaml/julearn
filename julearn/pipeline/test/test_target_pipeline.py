@@ -5,16 +5,13 @@
 # License: AGPL
 
 import numpy as np
-from numpy.testing import assert_array_equal
-
 import pandas as pd
-
+import pytest
+from numpy.testing import assert_array_equal
 from sklearn.preprocessing import StandardScaler
 
-from julearn.transformers.target import JuTargetTransformer
 from julearn.pipeline.target_pipeline import JuTargetPipeline
-
-import pytest
+from julearn.transformers.target import JuTargetTransformer
 
 
 def test_target_pipeline_sklearn(

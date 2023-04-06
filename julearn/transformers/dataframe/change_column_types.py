@@ -4,11 +4,11 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Dict, Optional, List, Union
+from typing import Dict, List, Optional, Union
 
 import pandas as pd
 
-from ...base import JuTransformer, ColumnTypesLike
+from ...base import ColumnTypesLike, JuTransformer
 from ...utils.typing import DataLike
 
 
@@ -43,7 +43,8 @@ class ChangeColumnTypes(JuTransformer):
         self.X_types_renamer = X_types_renamer
         super().__init__(
             apply_to=apply_to, needed_types=None,
-            row_select_col_type=row_select_col_type, row_select_vals=row_select_vals
+            row_select_col_type=row_select_col_type,
+            row_select_vals=row_select_vals
 
         )
 
