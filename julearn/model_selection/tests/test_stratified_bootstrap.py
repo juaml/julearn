@@ -4,9 +4,9 @@
 # License: AGPL
 
 import numpy as np
-from julearn.model_selection import StratifiedBootstrap
-
 import pytest
+
+from julearn.model_selection import StratifiedBootstrap
 
 
 @pytest.mark.parametrize(

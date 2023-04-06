@@ -2,4 +2,4 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from . preprocess import preprocess
+from .preprocess import preprocess

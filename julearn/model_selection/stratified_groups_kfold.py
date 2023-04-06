@@ -5,9 +5,9 @@
 # License: AGPL
 
 from typing import Optional, Union
+
 import numpy as np
 from numpy.random import RandomState
-
 from sklearn.model_selection._split import StratifiedKFold, _RepeatedSplits
 from sklearn.utils.validation import check_array
 

@@ -5,20 +5,17 @@
 # License: AGPL
 
 import typing
-from typing import List, Optional, Dict, Union, Callable
-
 from copy import deepcopy
+from typing import Callable, Dict, List, Optional, Union
 
-from sklearn.metrics import _scorer, SCORERS, make_scorer
-from sklearn.metrics._scorer import (
-    check_scoring as sklearn_check_scoring,
-    _check_multimetric_scoring,
-)
+from sklearn.metrics import SCORERS, _scorer, make_scorer
+from sklearn.metrics._scorer import _check_multimetric_scoring
+from sklearn.metrics._scorer import check_scoring as sklearn_check_scoring
 
-from ..utils import warn_with_log, raise_error, logger
-from ..utils.typing import ScorerLike, EstimatorLike
-
+from ..utils import logger, raise_error, warn_with_log
+from ..utils.typing import EstimatorLike, ScorerLike
 from .metrics import r2_corr
+
 
 _extra_available_scorers = {"r2_corr": make_scorer(r2_corr)}
 
@@ -144,4 +141,5 @@ def check_scoring(
         scorer_names = typing.cast(List[str], scoring)
         scoring_dict = {score: get_scorer(score) for score in scorer_names}
         return _check_multimetric_scoring(  # type: ignore
-            estimator, scoring_dict)
+            estimator, scoring_dict
+        )

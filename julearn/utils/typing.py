@@ -1,27 +1,22 @@
 """Protocols for type checking."""
 
-from typing import (
-    runtime_checkable,
-    Protocol,
-    Optional,
-    Any,
-    Dict,
-    Union,
-)
+from typing import Any, Dict, Optional, Protocol, Union, runtime_checkable
+
 import numpy as np
 import pandas as pd
-
 from sklearn.metrics._scorer import (
+    _PredictScorer,
     _ProbaScorer,
     _ThresholdScorer,
-    _PredictScorer,
 )
 
 from ..base import ColumnTypes
 
+
 DataLike = Union[np.ndarray, pd.DataFrame, pd.Series]
 
 ScorerLike = Union[_ProbaScorer, _ThresholdScorer, _PredictScorer]
+
 
 @runtime_checkable
 class EstimatorLikeFit1(Protocol):
@@ -34,6 +29,7 @@ class EstimatorLikeFit1(Protocol):
     def set_params(self, **params) -> "EstimatorLikeFit1":
         return self
 
+
 @runtime_checkable
 class EstimatorLikeFit2(Protocol):
     def fit(self, X, y) -> "EstimatorLikeFit2":
@@ -44,6 +40,7 @@ class EstimatorLikeFit2(Protocol):
 
     def set_params(self, **params) -> "EstimatorLikeFit2":
         return self
+
 
 @runtime_checkable
 class EstimatorLikeFity(Protocol):

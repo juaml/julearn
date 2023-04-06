@@ -9,9 +9,11 @@ import numpy as np
 from joblib import Parallel, delayed
 from scipy.stats import pearsonr
 from sklearn.base import BaseEstimator, TransformerMixin
+
 from sklearn.utils.validation import check_is_fitted
 from ..utils.versions import _joblib_parallel_args
 from ..utils import warn_with_log
+from ..utils.versions import _joblib_parallel_args
 
 
 class CBPM(BaseEstimator, TransformerMixin):

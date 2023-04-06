@@ -4,33 +4,34 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import List, Any
-
 from copy import deepcopy
+from typing import Any, List
+
 from sklearn.decomposition import PCA
-from sklearn.preprocessing import (
-    StandardScaler,
-    RobustScaler,
-    MaxAbsScaler,
-    MinMaxScaler,
-    Normalizer,
-    QuantileTransformer,
-    PowerTransformer,
-)
 from sklearn.feature_selection import (
     GenericUnivariateSelect,
-    SelectPercentile,
-    SelectKBest,
     SelectFdr,
     SelectFpr,
     SelectFwe,
+    SelectKBest,
+    SelectPercentile,
     VarianceThreshold,
 )
-from .cbpm import CBPM
-from .dataframe import DropColumns, ChangeColumnTypes, FilterColumns
-from ..utils import raise_error, warn_with_log, logger
-from .confound_remover import ConfoundRemover
+from sklearn.preprocessing import (
+    MaxAbsScaler,
+    MinMaxScaler,
+    Normalizer,
+    PowerTransformer,
+    QuantileTransformer,
+    RobustScaler,
+    StandardScaler,
+)
+
+from ..utils import logger, raise_error, warn_with_log
 from ..utils.typing import TransformerLike
+from .cbpm import CBPM
+from .confound_remover import ConfoundRemover
+from .dataframe import ChangeColumnTypes, DropColumns, FilterColumns
 
 
 _available_transformers = {

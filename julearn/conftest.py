@@ -4,14 +4,15 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 import typing
-from typing import Optional, Dict, Callable, Union, List
-from seaborn import load_dataset
-import pandas as pd
-from pytest import fixture, FixtureRequest
 from copy import copy
+from typing import Callable, Dict, List, Optional, Union
+
+import pandas as pd
+from pytest import FixtureRequest, fixture
+from seaborn import load_dataset
 
 
-@fixture(scope="module")
+@fixture(scope="function")
 def df_typed_iris() -> pd.DataFrame:
     """Return a typed iris dataset.
 
@@ -33,7 +34,7 @@ def df_typed_iris() -> pd.DataFrame:
     return df.rename(columns=rename)
 
 
-@fixture(scope="module")
+@fixture(scope="function")
 def df_iris() -> pd.DataFrame:
     """Return the iris dataset.
 
@@ -45,10 +46,10 @@ def df_iris() -> pd.DataFrame:
     df = load_dataset("iris")
     df = typing.cast(pd.DataFrame, df)
 
-    return df
+    return df.copy()
 
 
-@fixture(scope="module")
+@fixture(scope="function")
 def df_binary() -> pd.DataFrame:
     """Return the iris dataset as a binary classification problem.
 
@@ -64,7 +65,7 @@ def df_binary() -> pd.DataFrame:
     return df_binary
 
 
-@fixture(scope="module")
+@fixture(scope="function")
 def X_iris() -> pd.DataFrame:
     """Return the iris dataset features.
 
@@ -81,7 +82,7 @@ def X_iris() -> pd.DataFrame:
     return df.loc[:, features]
 
 
-@fixture(scope="module")
+@fixture(scope="function")
 def y_iris() -> pd.Series:
     """Return the iris dataset target as integers.
 
@@ -105,7 +106,7 @@ def y_iris() -> pd.Series:
         dict(duck=["petal_length"]),
         dict(duck=["petal_length"], confound=["petal_width"]),
     ],
-    scope="module",
+    scope="function",
 )
 def X_types_iris(request: FixtureRequest) -> Optional[Dict]:
     """Return different types for the iris dataset features.
@@ -123,7 +124,7 @@ def X_types_iris(request: FixtureRequest) -> Optional[Dict]:
     return request.param
 
 
-@fixture(params=["rf", "svm", "gauss", "ridge"], scope="module")
+@fixture(params=["rf", "svm", "gauss", "ridge"], scope="function")
 def models_all_problem_types(request: FixtureRequest) -> str:
     """Return different models that work with classification and regression.
 
@@ -140,7 +141,7 @@ def models_all_problem_types(request: FixtureRequest) -> str:
     return request.param
 
 
-@fixture(params=["regression", "classification"], scope="module")
+@fixture(params=["regression", "classification"], scope="function")
 def all_problem_types(request: FixtureRequest) -> str:
     """Return different problem types.
 
@@ -166,7 +167,7 @@ def all_problem_types(request: FixtureRequest) -> str:
         dict(kind="random", n_iter=2),
         dict(kind="random", n_iter=2, cv=3),
     ],
-    scope="module",
+    scope="function",
 )
 def search_params(request: FixtureRequest) -> Optional[Dict]:
     """Return different possibiblites for the search_params argument.
@@ -194,7 +195,7 @@ _tuning_params = {
 }
 
 
-@fixture(scope="module")
+@fixture(scope="function")
 def get_tuning_params() -> Callable:
     """Return a function that returns the parameters to tune for a given step.
 
@@ -231,7 +232,7 @@ def get_tuning_params() -> Callable:
         ["zscore", "pca"],
         ["select_univariate", "zscore", "pca"],
     ],
-    scope="module",
+    scope="function",
 )
 def preprocessing(request: FixtureRequest) -> Union[str, List[str]]:
     """Return different preprocessing steps.

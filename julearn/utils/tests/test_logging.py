@@ -4,11 +4,13 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from julearn.utils import logger, configure_logging, raise_error, warn_with_log
-from julearn.utils.logging import _close_handlers
-import pytest
 import tempfile
 from pathlib import Path
+
+import pytest
+
+from julearn.utils import configure_logging, logger, raise_error, warn_with_log
+from julearn.utils.logging import _close_handlers
 
 
 # TODO: Fix this deprecation warning issue by fixing the real problem
@@ -129,9 +131,9 @@ def test_lib_logging() -> None:
     """Test logging versions."""
 
     import numpy as np  # noqa
+    import pandas  # noqa
     import scipy  # noqa
     import sklearn  # noqa
-    import pandas  # noqa
 
     with tempfile.TemporaryDirectory() as tmp:
         tmpdir = Path(tmp)

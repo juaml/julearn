@@ -4,19 +4,17 @@
 #          Federico Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL
 
-from numpy.testing import assert_array_equal
 import pandas as pd
-
-from sklearn.preprocessing import StandardScaler, Normalizer
+import pytest
+from numpy.testing import assert_array_equal
+from sklearn.preprocessing import Normalizer, StandardScaler
 from sklearn.svm import SVR
 
+from julearn.pipeline import JuTargetPipeline
 from julearn.transformers.target import (
     JuTransformedTargetModel,
     TransformedTargetWarning,
 )
-from julearn.pipeline import JuTargetPipeline
-
-import pytest
 
 
 def test_JuTransformedTargetModel(
@@ -30,8 +28,7 @@ def test_JuTransformedTargetModel(
 
     # TODO: @samihamdan: fix the protocol error
     ju_transformed_target_model = JuTransformedTargetModel(
-        transformer=transformer,
-        model=model  # type: ignore
+        transformer=transformer, model=model  # type: ignore
     )
 
     ju_transformed_target_model.fit(X_iris, y_iris)
@@ -62,7 +59,7 @@ def test_JuTransformedTargetModel_noinverse(
     ju_transformed_target_model.fit(X_iris, y_iris)
     with pytest.warns(
         TransformedTargetWarning,
-        match=r"has been transformed to fit the model"
+        match=r"has been transformed to fit the model",
     ):
         y_pred = ju_transformed_target_model.predict(X_iris)
 

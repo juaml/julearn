@@ -5,19 +5,19 @@
 #          Shammi More <s.more@fz-juelich.de>
 # License: AGPL
 
+import warnings
 from typing import Any
+
 import numpy as np
 import pandas as pd
-
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import train_test_split, ShuffleSplit
-
 import pytest
-import warnings
-from pytest import fixture, FixtureRequest
+from pytest import FixtureRequest, fixture
 from pytest_lazyfixture import lazy_fixture
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import ShuffleSplit, train_test_split
 
 from julearn.models.dynamic import DynamicSelection
+
 
 # Check if the test is running on juseless
 try:
@@ -27,9 +27,9 @@ except ImportError:
 
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
-    from deslib.dcs import OLA, MCB
-    from deslib.des import DESP, KNORAU, METADES, KNOP, KNORAE
-    from deslib.static import StackedClassifier, SingleBest, StaticSelection
+    from deslib.dcs import MCB, OLA
+    from deslib.des import DESP, KNOP, KNORAE, KNORAU, METADES
+    from deslib.static import SingleBest, StackedClassifier, StaticSelection
 
 
 _algorithm_objects = {
@@ -98,8 +98,7 @@ def test_algorithms(
         Name of the algorithm.
     """
 
-    df_iris = df_iris[
-        df_iris["species"].isin(["versicolor", "virginica"])]
+    df_iris = df_iris[df_iris["species"].isin(["versicolor", "virginica"])]
     X = ["sepal_length", "sepal_width", "petal_length"]
     y = "species"
 

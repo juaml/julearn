@@ -6,10 +6,11 @@
 
 import pytest
 from sklearn.model_selection import GridSearchCV
+
 from julearn.model_selection import (
+    get_searcher,
     register_searcher,
     reset_searcher_register,
-    get_searcher,
 )
 
 
@@ -29,7 +30,6 @@ def test_register_searcher() -> None:
     with pytest.raises(
         ValueError, match="searcher named custom_grid already exists and "
     ):
-
         register_searcher("custom_grid", GridSearchCV, overwrite=False)
 
     reset_searcher_register()
@@ -41,5 +41,4 @@ def test_reset_searcher() -> None:
     get_searcher("custom_grid")
     reset_searcher_register()
     with pytest.raises(ValueError, match="The specified searcher "):
-
         get_searcher("custom_grid")

@@ -8,14 +8,12 @@ from typing import Optional
 
 import numpy as np
 import pandas as pd
-
 from sklearn.base import clone
 from sklearn.linear_model import LinearRegression
 
-from ...base.column_types import ensure_column_types, ColumnTypesLike
-from .ju_target_transformer import JuTargetTransformer
-
+from ...base.column_types import ColumnTypesLike, ensure_column_types
 from ...utils.typing import ModelLike
+from .ju_target_transformer import JuTargetTransformer
 
 
 class TargetConfoundRemover(JuTargetTransformer):
@@ -49,6 +47,11 @@ class TargetConfoundRemover(JuTargetTransformer):
         self.model_confound = model_confound
         self.confounds = ensure_column_types(confounds)
         self.threshold = threshold
+
+    @property
+    def needed_types(self) -> ColumnTypesLike:
+        """Get the needed column types."""
+        return self.confounds
 
     def fit(self, X: pd.DataFrame, y: pd.Series) -> "TargetConfoundRemover":
         """Fit ConfoundRemover.

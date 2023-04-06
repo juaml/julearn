@@ -4,14 +4,13 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import List, Any, Optional, Dict, Type
-
 from copy import deepcopy
+from typing import Any, Dict, List, Optional, Type
 
+from ...utils import logger, raise_error, warn_with_log
 from .ju_target_transformer import JuTargetTransformer
 from .target_confound_remover import TargetConfoundRemover
 
-from ...utils import raise_error, logger, warn_with_log
 
 _available_target_transformers: Dict[str, Type[JuTargetTransformer]] = {
     "confound_removal": TargetConfoundRemover,
@@ -95,7 +94,6 @@ def register_target_transformer(
         If `transformer_name` is already registered and `overwrite` is None.
     """
     if _available_target_transformers.get(transformer_name) is not None:
-
         if overwrite is None:
             warn_with_log(
                 f"Target transformer named {transformer_name} already exists. "

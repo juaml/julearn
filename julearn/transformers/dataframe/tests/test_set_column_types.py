@@ -3,10 +3,10 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
-from typing import Optional, Dict
+from typing import Dict, Optional
+
 import pandas as pd
 import pytest
-
 from pandas.testing import assert_frame_equal
 
 from julearn.transformers.dataframe import SetColumnTypes

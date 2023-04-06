@@ -5,17 +5,15 @@
 #          Shammi More <s.more@fz-juelich.de>
 # License: AGPL
 
-from typing import Optional, Any
+from typing import Any, Optional
 
 import numpy as np
-
 import pandas as pd
-
 from sklearn.base import BaseEstimator
-from sklearn.model_selection import train_test_split, check_cv
+from sklearn.model_selection import check_cv, train_test_split
 
 from ..utils import raise_error
-from ..utils.typing import ModelLike, DataLike
+from ..utils.typing import DataLike, ModelLike
 
 
 _deslib_algorithms = {
@@ -228,5 +226,6 @@ class DynamicSelection(BaseEstimator):
         out = ds_algo(  # type: ignore # noqa: F821
             pool_classifiers=self.ensemble,
             random_state=self.random_state_algorithm,
-            **self._ds_params)
+            **self._ds_params,
+        )
         return out

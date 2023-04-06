@@ -4,11 +4,11 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Dict, Optional, List
+from typing import Dict, List, Optional
 
 import pandas as pd
 
-from ...base import JuTransformer, ColumnTypesLike
+from ...base import ColumnTypesLike, JuTransformer
 from ...utils.typing import DataLike
 
 

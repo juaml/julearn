@@ -4,15 +4,16 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Optional, Dict, Any, List
+from typing import Any, Dict, List, Optional
+
 import pandas as pd
 from sklearn.base import ClassNamePrefixFeaturesOutMixin
 from sklearn.compose import ColumnTransformer
 from sklearn.utils.validation import check_is_fitted
 
-from ..base import JuTransformer, ColumnTypesLike, ensure_column_types
+from ..base import ColumnTypesLike, JuTransformer, ensure_column_types
 from ..utils.logging import raise_error
-from ..utils.typing import EstimatorLike, DataLike
+from ..utils.typing import DataLike, EstimatorLike
 
 
 class JuColumnTransformer(JuTransformer):
@@ -32,6 +33,7 @@ class JuColumnTransformer(JuTransformer):
     needed_types : ColumnTypesLike, optional
         Which feature types are needed for the transformer to work.
     """
+
     def __init__(
         self,
         name: str,

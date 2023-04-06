@@ -10,10 +10,10 @@ import pandas as pd
 from sklearn.compose import ColumnTransformer
 
 from ...base import (
+    ColumnTypes,
+    ColumnTypesLike,
     JuTransformer,
     ensure_column_types,
-    ColumnTypesLike,
-    ColumnTypes,
 )
 from ...utils.typing import DataLike
 
