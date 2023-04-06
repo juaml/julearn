@@ -3,3 +3,4 @@
 # License: AGPL
 
 from .preprocess import preprocess
+from .pipeline_inspector import PipelineInspector, EstimatorInspector
