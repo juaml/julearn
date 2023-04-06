@@ -1,23 +1,42 @@
----
-name: Feature request
-about: Suggest an idea for this project
-title: "[ENH]"
-labels: enhancement
-assignees: ''
-
----
-
-**Is your feature request related to a problem? Please describe.**
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
-
-**Describe the solution you'd like**
-A clear and concise description of what you want to happen. What is the expected behaviour?
-
-**Describe alternatives you've considered**
-A clear and concise description of any alternative solutions or features you've considered.
-
-**Do you have a sample code that implements this outside of julearn?**
-Sample code helps us understand the scope/requirements of this feature. If you can provide sample code and the feature fits the scope of julearn, it is more likely that it gets implemented and integrated quicker.
-
-**Additional context**
-Add any other context or screenshots about the feature request here.
+name: Feature Request
+description: Request to include a new feature
+title: "[ENH]: "
+labels: ["enhancement", "triage"]
+assignees:
+  - fraimondo
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Fill in this form if you want that julearn includes a new feature.
+  - type: textarea
+    id: description
+    attributes:
+      label: Which feature do you want to include?
+      description: |
+        Please include a complete description, including the motivation, description, and why we should include it in julearn.
+      placeholder: Convince us!
+    validations:
+      required: true
+  - type: textarea
+    id: behaviour
+    attributes:
+      label: How do you imagine this integrated in julearn?
+      description: |
+        Please provide your idea on how this can be implemented. How would you like to use julearn?
+      placeholder: Help us make it easy for you!
+    validations:
+      required: true
+  - type: textarea
+    id: implementation
+    attributes:
+      label: Do you have a sample code that implements this outside of julearn?
+      description: |
+        If you manage to have an idea on how to implement it, please copy and paste your implementation code or pseudo-code here. You can also post a link to a gist or github repository.
+      render: shell
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else to say?
+      description:
+      placeholder: ...
