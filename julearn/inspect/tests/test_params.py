@@ -1,12 +1,12 @@
-from julearn import run_cross_validation
-from julearn.inspect import PipelineInspector, EstimatorInspector
+import pytest
+from sklearn.base import BaseEstimator
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import SVC
+
+from julearn.inspect import EstimatorInspector, PipelineInspector
 from julearn.pipeline import PipelineCreator
 from julearn.transformers import JuColumnTransformer
-from sklearn.preprocessing import StandardScaler
-from sklearn.decomposition import PCA
-from sklearn.svm import SVC
-from sklearn.base import BaseEstimator
-import pytest
 
 
 class TestEst(BaseEstimator):
@@ -75,3 +75,26 @@ def test_inspect_estimator(est, fitted_params, df_iris):
     inspect_params = inspector.get_fitted_params()
     inspect_params.pop("column_transformer_", None)
     assert fitted_params == inspect_params
+
+
+def test_inspect_pipeline(df_iris):
+
+    expected_fitted_params = {
+        "jucolumntransformer__param_0_": 0, "jucolumntransformer__param_1_": 1}
+
+    pipe = (PipelineCreator(problem_type="classification")
+            .add(JuColumnTransformer("test", TestEst(), "continuous"))
+            .add(SVC())
+            .to_pipeline()
+            )
+    pipe.fit(df_iris.iloc[:, :-1], df_iris.species)
+    inspector = PipelineInspector(pipe)
+    inspect_params = inspector.get_fitted_params()
+    inspect_params.pop("jucolumntransformer__column_transformer_", None)
+    inspect_params = {
+        key: val for key, val in inspect_params.items()
+        if (not key.startswith("svc")) and (
+            not key.startswith("set_column_types"))
+    }
+
+    assert expected_fitted_params == inspect_params

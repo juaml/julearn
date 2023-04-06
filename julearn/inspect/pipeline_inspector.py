@@ -1,6 +1,8 @@
-from sklearn.utils.validation import check_is_fitted
-from ..transformers import JuColumnTransformer
 import re
+
+from sklearn.utils.validation import check_is_fitted
+
+from ..transformers import JuColumnTransformer
 
 
 class PipelineInspector():
@@ -20,6 +22,16 @@ class PipelineInspector():
 
     def get_params(self):
         return self._pipe.get_params()
+
+    def get_fitted_params(self):
+        fitted_params = {}
+        for name, step in self._pipe.steps:
+            params = EstimatorInspector(step).get_fitted_params()
+            fitted_params = {
+                **fitted_params,
+                ** {f"{name}__{param}": val for param, val in params.items()}
+            }
+        return fitted_params
 
 
 class EstimatorInspector():
