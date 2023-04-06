@@ -99,7 +99,7 @@ class FoldsInspector:
                 folded_predictions.append(t_series)
             predictions = folded_predictions
         predictions = pd.concat(predictions, axis=1)
-        return predictions
+        return predictions.sort_index()
 
     def __getitem__(self, key):
         return FoldInspector(self, key)
