@@ -8,7 +8,7 @@ from typing import Dict, Type
 import numpy as np
 import pandas as pd
 import pytest
-from numpy.testing import assert_array_equal
+from numpy.testing import assert_almost_equal, assert_array_equal
 from pandas.testing import assert_frame_equal
 from pytest import fixture
 from sklearn.preprocessing import (
@@ -111,3 +111,60 @@ def test_jucolumntransformer(
 
     assert_frame_equal(df_X_transformed[kept], df_X_confounds[kept])
     assert_array_equal(df_X_transformed[trans].values, manual)
+
+
+def test_row_select():
+    X = pd.DataFrame({
+        "a__:type:__continuous": [0, 0, 1, 1],
+        "b__:type:__healthy": [1, 1, 0, 0],
+    })
+
+    transformer_healthy = JuColumnTransformer(
+        name="zscore",
+        transformer=StandardScaler(),
+        apply_to="continuous",
+        row_select_col_type=["healthy"],
+        row_select_vals=1
+    )
+
+    transformer_unhealthy = JuColumnTransformer(
+        name="zscore",
+        transformer=StandardScaler(),
+        apply_to="continuous",
+        row_select_col_type=["healthy"],
+        row_select_vals=0
+    )
+
+    transformer_both = JuColumnTransformer(
+        name="zscore",
+        transformer=StandardScaler(),
+        apply_to="continuous",
+        row_select_col_type=["healthy"],
+        row_select_vals=[0, 1]
+    )
+    mean_healthy = (
+        transformer_healthy.fit(X)
+        .column_transformer_.transformers_[0][1].mean_
+    )
+    mean_unhealthy = (
+        transformer_unhealthy.fit(X)
+        .column_transformer_.transformers_[0][1].mean_
+    )
+
+    mean_both = (transformer_both.fit(X)
+                 .column_transformer_.transformers_[0][1].mean_
+                 )
+
+    assert_almost_equal(
+        transformer_healthy._select_rows(X, y=None)["X"].index.values,
+        [0, 1])
+    assert_almost_equal(
+        transformer_unhealthy._select_rows(X, None)["X"].index.values,
+        [2, 3])
+    assert_almost_equal(
+        transformer_both._select_rows(X, None)["X"].index.values,
+        [0, 1, 2, 3])
+
+    assert_almost_equal(mean_unhealthy, [1])
+    assert_almost_equal(mean_healthy, [0])
+    assert_almost_equal(mean_both, [0.5])

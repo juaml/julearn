@@ -50,6 +50,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.svm import SVC, SVR
 
 from julearn import run_cross_validation
+from julearn.base import WrapModel
 from julearn.utils.typing import DataLike, EstimatorLike
 
 
@@ -70,6 +71,10 @@ def compare_models(  # pragma: no cover
     AssertionError
         If the models are not equal.
     """
+    if isinstance(clf1, WrapModel):
+        clf1 = clf1.model
+    if isinstance(clf2, WrapModel):
+        clf2 = clf2.model
     if clf1.__class__ != clf2.__class__:
         raise AssertionError("Different classes")
     if isinstance(clf1, (SVC, SVR)):

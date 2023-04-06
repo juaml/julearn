@@ -1,1 +1,1 @@
-from . import corrected_ttest
+from .corrected_ttest import corrected_ttest

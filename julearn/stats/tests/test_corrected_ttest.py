@@ -45,6 +45,7 @@ def test_corrected_ttest() -> None:
 
     data1 = np.random.rand(10)
     data2 = np.random.rand(10) + 0.05
+    data3 = np.random.rand(10) + 0.1
     cv_mdsum = "maradona"
     scores1 = pd.DataFrame(
         {
@@ -77,3 +78,93 @@ def test_corrected_ttest() -> None:
         assert "model_2" in out
         assert "model_0" in out["model_1"].values
         assert "model_1" in out["model_2"].values
+
+    scores3 = pd.DataFrame(
+        {
+            "fold": np.arange(10) % 5,
+            "repeat": np.arange(10) // 5,
+            "score": data3,
+        }
+    )
+    scores3["cv_mdsum"] = cv_mdsum
+    scores3["n_train"] = 100
+    scores3["n_test"] = 20
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        out = corrected_ttest(scores1, scores2, scores3)
+        assert len(out) == 3
+        assert "p-val" in out
+        assert "p-val-corrected" in out
+        assert "model_1" in out
+        assert "model_2" in out
+        assert "model_0" in out["model_1"].values
+        assert "model_1" in out["model_1"].values
+        assert "model_1" in out["model_2"].values
+        assert "model_2" in out["model_2"].values
+
+
+def test_corrected_ttest_errors() -> None:
+    """Test the corrected_ttest function."""
+
+    data1 = np.random.rand(10)
+    data2 = np.random.rand(10) + 0.05
+    scores1 = pd.DataFrame(
+        {
+            "score": data1,
+        }
+    )
+    scores2 = pd.DataFrame(
+        {
+            "score": data2,
+        }
+    )
+
+    with pytest.raises(ValueError, match="cv_mdsum"):
+        corrected_ttest(scores1, scores2)
+
+    scores1["cv_mdsum"] = "maradona"
+    scores2["cv_mdsum"] = "messi"
+
+    with pytest.raises(ValueError, match="fold"):
+        corrected_ttest(scores1, scores2)
+
+    scores1["fold"] = np.arange(10) % 5
+    scores2["fold"] = np.arange(10) % 5
+
+    with pytest.raises(ValueError, match="repeat"):
+        corrected_ttest(scores1, scores2)
+
+    scores1["repeat"] = np.arange(10) // 5
+    scores2["repeat"] = np.arange(10) // 5
+
+    with pytest.raises(ValueError, match="n_train"):
+        corrected_ttest(scores1, scores2)
+
+    scores1["n_train"] = 100
+    scores2["n_train"] = 100
+
+    with pytest.raises(ValueError, match="n_test"):
+        corrected_ttest(scores1, scores2)
+
+    scores1["n_test"] = 90
+    scores2["n_test"] = 90
+
+    with pytest.raises(ValueError, match="different CVs"):
+        corrected_ttest(scores1, scores2)
+
+    scores2["cv_mdsum"] = "maradona"
+    scores3 = scores2
+
+    with pytest.raises(ValueError, match="two-sided"):
+        corrected_ttest(scores1, scores2, scores3, alternative="wrong")
+
+    scores1["n_train"] = [100] * 9 + [90]
+    scores1["n_test"] = 90
+    with pytest.warns(RuntimeWarning, match="training set"):
+        corrected_ttest(scores1, scores2)
+
+    scores1["n_train"] = 100
+    scores1["n_test"] = [100] * 9 + [90]
+    with pytest.warns(RuntimeWarning, match="testing set"):
+        corrected_ttest(scores1, scores2)

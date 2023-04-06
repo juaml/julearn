@@ -5,11 +5,11 @@
 # License: AGPL
 
 import re
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Union
 
 import pandas as pd
 
-from ...base import JuTransformer, change_column_type
+from ...base import ColumnTypesLike, JuTransformer, change_column_type
 from ...utils import logger, raise_error
 from ...utils.typing import DataLike
 
@@ -23,9 +23,22 @@ class SetColumnTypes(JuTransformer):
         A dictionary with the column types to set. The keys are the column
         types and the values are the columns to set the type to. If None, will
         set all the column types to `continuous` (default is None).
+    row_select_col_type : str or list of str or set of str or ColumnTypes
+        The column types needed to select rows (default is None)
+        Not really useful for this one, but here for compatibility.
+    row_select_vals : str, int, bool or list of str, int, bool
+        The value(s) which should be selected in the row_select_col_type
+        to select the rows used for training (default is None)
+        Not really useful for this one, but here for compatibility.
     """
 
-    def __init__(self, X_types: Optional[Dict[str, List[str]]] = None):
+    def __init__(self,
+                 X_types: Optional[Dict[str, List[str]]] = None,
+                 row_select_col_type:  Optional[ColumnTypesLike] = None,
+                 row_select_vals:  Optional[Union[str,
+                                                  int, list, bool]] = None,
+
+                 ):
         if X_types is None:
             X_types = {}
 
@@ -37,9 +50,13 @@ class SetColumnTypes(JuTransformer):
                     f"of type {type(columns)}"
                 )
         self.X_types = X_types
-        super().__init__(apply_to="*", needed_types=None)
+        super().__init__(
+            apply_to="*", needed_types=None,
+            row_select_col_type=row_select_col_type,
+            row_select_vals=row_select_vals
+        )
 
-    def fit(
+    def _fit(
         self, X: pd.DataFrame, y: Optional[DataLike] = None
     ) -> "SetColumnTypes":
         """Fit the transformer.

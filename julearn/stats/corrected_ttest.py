@@ -48,7 +48,7 @@ def _compute_corrected_ttest(
     df: Optional[int] = None,
     alternative: str = "two-sided",
 ) -> Tuple[float, float]:
-    """Computes paired t-test with corrected variance.
+    """Compute paired t-test with corrected variance.
 
     Parameters
     ----------

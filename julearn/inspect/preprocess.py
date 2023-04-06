@@ -50,7 +50,7 @@ def preprocess(
                 break
             i += 1
         else:
-            raise_error(f"No stepe named {until} found.")
+            raise_error(f"No step named {until} found.")
     df_out = pipeline[:i].transform(_X)
 
     if not isinstance(df_out, pd.DataFrame) and with_column_types is False:

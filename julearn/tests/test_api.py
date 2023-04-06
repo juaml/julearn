@@ -55,6 +55,7 @@ def test_run_cv_simple_binary(
     """
     X = ["sepal_length", "sepal_width", "petal_length"]
     y = "species"
+    X_types = {"features": X}
 
     scorers = ["accuracy", "balanced_accuracy"]
     api_params = {"model": "svm", "problem_type": "classification"}
@@ -73,22 +74,25 @@ def test_run_cv_simple_binary(
     # now let"s try target-dependent scores
     scorers = ["recall", "precision", "f1"]
     sk_y = (df_iris[y].values == "virginica").astype(int)
-    with pytest.warns(RuntimeWarning, match="treated as continuous"):
-        api_params = {
-            "model": "svm",
-            "pos_labels": "virginica",
-            "problem_type": "classification",
-        }
-        sklearn_model = SVC()
-        do_scoring_test(
-            X,
-            y,
-            data=df_iris,
-            api_params=api_params,
-            sklearn_model=sklearn_model,
-            scorers=scorers,
-            sk_y=sk_y,
-        )
+
+    model = PipelineCreator(apply_to="features", problem_type="classification")
+    model.add("svm")
+
+    api_params = {
+        "model": model,
+        "pos_labels": "virginica",
+    }
+    sklearn_model = SVC()
+    do_scoring_test(
+        X,
+        y,
+        data=df_iris,
+        api_params=api_params,
+        X_types=X_types,
+        sklearn_model=sklearn_model,
+        scorers=scorers,
+        sk_y=sk_y,
+    )
 
     # now let"s try proba-dependent scores
     X = ["sepal_length", "petal_length"]
@@ -376,6 +380,87 @@ def test_tune_hyperparam_gridsearch(df_iris: pd.DataFrame) -> None:
     # Compare the models
     clf1 = actual_estimator.best_estimator_.steps[-1][1]
     clf2 = clone(gs).fit(sk_X, sk_y).best_estimator_.steps[-1][1]
+    compare_models(clf1, clf2)
+
+
+def test_tune_hyperparam_gridsearch_groups(df_iris: pd.DataFrame) -> None:
+    """Test a run_cross_validation with hyperparameter tuning (gridsearch).
+
+    Parameters
+    ----------
+    df_iris : pd.DataFrame
+        The iris dataset as a multiclass classification problem.
+    """
+    # keep only two species
+    df_iris = df_iris[df_iris["species"].isin(["versicolor", "virginica"])]
+    df_iris = df_iris.copy()
+    X = ["sepal_length", "sepal_width", "petal_length"]
+    y = "species"
+    X_types = {"continuous": X}
+
+    df_iris["groups"] = np.digitize(
+        df_iris["sepal_length"],
+        bins=np.histogram(df_iris["sepal_length"], bins=20)[1],
+    )
+
+    sk_X = df_iris[X].values
+    sk_y = df_iris[y].values
+    sk_groups = df_iris["groups"].values
+
+    scoring = "accuracy"
+
+    np.random.seed(42)
+    cv_outer = GroupKFold(n_splits=2)
+    cv_inner = GroupKFold(n_splits=2)
+
+    model_params = {"svm__C": [0.01, 0.001]}
+    search_params = {"cv": cv_inner}
+    actual, actual_estimator = run_cross_validation(
+        X=X,
+        y=y,
+        data=df_iris,
+        X_types=X_types,
+        model="svm",
+        model_params=model_params,
+        cv=cv_outer,
+        scoring=[scoring],
+        groups="groups",
+        return_estimator="final",
+        search_params=search_params,
+        problem_type="classification",
+    )
+
+    # Now do the same with scikit-learn
+    np.random.seed(42)
+    cv_outer = GroupKFold(n_splits=2)
+    cv_inner = GroupKFold(n_splits=2)
+
+    clf = make_pipeline(SVC())
+    gs = GridSearchCV(clf, {"svc__C": [0.01, 0.001]}, cv=cv_inner)
+
+    expected = cross_validate(
+        gs,
+        sk_X,
+        sk_y,
+        cv=cv_outer,
+        scoring=[scoring],
+        groups=sk_groups,
+        fit_params={"groups": sk_groups},
+    )
+
+    assert len(actual.columns) == len(expected) + 5
+    assert len(actual["test_accuracy"]) == len(expected["test_accuracy"])
+    assert all(
+        [
+            a == b
+            for a, b in zip(actual["test_accuracy"], expected["test_accuracy"])
+        ]
+    )
+
+    # Compare the models
+    clf1 = actual_estimator.best_estimator_.steps[-1][1]
+    clf2 = clone(gs).fit(
+        sk_X, sk_y, groups=sk_groups).best_estimator_.steps[-1][1]
     compare_models(clf1, clf2)
 
 
