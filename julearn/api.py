@@ -6,65 +6,20 @@
 
 from typing import List, Optional, Union, Dict
 
-import hashlib
-import inspect
-import json
+
 
 import numpy as np
 import pandas as pd
 from sklearn.base import BaseEstimator
 from sklearn.model_selection import check_cv, cross_validate
-from sklearn.model_selection._split import PredefinedSplit, _CVIterableWrapper
 from sklearn.model_selection._search import BaseSearchCV
 from sklearn.pipeline import Pipeline
 
 from .pipeline import PipelineCreator
 from .prepare import check_consistency, prepare_input_data
 from .scoring import check_scoring
-from .utils import logger, raise_error
-
-
-def _recurse_to_list(a):
-    """Recursively convert a to a list."""
-    if isinstance(a, (list, tuple)):
-        return [_recurse_to_list(i) for i in a]
-    elif isinstance(a, np.ndarray):
-        return a.tolist()
-    else:
-        return a
-
-
-def _compute_cvmdsum(cv):
-    """Compute the sum of the CV generator."""
-    params = {k: v for k, v in vars(cv).items()}
-    params["class"] = cv.__class__.__name__
-
-    out = None
-
-    # Check for special cases that might not be comparable
-    if "random_state" in params:
-        if params["random_state"] is None:
-            if params.get("shuffle", True) is True:
-                # If it's shuffled and the random seed is None
-                out = "non-reproducible"
-
-    if isinstance(cv, _CVIterableWrapper):
-        splits = params.pop("cv")
-        params["cv"] = _recurse_to_list(splits)
-    if isinstance(cv, PredefinedSplit):
-        params["test_fold"] = params["test_fold"].tolist()
-        params["unique_folds"] = params["unique_folds"].tolist()
-
-    if "cv" in params:
-        if inspect.isclass(params["cv"]):
-            params["cv"] = params["cv"].__class__.__name__
-
-    if out is None:
-        out = hashlib.md5(
-            json.dumps(params, sort_keys=True).encode("utf-8")
-        ).hexdigest()
-
-    return out
+from .utils import logger, raise_error, _compute_cvmdsum
+from .inspect import Inspector
 
 
 def run_cross_validation(
@@ -76,6 +31,7 @@ def run_cross_validation(
     problem_type: Optional[str] = None,
     preprocess: Union[None, str, List[str]] = None,
     return_estimator: Optional[str] = None,
+    return_inspector: bool = False,
     return_train_score: bool = False,
     cv: Union[None, int] = None,
     groups: Optional[str] = None,
@@ -134,6 +90,9 @@ def run_cross_validation(
         * 'cv': Return the all the estimator from each CV split, fitted on the
           training data.
         * 'all': Return all the estimators (final and cv).
+
+    return_inspector : bool
+        Whether to return the inspector object (default is False)
 
     return_train_score : bool
         Whether to return the training score with the test scores
@@ -220,6 +179,14 @@ def run_cross_validation(
             f"return_estimator must be one of None, 'final', 'cv', 'all'. "
             f"Got {return_estimator}."
         )
+    if return_inspector:
+        if return_estimator is None:
+            logger.info("Inspector requested: setting return_estimator='all'")
+            return_estimator = "all"
+        if return_estimator != "all":
+            raise_error(
+                "return_inspector=True requires return_estimator to be `all`."
+            )
 
     X_types = {} if X_types is None else X_types
     if seed is not None:
@@ -387,9 +354,21 @@ def run_cross_validation(
     scores["fold"] = folds
     scores["cv_mdsum"] = cv_mdsum
 
-    out = pd.DataFrame(scores)
+    scores_df = pd.DataFrame(scores)
+    out = scores_df
     if return_estimator in ["final", "all"]:
         pipeline.fit(df_X, y, **fit_params)
-        out = out, pipeline
+        out = scores_df, pipeline
+
+    if return_inspector:
+        inspector = Inspector(
+            scores=scores_df,
+            model=pipeline,
+            X=df_X,
+            y=y,
+            groups=df_groups,
+            cv=cv_outer,
+        )
+        out = scores_df, pipeline, inspector
 
     return out

@@ -13,6 +13,9 @@ We later inspect the predictions of the model for each fold.
 #
 # License: AGPL
 from seaborn import load_dataset
+
+from sklearn.model_selection import RepeatedStratifiedKFold, ShuffleSplit
+
 from julearn import run_cross_validation
 from julearn.pipeline import PipelineCreator
 from julearn.utils import configure_logging
@@ -41,12 +44,15 @@ creator = PipelineCreator(problem_type="classification")
 creator.add("zscore")
 creator.add("svm")
 
-scores = run_cross_validation(
+cv = ShuffleSplit(n_splits=5, train_size=.7, random_state=200)
+
+scores, model, inspector = run_cross_validation(
     X=X,
     y=y,
     data=df_iris,
     model=creator,
-    return_estimator="cv",
+    return_inspector=True,
+    cv=cv,
 )
 
 print(scores)
@@ -54,10 +60,9 @@ print(scores)
 ###############################################################################
 # We can now inspect the predictions of the model for each fold.
 
-cv_predictions = fold_predictions(
-    scores=scores,
-    cv=cv,
-    X=X,
-    data=data,
-    func=True,
-)
+cv_predictions = inspector.folds.predict()
+
+print(cv_predictions)
+
+###############################################################################
+inspector.folds[0].model

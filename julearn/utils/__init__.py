@@ -4,3 +4,4 @@
 from . import logging
 
 from .logging import logger, configure_logging, raise_error, warn_with_log
+from ._cv import _compute_cvmdsum, is_nonoverlapping_cv

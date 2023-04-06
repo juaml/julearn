@@ -7,25 +7,25 @@ from ..transformers import JuColumnTransformer
 
 class PipelineInspector():
 
-    def __init__(self, pipe):
-        check_is_fitted(pipe)
-        self._pipe = pipe
+    def __init__(self, model):
+        check_is_fitted(model)
+        self._model = model
 
     def get_step_names(self):
-        return list(self._pipe.named_steps.keys())
+        return list(self._model.named_steps.keys())
 
     def get_step(self, name, as_estimator=False):
-        step = self._pipe.named_steps[name]
+        step = self._model.named_steps[name]
         if not as_estimator:
             step = _EstimatorInspector(step)
         return step
 
     def get_params(self):
-        return self._pipe.get_params()
+        return self._model.get_params()
 
     def get_fitted_params(self):
         fitted_params = {}
-        for name, step in self._pipe.steps:
+        for name, step in self._model.steps:
             params = _EstimatorInspector(step).get_fitted_params()
             fitted_params = {
                 **fitted_params,
