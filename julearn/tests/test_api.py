@@ -139,6 +139,48 @@ def test_run_cv_simple_binary(
         )
 
 
+def test_run_cv_simple_binary_groups(df_iris: pd.DataFrame) -> None:
+    """Test a simple binary classification problem with groups in the CV.
+
+    Parameters
+    ----------
+    df_iris : pd.DataFrame
+        The iris dataset as a multiclass classification problem.
+    """
+    # keep only two species
+    df_iris = df_iris[df_iris["species"].isin(["versicolor", "virginica"])]
+    df_iris = df_iris.copy()
+
+    X = ["sepal_length", "sepal_width", "petal_length"]
+    y = "species"
+    X_types = {"continuous": X}
+
+    df_iris["groups"] = np.digitize(
+        df_iris["sepal_length"],
+        bins=np.histogram(df_iris["sepal_length"], bins=20)[1],
+    )
+
+    scorers = ["accuracy", "balanced_accuracy"]
+    api_params = {
+        "model": "svm",
+        "problem_type": "classification",
+    }
+    sklearn_model = SVC()
+    cv = GroupKFold(n_splits=2)
+
+    do_scoring_test(
+        X=X,
+        y=y,
+        data=df_iris,
+        X_types=X_types,
+        groups="groups",
+        cv=cv,
+        scorers=scorers,
+        api_params=api_params,
+        sklearn_model=sklearn_model,
+    )
+
+
 def test_run_cv_simple_binary_errors(
     df_binary: pd.DataFrame, df_iris: pd.DataFrame
 ) -> None:
@@ -459,8 +501,11 @@ def test_tune_hyperparam_gridsearch_groups(df_iris: pd.DataFrame) -> None:
 
     # Compare the models
     clf1 = actual_estimator.best_estimator_.steps[-1][1]
-    clf2 = clone(gs).fit(
-        sk_X, sk_y, groups=sk_groups).best_estimator_.steps[-1][1]
+    clf2 = (
+        clone(gs)
+        .fit(sk_X, sk_y, groups=sk_groups)
+        .best_estimator_.steps[-1][1]
+    )
     compare_models(clf1, clf2)
 
 

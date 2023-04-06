@@ -13,6 +13,7 @@ import pandas as pd
 from sklearn.base import BaseEstimator
 from sklearn.model_selection import check_cv, cross_validate
 from sklearn.model_selection._split import PredefinedSplit, _CVIterableWrapper
+from sklearn.model_selection._search import BaseSearchCV
 from sklearn.pipeline import Pipeline
 
 from .pipeline import PipelineCreator
@@ -346,7 +347,8 @@ def run_cross_validation(
     cv_mdsum = _compute_cvmdsum(cv_outer)
     fit_params = {}
     if df_groups is not None:
-        fit_params["groups"] = df_groups.values
+        if isinstance(pipeline, BaseSearchCV):
+            fit_params["groups"] = df_groups.values
     scores = cross_validate(
         pipeline,
         df_X,
