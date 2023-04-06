@@ -8,7 +8,8 @@ import numpy as np
 import pandas as pd
 import pytest
 from numpy.testing import assert_array_equal
-from scipy.stats import pearsonr, spearmanr
+from scipy.stats import spearmanr
+from pandas.testing import assert_frame_equal
 
 from julearn.transformers import CBPM
 
@@ -29,7 +30,8 @@ def test_CBPM_posneg_correlated_features(
     X_pos = ["sepal_length", "petal_length", "petal_width"]
     X_neg = ["sepal_width"]
 
-    trans_X_posneg = CBPM(corr_sign="posneg").fit_transform(X_iris, y_iris)
+    trans_X_posneg = CBPM(corr_sign="posneg", agg_method=np.mean
+                          ).fit_transform(X_iris, y_iris)
     trans_man_pos = X_iris[X_pos].values.mean(axis=1)
     trans_man_neg = X_iris[X_neg].values.mean(axis=1)
     trans_man = np.concatenate(
@@ -53,9 +55,11 @@ def test_CBPM_pos_correlated_features(
 
     X_pos = ["sepal_length", "petal_length", "petal_width"]
 
-    trans_X_pos = CBPM(corr_sign="pos").fit_transform(X_iris[X_pos], y_iris)
+    trans_X_pos = CBPM(corr_sign="pos", agg_method=np.mean
+                       ).fit_transform(X_iris[X_pos], y_iris)
 
-    trans_X_pos_neg = CBPM(corr_sign="pos").fit_transform(X_iris, y_iris)
+    trans_X_pos_neg = CBPM(corr_sign="pos", agg_method=np.mean
+                           ).fit_transform(X_iris, y_iris)
 
     trans_man = X_iris[X_pos].values.mean(axis=1)
 
@@ -78,9 +82,11 @@ def test_CBPM_neg_correlated_features(
 
     X_neg = ["sepal_width"]
 
-    trans_X_neg = CBPM(corr_sign="neg").fit_transform(X_iris[X_neg], y_iris)
+    trans_X_neg = CBPM(corr_sign="neg", agg_method=np.mean
+                       ).fit_transform(X_iris[X_neg], y_iris)
 
-    trans_X_neg_neg = CBPM(corr_sign="neg").fit_transform(X_iris, y_iris)
+    trans_X_neg_neg = CBPM(corr_sign="neg", agg_method=np.mean
+                           ).fit_transform(X_iris, y_iris)
 
     trans_man = X_iris[X_neg].values.mean(axis=1)
 
@@ -105,7 +111,8 @@ def test_CBPM_warnings(X_iris: pd.DataFrame, y_iris: pd.DataFrame) -> None:
     with pytest.warns(
         RuntimeWarning, match="No feature with significant positive"
     ):
-        trans = CBPM(corr_sign="pos").fit_transform(X_iris[X_neg], y_iris)
+        trans = CBPM(corr_sign="pos", agg_method=np.mean
+                     ).fit_transform(X_iris[X_neg], y_iris)
 
     assert (trans == y_iris.values.mean()).all()
 
@@ -113,25 +120,30 @@ def test_CBPM_warnings(X_iris: pd.DataFrame, y_iris: pd.DataFrame) -> None:
     with pytest.warns(
         RuntimeWarning, match="No feature with significant negative"
     ):
-        trans = CBPM(corr_sign="neg").fit_transform(X_iris[X_pos], y_iris)
+        trans = CBPM(corr_sign="neg", agg_method=np.mean
+                     ).fit_transform(X_iris[X_pos], y_iris)
 
     assert (trans == y_iris.values.mean()).all()
 
     # Use posneg, but only positive present
-    trans_pos = CBPM(corr_sign="pos").fit_transform(X_iris[X_pos], y_iris)
+    trans_pos = CBPM(corr_sign="pos", agg_method=np.mean
+                     ).fit_transform(X_iris[X_pos], y_iris)
     with pytest.warns(
         RuntimeWarning, match="Only features with positive correlations"
     ):
-        trans = CBPM(corr_sign="posneg").fit_transform(X_iris[X_pos], y_iris)
+        trans = CBPM(corr_sign="posneg", agg_method=np.mean
+                     ).fit_transform(X_iris[X_pos], y_iris)
 
     assert_array_equal(trans, trans_pos)
 
     # Use posneg, but only negative present
-    trans_neg = CBPM(corr_sign="neg").fit_transform(X_iris[X_neg], y_iris)
+    trans_neg = CBPM(corr_sign="neg", agg_method=np.mean
+                     ).fit_transform(X_iris[X_neg], y_iris)
     with pytest.warns(
         RuntimeWarning, match="Only features with negative correlations"
     ):
-        trans = CBPM(corr_sign="posneg").fit_transform(X_iris[X_neg], y_iris)
+        trans = CBPM(corr_sign="posneg", agg_method=np.mean
+                     ).fit_transform(X_iris[X_neg], y_iris)
 
     assert_array_equal(trans, trans_neg)
 
@@ -141,7 +153,8 @@ def test_CBPM_warnings(X_iris: pd.DataFrame, y_iris: pd.DataFrame) -> None:
         RuntimeWarning,
         match="No feature with significant negative or positive",
     ):
-        trans = CBPM(corr_sign="posneg").fit_transform(df_shuffled_X, y_iris)
+        trans = CBPM(corr_sign="posneg", agg_method=np.mean
+                     ).fit_transform(df_shuffled_X, y_iris)
     assert (trans == y_iris.values.mean()).all()
 
 
@@ -158,7 +171,7 @@ def test_CBPM_lower_sign_threshhold(
         The iris dataset target
     """
     trans_posneg = CBPM(
-        corr_sign="pos", significance_threshold=1e-50
+        corr_sign="pos", significance_threshold=1e-50, agg_method=np.mean
     ).fit_transform(X_iris, y_iris)
 
     # I have checked before that only these 2 have pvalues under 1e-50
@@ -186,7 +199,8 @@ def test_CBPM_lower_sign_threshhold_no_sig(
         match="No feature with significant negative or positive",
     ):
         trans_posneg = CBPM(
-            corr_sign="posneg", significance_threshold=1e-100
+            corr_sign="posneg", significance_threshold=1e-100,
+            agg_method=np.mean
         ).fit_transform(X_iris, y_iris)
     assert (trans_posneg == y_iris.values.mean()).all()
 
@@ -206,7 +220,9 @@ def test_CBPM_spearman(X_iris: pd.DataFrame, y_iris: pd.DataFrame) -> None:
     X_neg = ["sepal_width"]
 
     # I have checked before all are still significant with spearman
-    trans_posneg = CBPM(corr_method=spearmanr).fit_transform(X_iris, y_iris)
+    trans_posneg = CBPM(corr_method=spearmanr,
+                        agg_method=np.mean
+                        ).fit_transform(X_iris, y_iris)
 
     trans_man_pos = X_iris[X_pos].values.mean(axis=1)
     trans_man_neg = X_iris[X_neg].values.mean(axis=1)
@@ -216,10 +232,10 @@ def test_CBPM_spearman(X_iris: pd.DataFrame, y_iris: pd.DataFrame) -> None:
     assert_array_equal(trans_posneg, trans_man)
 
 
-def test_CBPM_posneg_weighted_correlated_features(
-    X_iris: pd.DataFrame, y_iris: pd.DataFrame
+def test_CBPM_set_output_posneg(
+    X_iris: pd.DataFrame, y_iris: pd.DataFrame,
 ) -> None:
-    """Test the CBPM transformer with weighted average.
+    """
 
     Parameters
     ----------
@@ -231,26 +247,29 @@ def test_CBPM_posneg_weighted_correlated_features(
 
     X_pos = ["sepal_length", "petal_length", "petal_width"]
     X_neg = ["sepal_width"]
-    trans_X_posneg = CBPM(
-        corr_sign="posneg", weight_by_corr=True
-    ).fit_transform(X_iris, y_iris)
-    corr_pos = X_iris[X_pos].apply(lambda col: pearsonr(col, y_iris)[0]).values
-    corr_neg = X_iris[X_neg].apply(lambda col: pearsonr(col, y_iris)[0]).values
 
-    trans_man_pos = np.average(X_iris[X_pos].values, weights=corr_pos, axis=1)
+    # I have checked before all are still significant with spearman
+    trans_posneg = (CBPM(corr_method=spearmanr,
+                         agg_method=np.mean,
+                         corr_sign="posneg"
+                         )
+                    .set_output(transform="pandas")
+                    .fit_transform(X_iris, y_iris)
+                    )
 
-    trans_man_neg = np.average(X_iris[X_neg].values, weights=corr_neg, axis=1)
-
+    trans_man_pos = X_iris[X_pos].values.mean(axis=1)
+    trans_man_neg = X_iris[X_neg].values.mean(axis=1)
     trans_man = np.concatenate(
         [trans_man_pos.reshape(-1, 1), trans_man_neg.reshape(-1, 1)], axis=1
     )
-    assert_array_equal(trans_X_posneg, trans_man)
+    df_trans_man = pd.DataFrame(trans_man, columns=["positive", "negative"])
+    assert_frame_equal(trans_posneg, df_trans_man)
 
 
-def test_CBPM_pos_weighted_correlated_features(
-    X_iris: pd.DataFrame, y_iris: pd.DataFrame
+def test_CBPM_set_output_pos(
+    X_iris: pd.DataFrame, y_iris: pd.DataFrame,
 ) -> None:
-    """Test the CBPM transformer with weighted average.
+    """
 
     Parameters
     ----------
@@ -261,20 +280,25 @@ def test_CBPM_pos_weighted_correlated_features(
     """
 
     X_pos = ["sepal_length", "petal_length", "petal_width"]
-    trans_X_pos = CBPM(corr_sign="pos", weight_by_corr=True).fit_transform(
-        X_iris[X_pos], y_iris
-    )
 
-    corr = X_iris[X_pos].apply(lambda col: pearsonr(col, y_iris)[0]).values
-    trans_man = np.average(X_iris[X_pos].values, weights=corr, axis=1)
+    # I have checked before all are still significant with spearman
+    trans_pos = (CBPM(corr_method=spearmanr,
+                      agg_method=np.mean,
+                      corr_sign="pos"
+                      )
+                 .set_output(transform="pandas")
+                 .fit_transform(X_iris, y_iris)
+                 )
 
-    assert_array_equal(trans_X_pos, trans_man)
+    trans_man_pos = X_iris[X_pos].values.mean(axis=1)
+    df_trans_man = pd.DataFrame(trans_man_pos, columns=["positive"])
+    assert_frame_equal(trans_pos, df_trans_man)
 
 
-def test_CBPM_neg_weighted_correlated_features(
-    X_iris: pd.DataFrame, y_iris: pd.DataFrame
+def test_CBPM_set_output_neg(
+    X_iris: pd.DataFrame, y_iris: pd.DataFrame,
 ) -> None:
-    """Test the CBPM transformer with weighted average.
+    """
 
     Parameters
     ----------
@@ -285,10 +309,16 @@ def test_CBPM_neg_weighted_correlated_features(
     """
 
     X_neg = ["sepal_width"]
-    trans_X_neg = CBPM(corr_sign="neg", weight_by_corr=True).fit_transform(
-        X_iris[X_neg], y_iris
-    )
-    corr = X_iris[X_neg].apply(lambda col: pearsonr(col, y_iris)[0]).values
-    trans_man = np.average(X_iris[X_neg].values, weights=corr, axis=1)
 
-    assert_array_equal(trans_X_neg, trans_man)
+    # I have checked before all are still significant with spearman
+    trans_neg = (CBPM(corr_method=spearmanr,
+                      agg_method=np.mean,
+                      corr_sign="neg"
+                      )
+                 .set_output(transform="pandas")
+                 .fit_transform(X_iris, y_iris)
+                 )
+
+    trans_man_neg = X_iris[X_neg].values.mean(axis=1)
+    df_trans_man = pd.DataFrame(trans_man_neg, columns=["negative"])
+    assert_frame_equal(trans_neg, df_trans_man)
