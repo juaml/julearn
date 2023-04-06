@@ -223,7 +223,8 @@ class PipelineCreator:
         for param, vals in params.items():
             # If we have more than 1 value, we will tune it.
             # If not, it will be set in the model.
-            if hasattr(vals, "__iter__") and not isinstance(vals, str):
+            if (hasattr(vals, "__iter__")
+                    and not isinstance(vals, (str, EstimatorLike))):
                 if len(vals) > 1:
                     logger.info(f"Tuning hyperparameter {param} = {vals}")
                     params_to_tune[param] = vals

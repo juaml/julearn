@@ -11,6 +11,7 @@ import pandas as pd
 import pytest
 from pytest_lazyfixture import lazy_fixture
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
+from sklearn.ensemble import RandomForestRegressor
 
 from julearn.base import ColumnTypesLike, WrapModel
 from julearn.models import get_model
@@ -350,5 +351,10 @@ def test_added_repeated_transformers() -> None:
     assert pipeline_creator._steps[0].name == "zscore"
     assert pipeline_creator._steps[1].name == "zscore_1"
 
+
+def test_hyperparameter_ter():
+    (PipelineCreator(problem_type="classification")
+     .add("confound_removal", model_confound=RandomForestRegressor())
+     )
 
 # TODO: Test adding target transformers
