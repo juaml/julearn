@@ -344,7 +344,9 @@ def run_cross_validation(
     scoring = check_scoring(pipeline, scoring)
 
     cv_mdsum = _compute_cvmdsum(cv_outer)
-
+    fit_params = {}
+    if df_groups is not None:
+        fit_params["groups"] = df_groups.values
     scores = cross_validate(
         pipeline,
         df_X,
@@ -356,6 +358,7 @@ def run_cross_validation(
         n_jobs=n_jobs,
         return_train_score=return_train_score,
         verbose=verbose,
+        fit_params=fit_params,
     )
 
     n_repeats = getattr(cv_outer, "n_repeats", 1)
@@ -375,7 +378,7 @@ def run_cross_validation(
 
     out = pd.DataFrame(scores)
     if return_estimator in ["final", "all"]:
-        pipeline.fit(df_X, y)
+        pipeline.fit(df_X, y, **fit_params)
         out = out, pipeline
 
     return out
