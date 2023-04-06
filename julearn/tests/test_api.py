@@ -596,6 +596,18 @@ def test_return_estimators(df_iris: pd.DataFrame) -> None:
 
     cv = StratifiedKFold(2)
 
+    with pytest.raises(ValueError, match="must be one of"):
+        scores = run_cross_validation(
+            X=X,
+            y=y,
+            data=df_iris,
+            X_types=X_types,
+            model="svm",
+            problem_type="classification",
+            cv=cv,
+            return_estimator=True,
+        )
+
     scores = run_cross_validation(
         X=X,
         y=y,
