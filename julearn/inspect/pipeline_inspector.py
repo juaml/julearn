@@ -17,7 +17,7 @@ class PipelineInspector():
     def get_step(self, name, as_estimator=False):
         step = self._pipe.named_steps[name]
         if not as_estimator:
-            step = EstimatorInspector(step)
+            step = _EstimatorInspector(step)
         return step
 
     def get_params(self):
@@ -26,7 +26,7 @@ class PipelineInspector():
     def get_fitted_params(self):
         fitted_params = {}
         for name, step in self._pipe.steps:
-            params = EstimatorInspector(step).get_fitted_params()
+            params = _EstimatorInspector(step).get_fitted_params()
             fitted_params = {
                 **fitted_params,
                 ** {f"{name}__{param}": val for param, val in params.items()}
@@ -34,7 +34,7 @@ class PipelineInspector():
         return fitted_params
 
 
-class EstimatorInspector():
+class _EstimatorInspector():
     def __init__(self, estimator):
         self._estimator = estimator
 

@@ -17,7 +17,7 @@ will discuss the options you have.
 from sklearn.datasets import load_diabetes  # to load data
 from julearn.pipeline import PipelineCreator
 from julearn import run_cross_validation
-from julearn.inspect.preprocess import preprocess
+from julearn.inspect import preprocess
 
 # load in the data
 df_features, target = load_diabetes(return_X_y=True, as_frame=True)

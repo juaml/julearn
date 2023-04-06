@@ -4,7 +4,7 @@ from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 
-from julearn.inspect import EstimatorInspector, PipelineInspector
+from julearn.inspect import _EstimatorInspector, PipelineInspector
 from julearn.pipeline import PipelineCreator
 from julearn.transformers import JuColumnTransformer
 
@@ -45,7 +45,7 @@ def test_get_stepnames(steps, df_iris):
     "steps,as_estimator,returns", [
         (["svm"], True, [SVC()]),
         (["zscore", "pca", "svm"], True, [StandardScaler(), PCA(), SVC()]),
-        (["svm"], False, [EstimatorInspector(SVC())]),
+        (["svm"], False, [_EstimatorInspector(SVC())]),
 
     ])
 def test_steps(steps, as_estimator, returns, df_iris):
@@ -70,7 +70,7 @@ def test_steps(steps, as_estimator, returns, df_iris):
 def test_inspect_estimator(est, fitted_params, df_iris):
 
     est.fit(df_iris.iloc[:, :-1], df_iris.species)
-    inspector = EstimatorInspector(est)
+    inspector = _EstimatorInspector(est)
     assert est.get_params() == inspector.get_params()
     inspect_params = inspector.get_fitted_params()
     inspect_params.pop("column_transformer_", None)
