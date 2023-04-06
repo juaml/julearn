@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Preprocessing with variance threshold, zscore and PCA &mdash; julearn  documentation</title>
@@ -15,10 +15,9 @@
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
         <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/js/theme.js"></script>
@@ -33,12 +32,16 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html">
-            <img src="../../_static/julearn_logo_it.png" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../../index.html">
+            
+              <img src="../../_static/julearn_logo_it.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -84,7 +87,7 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a></li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="index.html">Basic Examples</a></li>
       <li class="breadcrumb-item active">Preprocessing with variance threshold, zscore and PCA</li>
       <li class="wy-breadcrumbs-aside">
@@ -98,7 +101,7 @@
              
   <div class="sphx-glr-download-link-note admonition note">
 <p class="admonition-title">Note</p>
-<p>Click <a class="reference internal" href="#sphx-glr-download-auto-examples-basic-plot-transform-until-py"><span class="std std-ref">here</span></a>
+<p><a class="reference internal" href="#sphx-glr-download-auto-examples-basic-plot-transform-until-py"><span class="std std-ref">Go to the end</span></a>
 to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="preprocessing-with-variance-threshold-zscore-and-pca">
@@ -123,13 +126,13 @@ using PCA. We will check the features after each preprocessing step.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s1">&#39;INFO&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-12-08 10:42:46,469 - julearn - INFO - ===== Lib Versions =====
-2022-12-08 10:42:46,469 - julearn - INFO - numpy: 1.23.5
-2022-12-08 10:42:46,469 - julearn - INFO - scipy: 1.9.3
-2022-12-08 10:42:46,469 - julearn - INFO - sklearn: 1.0.2
-2022-12-08 10:42:46,469 - julearn - INFO - pandas: 1.4.4
-2022-12-08 10:42:46,469 - julearn - INFO - julearn: 0.2.6.dev4
-2022-12-08 10:42:46,469 - julearn - INFO - ========================
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-04-06 09:46:40,752 - julearn - INFO - ===== Lib Versions =====
+2023-04-06 09:46:40,752 - julearn - INFO - numpy: 1.23.5
+2023-04-06 09:46:40,752 - julearn - INFO - scipy: 1.10.1
+2023-04-06 09:46:40,752 - julearn - INFO - sklearn: 1.0.2
+2023-04-06 09:46:40,753 - julearn - INFO - pandas: 1.4.4
+2023-04-06 09:46:40,753 - julearn - INFO - julearn: 0.3.1.dev1
+2023-04-06 09:46:40,753 - julearn - INFO - ========================
 </pre></div>
 </div>
 <p>Load the iris data from seaborn</p>
@@ -181,27 +184,27 @@ and then train a random forest model</p>
     <span class="n">return_estimator</span><span class="o">=</span><span class="s1">&#39;final&#39;</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-12-08 10:42:46,485 - julearn - INFO - Setting random seed to 200
-2022-12-08 10:42:46,486 - julearn - INFO - Using default CV
-2022-12-08 10:42:46,486 - julearn - INFO - ==== Input Data ====
-2022-12-08 10:42:46,486 - julearn - INFO - Using dataframe as input
-2022-12-08 10:42:46,486 - julearn - INFO - Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2022-12-08 10:42:46,486 - julearn - INFO - Target: species
-2022-12-08 10:42:46,486 - julearn - INFO - Expanded X: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2022-12-08 10:42:46,486 - julearn - INFO - Expanded Confounds: []
-2022-12-08 10:42:46,487 - julearn - INFO - ====================
-2022-12-08 10:42:46,487 - julearn - INFO -
-2022-12-08 10:42:46,487 - julearn - INFO - ====== Model ======
-2022-12-08 10:42:46,487 - julearn - INFO - Obtaining model by name: rf
-2022-12-08 10:42:46,487 - julearn - INFO - ===================
-2022-12-08 10:42:46,487 - julearn - INFO -
-2022-12-08 10:42:46,487 - julearn - INFO - = Model Parameters =
-2022-12-08 10:42:46,487 - julearn - INFO - Setting hyperparameter select_variance__threshold = 0.15
-2022-12-08 10:42:46,488 - julearn - INFO - Setting hyperparameter pca__n_components = 2
-2022-12-08 10:42:46,489 - julearn - INFO - Setting hyperparameter rf__n_estimators = 200
-2022-12-08 10:42:46,490 - julearn - INFO - ====================
-2022-12-08 10:42:46,490 - julearn - INFO -
-2022-12-08 10:42:46,490 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-04-06 09:46:40,779 - julearn - INFO - Setting random seed to 200
+2023-04-06 09:46:40,779 - julearn - INFO - Using default CV
+2023-04-06 09:46:40,779 - julearn - INFO - ==== Input Data ====
+2023-04-06 09:46:40,779 - julearn - INFO - Using dataframe as input
+2023-04-06 09:46:40,779 - julearn - INFO - Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2023-04-06 09:46:40,780 - julearn - INFO - Target: species
+2023-04-06 09:46:40,780 - julearn - INFO - Expanded X: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2023-04-06 09:46:40,780 - julearn - INFO - Expanded Confounds: []
+2023-04-06 09:46:40,781 - julearn - INFO - ====================
+2023-04-06 09:46:40,781 - julearn - INFO -
+2023-04-06 09:46:40,781 - julearn - INFO - ====== Model ======
+2023-04-06 09:46:40,781 - julearn - INFO - Obtaining model by name: rf
+2023-04-06 09:46:40,782 - julearn - INFO - ===================
+2023-04-06 09:46:40,782 - julearn - INFO -
+2023-04-06 09:46:40,782 - julearn - INFO - = Model Parameters =
+2023-04-06 09:46:40,782 - julearn - INFO - Setting hyperparameter select_variance__threshold = 0.15
+2023-04-06 09:46:40,783 - julearn - INFO - Setting hyperparameter pca__n_components = 2
+2023-04-06 09:46:40,785 - julearn - INFO - Setting hyperparameter rf__n_estimators = 200
+2023-04-06 09:46:40,786 - julearn - INFO - ====================
+2023-04-06 09:46:40,786 - julearn - INFO -
+2023-04-06 09:46:40,786 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
 </pre></div>
 </div>
 <p>Now let’s look at the data after pre-processing. It can be done using
@@ -320,7 +323,7 @@ last preprocessing step we don’t really need the <cite>until</cite> argument
 [100 rows x 2 columns]
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  7.288 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  10.011 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-basic-plot-transform-until-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/4284419cd0632120517626f0a3f0b78a/plot_transform_until.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_transform_until.py</span></code></a></p>
@@ -370,6 +373,7 @@ last preprocessing step we don’t really need the <cite>until</cite> argument
       <dd><a href="../../../v0.2.3/index.html">v0.2.3</a></dd>
       <dd><a href="../../../v0.2.4/index.html">v0.2.4</a></dd>
       <dd><a href="../../../v0.2.5/index.html">v0.2.5</a></dd>
+      <dd><a href="../../../v0.2.7/index.html">v0.2.7</a></dd>
     </dl>
     <dl>
       <dt>Branches</dt>
