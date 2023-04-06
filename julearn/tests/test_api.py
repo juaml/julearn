@@ -55,6 +55,7 @@ def test_run_cv_simple_binary(
     """
     X = ["sepal_length", "sepal_width", "petal_length"]
     y = "species"
+    X_types = {"features": X}
 
     scorers = ["accuracy", "balanced_accuracy"]
     api_params = {"model": "svm", "problem_type": "classification"}
@@ -73,22 +74,25 @@ def test_run_cv_simple_binary(
     # now let"s try target-dependent scores
     scorers = ["recall", "precision", "f1"]
     sk_y = (df_iris[y].values == "virginica").astype(int)
-    with pytest.warns(RuntimeWarning, match="treated as continuous"):
-        api_params = {
-            "model": "svm",
-            "pos_labels": "virginica",
-            "problem_type": "classification",
-        }
-        sklearn_model = SVC()
-        do_scoring_test(
-            X,
-            y,
-            data=df_iris,
-            api_params=api_params,
-            sklearn_model=sklearn_model,
-            scorers=scorers,
-            sk_y=sk_y,
-        )
+
+    model = PipelineCreator(apply_to="features", problem_type="classification")
+    model.add("svm")
+
+    api_params = {
+        "model": model,
+        "pos_labels": "virginica",
+    }
+    sklearn_model = SVC()
+    do_scoring_test(
+        X,
+        y,
+        data=df_iris,
+        api_params=api_params,
+        X_types=X_types,
+        sklearn_model=sklearn_model,
+        scorers=scorers,
+        sk_y=sk_y,
+    )
 
     # now let"s try proba-dependent scores
     X = ["sepal_length", "petal_length"]
