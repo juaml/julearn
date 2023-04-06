@@ -180,6 +180,7 @@ def do_scoring_test(
     api_params: Dict[str, Any],
     sklearn_model: EstimatorLike,
     scorers: List[str],
+    groups: Optional[str] = None,
     X_types: Optional[Dict[str, List[str]]] = None,
     cv: int = 5,
     sk_y: Optional[np.ndarray] = None,
@@ -195,6 +196,8 @@ def do_scoring_test(
         The target name.
     data : pd.DataFrame
         The data.
+    groups : str, optional
+        The group name, by default None.
     X_types : Dict[str, List[str]]
         The feature types.
     api_params : Dict[str, Any]
@@ -215,22 +218,31 @@ def do_scoring_test(
         sk_y = data[y].values  # type: ignore
 
     params_dict = {k: v for k, v in api_params.items()}
-    jucv = KFold(n_splits=cv, random_state=42, shuffle=True)
+    if isinstance(cv, int):
+        jucv = KFold(n_splits=cv, random_state=42, shuffle=True)
+        sk_cv = KFold(n_splits=cv, random_state=42, shuffle=True)
+    else:
+        jucv = cv
+        sk_cv = cv
+    sk_groups = None
+    if groups is not None:
+        sk_groups = data[groups].values
     np.random.seed(42)
     actual, actual_estimator = run_cross_validation(
         X=X,
         y=y,
         X_types=X_types,
         data=data,
+        groups=groups,
         scoring=scorers,
         cv=jucv,
         return_estimator="final",
         **params_dict,
     )
-    sk_cv = KFold(n_splits=cv, random_state=42, shuffle=True)
+
     np.random.seed(42)
     expected = cross_validate(
-        sklearn_model, sk_X, sk_y, cv=sk_cv, scoring=scorers
+        sklearn_model, sk_X, sk_y, cv=sk_cv, scoring=scorers, groups=sk_groups
     )
 
     # Compare the models
