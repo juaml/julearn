@@ -92,7 +92,7 @@ class ChangeColumnTypes(JuTransformer):
         pd.DataFrame
             The transformed data.
         """
-        return X
+        return X.rename(columns=self._renamer)
 
     def get_feature_names_out(
         self, input_features: Optional[List[str]] = None
