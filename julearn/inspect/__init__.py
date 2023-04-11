@@ -4,4 +4,5 @@
 
 from .inspector import Inspector
 from ._preprocess import preprocess
-from ._pipeline import PipelineInspector
+from ._pipeline import PipelineInspector, _EstimatorInspector
+

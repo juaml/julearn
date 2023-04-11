@@ -4,7 +4,6 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import List, Union
 
 import numpy as np
 import hashlib
@@ -26,6 +25,7 @@ from ..model_selection import (
     RepeatedStratifiedGroupsKFold,
     StratifiedGroupsKFold,
 )
+
 
 def _recurse_to_list(a):
     """Recursively convert a to a list."""
