@@ -14,9 +14,6 @@ from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 from julearn.models import get_model, register_model, reset_model_register
 
 
-# TODO: @samihamdan: Fix the ModelLike protocol to avoid all this type: ignore
-
-
 def test_register_model() -> None:
     """Test the register model function."""
     register_model(

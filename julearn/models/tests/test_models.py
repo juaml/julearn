@@ -97,7 +97,6 @@ def test_naive_bayes_estimators(
             f"{model_name}__{t_param}": t_value
             for t_param, t_value in model_params.items()
         }
-        # TODO: @samihamdan, fix the protocol.
         t_model = model_class(**model_params)  # type: ignore
     else:
         t_model = model_class()
@@ -225,7 +224,6 @@ def test_classificationestimators(
             f"{model_name}__{t_param}": t_value
             for t_param, t_value in model_params.items()
         }
-        # TODO: @samihamdan, fix the protocol.
         t_model = model_class(**model_params)  # type: ignore
     else:
         t_model = model_class()
@@ -322,7 +320,6 @@ def test_regression_estimators(
             f"{model_name}__{t_param}": t_value
             for t_param, t_value in model_params.items()
         }
-        # TODO: @samihamdan, fix the protocol.
         t_model = model_class(**model_params)  # type: ignore
     else:
         t_model = model_class()

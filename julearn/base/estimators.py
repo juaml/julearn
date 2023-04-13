@@ -343,7 +343,6 @@ class WrapModel(JuBaseEstimator):
             order, as they appear in the attribute :term:`classes_`.
         """
         Xt = self.filter_columns(X)
-        # TODO: @samihamdan: check the protocol
         return self.model_.predict_proba(Xt)  # type: ignore
 
     @available_if(_wrapped_model_has("decision_function"))
@@ -362,8 +361,26 @@ class WrapModel(JuBaseEstimator):
             in the model.
         """
         Xt = self.filter_columns(X)
-        # TODO: @samihamdan: check the protocol
         return self.model_.decision_function(Xt)  # type: ignore
+
+    @available_if(_wrapped_model_has("predict_log_proba"))
+    def predict_log_proba(self, X: pd.DataFrame) -> np.ndarray:
+        """Compute probabilities of possible outcomes for samples in X.
+
+        Parameters
+        ----------
+        X : pd.DataFrame
+            The data to predict on.
+
+        Returns
+        -------
+        np.ndarray
+            Returns the probability of the sample for each class in
+            the model. The columns correspond to the classes in sorted
+            order, as they appear in the attribute :term:`classes_`.
+        """
+        Xt = self.filter_columns(X)
+        return self.model_.predict_log_proba(Xt)  # type: ignore
 
     @property
     def classes_(self) -> np.ndarray:

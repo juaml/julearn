@@ -207,7 +207,6 @@ class PipelineCreator:
                 raise_error(
                     "TargetPipelineCreator can only be added to the target."
                 )
-            # TODO: @samihamdan fix the protocol
             step = step.to_pipeline()  # type: ignore
 
         # Validate the step
@@ -425,8 +424,7 @@ class PipelineCreator:
         if self._added_target_transformer:
             # If we have a target transformer, we need to wrap the model
             # in a the right "Targeted" transformer.
-            # TODO: Deal with hyperparemeters in the model (@samihamdan)
-            # TODO: @samihamdan: Fix the model_estimator typing hints
+            # TODO: Deal with hyperparemeters in the model
             target_model_step = self._wrap_target_model(
                 model_name,
                 model_estimator,  # type: ignore

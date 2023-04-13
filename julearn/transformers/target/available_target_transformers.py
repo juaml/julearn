@@ -57,7 +57,6 @@ def get_target_transformer(name: str, **params: Any) -> JuTargetTransformer:
             f"Valid options are: {list(_available_target_transformers.keys())}"
         )
     trans = _available_target_transformers[name]
-    # TODO: @samihamdan: fix this typing issue
     out = trans(**params)  # type: ignore
     return out
 

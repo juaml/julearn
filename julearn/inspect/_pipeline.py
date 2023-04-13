@@ -55,4 +55,4 @@ class _EstimatorInspector():
 
     @property
     def estimator(self):
-        return self.estimator
+        return self._estimator

@@ -65,7 +65,6 @@ class ConfoundRemover(JuTransformer):
         row_select_vals:  Optional[Union[str, int, List, bool]] = None,
     ):
         if model_confound is None:
-            # TODO: @samihamdan: Fix protocol
             model_confound = LinearRegression()  # type: ignore
         self.model_confound = model_confound
         self.confounds = ensure_column_types(confounds)
@@ -107,7 +106,6 @@ class ConfoundRemover(JuTransformer):
 
         def fit_confound_models(X: Scalar) -> ModelLike:
             _model = clone(self.model_confound)
-            # TODO: @samihamdan: Fix protocol
             _model.fit(ser_confound.values, X)  # type: ignore
             return _model  # type: ignore
 

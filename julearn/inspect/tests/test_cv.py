@@ -2,8 +2,9 @@ import pandas as pd
 from sklearn.model_selection import RepeatedKFold
 from sklearn.base import BaseEstimator
 from julearn.base.estimators import WrapModel
-from julearn.inspect import FoldsInspector
+from julearn.inspect import FoldsInspector, PipelineInspector
 from julearn.utils import _compute_cvmdsum
+from julearn.pipeline import PipelineCreator
 from numpy.testing import assert_array_almost_equal
 import pytest
 
@@ -18,8 +19,14 @@ class MockModelReturnsIndex(BaseEstimator):
     def predict_proba(self, X):
         return X.index
 
+    def predict_log_proba(self, X):
+        return X.index
+
     def decision_function(self, X):
         return X.index
+
+    def __sklearn_is_fitted__(self):
+        return True
 
 
 class MockRegressorReturnsIndex(BaseEstimator):
@@ -28,6 +35,9 @@ class MockRegressorReturnsIndex(BaseEstimator):
 
     def predict(self, X):
         return X.index
+
+    def __sklearn_is_fitted__(self):
+        return True
 
 
 def scores(df_typed_iris, n_iters=5, mock_model=None):
@@ -68,6 +78,7 @@ def test_get_predictions(get_cv_scores, df_typed_iris):
     y = df_typed_iris.iloc[:, -1]
     cv, df_scores = get_cv_scores
     inspector = FoldsInspector(df_scores, cv=cv, X=X, y=y)
+    print(df_scores)
     assert_array_almost_equal(
         inspector.predict().values.flatten(),
         X.index.values
@@ -75,6 +86,12 @@ def test_get_predictions(get_cv_scores, df_typed_iris):
     assert_array_almost_equal(
         inspector.predict_proba().values.flatten(),
         X.index.values
+    )
+
+    assert_array_almost_equal(
+        inspector.predict_log_proba().values.flatten(),
+        X.index.values
+
     )
     assert_array_almost_equal(
         inspector.decision_function().values.flatten(),
@@ -108,3 +125,46 @@ def test_predictions_available(get_cv_scores, df_typed_iris):
             match="This 'FoldsInspector' has no attribute 'decision_function'"
     ):
         inspector.decision_function()
+
+
+@pytest.mark.parametrize(
+    'get_cv_scores', [
+        [2, MockRegressorReturnsIndex]
+    ], indirect=True)
+def test_invalid_func(get_cv_scores, df_typed_iris):
+    X = df_typed_iris.iloc[:, :-1]
+    y = df_typed_iris.iloc[:, -1]
+    cv, df_scores = get_cv_scores
+    inspector = FoldsInspector(df_scores, cv=cv, X=X, y=y)
+    with pytest.raises(
+        ValueError,
+        match="Invalid func: no"
+    ):
+        inspector._get_predictions("no")
+
+
+@pytest.mark.parametrize(
+    'get_cv_scores', [
+        5
+    ], indirect=True)
+def test_foldsinspector_iter(get_cv_scores, df_typed_iris):
+
+    X = df_typed_iris.iloc[:, :-1]
+    y = df_typed_iris.iloc[:, -1]
+    cv, df_scores = get_cv_scores
+    df_scores["estimator"] = [(
+        PipelineCreator(problem_type="regression")
+        .add(MockRegressorReturnsIndex())
+        .to_pipeline()
+        .fit(X, y)
+    ) for _ in range(len(df_scores))]
+
+    inspector = FoldsInspector(df_scores, cv=cv, X=X, y=y)
+
+    for fold_inspector in inspector:
+        i_model = fold_inspector.model
+
+        assert isinstance(fold_inspector.model, PipelineInspector)
+        assert isinstance(
+            i_model.get_step("mockregressorreturnsindex").estimator,
+            MockRegressorReturnsIndex)

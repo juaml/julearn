@@ -98,3 +98,15 @@ def test_inspect_pipeline(df_iris):
     }
 
     assert expected_fitted_params == inspect_params
+
+
+def test_get_estimator(df_iris):
+    pipe = (PipelineCreator(problem_type="classification")
+            .add(JuColumnTransformer("test", TestEst(), "continuous"))
+            .add(SVC())
+            .to_pipeline()
+            )
+    pipe.fit(df_iris.iloc[:, :-1], df_iris.species)
+    inspector = PipelineInspector(pipe)
+    svc = inspector.get_step("svc").estimator
+    isinstance(svc, SVC)

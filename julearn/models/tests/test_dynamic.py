@@ -109,7 +109,6 @@ def test_algorithms(
     np.random.seed(seed)
     ensemble_model = RandomForestClassifier(random_state=6)
 
-    # TODO: @samihamdan fix the protocol
     dynamic_model = DynamicSelection(
         ensemble=ensemble_model,  # type: ignore
         algorithm=algo_name,
@@ -131,7 +130,6 @@ def test_algorithms(
     pool_classifiers.fit(X_train, y_train)
 
     cls = _algorithm_objects[algo_name]
-    # TODO: @samihamdan fix the protocol
     model_deslib = cls(pool_classifiers, random_state=seed)  # type: ignore
     model_deslib.fit(X_dsel, y_dsel)
     score_deslib = model_deslib.score(df_iris[X], df_iris[y])
@@ -142,7 +140,6 @@ def test_algorithms(
 
     if hasattr(model_deslib, "predict_proba"):
         pred_proba_julearn = dynamic_model.predict_proba(df_iris[X])
-        # TODO: @samihamdan fix the protocol
         pred_proba_deslib = model_deslib.predict_proba(  # type: ignore
             df_iris[X].values  # Deslib works with numpy arrays only
         )
@@ -163,7 +160,6 @@ def test_wrong_algo(df_iris: pd.DataFrame) -> None:
     ensemble_model = RandomForestClassifier()
 
     with pytest.raises(ValueError, match="wrong is not a valid or supported"):
-        # TODO: @samihamdan fix the protocol
         dynamic_model = DynamicSelection(
             ensemble=ensemble_model, algorithm="wrong"  # type: ignore
         )
@@ -195,7 +191,6 @@ def test_ds_split_parameter(ds_split: Any, df_iris: pd.DataFrame) -> None:
     y = "species"
     ensemble_model = RandomForestClassifier()
 
-    # TODO: @samihamdan fix the protocol
     dynamic_model = DynamicSelection(
         ensemble=ensemble_model,  # type: ignore
         algorithm="METADES",
@@ -222,7 +217,6 @@ def test_ds_split_error(ds_split: Any, df_iris: pd.DataFrame) -> None:
     ensemble_model = RandomForestClassifier()
 
     with pytest.raises(ValueError, match="ds_split only allows"):
-        # TODO: @samihamdan fix the protocol
         dynamic_model = DynamicSelection(
             ensemble=ensemble_model,  # type: ignore
             algorithm="METADES",

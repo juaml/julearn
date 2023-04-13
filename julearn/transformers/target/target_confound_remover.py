@@ -42,7 +42,6 @@ class TargetConfoundRemover(JuTargetTransformer):
         threshold: Optional[float] = None,
     ):
         if model_confound is None:
-            # TODO: @samihamdan: fix the protocol
             model_confound = LinearRegression()  # type: ignore
         self.model_confound = model_confound
         self.confounds = ensure_column_types(confounds)
@@ -71,7 +70,6 @@ class TargetConfoundRemover(JuTargetTransformer):
         self.model_confounds_ = clone(self.model_confound)
         self.detected_confounds_ = self.confounds.to_type_selector()(X)
         X_confounds = X.loc[:, self.detected_confounds_]
-        # TODO: @samihamdan: fix the protocol and typings
         self.model_confounds_.fit(X_confounds.values, y)  # type: ignore
         return self
 
@@ -91,7 +89,6 @@ class TargetConfoundRemover(JuTargetTransformer):
             The target with confounds removed.
         """
         X_confounds = X.loc[:, self.detected_confounds_]
-        # TODO: @samihamdan: fix the protocol and typings
         y_pred = self.model_confounds_.predict(  # type: ignore
             X_confounds.values
         )

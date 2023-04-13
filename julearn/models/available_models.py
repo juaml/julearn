@@ -51,7 +51,6 @@ from ..utils.typing import ModelLike
 from .dynamic import DynamicSelection
 
 
-# TODO: @samihamdan: fix the protocol. Any shgould be Type[ModelLike]
 _available_models: Dict[str, Dict[str, Any]] = {
     "svm": {
         "regression": SVR,
@@ -173,7 +172,6 @@ def get_model(name: str, problem_type: str, **kwargs: Any) -> ModelLike:
             f"The specified model ({name})) is not suitable for"
             f"{problem_type}"
         )
-    # TODO: @samihamdan: fix the protocol
     out = _available_models[name][problem_type](**kwargs)  # type: ignore
     return out
 

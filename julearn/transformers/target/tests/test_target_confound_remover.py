@@ -46,7 +46,6 @@ def test_TargetConfoundRemover(
     residuals = y_iris - y_pred
     assert_series_equal(y_removed, residuals)
 
-    # TODO: @samihamdan: fix the protocol and typings
     remover2 = TargetConfoundRemover(
         model_confound=LinearRegression(),  # type: ignore
         confounds=["duck"],

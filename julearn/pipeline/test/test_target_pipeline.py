@@ -28,7 +28,6 @@ def test_target_pipeline_sklearn(
     """
 
     steps = [("scaler", StandardScaler())]
-    # TODO: @samihamdan: fix the protocol error
     pipeline = JuTargetPipeline(steps)  # type: ignore
     y_transformed = pipeline.fit_transform(X_iris, y_iris)
 
@@ -63,7 +62,6 @@ def test_target_pipeline_jutargettransformer(
             return (y > self.median).astype(int)
 
     steps = [("splitter", MedianSplitter())]
-    # TODO: @samihamdan: fix the protocol error
     pipeline = JuTargetPipeline(steps)  # type: ignore
     y_transformed = pipeline.fit_transform(X_iris, y_iris)
 

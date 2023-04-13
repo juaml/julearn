@@ -26,7 +26,6 @@ def test_JuTransformedTargetModel(
     transformer = JuTargetPipeline(steps)  # type: ignore
     model = SVR()
 
-    # TODO: @samihamdan: fix the protocol error
     ju_transformed_target_model = JuTransformedTargetModel(
         transformer=transformer, model=model  # type: ignore
     )
@@ -51,7 +50,6 @@ def test_JuTransformedTargetModel_noinverse(
     transformer = JuTargetPipeline(steps)  # type: ignore
     model = SVR()
 
-    # TODO: @samihamdan: fix the protocol error
     ju_transformed_target_model = JuTransformedTargetModel(
         transformer=transformer, model=model  # type: ignore
     )

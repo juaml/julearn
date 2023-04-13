@@ -145,9 +145,15 @@ class FoldsInspector:
         return self
 
     def __next__(self):
+
+        if self._current_fold == self.__len__():
+            raise StopIteration
         this_fold = self[self._current_fold]
         self._current_fold += 1
         return this_fold
+
+    def __len__(self):
+        return len(self._scores)
 
 
 class _FoldInspector:
