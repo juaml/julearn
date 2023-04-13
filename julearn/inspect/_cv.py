@@ -1,6 +1,7 @@
 from typing import List, Union, Optional
 
 from sklearn.model_selection import BaseCrossValidator, check_cv
+from sklearn.utils.metaestimators import available_if
 
 import pandas as pd
 
@@ -14,6 +15,39 @@ _valid_funcs = [
     "predict_log_proba",
     "decision_function",
 ]
+
+
+def _wrapped_model_has(attr):
+    """Create a function to check if self.model_ has a given attribute.
+
+    This function is usable by
+    :func:`sklearn.utils.metaestimators.available_if`
+
+    Parameters
+    ----------
+    attr : str
+        The attribute to check for.
+
+    Returns
+    -------
+    check : function
+        The check function.
+
+    """
+
+    def check(self):
+        """Check if self.model_ has a given attribute.
+
+        Returns
+        -------
+        bool
+            True if first estimator in scores has the attribute,
+            False otherwise.
+        """
+        model_ = self._scores['estimator'].iloc[0]
+        return hasattr(model_, attr)
+
+    return check
 
 
 class FoldsInspector:
@@ -33,7 +67,8 @@ class FoldsInspector:
         self._func = func
         self._groups = groups
 
-        if "cv_mdsum" not in self._scores:
+        self._current_fold = 0
+        if "cv_mdsum" not in list(self._scores.columns):
             raise_error(
                 "The scores DataFrame must be the output of "
                 "`run_cross_validation`. It is missing the `cv_mdsum` column."
@@ -61,12 +96,15 @@ class FoldsInspector:
     def predict(self):
         return self._get_predictions("predict")
 
+    @available_if(_wrapped_model_has("predict_proba"))
     def predict_proba(self):
         return self._get_predictions("predict_proba")
 
+    @available_if(_wrapped_model_has("predict_log_proba"))
     def predict_log_proba(self):
         return self._get_predictions("predict_log_proba")
 
+    @available_if(_wrapped_model_has("decision_function"))
     def decision_function(self):
         return self._get_predictions("decision_function")
 
@@ -101,10 +139,18 @@ class FoldsInspector:
         return predictions.sort_index()
 
     def __getitem__(self, key):
-        return FoldInspector(self, key)
+        return _FoldInspector(self, key)
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        this_fold = self[self._current_fold]
+        self._current_fold += 1
+        return this_fold
 
 
-class FoldInspector:
+class _FoldInspector:
     def __init__(self, folds_inspector: FoldsInspector, i_fold: int):
         self._folds_inspector = folds_inspector
         self._i_fold = i_fold
