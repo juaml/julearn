@@ -151,7 +151,6 @@ class _JulearnScoresViewer(param.Parameterized):
         }
 
         source = ColumnDataSource(data=data_dict)
-        # x = [tuple(x) for x in df_results[["file_kind", "storage_kind"]].values]
         p = figure(
             width=self._width,
             height=self._height,
