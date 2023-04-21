@@ -4,6 +4,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+===================================
 Welcome to julearn's documentation!
 ===================================
 
@@ -15,7 +16,7 @@ Welcome to julearn's documentation!
 ... a user-oriented machine-learning library.
 
 What is Julearn?
-----------------
+================
 
 At the Applied Machine Learning (`AML`_) group, as part of the Institute of 
 Neuroscience and Medicine - Brain and Behaviour (`INM-7`_), we thought that
@@ -55,8 +56,8 @@ Table of Contents
 -----------------
 
 .. toctree::
-   :maxdepth: 3
-   :numbered:
+   :maxdepth: 1
+   :numbered: 2
 
    getting_started
 
@@ -65,7 +66,8 @@ Table of Contents
    selected_deeper_topics/index.rst
 
    available_pipeline_steps.rst
-   api
+
+   api/index.rst
    contributing
    maintaining
    whats_new

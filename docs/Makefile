@@ -3,7 +3,7 @@
 
 # You can set these variables from the command line, and also
 # from the environment for the first two.
-SPHINXOPTS    ?="-W"
+SPHINXOPTS    ?=
 SPHINXBUILD   ?= sphinx-multiversion
 SOURCEDIR     = .
 BUILDDIR      ?= _build
@@ -17,6 +17,7 @@ help:
 clean:
 	rm -rf $(BUILDDIR)/*
 	rm -rf auto_examples/
+	rm -rf api/generated/
 
 # For local build
 local:

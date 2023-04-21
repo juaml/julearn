@@ -184,30 +184,27 @@ def register_model(
 ):
     """Register a model to julearn.
 
-    This function allows you to add a model or models for different
-    problem_types to julearn.
-    Afterwards, it behaves like every other julearn model and can
-    be referred to by name. E.g. you can use inside of
-     `run_cross_validation` unsig `model=model_name`.
+    This function allows you to add a model or models for different problem
+    types to julearn. Afterwards, it behaves like every other julearn model and
+    can be referred to by name. E.g. you can use inside of
+    `run_cross_validation` using `model=model_name`.
 
     Parameters
     ----------
     model_name : str
         Name by which model will be referenced by
     classification_cls : ModelLike
-        The class which will be used for
-         classification problem_type.
+        The class which will be used for classification.
     regression_cls : ModelLike
-        The class which will be used for
-         regression problem_type.
+        The class which will be used for regression.
     overwrite : bool, optional
-        decides whether overwrite should be allowed.
+        decides whether overwrite should be allowed
+
         Options are:
 
-        * None : overwrite is possible, but warns the user
-        * True : overwrite is possible without any warning
-        * False : overwrite is not possible, error is raised instead
-    (default is None)
+        * None : overwrite is possible, but warns the user (default).
+        * True : overwrite is possible without any warning.
+        * False : overwrite is not possible, error is raised instead.
 
     Raises
     ------
