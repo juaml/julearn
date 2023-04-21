@@ -1,6 +1,7 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
+from pathlib import Path
 
 import pandas as pd
 import panel as pn
@@ -39,7 +40,7 @@ class _JulearnScoresViewer(param.Parameterized):
     _long_df = None
     _width = 800
     _height = 400
-    _ci = 95
+    _ci = 0.95
 
     def set_data(self, long_df):
         """Set the data to use for the plot.
@@ -311,10 +312,17 @@ def plot_scores(
     )
     all_sets = long_df["set"].unique().tolist()
 
-    viewer = _JulearnScoresViewer().set_data(long_df).set_width(width)
-    pn.extension(template="fast", theme="dark")
+    viewer = (
+        _JulearnScoresViewer()
+        .set_data(long_df)
+        .set_width(width)
+        .set_height(height)
+        .set_ci(ci)
+    )
+    pn.extension(template="fast")
     dashboard_title = pn.panel("## Scores Viewer")
-    png = pn.panel("./julearn_logo_it.png", width=200)
+    logo = Path(__file__).parent / "res" / "julearn_logo_generalization.png"
+    png = pn.panel(logo, width=200)
     header = pn.Row(png, pn.Spacer(width=50), dashboard_title)
     widget_row = pn.Row(
         pn.Param(
