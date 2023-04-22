@@ -9,3 +9,4 @@ from .available_scorers import (
     reset_scorer_register,
     check_scoring,
 )
+from . import metrics

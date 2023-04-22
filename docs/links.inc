@@ -12,9 +12,35 @@
 .. _`AML`: https://www.fz-juelich.de/inm/inm-7/EN/Forschung/Applied%20Machine%20Learning/_node.html
 .. _`INM-7`: https://www.fz-juelich.de/inm/inm-7/EN/Home/home_node.html
 .. _`video tutorial`: https://youtube.com/playlist?list=PLvb39y5Ge21CUjccmY_0kXRCwBBaikGf_
-.. sklearn
 
-.. _scikit-learn: https://scikit-learn.org/stable/
+.. _`scikit-learn`: https://scikit-learn.org/stable/
+.. _`numpy`: https://numpy.org
+.. _`pandas`: https://pandas.pydata.org
+.. _`Python`: https://python.org
+.. _`seaborn`: https://seaborn.pydata.org
+.. _`matplotlib`: https://matplotlib.org
+.. _`bokeh`: https://bokeh.org
+.. _`panel`: https://panel.holoviz.org
+.. _`param`: https://param.holoviz.org
+
+.. _`venv`: https://docs.python.org/3/tutorial/venv.html
+.. _`conda env`: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
+
+.. _`Github`: https://github.com/
+.. _`julearn Github`: https://github.com/juaml/julearn
+
+.. _`Wikipedia`: https://wikipedia.org
+
+.. _`Regular Expressions`: https://docs.python.org/3/library/re.html
+
+.. _`setuptools_scm`: https://github.com/pypa/setuptools_scm/
+
+.. _`sphinx gallery`: https://sphinx-gallery.github.io/stable/index.html
+.. _`sphinx RST reference`: https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#inline-markup
+
+
+.. This should be used with intersphinx to link to other projects
+
 .. _`Balanced Accuracy`: https://scikit-learn.org/stable/modules/model_evaluation.html#balanced-accuracy-score
 .. _`Precision`: https://scikit-learn.org/stable/modules/model_evaluation.html#precission-score
 .. _`scoring`: https://scikit-learn.org/stable/modules/model_evaluation.html#
@@ -87,30 +113,10 @@
 
 .. _`make_scorer`: https://scikit-learn.org/stable/modules/generated/sklearn.metrics.make_scorer.html?highlight=make_scorer#sklearn.metrics.make_scorer
 
-.. _`pandas`: https://pandas.pydata.org
+
 .. _`pandas.DataFrame` : https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html
 
-.. _`Python`: https://python.org
-.. _`seaborn`: https://seaborn.pydata.org
-.. _`matplotlib`: https://matplotlib.org
-
-.. _`venv`: https://docs.python.org/3/tutorial/venv.html
-.. _`conda env`: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
-
-.. _`Github`: https://github.com/
-.. _`julearn Github`: https://github.com/juaml/julearn
-
-.. _`Wikipedia`: https://wikipedia.org
-
-.. _`Regular Expressions`: https://docs.python.org/3/library/re.html
-
-.. _`setuptools_scm`: https://github.com/pypa/setuptools_scm/
-
-.. _`sphinx gallery`: https://sphinx-gallery.github.io/stable/index.html
-.. _`sphinx RST reference`: https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#inline-markup
-
-
 .. numpy
-.. _`numpy`: https://numpy.org
+
 .. _`numpy.array`: https://numpy.org/doc/stable/reference/generated/numpy.array.html
 .. _`numpy.corrcoef`: https://numpy.org/doc/stable/reference/generated/numpy.corrcoef.html

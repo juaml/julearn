@@ -1,11 +1,12 @@
 .. include:: links.inc
 
+===============
 Getting started
-================
+===============
 
 
 Requirements
-^^^^^^^^^^^^
+============
 
 Julearn requires the following packages:
 
@@ -16,6 +17,9 @@ Julearn requires the following packages:
 Running the examples requires:
 
 * `seaborn`_ >= 0.11.2, < 0.12
+* `bokeh`_ >= 3.0.2
+* `panel`_ >= 1.0.0b1
+* `param`_ >= 1.12.0
 
 Depending on the installation method (e.g. the `pip install`-option below),
 these packages might be installed automatically. It is nevertheless good to be
@@ -23,7 +27,7 @@ aware of these dependencies as installing Julearn might lead to changes in these
 packages.
 
 Setup suggestion
-^^^^^^^^^^^^^^^^^
+================
 Although not required, we strongly recommend using **virtual environments** and 
 installing Julearn into a virtual environment. This helps to keep the setup
 clean. The most prominent options are:
@@ -32,7 +36,7 @@ clean. The most prominent options are:
 * conda: `conda env`_
 
 Installing
-^^^^^^^^^^
+==========
 
 .. note::
     Julearn keeps on being updated and improved. The latest stable release and

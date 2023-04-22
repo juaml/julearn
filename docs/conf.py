@@ -3,7 +3,7 @@
 # This file only contains a selection of the most common options. For a full
 # list see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
-
+import os
 from sphinx_gallery.sorting import ExplicitOrder
 
 # -- Path setup --------------------------------------------------------------
@@ -56,7 +56,7 @@ templates_path = ["_templates"]
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
-nitpicky = True
+nitpicky = False
 
 nitpick_ignore_regex = [
     ("py:class", "numpy._typing.*"),
@@ -88,6 +88,7 @@ html_js_files = [
     "js/custom.js",
 ]
 
+html_use_modindex = False
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -116,6 +117,29 @@ autodoc_typehints_description_target = "documented"
 # -- sphinx.ext.autosummary configuration ------------------------------------
 
 autosummary_generate = True
+
+autodoc_default_options = {
+    "imported-members": True,
+    "inherited-members": True,
+    "undoc-members": True,
+    "member-order": "bysource",
+    #  We cannot have __init__: it causes duplicated entries
+    #  'special-members': '__init__',
+}
+
+def touch_example_backreferences(app, what, name, obj, options, lines):
+    # generate empty examples files, so that we don't get
+    # inclusion errors if there are no examples for a class / module
+    examples_path = os.path.join(
+        app.srcdir, "api", "generated", f"{name}.examples"
+    )
+    if not os.path.exists(examples_path):
+        # touch file
+        open(examples_path, "w").close()
+
+
+def setup(app):
+    app.connect("autodoc-process-docstring", touch_example_backreferences)
 
 # -- sphinx.ext.intersphinx configuration ------------------------------------
 
@@ -175,13 +199,12 @@ numpydoc_xref_ignore = {
 # -- Sphinx-Gallery configuration --------------------------------------------
 
 sphinx_gallery_conf = {
-    "examples_dirs": ["../examples/basic", "../examples/advanced"],
-    "subsection_order": ExplicitOrder(
-        ["../examples/basic/", "../examples/advanced/"]
-    ),
-    "gallery_dirs": ["auto_examples/basic", "auto_examples/advanced"],
+    "examples_dirs": "../examples/",
+    "gallery_dirs": "auto_examples",
+    "nested_sections": True,
     "filename_pattern": "/(plot|run)_",
-    "backreferences_dir": "generated",
+    "backreferences_dir": "api/generated",
+    "doc_module": "julearn",
 }
 
 # -- sphinx-multiversion configuration ---------------------------------------

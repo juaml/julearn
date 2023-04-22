@@ -8,7 +8,6 @@ Selected deeper topics
 .. toctree::
    :maxdepth: 2
    :caption: Table of Contents
-   :numbered:
 
    confound_removal.rst
    HPT.rst

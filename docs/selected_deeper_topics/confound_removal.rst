@@ -30,7 +30,7 @@ Removing Confounds from the Features
 ************************************
 
 The first scenario involves confound regression on the features. In order to do this
-we can simply configure an instance of a :class:`julearn.pipeline.PipelineCreator`
+we can simply configure an instance of a :class:`.PipelineCreator`
 by adding the "confound_removal" step.
 
 We can create some data using scikit-learn's :func:`sklearn.datasets.make_regression`

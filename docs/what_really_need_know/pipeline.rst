@@ -27,10 +27,14 @@ So far we know how to input data. To do machine learning with these data
 one additional needs to specify what learning algorithm 
 :func:`.run_cross_validation` should use
 
-run_cross_validation(
-    X=X, y=y, data=df, 
-    model = "svm"
-)
+.. code-block:: python
+
+  run_cross_validation(
+      X=X,
+      y=y,
+      data=df, 
+      model="svm"
+  )
 
 
 Pipeline
@@ -61,8 +65,8 @@ features of julearn and how you can use them.
 .. note::
   You should have read the :doc:`input <input>` section before.
 
-Model & Problem Type
-********************
+Model and Problem Type
+======================
 
 When using :func:`.run_cross_validation` you have to answer at least
  2 questions first and then specify the according arguments properly:
@@ -83,10 +87,10 @@ machine learning on.
 
 
 Preprocessing
-*************
+=============
 
 Concepts
-^^^^^^^^
+--------
 
 By default users do not have to specify how to preprocess their data.
 In this case, julearn automatically standardizes the continuous features,
@@ -116,7 +120,7 @@ To do so you can set the following arguments in the
     ``preprocess_X``. By default confounds will not be preprocessed.
 
 Example
-^^^^^^^
+-------
 Assume we want not preprocess the confounds, zscore the transformer
 and then use a pca on the features before removing the confound from these
 features. All of these operations are included in the :doc:`steps <steps>` 
@@ -162,7 +166,7 @@ like this:
 
 
 More information
-^^^^^^^^^^^^^^^^
+----------------
 
 As mentioned above julearn allows the user to specify to which variable/columns
 or variable/column types each transformer will be applied. To do so you
@@ -173,7 +177,7 @@ and find more information on hyperparameter tuning in
 
 
 The returned pipeline
-*********************
+=====================
 
 The :func:`.run_cross_validation` uses all the information mentioned above
 to create one ExtendedDataFramePipeline which is then used for
@@ -182,7 +186,7 @@ application. E.g. you could want to test the pipeline on one additional
 test set. But how can you do that?
 
 Returning the (extended) pipeline
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+---------------------------------
 There are multiple options which you can use to return the pipeline(s).
 For all of them you have to set the `return_estimator`.
 These are the possible options:
@@ -198,7 +202,7 @@ objects.Therefore, the next section will discuss how you can use
 a returned estimator.
 
 ExtendedDataFramePipeline
-^^^^^^^^^^^^^^^^^^^^^^^^^
+-------------------------
 The ExtendedDataFramePipeline has the same basic functionality as
 all scikit-learn pipelines or estimators, but also has some caveats.
 
@@ -237,7 +241,7 @@ added methods:
 
 
 
-.. include:: links.inc
+.. include:: ../links.inc
 
 Available Pipeline Steps
 ========================
@@ -249,7 +253,7 @@ Features Preprocessing
 ----------------------
 
 Scalers
-^^^^^^^
+-------
 
 .. list-table::
    :widths: 30 80 40
@@ -282,7 +286,7 @@ Scalers
 
 
 Feature Selection
-^^^^^^^^^^^^^^^^^
+-----------------
 .. list-table::
    :widths: 30 80 40
    :header-rows: 1
@@ -314,7 +318,7 @@ Feature Selection
 
 
 Confound Removal
-^^^^^^^^^^^^^^^^
+----------------
 .. list-table::
    :widths: 30 80 40
    :header-rows: 1
@@ -330,7 +334,7 @@ Confound Removal
      - confounds.ConfoundRemover
 
 Decomposition
-^^^^^^^^^^^^^
+-------------
 .. list-table::
    :widths: 30 80 40
    :header-rows: 1
@@ -346,7 +350,7 @@ Target Preprocessing
 --------------------
 
 Target Scalers
-^^^^^^^^^^^^^^
+--------------
 
 .. list-table::
    :widths: 30 80 40
@@ -360,7 +364,7 @@ Target Scalers
      - `StandardScaler`_
 
 Target Confound Removal
-^^^^^^^^^^^^^^^^^^^^^^^
+-----------------------
 .. list-table::
    :widths: 30 80 40
    :header-rows: 1
@@ -380,7 +384,7 @@ Models
 
 
 Support Vector Machines
-^^^^^^^^^^^^^^^^^^^^^^^
+-----------------------
 .. list-table::
    :widths: 30 80 40 20 20 20
    :header-rows: 1
@@ -400,7 +404,7 @@ Support Vector Machines
 
 
 Ensemble
-^^^^^^^^
+--------
 .. list-table::
    :widths: 30 30 70 20 20 20
    :header-rows: 1
@@ -444,7 +448,7 @@ Ensemble
 
 
 Gaussian Processes
-^^^^^^^^^^^^^^^^^^
+------------------
 .. list-table::
    :widths: 30 30 70 20 20 20
    :header-rows: 1
@@ -463,7 +467,7 @@ Gaussian Processes
      - Y
 
 Linear Models
-^^^^^^^^^^^^^
+-------------
 .. list-table::
    :widths: 30 50 70 10 10 10
    :header-rows: 1
@@ -513,7 +517,7 @@ Linear Models
 
 
 Naive Bayes
-^^^^^^^^^^^
+-----------
 .. list-table::
    :widths: 30 50 70 10 10 10
    :header-rows: 1
@@ -556,7 +560,7 @@ Naive Bayes
      - N
 
 Dummy
-^^^^^
+-----
 .. list-table::
    :widths: 30 50 70 10 10 10
    :header-rows: 1

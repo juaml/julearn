@@ -1,5 +1,7 @@
 .. include:: ../links.inc
 
+.. _need_to_know:
+
 What you really need to know
 ============================
 
@@ -65,10 +67,9 @@ a basic pipeline and basic model evaluation:
 .. toctree::
    :maxdepth: 2
    :caption: Table of Contents
-   :numbered:
    
    data.rst
-   pipeline.rst
+   .. pipeline.rst
    model_evaluation.rst
 
 If you are just interested in seeing all parameters of :func:`.run_cross_validation`, 
