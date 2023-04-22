@@ -1,5 +1,7 @@
 .. include:: links.inc
 
+.. _available_pipeline_steps:
+
 Overview of available Pipeline Steps
 ====================================
 

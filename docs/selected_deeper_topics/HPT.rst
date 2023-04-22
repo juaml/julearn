@@ -1,2 +1,4 @@
-Hyper Paremeter Tuning
+.. _hp_tuning:
+
+Hyper Parameter Tuning
 ======================

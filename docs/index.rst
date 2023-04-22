@@ -30,7 +30,8 @@ Julearn is a library that provides users with the possibility of easy
 testing ML models directly from `pandas`_ dataframes, while keeping the
 flexibiliy of using `scikit-learn`_'s models.
 
-You can also check out our `video tutorial`_.
+To get started with Julearn just keep reading here. Additionally You can 
+check out our `video tutorials`_.
 
 Why Julearn?
 ------------

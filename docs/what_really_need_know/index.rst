@@ -53,14 +53,15 @@ the specification of ...
 3. ... how the model should be evaluated, like cross validation scheme or the 
    scoring to be used for evaluation (see :ref:`model_evaluation_usage`) 
 
-After training the model either only the model's scores from the cross 
-validation or the scores and the model(s) of the performed cross validation are 
-**returned** (depending on your exact specifications).
+After training the model, :func:`.run_cross_validation` either **returns** 
+only the model's scores from the cross validation or both, the scores and 
+the model(s) of the performed cross validation are 
+(depending on your exact specifications).
 
 Get the basics running
 ----------------------
 
-To see what is needed to setup a basic workflow using :func:`.run_cross_validation` 
+To see what is needed to setup a basic workflow using :func:`.run_cross_validation`, 
 follow along this chapter where you can find out more about the data input, 
 a basic pipeline and basic model evaluation:
 
@@ -69,7 +70,7 @@ a basic pipeline and basic model evaluation:
    :caption: Table of Contents
    
    data.rst
-   .. pipeline.rst
+   pipeline.rst
    model_evaluation.rst
 
 If you are just interested in seeing all parameters of :func:`.run_cross_validation`, 
