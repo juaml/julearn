@@ -109,4 +109,5 @@ def test_get_estimator(df_iris):
     pipe.fit(df_iris.iloc[:, :-1], df_iris.species)
     inspector = PipelineInspector(pipe)
     svc = inspector.get_step("svc").estimator
-    isinstance(svc, SVC)
+    assert isinstance(svc, SVC)
+    assert pipe.get_params() ==  inspector.get_params()

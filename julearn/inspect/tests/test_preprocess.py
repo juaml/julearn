@@ -14,6 +14,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 
+from julearn import run_cross_validation
 from julearn.inspect import preprocess
 from julearn.utils.typing import TransformerLike
 
@@ -117,3 +118,23 @@ def test_preprocess_sklearn_nodataframe(
         preprocess(
             pipeline, X=X, data=X_iris, until=None, with_column_types=False
         )
+
+
+def test_preprocess_no_step(X_iris, y_iris, df_iris):
+
+    pipeline = Pipeline([("scaler", StandardScaler()), ("svm", SVC())])
+    pipeline.fit(X_iris, y=y_iris)
+    with pytest.raises(ValueError, match="No step named"):
+        preprocess(pipeline, X=list(X_iris.columns),
+                   data=df_iris,
+                   until="non_existent")
+
+
+def test_preprocess_with_column_types(df_iris):
+    X = list(df_iris.iloc[:, :-1].columns)
+    y = "species"
+    _, model = run_cross_validation(
+        X=X, y=y, data=df_iris, problem_type="classification",
+        model="rf", return_estimator="final")
+    X_t = preprocess(model, X=X, data=df_iris, with_column_types=False)
+    assert (list(X_t.columns) == X)
