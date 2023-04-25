@@ -82,6 +82,9 @@
 .. _`BaggingRegressor`: https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.BaggingRegressor.html
 .. _`GradientBoostingClassifier`: https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.GradientBoostingClassifier.html
 .. _`GradientBoostingRegressor`: https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.GradientBoostingRegressor.html
+.. _`StackingClassifier`: https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.StackingClassifier.html
+.. _`StackingRegressor`: https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.StackingRegressor.html
+.. _`DESlib`: https://github.com/scikit-learn-contrib/DESlib
 
 .. _`GaussianProcessClassifier`: https://scikit-learn.org/stable/modules/generated/sklearn.gaussian_process.GaussianProcessClassifier.html
 .. _`GaussianProcessRegressor`: https://scikit-learn.org/stable/modules/generated/sklearn.gaussian_process.GaussianProcessRegressor.html
