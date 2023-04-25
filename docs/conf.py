@@ -128,19 +128,6 @@ autodoc_default_options = {
     #  'special-members': '__init__',
 }
 
-def touch_example_backreferences(app, what, name, obj, options, lines):
-    # generate empty examples files, so that we don't get
-    # inclusion errors if there are no examples for a class / module
-    examples_path = os.path.join(
-        app.srcdir, "api", "generated", f"{name}.examples"
-    )
-    if not os.path.exists(examples_path):
-        # touch file
-        open(examples_path, "w").close()
-
-
-def setup(app):
-    app.connect("autodoc-process-docstring", touch_example_backreferences)
 
 # -- sphinx.ext.intersphinx configuration ------------------------------------
 
@@ -250,3 +237,17 @@ smv_rebuild_tags = False
 smv_tag_whitelist = r"^v\d+\.\d+.\d+$"
 smv_branch_whitelist = r"main"
 smv_released_pattern = r"^tags/v.*$"
+
+
+# -- setup configuration ---------------------------------------
+
+def touch_example_backreferences(app, what, name, obj, options, lines):
+    # generate empty examples files, so that we don't get
+    # inclusion errors if there are no examples for a class / module
+    examples_path = Path(app.srcdir) / "api" / "generated" / f"{name}.examples"
+    if not examples_path.exists():
+        # touch file
+        examples_path.touch()
+
+def setup(app):
+    app.connect("autodoc-process-docstring", touch_example_backreferences)

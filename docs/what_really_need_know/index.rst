@@ -66,7 +66,6 @@ follow along this chapter where you can find out more about the data input,
 a basic pipeline and basic model evaluation:
 
 .. toctree::
-   :maxdepth: 2
    :caption: Table of Contents
    
    data.rst
