@@ -1,13 +1,34 @@
 .. include:: links.inc
 
-Available Pipeline Steps
-========================
+.. _available_pipeline_steps:
 
-The following is a list of all the available steps that can be used to create
-a pipeline by name.
+Overview of available Pipeline Steps
+====================================
 
-Features Preprocessing
-----------------------
+The following is a list of all available steps that can be used to create
+a pipeline by name. The overview is sorted based on the type of the step: 
+:ref:`available_transformers` or :ref:`available_models`.
+
+The column 'Name (str)' refers to the string-name of 
+the respective step, i.e. how it should be specified when passed to e.g. the
+``PipelineCreator``. The column 'Description' gives a short 
+description of what the step is doing. The column 'Class' either indicates the 
+underlying `scikit-learn`_ class of the respective pipeline-step together with 
+a link to the class in the `scikit-learn`_ documentation (follow the link to 
+see the valid parameters) or indicates the class in 
+the Julearn code, so one can have a closer look at it in Julearn's 
+:ref:`api`.
+
+For feature transformations the :ref:`available_transformers` have to be used 
+with the ``PipelineCreator`` and for target transformation with the 
+``TargetPipelineCreator``.
+
+.. _available_transformers:
+
+Transformers
+------------
+
+.. _available_scalers:
 
 Scalers
 ^^^^^^^
@@ -74,8 +95,8 @@ Feature Selection
      - `VarianceThreshold`_
 
 
-Confound Removal
-^^^^^^^^^^^^^^^^
+DataFrame operations
+^^^^^^^^^^^^^^^^^^^^
 .. list-table::
    :widths: 30 80 40
    :header-rows: 1
@@ -84,11 +105,22 @@ Confound Removal
      - Description
      - Class
    * - ``remove_confound``
-     - removing confounds from features,
+     - Removing confounds from features,
        by subtracting the prediction of each feature given all confounds.
        By default this is equal to "independently regressing out 
        the confounds from the features" 
-     - :class:`.confounds.ConfoundRemover`
+     - confounds.ConfoundRemover
+   * - ``drop_columns``
+     - Drop columns from the dataframe
+     - dataframe.DropColumns
+   * - ``change_column_types``
+     - Change the type of a column in a dataframe
+     - dataframe.ChangeColumnTypes
+   * - ``filter_columns``
+     - Filter columns in a dataframe
+     - dataframe.FilterColumns
+
+.. _available_decompositions:
 
 Decomposition
 ^^^^^^^^^^^^^
@@ -102,42 +134,24 @@ Decomposition
    * - ``pca``
      - Principal Component Analysis
      - `PCA`_
+  
+Custom
+^^^^^^
+.. list-table::
+   :widths: 30 80 40
+   :header-rows: 1
 
-Target Preprocessing
+   * - Name (str)
+     - Description
+     - Class
+   * - ``cbpm``
+     - Connectome-based Predictive Modeling (CBPM) 
+     - cbpm.CBPM
+
+.. _available_models:
+
+Models (Estimators)
 --------------------
-
-Target Scalers
-^^^^^^^^^^^^^^
-
-.. list-table::
-   :widths: 30 80 40
-   :header-rows: 1
-
-   * - Name (str)
-     - Description
-     - Class
-   * - ``zscore``
-     - Removing mean and scale to unit variance
-     - `StandardScaler`_
-
-Target Confound Removal
-^^^^^^^^^^^^^^^^^^^^^^^
-.. list-table::
-   :widths: 30 80 40
-   :header-rows: 1
-
-   * - Name (str)
-     - Description
-     - Class
-   * - ``remove_confound``
-     - removing confounds from target,
-       by subtracting the prediction of the target given all confounds.
-       By default this is equal to "regressing out 
-       the confounds from the target"
-     - :class:`.TargetConfoundRemover`
-
-Models
-------
 
 
 Support Vector Machines
@@ -199,6 +213,12 @@ Ensemble
    * - ``gradientboost``
      - Gradient Boosting 
      - `GradientBoostingClassifier`_ and `GradientBoostingRegressor`_
+     - Y
+     - Y
+     - Y
+   * - ``stacking``
+     - Stacking
+     - `StackingClassifier`_ and `StackingRegressor`_
      - Y
      - Y
      - Y
@@ -315,6 +335,27 @@ Naive Bayes
      - Y
      - Y
      - N
+
+
+Dynamic Selection
+^^^^^^^^^^^^^^^^^
+.. list-table::
+   :widths: 30 50 70 10 10 10
+   :header-rows: 1
+
+   * - Name (str)
+     - Description
+     - Class
+     - Binary
+     - Multiclass
+     - Regression
+   * - ``ds``
+     - Support for `DESlib`_ models
+     - dynamic.DynamicSelection
+     - Y
+     - Y
+     - Y
+
 
 Dummy
 ^^^^^
