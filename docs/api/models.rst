@@ -16,7 +16,7 @@ Models
    :toctree: generated/
    :template: class.rst
 
-   dynamic.DynamicSelection
+    dynamic.DynamicSelection
 
 **Functions**
 
@@ -26,7 +26,7 @@ Models
    :toctree: generated/
    :template: function.rst
 
-   list_models
-   get_model
-   register_model
-   reset_model_register
+    list_models
+    get_model
+    register_model
+    reset_model_register

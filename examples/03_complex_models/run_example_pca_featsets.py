@@ -1,14 +1,17 @@
 """
 Regression Analysis
-============================
+===================
 
 This example uses the 'diabetes' data from sklearn datasets and performs
-a regression analysis using a Ridge Regression model.
+a regression analysis using a Ridge Regression model. I will use the Julearn
+PipelineCreator to create a pipeline with two different PCA steps are used
+to reduce the dimensionality of the data, each one computed on a different
+subset of features.
 
 """
 # Authors: Georgios Antonopoulos <g.antonopoulos@fz-juelich.de>
 #          Kaustubh R. Patil <k.patil@fz-juelich.de>
-# Original: Shammi More <s.more@fz-juelich.de>
+#          Shammi More <s.more@fz-juelich.de>
 #          Federico Raimondo <f.raimondo@fz-juelich.de>
 #
 # License: AGPL

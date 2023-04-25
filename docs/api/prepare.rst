@@ -1,17 +1,17 @@
 *******
-Inspect
+Prepare
 *******
 
-.. automodule:: julearn.inspect
+.. automodule:: julearn.prepare
    :no-members:
    :no-inherited-members:
 
 **Functions**
-
-.. currentmodule:: julearn.inspect
+.. currentmodule:: julearn.prepare
 
 .. autosummary::
    :toctree: generated/
    :template: function.rst
-
-    preprocess
+  
+    prepare_input_data
+    check_consistency

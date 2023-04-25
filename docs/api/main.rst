@@ -14,4 +14,4 @@ Main API
    :toctree: generated/
    :template: function.rst
 
-   run_cross_validation
+    run_cross_validation

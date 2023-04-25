@@ -4,6 +4,7 @@
 # list see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 import os
+import re
 from sphinx_gallery.sorting import ExplicitOrder
 
 # -- Path setup --------------------------------------------------------------
@@ -56,7 +57,7 @@ templates_path = ["_templates"]
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
-nitpicky = False
+nitpicky = True
 
 nitpick_ignore_regex = [
     ("py:class", "numpy._typing.*"),
@@ -198,13 +199,49 @@ numpydoc_xref_ignore = {
 
 # -- Sphinx-Gallery configuration --------------------------------------------
 
+class SubSectionTitleOrder:
+    """Sort example gallery by title of subsection.
+
+    Assumes README.txt exists for all subsections and uses the subsection with
+    dashes, '---', as the adornment.
+    """
+
+    def __init__(self, src_dir):
+        self.src_dir = src_dir
+        self.regex = re.compile(r"^([\w ]+)\n-", re.MULTILINE)
+
+    def __repr__(self):
+        return "<%s>" % (self.__class__.__name__,)
+
+    def __call__(self, directory):
+        src_path = os.path.normpath(os.path.join(self.src_dir, directory))
+
+        # Forces Release Highlights to the top
+        if os.path.basename(src_path) == "release_highlights":
+            return "0"
+
+        readme = os.path.join(src_path, "README.txt")
+
+        try:
+            with open(readme, "r") as f:
+                content = f.read()
+        except FileNotFoundError:
+            return directory
+
+        title_match = self.regex.search(content)
+        if title_match is not None:
+            return title_match.group(1)
+        return directory
+
+
 sphinx_gallery_conf = {
-    "examples_dirs": "../examples/",
-    "gallery_dirs": "auto_examples",
-    "nested_sections": True,
-    "filename_pattern": "/(plot|run)_",
-    "backreferences_dir": "api/generated",
     "doc_module": "julearn",
+    "backreferences_dir": "api/generated",
+    "examples_dirs": ["../examples/"],
+    "gallery_dirs": ["auto_examples"],
+    "nested_sections": True,
+    "subsection_order": SubSectionTitleOrder("../examples"),
+    "filename_pattern": "/(plot|run)_",
 }
 
 # -- sphinx-multiversion configuration ---------------------------------------

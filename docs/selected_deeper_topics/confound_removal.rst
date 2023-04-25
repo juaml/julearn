@@ -95,7 +95,7 @@ examples:
 In this example, we only distinguish between two types of variables in the "X".
 That is, we have 1.) our features (or predictors) and 2.) our confounds.
 Let's prepare the "X_types" dictionary that we hand over to 
-:func:`julearn.api.run_cross_validation` accordingly:
+:func:`.run_cross_validation` accordingly:
 
 .. code-block:: python
 
@@ -104,9 +104,9 @@ Let's prepare the "X_types" dictionary that we hand over to
 Now, that we have all the data prepared, and we have defined our "X_types", we
 can think about creating the pipeline that we want to run. Now, this is the crucial
 point at which we parametrise the confound removal. We initialise the
-:class:`julearn.pipeline.PipelineCreator` and add to it as a step the
+:class:`.PipelineCreator` and add to it as a step the
 "confound_removal" transformer (the underlying transformer object is the
-:class:`julearn.transformers.confound_remover.ConfoundRemover`). The following code
+:class:`.ConfoundRemover`). The following code
 will do just that:
 
 .. code-block:: python
@@ -115,7 +115,7 @@ will do just that:
 	pipeline_creator.add("confound_removal", confounds="confounds")
 	pipeline_creator.add("linreg")
 
-As you can see, we tell the :class:`julearn.pipeline.PipelineCreator` that we want
+As you can see, we tell the :class:`.PipelineCreator` that we want
 to work on a "regression" problem when we initialise the class. We also tell it,
 that by default each "step" of the pipeline should be applied to the "X_type" called
 "features". In the first step that we add, we specify we want to perform 
@@ -126,7 +126,7 @@ during the initialisation, we do not need to explicitly state this again.
 As a second and last step, we simply add a linear regression ("linreg") to fit a
 predictive model to the de-confounded X and the y.
 
-Lastly, we only need to apply this pipeline in the :func:`julearn.api.run_cross_validation`
+Lastly, we only need to apply this pipeline in the :func:`.run_cross_validation`
 function to perform confound removal on the features in a cross-validation consistent way:
 
 .. code-block:: python
@@ -149,9 +149,9 @@ Removing Confounds from the Target
 If we want to remove the confounds from the target rather than from the features,
 we can use the same code to create the data of course. We only need to adjust the
 creation of the pipeline in the example above. Julearn has a specific
-:class:`julearn.pipeline.TargetPipelineCreator` to perform transformations on the
+:class:`.TargetPipelineCreator` to perform transformations on the
 target. We can configure one of these and then insert it as a pipeline step in a
-regular :class:`julearn.pipeline.PipelineCreator`:
+regular :class:`.PipelineCreator`:
 
 .. code-block:: python
 
@@ -163,7 +163,7 @@ regular :class:`julearn.pipeline.PipelineCreator`:
 	pipeline_creator.add("linreg")
 
 Having configured this pipeline, we can then simply use the same 
-:func:`julearn.api.run_cross_validation` call to obtain our results:
+:func:`.run_cross_validation` call to obtain our results:
 
 .. code-block:: python
 

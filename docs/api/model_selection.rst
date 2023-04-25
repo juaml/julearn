@@ -16,9 +16,9 @@ Model Selection
    :toctree: generated/
    :template: class.rst
 
-   StratifiedGroupsKFold
-   RepeatedStratifiedGroupsKFold
-   StratifiedBootstrap
+    StratifiedGroupsKFold
+    RepeatedStratifiedGroupsKFold
+    StratifiedBootstrap
 
 **Functions**
 
@@ -28,7 +28,7 @@ Model Selection
    :toctree: generated/
    :template: function.rst
 
-   get_searcher
-   list_searchers
-   register_searcher
-   reset_searcher_register
+    get_searcher
+    list_searchers
+    register_searcher
+    reset_searcher_register

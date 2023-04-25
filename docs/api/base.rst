@@ -16,11 +16,11 @@ Base
    :toctree: generated/
    :template: class.rst
 
-   JuBaseEstimator
-   JuTransformer
-   WrapModel
-   ColumnTypes
-   ColumnTypesLike
+    JuBaseEstimator
+    JuTransformer
+    WrapModel
+    ColumnTypes
+    ColumnTypesLike
 
 
 **Functions**
@@ -31,7 +31,7 @@ Base
    :toctree: generated/
    :template: function.rst
 
-   change_column_type
-   get_column_type
-   make_type_selector
-   ensure_column_types
+    change_column_type
+    get_column_type
+    make_type_selector
+    ensure_column_types
