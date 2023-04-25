@@ -10,7 +10,11 @@
 
 .. autofunction:: {{ objname }}
 
-.. include:: {{module}}.{{objname}}.examples
+.. _sphx_glr_backreferences_{{ fullname }}:
+
+.. minigallery:: {{fullname}}.{{item}}
+    :add-heading:
+
 
 .. raw:: html
 

@@ -11,7 +11,7 @@
 
 .. _`AML`: https://www.fz-juelich.de/inm/inm-7/EN/Forschung/Applied%20Machine%20Learning/_node.html
 .. _`INM-7`: https://www.fz-juelich.de/inm/inm-7/EN/Home/home_node.html
-.. _`video tutorials`: https://youtube.com/playlist?list=PLvb39y5Ge21CUjccmY_0kXRCwBBaikGf_
+.. _`video tutorial`: https://youtube.com/playlist?list=PLvb39y5Ge21CUjccmY_0kXRCwBBaikGf_
 
 .. _`scikit-learn`: https://scikit-learn.org/stable/
 .. _`numpy`: https://numpy.org

@@ -15,7 +15,11 @@
    .. automethod:: __init__
    {% endblock %}
 
-.. include:: {{module}}.{{objname}}.examples
+.. _sphx_glr_backreferences_{{ fullname }}:
+
+.. minigallery:: {{fullname}}.{{item}}
+    :add-heading:
+
 
 .. raw:: html
 
