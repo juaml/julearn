@@ -16,6 +16,7 @@ Pipeline
    :toctree: generated/
    :template: class.rst
 
-   PipelineCreator
-   TargetPipelineCreator
-   pipeline.JuTargetPipeline
+    PipelineCreator
+    TargetPipelineCreator
+    pipeline.JuTargetPipeline
+    pipeline.pipeline_creator.Step

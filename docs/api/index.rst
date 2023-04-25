@@ -14,6 +14,9 @@ Reference
    inspect.rst
    models.rst
    scoring.rst
+   transformers.rst
+   utils.rst
+   prepare.rst
 
 
 

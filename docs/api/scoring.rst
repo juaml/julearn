@@ -14,11 +14,11 @@ Scoring
    :toctree: generated/
    :template: function.rst
 
-   get_scorer
-   list_scorers
-   register_scorer
-   reset_scorer_register
-   check_scoring
+    get_scorer
+    list_scorers
+    register_scorer
+    reset_scorer_register
+    check_scoring
 
 ***************
 Scoring Metrics
@@ -35,4 +35,5 @@ Scoring Metrics
 .. autosummary::
    :toctree: generated/
    :template: function.rst
-   r2_corr
+
+    r2_corr
