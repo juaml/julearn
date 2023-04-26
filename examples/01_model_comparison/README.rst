@@ -1,5 +1,3 @@
-.. _examples_comparison:
-
 Model Comparison
 ================
 

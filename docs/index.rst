@@ -62,7 +62,7 @@ Table of Contents
 -----------------
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :numbered: 2
 
    getting_started
@@ -73,7 +73,8 @@ Table of Contents
 
    available_pipeline_steps.rst
 
-   auto_examples/index.rst
+   examples.rst
+
    api/index.rst
    contributing
    maintaining

@@ -221,11 +221,27 @@ class SubSectionTitleOrder:
         return directory
 
 
+ex_dirs = [
+    "00_starting",
+    "01_model_comparison",
+    "02_inspection",
+    "03_complex_models",
+    "04_confounds",
+    "05_customization"
+]
+
+example_dirs = []
+gallery_dirs = []
+for t_dir in ex_dirs:
+    example_dirs.append(f"../examples/{t_dir}")
+    gallery_dirs.append(f"auto_examples/{t_dir}")
+
+
 sphinx_gallery_conf = {
     "doc_module": "julearn",
     "backreferences_dir": "api/generated",
-    "examples_dirs": ["../examples/"],
-    "gallery_dirs": ["auto_examples"],
+    "examples_dirs": example_dirs,
+    "gallery_dirs": gallery_dirs,
     "nested_sections": True,
     "subsection_order": SubSectionTitleOrder("../examples"),
     "filename_pattern": "/(plot|run)_",
