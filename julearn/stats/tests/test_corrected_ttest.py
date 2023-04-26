@@ -51,7 +51,7 @@ def test_corrected_ttest() -> None:
         {
             "fold": np.arange(10) % 5,
             "repeat": np.arange(10) // 5,
-            "score": data1,
+            "test_score": data1,
         }
     )
     scores1["cv_mdsum"] = cv_mdsum
@@ -61,7 +61,7 @@ def test_corrected_ttest() -> None:
         {
             "fold": np.arange(10) % 5,
             "repeat": np.arange(10) // 5,
-            "score": data2,
+            "test_score": data2,
         }
     )
     scores2["cv_mdsum"] = cv_mdsum
@@ -76,14 +76,14 @@ def test_corrected_ttest() -> None:
         assert "p-val-corrected" not in out
         assert "model_1" in out
         assert "model_2" in out
-        assert "model_0" in out["model_1"].values
-        assert "model_1" in out["model_2"].values
+        assert "model_1" in out["model_1"].values
+        assert "model_2" in out["model_2"].values
 
     scores3 = pd.DataFrame(
         {
             "fold": np.arange(10) % 5,
             "repeat": np.arange(10) // 5,
-            "score": data3,
+            "test_score": data3,
         }
     )
     scores3["cv_mdsum"] = cv_mdsum
@@ -98,10 +98,10 @@ def test_corrected_ttest() -> None:
         assert "p-val-corrected" in out
         assert "model_1" in out
         assert "model_2" in out
-        assert "model_0" in out["model_1"].values
         assert "model_1" in out["model_1"].values
-        assert "model_1" in out["model_2"].values
+        assert "model_2" in out["model_1"].values
         assert "model_2" in out["model_2"].values
+        assert "model_3" in out["model_2"].values
 
 
 def test_corrected_ttest_errors() -> None:
@@ -111,12 +111,12 @@ def test_corrected_ttest_errors() -> None:
     data2 = np.random.rand(10) + 0.05
     scores1 = pd.DataFrame(
         {
-            "score": data1,
+            "test_score": data1,
         }
     )
     scores2 = pd.DataFrame(
         {
-            "score": data2,
+            "test_score": data2,
         }
     )
 

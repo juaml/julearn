@@ -12,6 +12,7 @@ import scipy.special as special
 from statsmodels.stats.multitest import multipletests
 
 from ..utils.logging import raise_error, warn_with_log
+from ..utils.checks import check_scores_df
 
 
 def _corrected_std(
@@ -104,8 +105,7 @@ def corrected_ttest(
     method: str = "bonferroni",
     alternative: str = "two-sided",
 ) -> pd.DataFrame:
-    """Performs corrected t-test on the scores of two or more models.
-
+    """Perform corrected t-test on the scores of two or more models.
 
     Parameters
     ----------
@@ -140,40 +140,7 @@ def corrected_ttest(
           sample is greater than the mean of the distribution underlying
           the second sample.
     """
-    if any("cv_mdsum" not in x for x in scores):
-        raise_error(
-            "The DataFrames must be the output of `run_cross_validation`. "
-            "Some of the DataFrames are missing the `cv_mdsum` column."
-        )
-    if any("fold" not in x for x in scores):
-        raise_error(
-            "The DataFrames must be the output of `run_cross_validation`. "
-            "Some of the DataFrames are missing the `fold` column."
-        )
-    if any("repeat" not in x for x in scores):
-        raise_error(
-            "The DataFrames must be the output of `run_cross_validation`. "
-            "Some of the DataFrames are missing the `repeat` column."
-        )
-    if any("n_train" not in x for x in scores):
-        raise_error(
-            "The DataFrames must be the output of `run_cross_validation`. "
-            "Some of the DataFrames are missing the `n_train` column."
-        )
-    if any("n_test" not in x for x in scores):
-        raise_error(
-            "The DataFrames must be the output of `run_cross_validation`. "
-            "Some of the DataFrames are missing the `n_test` column."
-        )
-    cv_mdsums = np.unique(np.hstack([x["cv_mdsum"].unique() for x in scores]))
-    if cv_mdsums.size > 1:
-        raise_error(
-            "The CVs are not the same. Can't do a t-test on different CVs."
-        )
-    if cv_mdsums[0] == "non-reproducible":
-        raise_error(
-            "The CV is non-reproducible. Can't reproduce the CV folds."
-        )
+    scores = check_scores_df(*scores, same_cv=True)
     if len(scores) > 2 and alternative != "two-sided":
         raise_error(
             "Only two-sided tests are supported for more than two models."
@@ -186,16 +153,8 @@ def corrected_ttest(
     for model_i, model_k in combinations(range(len(t_scores)), 2):
         i_scores = t_scores[model_i]
         k_scores = t_scores[model_k]
-        model_i_name = (
-            i_scores["model"].iloc[0]
-            if "model" in i_scores
-            else f"model_{model_i}"
-        )
-        model_k_name = (
-            k_scores["model"].iloc[0]
-            if "model" in k_scores
-            else f"model_{model_k}"
-        )
+        model_i_name = i_scores["model"].iloc[0]
+        model_k_name = k_scores["model"].iloc[0]
         n_train = i_scores["n_train"].values
         n_test = i_scores["n_test"].values
 
@@ -219,7 +178,10 @@ def corrected_ttest(
 
         to_skip = ["cv_mdsum", "n_train", "n_test", "model"]
 
-        to_keep = [x for x in i_scores.columns if x not in to_skip]
+        to_keep = [
+            x for x in i_scores.columns if x not in to_skip
+            and (x.startswith("test_") or x.startswith("train_"))
+        ]
         df1 = i_scores[to_keep]
         df2 = k_scores[to_keep]
         differences = df1 - df2
