@@ -4,9 +4,9 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-===================================
+###################################
 Welcome to julearn's documentation!
-===================================
+###################################
 
 .. image:: images/julearn_logo_it.png
    :width: 300
@@ -73,6 +73,7 @@ Table of Contents
 
    available_pipeline_steps.rst
 
+   auto_examples/index.rst
    api/index.rst
    contributing
    maintaining

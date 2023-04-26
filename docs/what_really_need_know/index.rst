@@ -2,8 +2,10 @@
 
 .. _need_to_know:
 
+############################
 What you really need to know
-============================
+############################
+
 
 The backbone of Julearn is the function :func:`.run_cross_validation`, which
 allows you to do all the magic. All important information needed for your 
@@ -63,8 +65,9 @@ follow along this chapter where you can find out more about the data input,
 a basic pipeline and basic model evaluation:
 
 .. toctree::
-   :caption: Table of Contents
-   
+   :maxdepth: 2
+
+   cross_validation.rst
    data.rst
    pipeline.rst
    model_evaluation.rst
