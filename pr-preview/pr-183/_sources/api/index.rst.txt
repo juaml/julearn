@@ -19,3 +19,4 @@ Reference
    transformers.rst
    utils.rst
    prepare.rst
+   viz.rst

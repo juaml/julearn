@@ -114,5 +114,52 @@ scores3 = run_cross_validation(
 
 scores3["model"] = "svm_linear"
 
+###############################################################################
+# We can now compare the performance of the models using corrected statistics
+
 stats_df = corrected_ttest(scores1, scores2, scores3)
 print(stats_df)
+
+###############################################################################
+# .. rst-class:: hidden
+#   This block is hidden in the documentation. This files are used to generate
+#   the plots in the documentation. (not working for now)
+
+# The following lines are only meant for the documentation to work and not
+# needed for the example to run. This will be removed as soon as sphix-gallery
+# is able to hide code blocks.
+scores1.to_csv("/tmp/scores1.csv")
+scores2.to_csv("/tmp/scores2.csv")
+scores3.to_csv("/tmp/scores3.csv")
+
+
+###############################################################################
+# We can also plot the performance of the models using the Julearn Score Viewer
+#
+
+from julearn.viz import plot_scores
+panel = plot_scores(scores1, scores2, scores3)
+# panel.show() 
+# uncomment the previous line show the plot
+# read the documentation for more information
+#  https://panel.holoviz.org/getting_started/build_app.html#deploying-panels
+
+###############################################################################
+# This is how the plot looks like.
+#
+# .. note::
+#    The plot is interactive. You can zoom in and out, and hover over.
+#    However, buttons will not work in this documentation.
+#
+# .. bokeh-plot::
+#    :source-position: none
+#
+#    from julearn.viz import plot_scores
+#    from bokeh.io import output_notebook, show
+#    import pandas as pd
+#    output_notebook()
+#    scores1 = pd.read_csv("/tmp/scores1.csv")
+#    scores2 = pd.read_csv("/tmp/scores2.csv")
+#    scores3 = pd.read_csv("/tmp/scores3.csv")
+#    panel = plot_scores(scores1, scores2, scores3, width=600)
+#    show(panel.get_root())

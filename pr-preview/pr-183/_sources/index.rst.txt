@@ -78,6 +78,7 @@ Table of Contents
    api/index.rst
    contributing
    maintaining
+   faq
    whats_new
 
 
