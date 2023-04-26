@@ -1,8 +1,8 @@
 .. include:: links.inc
 
-===============
+###############
 Getting started
-===============
+###############
 
 
 Requirements

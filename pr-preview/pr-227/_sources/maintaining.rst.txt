@@ -1,11 +1,13 @@
 .. include:: links.inc
 
+###################
 Maintaining julearn
-===================
+###################
 
 
 Versioning
-^^^^^^^^^^
+==========
+
 julearn version numbers are as follows: *MAJOR.MINOR.MICRO*. Additionally,
 development version append *devN* where N is the distance (in commits) to
 the last release.
@@ -21,7 +23,7 @@ version "X.Y.Z". Additionally, for every push to main, it will be published
 as pre-release to TestPypi.
 
 Releasing a new version
-^^^^^^^^^^^^^^^^^^^^^^^
+-----------------------
 Once the milestone is reached (all issues closed), it is time to do a new
 release.
 
