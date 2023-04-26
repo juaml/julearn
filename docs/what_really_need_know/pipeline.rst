@@ -43,7 +43,7 @@ One important aspect when building machine learning models is the selection of
 a learning algorithm. This can be specified in :func:`.run_cross_validation`
 by setting the ``model`` parameter. This parameter can be any scikit-learn
 compatible learning algorithm. However, Julearn provides a built-in list of
-:ref:`available_models` that can be specified by name (see _Name (str)_ 
+:ref:`available_models` that can be specified by name (see ``Name (str)`` 
 column in :ref:`available_models`). For example, we 
 can simply set ``model=="svm"`` to use a support vector machine (SVM) [#1]_. 
 
