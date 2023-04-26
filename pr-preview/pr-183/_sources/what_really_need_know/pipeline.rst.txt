@@ -9,26 +9,28 @@ So far we know how to pass input data to :func:`.run_cross_validation`
 (see :ref:`data_usage`). Now, we will have a look at the implementation of 
 basic machine learning pipelines.
 
-A machine learning pipeline is a process of automating the workflow of a 
-building a model. It can be thought of as a combination of pipes and 
-filters. At the pipeline starting point, the raw data is fed into this
-pipeline. Different  filters inside the pipeline modify the data. The output of
-a machine pipeline is the predictions of that data. But before using the pipeline
-to predict new data, the pipeline has to be trained on data. We call
+A machine learning pipeline is a process to automate the workflow of 
+building a predictive model. It can be thought of as a combination of pipes and 
+filters. At a pipeline's starting point, the raw data is fed into this
+pipeline. Different filters inside the pipeline modify the data. The output of
+a machine learning pipeline is a model that can be used 
+for predictions on unseen data. Before using the pipeline
+to predict new data, the pipeline has to be trained or fitted on data. We call
 this, as scikit-learn does, _fitting_ the pipeline.
 
 Importantly, since we want to test how well our model _predicts_ new data, we
 cannot predict using the same data we used for _fitting_. Thus, we need to have
 separate data for fitting and predicting. This is where cross validation comes
 in handy. Cross validation is a technique to split the data into a training and
-testing data set. The training data set is used to fit the pipeline, while the
-testing data set is used to predict the data. The predictions are then compared
-to the true values of the testing data set, obtaining an estimation of the
-prediction performance of the model.
+validation data set. The training data set is used to fit the pipeline, while the
+validation data set is used to predict the data. The predictions are then compared
+to the true values of the validation data set, obtaining an estimation of the
+prediction performance of the model (see also :ref:`why_cv`).
 
 Julearn aims to provide a user-friendly way to build and evaluate complex
 machine learning pipelines. The :func:`.run_cross_validation` function is the
-entry point to safely evaluate pipelines. We first have a look at the most
+entry point to safely evaluate pipelines by making it easy to specify, 
+costumize and train the pipeline. We first have a look at the most
 basic pipeline, only consisting of a machine learning algorithm. Then we will
 make the pipeline incrementally more complex.
 
@@ -39,9 +41,10 @@ Basic cross validation with Julearn
 
 One important aspect when building machine learning models is the selection of
 a learning algorithm. This can be specified in :func:`.run_cross_validation`
-by setting the ``model`` parameter . This parameter can be any scikit-learn
-compatible learning algorithms. However, Julearn provides a built-in list of
-:ref:`available_models` that can be specified just by a name. For example, we 
+by setting the ``model`` parameter. This parameter can be any scikit-learn
+compatible learning algorithm. However, Julearn provides a built-in list of
+:ref:`available_models` that can be specified by name (see ``Name (str)`` 
+column in :ref:`available_models`). For example, we 
 can simply set ``model=="svm"`` to use a support vector machine (SVM) [#1]_. 
 
 .. code-block:: python
@@ -80,9 +83,10 @@ scaling) the features (see :ref:`available_scalers`).
 Importantly, in a machine learning workflow all transformations done to the 
 data have to be done in a cv-consistent way. That means, that one should do 
 steps like feature preprocessing on the training data of each respective cross 
-validation and then only apply the parameters of the transformation to the 
-validation data. One should **never** do preprocessing on the entire dataset
-and then do cross validation on the already preprocessed features (or more
+validation fold and then only apply the parameters of the transformation to the 
+validation data of the respective fold. One should **never** do preprocessing 
+on the entire dataset and then do cross validation on the already preprocessed 
+features (or more
 generally transformed data) because this leads to leakage of information from
 the validation data into the model. This is exactly where
 :func:`.run_cross_validation` comes in handy, because you can simply add your
@@ -114,7 +118,7 @@ takes care of doing the respective transformations in a cv-consistent manner.
           transformation is applied.
 
 But what if we want to add more pre-processing steps? 
-An examplar scenario can be, that there are many features available, so that one
+An examplary scenario can be, that there are many features available, so that one
 wants to first reduce the dimensionality of the features before passing them
 to the learning algorithm. A commonly used approach is a principal component
 analysis (PCA, see :ref:`available_decompositions`). If we nevertheless 
@@ -142,18 +146,32 @@ Pipeline specification made easy with the :class:`.PipelineCreator`
 -------------------------------------------------------------------
 
 The :class:`.PipelineCreator` is a class that helps the user create complex
-pipelines, but with straightforward usage.
+pipelines with straightforward usage by stepwise adding subsequent steps of 
+the pipeline. 
 
-Lets re-write the previous example, using the :class:`.PipelineCreator`.
+Both the pre-processing steps and the passed learning-algorithm 
+are subsequent steps of the pipeline. Following this logic, we can add 
+both the specified preprocessing steps and the learning algorithm to the 
+pipeline creator to define the pipeline.
 
-We first start by creating an instance of the :class:`.PipelineCreator`, and
+.. note::
+  The :class:`.PipelineCreator` always has to be initialized with the 
+  ``problem_type`` parameter, which can be either ``classification`` or 
+  ``regression``.
+
+Let's re-write the previous example, using the :class:`.PipelineCreator`.
+
+We start by creating an instance of the :class:`.PipelineCreator`, and
 setting the ``problem_type`` parameter to ``classification``.
 
 .. code-block:: python
 
   creator = PipelineCreator(problem_type="classification")
 
-Then we just use the ``add`` method to add the desired steps to the pipeline.
+Then we use the ``add`` method and add every desired step to the pipeline. Both,
+the pre-processing steps and the learning algorithm are added in the same way.
+As above one can use the names of the step as indicated in 
+:ref:`available_pipeline_steps`.
 
 .. code-block:: python
 
@@ -173,6 +191,12 @@ parameter.
         data=df, 
         model=creator
     )
+
+.. note::
+  If the argument passed to the ``model``-parameter is a PipelineCreator, 
+  the preprocess parameter should be None. Otherwise, an error will be raised. 
+  This can be done by just **not** specifying it as the default is None.
+
 
 Awesome! We covered how to create a basic machine learning pipeline and 
 even added multiple feature pre-preprocessing steps. 
@@ -214,11 +238,12 @@ pipeline.
 .. code-block:: python
 
     creator = PipelineCreator(problem_type="classification")
-    creator.add("zscore", with_mean=True)
-    creator.add("pca", n_components=.2)
+    creator.add("zscore", with_mean=[True])
+    creator.add("pca", n_components=[.2])
     creator.add("svm")
 
     run_cross_validation(
+        X=X,
         y=y,
         data=df,
         model=creator,
@@ -233,8 +258,8 @@ respective link in :ref:`available_pipeline_steps` which will lead you to the
 hyperparameters.
 
 In many cases one wants to specify more than one hyperparameter. This can be 
-done by passing each hyperparameter separated by a comma. For the 'svm' we could 
-for example specify the 'C' and the kernel hyperparameter like this:
+done by passing each hyperparameter separated by a comma. For the ``svm`` we 
+could for example specify the ``C`` and the kernel hyperparameter like this:
 
 .. code-block:: python
 
@@ -245,8 +270,10 @@ for example specify the 'C' and the kernel hyperparameter like this:
           )
 
   run_cross_validation(
-    X=X, y=y, data=df, 
-    model=creator
+    X=X,
+    y=y,
+    data=df, 
+    model=creator,
   )
 
 
@@ -281,6 +308,10 @@ only be applied to these ``X_types``:
     creator.add("pca", apply_to="petal", n_components=1)
     creator.add("svm")
 
+We here additionally had specified as a hyperparameter of the _PCA_ 
+that we want to use only the first component. For the ``svm`` we used 
+the default hyperparameters.
+
 Finally, we again pass the defined ``X_types`` and the ``creator`` to 
 :func:`.run_cross_validation`:
 
@@ -295,13 +326,13 @@ Finally, we again pass the defined ``X_types`` and the ``creator`` to
     )
 
 In a slightly more complex use-case, one might want to ``z-score`` all features
-and apply a ``pca`` only to the 'petal' features. The ``apply-to`` parameter
+and apply a ``pca`` only to the _petal_ features. The ``apply-to`` parameter
 can also receive a list of ``X_types``. To demonstrate this we split the
-features in two different types: ``petal`` and ``sepal``. This also shows that
+features in two different types: _petal_ and _sepal_. This also shows that
 ``X_types`` is a dictionary in which one can specify as many different
 ``X_types`` as wished in a key-value manner. The key is the name of the type 
 and the value a list of column-names in the features that should belong to 
-this type. Splitting the ``petal`` columns in two different ``X_types`` is not 
+this type. Splitting the _petal_ columns in two different ``X_types`` is not 
 necessary and only for demonstration purposes. We here only want to 
 use the first component of the ``pca`` and therfore specify its ``n_components`` 
 hyperparameter respectively.
@@ -329,37 +360,56 @@ hyperparameter respectively.
 Applying preprocessing to the target
 ------------------------------------
 
-- So far we only applied preprocessing ot the features
-- all transformers in (ref transfomers) cann be used both for feature and targettransfomrations, 
-- but when used for target transformations, the TargetPipelineCreator has to be used 
-- The target creator is than passed to the general pipeline creatro following the general principle of
-  using apply_to to add everything to the general pipelinCreagor and create one big pipeline
+What we covered so far is how to apply preprocessing to the features and train 
+a model in a cv-conistent manner by building a pipeline.
+However, sometimes one wants to apply preprocessing to the target. For example,
+when having a regression-task (continous target variable), one might want to 
+predict the z-scored target.
+This can be achieved by using a :class:`.TargetPipelineCreator` 
+as one step in the general pipeline.
 
-<fill-in example for target preprocessing>
+We first create a :class:`.TargetPipelineCreator`:
 
-.. note::
-  This approach refered to using the `:class:`.PipelineCreator` for feature 
-  preprocessing and model definitions. To see how to preprocess targets within 
-  a pipeline have a look at ref `target_preprocessing`.
+.. code-block:: python
 
+    target_creator = TargetPipelineCreator()
+    target_creator.add("zscore")
+
+Next, we create the general pipeline using a :class:`.PipelineCreator`. We pass
+the ``target_creator`` as one step of the pipeline and specify that it should 
+only be applied to the ``target``, which makes it clear for Julearn to only 
+apply it to ``y``:
+
+.. code-block:: python
+
+    creator = PipelineCreator(problem_type="regression")
+    creator.add(target_creator, apply_to="target")
+    creator.add("svm")
+
+This ``creator`` can then be passed to :func:`.run_cross_validation` as usual:
+
+.. code-block:: python
+
+    run_cross_validation(
+        X=X,
+        y=y,
+        data=df, 
+        model=creator
+    )
+
+
+All transformers in (:ref:`available_transformers`) can be used for both, 
+feature and target transformations. However, features transformations can be 
+directly specified as step in the :class:`.PipelineCreator`, while target 
+transformations have to be specified using the :class:`.TargetPipelineCreator`, 
+which is then passed to the overall :class:`.PipelineCreator` as an extra step.
 
 We covered how to set up basic pipelines, how to use the 
 :class:`.PipelineCreator`, how to use the ``apply_to`` parameter of the 
-:class:`.PipelineCreator` and covered basics of hyperparameters. In the next
+:class:`.PipelineCreator` and covered basics of hyperparameters. Additional, 
+we saw a basic use-case of target pre-processing. In the next
 step we will understand the returns of :func:`.run_cross_validation`, i.e. the 
-model output and the scores of the performed corss-validation.
-
-
-.. More information
-.. ^^^^^^^^^^^^^^^^^
-
-.. As mentioned above julearn allows the user to specify to which variable/columns
-.. or variable/column types each transformer will be applied. To do so you
-.. can adjust the ``apply_to`` hyperparameter which is added to all transformers
-.. used in ``preprocess_X``. You can find such an example at #TODO
-.. and find more information on hyperparameter tuning in
-.. :doc:`hyperparameters <hyperparameters>` .
-
+model output and the scores of the performed cross-validation.
 
 .. topic:: References:
 

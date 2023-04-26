@@ -166,18 +166,19 @@
   <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">1. Getting started</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../what_really_need_know/index.html">2. What you really need to know</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/cross_validation.html">2.1. Why cross validation?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/data.html">2.2. Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/pipeline.html">2.3. Pipeline</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/model_evaluation.html">2.4. Model evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/cross_validation.html">Why cross validation?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/data.html">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/pipeline.html">Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/model_evaluation.html">Model evaluation</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../selected_deeper_topics/index.html">3. Selected deeper topics</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/confound_removal.html">3.1. Cross-validation consistent Confound Removal</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/HPT.html">3.2. Hyper Parameter Tuning</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/model_inspect.html">3.3. Inspecting Models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/stacked_models.html">3.4. Stacking Models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/CBPM.html">3.5. Connectome-based Predictive Modeling (CBPM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/cross_validation_splitter.html">3.4. Cross-validation splitter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/stacked_models.html">3.5. Stacking Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/CBPM.html">3.6. Connectome-based Predictive Modeling (CBPM)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../available_pipeline_steps.html">4. Overview of available Pipeline Steps</a></li>
@@ -398,13 +399,13 @@ subset of features.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-04-26 12:08:51,230 - julearn - INFO - ===== Lib Versions =====
-2023-04-26 12:08:51,231 - julearn - INFO - numpy: 1.23.5
-2023-04-26 12:08:51,231 - julearn - INFO - scipy: 1.10.1
-2023-04-26 12:08:51,231 - julearn - INFO - sklearn: 1.2.2
-2023-04-26 12:08:51,231 - julearn - INFO - pandas: 1.5.3
-2023-04-26 12:08:51,231 - julearn - INFO - julearn: 0.3.0.dev155
-2023-04-26 12:08:51,231 - julearn - INFO - ========================
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-04-26 12:31:31,255 - julearn - INFO - ===== Lib Versions =====
+2023-04-26 12:31:31,255 - julearn - INFO - numpy: 1.23.5
+2023-04-26 12:31:31,255 - julearn - INFO - scipy: 1.10.1
+2023-04-26 12:31:31,256 - julearn - INFO - sklearn: 1.2.2
+2023-04-26 12:31:31,256 - julearn - INFO - pandas: 1.5.3
+2023-04-26 12:31:31,256 - julearn - INFO - julearn: 0.3.0.dev167
+2023-04-26 12:31:31,256 - julearn - INFO - ========================
 </pre></div>
 </div>
 <p>load the diabetes data from sklearn as a pandas dataframe</p>
@@ -468,16 +469,16 @@ know what to do with the categorical features.</p>
 <span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;ridge&quot;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;continuous&quot;</span><span class="p">,</span> <span class="s2">&quot;categorical&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-04-26 12:08:51,254 - julearn - INFO - Adding step pca_feats1 that applies to ColumnTypes&lt;types={&#39;pca1&#39;}; pattern=(?:__:type:__pca1)&gt;
-2023-04-26 12:08:51,254 - julearn - INFO - Setting hyperparameter n_components = 1
-2023-04-26 12:08:51,254 - julearn - INFO - Step added
-2023-04-26 12:08:51,254 - julearn - INFO - Adding step pca_feats2 that applies to ColumnTypes&lt;types={&#39;pca2&#39;}; pattern=(?:__:type:__pca2)&gt;
-2023-04-26 12:08:51,254 - julearn - INFO - Setting hyperparameter n_components = 1
-2023-04-26 12:08:51,255 - julearn - INFO - Step added
-2023-04-26 12:08:51,255 - julearn - INFO - Adding step ridge that applies to ColumnTypes&lt;types={&#39;continuous&#39;, &#39;categorical&#39;}; pattern=(?:__:type:__continuous|__:type:__categorical)&gt;
-2023-04-26 12:08:51,255 - julearn - INFO - Step added
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-04-26 12:31:31,284 - julearn - INFO - Adding step pca_feats1 that applies to ColumnTypes&lt;types={&#39;pca1&#39;}; pattern=(?:__:type:__pca1)&gt;
+2023-04-26 12:31:31,284 - julearn - INFO - Setting hyperparameter n_components = 1
+2023-04-26 12:31:31,284 - julearn - INFO - Step added
+2023-04-26 12:31:31,284 - julearn - INFO - Adding step pca_feats2 that applies to ColumnTypes&lt;types={&#39;pca2&#39;}; pattern=(?:__:type:__pca2)&gt;
+2023-04-26 12:31:31,284 - julearn - INFO - Setting hyperparameter n_components = 1
+2023-04-26 12:31:31,285 - julearn - INFO - Step added
+2023-04-26 12:31:31,285 - julearn - INFO - Adding step ridge that applies to ColumnTypes&lt;types={&#39;continuous&#39;, &#39;categorical&#39;}; pattern=(?:__:type:__continuous|__:type:__categorical)&gt;
+2023-04-26 12:31:31,285 - julearn - INFO - Step added
 
-&lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7f1797c83640&gt;
+&lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fd6be6bc520&gt;
 </pre></div>
 </div>
 <p>Split the dataset into train and test</p>
@@ -497,25 +498,25 @@ for scoring/</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-04-26 12:08:51,256 - julearn - INFO - ==== Input Data ====
-2023-04-26 12:08:51,256 - julearn - INFO - Using dataframe as input
-2023-04-26 12:08:51,257 - julearn - INFO -      Features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
-2023-04-26 12:08:51,257 - julearn - INFO -      Target: target
-2023-04-26 12:08:51,257 - julearn - INFO -      Expanded features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
-2023-04-26 12:08:51,257 - julearn - INFO -      X_types:{&#39;pca1&#39;: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;], &#39;pca2&#39;: [&#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;], &#39;categorical&#39;: [&#39;sex&#39;]}
-2023-04-26 12:08:51,258 - julearn - INFO - ====================
-2023-04-26 12:08:51,258 - julearn - INFO -
-2023-04-26 12:08:51,260 - julearn - INFO - = Model Parameters =
-2023-04-26 12:08:51,260 - julearn - INFO - ====================
-2023-04-26 12:08:51,260 - julearn - INFO -
-2023-04-26 12:08:51,261 - julearn - INFO - = Data Information =
-2023-04-26 12:08:51,261 - julearn - INFO -      Problem type: regression
-2023-04-26 12:08:51,261 - julearn - INFO -      Number of samples: 309
-2023-04-26 12:08:51,261 - julearn - INFO -      Number of features: 10
-2023-04-26 12:08:51,261 - julearn - INFO - ====================
-2023-04-26 12:08:51,261 - julearn - INFO -
-2023-04-26 12:08:51,261 - julearn - INFO -      Target type: float64
-2023-04-26 12:08:51,261 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-04-26 12:31:31,287 - julearn - INFO - ==== Input Data ====
+2023-04-26 12:31:31,287 - julearn - INFO - Using dataframe as input
+2023-04-26 12:31:31,287 - julearn - INFO -      Features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2023-04-26 12:31:31,287 - julearn - INFO -      Target: target
+2023-04-26 12:31:31,288 - julearn - INFO -      Expanded features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2023-04-26 12:31:31,288 - julearn - INFO -      X_types:{&#39;pca1&#39;: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;], &#39;pca2&#39;: [&#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;], &#39;categorical&#39;: [&#39;sex&#39;]}
+2023-04-26 12:31:31,289 - julearn - INFO - ====================
+2023-04-26 12:31:31,289 - julearn - INFO -
+2023-04-26 12:31:31,292 - julearn - INFO - = Model Parameters =
+2023-04-26 12:31:31,292 - julearn - INFO - ====================
+2023-04-26 12:31:31,292 - julearn - INFO -
+2023-04-26 12:31:31,292 - julearn - INFO - = Data Information =
+2023-04-26 12:31:31,292 - julearn - INFO -      Problem type: regression
+2023-04-26 12:31:31,292 - julearn - INFO -      Number of samples: 309
+2023-04-26 12:31:31,292 - julearn - INFO -      Number of features: 10
+2023-04-26 12:31:31,292 - julearn - INFO - ====================
+2023-04-26 12:31:31,292 - julearn - INFO -
+2023-04-26 12:31:31,292 - julearn - INFO -      Target type: float64
+2023-04-26 12:31:31,293 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
 </pre></div>
 </div>
 <p>The scores dataframe has all the values for each CV split.</p>
@@ -523,11 +524,11 @@ for scoring/</p>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>   fit_time  score_time  ...  fold                          cv_mdsum
-0  0.021237    0.010185  ...     0  b10eef89b4192178d482d7a1587a248a
-1  0.019181    0.009894  ...     1  b10eef89b4192178d482d7a1587a248a
-2  0.019402    0.010036  ...     2  b10eef89b4192178d482d7a1587a248a
-3  0.019646    0.009737  ...     3  b10eef89b4192178d482d7a1587a248a
-4  0.019304    0.010535  ...     4  b10eef89b4192178d482d7a1587a248a
+0  0.029897    0.013818  ...     0  b10eef89b4192178d482d7a1587a248a
+1  0.026349    0.011822  ...     1  b10eef89b4192178d482d7a1587a248a
+2  0.023522    0.011561  ...     2  b10eef89b4192178d482d7a1587a248a
+3  0.023984    0.011030  ...     3  b10eef89b4192178d482d7a1587a248a
+4  0.023628    0.012053  ...     4  b10eef89b4192178d482d7a1587a248a
 
 [5 rows x 8 columns]
 </pre></div>
@@ -623,7 +624,7 @@ of true values vs predicted values</p>
 <img src="../../_images/sphx_glr_run_example_pca_featsets_002.png" srcset="../../_images/sphx_glr_run_example_pca_featsets_002.png" alt="Actual vs Predicted" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>(8.95, 362.05, 8.95, 362.05)
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.565 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.708 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-03-complex-models-run-example-pca-featsets-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/d48d37efb46ccabf7a609809e1f1c990/run_example_pca_featsets.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">run_example_pca_featsets.py</span></code></a></p>

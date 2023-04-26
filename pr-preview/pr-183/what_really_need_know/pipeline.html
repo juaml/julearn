@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="2.4. Model evaluation" href="model_evaluation.html" /><link rel="prev" title="2.2. Data" href="data.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Model evaluation" href="model_evaluation.html" /><link rel="prev" title="Data" href="data.html" />
 
     <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
-        <title>2.3. Pipeline - julearn documentation</title>
+        <title>Pipeline - julearn documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
@@ -166,18 +166,19 @@
   <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../getting_started.html">1. Getting started</a></li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">2. What you really need to know</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="cross_validation.html">2.1. Why cross validation?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="data.html">2.2. Data</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">2.3. Pipeline</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model_evaluation.html">2.4. Model evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cross_validation.html">Why cross validation?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html">Data</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_evaluation.html">Model evaluation</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../selected_deeper_topics/index.html">3. Selected deeper topics</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/confound_removal.html">3.1. Cross-validation consistent Confound Removal</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/HPT.html">3.2. Hyper Parameter Tuning</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/model_inspect.html">3.3. Inspecting Models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/stacked_models.html">3.4. Stacking Models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/CBPM.html">3.5. Connectome-based Predictive Modeling (CBPM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/cross_validation_splitter.html">3.4. Cross-validation splitter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/stacked_models.html">3.5. Stacking Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/CBPM.html">3.6. Connectome-based Predictive Modeling (CBPM)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../available_pipeline_steps.html">4. Overview of available Pipeline Steps</a></li>
@@ -362,37 +363,40 @@
         </div>
         <article role="main">
           <section id="pipeline">
-<span id="pipeline-usage"></span><h1><span class="section-number">2.3. </span>Pipeline<a class="headerlink" href="#pipeline" title="Permalink to this heading">#</a></h1>
+<span id="pipeline-usage"></span><h1>Pipeline<a class="headerlink" href="#pipeline" title="Permalink to this heading">#</a></h1>
 <p>So far we know how to pass input data to <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>
 (see <a class="reference internal" href="data.html#data-usage"><span class="std std-ref">Data</span></a>). Now, we will have a look at the implementation of
 basic machine learning pipelines.</p>
-<p>A machine learning pipeline is a process of automating the workflow of a
-building a model. It can be thought of as a combination of pipes and
-filters. At the pipeline starting point, the raw data is fed into this
-pipeline. Different  filters inside the pipeline modify the data. The output of
-a machine pipeline is the predictions of that data. But before using the pipeline
-to predict new data, the pipeline has to be trained on data. We call
+<p>A machine learning pipeline is a process to automate the workflow of
+building a predictive model. It can be thought of as a combination of pipes and
+filters. At a pipeline’s starting point, the raw data is fed into this
+pipeline. Different filters inside the pipeline modify the data. The output of
+a machine learning pipeline is a model that can be used
+for predictions on unseen data. Before using the pipeline
+to predict new data, the pipeline has to be trained or fitted on data. We call
 this, as scikit-learn does, _fitting_ the pipeline.</p>
 <p>Importantly, since we want to test how well our model _predicts_ new data, we
 cannot predict using the same data we used for _fitting_. Thus, we need to have
 separate data for fitting and predicting. This is where cross validation comes
 in handy. Cross validation is a technique to split the data into a training and
-testing data set. The training data set is used to fit the pipeline, while the
-testing data set is used to predict the data. The predictions are then compared
-to the true values of the testing data set, obtaining an estimation of the
-prediction performance of the model.</p>
+validation data set. The training data set is used to fit the pipeline, while the
+validation data set is used to predict the data. The predictions are then compared
+to the true values of the validation data set, obtaining an estimation of the
+prediction performance of the model (see also <a class="reference internal" href="index.html#why-cv"><span class="std std-ref">Why cross validation?</span></a>).</p>
 <p>Julearn aims to provide a user-friendly way to build and evaluate complex
 machine learning pipelines. The <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> function is the
-entry point to safely evaluate pipelines. We first have a look at the most
+entry point to safely evaluate pipelines by making it easy to specify,
+costumize and train the pipeline. We first have a look at the most
 basic pipeline, only consisting of a machine learning algorithm. Then we will
 make the pipeline incrementally more complex.</p>
 <section id="basic-cross-validation-with-julearn">
 <span id="basic-cv"></span><h2>Basic cross validation with Julearn<a class="headerlink" href="#basic-cross-validation-with-julearn" title="Permalink to this heading">#</a></h2>
 <p>One important aspect when building machine learning models is the selection of
 a learning algorithm. This can be specified in <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>
-by setting the <code class="docutils literal notranslate"><span class="pre">model</span></code> parameter . This parameter can be any scikit-learn
-compatible learning algorithms. However, Julearn provides a built-in list of
-<a class="reference internal" href="../available_pipeline_steps.html#available-models"><span class="std std-ref">Models (Estimators)</span></a> that can be specified just by a name. For example, we
+by setting the <code class="docutils literal notranslate"><span class="pre">model</span></code> parameter. This parameter can be any scikit-learn
+compatible learning algorithm. However, Julearn provides a built-in list of
+<a class="reference internal" href="../available_pipeline_steps.html#available-models"><span class="std std-ref">Models (Estimators)</span></a> that can be specified by name (see <code class="docutils literal notranslate"><span class="pre">Name</span> <span class="pre">(str)</span></code>
+column in <a class="reference internal" href="../available_pipeline_steps.html#available-models"><span class="std std-ref">Models (Estimators)</span></a>). For example, we
 can simply set <code class="docutils literal notranslate"><span class="pre">model==&quot;svm&quot;</span></code> to use a support vector machine (SVM) <a class="footnote-reference brackets" href="#id2" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">run_cross_validation</span><span class="p">(</span>
     <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
@@ -427,9 +431,10 @@ scaling) the features (see <a class="reference internal" href="../available_pipe
 <p>Importantly, in a machine learning workflow all transformations done to the
 data have to be done in a cv-consistent way. That means, that one should do
 steps like feature preprocessing on the training data of each respective cross
-validation and then only apply the parameters of the transformation to the
-validation data. One should <strong>never</strong> do preprocessing on the entire dataset
-and then do cross validation on the already preprocessed features (or more
+validation fold and then only apply the parameters of the transformation to the
+validation data of the respective fold. One should <strong>never</strong> do preprocessing
+on the entire dataset and then do cross validation on the already preprocessed
+features (or more
 generally transformed data) because this leads to leakage of information from
 the validation data into the model. This is exactly where
 <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> comes in handy, because you can simply add your
@@ -461,7 +466,7 @@ transformation is applied.</p>
 </dl>
 </div>
 <p>But what if we want to add more pre-processing steps?
-An examplar scenario can be, that there are many features available, so that one
+An examplary scenario can be, that there are many features available, so that one
 wants to first reduce the dimensionality of the features before passing them
 to the learning algorithm. A commonly used approach is a principal component
 analysis (PCA, see <a class="reference internal" href="../available_pipeline_steps.html#available-decompositions"><span class="std std-ref">Decomposition</span></a>). If we nevertheless
@@ -484,14 +489,28 @@ intransparent. To simplify building complex pipelines, Julearn provides a
 <section id="pipeline-specification-made-easy-with-the-pipelinecreator">
 <span id="pipeline-creator"></span><h2>Pipeline specification made easy with the <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a><a class="headerlink" href="#pipeline-specification-made-easy-with-the-pipelinecreator" title="Permalink to this heading">#</a></h2>
 <p>The <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> is a class that helps the user create complex
-pipelines, but with straightforward usage.</p>
-<p>Lets re-write the previous example, using the <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a>.</p>
-<p>We first start by creating an instance of the <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a>, and
+pipelines with straightforward usage by stepwise adding subsequent steps of
+the pipeline.</p>
+<p>Both the pre-processing steps and the passed learning-algorithm
+are subsequent steps of the pipeline. Following this logic, we can add
+both the specified preprocessing steps and the learning algorithm to the
+pipeline creator to define the pipeline.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> always has to be initialized with the
+<code class="docutils literal notranslate"><span class="pre">problem_type</span></code> parameter, which can be either <code class="docutils literal notranslate"><span class="pre">classification</span></code> or
+<code class="docutils literal notranslate"><span class="pre">regression</span></code>.</p>
+</div>
+<p>Let’s re-write the previous example, using the <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a>.</p>
+<p>We start by creating an instance of the <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a>, and
 setting the <code class="docutils literal notranslate"><span class="pre">problem_type</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">classification</span></code>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;classification&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Then we just use the <code class="docutils literal notranslate"><span class="pre">add</span></code> method to add the desired steps to the pipeline.</p>
+<p>Then we use the <code class="docutils literal notranslate"><span class="pre">add</span></code> method and add every desired step to the pipeline. Both,
+the pre-processing steps and the learning algorithm are added in the same way.
+As above one can use the names of the step as indicated in
+<a class="reference internal" href="../available_pipeline_steps.html#available-pipeline-steps"><span class="std std-ref">Overview of available Pipeline Steps</span></a>.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">)</span>
 <span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;pca&quot;</span><span class="p">)</span>
 <span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;svm&quot;</span><span class="p">)</span>
@@ -507,6 +526,12 @@ parameter.</p>
     <span class="n">model</span><span class="o">=</span><span class="n">creator</span>
 <span class="p">)</span>
 </pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the argument passed to the <code class="docutils literal notranslate"><span class="pre">model</span></code>-parameter is a PipelineCreator,
+the preprocess parameter should be None. Otherwise, an error will be raised.
+This can be done by just <strong>not</strong> specifying it as the default is None.</p>
 </div>
 <p>Awesome! We covered how to create a basic machine learning pipeline and
 even added multiple feature pre-preprocessing steps.</p>
@@ -540,11 +565,12 @@ support vector machines or the number of estimators in a random forest.</p>
 <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> and add or change hyperparameters for each step in the
 pipeline.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;classification&quot;</span><span class="p">)</span>
-<span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">,</span> <span class="n">with_mean</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;pca&quot;</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="mf">.2</span><span class="p">)</span>
+<span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">,</span> <span class="n">with_mean</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">])</span>
+<span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;pca&quot;</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="p">[</span><span class="mf">.2</span><span class="p">])</span>
 <span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;svm&quot;</span><span class="p">)</span>
 
 <span class="n">run_cross_validation</span><span class="p">(</span>
+    <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
     <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
     <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
     <span class="n">model</span><span class="o">=</span><span class="n">creator</span><span class="p">,</span>
@@ -559,8 +585,8 @@ respective link in <a class="reference internal" href="../available_pipeline_ste
 <a class="reference external" href="https://scikit-learn.org/stable/">scikit-learn</a> documentation where you can read more about the respective
 hyperparameters.</p>
 <p>In many cases one wants to specify more than one hyperparameter. This can be
-done by passing each hyperparameter separated by a comma. For the ‘svm’ we could
-for example specify the ‘C’ and the kernel hyperparameter like this:</p>
+done by passing each hyperparameter separated by a comma. For the <code class="docutils literal notranslate"><span class="pre">svm</span></code> we
+could for example specify the <code class="docutils literal notranslate"><span class="pre">C</span></code> and the kernel hyperparameter like this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">creator</span> <span class="o">=</span> <span class="p">(</span><span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;classification&quot;</span><span class="p">)</span>
          <span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">,</span> <span class="n">with_mean</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">])</span>
          <span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;pca&quot;</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="p">[</span><span class="mf">.2</span><span class="p">])</span>
@@ -568,8 +594,10 @@ for example specify the ‘C’ and the kernel hyperparameter like this:</p>
         <span class="p">)</span>
 
 <span class="n">run_cross_validation</span><span class="p">(</span>
-  <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
-  <span class="n">model</span><span class="o">=</span><span class="n">creator</span>
+  <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
+  <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+  <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+  <span class="n">model</span><span class="o">=</span><span class="n">creator</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -597,6 +625,9 @@ only be applied to these <code class="docutils literal notranslate"><span class=
 <span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;svm&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>We here additionally had specified as a hyperparameter of the _PCA_
+that we want to use only the first component. For the <code class="docutils literal notranslate"><span class="pre">svm</span></code> we used
+the default hyperparameters.</p>
 <p>Finally, we again pass the defined <code class="docutils literal notranslate"><span class="pre">X_types</span></code> and the <code class="docutils literal notranslate"><span class="pre">creator</span></code> to
 <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">run_cross_validation</span><span class="p">(</span>
@@ -609,13 +640,13 @@ only be applied to these <code class="docutils literal notranslate"><span class=
 </pre></div>
 </div>
 <p>In a slightly more complex use-case, one might want to <code class="docutils literal notranslate"><span class="pre">z-score</span></code> all features
-and apply a <code class="docutils literal notranslate"><span class="pre">pca</span></code> only to the ‘petal’ features. The <code class="docutils literal notranslate"><span class="pre">apply-to</span></code> parameter
+and apply a <code class="docutils literal notranslate"><span class="pre">pca</span></code> only to the _petal_ features. The <code class="docutils literal notranslate"><span class="pre">apply-to</span></code> parameter
 can also receive a list of <code class="docutils literal notranslate"><span class="pre">X_types</span></code>. To demonstrate this we split the
-features in two different types: <code class="docutils literal notranslate"><span class="pre">petal</span></code> and <code class="docutils literal notranslate"><span class="pre">sepal</span></code>. This also shows that
+features in two different types: _petal_ and _sepal_. This also shows that
 <code class="docutils literal notranslate"><span class="pre">X_types</span></code> is a dictionary in which one can specify as many different
 <code class="docutils literal notranslate"><span class="pre">X_types</span></code> as wished in a key-value manner. The key is the name of the type
 and the value a list of column-names in the features that should belong to
-this type. Splitting the <code class="docutils literal notranslate"><span class="pre">petal</span></code> columns in two different <code class="docutils literal notranslate"><span class="pre">X_types</span></code> is not
+this type. Splitting the _petal_ columns in two different <code class="docutils literal notranslate"><span class="pre">X_types</span></code> is not
 necessary and only for demonstration purposes. We here only want to
 use the first component of the <code class="docutils literal notranslate"><span class="pre">pca</span></code> and therfore specify its <code class="docutils literal notranslate"><span class="pre">n_components</span></code>
 hyperparameter respectively.</p>
@@ -641,25 +672,47 @@ hyperparameter respectively.</p>
 </section>
 <section id="applying-preprocessing-to-the-target">
 <h2>Applying preprocessing to the target<a class="headerlink" href="#applying-preprocessing-to-the-target" title="Permalink to this heading">#</a></h2>
-<ul class="simple">
-<li><p>So far we only applied preprocessing ot the features</p></li>
-<li><p>all transformers in (ref transfomers) cann be used both for feature and targettransfomrations,</p></li>
-<li><p>but when used for target transformations, the TargetPipelineCreator has to be used</p></li>
-<li><p>The target creator is than passed to the general pipeline creatro following the general principle of
-using apply_to to add everything to the general pipelinCreagor and create one big pipeline</p></li>
-</ul>
-<p>&lt;fill-in example for target preprocessing&gt;</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This approach refered to using the <cite>:class:</cite>.PipelineCreator` for feature
-preprocessing and model definitions. To see how to preprocess targets within
-a pipeline have a look at ref <cite>target_preprocessing</cite>.</p>
+<p>What we covered so far is how to apply preprocessing to the features and train
+a model in a cv-conistent manner by building a pipeline.
+However, sometimes one wants to apply preprocessing to the target. For example,
+when having a regression-task (continous target variable), one might want to
+predict the z-scored target.
+This can be achieved by using a <a class="reference internal" href="../api/generated/julearn.TargetPipelineCreator.html#julearn.TargetPipelineCreator" title="julearn.TargetPipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">TargetPipelineCreator</span></code></a>
+as one step in the general pipeline.</p>
+<p>We first create a <a class="reference internal" href="../api/generated/julearn.TargetPipelineCreator.html#julearn.TargetPipelineCreator" title="julearn.TargetPipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">TargetPipelineCreator</span></code></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">target_creator</span> <span class="o">=</span> <span class="n">TargetPipelineCreator</span><span class="p">()</span>
+<span class="n">target_creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">)</span>
+</pre></div>
 </div>
+<p>Next, we create the general pipeline using a <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a>. We pass
+the <code class="docutils literal notranslate"><span class="pre">target_creator</span></code> as one step of the pipeline and specify that it should
+only be applied to the <code class="docutils literal notranslate"><span class="pre">target</span></code>, which makes it clear for Julearn to only
+apply it to <code class="docutils literal notranslate"><span class="pre">y</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;regression&quot;</span><span class="p">)</span>
+<span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">target_creator</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;target&quot;</span><span class="p">)</span>
+<span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;svm&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This <code class="docutils literal notranslate"><span class="pre">creator</span></code> can then be passed to <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> as usual:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">run_cross_validation</span><span class="p">(</span>
+    <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">creator</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>All transformers in (<a class="reference internal" href="../available_pipeline_steps.html#available-transformers"><span class="std std-ref">Transformers</span></a>) can be used for both,
+feature and target transformations. However, features transformations can be
+directly specified as step in the <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a>, while target
+transformations have to be specified using the <a class="reference internal" href="../api/generated/julearn.TargetPipelineCreator.html#julearn.TargetPipelineCreator" title="julearn.TargetPipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">TargetPipelineCreator</span></code></a>,
+which is then passed to the overall <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> as an extra step.</p>
 <p>We covered how to set up basic pipelines, how to use the
 <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a>, how to use the <code class="docutils literal notranslate"><span class="pre">apply_to</span></code> parameter of the
-<a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> and covered basics of hyperparameters. In the next
+<a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> and covered basics of hyperparameters. Additional,
+we saw a basic use-case of target pre-processing. In the next
 step we will understand the returns of <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>, i.e. the
-model output and the scores of the performed corss-validation.</p>
+model output and the scores of the performed cross-validation.</p>
 <aside class="topic">
 <p class="topic-title">References:</p>
 <aside class="footnote-list brackets">
@@ -682,7 +735,7 @@ model output and the scores of the performed corss-validation.</p>
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title"><span class="section-number">2.4. </span>Model evaluation</div>
+                <div class="title">Model evaluation</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -693,7 +746,7 @@ model output and the scores of the performed corss-validation.</p>
                   <span>Previous</span>
                 </div>
                 
-                <div class="title"><span class="section-number">2.2. </span>Data</div>
+                <div class="title">Data</div>
                 
               </div>
             </a>
@@ -727,7 +780,7 @@ model output and the scores of the performed corss-validation.</p>
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">2.3. Pipeline</a><ul>
+<li><a class="reference internal" href="#">Pipeline</a><ul>
 <li><a class="reference internal" href="#basic-cross-validation-with-julearn">Basic cross validation with Julearn</a></li>
 <li><a class="reference internal" href="#feature-preprocessing">(Feature) preprocessing</a></li>
 <li><a class="reference internal" href="#pipeline-specification-made-easy-with-the-pipelinecreator">Pipeline specification made easy with the <code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a></li>

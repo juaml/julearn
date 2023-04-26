@@ -1,3 +1,4 @@
+.. _model_selection:
 
 ***************
 Model Selection

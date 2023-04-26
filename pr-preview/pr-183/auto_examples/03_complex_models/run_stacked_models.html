@@ -166,18 +166,19 @@
   <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">1. Getting started</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../what_really_need_know/index.html">2. What you really need to know</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/cross_validation.html">2.1. Why cross validation?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/data.html">2.2. Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/pipeline.html">2.3. Pipeline</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/model_evaluation.html">2.4. Model evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/cross_validation.html">Why cross validation?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/data.html">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/pipeline.html">Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/model_evaluation.html">Model evaluation</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../selected_deeper_topics/index.html">3. Selected deeper topics</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/confound_removal.html">3.1. Cross-validation consistent Confound Removal</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/HPT.html">3.2. Hyper Parameter Tuning</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/model_inspect.html">3.3. Inspecting Models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/stacked_models.html">3.4. Stacking Models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/CBPM.html">3.5. Connectome-based Predictive Modeling (CBPM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/cross_validation_splitter.html">3.4. Cross-validation splitter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/stacked_models.html">3.5. Stacking Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/CBPM.html">3.6. Connectome-based Predictive Modeling (CBPM)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../available_pipeline_steps.html">4. Overview of available Pipeline Steps</a></li>
@@ -385,13 +386,13 @@ classifier will be applied on the predictions of the two classifiers.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-04-26 12:08:39,898 - julearn - INFO - ===== Lib Versions =====
-2023-04-26 12:08:39,899 - julearn - INFO - numpy: 1.23.5
-2023-04-26 12:08:39,899 - julearn - INFO - scipy: 1.10.1
-2023-04-26 12:08:39,899 - julearn - INFO - sklearn: 1.2.2
-2023-04-26 12:08:39,899 - julearn - INFO - pandas: 1.5.3
-2023-04-26 12:08:39,899 - julearn - INFO - julearn: 0.3.0.dev155
-2023-04-26 12:08:39,899 - julearn - INFO - ========================
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-04-26 12:31:18,724 - julearn - INFO - ===== Lib Versions =====
+2023-04-26 12:31:18,724 - julearn - INFO - numpy: 1.23.5
+2023-04-26 12:31:18,724 - julearn - INFO - scipy: 1.10.1
+2023-04-26 12:31:18,724 - julearn - INFO - sklearn: 1.2.2
+2023-04-26 12:31:18,724 - julearn - INFO - pandas: 1.5.3
+2023-04-26 12:31:18,724 - julearn - INFO - julearn: 0.3.0.dev167
+2023-04-26 12:31:18,725 - julearn - INFO - ========================
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_iris</span></a> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;iris&quot;</span><span class="p">)</span>
@@ -441,53 +442,53 @@ We will try to predict the species.</p>
 <span class="nb">print</span><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">[</span><span class="s2">&quot;test_score&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-04-26 12:08:39,904 - julearn - INFO - Adding step filter_columns that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
-2023-04-26 12:08:39,904 - julearn - INFO - Setting hyperparameter keep = sepal
-2023-04-26 12:08:39,904 - julearn - INFO - Step added
-2023-04-26 12:08:39,904 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;sepal&#39;}; pattern=(?:__:type:__sepal)&gt;
-2023-04-26 12:08:39,904 - julearn - INFO - Step added
-2023-04-26 12:08:39,905 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;sepal&#39;}; pattern=(?:__:type:__sepal)&gt;
-2023-04-26 12:08:39,905 - julearn - INFO - Step added
-2023-04-26 12:08:39,905 - julearn - INFO - Adding step filter_columns that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
-2023-04-26 12:08:39,905 - julearn - INFO - Setting hyperparameter keep = petal
-2023-04-26 12:08:39,905 - julearn - INFO - Step added
-2023-04-26 12:08:39,905 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;petal&#39;}; pattern=(?:__:type:__petal)&gt;
-2023-04-26 12:08:39,905 - julearn - INFO - Step added
-2023-04-26 12:08:39,906 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={&#39;petal&#39;}; pattern=(?:__:type:__petal)&gt;
-2023-04-26 12:08:39,906 - julearn - INFO - Step added
-2023-04-26 12:08:39,906 - julearn - INFO - Adding step stacking that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
-2023-04-26 12:08:39,906 - julearn - INFO - Setting hyperparameter estimators = [(&#39;model_sepal&#39;, &lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7f1786a99960&gt;), (&#39;model_petal&#39;, &lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7f1786893e50&gt;)]
-2023-04-26 12:08:39,906 - julearn - INFO - Step added
-2023-04-26 12:08:39,906 - julearn - INFO - ==== Input Data ====
-2023-04-26 12:08:39,906 - julearn - INFO - Using dataframe as input
-2023-04-26 12:08:39,906 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2023-04-26 12:08:39,906 - julearn - INFO -      Target: species
-2023-04-26 12:08:39,907 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2023-04-26 12:08:39,907 - julearn - INFO -      X_types:{&#39;sepal&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;], &#39;petal&#39;: [&#39;petal_length&#39;, &#39;petal_width&#39;]}
-2023-04-26 12:08:39,908 - julearn - INFO - ====================
-2023-04-26 12:08:39,908 - julearn - INFO -
-2023-04-26 12:08:39,910 - julearn - INFO - = Model Parameters =
-2023-04-26 12:08:39,910 - julearn - INFO - ====================
-2023-04-26 12:08:39,910 - julearn - INFO -
-2023-04-26 12:08:39,912 - julearn - INFO - = Model Parameters =
-2023-04-26 12:08:39,912 - julearn - INFO - ====================
-2023-04-26 12:08:39,912 - julearn - INFO -
-2023-04-26 12:08:40,076 - julearn - INFO - = Model Parameters =
-2023-04-26 12:08:40,077 - julearn - INFO - ====================
-2023-04-26 12:08:40,077 - julearn - INFO -
-2023-04-26 12:08:40,077 - julearn - INFO - = Data Information =
-2023-04-26 12:08:40,077 - julearn - INFO -      Problem type: classification
-2023-04-26 12:08:40,077 - julearn - INFO -      Number of samples: 100
-2023-04-26 12:08:40,077 - julearn - INFO -      Number of features: 4
-2023-04-26 12:08:40,077 - julearn - INFO - ====================
-2023-04-26 12:08:40,077 - julearn - INFO -
-2023-04-26 12:08:40,077 - julearn - INFO -      Number of classes: 2
-2023-04-26 12:08:40,077 - julearn - INFO -      Target type: object
-2023-04-26 12:08:40,079 - julearn - INFO -      Class distributions: versicolor    50
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-04-26 12:31:18,729 - julearn - INFO - Adding step filter_columns that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
+2023-04-26 12:31:18,729 - julearn - INFO - Setting hyperparameter keep = sepal
+2023-04-26 12:31:18,730 - julearn - INFO - Step added
+2023-04-26 12:31:18,730 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;sepal&#39;}; pattern=(?:__:type:__sepal)&gt;
+2023-04-26 12:31:18,730 - julearn - INFO - Step added
+2023-04-26 12:31:18,730 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;sepal&#39;}; pattern=(?:__:type:__sepal)&gt;
+2023-04-26 12:31:18,730 - julearn - INFO - Step added
+2023-04-26 12:31:18,731 - julearn - INFO - Adding step filter_columns that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
+2023-04-26 12:31:18,731 - julearn - INFO - Setting hyperparameter keep = petal
+2023-04-26 12:31:18,731 - julearn - INFO - Step added
+2023-04-26 12:31:18,731 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;petal&#39;}; pattern=(?:__:type:__petal)&gt;
+2023-04-26 12:31:18,731 - julearn - INFO - Step added
+2023-04-26 12:31:18,731 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={&#39;petal&#39;}; pattern=(?:__:type:__petal)&gt;
+2023-04-26 12:31:18,731 - julearn - INFO - Step added
+2023-04-26 12:31:18,731 - julearn - INFO - Adding step stacking that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
+2023-04-26 12:31:18,732 - julearn - INFO - Setting hyperparameter estimators = [(&#39;model_sepal&#39;, &lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fd6be982650&gt;), (&#39;model_petal&#39;, &lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fd6be981cc0&gt;)]
+2023-04-26 12:31:18,732 - julearn - INFO - Step added
+2023-04-26 12:31:18,732 - julearn - INFO - ==== Input Data ====
+2023-04-26 12:31:18,732 - julearn - INFO - Using dataframe as input
+2023-04-26 12:31:18,732 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2023-04-26 12:31:18,732 - julearn - INFO -      Target: species
+2023-04-26 12:31:18,732 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2023-04-26 12:31:18,732 - julearn - INFO -      X_types:{&#39;sepal&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;], &#39;petal&#39;: [&#39;petal_length&#39;, &#39;petal_width&#39;]}
+2023-04-26 12:31:18,734 - julearn - INFO - ====================
+2023-04-26 12:31:18,734 - julearn - INFO -
+2023-04-26 12:31:18,736 - julearn - INFO - = Model Parameters =
+2023-04-26 12:31:18,736 - julearn - INFO - ====================
+2023-04-26 12:31:18,736 - julearn - INFO -
+2023-04-26 12:31:18,737 - julearn - INFO - = Model Parameters =
+2023-04-26 12:31:18,737 - julearn - INFO - ====================
+2023-04-26 12:31:18,737 - julearn - INFO -
+2023-04-26 12:31:18,899 - julearn - INFO - = Model Parameters =
+2023-04-26 12:31:18,899 - julearn - INFO - ====================
+2023-04-26 12:31:18,899 - julearn - INFO -
+2023-04-26 12:31:18,899 - julearn - INFO - = Data Information =
+2023-04-26 12:31:18,899 - julearn - INFO -      Problem type: classification
+2023-04-26 12:31:18,899 - julearn - INFO -      Number of samples: 100
+2023-04-26 12:31:18,899 - julearn - INFO -      Number of features: 4
+2023-04-26 12:31:18,899 - julearn - INFO - ====================
+2023-04-26 12:31:18,899 - julearn - INFO -
+2023-04-26 12:31:18,899 - julearn - INFO -      Number of classes: 2
+2023-04-26 12:31:18,900 - julearn - INFO -      Target type: object
+2023-04-26 12:31:18,901 - julearn - INFO -      Class distributions: versicolor    50
 virginica     50
 Name: species, dtype: int64
-2023-04-26 12:08:40,079 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2023-04-26 12:08:40,079 - julearn - INFO - Binary classification problem detected.
+2023-04-26 12:31:18,901 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2023-04-26 12:31:18,901 - julearn - INFO - Binary classification problem detected.
 0    1.00
 1    0.85
 2    0.95
@@ -496,7 +497,7 @@ Name: species, dtype: int64
 Name: test_score, dtype: float64
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  7.254 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  7.761 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-03-complex-models-run-stacked-models-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/642e7f78aab7ede209bd6f51a116541e/run_stacked_models.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">run_stacked_models.py</span></code></a></p>

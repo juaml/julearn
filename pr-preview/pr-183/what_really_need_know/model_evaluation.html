@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="3. Selected deeper topics" href="../selected_deeper_topics/index.html" /><link rel="prev" title="2.3. Pipeline" href="pipeline.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="3. Selected deeper topics" href="../selected_deeper_topics/index.html" /><link rel="prev" title="Pipeline" href="pipeline.html" />
 
     <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
-        <title>2.4. Model evaluation - julearn documentation</title>
+        <title>Model evaluation - julearn documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
@@ -140,7 +140,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -166,18 +166,19 @@
   <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../getting_started.html">1. Getting started</a></li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">2. What you really need to know</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="cross_validation.html">2.1. Why cross validation?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="data.html">2.2. Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pipeline.html">2.3. Pipeline</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">2.4. Model evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cross_validation.html">Why cross validation?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipeline.html">Pipeline</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">Model evaluation</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../selected_deeper_topics/index.html">3. Selected deeper topics</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/confound_removal.html">3.1. Cross-validation consistent Confound Removal</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/HPT.html">3.2. Hyper Parameter Tuning</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/model_inspect.html">3.3. Inspecting Models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/stacked_models.html">3.4. Stacking Models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/CBPM.html">3.5. Connectome-based Predictive Modeling (CBPM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/cross_validation_splitter.html">3.4. Cross-validation splitter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/stacked_models.html">3.5. Stacking Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/CBPM.html">3.6. Connectome-based Predictive Modeling (CBPM)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../available_pipeline_steps.html">4. Overview of available Pipeline Steps</a></li>
@@ -355,21 +356,326 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main">
           <section id="model-evaluation">
-<span id="model-evaluation-usage"></span><h1><span class="section-number">2.4. </span>Model evaluation<a class="headerlink" href="#model-evaluation" title="Permalink to this heading">#</a></h1>
-<dl class="simple">
-<dt>Content to treat:</dt><dd><p>model and score as output of run_cv -&gt; inspect some output from the examples in pipeline.rst
-cv, + return estimator=final
-scoring -&gt; external skl input, access train/test scores, t-test for model comparison
-inspect preprocess??</p>
-</dd>
-</dl>
+<span id="model-evaluation-usage"></span><h1>Model evaluation<a class="headerlink" href="#model-evaluation" title="Permalink to this heading">#</a></h1>
+<section id="the-returns-of-run-cross-validation">
+<h2>The returns of <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a><a class="headerlink" href="#the-returns-of-run-cross-validation" title="Permalink to this heading">#</a></h2>
+<p>So far, we saw how to run a cross-validation using the <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a>
+and <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>. But what do we get as output from such a
+pipeline?</p>
+<section id="cross-validation-scores">
+<h3>Cross-validation scores<a class="headerlink" href="#cross-validation-scores" title="Permalink to this heading">#</a></h3>
+<p>We consider the _iris_ data example and one of the pipelines from the previous
+section (feature z-scoring and a <code class="docutils literal notranslate"><span class="pre">svm</span></code>). However, this time we assign
+the returned value of
+<a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> to a variable called <code class="docutils literal notranslate"><span class="pre">scores</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">julearn.model_selection</span> <span class="kn">import</span> <span class="n">run_cross_validation</span>
+<span class="kn">from</span> <span class="nn">julearn.pipeline</span> <span class="kn">import</span> <span class="n">PipelineCreator</span>
+
+<span class="c1"># create pipeline</span>
+<span class="n">creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;classification&quot;</span><span class="p">)</span>
+<span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">)</span>
+<span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;svm&quot;</span><span class="p">)</span>
+
+<span class="c1"># run cross-validation</span>
+<span class="n">scores</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">creator</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">scores</span></code> variable is an ExtendedDataFrame object which contains as rows
+the folds (and/or repititions) of the cross-validation and as columns the
+information about the scoring for each fold.</p>
+<a class="reference internal image-reference" href="../_images/scores_run_cv.png"><img alt="scores_cv" src="../_images/scores_run_cv.png" style="width: 600px;" /></a>
+<p>We can for example see that there is <code class="docutils literal notranslate"><span class="pre">n_train=120</span></code> samples in each fold’s
+training set and <code class="docutils literal notranslate"><span class="pre">n_test=30</span></code> samples in each respective validations set.
+Additionally, we see that for example the <code class="docutils literal notranslate"><span class="pre">test_score</span></code> for the third fold is
+0.933. This means that the model achieved a score of 0.933 on the validation set
+of this fold.</p>
+<p>Cross-validation is particularly useful to inspect if a model is overfitting.
+For this purpose it is useful to not only see the test scores for each fold but
+also the training scores. This can be achieved by setting the
+<code class="docutils literal notranslate"><span class="pre">return_train_score</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">True</span></code> in <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">scores</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">creator</span><span class="p">,</span>
+    <span class="n">return_train_score</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Leading to an additional column <code class="docutils literal notranslate"><span class="pre">train_score</span></code> in the <code class="docutils literal notranslate"><span class="pre">scores</span></code> variable:</p>
+<a class="reference internal image-reference" href="../_images/scores_run_cv_train.png"><img alt="scores_cv_train" src="../_images/scores_run_cv_train.png" style="width: 600px;" /></a>
+<p>For a model that is not overfitting, the training and test scores should be
+similar. In our example, the training and test scores are indeed similar.</p>
+<p>The column <code class="docutils literal notranslate"><span class="pre">cv_mdsum</span></code> on the first glance might appear a bit cryptic. However,
+it can be useful for internal checks, to see if the same CV was used or not. But
+this is nothing you need to worry about at this point.</p>
+</section>
+<section id="returning-a-model-estimator">
+<h3>Returning a model (estimator)<a class="headerlink" href="#returning-a-model-estimator" title="Permalink to this heading">#</a></h3>
+<p>Now that we saw that our model doesn’t seem to overfit, we might be interested
+in not only the scores but also want to return a model. For that purpose
+<a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> has the parameter <code class="docutils literal notranslate"><span class="pre">return_estimator</span></code>. It can
+have three different values:</p>
+<p>1. <code class="docutils literal notranslate"><span class="pre">&quot;cv&quot;</span></code>: This will lead to <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> returning all the
+estimators from each CV fold, fitted on the training data of the respective
+fold, i.e. the models that led to the above scores in each fold.</p>
+<p>2. <code class="docutils literal notranslate"><span class="pre">&quot;final&quot;</span></code>: With this setting, an additional model will be trained on the
+entire training dataset and not on the cv folds. This model will be returned.
+The scores will still refer to the cv folds.</p>
+<p>1. <code class="docutils literal notranslate"><span class="pre">&quot;all&quot;</span></code>: In this scenario, all the estimators (final and cv) will be
+returned.</p>
+<p>For demonstration purposes we will have a closer look at the <code class="docutils literal notranslate"><span class="pre">&quot;final&quot;</span></code>
+estimator option (same pipeline as above) and therefore assign the returned
+values of <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> to a variable called <code class="docutils literal notranslate"><span class="pre">scores</span></code> (for
+the CV scores) and <code class="docutils literal notranslate"><span class="pre">model</span></code> (for the returned model):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">scores</span><span class="p">,</span> <span class="n">model</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">creator</span><span class="p">,</span>
+    <span class="n">return_train_score</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">return_estimator</span><span class="o">=</span><span class="s2">&quot;final&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">scores</span></code> will contain the same content as before. The <code class="docutils literal notranslate"><span class="pre">model</span></code> variable
+is a sklearn estimator object and has all the information on our pipeline and
+the retrained information on the entire training dataset.</p>
+<a class="reference internal image-reference" href="../_images/final_estimator.png"><img alt="final_estimator" src="../_images/final_estimator.png" style="width: 600px;" /></a>
+<p>We can use this estimator object to for example inspect the coefficients of the
+model or make predictions on a hold out test set. To learn more about how to
+inspect models please have a look at <a class="reference internal" href="../selected_deeper_topics/model_inspect.html#model-inspection"><span class="std std-ref">Inspecting Models</span></a>.</p>
+</section>
+</section>
+<section id="cross-validation-types-and-scoring">
+<h2>Cross-validation types and scoring<a class="headerlink" href="#cross-validation-types-and-scoring" title="Permalink to this heading">#</a></h2>
+<section id="cross-validation-splitters">
+<h3>Cross-validation splitters<a class="headerlink" href="#cross-validation-splitters" title="Permalink to this heading">#</a></h3>
+<p>When performing a cross-validation, we need to split the data into training and
+validation sets. This is done by a cross-validation splitter, that defines how
+many folds should be used, how often the cross-validation should be repeated
+and how the data should be split. When splitting the data they can for example
+be shuffled, one can consider certain groups for splitting or the splits can be
+stratified according to some pre-defined variables.</p>
+<p>So far, however, we didn’t specify anything in that regard and still the cross-
+validation was performed and we got five folds (see the five rows above in the
+scores dataframe). This is, because per default <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>
+falls back to the scikit-learn defaults, which is a <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.StratifiedKFold.html#sklearn.model_selection.StratifiedKFold">StratifiedKFold</a> (k=5) for
+classification and <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.KFold.html#sklearn.model_selection.KFold">KFold</a> (k=5) for regression. So in our case a <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.KFold.html#sklearn.model_selection.KFold">KFold</a>
+cross-validation with five folds was performed.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>These defaults will change when they are changed in scikit-learn as here
+Julearn just falls back to the scikit-learn defaults.</p>
+</div>
+<p>We can define the cross-validation splitting strategy ourselves by passing an
+int, str or cross-validation generator to the <code class="docutils literal notranslate"><span class="pre">cv</span></code> parameter of
+<a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>. The default described above resembles <code class="docutils literal notranslate"><span class="pre">cv=None</span></code>.
+the second options is to pass only an integer to <code class="docutils literal notranslate"><span class="pre">cv</span></code>. In that case still the
+same default splitting
+strategies will be used (<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.StratifiedKFold.html#sklearn.model_selection.StratifiedKFold">StratifiedKFold</a> for classification,
+<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.KFold.html#sklearn.model_selection.KFold">KFold</a> for regression), but the number of folds will be changed to the value
+of the provided integer (e.g. <code class="docutils literal notranslate"><span class="pre">cv=10</span></code>). To define the entire splitting
+strategy, one can pass all scikit-learn compatible splitters <a class="footnote-reference brackets" href="#id5" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a>
+to <code class="docutils literal notranslate"><span class="pre">cv</span></code>. However, Julearn provides a built-in set of possible splitters that
+can be found under <a class="reference internal" href="../api/model_selection.html#model-selection"><span class="std std-ref">Model Selection</span></a> (see more about them in
+<a class="reference internal" href="../selected_deeper_topics/cross_validation_splitter.html#cv-splitter"><span class="std std-ref">Cross-validation splitter</span></a>). The fourth option is to pass an
+iterable that yields the train and test indices for each split.</p>
+<p>Using the same pipeline (<code class="docutils literal notranslate"><span class="pre">creator</span></code>) as above, we can define a cv-splitter and
+pass it to <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">RepeatedStratifiedKFold</span>
+
+<span class="n">cv_splitter</span> <span class="o">=</span> <span class="n">RepeatedStratifiedKFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">n_repeats</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="n">scores</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">creator</span><span class="p">,</span>
+    <span class="n">cv</span><span class="o">=</span><span class="n">cv_splitter</span><span class="p">,</span>
+    <span class="n">return_train_score</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>This will lead to a cross-validation being performed 10 times
+(5 folds x 2 repeats), so the returned <code class="docutils literal notranslate"><span class="pre">scores</span></code> dataframe will have 10 rows
+now. We set the <code class="docutils literal notranslate"><span class="pre">random_state</span></code> to an arbitrary integer to make the splitting
+of the data reproducible.</p>
+<a class="reference internal image-reference" href="../_images/scores_run_cv_splitter.png"><img alt="cv_splitter_scores" src="../_images/scores_run_cv_splitter.png" style="width: 600px;" /></a>
+</section>
+<section id="id2">
+<h3>Scoring<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h3>
+<p>Nice, we have a basic pipeline, with preprocessing of features and a model, we
+defined the splitting strategy for the cross-validation the way we want it and we
+had a look at our resulting train and test scores when performing
+the cross-validation. But what do these scores even mean?</p>
+<p>Same as for the kind of cv-splitter, <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> has a default
+assumption for the scorer to be used to evaluate the cross-validation, which is
+always the model’s default scorer. Remember, we used a support vector classifier
+with the <code class="docutils literal notranslate"><span class="pre">y</span></code> (target) variable being the species of the iris dataset
+(possible values: ‘setosa’, ‘versicolor’ or ‘virginica’). Therefore we have a
+multi-class classification (not to be confused with a multi-label
+classification!). Checking the scikit-learn documentation of a support vector
+classifier’s default scorer, we can see that this is the
+‘mean accuracy on the given test data and labels’ <a class="footnote-reference brackets" href="#id6" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></a>.</p>
+<p>With the <code class="docutils literal notranslate"><span class="pre">scoring</span></code> parameter of <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>, one can define
+the scoring function to be used. On top of the available scikit-learn <a class="reference external" href="https://scikit-learn.org/stable/modules/model_evaluation.html#">scoring</a>
+parameter options, julearn extends the
+functionality with more internal scorers and the possibility to define custom
+scorers. To see the available Julearn scorers, one can use the
+<a class="reference internal" href="../api/generated/julearn.scoring.list_scorers.html#julearn.scoring.list_scorers" title="julearn.scoring.list_scorers"><code class="xref py py-func docutils literal notranslate"><span class="pre">list_scorers()</span></code></a> function:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">julearn</span> <span class="kn">import</span> <span class="n">scoring</span>
+
+<span class="n">scoring</span><span class="o">.</span><span class="n">list_scorers</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>To use a Julearn scorer, one can pass the name of the scorer as a string to the
+<code class="docutils literal notranslate"><span class="pre">scoring</span></code> parameter of <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>. If multiple different
+scorers should be used, a list of strings can be passed. For example, if we were
+interested in the <code class="docutils literal notranslate"><span class="pre">accuracy</span></code> and the <code class="docutils literal notranslate"><span class="pre">f1</span></code> as scorer we could do the
+following:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">scoring</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;accuracy&quot;</span><span class="p">,</span> <span class="s2">&quot;f1_macro&quot;</span><span class="p">]</span>
+
+<span class="n">scores</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">creator</span><span class="p">,</span>
+    <span class="n">cv</span><span class="o">=</span><span class="n">cv_splitter</span><span class="p">,</span>
+    <span class="n">return_train_score</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">scoring</span><span class="o">=</span><span class="n">scoring</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">scores</span></code> dataframe will now have train- and test-score columns for both
+scorers:</p>
+<a class="reference internal image-reference" href="../_images/multiple_scorers_run_cv.png"><img alt="multiple_scorers" src="../_images/multiple_scorers_run_cv.png" style="width: 600px;" /></a>
+</section>
+</section>
+<section id="basic-model-comparisons-with-julearn">
+<h2>Basic model comparisons with Julearn<a class="headerlink" href="#basic-model-comparisons-with-julearn" title="Permalink to this heading">#</a></h2>
+<p>The example model seems to perform decently well. But what if we want to compare
+the performance of different models, for example when using different learning
+algorithms?</p>
+<p>To statistically compare different models, Julearn provides a built-in
+corrected t-test. To see how to apply it, we will first build three different
+models, each with another learning algorithm and then statistically compare them.</p>
+<p>To perform a binary classification (and not a multi-class classification) we
+will switch to the <code class="docutils literal notranslate"><span class="pre">breast_cancer</span></code> dataset from scikit-learn <a class="footnote-reference brackets" href="#id7" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></a> as an
+example. The to be predicted target states if the cancer is malignant or benign.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_breast_cancer</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">load_breast_cancer</span><span class="p">()</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">feature_names</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">target</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">y</span> <span class="o">=</span> <span class="s2">&quot;target&quot;</span>
+</pre></div>
+</div>
+<p>We start by defining the same cv_splitter as above and two scorers:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cv_splitter</span> <span class="o">=</span> <span class="n">RepeatedStratifiedKFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">n_repeats</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="n">scoring</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;accuracy&quot;</span><span class="p">,</span> <span class="s2">&quot;roc_auc&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>We will use the same pipeline as above, but this time without the
+<a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> and instead define the pipeline directly in
+<a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>. We use three different learning algorithms that
+we want to compare and use the default hyperparameters for each of them.</p>
+<p><strong>Model 1</strong>: default SVM.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">scores1</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;svm&quot;</span><span class="p">,</span>
+    <span class="n">preprocess</span><span class="o">=</span><span class="s2">&quot;zscore&quot;</span><span class="p">,</span>
+    <span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;classification&quot;</span><span class="p">,</span>
+    <span class="n">scoring</span><span class="o">=</span><span class="n">scoring</span><span class="p">,</span>
+    <span class="n">cv</span><span class="o">=</span><span class="n">cv_splitter</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Model 2</strong>: default Random Forest.</p>
+<p>As we can see in <a class="reference internal" href="../available_pipeline_steps.html#available-models"><span class="std std-ref">Models (Estimators)</span></a>, we can specify to use a random forest
+by passing the <code class="docutils literal notranslate"><span class="pre">rf</span></code> string to the <code class="docutils literal notranslate"><span class="pre">model</span></code> parameter of
+<a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">scores2</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;rf&quot;</span><span class="p">,</span>
+    <span class="n">preprocess</span><span class="o">=</span><span class="s2">&quot;zscore&quot;</span><span class="p">,</span>
+    <span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;classification&quot;</span><span class="p">,</span>
+    <span class="n">scoring</span><span class="o">=</span><span class="n">scoring</span><span class="p">,</span>
+    <span class="n">cv</span><span class="o">=</span><span class="n">cv_splitter</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Model 3</strong>: default Logistic Regression.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">scores3</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;logit&quot;</span><span class="p">,</span>
+    <span class="n">preprocess</span><span class="o">=</span><span class="s2">&quot;zscore&quot;</span><span class="p">,</span>
+    <span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;classification&quot;</span><span class="p">,</span>
+    <span class="n">scoring</span><span class="o">=</span><span class="n">scoring</span><span class="p">,</span>
+    <span class="n">cv</span><span class="o">=</span><span class="n">cv_splitter</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>We will add a column to each scores dataframes to be able to distinguish the
+different models later on.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">scores1</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;svm&quot;</span>
+<span class="n">scores2</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;rf&quot;</span>
+<span class="n">scores3</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;logit&quot;</span>
+</pre></div>
+</div>
+<p>Comparing the performance of these three models is now as easy as
+the following one-liner:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">julearn.stats.corrected_ttest</span> <span class="kn">import</span> <span class="n">corrected_ttest</span>
+
+<span class="n">stats_df</span> <span class="o">=</span> <span class="n">corrected_ttest</span><span class="p">(</span><span class="n">scores1</span><span class="p">,</span> <span class="n">scores2</span><span class="p">,</span> <span class="n">scores3</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">stats_df</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This gives us a dataframe with the corrected t-test results for each pairwise
+comparison of the three models’ fit_time, score_time and test scores:</p>
+<a class="reference internal image-reference" href="../_images/corrected_ttest.png"><img alt="corrected_ttest" src="../_images/corrected_ttest.png" style="width: 600px;" /></a>
+<p>We can see, that none of the models performed better with respect to
+neither accuracy nor roc_auc. However, the Random Forest was slower than both
+the SVM and the Logistic Regression.</p>
+<aside class="topic">
+<p class="topic-title">References:</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id5" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">4</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://scikit-learn.org/stable/modules/classes.html#module-sklearn.model_selection">https://scikit-learn.org/stable/modules/classes.html#module-sklearn.model_selection</a></p>
+</aside>
+<aside class="footnote brackets" id="id6" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">5</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC.score">https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC.score</a></p>
+</aside>
+<aside class="footnote brackets" id="id7" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id4">6</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_breast_cancer.html">https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_breast_cancer.html</a></p>
+</aside>
+</aside>
+</aside>
+</section>
 </section>
 
         </article>
@@ -393,7 +699,7 @@ inspect preprocess??</p>
                   <span>Previous</span>
                 </div>
                 
-                <div class="title"><span class="section-number">2.3. </span>Pipeline</div>
+                <div class="title">Pipeline</div>
                 
               </div>
             </a>
@@ -415,8 +721,37 @@ inspect preprocess??</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Model evaluation</a><ul>
+<li><a class="reference internal" href="#the-returns-of-run-cross-validation">The returns of <code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a><ul>
+<li><a class="reference internal" href="#cross-validation-scores">Cross-validation scores</a></li>
+<li><a class="reference internal" href="#returning-a-model-estimator">Returning a model (estimator)</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cross-validation-types-and-scoring">Cross-validation types and scoring</a><ul>
+<li><a class="reference internal" href="#cross-validation-splitters">Cross-validation splitters</a></li>
+<li><a class="reference internal" href="#id2">Scoring</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#basic-model-comparisons-with-julearn">Basic model comparisons with Julearn</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>

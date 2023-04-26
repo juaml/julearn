@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="2.1. Why cross validation?" href="cross_validation.html" /><link rel="prev" title="1. Getting started" href="../getting_started.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Why cross validation?" href="cross_validation.html" /><link rel="prev" title="1. Getting started" href="../getting_started.html" />
 
     <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
         <title>2. What you really need to know - julearn documentation</title>
@@ -140,7 +140,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -166,18 +166,19 @@
   <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../getting_started.html">1. Getting started</a></li>
 <li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">2. What you really need to know</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="cross_validation.html">2.1. Why cross validation?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="data.html">2.2. Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pipeline.html">2.3. Pipeline</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model_evaluation.html">2.4. Model evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cross_validation.html">Why cross validation?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipeline.html">Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_evaluation.html">Model evaluation</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../selected_deeper_topics/index.html">3. Selected deeper topics</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/confound_removal.html">3.1. Cross-validation consistent Confound Removal</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/HPT.html">3.2. Hyper Parameter Tuning</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/model_inspect.html">3.3. Inspecting Models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/stacked_models.html">3.4. Stacking Models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/CBPM.html">3.5. Connectome-based Predictive Modeling (CBPM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/cross_validation_splitter.html">3.4. Cross-validation splitter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/stacked_models.html">3.5. Stacking Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/CBPM.html">3.6. Connectome-based Predictive Modeling (CBPM)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../available_pipeline_steps.html">4. Overview of available Pipeline Steps</a></li>
@@ -355,7 +356,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -364,25 +365,65 @@
           <section id="what-you-really-need-to-know">
 <span id="need-to-know"></span><h1><span class="section-number">2. </span>What you really need to know<a class="headerlink" href="#what-you-really-need-to-know" title="Permalink to this heading">#</a></h1>
 <p>The backbone of Julearn is the function <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>, which
-allows you do all the magic. All important information needed for your
+allows you to do all the magic. All important information needed for your
 machine learning workflow goes into this function, specified via its parameters.</p>
 <p>But why is basically everything based on one <cite>cross_validation</cite> function? Well,
 because doing proper cross-validation is the backbone of machine learning.</p>
+<section id="why-cross-validation">
+<span id="why-cv"></span><h2><span class="section-number">2.1. </span>Why cross validation?<a class="headerlink" href="#why-cross-validation" title="Permalink to this heading">#</a></h2>
+<p>One of the core important concepts in machine learning is cross validation. The
+core idea is that we want to train (fit) a model on a subset of our data and
+evaluate it on a different subset of our data to see how well the trained
+model generalizes to unseen data. Thus, we need to have
+separate data for fitting and predicting. As data is a valuable ressource in
+machine learning, cross validation comes in handy as a technique to split the
+data into a training and validation data set using multiple folds.
+The training data set is used to
+fit the pipeline, while the validation data set is used to predict the data.
+The predictions are then compared to the true values of the validation data set,
+obtaining an estimation of the prediction performance of the model. This is
+done in a repeated manner for all folds and the overview of the scores from all
+folds give a good estimation of the model’s generalization performance. To read
+more about cross validation, its functionality and usage and why it is such an
+important concept in machine learning, you can have a look at these
+<a class="footnote-reference brackets" href="#id5" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id6" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id7" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>7<span class="fn-bracket">]</span></a> <a class="footnote-reference brackets" href="#id8" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>8<span class="fn-bracket">]</span></a> resources.</p>
+</section>
+<section id="the-essence-of-run-cross-validation">
+<h2><span class="section-number">2.2. </span>The essence of <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a><a class="headerlink" href="#the-essence-of-run-cross-validation" title="Permalink to this heading">#</a></h2>
+<p><a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> uses your <strong>specified parameters</strong> to train a model
+accordingly and most importantly does all specified steps in a cross-validation
+consistent manner. This helps to avoid data leakage.</p>
+<p>Among others, the parameters passed to <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> include
+the specification of …</p>
+<ol class="arabic simple">
+<li><p>… your data and feature types (see <a class="reference internal" href="data.html#data-usage"><span class="std std-ref">Data</span></a>)</p></li>
+<li><p>… your pipeline steps, like the learning algorithm or preprocessing steps
+to use (see <a class="reference internal" href="pipeline.html#pipeline-usage"><span class="std std-ref">Pipeline</span></a>)</p></li>
+<li><p>… how the model should be evaluated, like cross validation scheme or the
+scoring to be used for evaluation (see <a class="reference internal" href="model_evaluation.html#model-evaluation-usage"><span class="std std-ref">Model evaluation</span></a>)</p></li>
+</ol>
+<p>After training the model, <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> either <strong>returns</strong>
+only the model’s scores from the cross validation or both, the scores and
+the model(s) of the performed cross validation are
+(depending on your exact specifications).</p>
+</section>
+<section id="get-the-basics-running">
+<h2><span class="section-number">2.3. </span>Get the basics running<a class="headerlink" href="#get-the-basics-running" title="Permalink to this heading">#</a></h2>
 <p>To see what is needed to setup a basic workflow using <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>,
 follow along this chapter where you can find out more about the data input,
 a basic pipeline and basic model evaluation:</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="cross_validation.html">2.1. Why cross validation?</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="cross_validation.html">Why cross validation?</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="cross_validation.html#the-essence-of-run-cross-validation">The essence of <code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="data.html">2.2. Data</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="data.html">Data</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="data.html#input-data-to-run-cross-validation">Input data to <code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="data.html#give-the-feature-columns-a-specific-type">Give the feature columns a specific type</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="pipeline.html">2.3. Pipeline</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="pipeline.html">Pipeline</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="pipeline.html#basic-cross-validation-with-julearn">Basic cross validation with Julearn</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pipeline.html#feature-preprocessing">(Feature) preprocessing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pipeline.html#pipeline-specification-made-easy-with-the-pipelinecreator">Pipeline specification made easy with the <code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a></li>
@@ -391,7 +432,12 @@ a basic pipeline and basic model evaluation:</p>
 <li class="toctree-l2"><a class="reference internal" href="pipeline.html#applying-preprocessing-to-the-target">Applying preprocessing to the target</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="model_evaluation.html">2.4. Model evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="model_evaluation.html">Model evaluation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="model_evaluation.html#the-returns-of-run-cross-validation">The returns of <code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_evaluation.html#cross-validation-types-and-scoring">Cross-validation types and scoring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_evaluation.html#basic-model-comparisons-with-julearn">Basic model comparisons with Julearn</a></li>
+</ul>
+</li>
 </ul>
 </div>
 <p>If you are just interested in seeing all parameters of <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>,
@@ -399,6 +445,28 @@ click on the function link to have a look at all its parameters in the <cite>api
 <p>If you are already familiar with how to set up a basic workflow using Julearn
 and want to do more fancy stuff, go to <a class="reference internal" href="../selected_deeper_topics/index.html#selected-deeper-topics"><span class="std std-ref">Selected deeper topics</span></a> to pick
 and select specific topics.</p>
+<aside class="topic">
+<p class="topic-title">References:</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id5" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">5</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://www.sciencedirect.com/science/article/pii/S105381191630595X">https://www.sciencedirect.com/science/article/pii/S105381191630595X</a></p>
+</aside>
+<aside class="footnote brackets" id="id6" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">6</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://www.nature.com/articles/s41746-022-00592-y">https://www.nature.com/articles/s41746-022-00592-y</a></p>
+</aside>
+<aside class="footnote brackets" id="id7" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">7</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://www.sciencedirect.com/science/article/pii/S1053811917305311">https://www.sciencedirect.com/science/article/pii/S1053811917305311</a></p>
+</aside>
+<aside class="footnote brackets" id="id8" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id4">8</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://scikit-learn.org/stable/modules/cross_validation.html">https://scikit-learn.org/stable/modules/cross_validation.html</a></p>
+</aside>
+</aside>
+</aside>
+</section>
 </section>
 
         </article>
@@ -411,7 +479,7 @@ and select specific topics.</p>
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title"><span class="section-number">2.1. </span>Why cross validation?</div>
+                <div class="title">Why cross validation?</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -444,8 +512,29 @@ and select specific topics.</p>
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">2. What you really need to know</a><ul>
+<li><a class="reference internal" href="#why-cross-validation">2.1. Why cross validation?</a></li>
+<li><a class="reference internal" href="#the-essence-of-run-cross-validation">2.2. The essence of <code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a></li>
+<li><a class="reference internal" href="#get-the-basics-running">2.3. Get the basics running</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>
