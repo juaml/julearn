@@ -122,9 +122,12 @@ print(stats_df)
 
 ###############################################################################
 # .. rst-class:: hidden
+#   This block is hidden in the documentation. This files are used to generate
+#   the plots in the documentation. (not working for now)
 
-# This block is hidden in the documentation. This files are used to generate
-# the plots in the documentation.
+# The following lines are only meant for the documentation to work and not
+# needed for the example to run. This will be removed as soon as sphix-gallery
+# is able to hide code blocks.
 scores1.to_csv("/tmp/scores1.csv")
 scores2.to_csv("/tmp/scores2.csv")
 scores3.to_csv("/tmp/scores3.csv")
