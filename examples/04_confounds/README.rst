@@ -1,5 +1,3 @@
-.. _examples_confounds:
-
 Confounds
 =========
 

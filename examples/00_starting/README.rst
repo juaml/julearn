@@ -1,5 +1,3 @@
-.. _examples_starting:
-
 Starting with julearn
 =====================
 
