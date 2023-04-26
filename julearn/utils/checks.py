@@ -1,3 +1,4 @@
+"""Implement various checks for the input of the functions."""
 # Author: Federico Raimondo <f.raimondo@fz-juelich.de>
 # License: BSD 3 clause
 
@@ -76,4 +77,3 @@ def check_scores_df(
             score["model"] = f"model_{i+1}"
         named_scores.append(score)
     return named_scores
-
