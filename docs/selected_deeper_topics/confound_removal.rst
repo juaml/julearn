@@ -1,5 +1,7 @@
 .. include:: ../links.inc
 
+.. _confound_removal:
+
 Cross-validation consistent Confound Removal
 ============================================
 

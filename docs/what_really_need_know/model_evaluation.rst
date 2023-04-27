@@ -268,6 +268,9 @@ To statistically compare different models, Julearn provides a built-in
 corrected t-test. To see how to apply it, we will first build three different 
 models, each with another learning algorithm and then statistically compare them.
 
+Running different models
+^^^^^^^^^^^^^^^^^^^^^^^^
+
 To perform a binary classification (and not a multi-class classification) we 
 will switch to the ``breast_cancer`` dataset from scikit-learn [#3]_ as an
 example. The to be predicted target states if the cancer is malignant or benign.
@@ -356,6 +359,9 @@ different models later on.
   scores2["model"] = "rf"
   scores3["model"] = "logit"
 
+Statistically compare the models
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 Comparing the performance of these three models is now as easy as 
 the following one-liner:
 
@@ -378,12 +384,51 @@ neither accuracy nor roc_auc. However, the Random Forest was slower than both
 the SVM and the Logistic Regression.
 
 .. # TODO - Add visualization or leave it for the example?
-.. To get a better overview of the performance of the three models, we can use the
-.. Julearn's visualization tool to plot the scores:
+Visualize the models
+^^^^^^^^^^^^^^^^^^^^
 
-.. from julearn.viz import plot_scores
-.. panel = plot_scores(scores1, scores2, scores3)
-.. panel.show()
+Visualizations can help to get a better intuitive understanding of the 
+differences between the models. To get a better overview of the performances
+of our three models, we can make use of 
+Julearn's visualization tool to plot the scores in an interactive manner. As 
+visualizations are not part of the core functionality of Julearn, you will need
+to first manually **install the additional following dependencies** inside your 
+respective environment, using either pip or conda:
+
+Using pip:
+
+.. code-block:: bash
+
+  pip install panel
+  pip install bokeh
+
+Using conda:
+
+.. code-block:: bash
+
+  conda install -c conda-forge panel
+  conda install -c bokeh bokeh
+
+From here we can create the interactive plot. Interactive, because you can 
+choose the models to be displayed and the scorer to be plotted.
+
+.. code-block:: python
+
+  from julearn.viz import plot_scores
+
+  panel = plot_scores(scores1, scores2, scores3)
+  panel.show()
+
+This is what your plot could look like:
+
+.. image:: ../images/plot_scores.png
+    :width: 600
+    :alt: plot_scores
+
+Well done, you made it until here and are now ready to dive into
+:ref:`selected_deeper_topics`!
+Maybe you are curious to learn :ref:`confound_removal` or want to learn more 
+about :ref:`model_inspection`. 
 
 
 .. topic:: References:
