@@ -3,6 +3,9 @@
 Why cross validation?
 =====================
 
+Cross-validation - The fundamentals
+-----------------------------------
+
 In Machine Learning, usually one wants to test how well a model _predicts_ 
 new data. Therefore, we cannot do predictions using the same data we used 
 for _fitting_, as this is the data the model learned from and therefore will 

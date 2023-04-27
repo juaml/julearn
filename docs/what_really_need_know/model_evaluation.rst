@@ -377,9 +377,9 @@ We can see, that none of the models performed better with respect to
 neither accuracy nor roc_auc. However, the Random Forest was slower than both 
 the SVM and the Logistic Regression.
 
-.. # TODO - currently not working b/c julearn.viz not found
+.. # TODO - Add visualization or leave it for the example?
 .. To get a better overview of the performance of the three models, we can use the
-.. :class:`.ScoreViewer` to plot the scores:
+.. Julearn's visualization tool to plot the scores:
 
 .. from julearn.viz import plot_scores
 .. panel = plot_scores(scores1, scores2, scores3)
