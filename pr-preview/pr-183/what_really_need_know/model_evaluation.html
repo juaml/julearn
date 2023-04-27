@@ -580,6 +580,8 @@ algorithms?</p>
 <p>To statistically compare different models, Julearn provides a built-in
 corrected t-test. To see how to apply it, we will first build three different
 models, each with another learning algorithm and then statistically compare them.</p>
+<section id="running-different-models">
+<h3>Running different models<a class="headerlink" href="#running-different-models" title="Permalink to this heading">#</a></h3>
 <p>To perform a binary classification (and not a multi-class classification) we
 will switch to the <code class="docutils literal notranslate"><span class="pre">breast_cancer</span></code> dataset from scikit-learn <a class="footnote-reference brackets" href="#id7" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></a> as an
 example. The to be predicted target states if the cancer is malignant or benign.</p>
@@ -652,6 +654,9 @@ different models later on.</p>
 <span class="n">scores3</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;logit&quot;</span>
 </pre></div>
 </div>
+</section>
+<section id="statistically-compare-the-models">
+<h3>Statistically compare the models<a class="headerlink" href="#statistically-compare-the-models" title="Permalink to this heading">#</a></h3>
 <p>Comparing the performance of these three models is now as easy as
 the following one-liner:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">julearn.stats.corrected_ttest</span> <span class="kn">import</span> <span class="n">corrected_ttest</span>
@@ -666,6 +671,40 @@ comparison of the three models’ fit_time, score_time and test scores:</p>
 <p>We can see, that none of the models performed better with respect to
 neither accuracy nor roc_auc. However, the Random Forest was slower than both
 the SVM and the Logistic Regression.</p>
+</section>
+<section id="visualize-the-models">
+<h3>Visualize the models<a class="headerlink" href="#visualize-the-models" title="Permalink to this heading">#</a></h3>
+<p>Visualizations can help to get a better intuitive understanding of the
+differences between the models. To get a better overview of the performances
+of our three models, we can make use of
+Julearn’s visualization tool to plot the scores in an interactive manner. As
+visualizations are not part of the core functionality of Julearn, you will need
+to first manually <strong>install the additional following dependencies</strong> inside your
+respective environment, using either pip or conda:</p>
+<p>Using pip:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>panel
+pip<span class="w"> </span>install<span class="w"> </span>bokeh
+</pre></div>
+</div>
+<p>Using conda:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>panel
+conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>bokeh<span class="w"> </span>bokeh
+</pre></div>
+</div>
+<p>From here we can create the interactive plot. Interactive, because you can
+choose the models to be displayed and the scorer to be plotted.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">julearn.viz</span> <span class="kn">import</span> <span class="n">plot_scores</span>
+
+<span class="n">panel</span> <span class="o">=</span> <span class="n">plot_scores</span><span class="p">(</span><span class="n">scores1</span><span class="p">,</span> <span class="n">scores2</span><span class="p">,</span> <span class="n">scores3</span><span class="p">)</span>
+<span class="n">panel</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>This is what your plot could look like:</p>
+<a class="reference internal image-reference" href="../_images/plot_scores.png"><img alt="plot_scores" src="../_images/plot_scores.png" style="width: 600px;" /></a>
+<p>Well done, you made it until here and are now ready to dive into
+<a class="reference internal" href="../selected_deeper_topics/index.html#selected-deeper-topics"><span class="std std-ref">Selected deeper topics</span></a>!
+Maybe you are curious to learn <a class="reference internal" href="../selected_deeper_topics/confound_removal.html#confound-removal"><span class="std std-ref">Cross-validation consistent Confound Removal</span></a> or want to learn more
+about <a class="reference internal" href="../selected_deeper_topics/model_inspect.html#model-inspection"><span class="std std-ref">Inspecting Models</span></a>.</p>
 <aside class="topic">
 <p class="topic-title">References:</p>
 <aside class="footnote-list brackets">
@@ -683,6 +722,7 @@ the SVM and the Logistic Regression.</p>
 </aside>
 </aside>
 </aside>
+</section>
 </section>
 </section>
 
@@ -752,7 +792,12 @@ the SVM and the Logistic Regression.</p>
 <li><a class="reference internal" href="#id2">Scoring</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#basic-model-comparisons-with-julearn">Basic model comparisons with Julearn</a></li>
+<li><a class="reference internal" href="#basic-model-comparisons-with-julearn">Basic model comparisons with Julearn</a><ul>
+<li><a class="reference internal" href="#running-different-models">Running different models</a></li>
+<li><a class="reference internal" href="#statistically-compare-the-models">Statistically compare the models</a></li>
+<li><a class="reference internal" href="#visualize-the-models">Visualize the models</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
