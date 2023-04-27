@@ -16,16 +16,9 @@ pipeline. Different filters inside the pipeline modify the data. The output of
 a machine learning pipeline is a model that can be used 
 for predictions on unseen data. Before using the pipeline
 to predict new data, the pipeline has to be trained or fitted on data. We call
-this, as scikit-learn does, _fitting_ the pipeline.
-
-Importantly, since we want to test how well our model _predicts_ new data, we
-cannot predict using the same data we used for _fitting_. Thus, we need to have
-separate data for fitting and predicting. This is where cross validation comes
-in handy. Cross validation is a technique to split the data into a training and
-validation data set. The training data set is used to fit the pipeline, while the
-validation data set is used to predict the data. The predictions are then compared
-to the true values of the validation data set, obtaining an estimation of the
-prediction performance of the model (see also :ref:`why_cv`).
+this, as scikit-learn does, _fitting_ the pipeline. all of this has to be done 
+in a cross-validation-consistent manner. To see what cross-validation is and 
+why it is important, please see :ref:`why_cv`.
 
 Julearn aims to provide a user-friendly way to build and evaluate complex
 machine learning pipelines. The :func:`.run_cross_validation` function is the

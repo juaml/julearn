@@ -18,7 +18,7 @@ point.
 
 Once you are familiar with the importance of cross-validation, to see what is 
 needed to setup a basic workflow using Julearn's :func:`.run_cross_validation`, 
-function, please follow along the other sub-chapter of this chapters.
+function, please follow along the other sub-chapters of this chapter.
 There you can find out more about the data input, a basic pipeline and
 basic model evaluation steps:
 
