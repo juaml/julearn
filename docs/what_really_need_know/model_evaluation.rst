@@ -383,7 +383,6 @@ We can see, that none of the models performed better with respect to
 neither accuracy nor roc_auc. However, the Random Forest was slower than both 
 the SVM and the Logistic Regression.
 
-.. # TODO - Add visualization or leave it for the example?
 Visualize the models
 ^^^^^^^^^^^^^^^^^^^^
 
