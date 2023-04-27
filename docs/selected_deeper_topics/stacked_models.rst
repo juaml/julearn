@@ -5,8 +5,7 @@ Stacking Models
 
 Scikit-learn already provides a stacking implementation for `"regression" <https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.StackingRegressor.html>`_ as well
 as for `"classification" <https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.StackingClassifier.html>`_. Be sure to read scikit-learn's user guide on `"stacked generalization" <https://scikit-learn.org/stable/modules/ensemble.html#stacking>`_ if you are interested in learning how these work in more detail. Both of these estimators can be used in Julearn natively by providing the string :code:`"stacking"` to Julearn's :class:`.PipelineCreator`. 
-Now, Scikit-learn's stacking implementation will fit each estimator on all of the data. Let's first explore this simple example of fitting each estimator on all of the data.
-For example, we can stack a support vector regression (SVR) and a random forest regression (RF) to predict some target in a bit of toy data.
+Now, scikit-learn's stacking implementation will fit each estimator on all of the data. However, this may not always be what you want. Sometimes perhaps, you want one estimator in the ensemble to be fitted on one type of features, while fitting another estimator on another type of features. Julearn's API provides some extra flexibility to build more flexible and customisable stacking pipelines. In order to explore its capabilities, let's first look at this simple example of fitting each estimator on all of the data. For example, we can stack a support vector regression (SVR) and a random forest regression (RF) to predict some target in a bit of toy data.
 
 Fitting each estimator on all of the features
 ---------------------------------------------
@@ -45,7 +44,7 @@ To build a stacking pipeline, we have to initialise each estimator that we want 
     model_1 = PipelineCreator(problem_type="regression", apply_to="*")
     model_1.add("svm", kernel="linear", C=np.geomspace(1e-2, 1e2, 10))
 
-Now, let's also create a pipeline for our random forest estimator:
+Note, that we specify applying the model to all of the features using :code:`apply_to="*"`. Now, let's also create a pipeline for our random forest estimator:
 
 .. code-block:: python
 
