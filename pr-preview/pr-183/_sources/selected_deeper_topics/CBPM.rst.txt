@@ -122,7 +122,7 @@ that specifies each of these parameters may look as follows:
 As you may have guessed, this pipeline will use a Spearman correlation and a 
 significance level of 0.05 for feature selection. It will only select features
 that are positively correlated to the target and aggregate them using the
-`:func:numpy.average` aggregation function.
+:func:`numpy.average` aggregation function.
 
 .. topic:: References:
 
