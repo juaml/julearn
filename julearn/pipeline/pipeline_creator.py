@@ -424,18 +424,23 @@ class PipelineCreator:
         if self._added_target_transformer:
             # If we have a target transformer, we need to wrap the model
             # in a the right "Targeted" transformer.
-            # TODO: Deal with hyperparemeters in the model
             target_model_step = self._wrap_target_model(
                 model_name,
                 model_estimator,  # type: ignore
                 target_transformer_step,  # type: ignore
             )
+            target_step_to_tune = {
+                f"{model_name}_target_transform__transformer__{param}": val
+                for param, val in (target_transformer_step
+                                   .params_to_tune.items())
+            }
             step_params_to_tune = {
                 f"{model_name}_target_transform__model__{param}": val
                 for param, val in step_params_to_tune.items()
             }
             pipeline_steps.append(target_model_step)
             params_to_tune.update(step_params_to_tune)
+            params_to_tune.update(target_step_to_tune)
         else:
             # if not, just add a model as the last step
             params_to_tune.update(step_params_to_tune)

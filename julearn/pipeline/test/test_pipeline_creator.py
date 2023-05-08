@@ -363,8 +363,8 @@ def test_target_pipe(X_iris, y_iris):
         "confounds": ["petal_width"],
     }
     target_pipeline = (TargetPipelineCreator()
-                       .add("confound_removal", confounds="confounds")
-                       )
+                       .add("confound_removal",
+                            confounds=["confounds", "continuous"]))
     pipeline_creator = (PipelineCreator(problem_type='regression')
                         .add(target_pipeline, apply_to="target")
                         .add("svm", C=[1, 2])
