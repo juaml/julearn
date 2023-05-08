@@ -365,8 +365,10 @@ def test_target_pipe(X_iris, y_iris):
     target_pipeline = (TargetPipelineCreator()
                        .add("confound_removal", confounds="confounds")
                        )
-    pipeline_creator = (PipelineCreator(problem_type='classification')
+    pipeline_creator = (PipelineCreator(problem_type='regression')
                         .add(target_pipeline, apply_to="target")
                         .add("svm", C=[1, 2])
                         )
-    pipeline_creator.to_pipeline(X_types, search_params=dict(kind="random"))
+    pipe = pipeline_creator.to_pipeline(
+        X_types, search_params=dict(kind="random"))
+    pipe.fit(X_iris, y_iris)

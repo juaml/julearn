@@ -430,6 +430,10 @@ class PipelineCreator:
                 model_estimator,  # type: ignore
                 target_transformer_step,  # type: ignore
             )
+            step_params_to_tune = {
+                f"{model_name}_target_transform__model__{param}": val
+                for param, val in step_params_to_tune.items()
+            }
             pipeline_steps.append(target_model_step)
             params_to_tune.update(step_params_to_tune)
         else:

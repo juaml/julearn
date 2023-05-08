@@ -98,6 +98,14 @@ class JuTransformedTargetModel(JuBaseEstimator):
             )
         return y_pred
 
+    def score(self, X, y):
+
+        if self.model_ is None:
+            raise_error("Model not fitted yet.")
+        self.model_ = typing.cast(ModelLike, self.model_)
+        y_trans = self.transformer.transform(X, y)
+        return self.model_.score(X, y_trans)
+
     @available_if(_wrapped_model_has("predict_proba"))
     def predict_proba(self, X: pd.DataFrame) -> np.ndarray:
         """Compute probabilities of possible outcomes for samples in X.
