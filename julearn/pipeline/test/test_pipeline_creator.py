@@ -15,7 +15,7 @@ from sklearn.ensemble import RandomForestRegressor
 
 from julearn.base import ColumnTypesLike, WrapModel
 from julearn.models import get_model
-from julearn.pipeline import PipelineCreator
+from julearn.pipeline import PipelineCreator, TargetPipelineCreator
 from julearn.pipeline.pipeline_creator import JuColumnTransformer
 from julearn.transformers import get_transformer
 
@@ -309,7 +309,6 @@ def test_added_model_target_transform() -> None:
 
 def test_stacking(X_iris: pd.DataFrame, y_iris: pd.Series) -> None:
     """Test that the stacking model works correctly."""
-    print(X_iris.columns)
     # Define our feature types
     X_types = {
         "sepal": ["sepal_length", "sepal_width"],
@@ -357,4 +356,17 @@ def test_hyperparameter_ter():
      .add("confound_removal", model_confound=RandomForestRegressor())
      )
 
-# TODO: Test adding target transformers
+
+def test_target_pipe(X_iris, y_iris):
+    X_types = {
+        "continuous": ["sepal_length", "sepal_width", "petal_length"],
+        "confounds": ["petal_width"],
+    }
+    target_pipeline = (TargetPipelineCreator()
+                       .add("confound_removal", confounds="confounds")
+                       )
+    pipeline_creator = (PipelineCreator(problem_type='classification')
+                        .add(target_pipeline, apply_to="target")
+                        .add("svm", C=[1, 2])
+                        )
+    pipeline_creator.to_pipeline(X_types, search_params=dict(kind="random"))

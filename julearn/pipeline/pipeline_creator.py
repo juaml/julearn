@@ -431,6 +431,7 @@ class PipelineCreator:
                 target_transformer_step,  # type: ignore
             )
             pipeline_steps.append(target_model_step)
+            params_to_tune.update(step_params_to_tune)
         else:
             # if not, just add a model as the last step
             params_to_tune.update(step_params_to_tune)
