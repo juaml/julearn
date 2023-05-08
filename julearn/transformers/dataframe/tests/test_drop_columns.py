@@ -28,6 +28,7 @@ def test_DropColumns() -> None:
     drop_columns = DropColumns(apply_to=["confound"])
     drop_columns.fit(X_with_types)
     X_trans = drop_columns.transform(X_with_types)
+    support = drop_columns.get_support()
 
     non_confound = [
         "a__:type:__continuous",
@@ -44,3 +45,4 @@ def test_DropColumns() -> None:
         ),
         X_trans,
     )
+    assert all(support == [1, 1, 0, 0, 1, 1])

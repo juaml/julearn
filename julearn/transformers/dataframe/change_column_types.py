@@ -68,6 +68,7 @@ class ChangeColumnTypes(JuTransformer):
         ChangeColumnTypes
             The fitted transformer.
         """
+        self.feature_names_in_ = X.columns
         to_rename = {}
         for col in self.filter_columns(X).columns.tolist():
             if "__:type:__" in col:
@@ -111,8 +112,7 @@ class ChangeColumnTypes(JuTransformer):
             Names of features to be kept in the output pd.DataFrame.
         """
         out = self.feature_names_in_
-        # Remove column types of input
-        out = out.map(lambda col: col.split("__:type:__")[0])
+        out = self.filter_columns(pd.DataFrame(columns=out)).columns
         # Assign new column types (previous as default)
         out = out.map(self._renamer)
         return out  # type: ignore
