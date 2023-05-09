@@ -1002,3 +1002,28 @@ def test_api_stacking_models() -> None:
     assert isinstance(
         final.steps[1][1].model.estimators[0][1], GridSearchCV
     )
+
+
+def test_inspection_error(df_iris):
+    X = ["sepal_length", "sepal_width", "petal_length"]
+    y = "species"
+    with pytest.raises(ValueError, match="return_inspector=True requires"):
+        run_cross_validation(
+            X=X,
+            y=y,
+            data=df_iris,
+            model="rf",
+            return_estimator="final",
+            return_inspector=True,
+            problem_type="classification"
+        )
+    # default should be all now
+    res = run_cross_validation(
+        X=X,
+        y=y,
+        data=df_iris,
+        model="rf",
+        return_inspector=True,
+        problem_type="classification"
+    )
+    assert len(res) == 3
