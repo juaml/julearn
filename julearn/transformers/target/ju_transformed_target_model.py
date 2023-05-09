@@ -12,13 +12,44 @@ import pandas as pd
 from sklearn.base import clone
 from sklearn.utils.metaestimators import available_if
 
-from ...base import JuBaseEstimator, _wrapped_model_has
+from ...base import JuBaseEstimator
 from ...utils import raise_error, warn_with_log
 from ...utils.typing import DataLike, ModelLike
 
 
 if TYPE_CHECKING:
     from ...pipeline.target_pipeline import JuTargetPipeline
+
+
+def _wrapped_model_has(attr):
+    """Create a function to check if self.model_ has a given attribute.
+
+    This function is usable by
+    :func:`sklearn.utils.metaestimators.available_if`
+
+    Parameters
+    ----------
+    attr : str
+        The attribute to check for.
+
+    Returns
+    -------
+    check : function
+        The check function.
+
+    """
+
+    def check(self):
+        """Check if self.model has a given attribute.
+
+        Returns
+        -------
+        bool
+            True if self.model_ has the attribute, False otherwise.
+        """
+        return hasattr(self.model, attr)
+
+    return check
 
 
 class TransformedTargetWarning(RuntimeWarning):
@@ -41,7 +72,6 @@ class JuTransformedTargetModel(JuBaseEstimator):
     def __init__(self, model: ModelLike, transformer: "JuTargetPipeline"):
         self.model = model
         self.transformer = transformer
-        self.model_ = None
 
     def fit(
         self, X: pd.DataFrame, y: DataLike, **fit_params: Any
@@ -80,7 +110,7 @@ class JuTransformedTargetModel(JuBaseEstimator):
         DataLike
             The predictions.
         """
-        if self.model_ is None:
+        if not hasattr(self, "model_"):
             raise_error("Model not fitted yet.")
         self.model_ = typing.cast(ModelLike, self.model_)
         # TODO: Check if we can inverse the y transformations
@@ -100,7 +130,7 @@ class JuTransformedTargetModel(JuBaseEstimator):
 
     def score(self, X, y):
 
-        if self.model_ is None:
+        if not hasattr(self, "model_"):
             raise_error("Model not fitted yet.")
         self.model_ = typing.cast(ModelLike, self.model_)
         y_trans = self.transformer.transform(X, y)
@@ -122,7 +152,7 @@ class JuTransformedTargetModel(JuBaseEstimator):
             the model. The columns correspond to the classes in sorted
             order, as they appear in the attribute :term:`classes_`.
         """
-        if self.model_ is None:
+        if not hasattr(self, "model_"):
             raise_error("Model not fitted yet.")
         self.model_ = typing.cast(ModelLike, self.model_)
         return self.model_.predict_proba(X)  # type: ignore
@@ -142,7 +172,7 @@ class JuTransformedTargetModel(JuBaseEstimator):
             Returns the decision function of the sample for each class
             in the model.
         """
-        if self.model_ is None:
+        if not hasattr(self, "model_"):
             raise_error("Model not fitted yet.")
         self.model_ = typing.cast(ModelLike, self.model_)
         return self.model_.decision_function(X)  # type: ignore
@@ -150,7 +180,7 @@ class JuTransformedTargetModel(JuBaseEstimator):
     @property
     def classes_(self) -> np.ndarray:
         """Get the classes of the model."""
-        if self.model_ is None:
+        if not hasattr(self, "model_"):
             raise_error("Model not fitted yet.")
         self.model_ = typing.cast(ModelLike, self.model_)
         return self.model_.classes_
