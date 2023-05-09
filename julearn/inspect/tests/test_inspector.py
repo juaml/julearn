@@ -1,5 +1,5 @@
 from julearn.inspect import Inspector
-from julearn import run_cross_validation
+from julearn import run_cross_validation, PipelineCreator
 import pytest
 
 
@@ -37,3 +37,16 @@ def test_normal_usage(df_iris):
     assert pipe == inspect.model._model
     for (_, score), inspect_fold in zip(scores.iterrows(), inspect.folds):
         assert score["estimator"] == inspect_fold.model._model
+
+
+def test_normal_usage_with_search(df_iris):
+    X = list(df_iris.iloc[:, :-1].columns)
+
+    pipe = PipelineCreator(problem_type="classification").add("svm", C=[1, 2])
+    _, pipe, inspect = run_cross_validation(
+        X=X, y="species", data=df_iris, model=pipe,
+        return_estimator="all", return_inspector=True,
+    )
+    assert pipe == inspect.model._model
+    inspect.model.get_fitted_params()
+    inspect.model.get_params()

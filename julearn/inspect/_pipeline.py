@@ -21,11 +21,18 @@ class PipelineInspector():
         return step
 
     def get_params(self):
+
+        if hasattr(self._model, "best_estimator_"):
+            self._model.best_estimator_.get_params()
         return self._model.get_params()
 
     def get_fitted_params(self):
         fitted_params = {}
-        for name, step in self._model.steps:
+        model = (self._model.best_estimator_
+                 if hasattr(self._model, "best_estimator_")
+                 else self._model
+                 )
+        for name, step in model.steps:
             params = _EstimatorInspector(step).get_fitted_params()
             fitted_params = {
                 **fitted_params,
