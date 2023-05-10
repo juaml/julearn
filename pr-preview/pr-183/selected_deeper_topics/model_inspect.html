@@ -372,6 +372,145 @@
         <article role="main">
           <section id="inspecting-models">
 <span id="model-inspection"></span><h1><span class="section-number">3.3. </span>Inspecting Models<a class="headerlink" href="#inspecting-models" title="Permalink to this heading">#</a></h1>
+<p>Understanding the internals of machine learning models is essential for
+interpreting their behavior and gaining insights into their predictions. By
+inspecting the parameters and hyperparameters of a trained model, we can
+identify the features that have the most significant impact on the model’s
+output and explore how the model works. By analyzing the performance of each
+model across different iterations and hyperparameters, we can assess the
+variability across models and identify any patterns that might help interpret
+the model’s outputs. The ability to inspect the internals of machine
+learning models can help us identify the most critical features that influence
+the model’s predictions, understand how the model works and make informed
+decisions about its deployment.</p>
+<p>In this context, we will explore how to perform model inspection in julearn.
+Julearn provides an intuitive suite of tools for model inspection and
+interpretation. We will focus on how to inspect models in julearn’s nested
+cross-validation workflow. With these techniques, we can gain a better
+understanding of how the model works and identify any patterns or anomalies that
+could affect its performance. This knowledge can help us deploy models more
+effectively and interpret their outputs with greater confidence.</p>
+<p>Let’s start by importing some useful utilities:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">RepeatedKFold</span>
+
+<span class="kn">from</span> <span class="nn">julearn</span> <span class="kn">import</span> <span class="n">run_cross_validation</span>
+<span class="kn">from</span> <span class="nn">julearn.pipeline</span> <span class="kn">import</span> <span class="n">PipelineCreator</span>
+<span class="kn">from</span> <span class="nn">julearn.utils</span> <span class="kn">import</span> <span class="n">configure_logging</span>
+</pre></div>
+</div>
+<p>Now, let’s configure julearn’s logger to get some output as the pipeline is
+running and get some toy data to play with. In this example, we will use the
+penguin dataset, and classify the penguin species based on the continuous
+measures in the dataset.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
+
+<span class="c1"># get some data</span>
+<span class="n">penguins_df</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;penguins&quot;</span><span class="p">)</span>
+<span class="n">penguins_df</span> <span class="o">=</span> <span class="n">penguins_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;island&quot;</span><span class="p">,</span> <span class="s2">&quot;sex&quot;</span><span class="p">])</span>
+<span class="n">penguins_df</span> <span class="o">=</span> <span class="n">penguins_df</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="s2">&quot;species != &#39;Chinstrap&#39;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+<span class="n">penguins_df</span><span class="p">[</span><span class="s2">&quot;species&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">penguins_df</span><span class="p">[</span><span class="s2">&quot;species&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+    <span class="p">{</span><span class="s2">&quot;Adelie&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Gentoo&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+<span class="p">)</span>
+<span class="n">features</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">penguins_df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">x</span> <span class="o">!=</span> <span class="s2">&quot;species&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>We are going to use a fairly simple pipeline, in which we z-score the features
+and then apply a support vector classifier to classify species.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># create model</span>
+<span class="n">pipeline_creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;classification&quot;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">)</span>
+<span class="n">pipeline_creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">)</span>
+<span class="n">pipeline_creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;svm&quot;</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">geomspace</span><span class="p">(</span><span class="mf">1e-2</span><span class="p">,</span> <span class="mf">1e2</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Once this is set up, we can simply call julearn’s <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>.
+Notice, how we set the <code class="code docutils literal notranslate"><span class="pre">return_inspector</span></code> parameter to <code class="code docutils literal notranslate"><span class="pre">True</span></code>.
+Importantly, we also have to set the <code class="code docutils literal notranslate"><span class="pre">return_estimator</span></code> to <code class="code docutils literal notranslate"><span class="pre">&quot;all&quot;</span></code>.
+This is because julearn’s <code class="code docutils literal notranslate"><span class="pre">Inspector</span></code> extracts all relevant
+information from estimators after the pipeline has been run. The pipeline will
+take a few minutes in our example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">scores</span><span class="p">,</span> <span class="n">final_model</span><span class="p">,</span> <span class="n">inspector</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <span class="n">X</span><span class="o">=</span><span class="n">features</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="s2">&quot;species&quot;</span><span class="p">,</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">penguins_df</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">pipeline_creator</span><span class="p">,</span>
+    <span class="n">seed</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+    <span class="n">cv</span><span class="o">=</span><span class="n">RepeatedKFold</span><span class="p">(</span><span class="n">n_repeats</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_splits</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">200</span><span class="p">),</span>
+    <span class="n">return_estimator</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
+    <span class="n">return_inspector</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>After this is done, we can now use the inspector to look at final model parameters,
+but also at the parameters of individual models from each fold of the
+cross-validation. The final model can be inspected using the <code class="code docutils literal notranslate"><span class="pre">.model</span></code>
+attribute. For example to get a quick overview over the model parameters, run:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># remember to actually import pprint as above, or just print out using print</span>
+<span class="n">pprint</span><span class="p">(</span><span class="n">inspector</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">get_params</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>This will print out a dictionary containing all the parameters of the final selected
+estimator. Similarly, we can also get an overview of the fitted parameters:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pprint</span><span class="p">(</span><span class="n">inspector</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">get_fitted_params</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Again, this will print out quite a lot. What if we just want to look at a specific
+parameter? Well, this somewhat depends on the underlying structure and attributes
+of the used estimators or transformers, and will likely require some interactive
+exploring. But the inspector makes it quite easy to interactively explore your
+final model. For example, to see which sample means were used to z-score features
+in the final model we can run:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">inspector</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">get_fitted_params</span><span class="p">()[</span><span class="s2">&quot;zscore__mean_&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>In addition, sometimes it can be very useful to know what predictions were made in
+each individual train-test split of the cross-validation. This is where the
+<code class="code docutils literal notranslate"><span class="pre">.folds</span></code> attribute comes in handy. This attribute has a <code class="code docutils literal notranslate"><span class="pre">.predict()</span></code>
+method, that makes it very easy to display the predictions made for each sample
+in each test fold and in each repeat of the cross-validation. It will display
+a DataFrame with each row corresponding to a sample, and each column corresponding
+to a repeat of the cross-validation. Simply run:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">inspector</span><span class="o">.</span><span class="n">folds</span><span class="o">.</span><span class="n">predict</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>This <code class="code docutils literal notranslate"><span class="pre">.folds</span></code> attribute is actually an iterator, that can iterate over
+every single fold used in the cross-validation, and it yields an instance of a
+<code class="code docutils literal notranslate"><span class="pre">FoldsInspector</span></code>, which can then be used to explore each model that was
+fitted during cross-validation. For example, we can collect the ‘C’ parameters
+that were selected in each outer fold of our nested cross-validation. That way,
+we can assess the amount of variance on that particular parameter across folds:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">c_values</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">repeat</span><span class="p">,</span> <span class="n">fold</span><span class="p">,</span> <span class="n">fold_inspector</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+    <span class="n">scores</span><span class="p">[</span><span class="s2">&quot;repeat&quot;</span><span class="p">],</span> <span class="n">scores</span><span class="p">[</span><span class="s2">&quot;fold&quot;</span><span class="p">],</span> <span class="n">inspector</span><span class="o">.</span><span class="n">folds</span>
+<span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Repeat </span><span class="si">{</span><span class="n">repeat</span><span class="si">}</span><span class="s2">, fold </span><span class="si">{</span><span class="n">fold</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">fold_inspector</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">get_fitted_params</span><span class="p">()[</span><span class="s2">&quot;svm__model_&quot;</span><span class="p">])</span>
+    <span class="n">c_values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+        <span class="n">fold_inspector</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">get_fitted_params</span><span class="p">()[</span><span class="s2">&quot;svm__model_&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get_params</span><span class="p">()[</span>
+            <span class="s2">&quot;C&quot;</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+<p>By printing out the unique values in the <code class="code docutils literal notranslate"><span class="pre">c_values</span></code> list, we realise, that
+actually there was not much variance across models. In fact, there was only one
+parameter value ever selected. This may indicate that this is in fact the optimal
+value, or it may indicate that there is a potential problem with our search grid.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">c_values</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>As you can see the inspector provides you with a set of powerful tools to look
+at what exactly happened in your pipeline. It may help you better interpret your
+models, understand your results, and identify problems if there are any. By
+leveraging these tools, you can gain deeper insights, interpret your models
+effectively, and address any issues that may arise. Model inspection serves as
+a valuable asset in the deployment of machine learning models, ensuring
+transparency, interpretability, and reliable decision-making. With julearn’s
+model inspection capabilities, you can confidently navigate the complexities of
+machine learning models and harness their full potential in real-world applications.</p>
 </section>
 
         </article>
