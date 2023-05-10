@@ -77,4 +77,101 @@ and then apply a support vector classifier to classify species.
     pipeline_creator.add("zscore")
     pipeline_creator.add("svm", kernel="linear", C=np.geomspace(1e-2, 1e2, 5))
 
+Once this is set up, we can simply call julearn's :func:`.run_cross_validation`.
+Notice, how we set the :code:`return_inspector` parameter to :code:`True`.
+Importantly, we also have to set the :code:`return_estimator` to :code:`"all"`.
+This is because julearn's :class:`.inspect.Inspector` extracts all relevant
+information from estimators after the pipeline has been run. The pipeline will
+take a few minutes in our example:
+
+.. code-block:: python
+
+    scores, final_model, inspector = run_cross_validation(
+	X=features,
+	y="species",
+	data=penguins_df,
+	model=pipeline_creator,
+	seed=200,
+	cv=RepeatedKFold(n_repeats=10, n_splits=10, random_state=200),
+	return_estimator="all",
+	return_inspector=True,
+    )
+
+After this is done, we can now use the inspector to look at final model parameters,
+but also at the parameters of individual models from each fold of the
+cross-validation. The final model can be inspected using the :code:`.model`
+attribute. For example to get a quick overview over the model parameters, run:
+
+.. code-block:: python
+
+    # remember to actually import pprint as above, or just print out using print   
+    pprint(inspector.model.get_params())
+
+
+This will print out a dictionary containing all the parameters of the final selected
+estimator. Similarly, we can also get an overview of the fitted parameters:
+
+.. code-block:: python
+
+    pprint(inspector.model.get_fitted_params())
+
+
+Again, this will print out quite a lot. What if we want to look at a specific
+parameter. Well, this somewhat depends on the underlying structure of the used
+estimators or transformers, and will likely require some interactive exploring.
+But the inspector makes it quite easy to interactively explore your final model.
+For example, to see which sample means were used to zscore features in the final
+model we can run:
+
+.. code-block:: python
+		
+    print(inspector.model.get_fitted_params()["zscore__mean_"])
+
+
+In addition, sometimes it can be very useful to know what predictions were made in
+each individual train-test split of the cross-validation. This is where the
+:code:`.folds` attribute comes in handy. This attribute has :code:`.predict()`
+that makes it very easy to display the predictions made for each sample in each
+test fold and in each repeat of the cross-validation. Simply run:
+
+.. code-block:: python
+
+    print(inspector.folds.predict())
+
+This :code:`.folds` attribute is actually an iterator, that can iterate over
+every single fold used in the cross-validation, and it yields an instance of a
+:class:`.FoldsInspector`, which can then be used to explore each model that was
+fitted during cross-validation. For example, we can collect the 'C' parameters
+that were selected in each outer fold of our nested cross-validation. That way,
+we can assess the amount of variance on that particular parameter across folds:
+
+.. code-block:: python
+
+    c_values = []
+    for repeat, fold, fold_inspector in zip(
+	scores["repeat"], scores["fold"], inspector.folds
+    ):
+	print(f"Repeat {repeat}, fold {fold}\n")
+	print(fold_inspector.model.get_fitted_params()["svm__model_"])
+	c_values.append(
+	    fold_inspector.model.get_fitted_params()["svm__model_"].get_params()[
+		"C"
+	    ]
+	)
+
+
+By printing out the unique values in the :code:`c_values` list, we realise, that
+actually there was not much variance across models. In fact, there was only one
+parameter value ever selected. This may indicate that this is in fact the optimal
+value, or it may indicate that there is a potential problem with our search grid.
+
+As you can see the inspector provides you with a set of powerful tools to look
+at what exactly happend in your pipeline. It may help you better interpret your
+models, understand your results, and identify problems if there are any. By
+leveraging these tools, you can gain deeper insights, interpret your models
+effectively, and address any issues that may arise. Model inspection serves as
+a valuable asset in the deployment of machine learning models, ensuring
+transparency, interpretability, and reliable decision-making. With julearn's
+model inspection capabilities, you can confidently navigate the complexities of
+machine learning models and harness their full potential in real-world applications.
 
