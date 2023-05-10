@@ -9,29 +9,21 @@ Understanding the internals of machine learning models is essential for
 interpreting their behavior and gaining insights into their predictions. By
 inspecting the parameters and hyperparameters of a trained model, we can
 identify the features that have the most significant impact on the model's
-output and explore how the model works. This is especially important when using
-nested cross-validation workflows, where we train and test the model repeatedly
-on different subsets of data with various hyperparameters. By analyzing the
-performance of each model across different iterations and hyperparameters, we
-can assess the variability across models and identify any patterns that might
-help interpret the model's outputs. This information is crucial for deploying
-machine learning models in real-world applications where interpretability and
-transparency are essential. The ability to inspect the internals of machine
+output and explore how the model works. By analyzing the performance of each
+model across different iterations and hyperparameters, we can assess the
+variability across models and identify any patterns that might help interpret
+the model's outputs. The ability to inspect the internals of machine
 learning models can help us identify the most critical features that influence
 the model's predictions, understand how the model works and make informed
 decisions about its deployment.
 
 In this context, we will explore how to perform model inspection in julearn.
-julearn provides an intuitive suite of tools for model inspection and
+Julearn provides an intuitive suite of tools for model inspection and
 interpretation. We will focus on how to inspect models in julearn's nested
-cross-validation workflow. Specifically, we will demonstrate how to analyze the
-performance and variability of the models across different hyperparameters and
-iterations. We will also show how to explore the fitted parameters of the final
-model and inspect the impact of individual features on the model's output. With
-these techniques, we can gain a better understanding of how the model works and
-identify any patterns or anomalies that could affect its performance. This
-knowledge can help us deploy models more effectively and interpret their outputs
-with greater confidence.
+cross-validation workflow. With these techniques, we can gain a better
+understanding of how the model works and identify any patterns or anomalies that
+could affect its performance. This knowledge can help us deploy models more
+effectively and interpret their outputs with greater confidence.
 
 Let's start by importing some useful utilities:
 
@@ -67,7 +59,7 @@ measures in the dataset.
     features = [x for x in penguins_df.columns if x != "species"]
 
 
-We are going to use a fairly simple pipeline, in which we zscore the features
+We are going to use a fairly simple pipeline, in which we z-score the features
 and then apply a support vector classifier to classify species.
 
 .. code-block:: python
@@ -80,7 +72,7 @@ and then apply a support vector classifier to classify species.
 Once this is set up, we can simply call julearn's :func:`.run_cross_validation`.
 Notice, how we set the :code:`return_inspector` parameter to :code:`True`.
 Importantly, we also have to set the :code:`return_estimator` to :code:`"all"`.
-This is because julearn's :class:`.inspect.Inspector` extracts all relevant
+This is because julearn's :code:`Inspector` extracts all relevant
 information from estimators after the pipeline has been run. The pipeline will
 take a few minutes in our example:
 
@@ -116,12 +108,12 @@ estimator. Similarly, we can also get an overview of the fitted parameters:
     pprint(inspector.model.get_fitted_params())
 
 
-Again, this will print out quite a lot. What if we want to look at a specific
-parameter. Well, this somewhat depends on the underlying structure of the used
-estimators or transformers, and will likely require some interactive exploring.
-But the inspector makes it quite easy to interactively explore your final model.
-For example, to see which sample means were used to zscore features in the final
-model we can run:
+Again, this will print out quite a lot. What if we just want to look at a specific
+parameter? Well, this somewhat depends on the underlying structure and attributes
+of the used estimators or transformers, and will likely require some interactive
+exploring. But the inspector makes it quite easy to interactively explore your
+final model. For example, to see which sample means were used to z-score features
+in the final model we can run:
 
 .. code-block:: python
 		
@@ -130,9 +122,11 @@ model we can run:
 
 In addition, sometimes it can be very useful to know what predictions were made in
 each individual train-test split of the cross-validation. This is where the
-:code:`.folds` attribute comes in handy. This attribute has :code:`.predict()`
-that makes it very easy to display the predictions made for each sample in each
-test fold and in each repeat of the cross-validation. Simply run:
+:code:`.folds` attribute comes in handy. This attribute has a :code:`.predict()`
+method, that makes it very easy to display the predictions made for each sample
+in each test fold and in each repeat of the cross-validation. It will display
+a DataFrame with each row corresponding to a sample, and each column corresponding
+to a repeat of the cross-validation. Simply run:
 
 .. code-block:: python
 
@@ -140,7 +134,7 @@ test fold and in each repeat of the cross-validation. Simply run:
 
 This :code:`.folds` attribute is actually an iterator, that can iterate over
 every single fold used in the cross-validation, and it yields an instance of a
-:class:`.FoldsInspector`, which can then be used to explore each model that was
+:code:`FoldsInspector`, which can then be used to explore each model that was
 fitted during cross-validation. For example, we can collect the 'C' parameters
 that were selected in each outer fold of our nested cross-validation. That way,
 we can assess the amount of variance on that particular parameter across folds:
@@ -165,8 +159,12 @@ actually there was not much variance across models. In fact, there was only one
 parameter value ever selected. This may indicate that this is in fact the optimal
 value, or it may indicate that there is a potential problem with our search grid.
 
+.. code-block:: python
+
+    print(set(c_values))
+
 As you can see the inspector provides you with a set of powerful tools to look
-at what exactly happend in your pipeline. It may help you better interpret your
+at what exactly happened in your pipeline. It may help you better interpret your
 models, understand your results, and identify problems if there are any. By
 leveraging these tools, you can gain deeper insights, interpret your models
 effectively, and address any issues that may arise. Model inspection serves as
