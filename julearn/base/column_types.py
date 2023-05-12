@@ -48,43 +48,46 @@ def get_column_type(column):
     return column.split("__:type:__")[1]
 
 
-def make_type_selector(pattern):
-    """Make a type selector.
-
-    This type selector is to be used with
-    :class:`sklearn.compose.ColumnTransformer`
+def get_renamer(X_df):
+    """Get the dictionary that will rename the columns to add the type.
 
     Parameters
     ----------
-    pattern : str
-        The pattern to select the columns.
+    X_df : pd.DataFrame
+        The dataframe to rename the columns of.
 
     Returns
     -------
-    function
-        The type selector.
-    """
+    dict
+        The dictionary that will rename the columns.
 
-    def get_renamer(X_df):
-        """Get the dictionary that will rename the columns to add the type.
+    """
+    return {
+        x: (x if "__:type:__" in x else f"{x}__:type:__continuous")
+        for x in X_df.columns
+    }
+
+
+class make_type_selector(object):
+    def __init__(self, pattern):
+        """Make a type selector.
+
+        This type selector is to be used with
+        :class:`sklearn.compose.ColumnTransformer`
 
         Parameters
         ----------
-        X_df : pd.DataFrame
-            The dataframe to rename the columns of.
+        pattern : str
+            The pattern to select the columns.
 
         Returns
         -------
-        dict
-            The dictionary that will rename the columns.
-
+        function
+            The type selector.
         """
-        return {
-            x: (x if "__:type:__" in x else f"{x}__:type:__continuous")
-            for x in X_df.columns
-        }
+        self.pattern = pattern
 
-    def type_selector(X_df):
+    def __call__(self, X_df):
         """Select the columns based on the pattern.
 
         Parameters
@@ -106,10 +109,10 @@ def make_type_selector(pattern):
         }
 
         # Select the columns based on the pattern
-        selected_columns = make_column_selector(pattern)(_X_df)
+        selected_columns = make_column_selector(self.pattern)(_X_df)
         if len(selected_columns) == 0:
             raise_error(
-                f"No columns selected with pattern {pattern} in "
+                f"No columns selected with pattern {self.pattern} in "
                 f"{_X_df.columns.to_list()}"
             )
 
@@ -118,8 +121,6 @@ def make_type_selector(pattern):
             reverse_renamer[col] if col in reverse_renamer else col
             for col in selected_columns
         ]
-
-    return type_selector
 
 
 class ColumnTypes:

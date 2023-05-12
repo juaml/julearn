@@ -6,6 +6,7 @@
 
 import numpy as np
 import pandas as pd
+import joblib
 import pytest
 from sklearn.base import clone
 from sklearn.datasets import make_regression
@@ -1027,3 +1028,40 @@ def test_inspection_error(df_iris):
         problem_type="classification"
     )
     assert len(res) == 3
+
+
+def test_final_estimator_picklable(tmp_path, df_iris) -> None:
+    X = ["sepal_length", "sepal_width", "petal_length"]
+    y = "species"
+    pickled_file = tmp_path / "final_estimator.sav"
+    
+    _, final_estimator = run_cross_validation(
+        X=X,
+        y=y,
+        data=df_iris,
+        model="rf",
+        problem_type="classification",
+        return_estimator="final"
+    )
+    joblib.dump(final_estimator, pickled_file)
+    # test if object can be loaded as well
+    joblib.load(pickled_file)
+
+
+def test_inspector_picklable(tmp_path, df_iris) -> None:
+    X = ["sepal_length", "sepal_width", "petal_length"]
+    y = "species"
+    pickled_file = tmp_path / "inspector.sav"
+    
+    _, _, inspector = run_cross_validation(
+        X=X,
+        y=y,
+        data=df_iris,
+        model="rf",
+        problem_type="classification",
+        return_estimator="all",
+        return_inspector=True,
+    )
+    joblib.dump(inspector, pickled_file)
+    # test if object can be loaded as well
+    joblib.load(pickled_file)
