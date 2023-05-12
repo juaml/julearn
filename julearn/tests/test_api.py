@@ -1033,7 +1033,7 @@ def test_inspection_error(df_iris):
 def test_final_estimator_picklable(tmp_path, df_iris) -> None:
     X = ["sepal_length", "sepal_width", "petal_length"]
     y = "species"
-    pickled_file = tmp_path / "final_estimator.sav"
+    pickled_file = tmp_path / "final_estimator.joblib"
     _, final_estimator = run_cross_validation(
         X=X,
         y=y,
@@ -1050,7 +1050,7 @@ def test_final_estimator_picklable(tmp_path, df_iris) -> None:
 def test_inspector_picklable(tmp_path, df_iris) -> None:
     X = ["sepal_length", "sepal_width", "petal_length"]
     y = "species"
-    pickled_file = tmp_path / "inspector.sav"
+    pickled_file = tmp_path / "inspector.joblib"
     _, _, inspector = run_cross_validation(
         X=X,
         y=y,
