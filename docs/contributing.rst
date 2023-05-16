@@ -1,213 +1,163 @@
 .. include:: links.inc
 
+.. _contribution_guidelines:
+
 Contributing to julearn
 =======================
 
+Setting up the local development environment
+--------------------------------------------
 
-Setting up the development environment
---------------------------------------
+#. Fork the https://github.com/juaml/julearn repository on GitHub. If you
+   have never done this before, `follow the official guide
+   <https://guides.github.com/activities/forking/>`_.
+#. Clone your fork locally as described in the same guide.
+#. Install your local copy into a Python virtual environment. You can `read
+   this guide to learn more
+   <https://realpython.com/python-virtual-environments-a-primer/>`_ about them
+   and how to create one.
 
-Before your first contribution, you might want to install all the required
-tools to be able to test that everything is according to the required
-development guidelines.
+   .. code-block:: bash
 
-Download the source code
-^^^^^^^^^^^^^^^^^^^^^^^^
+       pip install -e ".[dev]"
 
-Choose a folder where you will place the code and clone the `julearn Github`_
-repository:
+#. Create a branch for local development using the ``main`` branch as a
+   starting point. Use ``fix``, ``refactor``, or ``feat`` as a prefix.
 
-.. code-block:: bash
+   .. code-block:: bash
 
-    git clone https://github.com/juaml/julearn.git
+       git checkout main
+       git checkout -b <prefix>/<name-of-your-branch>
 
-Create a virtual environment
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   Now you can make your changes locally.
 
-This step can be omitted, but it is highly recommended, as the development
-version of julearn can interfere with the other versions that you might use in
-your projects.
+#. When making changes locally, it is helpful to ``git commit`` your work
+   regularly. On one hand to save your work and on the other hand, the smaller
+   the steps, the easier it is to review your work later. Please use `semantic
+   commit messages
+   <http://karma-runner.github.io/2.0/dev/git-commit-msg.html>`_.
 
-Check the `venv`_ or `conda env`_ documentation on how to create one.
+   .. code-block:: bash
 
+       git add .
+       git commit -m "<prefix>: <summary of changes>"
 
-Install the requirements
-^^^^^^^^^^^^^^^^^^^^^^^^
+#. When you're done making changes, check that your changes pass our test suite.
+   This is all included with ``tox``.
 
-The required packages for development are specified within 3 files in the
-repository, according to the different build stages.
+   .. code-block:: bash
 
-The following is an example on how to install them using `pip`:
+       tox
 
-.. code-block:: bash
+   You can also run all ``tox`` tests in parallel. As of ``tox 3.7``, you can run
 
-    cd julearn
-    pip install -r requirements.txt
-    pip install -r test-requirements.txt
-    pip install -r docs-requirements.txt
-    pip install -r dev-requirements.txt
+   .. code-block:: bash
 
-Install julearn
-^^^^^^^^^^^^^^^
-
-To install julearn in editable/development mode, simple run:
-
-.. code-block:: bash
-
-    python setup.py develop
-
-Now you are ready for the first contribution.
-
-.. note:: Every time that you run ``setup.py develop``, the version is going to
-  be automatically set based on the git history. Nevertheless, this change 
-  should not be committed (changes to ``_version.py``). Running ``git stash``
-  at this point will forget the local changes to ``_version.py``.
+       tox --parallel
 
 
-Contributing with a pull request
---------------------------------
+#. Push your branch to GitHub.
 
-The first step, before doing any edit to the code, is to find the issue in the
-`julearn Github`_ repository that you will address and explain what your
-contribution will do. If it does not exist, you can create it. The idea is that
-after your pull request is merged, the issue is fixed/closed.
+   .. code-block:: bash
 
-Fork the `julearn Github`_ repository
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-In order to push into a repository, you will need to have push permissions.
-Github provides a way of doing this by forking (creating a copy) the repository
-into one under your Github user account in.
+       git push origin <prefix>/<name-of-your-branch>
 
-Simply go to `julearn Github`_  and click on the ^Fork^ button on the top-right
-corner.
-
-Once you do this, there will be a ``julearn`` repository under your username.
-For example ``fraimondo/julearn``.
-
-Now add this as an other remote repository to the current julearn local git.
-Replace ``fraimondo`` with your Github username.
-
-.. code-block:: bash
-
-    git remote add fraimondo git@github.com:fraimondo/julearn.git
+#. Open the link displayed in the message when pushing your new branch in order
+   to submit a pull request. Please follow the template presented to you in the
+   web interface to complete your pull request.
 
 
-Create a branch for your modifications
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+GitHub Pull Request guidelines
+------------------------------
 
-All your modifications that address this issue will be placed in a new branch.
-First, make sure you have the latest commit in your local ``main`` branch.
+Before you submit a pull request, check that it meets these guidelines:
 
-.. code-block:: bash
+#. The pull request should include tests in the respective ``tests`` directory.
+   Except in rare circumstances, code coverage must not decrease (as reported
+   by codecov which runs automatically when you submit your pull request).
+#. If the pull request adds functionality, the docs should be
+   updated. Consider creating a Python file that demonstrates the usage in
+   ``examples/`` directory.
+#. Make sure to create a Draft Pull Request. If you are not sure how to do it,
+   check
+   `here <https://github.blog/2019-02-14-introducing-draft-pull-requests/>`_.
+#. Note the pull request ID assigned after completing the previous step and
+   create a short one-liner file of your contribution named as
+   ``<pull-request-ID>.<type>`` in ``docs/changes/newsfragments/``, ``<type>``
+   being as per the following convention:
 
-    git checkout main
-    git pull --rebase origin main
+   * API change : ``change``
+   * Bug fix : ``bugfix``
+   * Enhancement : ``enh``
+   * Feature : ``feature``
+   * Documentation improvement : ``doc``
+   * Miscellaneous : ``misc``
+   * Deprecation and API removal : ``removal``
+
+   For example, a basic documentation improvement can be recorded in a file
+   ``101.doc`` with the content:
+
+   .. code-block::
+
+       Fixed a typo in intro by `julearn's biggest fan`_
+
+#. If it's your first contribution, also add yourself to
+   ``docs/changes/contributors.inc``.
+#. The pull request will be tested against several Python versions.
+#. Someone from the core team will review your work and guide you to a successful
+   contribution.
 
 
-Then, execute the following command to create a new branch, replacing 
-``<BRANCH_NAME>`` with a name that relates to the issue.
+Running unit tests
+------------------
 
-.. code-block:: bash
+julearn uses `pytest <http://docs.pytest.org/en/latest/>`_ for its
+unit-tests and new features should in general always come with new
+tests that make sure that the code runs as intended.
 
-    git checkout -b <BRANCH_NAME>
-
-
-.. _do_changes:
-
-Do the changes
-^^^^^^^^^^^^^^
-
-Simply use your preferred code editor to do the modifications you want.
-
-.. note:: You must also add a line in `docs/changes/latest.inc` where you briefly
-  explain the modifications you made. If it's your first contribution, also
-  add yourself to `docs/changes/contributors.inc`.
-
-
-Commit and Push
-^^^^^^^^^^^^^^^
-
-This is the standard git workflow. Replace ``<USERNAME>>`` with your Github 
-username.
-
-    # Add the files you created with ``git add``
-    # Commit the changes with ``git commit``
-    # Commit the changes with ``git push <USERNAME> <BRANCH_NAME>``
-
-Test and build the documentation
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Before creating the pull request (PR), make sure that all the test pass and
-the documentation can be correctly built.
-
-To check the code style, run:
+To run all tests
 
 .. code-block:: bash
 
-    flake8
+    tox -e test
 
-To run the spell check, run:
 
-.. code-block:: bash
+Adding and building documentation
+---------------------------------
 
-    codespell julearn/ docs/ examples/
-
-To run the test, execute:
+Building the documentation requires some extra packages and can be installed by
 
 .. code-block:: bash
 
-    pytest -v
+    pip install -e ".[docs]"
 
-
-To build the docs:
+To build the docs
 
 .. code-block:: bash
 
     cd docs
-    make html
+    make local
 
-To view the documentation, open `docs/_build/html/index.html`.
+To view the documentation, open ``docs/_build/html/index.html``.
 
-In case you remove some files or change their filename you can run into
-errors when using ``make html``. In this situation you can use ``make clean``
-to clean up the already build files and then rerun ``make html``.
-
-If any of this fails, go back to :ref:`do_changes`
-
-Create a pull request
-^^^^^^^^^^^^^^^^^^^^^
-
-Now that you are happy with your contribution, just navigate to your fork
-of the julearn repository in `Github`_ and click on the ^Compare & pull 
-request^ button.
-
-Fill in the pull request message and you will be in contact with the julearn
-manitainers who will review your contribution. If they suggest any
-modification, go back to :ref:`do_changes`.
-
-Once everyone is happy, your modifications will be included in the development
-version and later on, in the release version.
-
+In case you remove some files or change their filenames, you can run into
+errors when using ``make local``. In this situation you can use ``make clean``
+to clean up the already build files and then re-run ``make local``.
 
 
 Writing Examples
 ----------------
 
-Examples are run and displayed in HTML format using `sphinx gallery`_. There
-are two sub directories in the ``examples`` directory: ``basic`` and
-``advanced``. To add an example, just create a ``.py`` file that starts either
-with ``plot_`` or ``run_``, dependending on whether the example generates a 
-figure or not.
+The format used for text is reST. Check the `sphinx RST reference`_ for more
+details. The examples are run and displayed in HTML format using
+`sphinx gallery`_. To add an example, just create a ``.py`` file that starts
+either with ``plot_`` or ``run_``, dependending on whether the example generates
+a figure or not.
 
-The first lines of the example should be a python block comment with a title,
-a description of the example an the following include directive to be able to
-use the links.
+The first lines of the example should be a Python block comment with a title,
+a description of the example, authors and license name.
 
-The format use for text is RST. Check the `sphinx RST reference`_ for more
-details.
-
-Example of the first lines:
-
+The following is an example of how to start an example
 
 .. code-block:: python
 
@@ -218,42 +168,38 @@ Example of the first lines:
     This example uses the 'iris' dataset and performs a simple binary
     classification using a Support Vector Machine classifier.
 
-    .. include:: ../../links.inc
     """
 
 
-The rest of the script will be executed as normal python code. In order to
+The rest of the script will be executed as normal Python code. In order to
 render the output and embed formatted text within the code, you need to add
 a 79 ``#`` (a full line) at the point in which you want to render and add text.
-Each line of text shall be preceded with ``#``. The code that it's not
+Each line of text shall be preceded with ``#``. The code that is not
 commented will be executed.
 
-The following example will create 3 texts and render the output between the
+The following example will create texts and render the output between the
 texts.
 
 .. code-block:: python
 
-    ###############################################################################
-    # Imports needed for the example
-    from seaborn import load_dataset
     from julearn import run_cross_validation
     from julearn.utils import configure_logging
+    from seaborn import load_dataset
+
 
     ###############################################################################
-    df_iris = load_dataset('iris')
+    # Set the logging level to info to see extra information
+    configure_logging(level="INFO")
 
     ###############################################################################
-    # The dataset has three kind of species. We will keep two to perform a binary
+    # Load the iris dataset
+    df_iris = load_dataset("iris")
+
+    ###############################################################################
+    # The dataset has three species. We will keep two to perform a binary
     # classification.
-    df_iris = df_iris[df_iris['species'].isin(['versicolor', 'virginica'])]
+    df_iris = df_iris[df_iris["species"].isin(["versicolor", "virginica"])]
 
 
-
-Finally, when the example is done, you can run as a normal python script.
-To generate the HTML, just build the docs:
-
-.. code-block:: bash
-
-    cd docs
-    make html
-
+Finally, when the example is done, you can run as a normal Python script.
+To generate the HTML, just build the docs.
