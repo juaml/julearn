@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="9. Frequenly Asked Questions" href="faq.html" /><link rel="prev" title="7. Contributing to julearn" href="contributing.html" />
 
     <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
-        <title>8. Maintaining julearn - julearn documentation</title>
+        <title>8. Maintaining - julearn documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
@@ -334,7 +334,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">7. Contributing to julearn</a></li>
-<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">8. Maintaining julearn</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">8. Maintaining</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">9. Frequenly Asked Questions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="whats_new.html">10. What’s new</a></li>
 </ul>
@@ -370,60 +370,83 @@
           </label>
         </div>
         <article role="main">
-          <section id="maintaining-julearn">
-<h1><span class="section-number">8. </span>Maintaining julearn<a class="headerlink" href="#maintaining-julearn" title="Permalink to this heading">#</a></h1>
+          <section id="maintaining">
+<h1><span class="section-number">8. </span>Maintaining<a class="headerlink" href="#maintaining" title="Permalink to this heading">#</a></h1>
 <section id="versioning">
 <h2><span class="section-number">8.1. </span>Versioning<a class="headerlink" href="#versioning" title="Permalink to this heading">#</a></h2>
-<p>julearn version numbers are as follows: <em>MAJOR.MINOR.MICRO</em>. Additionally,
+<p>Version numbers are as follows: <em>MAJOR.MINOR.MICRO</em>. Additionally,
 development version append <em>devN</em> where N is the distance (in commits) to
 the last release.</p>
 <p>This is done automatically by <a class="reference external" href="https://github.com/pypa/setuptools_scm/">setuptools_scm</a>.</p>
 <p>This plugin reads the latest tagged version from git and automatically
 increments the <em>MICRO</em> segment and appends <em>devN</em>. This is considered a
 pre-release.</p>
-<p>The CI scripts will publish every tag with the format <em>v.X.Y.Z</em> to Pypi as
+<p>The CI scripts will publish every tag with the format <em>v.X.Y.Z</em> to PyPI as
 version “X.Y.Z”. Additionally, for every push to main, it will be published
-as pre-release to TestPypi.</p>
+as pre-release to TestPyPI (for now).</p>
+</section>
 <section id="releasing-a-new-version">
-<h3>Releasing a new version<a class="headerlink" href="#releasing-a-new-version" title="Permalink to this heading">#</a></h3>
+<h2><span class="section-number">8.2. </span>Releasing a new version<a class="headerlink" href="#releasing-a-new-version" title="Permalink to this heading">#</a></h2>
 <p>Once the milestone is reached (all issues closed), it is time to do a new
-release.</p>
+release. Make sure you have
+<a class="reference external" href="https://towncrier.readthedocs.io/en/stable/index.html">towncrier</a> installed
+before proceeding.</p>
 <ol class="arabic simple">
-<li><dl class="simple">
-<dt>Open a PR to update documentation:</dt><dd><ul class="simple">
-<li><p><cite>docs/changes/latest.inc</cite> should now be renamed to the version to be
-released.</p></li>
-<li><p><cite>docs/whats_new.rst</cite> must update the link to the new version.</p></li>
-</ul>
-</dd>
-</dl>
-</li>
-<li><p>Merge PR</p></li>
 <li><p>Make sure you are in sync with the main branch.</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>main
 git<span class="w"> </span>pull<span class="w"> </span>--rebase<span class="w"> </span>origin<span class="w"> </span>main
 </pre></div>
 </div>
-<ol class="arabic simple" start="4">
-<li><p>Create tag (replace <code class="docutils literal notranslate"><span class="pre">X.Y.Z</span></code> with the proper version).</p></li>
+<ol class="arabic simple">
+<li><p>Run the following to check changelog is properly generated:</p></li>
 </ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>tag<span class="w"> </span>vX.Y.Z
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>towncrier<span class="w"> </span>build<span class="w"> </span>--draft
 </pre></div>
 </div>
-<ol class="arabic simple" start="5">
+<ol class="arabic simple">
+<li><p>Then, run:</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>towncrier
+</pre></div>
+</div>
+<p>to generate the proper changelog that should be reflected in
+<code class="docutils literal notranslate"><span class="pre">docs/whats_new.rst</span></code>.</p>
+<ol class="arabic simple">
+<li><p>Commit the chages, make a PR and merge via a merge commit.</p></li>
+<li><p>Make sure you are in sync with the main branch.</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>main
+git<span class="w"> </span>pull<span class="w"> </span>--rebase<span class="w"> </span>origin<span class="w"> </span>main
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p>Create tag (replace <code class="docutils literal notranslate"><span class="pre">X.Y.Z</span></code> with the proper version) on the merged PR’s
+merge commit.</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>tag<span class="w"> </span>-a<span class="w"> </span>vX.Y.Z<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Release X.Y.Z&quot;</span>
+</pre></div>
+</div>
+<ol class="arabic simple">
 <li><p>Check that the build system is creating the proper version</p></li>
 </ol>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">SETUPTOOLS_SCM_DEBUG</span><span class="o">=</span><span class="m">1</span><span class="w"> </span>python<span class="w"> </span>-m<span class="w"> </span>build<span class="w"> </span>--source<span class="w"> </span>--binary<span class="w"> </span>--out-dir<span class="w"> </span>dist/<span class="w"> </span>.
 </pre></div>
 </div>
-<ol class="arabic simple" start="6">
+<ol class="arabic simple">
 <li><p>Push the tag</p></li>
 </ol>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>vX.Y.Z
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>--follow-tags
 </pre></div>
 </div>
-</section>
+<ol class="arabic simple">
+<li><p>Optional: bump the <em>MAJOR</em> or <em>MINOR</em> segment of next release (replace
+<code class="docutils literal notranslate"><span class="pre">D.E.0</span></code> with the proper version).</p></li>
+</ol>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>tag<span class="w"> </span>-a<span class="w"> </span>vD.E.0.dev<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Set next release to D.E.0&quot;</span>
+git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>--follow-tags
+</pre></div>
+</div>
 </section>
 </section>
 
@@ -482,11 +505,9 @@ git<span class="w"> </span>pull<span class="w"> </span>--rebase<span class="w"> 
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">8. Maintaining julearn</a><ul>
-<li><a class="reference internal" href="#versioning">8.1. Versioning</a><ul>
-<li><a class="reference internal" href="#releasing-a-new-version">Releasing a new version</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#">8. Maintaining</a><ul>
+<li><a class="reference internal" href="#versioning">8.1. Versioning</a></li>
+<li><a class="reference internal" href="#releasing-a-new-version">8.2. Releasing a new version</a></li>
 </ul>
 </li>
 </ul>

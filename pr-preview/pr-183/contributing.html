@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="8. Maintaining julearn" href="maintaining.html" /><link rel="prev" title="julearn.viz.plot_scores" href="api/generated/julearn.viz.plot_scores.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="8. Maintaining" href="maintaining.html" /><link rel="prev" title="julearn.viz.plot_scores" href="api/generated/julearn.viz.plot_scores.html" />
 
     <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
         <title>7. Contributing to julearn - julearn documentation</title>
@@ -334,7 +334,7 @@
 </ul>
 </li>
 <li class="toctree-l1 current current-page"><a class="current reference internal" href="#">7. Contributing to julearn</a></li>
-<li class="toctree-l1"><a class="reference internal" href="maintaining.html">8. Maintaining julearn</a></li>
+<li class="toctree-l1"><a class="reference internal" href="maintaining.html">8. Maintaining</a></li>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">9. Frequenly Asked Questions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="whats_new.html">10. What’s new</a></li>
 </ul>
@@ -371,163 +371,132 @@
         </div>
         <article role="main">
           <section id="contributing-to-julearn">
-<h1><span class="section-number">7. </span>Contributing to julearn<a class="headerlink" href="#contributing-to-julearn" title="Permalink to this heading">#</a></h1>
-<section id="setting-up-the-development-environment">
-<h2><span class="section-number">7.1. </span>Setting up the development environment<a class="headerlink" href="#setting-up-the-development-environment" title="Permalink to this heading">#</a></h2>
-<p>Before your first contribution, you might want to install all the required
-tools to be able to test that everything is according to the required
-development guidelines.</p>
-<section id="download-the-source-code">
-<h3>Download the source code<a class="headerlink" href="#download-the-source-code" title="Permalink to this heading">#</a></h3>
-<p>Choose a folder where you will place the code and clone the <a class="reference external" href="https://github.com/juaml/julearn">julearn Github</a>
-repository:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/juaml/julearn.git
+<span id="contribution-guidelines"></span><h1><span class="section-number">7. </span>Contributing to julearn<a class="headerlink" href="#contributing-to-julearn" title="Permalink to this heading">#</a></h1>
+<section id="setting-up-the-local-development-environment">
+<h2><span class="section-number">7.1. </span>Setting up the local development environment<a class="headerlink" href="#setting-up-the-local-development-environment" title="Permalink to this heading">#</a></h2>
+<ol class="arabic">
+<li><p>Fork the <a class="reference external" href="https://github.com/juaml/julearn">https://github.com/juaml/julearn</a> repository on GitHub. If you
+have never done this before, <a class="reference external" href="https://guides.github.com/activities/forking/">follow the official guide</a>.</p></li>
+<li><p>Clone your fork locally as described in the same guide.</p></li>
+<li><p>Install your local copy into a Python virtual environment. You can <a class="reference external" href="https://realpython.com/python-virtual-environments-a-primer/">read
+this guide to learn more</a> about them
+and how to create one.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[dev]&quot;</span>
 </pre></div>
 </div>
-</section>
-<section id="create-a-virtual-environment">
-<h3>Create a virtual environment<a class="headerlink" href="#create-a-virtual-environment" title="Permalink to this heading">#</a></h3>
-<p>This step can be omitted, but it is highly recommended, as the development
-version of julearn can interfere with the other versions that you might use in
-your projects.</p>
-<p>Check the <a class="reference external" href="https://docs.python.org/3/tutorial/venv.html">venv</a> or <a class="reference external" href="https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html">conda env</a> documentation on how to create one.</p>
-</section>
-<section id="install-the-requirements">
-<h3>Install the requirements<a class="headerlink" href="#install-the-requirements" title="Permalink to this heading">#</a></h3>
-<p>The required packages for development are specified within 3 files in the
-repository, according to the different build stages.</p>
-<p>The following is an example on how to install them using <cite>pip</cite>:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>julearn
-pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
-pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>test-requirements.txt
-pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>docs-requirements.txt
-pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>dev-requirements.txt
-</pre></div>
-</div>
-</section>
-<section id="install-julearn">
-<h3>Install julearn<a class="headerlink" href="#install-julearn" title="Permalink to this heading">#</a></h3>
-<p>To install julearn in editable/development mode, simple run:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>setup.py<span class="w"> </span>develop
-</pre></div>
-</div>
-<p>Now you are ready for the first contribution.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Every time that you run <code class="docutils literal notranslate"><span class="pre">setup.py</span> <span class="pre">develop</span></code>, the version is going to
-be automatically set based on the git history. Nevertheless, this change
-should not be committed (changes to <code class="docutils literal notranslate"><span class="pre">_version.py</span></code>). Running <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">stash</span></code>
-at this point will forget the local changes to <code class="docutils literal notranslate"><span class="pre">_version.py</span></code>.</p>
-</div>
-</section>
-</section>
-<section id="contributing-with-a-pull-request">
-<h2><span class="section-number">7.2. </span>Contributing with a pull request<a class="headerlink" href="#contributing-with-a-pull-request" title="Permalink to this heading">#</a></h2>
-<p>The first step, before doing any edit to the code, is to find the issue in the
-<a class="reference external" href="https://github.com/juaml/julearn">julearn Github</a> repository that you will address and explain what your
-contribution will do. If it does not exist, you can create it. The idea is that
-after your pull request is merged, the issue is fixed/closed.</p>
-<section id="fork-the-julearn-github-repository">
-<h3>Fork the <a class="reference external" href="https://github.com/juaml/julearn">julearn Github</a> repository<a class="headerlink" href="#fork-the-julearn-github-repository" title="Permalink to this heading">#</a></h3>
-<p>In order to push into a repository, you will need to have push permissions.
-Github provides a way of doing this by forking (creating a copy) the repository
-into one under your Github user account in.</p>
-<p>Simply go to <a class="reference external" href="https://github.com/juaml/julearn">julearn Github</a>  and click on the ^Fork^ button on the top-right
-corner.</p>
-<p>Once you do this, there will be a <code class="docutils literal notranslate"><span class="pre">julearn</span></code> repository under your username.
-For example <code class="docutils literal notranslate"><span class="pre">fraimondo/julearn</span></code>.</p>
-<p>Now add this as an other remote repository to the current julearn local git.
-Replace <code class="docutils literal notranslate"><span class="pre">fraimondo</span></code> with your Github username.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>fraimondo<span class="w"> </span>git@github.com:fraimondo/julearn.git
-</pre></div>
-</div>
-</section>
-<section id="create-a-branch-for-your-modifications">
-<h3>Create a branch for your modifications<a class="headerlink" href="#create-a-branch-for-your-modifications" title="Permalink to this heading">#</a></h3>
-<p>All your modifications that address this issue will be placed in a new branch.
-First, make sure you have the latest commit in your local <code class="docutils literal notranslate"><span class="pre">main</span></code> branch.</p>
+</li>
+<li><p>Create a branch for local development using the <code class="docutils literal notranslate"><span class="pre">main</span></code> branch as a
+starting point. Use <code class="docutils literal notranslate"><span class="pre">fix</span></code>, <code class="docutils literal notranslate"><span class="pre">refactor</span></code>, or <code class="docutils literal notranslate"><span class="pre">feat</span></code> as a prefix.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>main
-git<span class="w"> </span>pull<span class="w"> </span>--rebase<span class="w"> </span>origin<span class="w"> </span>main
+git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span>&lt;prefix&gt;/&lt;name-of-your-branch&gt;
 </pre></div>
 </div>
-<p>Then, execute the following command to create a new branch, replacing
-<code class="docutils literal notranslate"><span class="pre">&lt;BRANCH_NAME&gt;</span></code> with a name that relates to the issue.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span>&lt;BRANCH_NAME&gt;
+<p>Now you can make your changes locally.</p>
+</li>
+<li><p>When making changes locally, it is helpful to <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">commit</span></code> your work
+regularly. On one hand to save your work and on the other hand, the smaller
+the steps, the easier it is to review your work later. Please use <a class="reference external" href="http://karma-runner.github.io/2.0/dev/git-commit-msg.html">semantic
+commit messages</a>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>add<span class="w"> </span>.
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;&lt;prefix&gt;: &lt;summary of changes&gt;&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p>When you’re done making changes, check that your changes pass our test suite.
+This is all included with <code class="docutils literal notranslate"><span class="pre">tox</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tox
+</pre></div>
+</div>
+<p>You can also run all <code class="docutils literal notranslate"><span class="pre">tox</span></code> tests in parallel. As of <code class="docutils literal notranslate"><span class="pre">tox</span> <span class="pre">3.7</span></code>, you can run</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tox<span class="w"> </span>--parallel
+</pre></div>
+</div>
+</li>
+<li><p>Push your branch to GitHub.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>push<span class="w"> </span>origin<span class="w"> </span>&lt;prefix&gt;/&lt;name-of-your-branch&gt;
+</pre></div>
+</div>
+</li>
+<li><p>Open the link displayed in the message when pushing your new branch in order
+to submit a pull request. Please follow the template presented to you in the
+web interface to complete your pull request.</p></li>
+</ol>
+</section>
+<section id="github-pull-request-guidelines">
+<h2><span class="section-number">7.2. </span>GitHub Pull Request guidelines<a class="headerlink" href="#github-pull-request-guidelines" title="Permalink to this heading">#</a></h2>
+<p>Before you submit a pull request, check that it meets these guidelines:</p>
+<ol class="arabic">
+<li><p>The pull request should include tests in the respective <code class="docutils literal notranslate"><span class="pre">tests</span></code> directory.
+Except in rare circumstances, code coverage must not decrease (as reported
+by codecov which runs automatically when you submit your pull request).</p></li>
+<li><p>If the pull request adds functionality, the docs should be
+updated. Consider creating a Python file that demonstrates the usage in
+<code class="docutils literal notranslate"><span class="pre">examples/</span></code> directory.</p></li>
+<li><p>Make sure to create a Draft Pull Request. If you are not sure how to do it,
+check
+<a class="reference external" href="https://github.blog/2019-02-14-introducing-draft-pull-requests/">here</a>.</p></li>
+<li><p>Note the pull request ID assigned after completing the previous step and
+create a short one-liner file of your contribution named as
+<code class="docutils literal notranslate"><span class="pre">&lt;pull-request-ID&gt;.&lt;type&gt;</span></code> in <code class="docutils literal notranslate"><span class="pre">docs/changes/newsfragments/</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;type&gt;</span></code>
+being as per the following convention:</p>
+<ul class="simple">
+<li><p>API change : <code class="docutils literal notranslate"><span class="pre">change</span></code></p></li>
+<li><p>Bug fix : <code class="docutils literal notranslate"><span class="pre">bugfix</span></code></p></li>
+<li><p>Enhancement : <code class="docutils literal notranslate"><span class="pre">enh</span></code></p></li>
+<li><p>Feature : <code class="docutils literal notranslate"><span class="pre">feature</span></code></p></li>
+<li><p>Documentation improvement : <code class="docutils literal notranslate"><span class="pre">doc</span></code></p></li>
+<li><p>Miscellaneous : <code class="docutils literal notranslate"><span class="pre">misc</span></code></p></li>
+<li><p>Deprecation and API removal : <code class="docutils literal notranslate"><span class="pre">removal</span></code></p></li>
+</ul>
+<p>For example, a basic documentation improvement can be recorded in a file
+<code class="docutils literal notranslate"><span class="pre">101.doc</span></code> with the content:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Fixed a typo in intro by `julearn&#39;s biggest fan`_
+</pre></div>
+</div>
+</li>
+<li><p>If it’s your first contribution, also add yourself to
+<code class="docutils literal notranslate"><span class="pre">docs/changes/contributors.inc</span></code>.</p></li>
+<li><p>The pull request will be tested against several Python versions.</p></li>
+<li><p>Someone from the core team will review your work and guide you to a successful
+contribution.</p></li>
+</ol>
+</section>
+<section id="running-unit-tests">
+<h2><span class="section-number">7.3. </span>Running unit tests<a class="headerlink" href="#running-unit-tests" title="Permalink to this heading">#</a></h2>
+<p>julearn uses <a class="reference external" href="http://docs.pytest.org/en/latest/">pytest</a> for its
+unit-tests and new features should in general always come with new
+tests that make sure that the code runs as intended.</p>
+<p>To run all tests</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tox<span class="w"> </span>-e<span class="w"> </span><span class="nb">test</span>
 </pre></div>
 </div>
 </section>
-<section id="do-the-changes">
-<span id="do-changes"></span><h3>Do the changes<a class="headerlink" href="#do-the-changes" title="Permalink to this heading">#</a></h3>
-<p>Simply use your preferred code editor to do the modifications you want.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>You must also add a line in <cite>docs/changes/latest.inc</cite> where you briefly
-explain the modifications you made. If it’s your first contribution, also
-add yourself to <cite>docs/changes/contributors.inc</cite>.</p>
-</div>
-</section>
-<section id="commit-and-push">
-<h3>Commit and Push<a class="headerlink" href="#commit-and-push" title="Permalink to this heading">#</a></h3>
-<p>This is the standard git workflow. Replace <code class="docutils literal notranslate"><span class="pre">&lt;USERNAME&gt;&gt;</span></code> with your Github
-username.</p>
-<blockquote>
-<div><p># Add the files you created with <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span></code>
-# Commit the changes with <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">commit</span></code>
-# Commit the changes with <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">push</span> <span class="pre">&lt;USERNAME&gt;</span> <span class="pre">&lt;BRANCH_NAME&gt;</span></code></p>
-</div></blockquote>
-</section>
-<section id="test-and-build-the-documentation">
-<h3>Test and build the documentation<a class="headerlink" href="#test-and-build-the-documentation" title="Permalink to this heading">#</a></h3>
-<p>Before creating the pull request (PR), make sure that all the test pass and
-the documentation can be correctly built.</p>
-<p>To check the code style, run:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>flake8
+<section id="adding-and-building-documentation">
+<h2><span class="section-number">7.4. </span>Adding and building documentation<a class="headerlink" href="#adding-and-building-documentation" title="Permalink to this heading">#</a></h2>
+<p>Building the documentation requires some extra packages and can be installed by</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[docs]&quot;</span>
 </pre></div>
 </div>
-<p>To run the spell check, run:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>codespell<span class="w"> </span>julearn/<span class="w"> </span>docs/<span class="w"> </span>examples/
-</pre></div>
-</div>
-<p>To run the test, execute:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest<span class="w"> </span>-v
-</pre></div>
-</div>
-<p>To build the docs:</p>
+<p>To build the docs</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>docs
-make<span class="w"> </span>html
+make<span class="w"> </span><span class="nb">local</span>
 </pre></div>
 </div>
-<p>To view the documentation, open <cite>docs/_build/html/index.html</cite>.</p>
-<p>In case you remove some files or change their filename you can run into
-errors when using <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">html</span></code>. In this situation you can use <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">clean</span></code>
-to clean up the already build files and then rerun <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">html</span></code>.</p>
-<p>If any of this fails, go back to <a class="reference internal" href="#do-changes"><span class="std std-ref">Do the changes</span></a></p>
-</section>
-<section id="create-a-pull-request">
-<h3>Create a pull request<a class="headerlink" href="#create-a-pull-request" title="Permalink to this heading">#</a></h3>
-<p>Now that you are happy with your contribution, just navigate to your fork
-of the julearn repository in <a class="reference external" href="https://github.com/">Github</a> and click on the ^Compare &amp; pull
-request^ button.</p>
-<p>Fill in the pull request message and you will be in contact with the julearn
-manitainers who will review your contribution. If they suggest any
-modification, go back to <a class="reference internal" href="#do-changes"><span class="std std-ref">Do the changes</span></a>.</p>
-<p>Once everyone is happy, your modifications will be included in the development
-version and later on, in the release version.</p>
-</section>
+<p>To view the documentation, open <code class="docutils literal notranslate"><span class="pre">docs/_build/html/index.html</span></code>.</p>
+<p>In case you remove some files or change their filenames, you can run into
+errors when using <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">local</span></code>. In this situation you can use <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">clean</span></code>
+to clean up the already build files and then re-run <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">local</span></code>.</p>
 </section>
 <section id="writing-examples">
-<h2><span class="section-number">7.3. </span>Writing Examples<a class="headerlink" href="#writing-examples" title="Permalink to this heading">#</a></h2>
-<p>Examples are run and displayed in HTML format using <a class="reference external" href="https://sphinx-gallery.github.io/stable/index.html">sphinx gallery</a>. There
-are two sub directories in the <code class="docutils literal notranslate"><span class="pre">examples</span></code> directory: <code class="docutils literal notranslate"><span class="pre">basic</span></code> and
-<code class="docutils literal notranslate"><span class="pre">advanced</span></code>. To add an example, just create a <code class="docutils literal notranslate"><span class="pre">.py</span></code> file that starts either
-with <code class="docutils literal notranslate"><span class="pre">plot_</span></code> or <code class="docutils literal notranslate"><span class="pre">run_</span></code>, dependending on whether the example generates a
-figure or not.</p>
-<p>The first lines of the example should be a python block comment with a title,
-a description of the example an the following include directive to be able to
-use the links.</p>
-<p>The format use for text is RST. Check the <a class="reference external" href="https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#inline-markup">sphinx RST reference</a> for more
-details.</p>
-<p>Example of the first lines:</p>
+<h2><span class="section-number">7.5. </span>Writing Examples<a class="headerlink" href="#writing-examples" title="Permalink to this heading">#</a></h2>
+<p>The format used for text is reST. Check the <a class="reference external" href="https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#inline-markup">sphinx RST reference</a> for more
+details. The examples are run and displayed in HTML format using
+<a class="reference external" href="https://sphinx-gallery.github.io/stable/index.html">sphinx gallery</a>. To add an example, just create a <code class="docutils literal notranslate"><span class="pre">.py</span></code> file that starts
+either with <code class="docutils literal notranslate"><span class="pre">plot_</span></code> or <code class="docutils literal notranslate"><span class="pre">run_</span></code>, dependending on whether the example generates
+a figure or not.</p>
+<p>The first lines of the example should be a Python block comment with a title,
+a description of the example, authors and license name.</p>
+<p>The following is an example of how to start an example</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Simple Binary Classification</span>
 <span class="sd">============================</span>
@@ -535,38 +504,37 @@ details.</p>
 <span class="sd">This example uses the &#39;iris&#39; dataset and performs a simple binary</span>
 <span class="sd">classification using a Support Vector Machine classifier.</span>
 
-<span class="sd">.. include:: ../../links.inc</span>
 <span class="sd">&quot;&quot;&quot;</span>
 </pre></div>
 </div>
-<p>The rest of the script will be executed as normal python code. In order to
+<p>The rest of the script will be executed as normal Python code. In order to
 render the output and embed formatted text within the code, you need to add
 a 79 <code class="docutils literal notranslate"><span class="pre">#</span></code> (a full line) at the point in which you want to render and add text.
-Each line of text shall be preceded with <code class="docutils literal notranslate"><span class="pre">#</span></code>. The code that it’s not
+Each line of text shall be preceded with <code class="docutils literal notranslate"><span class="pre">#</span></code>. The code that is not
 commented will be executed.</p>
-<p>The following example will create 3 texts and render the output between the
+<p>The following example will create texts and render the output between the
 texts.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">###############################################################################</span>
-<span class="c1"># Imports needed for the example</span>
-<span class="kn">from</span> <span class="nn">seaborn</span> <span class="kn">import</span> <span class="n">load_dataset</span>
-<span class="kn">from</span> <span class="nn">julearn</span> <span class="kn">import</span> <span class="n">run_cross_validation</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">julearn</span> <span class="kn">import</span> <span class="n">run_cross_validation</span>
 <span class="kn">from</span> <span class="nn">julearn.utils</span> <span class="kn">import</span> <span class="n">configure_logging</span>
+<span class="kn">from</span> <span class="nn">seaborn</span> <span class="kn">import</span> <span class="n">load_dataset</span>
+
 
 <span class="c1">###############################################################################</span>
-<span class="n">df_iris</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s1">&#39;iris&#39;</span><span class="p">)</span>
+<span class="c1"># Set the logging level to info to see extra information</span>
+<span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
 
 <span class="c1">###############################################################################</span>
-<span class="c1"># The dataset has three kind of species. We will keep two to perform a binary</span>
+<span class="c1"># Load the iris dataset</span>
+<span class="n">df_iris</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;iris&quot;</span><span class="p">)</span>
+
+<span class="c1">###############################################################################</span>
+<span class="c1"># The dataset has three species. We will keep two to perform a binary</span>
 <span class="c1"># classification.</span>
-<span class="n">df_iris</span> <span class="o">=</span> <span class="n">df_iris</span><span class="p">[</span><span class="n">df_iris</span><span class="p">[</span><span class="s1">&#39;species&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s1">&#39;versicolor&#39;</span><span class="p">,</span> <span class="s1">&#39;virginica&#39;</span><span class="p">])]</span>
+<span class="n">df_iris</span> <span class="o">=</span> <span class="n">df_iris</span><span class="p">[</span><span class="n">df_iris</span><span class="p">[</span><span class="s2">&quot;species&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s2">&quot;versicolor&quot;</span><span class="p">,</span> <span class="s2">&quot;virginica&quot;</span><span class="p">])]</span>
 </pre></div>
 </div>
-<p>Finally, when the example is done, you can run as a normal python script.
-To generate the HTML, just build the docs:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>docs
-make<span class="w"> </span>html
-</pre></div>
-</div>
+<p>Finally, when the example is done, you can run as a normal Python script.
+To generate the HTML, just build the docs.</p>
 </section>
 </section>
 
@@ -580,7 +548,7 @@ make<span class="w"> </span>html
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title"><span class="section-number">8. </span>Maintaining julearn</div>
+                <div class="title"><span class="section-number">8. </span>Maintaining</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -626,23 +594,11 @@ make<span class="w"> </span>html
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">7. Contributing to julearn</a><ul>
-<li><a class="reference internal" href="#setting-up-the-development-environment">7.1. Setting up the development environment</a><ul>
-<li><a class="reference internal" href="#download-the-source-code">Download the source code</a></li>
-<li><a class="reference internal" href="#create-a-virtual-environment">Create a virtual environment</a></li>
-<li><a class="reference internal" href="#install-the-requirements">Install the requirements</a></li>
-<li><a class="reference internal" href="#install-julearn">Install julearn</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#contributing-with-a-pull-request">7.2. Contributing with a pull request</a><ul>
-<li><a class="reference internal" href="#fork-the-julearn-github-repository">Fork the julearn Github repository</a></li>
-<li><a class="reference internal" href="#create-a-branch-for-your-modifications">Create a branch for your modifications</a></li>
-<li><a class="reference internal" href="#do-the-changes">Do the changes</a></li>
-<li><a class="reference internal" href="#commit-and-push">Commit and Push</a></li>
-<li><a class="reference internal" href="#test-and-build-the-documentation">Test and build the documentation</a></li>
-<li><a class="reference internal" href="#create-a-pull-request">Create a pull request</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#writing-examples">7.3. Writing Examples</a></li>
+<li><a class="reference internal" href="#setting-up-the-local-development-environment">7.1. Setting up the local development environment</a></li>
+<li><a class="reference internal" href="#github-pull-request-guidelines">7.2. GitHub Pull Request guidelines</a></li>
+<li><a class="reference internal" href="#running-unit-tests">7.3. Running unit tests</a></li>
+<li><a class="reference internal" href="#adding-and-building-documentation">7.4. Adding and building documentation</a></li>
+<li><a class="reference internal" href="#writing-examples">7.5. Writing Examples</a></li>
 </ul>
 </li>
 </ul>
