@@ -6,7 +6,7 @@
 
 import re
 from collections import Counter
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
 import pandas as pd
@@ -451,3 +451,32 @@ def _check_x_types(X_types: Optional[Dict], X: List[str]) -> Dict[str, List]:
             f"{undefined_columns}. They will be treated as continuous."
         )
     return X_types
+
+
+def prepare_search_params(
+    search_params: Optional[Dict[str, Any]]
+) -> Dict[str, Any]:
+    """Prepare the parameters for the search.
+
+    Parameters
+    ----------
+    search_params : dict, optional
+        The parameters for the search.
+
+    Returns
+    -------
+    search_params : dict
+        The parameters for the search, ready to use.
+    """
+
+    if search_params is None:
+        search_params = {}
+    else:
+        search_params = search_params.copy()
+
+    if "cv" not in search_params:
+        search_params["cv"] = None
+    if "kind" not in search_params:
+        search_params["kind"] = "grid"
+
+    return search_params

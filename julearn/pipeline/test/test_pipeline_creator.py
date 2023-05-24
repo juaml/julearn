@@ -11,7 +11,9 @@ import pandas as pd
 import pytest
 from pytest_lazyfixture import lazy_fixture
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.preprocessing import RobustScaler, StandardScaler
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
+from sklearn.svm import SVC
 
 from julearn.base import ColumnTypesLike, WrapModel
 from julearn.models import get_model
@@ -420,3 +422,122 @@ def test_raise_pipe_wrong_searcher():
             match="The searcher no_search is not a valid julearn searcher"):
         pipeline_creator.to_pipeline(
             X_types, search_params=dict(kind="no_search"))
+
+
+def test_PipelineCreator_repeated_steps():
+    """Test the pipeline creator with repeated steps."""
+
+    # Without explicit naming, it should not be considered repeated
+    creator = PipelineCreator(problem_type="classification")
+    creator.add("zscore", apply_to="continuous")
+    creator.add("zscore", apply_to="continuous")
+    creator.add("rf")
+    assert len(creator._steps) == 3
+    assert creator._steps[0].name == "zscore"
+    assert creator._steps[1].name == "zscore_1"
+
+
+    # With explicit naming, it should be considered repeated
+    creator2 = PipelineCreator(problem_type="classification")
+    creator2.add("zscore", name="scale", apply_to="continuous")
+    creator2.add("zscore", name="scale", apply_to="continuous")
+    creator2.add("rf")
+    assert len(creator2._steps) == 3
+    assert creator2._steps[0].name == "scale"
+    assert creator2._steps[1].name == "scale"
+
+
+def test_PipelineCreator_split():
+    """Test the pipeline creator split."""
+    # No repetition, split should create one pipeline
+    creator1 = PipelineCreator(problem_type="classification")
+    creator1.add("zscore", apply_to="continuous")
+    creator1.add("zscore", apply_to="continuous")
+    creator1.add("rf")
+    assert len(creator1._steps) == 3
+    assert creator1._steps[0].name == "zscore"
+    assert creator1._steps[1].name == "zscore_1"
+
+    out1 = creator1.split()
+    assert len(out1) == 1
+    assert len(out1[0]._steps) == 3
+    assert out1[0]._steps[0].name == "zscore"
+    assert out1[0]._steps[1].name == "zscore_1"
+    assert out1[0]._steps[2].name == "rf"
+
+    # Repeated a step twice, split should create two pipelines
+    creator2 = PipelineCreator(problem_type="classification")
+    creator2.add("zscore", name="scale", apply_to="continuous")
+    creator2.add("zscore", name="scale", apply_to="continuous")
+    creator2.add("rf")
+    assert len(creator2._steps) == 3
+    assert creator2._steps[0].name == "scale"
+    assert creator2._steps[1].name == "scale"
+
+    out2 = creator2.split()
+    assert len(out2) == 2
+    assert len(out2[0]._steps) == 2
+    assert out2[0]._steps[0].name == "scale"
+    assert out2[0]._steps[1].name == "rf"
+    assert len(out2[1]._steps) == 2
+    assert out2[1]._steps[0].name == "scale"
+    assert out2[1]._steps[1].name == "rf"
+
+    # Repeated a step three times, split should create three pipelines
+    creator3 = PipelineCreator(problem_type="classification")
+    creator3.add("zscore", name="scale", apply_to="continuous")
+    creator3.add("zscore", name="scale", apply_to="continuous")
+    creator3.add("scaler_robust", name="scale", apply_to="continuous")
+    creator3.add("rf")
+    assert len(creator3._steps) == 4
+    assert creator3._steps[0].name == "scale"
+    assert creator3._steps[1].name == "scale"
+    assert creator3._steps[2].name == "scale"
+
+    out3 = creator3.split()
+    assert len(out3) == 3
+    assert len(out3[0]._steps) == 2
+    assert out3[0]._steps[0].name == "scale"
+    assert out3[0]._steps[1].name == "rf"
+
+    assert len(out3[1]._steps) == 2
+    assert out3[1]._steps[0].name == "scale"
+    assert out3[1]._steps[1].name == "rf"
+
+    assert len(out3[2]._steps) == 2
+    assert out3[2]._steps[0].name == "scale"
+    assert out3[2]._steps[1].name == "rf"
+
+    #Repeated two step twice, split should create 4 pipelines
+    creator4 = PipelineCreator(problem_type="classification")
+    creator4.add("zscore", name="scale", apply_to="continuous")
+    creator4.add("scaler_robust", name="scale", apply_to="continuous")
+    creator4.add("pca", apply_to="continuous")
+    creator4.add("rf", name="model")
+    creator4.add("svm", name="model")
+    assert len(creator4._steps) == 5
+    assert creator4._steps[0].name == "scale"
+    assert creator4._steps[1].name == "scale"
+    assert creator4._steps[2].name == "pca"
+    assert creator4._steps[3].name == "model"
+    assert creator4._steps[4].name == "model"
+
+    out4 = creator4.split()
+    assert len(out4) == 4
+    for i in range(4):
+        assert len(out4[i]._steps) == 3
+        assert out4[i]._steps[0].name == "scale"
+        assert out4[i]._steps[1].name == "pca"
+        assert out4[i]._steps[2].name == "model"
+
+    assert isinstance(out4[0]._steps[0].estimator, StandardScaler)
+    assert isinstance(out4[0]._steps[2].estimator, RandomForestClassifier)
+
+    assert isinstance(out4[1]._steps[0].estimator, StandardScaler)
+    assert isinstance(out4[1]._steps[2].estimator, SVC)
+
+    assert isinstance(out4[2]._steps[0].estimator, RobustScaler)
+    assert isinstance(out4[2]._steps[2].estimator, RandomForestClassifier)
+
+    assert isinstance(out4[3]._steps[0].estimator, RobustScaler)
+    assert isinstance(out4[3]._steps[2].estimator, SVC)

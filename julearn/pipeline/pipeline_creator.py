@@ -20,6 +20,8 @@ from ..transformers import (
     get_transformer,
     list_transformers,
 )
+from ..prepare import prepare_search_params
+
 from ..transformers.target import JuTransformedTargetModel
 from ..utils import logger, raise_error, warn_with_log
 from ..utils.typing import (
@@ -103,8 +105,8 @@ class Step:
     needed_types: Optional[ColumnTypesLike] = None
     params_to_tune: Optional[Dict] = None
 
-    row_select_col_type:  Optional[ColumnTypesLike] = None
-    row_select_vals:  Optional[Union[str, int, list, bool]] = None
+    row_select_col_type: Optional[ColumnTypesLike] = None
+    row_select_vals: Optional[Union[str, int, list, bool]] = None
 
     def __post_init__(self) -> None:
         """Post init."""
@@ -149,8 +151,8 @@ class PipelineCreator:
         step: Union[EstimatorLike, str, TargetPipelineCreator],
         name: Optional[str] = None,
         apply_to: Optional[ColumnTypesLike] = None,
-        row_select_col_type:  Optional[ColumnTypesLike] = None,
-        row_select_vals:  Optional[Union[str, int, list, bool]] = None,
+        row_select_col_type: Optional[ColumnTypesLike] = None,
+        row_select_vals: Optional[Union[str, int, list, bool]] = None,
         **params: Any,
     ) -> "PipelineCreator":
         """Add a step to the PipelineCreator.
@@ -212,6 +214,17 @@ class PipelineCreator:
         # Validate the step
         self._validate_step(step, apply_to)
 
+        # Check that if the name is already in the steps, we are adding them
+        # at the same place.
+        if name is not None and name in [x.name for x in self._steps]:
+            if self._steps[-1].name != name:
+                raise_error(
+                    "Repeated step names are only allowed to be added "
+                    "consecutively. That means that all the steps with the "
+                    "same name should be added one after the other."
+                    f"The step {name} was already added."
+                )
+
         # If the user did not give a name, we will create one.
         name = self._get_step_name(name, step)
         logger.info(f"Adding step {name} that applies to {apply_to}")
@@ -222,9 +235,11 @@ class PipelineCreator:
         for param, vals in params.items():
             # If we have more than 1 value, we will tune it.
             # If not, it will be set in the model.
-            if (hasattr(vals, "__iter__")
-                    and not hasattr(vals, "fit")
-                    and not isinstance(vals, str)):
+            if (
+                hasattr(vals, "__iter__")
+                and not hasattr(vals, "fit")
+                and not isinstance(vals, str)
+            ):
                 if len(vals) > 1:
                     logger.info(f"Tuning hyperparameter {param} = {vals}")
                     params_to_tune[param] = vals
@@ -257,7 +272,7 @@ class PipelineCreator:
         if isinstance(step, JuTransformer):
             step.set_params(
                 row_select_col_type=row_select_col_type,
-                row_select_vals=row_select_vals
+                row_select_vals=row_select_vals,
             )
 
             needed_types = step.get_needed_types()
@@ -265,6 +280,11 @@ class PipelineCreator:
         # For target transformers we need to add the target_ prefix
         if apply_to == "target":
             name = f"target_{name}"
+
+        # Fix the params to tune keys:
+        params_to_tune = {
+            f"{name}__{param}": val for param, val in params_to_tune.items()
+        }
 
         self._steps.append(
             Step(
@@ -280,7 +300,7 @@ class PipelineCreator:
         logger.info("Step added")
         return self
 
-    @ property
+    @property
     def steps(self) -> List[Step]:
         """Get the steps that have been added to the PipelineCreator."""
         return self._steps
@@ -289,7 +309,22 @@ class PipelineCreator:
         """Whether the PipelineCreator has a model."""
         return self._added_model
 
-    @ classmethod
+
+    def copy(self) -> "PipelineCreator":
+        """Create a copy of the PipelineCreator.
+        
+        Returns
+        -------
+        PipelineCreator
+            The copy of the PipelineCreator
+        """
+        other = PipelineCreator(
+            problem_type=self.problem_type, apply_to=self.apply_to
+        )
+        other._steps = self._steps.copy()
+        return other
+
+    @classmethod
     def from_list(
         cls,
         transformers: Union[str, list],
@@ -314,7 +349,8 @@ class PipelineCreator:
         apply_to : ColumnTypesLike, optional
             To what should the transformers be applied to if not specified in
             the `add` method (default is continuous).
-        Returns
+
+            Returns
         -------
         PipelineCreator
             The PipelineCreator with the steps added
@@ -330,6 +366,64 @@ class PipelineCreator:
             }
             creator.add(transformer_name, **t_params)
         return creator
+
+    def split(
+        self,
+    ) -> List["PipelineCreator"]:
+        """Split the PipelineCreator into multiple PipelineCreators.
+
+        If the PipelineCreator has at least two steps with the same name,
+        this is considered a split point for hyperparameter tuning.
+        This function will split the PipelineCreator into multiple
+        PipelineCreators, one for each split point, recursively. Thus, creating
+        as many PipelineCreators as needed to tune all the hyperparameters
+        configurations.
+
+
+        Returns
+        -------
+        List[PipelineCreator]
+            A list of PipelineCreators, each one without repeated step names.
+        """
+
+        out = []
+        # Add the default PipelineCreator with the same parameters.
+        out.append(
+            PipelineCreator(
+                problem_type=self.problem_type, apply_to=self.apply_to
+            )
+        )
+        names = [x.name for x in self._steps]
+
+        # Create a list of unique names, keeping the order
+        unique_names = []
+        for name in names:
+            if name not in unique_names:
+                unique_names.append(name)
+
+        for t_name in unique_names:
+            # Get the list of steps that should be added to the PipelineCreator
+            t_steps = [x for x in self._steps if x.name == t_name]
+
+            # Check how many steps we have with that name
+            if len(t_steps) == 1:
+                # If it is only one, add it to each of the PipelineCreators
+                for t_pipe in out:
+                    t_pipe._steps.append(t_steps[0])
+            else:
+                # If we have more than one, we need to create a new
+                # PipelineCreator for each of the steps.
+                new_out = []
+                for t_pipe in out:
+                    for t_step in t_steps:
+                        new_pipe = t_pipe.copy()
+                        new_pipe._steps.append(t_step)
+                        new_out.append(new_pipe)
+                out = new_out
+        for t_out in out:
+            t_out._added_model = self._added_model
+            t_out._added_target_transformer = self._added_target_transformer
+        return out
 
     def to_pipeline(
         self,
@@ -382,21 +476,20 @@ class PipelineCreator:
             # Wrap in a JuTransformer if needed
             if self.wrap and not isinstance(estimator, JuTransformer):
                 estimator = self._wrap_step(
-                    name, estimator, step_dict.apply_to,
+                    name,
+                    estimator,
+                    step_dict.apply_to,
                     row_select_col_type=step_dict.row_select_col_type,
-                    row_select_vals=step_dict.row_select_vals
+                    row_select_vals=step_dict.row_select_vals,
                 )
 
+            # Check if a step with the same name was already added
             pipeline_steps.append((name, estimator))
 
             # Add params to tune
-            params_to_tune.update(
-                {
-                    f"{name}__{param}": val
-                    for param, val in step_params_to_tune.items()
-                }
-            )
+            params_to_tune.update(step_params_to_tune)
 
+        # Add final model
         model_name = model_step.name
         model_estimator = model_step.estimator
         logger.debug(f"Adding model {model_name}")
@@ -413,10 +506,7 @@ class PipelineCreator:
             logger.debug(f"Wrapping {model_name}")
             model_estimator = WrapModel(model_estimator, model_step.apply_to)
 
-        step_params_to_tune = {
-            f"{model_name}__{k}": v
-            for k, v in model_step.params_to_tune.items()
-        }
+        step_params_to_tune = model_step.params_to_tune
 
         logger.debug(f"\t Estimator: {model_estimator}")
         logger.debug("\t Looking for nested pipeline creators")
@@ -431,8 +521,9 @@ class PipelineCreator:
             )
             target_step_to_tune = {
                 f"{model_name}_target_transform__transformer__{param}": val
-                for param, val in (target_transformer_step
-                                   .params_to_tune.items())
+                for param, val in (
+                    target_transformer_step.params_to_tune.items()
+                )
             }
             step_params_to_tune = {
                 f"{model_name}_target_transform__model__{param}": val
@@ -448,101 +539,13 @@ class PipelineCreator:
         pipeline = Pipeline(pipeline_steps).set_output(transform="pandas")
 
         # Deal with the Hyperparameter tuning
-        out = self._prepare_hyperparameter_tuning(
+        out = _prepare_hyperparameter_tuning(
             params_to_tune, search_params, pipeline
         )
         logger.debug("Pipeline created")
         return out
 
-    @staticmethod
-    def _prepare_hyperparameter_tuning(
-        params_to_tune: Dict[str, Any],
-        search_params: Optional[Dict[str, Any]],
-        pipeline: Pipeline,
-    ):
-        """Prepare hyperparameter tuning in the pipeline.
 
-        Parameters
-        ----------
-        params_to_tune : dict
-            A dictionary with the parameters to tune. The keys of the
-            dictionary should be named 'STEP__PARAMETER', to be used as
-            PARAMETER for STEP in the pipeline. Example:
-            'svm__probability': True will set the parameter 'probability' of
-            the 'svm' step. The value of the parameter must be a list of
-            values to test.
-
-        search_params : dict
-            The parameters for the search. The following keys are accepted:
-
-            * 'kind': The kind of search algorithm to use e.g.:
-              'grid' or 'random'. All valid julearn searchers can be entered.
-            * 'cv': If search is going to be used, the cross-validation
-              splitting strategy to use. Defaults to same CV as for the model
-              evaluation.
-            * 'scoring': If search is going to be used, the scoring metric to
-              evaluate the performance.
-
-        pipeline : sklearn.pipeline.Pipeline
-            The pipeline to apply/tune the hyperparameters
-
-        Returns
-        -------
-        sklearn.pipeline.Pipeline
-            The modified pipeline
-        """
-        logger.info("= Model Parameters =")
-
-        if search_params is None:
-            search_params = {}
-        else:
-            search_params = search_params.copy()
-        if len(params_to_tune) > 0:
-            search = search_params.pop("kind", "grid")
-            cv_inner = search_params.get("cv", None)
-
-            if search in list_searchers():
-                logger.info(f"Tuning hyperparameters using {search}")
-                search = get_searcher(search)
-            else:
-                if isinstance(search, str):
-                    raise_error(
-                        f"The searcher {search} is not a valid julearn"
-                        " searcher. "
-                        "You can get a list of all available once by using: "
-                        "julearn.model_selection.list_searchers(). "
-                        "You can also "
-                        "enter a valid scikit-learn searcher or register it."
-                    )
-                else:
-                    warn_with_log(f"{search} is not a registered searcher. ")
-                    logger.info(
-                        f"Tuning hyperparameters using not registered {search}"
-                    )
-
-            logger.info("Hyperparameters:")
-            for k, v in params_to_tune.items():
-                logger.info(f"\t{k}: {v}")
-
-            cv_inner = check_cv(cv_inner)  # type: ignore
-            logger.info(f"Using inner CV scheme {cv_inner}")
-            search_params["cv"] = cv_inner
-            logger.info("Search Parameters:")
-            for k, v in search_params.items():
-                logger.info(f"\t{k}: {v}")
-
-            # TODO: missing searcher typing
-            pipeline = search(  # type: ignore
-                pipeline, params_to_tune, **search_params
-            )
-        elif search_params is not None and len(search_params) > 0:
-            raise_error(
-                "Hyperparameter search parameters were specified, but no "
-                "hyperparameters to tune"
-            )
-        logger.info("====================")
-        logger.info("")
-        return pipeline
 
     @staticmethod
     def _wrap_target_model(
@@ -616,6 +619,8 @@ class PipelineCreator:
 
         Parameters
         ----------
+        name : str, optional
+            The name of the step, by default None.
         step : EstimatorLike or str
             The step to get the name for.
 
@@ -624,14 +629,18 @@ class PipelineCreator:
         name : str
             The name of the step.
         """
+        out = name
         if name is None:
             name = (
                 step
                 if isinstance(step, str)
                 else step.__class__.__name__.lower()
             )
-        count = np.array([_step.name == name for _step in self._steps]).sum()
-        return f"{name}_{count}" if count > 0 else name
+            count = np.array(
+                [_step.name == name for _step in self._steps]
+            ).sum()
+            out = f"{name}_{count}" if count > 0 else name
+        return out
 
     def _validate_step(
         self, step: Union[EstimatorLike, str], apply_to: ColumnTypesLike
@@ -761,9 +770,8 @@ class PipelineCreator:
 
     @staticmethod
     def _wrap_step(
-            name, step,
-            column_types,
-            row_select_col_type, row_select_vals) -> JuColumnTransformer:
+        name, step, column_types, row_select_col_type, row_select_vals
+    ) -> JuColumnTransformer:
         """Wrap a step in a JuColumnTransformer.
 
         Parameters
@@ -776,9 +784,12 @@ class PipelineCreator:
             The types of the columns the step is applied to.
         """
         return JuColumnTransformer(
-            name, step, column_types,
+            name,
+            step,
+            column_types,
             row_select_col_type=row_select_col_type,
-            row_select_vals=row_select_vals)
+            row_select_vals=row_select_vals,
+        )
 
     @staticmethod
     def _get_estimator_from(
@@ -814,3 +825,93 @@ class PipelineCreator:
             f"{name} is neither a registered transformer"
             "nor a registered model."
         )
+
+
+def _prepare_hyperparameter_tuning(
+    params_to_tune: Union[Dict[str, Any], List[Dict[str, Any]]],
+    search_params: Optional[Dict[str, Any]],
+    pipeline: Pipeline,
+):
+    """Prepare hyperparameter tuning in the pipeline.
+
+    Parameters
+    ----------
+    params_to_tune : dict
+        A dictionary with the parameters to tune. The keys of the
+        dictionary should be named 'STEP__PARAMETER', to be used as
+        PARAMETER for STEP in the pipeline. Example:
+        'svm__probability': True will set the parameter 'probability' of
+        the 'svm' step. The value of the parameter must be a list of
+        values to test.
+
+    search_params : dict
+        The parameters for the search. The following keys are accepted:
+
+        * 'kind': The kind of search algorithm to use e.g.:
+            'grid' or 'random'. All valid julearn searchers can be entered.
+        * 'cv': If search is going to be used, the cross-validation
+            splitting strategy to use. Defaults to same CV as for the model
+            evaluation.
+        * 'scoring': If search is going to be used, the scoring metric to
+            evaluate the performance.
+
+    pipeline : sklearn.pipeline.Pipeline
+        The pipeline to apply/tune the hyperparameters
+
+    Returns
+    -------
+    sklearn.pipeline.Pipeline
+        The modified pipeline
+    """
+    logger.info("= Model Parameters =")
+
+    search_params = prepare_search_params(search_params)
+    if len(params_to_tune) > 0:
+        search = search_params.pop("kind", "grid")
+        cv_inner = search_params.get("cv", None)
+
+        if search in list_searchers():
+            logger.info(f"Tuning hyperparameters using {search}")
+            search = get_searcher(search)
+        else:
+            if isinstance(search, str):
+                raise_error(
+                    f"The searcher {search} is not a valid julearn"
+                    " searcher. "
+                    "You can get a list of all available once by using: "
+                    "julearn.model_selection.list_searchers(). "
+                    "You can also "
+                    "enter a valid scikit-learn searcher or register it."
+                )
+            else:
+                warn_with_log(f"{search} is not a registered searcher. ")
+                logger.info(
+                    f"Tuning hyperparameters using not registered {search}"
+                )
+
+        if isinstance(params_to_tune, dict):
+            logger.info("Hyperparameters:")
+            for k, v in params_to_tune.items():
+                logger.info(f"\t{k}: {v}")
+        else:
+            logger.info("Hyperparameters list:")
+            for i_list, t_params in enumerate(params_to_tune):
+                logger.info(f"\tSet {i_list}")
+                for k, v in t_params.items():
+                    logger.info(f"\t\t{k}: {v}")
+
+        cv_inner = check_cv(cv_inner)  # type: ignore
+        logger.info(f"Using inner CV scheme {cv_inner}")
+        search_params["cv"] = cv_inner
+        logger.info("Search Parameters:")
+        for k, v in search_params.items():
+            logger.info(f"\t{k}: {v}")
+
+        # TODO: missing searcher typing
+        pipeline = search(  # type: ignore
+            pipeline, params_to_tune, **search_params
+        )
+
+    logger.info("====================")
+    logger.info("")
+    return pipeline

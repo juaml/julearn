@@ -347,21 +347,6 @@ def test_run_cv_errors(df_iris: pd.DataFrame) -> None:
             problem_type="classification",
         )
 
-    model = "svm"
-    model_params = {"svm__C": 1}
-    search_params = {"kind": "grid", "cv": 3}
-    with pytest.raises(ValueError, match="search parameters were specified"):
-        run_cross_validation(
-            X=X,
-            y=y,
-            data=df_iris,
-            X_types=X_types,
-            model=model,
-            model_params=model_params,
-            search_params=search_params,
-            problem_type="classification",
-        )
-
 
 def test_tune_hyperparam_gridsearch(df_iris: pd.DataFrame) -> None:
     """Test a run_cross_validation with hyperparameter tuning (gridsearch).

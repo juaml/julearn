@@ -15,6 +15,7 @@ from sklearn.model_selection._search import BaseSearchCV
 from sklearn.pipeline import Pipeline
 
 from .pipeline import PipelineCreator
+from .pipeline.merger import merge_pipelines
 from .prepare import check_consistency, prepare_input_data
 from .scoring import check_scoring
 from .utils import logger, raise_error, _compute_cvmdsum
@@ -216,24 +217,52 @@ def run_cross_validation(
             "model, use PipelineCreator instead"
         )
 
-    if isinstance(model, PipelineCreator):
+    if isinstance(model, (PipelineCreator, list)):
         if preprocess is not None:
             raise_error(
-                "If model is a PipelineCreator, preprocess should be None"
+                "If model is a PipelineCreator (or list of), "
+                "preprocess should be None"
             )
         if problem_type is not None:
             raise_error("Problem type should be set in the PipelineCreator")
 
         if len(model_params) > 0:
             raise_error(
-                "If model is a PipelineCreator, model_params must be None. "
-                f"Currently, it contains {model_params.keys()}"
+                "If model is a PipelineCreator (or list of), model_params must "
+                f"be None. Currently, it contains {model_params.keys()}"
+            )
+        if isinstance(model, list):
+            if any(not isinstance(m, PipelineCreator) for m in model):
+                raise_error(
+                    "If model is a list, all elements must be PipelineCreator"
+                )
+        else:
+            model = [model]
+
+        problem_types = set([m.problem_type for m in model])
+        if len(problem_types) > 1:
+            raise_error(
+                "If model is a list of PipelineCreator, all elements must have"
+                " the same problem_type"
             )
 
-        pipeline = model.to_pipeline(
-            X_types=X_types, search_params=search_params
-        )
-        problem_type = model.problem_type
+        expanded_models = []
+        for m in model:
+            expanded_models.extend(m.split())
+
+        all_pipelines = [
+            x.to_pipeline(X_types=X_types, search_params=search_params)
+            for x in expanded_models
+        ]
+
+        if len(all_pipelines) > 1:
+            pipeline = merge_pipelines(
+                *all_pipelines, search_params=search_params
+            )
+        else:
+            pipeline = all_pipelines[0]
+
+        problem_type = model[0].problem_type
 
     elif not isinstance(model, (str, BaseEstimator)):
         raise_error(
