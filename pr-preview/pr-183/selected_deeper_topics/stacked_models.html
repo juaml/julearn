@@ -372,14 +372,18 @@
         </div>
         <article role="main">
           <section id="stacking-models">
-<h1><span class="section-number">3.5. </span>Stacking Models<a class="headerlink" href="#stacking-models" title="Permalink to this heading">#</a></h1>
+<span id="sphx-glr-auto-examples-99-docs-run-stacked-models-docs-py"></span><h1><span class="section-number">3.5. </span>Stacking Models<a class="headerlink" href="#stacking-models" title="Permalink to this heading">#</a></h1>
 <p>Scikit-learn already provides a stacking implementation for <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.StackingRegressor.html">“regression”</a> as well
 as for <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.StackingClassifier.html">“classification”</a>. Be sure to read scikit-learn’s user guide on <a class="reference external" href="https://scikit-learn.org/stable/modules/ensemble.html#stacking">“stacked generalization”</a> if you are interested in learning how these work in more detail. Both of these estimators can be used in Julearn natively by providing the string <code class="code docutils literal notranslate"><span class="pre">&quot;stacking&quot;</span></code> to Julearn’s <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a>.
 Now, scikit-learn’s stacking implementation will fit each estimator on all of the data. However, this may not always be what you want. Sometimes perhaps, you want one estimator in the ensemble to be fitted on one type of features, while fitting another estimator on another type of features. Julearn’s API provides some extra flexibility to build more flexible and customisable stacking pipelines. In order to explore its capabilities, let’s first look at this simple example of fitting each estimator on all of the data. For example, we can stack a support vector regression (SVR) and a random forest regression (RF) to predict some target in a bit of toy data.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Authors: Leonard Sasse &lt;l.sasse@fz-juelich.de&gt;</span>
+<span class="c1"># License: AGPL</span>
+</pre></div>
+</div>
 <section id="fitting-each-estimator-on-all-of-the-features">
 <h2>Fitting each estimator on all of the features<a class="headerlink" href="#fitting-each-estimator-on-all-of-the-features" title="Permalink to this heading">#</a></h2>
 <p>First, of course, let’s import some necessary packages. Let’s also configure Julearn’s logger to get some additional information about whats happening:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">make_regression</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">make_regression</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
@@ -390,8 +394,17 @@ Now, scikit-learn’s stacking implementation will fit each estimator on all of 
 <span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-05-25 15:19:35,496 - julearn - INFO - ===== Lib Versions =====
+2023-05-25 15:19:35,496 - julearn - INFO - numpy: 1.23.5
+2023-05-25 15:19:35,496 - julearn - INFO - scipy: 1.10.1
+2023-05-25 15:19:35,496 - julearn - INFO - sklearn: 1.2.2
+2023-05-25 15:19:35,496 - julearn - INFO - pandas: 1.5.3
+2023-05-25 15:19:35,496 - julearn - INFO - julearn: 0.3.0.dev193
+2023-05-25 15:19:35,496 - julearn - INFO - ========================
+</pre></div>
+</div>
 <p>Now, that we have these out of the way, we can create some artificial toy data to demonstrate a very simple stacking estimator within Julearn. We will use a dataset with 20 features and 200 samples.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># prepare data</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># prepare data</span>
 <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_regression</span><span class="p">(</span><span class="n">n_features</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
 
 <span class="c1"># make df</span>
@@ -402,12 +415,22 @@ Now, scikit-learn’s stacking implementation will fit each estimator on all of 
 </pre></div>
 </div>
 <p>To build a stacking pipeline, we have to initialise each estimator that we want to use in stacking, and then of course the stacking estimator itself. Let’s start by initialising an SVR. For this we can use the <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a>. Keep in mind that this is only an example, and the hyperparameter grids we use here are somewhat arbitrary:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model_1</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;regression&quot;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model_1</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;regression&quot;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">)</span>
 <span class="n">model_1</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;svm&quot;</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">geomspace</span><span class="p">(</span><span class="mf">1e-2</span><span class="p">,</span> <span class="mf">1e2</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
 </pre></div>
 </div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-05-25 15:19:35,499 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
+2023-05-25 15:19:35,499 - julearn - INFO - Setting hyperparameter kernel = linear
+2023-05-25 15:19:35,499 - julearn - INFO - Tuning hyperparameter C = [1.00000000e-02 2.78255940e-02 7.74263683e-02 2.15443469e-01
+ 5.99484250e-01 1.66810054e+00 4.64158883e+00 1.29154967e+01
+ 3.59381366e+01 1.00000000e+02]
+2023-05-25 15:19:35,499 - julearn - INFO - Step added
+
+&lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fc7f23ea8f0&gt;
+</pre></div>
+</div>
 <p>Note, that we specify applying the model to all of the features using <code class="code docutils literal notranslate"><span class="pre">apply_to=&quot;*&quot;</span></code>. Now, let’s also create a pipeline for our random forest estimator:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model_2</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;regression&quot;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model_2</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;regression&quot;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">)</span>
 <span class="n">model_2</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
     <span class="s2">&quot;rf&quot;</span><span class="p">,</span>
     <span class="n">n_estimators</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
@@ -417,8 +440,18 @@ Now, scikit-learn’s stacking implementation will fit each estimator on all of 
 <span class="p">)</span>
 </pre></div>
 </div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-05-25 15:19:35,500 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
+2023-05-25 15:19:35,500 - julearn - INFO - Setting hyperparameter n_estimators = 20
+2023-05-25 15:19:35,500 - julearn - INFO - Tuning hyperparameter max_depth = [10, 50]
+2023-05-25 15:19:35,500 - julearn - INFO - Tuning hyperparameter min_samples_leaf = [1, 3, 4]
+2023-05-25 15:19:35,500 - julearn - INFO - Tuning hyperparameter min_samples_split = [2, 10]
+2023-05-25 15:19:35,500 - julearn - INFO - Step added
+
+&lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fc7f23e8670&gt;
+</pre></div>
+</div>
 <p>We can now provide these two models to a <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> to initialise a stacking model. The interface for this is very similar to a <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.pipeline.Pipeline</span></code></a>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create the stacking model</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create the stacking model</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;regression&quot;</span><span class="p">)</span>
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
     <span class="s2">&quot;stacking&quot;</span><span class="p">,</span>
@@ -427,9 +460,15 @@ Now, scikit-learn’s stacking implementation will fit each estimator on all of 
 <span class="p">)</span>
 </pre></div>
 </div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-05-25 15:19:35,501 - julearn - INFO - Adding step stacking that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
+2023-05-25 15:19:35,501 - julearn - INFO - Setting hyperparameter estimators = [(&#39;model_1&#39;, &lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fc7f23ea8f0&gt;), (&#39;model_2&#39;, &lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fc7f23e8670&gt;)]
+2023-05-25 15:19:35,501 - julearn - INFO - Step added
+
+&lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fc7f23e9690&gt;
+</pre></div>
+</div>
 <p>This final stacking <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> can now simply be handed over to Julearn’s <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># run</span>
-<span class="n">scores</span><span class="p">,</span> <span class="n">final</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">scores</span><span class="p">,</span> <span class="n">final</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
     <span class="n">X</span><span class="o">=</span><span class="n">X_names</span><span class="p">,</span>
     <span class="n">y</span><span class="o">=</span><span class="s2">&quot;target&quot;</span><span class="p">,</span>
     <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
@@ -439,6 +478,53 @@ Now, scikit-learn’s stacking implementation will fit each estimator on all of 
 <span class="p">)</span>
 </pre></div>
 </div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-05-25 15:19:35,501 - julearn - INFO - Setting random seed to 200
+2023-05-25 15:19:35,501 - julearn - INFO - ==== Input Data ====
+2023-05-25 15:19:35,501 - julearn - INFO - Using dataframe as input
+2023-05-25 15:19:35,501 - julearn - INFO -      Features: [&#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;feature_20&#39;]
+2023-05-25 15:19:35,501 - julearn - INFO -      Target: target
+2023-05-25 15:19:35,503 - julearn - INFO -      Expanded features: [&#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;feature_20&#39;]
+2023-05-25 15:19:35,503 - julearn - INFO -      X_types:{}
+2023-05-25 15:19:35,503 - julearn - WARNING - The following columns are not defined in X_types: [&#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;feature_20&#39;]. They will be treated as continuous.
+/home/runner/work/julearn/julearn/julearn/utils/logging.py:238: RuntimeWarning: The following columns are not defined in X_types: [&#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;feature_20&#39;]. They will be treated as continuous.
+  warn(msg, category=category)
+2023-05-25 15:19:35,504 - julearn - INFO - ====================
+2023-05-25 15:19:35,504 - julearn - INFO -
+2023-05-25 15:19:35,506 - julearn - INFO - = Model Parameters =
+2023-05-25 15:19:35,506 - julearn - INFO - Tuning hyperparameters using grid
+2023-05-25 15:19:35,506 - julearn - INFO - Hyperparameters:
+2023-05-25 15:19:35,506 - julearn - INFO -      svm__C: [1.00000000e-02 2.78255940e-02 7.74263683e-02 2.15443469e-01
+ 5.99484250e-01 1.66810054e+00 4.64158883e+00 1.29154967e+01
+ 3.59381366e+01 1.00000000e+02]
+2023-05-25 15:19:35,506 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2023-05-25 15:19:35,506 - julearn - INFO - Search Parameters:
+2023-05-25 15:19:35,507 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
+2023-05-25 15:19:35,507 - julearn - INFO - ====================
+2023-05-25 15:19:35,507 - julearn - INFO -
+2023-05-25 15:19:35,508 - julearn - INFO - = Model Parameters =
+2023-05-25 15:19:35,508 - julearn - INFO - Tuning hyperparameters using grid
+2023-05-25 15:19:35,508 - julearn - INFO - Hyperparameters:
+2023-05-25 15:19:35,508 - julearn - INFO -      rf__max_depth: [10, 50]
+2023-05-25 15:19:35,508 - julearn - INFO -      rf__min_samples_leaf: [1, 3, 4]
+2023-05-25 15:19:35,508 - julearn - INFO -      rf__min_samples_split: [2, 10]
+2023-05-25 15:19:35,508 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2023-05-25 15:19:35,508 - julearn - INFO - Search Parameters:
+2023-05-25 15:19:35,508 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
+2023-05-25 15:19:35,509 - julearn - INFO - ====================
+2023-05-25 15:19:35,509 - julearn - INFO -
+2023-05-25 15:19:35,676 - julearn - INFO - = Model Parameters =
+2023-05-25 15:19:35,676 - julearn - INFO - ====================
+2023-05-25 15:19:35,677 - julearn - INFO -
+2023-05-25 15:19:35,677 - julearn - INFO - = Data Information =
+2023-05-25 15:19:35,677 - julearn - INFO -      Problem type: regression
+2023-05-25 15:19:35,677 - julearn - INFO -      Number of samples: 200
+2023-05-25 15:19:35,677 - julearn - INFO -      Number of features: 20
+2023-05-25 15:19:35,677 - julearn - INFO - ====================
+2023-05-25 15:19:35,677 - julearn - INFO -
+2023-05-25 15:19:35,677 - julearn - INFO -      Target type: float64
+2023-05-25 15:19:35,677 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+</pre></div>
+</div>
 </section>
 <section id="fitting-each-estimator-on-a-specific-feature-type">
 <h2>Fitting each estimator on a specific feature type<a class="headerlink" href="#fitting-each-estimator-on-a-specific-feature-type" title="Permalink to this heading">#</a></h2>
@@ -446,7 +532,7 @@ Now, scikit-learn’s stacking implementation will fit each estimator on all of 
 simple with Julearn. However, sometimes it may be desirable to have a bit more control
 over which features are used to fit each estimator. For example, there may be two types of features. One of these feature types we may want to use for fitting the SVR, and one of thesefeature types we may want to use for fitting the RF. To demonstrate how this can be done in Julearn, let’s now create some very similar toy data, but distinguish between two different
 types of features: <code class="code docutils literal notranslate"><span class="pre">&quot;type1&quot;</span></code> and <code class="code docutils literal notranslate"><span class="pre">type2</span></code>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># prepare data</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># prepare data</span>
 <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_regression</span><span class="p">(</span><span class="n">n_features</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
 
 <span class="c1"># prepare feature names and types</span>
@@ -465,14 +551,27 @@ types of features: <code class="code docutils literal notranslate"><span class="
 </pre></div>
 </div>
 <p>Let’s first configure a <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> to fit an SVR on the features of <code class="code docutils literal notranslate"><span class="pre">&quot;type1&quot;</span></code>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># create linear svm</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># create linear svm</span>
 <span class="n">model_1</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;regression&quot;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;type1&quot;</span><span class="p">)</span>
 <span class="n">model_1</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;filter_columns&quot;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="s2">&quot;type1&quot;</span><span class="p">)</span>
 <span class="n">model_1</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;svm&quot;</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">geomspace</span><span class="p">(</span><span class="mf">1e-2</span><span class="p">,</span> <span class="mf">1e2</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
 </pre></div>
 </div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-05-25 15:22:20,550 - julearn - INFO - Adding step filter_columns that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
+2023-05-25 15:22:20,550 - julearn - INFO - Setting hyperparameter keep = type1
+2023-05-25 15:22:20,550 - julearn - INFO - Step added
+2023-05-25 15:22:20,550 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;type1&#39;}; pattern=(?:__:type:__type1)&gt;
+2023-05-25 15:22:20,550 - julearn - INFO - Setting hyperparameter kernel = linear
+2023-05-25 15:22:20,551 - julearn - INFO - Tuning hyperparameter C = [1.00000000e-02 2.78255940e-02 7.74263683e-02 2.15443469e-01
+ 5.99484250e-01 1.66810054e+00 4.64158883e+00 1.29154967e+01
+ 3.59381366e+01 1.00000000e+02]
+2023-05-25 15:22:20,551 - julearn - INFO - Step added
+
+&lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fc7f22fd4e0&gt;
+</pre></div>
+</div>
 <p>Afterwards, lets configure a <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> to fit a RF on the features of <code class="code docutils literal notranslate"><span class="pre">&quot;type2&quot;</span></code>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># create random forest estimator</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># create random forest estimator</span>
 <span class="n">model_2</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;regression&quot;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;type2&quot;</span><span class="p">)</span>
 <span class="n">model_2</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;filter_columns&quot;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="s2">&quot;type2&quot;</span><span class="p">)</span>
 <span class="n">model_2</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
@@ -484,8 +583,21 @@ types of features: <code class="code docutils literal notranslate"><span class="
 <span class="p">)</span>
 </pre></div>
 </div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-05-25 15:22:20,551 - julearn - INFO - Adding step filter_columns that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
+2023-05-25 15:22:20,551 - julearn - INFO - Setting hyperparameter keep = type2
+2023-05-25 15:22:20,552 - julearn - INFO - Step added
+2023-05-25 15:22:20,552 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={&#39;type2&#39;}; pattern=(?:__:type:__type2)&gt;
+2023-05-25 15:22:20,552 - julearn - INFO - Setting hyperparameter n_estimators = 20
+2023-05-25 15:22:20,552 - julearn - INFO - Tuning hyperparameter max_depth = [10, 50]
+2023-05-25 15:22:20,552 - julearn - INFO - Tuning hyperparameter min_samples_leaf = [1, 3, 4]
+2023-05-25 15:22:20,552 - julearn - INFO - Tuning hyperparameter min_samples_split = [2, 10]
+2023-05-25 15:22:20,552 - julearn - INFO - Step added
+
+&lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fc7f23eaef0&gt;
+</pre></div>
+</div>
 <p>Now, as in the previous example, we only have to create a stacking estimator that uses both of these estimators internally. Then we can simply use this stacking estimator in a <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> call:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create the stacking model</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create the stacking model</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;regression&quot;</span><span class="p">)</span>
 <span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
     <span class="s2">&quot;stacking&quot;</span><span class="p">,</span>
@@ -505,7 +617,55 @@ types of features: <code class="code docutils literal notranslate"><span class="
 <span class="p">)</span>
 </pre></div>
 </div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-05-25 15:22:20,553 - julearn - INFO - Adding step stacking that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
+2023-05-25 15:22:20,553 - julearn - INFO - Setting hyperparameter estimators = [(&#39;model_1&#39;, &lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fc7f22fd4e0&gt;), (&#39;model_2&#39;, &lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fc7f23eaef0&gt;)]
+2023-05-25 15:22:20,553 - julearn - INFO - Step added
+2023-05-25 15:22:20,553 - julearn - INFO - Setting random seed to 200
+2023-05-25 15:22:20,553 - julearn - INFO - ==== Input Data ====
+2023-05-25 15:22:20,553 - julearn - INFO - Using dataframe as input
+2023-05-25 15:22:20,553 - julearn - INFO -      Features: [&#39;type1_1&#39;, &#39;type1_2&#39;, &#39;type1_3&#39;, &#39;type1_4&#39;, &#39;type1_5&#39;, &#39;type1_6&#39;, &#39;type1_7&#39;, &#39;type1_8&#39;, &#39;type1_9&#39;, &#39;type1_10&#39;, &#39;type2_1&#39;, &#39;type2_2&#39;, &#39;type2_3&#39;, &#39;type2_4&#39;, &#39;type2_5&#39;, &#39;type2_6&#39;, &#39;type2_7&#39;, &#39;type2_8&#39;, &#39;type2_9&#39;, &#39;type2_10&#39;]
+2023-05-25 15:22:20,553 - julearn - INFO -      Target: target
+2023-05-25 15:22:20,555 - julearn - INFO -      Expanded features: [&#39;type1_1&#39;, &#39;type1_2&#39;, &#39;type1_3&#39;, &#39;type1_4&#39;, &#39;type1_5&#39;, &#39;type1_6&#39;, &#39;type1_7&#39;, &#39;type1_8&#39;, &#39;type1_9&#39;, &#39;type1_10&#39;, &#39;type2_1&#39;, &#39;type2_2&#39;, &#39;type2_3&#39;, &#39;type2_4&#39;, &#39;type2_5&#39;, &#39;type2_6&#39;, &#39;type2_7&#39;, &#39;type2_8&#39;, &#39;type2_9&#39;, &#39;type2_10&#39;]
+2023-05-25 15:22:20,555 - julearn - INFO -      X_types:{&#39;type1&#39;: [&#39;type1_1&#39;, &#39;type1_2&#39;, &#39;type1_3&#39;, &#39;type1_4&#39;, &#39;type1_5&#39;, &#39;type1_6&#39;, &#39;type1_7&#39;, &#39;type1_8&#39;, &#39;type1_9&#39;, &#39;type1_10&#39;], &#39;type2&#39;: [&#39;type2_1&#39;, &#39;type2_2&#39;, &#39;type2_3&#39;, &#39;type2_4&#39;, &#39;type2_5&#39;, &#39;type2_6&#39;, &#39;type2_7&#39;, &#39;type2_8&#39;, &#39;type2_9&#39;, &#39;type2_10&#39;]}
+2023-05-25 15:22:20,556 - julearn - INFO - ====================
+2023-05-25 15:22:20,557 - julearn - INFO -
+2023-05-25 15:22:20,558 - julearn - INFO - = Model Parameters =
+2023-05-25 15:22:20,558 - julearn - INFO - Tuning hyperparameters using grid
+2023-05-25 15:22:20,558 - julearn - INFO - Hyperparameters:
+2023-05-25 15:22:20,558 - julearn - INFO -      svm__C: [1.00000000e-02 2.78255940e-02 7.74263683e-02 2.15443469e-01
+ 5.99484250e-01 1.66810054e+00 4.64158883e+00 1.29154967e+01
+ 3.59381366e+01 1.00000000e+02]
+2023-05-25 15:22:20,559 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2023-05-25 15:22:20,559 - julearn - INFO - Search Parameters:
+2023-05-25 15:22:20,559 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
+2023-05-25 15:22:20,559 - julearn - INFO - ====================
+2023-05-25 15:22:20,559 - julearn - INFO -
+2023-05-25 15:22:20,560 - julearn - INFO - = Model Parameters =
+2023-05-25 15:22:20,560 - julearn - INFO - Tuning hyperparameters using grid
+2023-05-25 15:22:20,560 - julearn - INFO - Hyperparameters:
+2023-05-25 15:22:20,560 - julearn - INFO -      rf__max_depth: [10, 50]
+2023-05-25 15:22:20,560 - julearn - INFO -      rf__min_samples_leaf: [1, 3, 4]
+2023-05-25 15:22:20,560 - julearn - INFO -      rf__min_samples_split: [2, 10]
+2023-05-25 15:22:20,561 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2023-05-25 15:22:20,561 - julearn - INFO - Search Parameters:
+2023-05-25 15:22:20,561 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
+2023-05-25 15:22:20,561 - julearn - INFO - ====================
+2023-05-25 15:22:20,561 - julearn - INFO -
+2023-05-25 15:22:20,777 - julearn - INFO - = Model Parameters =
+2023-05-25 15:22:20,777 - julearn - INFO - ====================
+2023-05-25 15:22:20,777 - julearn - INFO -
+2023-05-25 15:22:20,777 - julearn - INFO - = Data Information =
+2023-05-25 15:22:20,777 - julearn - INFO -      Problem type: regression
+2023-05-25 15:22:20,777 - julearn - INFO -      Number of samples: 200
+2023-05-25 15:22:20,777 - julearn - INFO -      Number of features: 20
+2023-05-25 15:22:20,777 - julearn - INFO - ====================
+2023-05-25 15:22:20,777 - julearn - INFO -
+2023-05-25 15:22:20,777 - julearn - INFO -      Target type: float64
+2023-05-25 15:22:20,777 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+</pre></div>
+</div>
 <p>As you can see, the <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> and the in-built <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.StackingRegressor.html#sklearn.ensemble.StackingRegressor" title="(in scikit-learn v1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.ensemble.StackingRegressor</span></code></a> make it very easy to flexibly build some very powerful stacking pipelines. Of course, you can do the same for classification which will use the <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.StackingClassifier.html#sklearn.ensemble.StackingClassifier" title="(in scikit-learn v1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.ensemble.StackingClassifier</span></code></a> instead.</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 4 minutes  39.722 seconds)</p>
 </section>
 </section>
 
