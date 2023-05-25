@@ -354,9 +354,11 @@ def test_added_repeated_transformers() -> None:
 
 
 def test_hyperparameter_ter():
-    (PipelineCreator(problem_type="classification")
-     .add("confound_removal", model_confound=RandomForestRegressor())
-     )
+    (
+        PipelineCreator(problem_type="classification").add(
+            "confound_removal", model_confound=RandomForestRegressor()
+        )
+    )
 
 
 def test_target_pipe(X_iris, y_iris):
@@ -364,15 +366,17 @@ def test_target_pipe(X_iris, y_iris):
         "continuous": ["sepal_length", "sepal_width", "petal_length"],
         "confounds": ["petal_width"],
     }
-    target_pipeline = (TargetPipelineCreator()
-                       .add("confound_removal",
-                            confounds=["confounds", "continuous"]))
-    pipeline_creator = (PipelineCreator(problem_type='regression')
-                        .add(target_pipeline, apply_to="target")
-                        .add("svm", C=[1, 2])
-                        )
+    target_pipeline = TargetPipelineCreator().add(
+        "confound_removal", confounds=["confounds", "continuous"]
+    )
+    pipeline_creator = (
+        PipelineCreator(problem_type="regression")
+        .add(target_pipeline, apply_to="target")
+        .add("svm", C=[1, 2])
+    )
     pipe = pipeline_creator.to_pipeline(
-        X_types, search_params=dict(kind="random"))
+        X_types, search_params=dict(kind="random")
+    )
     pipe.fit(X_iris, y_iris)
 
 
@@ -384,44 +388,55 @@ def test_raise_wrong_problem_type():
 def test_raise_wrong_problem_type_added_to_step():
     with pytest.raises(ValueError, match="Please provide the problem_type"):
         PipelineCreator(problem_type="classification").add(
-            "svm", problem_type="classification")
+            "svm", problem_type="classification"
+        )
 
 
 def test_raise_error_not_target_pipe():
     with pytest.raises(ValueError, match="TargetPipelineCreator can"):
-        target_pipeline = (TargetPipelineCreator()
-                           .add("confound_removal",
-                                confounds=["confounds", "continuous"]))
-        (PipelineCreator(problem_type='regression')
-         .add(target_pipeline, apply_to="confounds")
-         )
+        target_pipeline = TargetPipelineCreator().add(
+            "confound_removal", confounds=["confounds", "continuous"]
+        )
+        (
+            PipelineCreator(problem_type="regression").add(
+                target_pipeline, apply_to="confounds"
+            )
+        )
 
 
 def test_raise_pipe_no_model():
     X_types = {
-        "continuous": ["sepal_length", "sepal_width",
-                       "petal_length", "petal_width"],
+        "continuous": [
+            "sepal_length",
+            "sepal_width",
+            "petal_length",
+            "petal_width",
+        ],
     }
-    pipeline_creator = (PipelineCreator(problem_type='regression')
-                        .add("zscore")
-                        )
+    pipeline_creator = PipelineCreator(problem_type="regression").add("zscore")
     with pytest.raises(ValueError, match="Cannot create a pipe"):
         pipeline_creator.to_pipeline(X_types)
 
 
 def test_raise_pipe_wrong_searcher():
     X_types = {
-        "continuous": ["sepal_length", "sepal_width",
-                       "petal_length", "petal_width"],
+        "continuous": [
+            "sepal_length",
+            "sepal_width",
+            "petal_length",
+            "petal_width",
+        ],
     }
-    pipeline_creator = (PipelineCreator(problem_type='regression')
-                        .add("svm", C=[1, 2])
-                        )
+    pipeline_creator = PipelineCreator(problem_type="regression").add(
+        "svm", C=[1, 2]
+    )
     with pytest.raises(
-            ValueError,
-            match="The searcher no_search is not a valid julearn searcher"):
+        ValueError,
+        match="The searcher no_search is not a valid julearn searcher",
+    ):
         pipeline_creator.to_pipeline(
-            X_types, search_params=dict(kind="no_search"))
+            X_types, search_params=dict(kind="no_search")
+        )
 
 
 def test_PipelineCreator_repeated_steps():
@@ -435,7 +450,6 @@ def test_PipelineCreator_repeated_steps():
     assert len(creator._steps) == 3
     assert creator._steps[0].name == "zscore"
     assert creator._steps[1].name == "zscore_1"
-
 
     # With explicit naming, it should be considered repeated
     creator2 = PipelineCreator(problem_type="classification")
@@ -508,7 +522,7 @@ def test_PipelineCreator_split():
     assert out3[2]._steps[0].name == "scale"
     assert out3[2]._steps[1].name == "rf"
 
-    #Repeated two step twice, split should create 4 pipelines
+    # Repeated two step twice, split should create 4 pipelines
     creator4 = PipelineCreator(problem_type="classification")
     creator4.add("zscore", name="scale", apply_to="continuous")
     creator4.add("scaler_robust", name="scale", apply_to="continuous")

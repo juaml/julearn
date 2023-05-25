@@ -1,4 +1,3 @@
-# %%
 """
 Tuning Multiple Hyperparameters Grids
 =====================================
@@ -34,7 +33,6 @@ configure_logging(level="INFO")
 # Set the random seed to always have the same example
 np.random.seed(42)
 
-# %%
 ###############################################################################
 # Load the dataset
 df_fmri = load_dataset("fmri")
@@ -64,8 +62,14 @@ scores = run_cross_validation(X=X, y=y, data=df_fmri, model=creator)
 print(scores["test_score"].mean())
 
 ###############################################################################
-# TODO
-# %%
+# Now lets tune a bit this SVM. We will use a grid search to tune the
+# regularization parameter C and the kernel. We will also tune the gamma.
+# But since the gamma is only used for the rbf kernel, we will use a
+# different grid for the rbf kernel.
+#
+# To specify two different sets of parameters for the same step, we can
+# explicitly specify the name of the step. This is done by passing the
+# ``name`` parameter to the ``add`` method.
 creator = PipelineCreator(problem_type="classification")
 creator.add("zscore")
 creator.add("svm", kernel="linear", C=[0.01, 0.1], name="svm")
@@ -92,7 +96,6 @@ scores, estimator = run_cross_validation(
 )
 
 print(scores["test_score"].mean())
-# %%
 ###############################################################################
 # It seems that we might have found a better model, but which one is it?
 print(estimator.best_params_)

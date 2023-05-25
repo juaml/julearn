@@ -309,10 +309,9 @@ class PipelineCreator:
         """Whether the PipelineCreator has a model."""
         return self._added_model
 
-
     def copy(self) -> "PipelineCreator":
         """Create a copy of the PipelineCreator.
-        
+
         Returns
         -------
         PipelineCreator
@@ -544,8 +543,6 @@ class PipelineCreator:
         )
         logger.debug("Pipeline created")
         return out
-
-
 
     @staticmethod
     def _wrap_target_model(

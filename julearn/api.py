@@ -228,8 +228,8 @@ def run_cross_validation(
 
         if len(model_params) > 0:
             raise_error(
-                "If model is a PipelineCreator (or list of), model_params must "
-                f"be None. Currently, it contains {model_params.keys()}"
+                "If model is a PipelineCreator (or list of), model_params must"
+                f" be None. Currently, it contains {model_params.keys()}"
             )
         if isinstance(model, list):
             if any(not isinstance(m, PipelineCreator) for m in model):
