@@ -1,3 +1,8 @@
+"""Module to merge multiple pipelines into a single one."""
+
+# Authors: Federico Raimondo <f.raimondo@fz-juelich.de>prepa
+# License: AGPL
+
 from typing import Dict
 
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
