@@ -32,13 +32,12 @@ class SetColumnTypes(JuTransformer):
         Not really useful for this one, but here for compatibility.
     """
 
-    def __init__(self,
-                 X_types: Optional[Dict[str, List[str]]] = None,
-                 row_select_col_type:  Optional[ColumnTypesLike] = None,
-                 row_select_vals:  Optional[Union[str,
-                                                  int, list, bool]] = None,
-
-                 ):
+    def __init__(
+        self,
+        X_types: Optional[Dict[str, List[str]]] = None,
+        row_select_col_type: Optional[ColumnTypesLike] = None,
+        row_select_vals: Optional[Union[str, int, list, bool]] = None,
+    ):
         if X_types is None:
             X_types = {}
 
@@ -51,9 +50,10 @@ class SetColumnTypes(JuTransformer):
                 )
         self.X_types = X_types
         super().__init__(
-            apply_to="*", needed_types=None,
+            apply_to="*",
+            needed_types=None,
             row_select_col_type=row_select_col_type,
-            row_select_vals=row_select_vals
+            row_select_vals=row_select_vals,
         )
 
     def _fit(

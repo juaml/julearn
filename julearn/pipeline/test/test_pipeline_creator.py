@@ -12,7 +12,7 @@ import pytest
 from pytest_lazyfixture import lazy_fixture
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 from sklearn.preprocessing import RobustScaler, StandardScaler
-from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
 
 from julearn.base import ColumnTypesLike, WrapModel
@@ -351,6 +351,7 @@ def test_added_repeated_transformers() -> None:
     assert len(pipeline_creator._steps) == 3
     assert pipeline_creator._steps[0].name == "zscore"
     assert pipeline_creator._steps[1].name == "zscore_1"
+
 
 # TODO: Identify what are we testing here
 # def test_hyperparameter_ter() -> None:

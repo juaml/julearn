@@ -216,7 +216,7 @@ class PipelineCreator:
 
         # Check that if the name is already in the steps, we are adding them
         # at the same place.
-        if name is not None and name in [x.name for x in self._steps]:
+        if name is not None and name in [step.name for step in self._steps]:
             if self._steps[-1].name != name:
                 raise_error(
                     "Repeated step names are only allowed to be added "

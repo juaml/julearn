@@ -25,7 +25,7 @@ from .inspect import Inspector
 def run_cross_validation(
     X: List[str],
     y: str,
-    model: Union[str, PipelineCreator, BaseEstimator],
+    model: Union[str, PipelineCreator, BaseEstimator, List[PipelineCreator]],
     X_types: Optional[Dict] = None,
     data: Optional[pd.DataFrame] = None,
     problem_type: Optional[str] = None,
@@ -251,8 +251,8 @@ def run_cross_validation(
             expanded_models.extend(m.split())
 
         all_pipelines = [
-            x.to_pipeline(X_types=X_types, search_params=search_params)
-            for x in expanded_models
+            model.to_pipeline(X_types=X_types, search_params=search_params)
+            for model in expanded_models
         ]
 
         if len(all_pipelines) > 1:

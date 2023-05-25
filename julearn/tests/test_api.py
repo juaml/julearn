@@ -348,6 +348,37 @@ def test_run_cv_errors(df_iris: pd.DataFrame) -> None:
         )
 
 
+def test_run_cv_multiple_pipeline_errors(df_iris: pd.DataFrame) -> None:
+    """Test run_cross_validation with multiple pipelines errors."""
+    X = ["sepal_length", "sepal_width", "petal_length"]
+    y = "species"
+
+    X_types = {"continuous": X}
+    model1 = PipelineCreator(problem_type="classification")
+    model1.add("svm")
+    model2 = "svm"
+    with pytest.raises(ValueError, match="If model is a list, all"):
+        run_cross_validation(
+            X=X,
+            y=y,
+            data=df_iris,
+            X_types=X_types,
+            model=[model1, model2],  # type: ignore
+        )
+
+    model2 = PipelineCreator(problem_type="regression")
+    model2.add("svm")
+
+    with pytest.raises(ValueError, match="same problem_type"):
+        run_cross_validation(
+            X=X,
+            y=y,
+            data=df_iris,
+            X_types=X_types,
+            model=[model1, model2],  # type: ignore
+        )
+
+
 def test_tune_hyperparam_gridsearch(df_iris: pd.DataFrame) -> None:
     """Test a run_cross_validation with hyperparameter tuning (gridsearch).
 
@@ -566,6 +597,124 @@ def test_tune_hyperparam_randomsearch(df_iris: pd.DataFrame) -> None:
     clf1 = actual_estimator.best_estimator_.steps[-1][1]
     clf2 = clone(gs).fit(sk_X, sk_y).best_estimator_.steps[-1][1]
     compare_models(clf1, clf2)
+
+
+def test_tune_hyperparams_multiple_grid(df_iris: pd.DataFrame) -> None:
+    """Test a run_cross_validation hyperparameter tuning (multiple grid)."""
+
+    df_iris = df_iris[df_iris["species"].isin(["versicolor", "virginica"])]
+    X = ["sepal_length", "sepal_width", "petal_length"]
+    y = "species"
+    X_types = {"continuous": X}
+
+    # Use a single creator with a repeated step name
+    creator1 = PipelineCreator(problem_type="classification")
+    creator1.add("svm", kernel="linear", C=[0.01, 0.1], name="svm")
+    creator1.add(
+        "svm",
+        kernel="rbf",
+        C=[0.01, 0.1],
+        gamma=["scale", "auto", 1e-2, 1e-3],
+        name="svm",
+    )
+
+    sk_X = df_iris[X].values
+    sk_y = df_iris[y].values
+
+    scoring = "accuracy"
+
+    np.random.seed(42)
+    cv_outer = RepeatedKFold(n_splits=2, n_repeats=1)
+    cv_inner = RepeatedKFold(n_splits=2, n_repeats=1)
+
+    search_params = {"cv": cv_inner}
+    actual1, actual_estimator1 = run_cross_validation(
+        X=X,
+        y=y,
+        data=df_iris,
+        X_types=X_types,
+        model=creator1,
+        cv=cv_outer,
+        scoring=[scoring],
+        return_estimator="final",
+        search_params=search_params,
+    )
+
+    # Use two creators
+    creator2_1 = PipelineCreator(problem_type="classification")
+    creator2_1.add("svm", kernel="linear", C=[0.01, 0.1], name="svm")
+    creator2_2 = PipelineCreator(problem_type="classification")
+    creator2_2.add(
+        "svm",
+        kernel="rbf",
+        C=[0.01, 0.1],
+        gamma=["scale", "auto", 1e-2, 1e-3],
+        name="svm",
+    )
+
+    np.random.seed(42)
+    cv_outer = RepeatedKFold(n_splits=2, n_repeats=1)
+    cv_inner = RepeatedKFold(n_splits=2, n_repeats=1)
+    search_params = {"cv": cv_inner}
+    actual2, actual_estimator2 = run_cross_validation(
+        X=X,
+        y=y,
+        data=df_iris,
+        X_types=X_types,
+        model=[creator2_1, creator2_2],
+        cv=cv_outer,
+        scoring=[scoring],
+        return_estimator="final",
+        search_params=search_params,
+    )
+
+    # Now do the same with scikit-learn
+    np.random.seed(42)
+    cv_outer = RepeatedKFold(n_splits=2, n_repeats=1)
+    cv_inner = RepeatedKFold(n_splits=2, n_repeats=1)
+
+    clf = make_pipeline(SVC())
+    grid = [
+        {
+            "svc__C": [0.01, 0.1],
+            "svc__kernel": ["linear"],
+        },
+        {
+            "svc__gamma": ["scale", "auto", 1e-2, 1e-3],
+            "svc__kernel": ["rbf"],
+            "svc__C": [0.01, 0.1],
+        },
+    ]
+    gs = GridSearchCV(clf, grid, cv=cv_inner)
+
+    expected = cross_validate(gs, sk_X, sk_y, cv=cv_outer, scoring=[scoring])
+
+    assert len(actual1.columns) == len(expected) + 5
+    assert len(actual2.columns) == len(expected) + 5
+    assert len(actual1["test_accuracy"]) == len(expected["test_accuracy"])
+    assert len(actual2["test_accuracy"]) == len(expected["test_accuracy"])
+    assert all(
+        [
+            a == b
+            for a, b in zip(
+                actual1["test_accuracy"], expected["test_accuracy"]
+            )
+        ]
+    )
+    assert all(
+        [
+            a == b
+            for a, b in zip(
+                actual2["test_accuracy"], expected["test_accuracy"]
+            )
+        ]
+    )
+    # Compare the models
+    clf1 = actual_estimator1.best_estimator_.steps[-1][1]
+    clf2 = actual_estimator2.best_estimator_.steps[-1][1]
+    clf3 = clone(gs).fit(sk_X, sk_y).best_estimator_.steps[-1][1]
+    compare_models(clf1, clf2)
+    compare_models(clf1, clf3)
 
 
 def test_return_estimators(df_iris: pd.DataFrame) -> None:
@@ -937,7 +1086,7 @@ def test__compute_cvmdsum(cv1, cv2, expected):
 
 
 def test_api_stacking_models() -> None:
-    """"Test API of stacking models."""
+    """ "Test API of stacking models."""
     # prepare data
     X, y = make_regression(n_features=6, n_samples=50)
 
@@ -965,11 +1114,9 @@ def test_api_stacking_models() -> None:
     # Create the stacking model
     model = PipelineCreator(problem_type="regression")
     model.add(
-        "stacking", estimators=[[
-            ("model_1", model_1),
-            ("model_2", model_2)]
-        ],
-        apply_to="*"
+        "stacking",
+        estimators=[[("model_1", model_1), ("model_2", model_2)]],
+        apply_to="*",
     )
 
     # run
@@ -985,9 +1132,7 @@ def test_api_stacking_models() -> None:
 
     # The final model should be a stacking model im which the first estimator
     # is a grid search
-    assert isinstance(
-        final.steps[1][1].model.estimators[0][1], GridSearchCV
-    )
+    assert isinstance(final.steps[1][1].model.estimators[0][1], GridSearchCV)
 
 
 def test_inspection_error(df_iris):
@@ -1001,7 +1146,7 @@ def test_inspection_error(df_iris):
             model="rf",
             return_estimator="final",
             return_inspector=True,
-            problem_type="classification"
+            problem_type="classification",
         )
     # default should be all now
     res = run_cross_validation(
@@ -1010,7 +1155,7 @@ def test_inspection_error(df_iris):
         data=df_iris,
         model="rf",
         return_inspector=True,
-        problem_type="classification"
+        problem_type="classification",
     )
     assert len(res) == 3
 
@@ -1025,7 +1170,7 @@ def test_final_estimator_picklable(tmp_path, df_iris) -> None:
         data=df_iris,
         model="rf",
         problem_type="classification",
-        return_estimator="final"
+        return_estimator="final",
     )
     joblib.dump(final_estimator, pickled_file)
     # test if object can be loaded as well

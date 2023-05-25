@@ -76,20 +76,20 @@ def merge_pipelines(
     # the pipeline is one of the hyperparameter options.
 
     different_steps = []
-    for t_name in step_names:
+    for t_step_name in step_names:
         # Get the transformer/model of the first element
-        t = reference_pipeline.named_steps[t_name]
+        t = reference_pipeline.named_steps[t_step_name]
 
         # Check that all searchers have the same transformer/model.
         # TODO: Fix this comparison, as it always returns False.
         for s in pipelines[1:]:
             if isinstance(s, (GridSearchCV, RandomizedSearchCV)):
-                if s.estimator.named_steps[t_name] != t:
-                    different_steps.append(t_name)
+                if s.estimator.named_steps[t_step_name] != t:
+                    different_steps.append(t_step_name)
                     break
             else:
-                if s.named_steps[t_name] != t:
-                    different_steps.append(t_name)
+                if s.named_steps[t_step_name] != t:
+                    different_steps.append(t_step_name)
                     break
 
     # Then, we will update the grid of the searchers that have different
