@@ -205,6 +205,7 @@
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../auto_examples/03_complex_models/index.html">5.4. Complex Models</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../auto_examples/03_complex_models/run_apply_to_target.html">Transforming target variable with z-score.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../auto_examples/03_complex_models/run_hyperparameter_multiple_grids.html">Tuning Multiple Hyperparameters Grids</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../auto_examples/03_complex_models/run_stacked_models.html">Stacking Classification</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../auto_examples/03_complex_models/run_hyperparameter_tuning.html">Tuning Hyperparameters</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../auto_examples/03_complex_models/run_example_pca_featsets.html">Regression Analysis</a></li>
@@ -466,6 +467,20 @@ TargetPipelineCreator and the apply_to is not “target”.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="julearn.PipelineCreator.copy">
+<span class="sig-name descname"><span class="pre">copy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#julearn.PipelineCreator.copy" title="Permalink to this definition">#</a></dt>
+<dd><p>Create a copy of the PipelineCreator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>PipelineCreator</dt><dd><p>The copy of the PipelineCreator</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="julearn.PipelineCreator.from_list">
 <em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">transformers</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">problem_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">apply_to</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'continuous'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.PipelineCreator.from_list" title="Permalink to this definition">#</a></dt>
 <dd><p>Create a PipelineCreator from a list of transformers and parameters.</p>
@@ -485,9 +500,31 @@ the parameters for that transformer or model.</p>
 <dt><strong>apply_to</strong><span class="classifier">ColumnTypesLike, optional</span></dt><dd><p>To what should the transformers be applied to if not specified in
 the <cite>add</cite> method (default is continuous).</p>
 </dd>
-<dt><strong>Returns</strong></dt><dd></dd>
-<dt><strong>——-</strong></dt><dd></dd>
-<dt><strong>PipelineCreator</strong></dt><dd><p>The PipelineCreator with the steps added</p>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>PipelineCreator</dt><dd><p>The PipelineCreator with the steps added</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="julearn.PipelineCreator.split">
+<span class="sig-name descname"><span class="pre">split</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#julearn.PipelineCreator.split" title="Permalink to this definition">#</a></dt>
+<dd><p>Split the PipelineCreator into multiple PipelineCreators.</p>
+<p>If the PipelineCreator has at least two steps with the same name,
+this is considered a split point for hyperparameter tuning.
+This function will split the PipelineCreator into multiple
+PipelineCreators, one for each split point, recursively. Thus, creating
+as many PipelineCreators as needed to tune all the hyperparameters
+configurations.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>List[PipelineCreator]</dt><dd><p>A list of PipelineCreators, each one without repeated step names.</p>
 </dd>
 </dl>
 </dd>
@@ -529,6 +566,9 @@ the <cite>add</cite> method (default is continuous).</p>
 </div><div class="sphx-glr-thumbcontainer" tooltip="This example uses the sklearn &quot;diabetes&quot; regression dataset, and transforms the target variable..."><img alt="" src="../../_images/sphx_glr_run_apply_to_target_thumb.png" />
 <p><a class="reference internal" href="../../auto_examples/03_complex_models/run_apply_to_target.html#sphx-glr-auto-examples-03-complex-models-run-apply-to-target-py"><span class="std std-ref">Transforming target variable with z-score.</span></a></p>
   <div class="sphx-glr-thumbnail-title">Transforming target variable with z-score.</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example uses the &#x27;fmri&#x27; dataset, performs simple binary classification using a Support Vec..."><img alt="" src="../../_images/sphx_glr_run_hyperparameter_multiple_grids_thumb.png" />
+<p><a class="reference internal" href="../../auto_examples/03_complex_models/run_hyperparameter_multiple_grids.html#sphx-glr-auto-examples-03-complex-models-run-hyperparameter-multiple-grids-py"><span class="std std-ref">Tuning Multiple Hyperparameters Grids</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Tuning Multiple Hyperparameters Grids</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="This example uses the &#x27;iris&#x27; dataset and performs a complex stacking classification. We will us..."><img alt="" src="../../_images/sphx_glr_run_stacked_models_thumb.png" />
 <p><a class="reference internal" href="../../auto_examples/03_complex_models/run_stacked_models.html#sphx-glr-auto-examples-03-complex-models-run-stacked-models-py"><span class="std std-ref">Stacking Classification</span></a></p>
   <div class="sphx-glr-thumbnail-title">Stacking Classification</div>
@@ -608,7 +648,9 @@ the <cite>add</cite> method (default is continuous).</p>
 <li><a class="reference internal" href="#julearn.PipelineCreator.add"><code class="docutils literal notranslate"><span class="pre">PipelineCreator.add()</span></code></a></li>
 <li><a class="reference internal" href="#julearn.PipelineCreator.steps"><code class="docutils literal notranslate"><span class="pre">PipelineCreator.steps</span></code></a></li>
 <li><a class="reference internal" href="#julearn.PipelineCreator.has_model"><code class="docutils literal notranslate"><span class="pre">PipelineCreator.has_model()</span></code></a></li>
+<li><a class="reference internal" href="#julearn.PipelineCreator.copy"><code class="docutils literal notranslate"><span class="pre">PipelineCreator.copy()</span></code></a></li>
 <li><a class="reference internal" href="#julearn.PipelineCreator.from_list"><code class="docutils literal notranslate"><span class="pre">PipelineCreator.from_list()</span></code></a></li>
+<li><a class="reference internal" href="#julearn.PipelineCreator.split"><code class="docutils literal notranslate"><span class="pre">PipelineCreator.split()</span></code></a></li>
 <li><a class="reference internal" href="#julearn.PipelineCreator.to_pipeline"><code class="docutils literal notranslate"><span class="pre">PipelineCreator.to_pipeline()</span></code></a></li>
 </ul>
 </li>
