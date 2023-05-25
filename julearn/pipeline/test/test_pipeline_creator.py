@@ -352,16 +352,15 @@ def test_added_repeated_transformers() -> None:
     assert pipeline_creator._steps[0].name == "zscore"
     assert pipeline_creator._steps[1].name == "zscore_1"
 
-
-def test_hyperparameter_ter():
-    (
-        PipelineCreator(problem_type="classification").add(
-            "confound_removal", model_confound=RandomForestRegressor()
-        )
-    )
+# TODO: Identify what are we testing here
+# def test_hyperparameter_ter() -> None:
+#     PipelineCreator(problem_type="classification").add(
+#         "confound_removal", model_confound=RandomForestRegressor()
+#     )
 
 
-def test_target_pipe(X_iris, y_iris):
+def test_target_pipe(X_iris, y_iris) -> None:
+    """Test that the target pipeline works correctly."""
     X_types = {
         "continuous": ["sepal_length", "sepal_width", "petal_length"],
         "confounds": ["petal_width"],
@@ -380,31 +379,33 @@ def test_target_pipe(X_iris, y_iris):
     pipe.fit(X_iris, y_iris)
 
 
-def test_raise_wrong_problem_type():
+def test_raise_wrong_problem_type() -> None:
+    """Test that the correct error is raised when the problem type is wrong."""
     with pytest.raises(ValueError, match="`problem_type` should"):
         PipelineCreator(problem_type="binary")
 
 
-def test_raise_wrong_problem_type_added_to_step():
+def test_raise_wrong_problem_type_added_to_step() -> None:
+    """Test error when problem type is passed to a step."""
     with pytest.raises(ValueError, match="Please provide the problem_type"):
         PipelineCreator(problem_type="classification").add(
             "svm", problem_type="classification"
         )
 
 
-def test_raise_error_not_target_pipe():
+def test_raise_error_not_target_pipe() -> None:
+    """Test error when target pipeline is not applied to target."""
     with pytest.raises(ValueError, match="TargetPipelineCreator can"):
         target_pipeline = TargetPipelineCreator().add(
             "confound_removal", confounds=["confounds", "continuous"]
         )
-        (
-            PipelineCreator(problem_type="regression").add(
-                target_pipeline, apply_to="confounds"
-            )
+        PipelineCreator(problem_type="regression").add(
+            target_pipeline, apply_to="confounds"
         )
 
 
-def test_raise_pipe_no_model():
+def test_raise_pipe_no_model() -> None:
+    """Test error when no model is added to the pipeline."""
     X_types = {
         "continuous": [
             "sepal_length",
@@ -418,7 +419,8 @@ def test_raise_pipe_no_model():
         pipeline_creator.to_pipeline(X_types)
 
 
-def test_raise_pipe_wrong_searcher():
+def test_raise_pipe_wrong_searcher() -> None:
+    """Test error when the searcher is not a valid julearn searcher."""
     X_types = {
         "continuous": [
             "sepal_length",
@@ -439,7 +441,7 @@ def test_raise_pipe_wrong_searcher():
         )
 
 
-def test_PipelineCreator_repeated_steps():
+def test_PipelineCreator_repeated_steps() -> None:
     """Test the pipeline creator with repeated steps."""
 
     # Without explicit naming, it should not be considered repeated
@@ -461,7 +463,18 @@ def test_PipelineCreator_repeated_steps():
     assert creator2._steps[1].name == "scale"
 
 
-def test_PipelineCreator_split():
+def test_PipelineCreator_repeated_steps_error() -> None:
+    """Test error with repeated steps."""
+
+    # With explicit naming, it should be considered repeated
+    creator = PipelineCreator(problem_type="classification")
+    creator.add("zscore", name="scale", apply_to="continuous")
+    creator.add("pca", name="pca", apply_to="continuous")
+    with pytest.raises(ValueError, match="Repeated step names are only"):
+        creator.add("scaler_robust", name="scale", apply_to="continuous")
+
+
+def test_PipelineCreator_split() -> None:
     """Test the pipeline creator split."""
     # No repetition, split should create one pipeline
     creator1 = PipelineCreator(problem_type="classification")
