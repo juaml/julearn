@@ -125,13 +125,14 @@ print(stats_df)
 #   This block is hidden in the documentation. This files are used to generate
 #   the plots in the documentation. (not working for now)
 
+# sphinx_gallery_start_ignore
 # The following lines are only meant for the documentation to work and not
 # needed for the example to run. This will be removed as soon as sphix-gallery
 # is able to hide code blocks.
 scores1.to_csv("/tmp/scores1.csv")
 scores2.to_csv("/tmp/scores2.csv")
 scores3.to_csv("/tmp/scores3.csv")
-
+# sphinx_gallery_end_ignore
 
 ###############################################################################
 # We can also plot the performance of the models using the Julearn Score Viewer

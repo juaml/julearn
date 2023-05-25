@@ -56,7 +56,12 @@ templates_path = ["_templates"]
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
+exclude_patterns = [
+    "_build",
+    "Thumbs.db",
+    ".DS_Store",
+    "auto_examples/99_docs/*",
+]
 
 nitpicky = True
 
@@ -187,6 +192,7 @@ numpydoc_xref_ignore = {
 
 # -- Sphinx-Gallery configuration --------------------------------------------
 
+
 class SubSectionTitleOrder:
     """Sort example gallery by title of subsection.
 
@@ -228,7 +234,8 @@ ex_dirs = [
     "02_inspection",
     "03_complex_models",
     "04_confounds",
-    "05_customization"
+    "05_customization",
+    "99_docs",
 ]
 
 example_dirs = []
@@ -236,7 +243,6 @@ gallery_dirs = []
 for t_dir in ex_dirs:
     example_dirs.append(f"../examples/{t_dir}")
     gallery_dirs.append(f"auto_examples/{t_dir}")
-
 
 sphinx_gallery_conf = {
     "doc_module": "julearn",
@@ -246,6 +252,7 @@ sphinx_gallery_conf = {
     "nested_sections": True,
     "subsection_order": SubSectionTitleOrder("../examples"),
     "filename_pattern": "/(plot|run)_",
+    "download_all_examples": False,
 }
 
 # -- sphinx-multiversion configuration ---------------------------------------
