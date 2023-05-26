@@ -43,7 +43,7 @@ Scalers
      - Class
    * - ``zscore``
      - Removing mean and scale to unit variance
-     - `StandardScaler`_
+     - :class:`~sklearn.preprocessing.StandardScaler`
    * - ``scaler_robust``
      - Removing median and scale to IQR
      - `RobustScaler`_
@@ -134,7 +134,7 @@ Decomposition
      - Class
    * - ``pca``
      - Principal Component Analysis
-     - `PCA`_
+     - `PCA`
   
 Custom
 ------
