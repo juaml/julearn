@@ -8,7 +8,7 @@ What you really need to know
 
 
 The backbone of Julearn is the function :func:`.run_cross_validation`, which
-allows you to do all the magic. All important information needed for your 
+allows you to do all the *magic*. All important information needed for your 
 machine learning workflow goes into this function, specified via its parameters.
 
 But why is basically everything based on one `cross_validation` function? Well,

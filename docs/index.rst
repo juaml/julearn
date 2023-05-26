@@ -40,23 +40,20 @@ Why not just using `scikit-learn`? Julearn offers **three essential benefits**:
 
 1. You can do machine learning with **less amount of code** than in
    `scikit-learn`
-2. Julearn helps you to build pipelines in an easy way and thereby supports you
-   to **avoid data leakage**
+2. Julearn helps you to build and evaluate pipelines in an easy way and thereby
+   helps you **avoid data leakage**!
 3. It offers you nice **additional functionality**:
    
-   * Easy to implement **confound removal**  # TODO Link to example
-   * Data type **typing**  # TODO Link to example, name in a bette way
-
-Julearn's backbone - :func:`.run_cross_validation`
---------------------------------------------------
-
-The backbone of Julearn is the function :func:`.run_cross_validation`, which let's you 
-do all the magic. To get a first impression what :func:`.run_cross_validation`
-can do and how to use it, please follow along the chapter :ref:`need_to_know`.
-If you just want to check out the API of :func:`.run_cross_validation`, please 
-have a look at :ref:`api`. If you are already familiar with Julearn and the 
-general functionality of :func:`.run_cross_validation`, you can have a look at
-:ref:`selected_deeper_topics`.
+   * Easy to implement **confound removal**: Julearn offers you a simple way
+     to remove confounds from your data in a cross-validated way.
+   * Data **typing**: Julearn provides a system to specify **data types** for
+     your features, and then provides you with the possibility to 
+     filter and transform your data according to these types.
+   * Model **inspection**: Julearn provides you with a simple way to **inspect**
+     your models and pipelines, and thereby helps you to understand what is
+     going on in your pipeline.
+   * Model **comparison**: Julearn provides out-of-the-box interactive
+     **visualizations** and **statistics** to compare your models.
 
 Table of Contents
 -----------------
