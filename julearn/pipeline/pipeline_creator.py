@@ -305,6 +305,17 @@ class PipelineCreator:
         """Get the steps that have been added to the PipelineCreator."""
         return self._steps
 
+    def __str__(self) -> str:
+        """Get a string representation of the PipelineCreator."""
+        out = "PipelineCreator:\n"
+        for i_step, step in enumerate(self._steps):
+            out += f"  Step {i_step}: {step.name}\n"
+            out += f"    estimator:     {step.estimator}\n"
+            out += f"    apply to:      {step.apply_to}\n"
+            out += f"    needed types:  {step.needed_types}\n"
+            out += f"    tuning params: {step.params_to_tune}\n"
+        return out
+
     def has_model(self) -> bool:
         """Whether the PipelineCreator has a model."""
         return self._added_model

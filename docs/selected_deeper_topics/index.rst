@@ -11,7 +11,7 @@ Selected deeper topics
    :caption: Table of Contents
 
    confound_removal.rst
-   HPT.rst
+   hyperparameter_tuning.rst
    model_inspect.rst
    cross_validation_splitter.rst
    stacked_models.rst
