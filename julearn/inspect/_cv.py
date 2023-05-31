@@ -44,7 +44,7 @@ def _wrapped_model_has(attr):
             True if first estimator in scores has the attribute,
             False otherwise.
         """
-        model_ = self._scores['estimator'].iloc[0]
+        model_ = self._scores["estimator"].iloc[0]
         return hasattr(model_, attr)
 
     return check
@@ -118,9 +118,11 @@ class FoldsInspector:
         ):
             t_model = self._scores["estimator"][i_fold]
             t_values = getattr(t_model, func)(self._X.iloc[test])
-            t_series = pd.Series(t_values, index=test)
-            t_series.name = f"fold_{i_fold}"
-            predictions.append(t_series)
+            column_names = [f"p{i}" for i in range(t_values.shape[1])]
+            t_predictions_df = pd.DataFrame(
+                t_values, index=test, columns=column_names
+            )
+            predictions.append(t_predictions_df)
 
         if is_nonoverlapping_cv(self._cv):
             n_repeats = self._scores["repeat"].unique().size
@@ -130,7 +132,8 @@ class FoldsInspector:
                 t_repeat_predictions = []
                 for t_fold in range(n_folds):
                     t_repeat_predictions.append(
-                        predictions[t_repeat * n_folds + t_fold])
+                        predictions[t_repeat * n_folds + t_fold]
+                    )
                 t_series = pd.concat(t_repeat_predictions, axis=0)
                 t_series.name = f"repeat_{t_repeat}"
                 folded_predictions.append(t_series)
@@ -145,7 +148,6 @@ class FoldsInspector:
         return self
 
     def __next__(self):
-
         if self._current_fold == self.__len__():
             raise StopIteration
         this_fold = self[self._current_fold]
