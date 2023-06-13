@@ -4,7 +4,33 @@
 Frequenly Asked Questions
 *************************
 
-1. How do I use the julearn :mod:`.viz` interactive plots?
+1. I have issues with the dependencies for the :mod:`.viz` module.
+
+The :mod:`.viz` module uses `bokeh`_ and `panel`_ to create interactive
+plots. These packages are not installed by default when you install
+``julearn``. This libraries are also under development and they might not
+be as robust as we want.
+
+Usually, installing julearn with the ``[viz]`` option will install the
+necessary dependencies using pip. However, if you have issues with the
+installation or you want to install them through other package managers,
+you can install them manually.
+
+Using pip:
+
+.. code-block:: bash
+
+  pip install panel
+  pip install bokeh
+
+Using conda:
+
+.. code-block:: bash
+
+  conda install -c conda-forge panel
+  conda install -c bokeh bokeh
+
+2. How do I use the julearn :mod:`.viz` interactive plots?
 ----------------------------------------------------------
 
 The interactive plots are based on `bokeh`_ and `panel`_. You can use them

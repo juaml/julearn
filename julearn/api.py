@@ -339,7 +339,7 @@ def run_cross_validation(
         logger.info(f"\tTarget type: {y.dtype}")
 
     # Prepare cross validation
-    cv_outer = check_cv(cv)  # type: ignore
+    cv_outer = check_cv(cv, classifier=problem_type == "classification")
     logger.info(f"Using outer CV scheme {cv_outer}")
 
     check_consistency(y, cv, groups, problem_type)
