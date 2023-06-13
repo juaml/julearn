@@ -168,7 +168,7 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../what_really_need_know/index.html">2. What you really need to know</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/cross_validation.html">2.1. Why cross validation?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/data.html">2.2. Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/pipeline.html">2.3. Pipeline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/pipeline.html">2.3. Model Building</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/model_evaluation.html">2.4. Model evaluation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/model_comparison.html">2.5. Model comparison</a></li>
 </ul>
@@ -404,13 +404,13 @@ We will check the features after each preprocessing step.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-06-13 10:27:05,219 - julearn - INFO - ===== Lib Versions =====
-2023-06-13 10:27:05,220 - julearn - INFO - numpy: 1.24.3
-2023-06-13 10:27:05,220 - julearn - INFO - scipy: 1.10.1
-2023-06-13 10:27:05,220 - julearn - INFO - sklearn: 1.2.2
-2023-06-13 10:27:05,220 - julearn - INFO - pandas: 2.0.2
-2023-06-13 10:27:05,220 - julearn - INFO - julearn: 0.3.0.dev204
-2023-06-13 10:27:05,220 - julearn - INFO - ========================
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-06-13 12:20:52,207 - julearn - INFO - ===== Lib Versions =====
+2023-06-13 12:20:52,207 - julearn - INFO - numpy: 1.24.3
+2023-06-13 12:20:52,207 - julearn - INFO - scipy: 1.10.1
+2023-06-13 12:20:52,207 - julearn - INFO - sklearn: 1.2.2
+2023-06-13 12:20:52,207 - julearn - INFO - pandas: 2.0.2
+2023-06-13 12:20:52,207 - julearn - INFO - julearn: 0.3.0.dev205
+2023-06-13 12:20:52,207 - julearn - INFO - ========================
 </pre></div>
 </div>
 <p>Create a dataset using sklearn’s make_regression</p>
@@ -522,40 +522,40 @@ to be used in the regression to the ‘PipelineCreator’.</p>
 <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">axes</span></a><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;PCA components&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_preprocess_001.png" srcset="../../_images/sphx_glr_plot_preprocess_001.png" alt="Raw features, PCA components" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-06-13 10:27:05,238 - julearn - INFO - Adding step select_variance that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
-2023-06-13 10:27:05,238 - julearn - INFO - Setting hyperparameter threshold = 0.15
-2023-06-13 10:27:05,238 - julearn - INFO - Step added
-2023-06-13 10:27:05,238 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;X_to_zscore&#39;}; pattern=(?:__:type:__X_to_zscore)&gt;
-2023-06-13 10:27:05,238 - julearn - INFO - Step added
-2023-06-13 10:27:05,238 - julearn - INFO - Adding step pca that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
-2023-06-13 10:27:05,238 - julearn - INFO - Setting hyperparameter n_components = 2
-2023-06-13 10:27:05,239 - julearn - INFO - Step added
-2023-06-13 10:27:05,239 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
-2023-06-13 10:27:05,239 - julearn - INFO - Setting hyperparameter n_estimators = 200
-2023-06-13 10:27:05,239 - julearn - INFO - Step added
-2023-06-13 10:27:05,239 - julearn - INFO - Setting random seed to 200
-2023-06-13 10:27:05,239 - julearn - INFO - ==== Input Data ====
-2023-06-13 10:27:05,239 - julearn - INFO - Using dataframe as input
-2023-06-13 10:27:05,239 - julearn - INFO -      Features: [&#39;Feature 1&#39;, &#39;Feature 2&#39;, &#39;Feature 3&#39;, &#39;Feature 4&#39;]
-2023-06-13 10:27:05,239 - julearn - INFO -      Target: y
-2023-06-13 10:27:05,239 - julearn - INFO -      Expanded features: [&#39;Feature 1&#39;, &#39;Feature 2&#39;, &#39;Feature 3&#39;, &#39;Feature 4&#39;]
-2023-06-13 10:27:05,240 - julearn - INFO -      X_types:{&#39;X_to_zscore&#39;: [&#39;Feature 1&#39;, &#39;Feature 2&#39;]}
-2023-06-13 10:27:05,240 - julearn - WARNING - The following columns are not defined in X_types: [&#39;Feature 3&#39;, &#39;Feature 4&#39;]. They will be treated as continuous.
+<img src="../../_images/sphx_glr_plot_preprocess_001.png" srcset="../../_images/sphx_glr_plot_preprocess_001.png" alt="Raw features, PCA components" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-06-13 12:20:52,225 - julearn - INFO - Adding step select_variance that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
+2023-06-13 12:20:52,225 - julearn - INFO - Setting hyperparameter threshold = 0.15
+2023-06-13 12:20:52,226 - julearn - INFO - Step added
+2023-06-13 12:20:52,226 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;X_to_zscore&#39;}; pattern=(?:__:type:__X_to_zscore)&gt;
+2023-06-13 12:20:52,226 - julearn - INFO - Step added
+2023-06-13 12:20:52,226 - julearn - INFO - Adding step pca that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
+2023-06-13 12:20:52,226 - julearn - INFO - Setting hyperparameter n_components = 2
+2023-06-13 12:20:52,226 - julearn - INFO - Step added
+2023-06-13 12:20:52,226 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
+2023-06-13 12:20:52,226 - julearn - INFO - Setting hyperparameter n_estimators = 200
+2023-06-13 12:20:52,226 - julearn - INFO - Step added
+2023-06-13 12:20:52,226 - julearn - INFO - Setting random seed to 200
+2023-06-13 12:20:52,226 - julearn - INFO - ==== Input Data ====
+2023-06-13 12:20:52,227 - julearn - INFO - Using dataframe as input
+2023-06-13 12:20:52,227 - julearn - INFO -      Features: [&#39;Feature 1&#39;, &#39;Feature 2&#39;, &#39;Feature 3&#39;, &#39;Feature 4&#39;]
+2023-06-13 12:20:52,227 - julearn - INFO -      Target: y
+2023-06-13 12:20:52,227 - julearn - INFO -      Expanded features: [&#39;Feature 1&#39;, &#39;Feature 2&#39;, &#39;Feature 3&#39;, &#39;Feature 4&#39;]
+2023-06-13 12:20:52,227 - julearn - INFO -      X_types:{&#39;X_to_zscore&#39;: [&#39;Feature 1&#39;, &#39;Feature 2&#39;]}
+2023-06-13 12:20:52,227 - julearn - WARNING - The following columns are not defined in X_types: [&#39;Feature 3&#39;, &#39;Feature 4&#39;]. They will be treated as continuous.
 /home/runner/work/julearn/julearn/julearn/utils/logging.py:238: RuntimeWarning: The following columns are not defined in X_types: [&#39;Feature 3&#39;, &#39;Feature 4&#39;]. They will be treated as continuous.
   warn(msg, category=category)
-2023-06-13 10:27:05,241 - julearn - INFO - ====================
-2023-06-13 10:27:05,241 - julearn - INFO -
-2023-06-13 10:27:05,243 - julearn - INFO - = Model Parameters =
-2023-06-13 10:27:05,243 - julearn - INFO - ====================
-2023-06-13 10:27:05,243 - julearn - INFO -
-2023-06-13 10:27:05,243 - julearn - INFO - = Data Information =
-2023-06-13 10:27:05,243 - julearn - INFO -      Problem type: regression
-2023-06-13 10:27:05,243 - julearn - INFO -      Number of samples: 100
-2023-06-13 10:27:05,243 - julearn - INFO -      Number of features: 4
-2023-06-13 10:27:05,243 - julearn - INFO - ====================
-2023-06-13 10:27:05,243 - julearn - INFO -
-2023-06-13 10:27:05,243 - julearn - INFO -      Target type: float64
-2023-06-13 10:27:05,243 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2023-06-13 12:20:52,228 - julearn - INFO - ====================
+2023-06-13 12:20:52,228 - julearn - INFO -
+2023-06-13 12:20:52,230 - julearn - INFO - = Model Parameters =
+2023-06-13 12:20:52,230 - julearn - INFO - ====================
+2023-06-13 12:20:52,230 - julearn - INFO -
+2023-06-13 12:20:52,230 - julearn - INFO - = Data Information =
+2023-06-13 12:20:52,230 - julearn - INFO -      Problem type: regression
+2023-06-13 12:20:52,230 - julearn - INFO -      Number of samples: 100
+2023-06-13 12:20:52,230 - julearn - INFO -      Number of features: 4
+2023-06-13 12:20:52,230 - julearn - INFO - ====================
+2023-06-13 12:20:52,230 - julearn - INFO -
+2023-06-13 12:20:52,231 - julearn - INFO -      Target type: float64
+2023-06-13 12:20:52,231 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
 X after PCA:
 ===============================================================================
     pca__pca0  pca__pca1
@@ -612,7 +612,7 @@ min   -2.013728e+00 -3.010202e+00   -2.552990   -2.659172
 max    2.113700e+00  2.184776e+00    2.383145    2.259309
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.731 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.736 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-02-inspection-plot-preprocess-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/0fdc9a0d75a37f1ac1637ca54129dba7/plot_preprocess.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_preprocess.py</span></code></a></p>
