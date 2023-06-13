@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="3. Selected deeper topics" href="../selected_deeper_topics/index.html" /><link rel="prev" title="2.3. Pipeline" href="pipeline.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="2.5. Model comparison" href="model_comparison.html" /><link rel="prev" title="2.3. Pipeline" href="pipeline.html" />
 
     <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
         <title>2.4. Model evaluation - julearn documentation</title>
@@ -170,6 +170,7 @@
 <li class="toctree-l2"><a class="reference internal" href="data.html">2.2. Data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pipeline.html">2.3. Pipeline</a></li>
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">2.4. Model evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_comparison.html">2.5. Model comparison</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../selected_deeper_topics/index.html">3. Selected deeper topics</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -179,6 +180,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/cross_validation_splitter.html">3.4. Cross-validation splitter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/stacked_models.html">3.5. Stacking Models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/CBPM.html">3.6. Connectome-based Predictive Modeling (CBPM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/target_transformers.html">3.7. Applying preprocessing to the target</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../available_pipeline_steps.html">4. Overview of available Pipeline Steps</a></li>
@@ -372,7 +374,7 @@
         </div>
         <article role="main">
           <section id="model-evaluation">
-<span id="model-evaluation-usage"></span><h1><span class="section-number">2.4. </span>Model evaluation<a class="headerlink" href="#model-evaluation" title="Permalink to this heading">#</a></h1>
+<span id="sphx-glr-auto-examples-99-docs-run-model-evaluation-docs-py"></span><span id="model-evaluation-usage"></span><h1><span class="section-number">2.4. </span>Model evaluation<a class="headerlink" href="#model-evaluation" title="Permalink to this heading">#</a></h1>
 <section id="the-returns-of-run-cross-validation">
 <h2>The returns of <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a><a class="headerlink" href="#the-returns-of-run-cross-validation" title="Permalink to this heading">#</a></h2>
 <p>So far, we saw how to run a cross-validation using the <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a>
@@ -381,13 +383,26 @@ pipeline?</p>
 <section id="cross-validation-scores">
 <h3>Cross-validation scores<a class="headerlink" href="#cross-validation-scores" title="Permalink to this heading">#</a></h3>
 <p>We consider the _iris_ data example and one of the pipelines from the previous
-section (feature z-scoring and a <code class="docutils literal notranslate"><span class="pre">svm</span></code>). However, this time we assign
-the returned value of
-<a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> to a variable called <code class="docutils literal notranslate"><span class="pre">scores</span></code>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">julearn.model_selection</span> <span class="kn">import</span> <span class="n">run_cross_validation</span>
+section (feature z-scoring and a <code class="docutils literal notranslate"><span class="pre">svm</span></code>).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">julearn</span> <span class="kn">import</span> <span class="n">run_cross_validation</span>
 <span class="kn">from</span> <span class="nn">julearn.pipeline</span> <span class="kn">import</span> <span class="n">PipelineCreator</span>
 
-<span class="c1"># create pipeline</span>
+<span class="kn">from</span> <span class="nn">seaborn</span> <span class="kn">import</span> <span class="n">load_dataset</span>
+
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;iris&quot;</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;sepal_length&quot;</span><span class="p">,</span> <span class="s2">&quot;sepal_width&quot;</span><span class="p">,</span> <span class="s2">&quot;petal_length&quot;</span><span class="p">,</span> <span class="s2">&quot;petal_width&quot;</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="s2">&quot;species&quot;</span>
+<span class="n">X_types</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;continuous&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;sepal_length&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;sepal_width&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;petal_length&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;petal_width&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+
+<span class="c1"># create a pipeline</span>
 <span class="n">creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;classification&quot;</span><span class="p">)</span>
 <span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">)</span>
 <span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;svm&quot;</span><span class="p">)</span>
@@ -396,333 +411,477 @@ the returned value of
 <span class="n">scores</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
     <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
     <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+    <span class="n">X_types</span><span class="o">=</span><span class="n">X_types</span><span class="p">,</span>
     <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
     <span class="n">model</span><span class="o">=</span><span class="n">creator</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
-<p>The <code class="docutils literal notranslate"><span class="pre">scores</span></code> variable is an ExtendedDataFrame object which contains as rows
-the folds (and/or repititions) of the cross-validation and as columns the
-information about the scoring for each fold.</p>
-<a class="reference internal image-reference" href="../_images/scores_run_cv.png"><img alt="scores_cv" src="../_images/scores_run_cv.png" style="width: 600px;" /></a>
-<p>We can for example see that there is <code class="docutils literal notranslate"><span class="pre">n_train=120</span></code> samples in each fold’s
-training set and <code class="docutils literal notranslate"><span class="pre">n_test=30</span></code> samples in each respective validations set.
-Additionally, we see that for example the <code class="docutils literal notranslate"><span class="pre">test_score</span></code> for the third fold is
-0.933. This means that the model achieved a score of 0.933 on the validation set
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-06-13 10:27:26,830 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-06-13 10:27:26,830 - julearn - INFO - Step added
+2023-06-13 10:27:26,830 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-06-13 10:27:26,830 - julearn - INFO - Step added
+2023-06-13 10:27:26,830 - julearn - INFO - ==== Input Data ====
+2023-06-13 10:27:26,830 - julearn - INFO - Using dataframe as input
+2023-06-13 10:27:26,830 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2023-06-13 10:27:26,830 - julearn - INFO -      Target: species
+2023-06-13 10:27:26,831 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2023-06-13 10:27:26,831 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
+2023-06-13 10:27:26,832 - julearn - INFO - ====================
+2023-06-13 10:27:26,832 - julearn - INFO -
+2023-06-13 10:27:26,832 - julearn - INFO - = Model Parameters =
+2023-06-13 10:27:26,832 - julearn - INFO - ====================
+2023-06-13 10:27:26,832 - julearn - INFO -
+2023-06-13 10:27:26,832 - julearn - INFO - = Data Information =
+2023-06-13 10:27:26,833 - julearn - INFO -      Problem type: classification
+2023-06-13 10:27:26,833 - julearn - INFO -      Number of samples: 150
+2023-06-13 10:27:26,833 - julearn - INFO -      Number of features: 4
+2023-06-13 10:27:26,833 - julearn - INFO - ====================
+2023-06-13 10:27:26,833 - julearn - INFO -
+2023-06-13 10:27:26,833 - julearn - INFO -      Number of classes: 3
+2023-06-13 10:27:26,833 - julearn - INFO -      Target type: object
+2023-06-13 10:27:26,834 - julearn - INFO -      Class distributions: species
+setosa        50
+versicolor    50
+virginica     50
+Name: count, dtype: int64
+2023-06-13 10:27:26,834 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2023-06-13 10:27:26,834 - julearn - INFO - Multi-class classification problem detected #classes = 3.
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">scores</span></code> variable is an pandas DataFrame object which contains the
+cross-validated metrics for each fold as columns and rows respectively.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>   fit_time  score_time  ...  fold                          cv_mdsum
+0  0.005965    0.003129  ...     0  b10eef89b4192178d482d7a1587a248a
+1  0.005474    0.003011  ...     1  b10eef89b4192178d482d7a1587a248a
+2  0.005383    0.003015  ...     2  b10eef89b4192178d482d7a1587a248a
+3  0.005412    0.003033  ...     3  b10eef89b4192178d482d7a1587a248a
+4  0.005374    0.003015  ...     4  b10eef89b4192178d482d7a1587a248a
+
+[5 rows x 8 columns]
+</pre></div>
+</div>
+<p>We see that for example the <code class="docutils literal notranslate"><span class="pre">test_score</span></code> for the third fold is 0.933. This
+means that the model achieved a score of 0.933 on the validation set
 of this fold.</p>
+<p>We can also see more information, such as the number of samples used for
+training and testing.</p>
 <p>Cross-validation is particularly useful to inspect if a model is overfitting.
-For this purpose it is useful to not only see the test scores for each fold but
-also the training scores. This can be achieved by setting the
-<code class="docutils literal notranslate"><span class="pre">return_train_score</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">True</span></code> in <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">scores</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+For this purpose it is useful to not only see the test scores for each fold
+but also the training scores. This can be achieved by setting the
+<code class="docutils literal notranslate"><span class="pre">return_train_score</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">True</span></code> in
+<a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">scores</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
     <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
     <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+    <span class="n">X_types</span><span class="o">=</span><span class="n">X_types</span><span class="p">,</span>
     <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
     <span class="n">model</span><span class="o">=</span><span class="n">creator</span><span class="p">,</span>
     <span class="n">return_train_score</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Leading to an additional column <code class="docutils literal notranslate"><span class="pre">train_score</span></code> in the <code class="docutils literal notranslate"><span class="pre">scores</span></code> variable:</p>
-<a class="reference internal image-reference" href="../_images/scores_run_cv_train.png"><img alt="scores_cv_train" src="../_images/scores_run_cv_train.png" style="width: 600px;" /></a>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-06-13 10:27:26,889 - julearn - INFO - ==== Input Data ====
+2023-06-13 10:27:26,889 - julearn - INFO - Using dataframe as input
+2023-06-13 10:27:26,890 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2023-06-13 10:27:26,890 - julearn - INFO -      Target: species
+2023-06-13 10:27:26,890 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2023-06-13 10:27:26,890 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
+2023-06-13 10:27:26,890 - julearn - INFO - ====================
+2023-06-13 10:27:26,891 - julearn - INFO -
+2023-06-13 10:27:26,891 - julearn - INFO - = Model Parameters =
+2023-06-13 10:27:26,891 - julearn - INFO - ====================
+2023-06-13 10:27:26,891 - julearn - INFO -
+2023-06-13 10:27:26,891 - julearn - INFO - = Data Information =
+2023-06-13 10:27:26,891 - julearn - INFO -      Problem type: classification
+2023-06-13 10:27:26,891 - julearn - INFO -      Number of samples: 150
+2023-06-13 10:27:26,891 - julearn - INFO -      Number of features: 4
+2023-06-13 10:27:26,891 - julearn - INFO - ====================
+2023-06-13 10:27:26,892 - julearn - INFO -
+2023-06-13 10:27:26,892 - julearn - INFO -      Number of classes: 3
+2023-06-13 10:27:26,892 - julearn - INFO -      Target type: object
+2023-06-13 10:27:26,892 - julearn - INFO -      Class distributions: species
+setosa        50
+versicolor    50
+virginica     50
+Name: count, dtype: int64
+2023-06-13 10:27:26,893 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2023-06-13 10:27:26,893 - julearn - INFO - Multi-class classification problem detected #classes = 3.
+   fit_time  score_time  ...  fold                          cv_mdsum
+0  0.005527    0.003041  ...     0  b10eef89b4192178d482d7a1587a248a
+1  0.005396    0.003059  ...     1  b10eef89b4192178d482d7a1587a248a
+2  0.005354    0.003042  ...     2  b10eef89b4192178d482d7a1587a248a
+3  0.005490    0.003047  ...     3  b10eef89b4192178d482d7a1587a248a
+4  0.005453    0.003020  ...     4  b10eef89b4192178d482d7a1587a248a
+
+[5 rows x 9 columns]
+</pre></div>
+</div>
+<p>The additional column <code class="docutils literal notranslate"><span class="pre">train_score</span></code> indicates the score on the training
+set.</p>
 <p>For a model that is not overfitting, the training and test scores should be
 similar. In our example, the training and test scores are indeed similar.</p>
-<p>The column <code class="docutils literal notranslate"><span class="pre">cv_mdsum</span></code> on the first glance might appear a bit cryptic. However,
-it can be useful for internal checks, to see if the same CV was used or not. But
-this is nothing you need to worry about at this point.</p>
+<p>The column <code class="docutils literal notranslate"><span class="pre">cv_mdsum</span></code> on the first glance might appear a bit cryptic.
+This column is used in internal checks, to verify that the same CV was used
+when results are compared using julearn’s provided statistical tests.
+This is nothing you need to worry about at this point.</p>
 </section>
 <section id="returning-a-model-estimator">
 <h3>Returning a model (estimator)<a class="headerlink" href="#returning-a-model-estimator" title="Permalink to this heading">#</a></h3>
-<p>Now that we saw that our model doesn’t seem to overfit, we might be interested
-in not only the scores but also want to return a model. For that purpose
-<a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> has the parameter <code class="docutils literal notranslate"><span class="pre">return_estimator</span></code>. It can
-have three different values:</p>
-<p>1. <code class="docutils literal notranslate"><span class="pre">&quot;cv&quot;</span></code>: This will lead to <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> returning all the
-estimators from each CV fold, fitted on the training data of the respective
-fold, i.e. the models that led to the above scores in each fold.</p>
-<p>2. <code class="docutils literal notranslate"><span class="pre">&quot;final&quot;</span></code>: With this setting, an additional model will be trained on the
-entire training dataset and not on the cv folds. This model will be returned.
-The scores will still refer to the cv folds.</p>
-<p>1. <code class="docutils literal notranslate"><span class="pre">&quot;all&quot;</span></code>: In this scenario, all the estimators (final and cv) will be
-returned.</p>
+<p>Now that we saw that our model doesn’t seem to overfit, we might be
+interested in checking how our model parameters look like. By setting the
+parameter <code class="docutils literal notranslate"><span class="pre">return_estimator</span></code>, we can tell <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> to
+give us models. It can have three different values:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;cv&quot;</span></code>: This option indicates that we want to get the model that was
+trained on the entire training data of each CV fold. This means that we
+get as many models as we have CV folds. They will be returned within the
+scores dataframe.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;final&quot;</span></code>: With this setting, an additional model will be trained on the
+entire input dataset. This model will be returned as a separate variable.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;all&quot;</span></code>: In this scenario, all the estimators (final and cv) will be
+returned.</p></li>
+</ol>
 <p>For demonstration purposes we will have a closer look at the <code class="docutils literal notranslate"><span class="pre">&quot;final&quot;</span></code>
-estimator option (same pipeline as above) and therefore assign the returned
-values of <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> to a variable called <code class="docutils literal notranslate"><span class="pre">scores</span></code> (for
-the CV scores) and <code class="docutils literal notranslate"><span class="pre">model</span></code> (for the returned model):</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">scores</span><span class="p">,</span> <span class="n">model</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+estimator option.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">scores</span><span class="p">,</span> <span class="n">model</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
     <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
     <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+    <span class="n">X_types</span><span class="o">=</span><span class="n">X_types</span><span class="p">,</span>
     <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
     <span class="n">model</span><span class="o">=</span><span class="n">creator</span><span class="p">,</span>
     <span class="n">return_train_score</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">return_estimator</span><span class="o">=</span><span class="s2">&quot;final&quot;</span><span class="p">,</span>
 <span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">scores</span></code> will contain the same content as before. The <code class="docutils literal notranslate"><span class="pre">model</span></code> variable
-is a sklearn estimator object and has all the information on our pipeline and
-the retrained information on the entire training dataset.</p>
-<a class="reference internal image-reference" href="../_images/final_estimator.png"><img alt="final_estimator" src="../_images/final_estimator.png" style="width: 600px;" /></a>
-<p>We can use this estimator object to for example inspect the coefficients of the
-model or make predictions on a hold out test set. To learn more about how to
-inspect models please have a look at <a class="reference internal" href="../selected_deeper_topics/model_inspect.html#model-inspection"><span class="std std-ref">Inspecting Models</span></a>.</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-06-13 10:27:26,964 - julearn - INFO - ==== Input Data ====
+2023-06-13 10:27:26,964 - julearn - INFO - Using dataframe as input
+2023-06-13 10:27:26,964 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2023-06-13 10:27:26,964 - julearn - INFO -      Target: species
+2023-06-13 10:27:26,964 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2023-06-13 10:27:26,964 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
+2023-06-13 10:27:26,965 - julearn - INFO - ====================
+2023-06-13 10:27:26,965 - julearn - INFO -
+2023-06-13 10:27:26,966 - julearn - INFO - = Model Parameters =
+2023-06-13 10:27:26,966 - julearn - INFO - ====================
+2023-06-13 10:27:26,966 - julearn - INFO -
+2023-06-13 10:27:26,966 - julearn - INFO - = Data Information =
+2023-06-13 10:27:26,966 - julearn - INFO -      Problem type: classification
+2023-06-13 10:27:26,966 - julearn - INFO -      Number of samples: 150
+2023-06-13 10:27:26,966 - julearn - INFO -      Number of features: 4
+2023-06-13 10:27:26,966 - julearn - INFO - ====================
+2023-06-13 10:27:26,966 - julearn - INFO -
+2023-06-13 10:27:26,966 - julearn - INFO -      Number of classes: 3
+2023-06-13 10:27:26,966 - julearn - INFO -      Target type: object
+2023-06-13 10:27:26,967 - julearn - INFO -      Class distributions: species
+setosa        50
+versicolor    50
+virginica     50
+Name: count, dtype: int64
+2023-06-13 10:27:26,967 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2023-06-13 10:27:26,967 - julearn - INFO - Multi-class classification problem detected #classes = 3.
+   fit_time  score_time  ...  fold                          cv_mdsum
+0  0.005518    0.003057  ...     0  b10eef89b4192178d482d7a1587a248a
+1  0.005404    0.003048  ...     1  b10eef89b4192178d482d7a1587a248a
+2  0.005364    0.003041  ...     2  b10eef89b4192178d482d7a1587a248a
+3  0.005404    0.003041  ...     3  b10eef89b4192178d482d7a1587a248a
+4  0.005379    0.003047  ...     4  b10eef89b4192178d482d7a1587a248a
+
+[5 rows x 9 columns]
+</pre></div>
+</div>
+<p>As we see, the scores dataframe is the same as before. However, we now have
+an additional variable <code class="docutils literal notranslate"><span class="pre">model</span></code>. This variable contains the final estimator
+that was trained on the entire training dataset.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span>
+</pre></div>
+</div>
+<div class="output_subarea output_html rendered_html output_result">
+<style>#sk-container-id-1 {color: black;background-color: white;}#sk-container-id-1 pre{padding: 0;}#sk-container-id-1 div.sk-toggleable {background-color: white;}#sk-container-id-1 label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-container-id-1 label.sk-toggleable__label-arrow:before {content: "▸";float: left;margin-right: 0.25em;color: #696969;}#sk-container-id-1 label.sk-toggleable__label-arrow:hover:before {color: black;}#sk-container-id-1 div.sk-estimator:hover label.sk-toggleable__label-arrow:before {color: black;}#sk-container-id-1 div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-container-id-1 div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-container-id-1 input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-container-id-1 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {content: "▾";}#sk-container-id-1 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-container-id-1 div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-container-id-1 div.sk-estimator:hover {background-color: #d4ebff;}#sk-container-id-1 div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-container-id-1 div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: 0;}#sk-container-id-1 div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;position: relative;}#sk-container-id-1 div.sk-item {position: relative;z-index: 1;}#sk-container-id-1 div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;position: relative;}#sk-container-id-1 div.sk-item::before, #sk-container-id-1 div.sk-parallel-item::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: -1;}#sk-container-id-1 div.sk-parallel-item {display: flex;flex-direction: column;z-index: 1;position: relative;background-color: white;}#sk-container-id-1 div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-container-id-1 div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-container-id-1 div.sk-parallel-item:only-child::after {width: 0;}#sk-container-id-1 div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;}#sk-container-id-1 div.sk-label label {font-family: monospace;font-weight: bold;display: inline-block;line-height: 1.2em;}#sk-container-id-1 div.sk-label-container {text-align: center;}#sk-container-id-1 div.sk-container {/* jupyter's `normalize.less` sets `[hidden] { display: none; }` but bootstrap.min.css set `[hidden] { display: none !important; }` so we also need the `!important` here to be able to override the default hidden behavior on the sphinx rendered scikit-learn.org. See: https://github.com/scikit-learn/scikit-learn/issues/21755 */display: inline-block !important;position: relative;}#sk-container-id-1 div.sk-text-repr-fallback {display: none;}</style><div id="sk-container-id-1" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>Pipeline(steps=[(&#x27;set_column_types&#x27;,
+                 SetColumnTypes(X_types={&#x27;continuous&#x27;: [&#x27;sepal_length&#x27;,
+                                                        &#x27;sepal_width&#x27;,
+                                                        &#x27;petal_length&#x27;,
+                                                        &#x27;petal_width&#x27;]})),
+                (&#x27;zscore&#x27;, StandardScaler()), (&#x27;svm&#x27;, SVC())])</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-1" type="checkbox" ><label for="sk-estimator-id-1" class="sk-toggleable__label sk-toggleable__label-arrow">Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[(&#x27;set_column_types&#x27;,
+                 SetColumnTypes(X_types={&#x27;continuous&#x27;: [&#x27;sepal_length&#x27;,
+                                                        &#x27;sepal_width&#x27;,
+                                                        &#x27;petal_length&#x27;,
+                                                        &#x27;petal_width&#x27;]})),
+                (&#x27;zscore&#x27;, StandardScaler()), (&#x27;svm&#x27;, SVC())])</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-2" type="checkbox" ><label for="sk-estimator-id-2" class="sk-toggleable__label sk-toggleable__label-arrow">SetColumnTypes</label><div class="sk-toggleable__content"><pre>SetColumnTypes(X_types={&#x27;continuous&#x27;: [&#x27;sepal_length&#x27;, &#x27;sepal_width&#x27;,
+                                       &#x27;petal_length&#x27;, &#x27;petal_width&#x27;]})</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-3" type="checkbox" ><label for="sk-estimator-id-3" class="sk-toggleable__label sk-toggleable__label-arrow">StandardScaler</label><div class="sk-toggleable__content"><pre>StandardScaler()</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-4" type="checkbox" ><label for="sk-estimator-id-4" class="sk-toggleable__label sk-toggleable__label-arrow">SVC</label><div class="sk-toggleable__content"><pre>SVC()</pre></div></div></div></div></div></div></div>
+</div>
+<br />
+<br /><p>We can use this estimator object to for example inspect the coefficients of
+the model or make predictions on a hold out test set. To learn more about how
+to inspect models please have a look at <a class="reference internal" href="../selected_deeper_topics/model_inspect.html#model-inspection"><span class="std std-ref">Inspecting Models</span></a>.</p>
 </section>
 </section>
 <section id="cross-validation-types-and-scoring">
 <h2>Cross-validation types and scoring<a class="headerlink" href="#cross-validation-types-and-scoring" title="Permalink to this heading">#</a></h2>
 <section id="cross-validation-splitters">
 <h3>Cross-validation splitters<a class="headerlink" href="#cross-validation-splitters" title="Permalink to this heading">#</a></h3>
-<p>When performing a cross-validation, we need to split the data into training and
-validation sets. This is done by a cross-validation splitter, that defines how
-many folds should be used, how often the cross-validation should be repeated
-and how the data should be split. When splitting the data they can for example
-be shuffled, one can consider certain groups for splitting or the splits can be
-stratified according to some pre-defined variables.</p>
-<p>So far, however, we didn’t specify anything in that regard and still the cross-
-validation was performed and we got five folds (see the five rows above in the
-scores dataframe). This is, because per default <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>
-falls back to the scikit-learn defaults, which is a <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.StratifiedKFold.html#sklearn.model_selection.StratifiedKFold">StratifiedKFold</a> (k=5) for
-classification and <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.KFold.html#sklearn.model_selection.KFold">KFold</a> (k=5) for regression. So in our case a <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.KFold.html#sklearn.model_selection.KFold">KFold</a>
-cross-validation with five folds was performed.</p>
+<p>When performing a cross-validation, we need to split the data into training
+and validation sets. This is done by a <em>cross-validation splitter</em>, that
+defines how the data should be split, how many folds should be used weather
+to repeat the process several times. For example, we might want to shuffle
+the data before splitting, stratify the splits so the distribution of targets
+are always represented in the individual folds, or consider certain grouping
+variables in the splitting process, so that samples from the same group are
+always in the same fold and not split across folds.</p>
+<p>So far, however, we didn’t specify anything in that regard and still the
+cross-validation was performed and we got five folds (see the five rows above
+in the scores dataframe). This is because the default behaviour in
+<a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> falls back to the scikit-learn defaults,
+which is a <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.StratifiedKFold.html#sklearn.model_selection.StratifiedKFold" title="(in scikit-learn v1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">StratifiedKFold</span></code></a> (with <code class="docutils literal notranslate"><span class="pre">k=5</span></code>)
+for classification and <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.KFold.html#sklearn.model_selection.KFold" title="(in scikit-learn v1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">KFold</span></code></a> (with <code class="docutils literal notranslate"><span class="pre">k=5</span></code>)
+for regression.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>These defaults will change when they are changed in scikit-learn as here
-Julearn just falls back to the scikit-learn defaults.</p>
+Julearn just uses scikit-learn’s defaults.</p>
 </div>
 <p>We can define the cross-validation splitting strategy ourselves by passing an
 int, str or cross-validation generator to the <code class="docutils literal notranslate"><span class="pre">cv</span></code> parameter of
-<a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>. The default described above resembles <code class="docutils literal notranslate"><span class="pre">cv=None</span></code>.
-the second options is to pass only an integer to <code class="docutils literal notranslate"><span class="pre">cv</span></code>. In that case still the
-same default splitting
-strategies will be used (<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.StratifiedKFold.html#sklearn.model_selection.StratifiedKFold">StratifiedKFold</a> for classification,
-<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.KFold.html#sklearn.model_selection.KFold">KFold</a> for regression), but the number of folds will be changed to the value
-of the provided integer (e.g. <code class="docutils literal notranslate"><span class="pre">cv=10</span></code>). To define the entire splitting
-strategy, one can pass all scikit-learn compatible splitters <a class="footnote-reference brackets" href="#id5" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a>
-to <code class="docutils literal notranslate"><span class="pre">cv</span></code>. However, Julearn provides a built-in set of possible splitters that
-can be found under <a class="reference internal" href="../api/model_selection.html#model-selection"><span class="std std-ref">Model Selection</span></a> (see more about them in
-<a class="reference internal" href="../selected_deeper_topics/cross_validation_splitter.html#cv-splitter"><span class="std std-ref">Cross-validation splitter</span></a>). The fourth option is to pass an
-iterable that yields the train and test indices for each split.</p>
-<p>Using the same pipeline (<code class="docutils literal notranslate"><span class="pre">creator</span></code>) as above, we can define a cv-splitter and
+<a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>. The default described above is <code class="docutils literal notranslate"><span class="pre">cv=None</span></code>.
+the second options is to pass only an integer to <code class="docutils literal notranslate"><span class="pre">cv</span></code>. In that case, the
+same default splitting strategies will be used
+(<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.StratifiedKFold.html#sklearn.model_selection.StratifiedKFold" title="(in scikit-learn v1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">StratifiedKFold</span></code></a> for classification,
+<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.KFold.html#sklearn.model_selection.KFold" title="(in scikit-learn v1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">KFold</span></code></a> for regression), but the number of
+folds will be changed to the value of the provided integer (e.g. <code class="docutils literal notranslate"><span class="pre">cv=10</span></code>).
+To define the entire splitting strategy, one can pass all scikit-learn
+compatible splitters <a class="reference external" href="https://scikit-learn.org/stable/modules/classes.html#module-sklearn.model_selection" title="(in scikit-learn v1.2)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sklearn.model_selection</span></code></a> to <code class="docutils literal notranslate"><span class="pre">cv</span></code>. However,
+Julearn provides a built-in set of additional splitters that can be found
+under <a class="reference internal" href="../api/model_selection.html#module-julearn.model_selection" title="julearn.model_selection"><code class="xref py py-mod docutils literal notranslate"><span class="pre">model_selection</span></code></a> (see more about them in <a class="reference internal" href="../selected_deeper_topics/cross_validation_splitter.html#cv-splitter"><span class="std std-ref">Cross-validation splitter</span></a>).
+The fourth option is to pass an iterable that yields the train and test
+indices for each split.</p>
+<p>Using the same pipeline creator as above, we can define a cv-splitter and
 pass it to <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> as follows:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">RepeatedStratifiedKFold</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">RepeatedStratifiedKFold</span>
 
 <span class="n">cv_splitter</span> <span class="o">=</span> <span class="n">RepeatedStratifiedKFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">n_repeats</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 
 <span class="n">scores</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
     <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
     <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+    <span class="n">X_types</span><span class="o">=</span><span class="n">X_types</span><span class="p">,</span>
     <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
     <span class="n">model</span><span class="o">=</span><span class="n">creator</span><span class="p">,</span>
-    <span class="n">cv</span><span class="o">=</span><span class="n">cv_splitter</span><span class="p">,</span>
     <span class="n">return_train_score</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">cv</span><span class="o">=</span><span class="n">cv_splitter</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
-<p>This will lead to a cross-validation being performed 10 times
-(5 folds x 2 repeats), so the returned <code class="docutils literal notranslate"><span class="pre">scores</span></code> dataframe will have 10 rows
-now. We set the <code class="docutils literal notranslate"><span class="pre">random_state</span></code> to an arbitrary integer to make the splitting
-of the data reproducible.</p>
-<a class="reference internal image-reference" href="../_images/scores_run_cv_splitter.png"><img alt="cv_splitter_scores" src="../_images/scores_run_cv_splitter.png" style="width: 600px;" /></a>
-</section>
-<section id="id2">
-<h3>Scoring<a class="headerlink" href="#id2" title="Permalink to this heading">#</a></h3>
-<p>Nice, we have a basic pipeline, with preprocessing of features and a model, we
-defined the splitting strategy for the cross-validation the way we want it and we
-had a look at our resulting train and test scores when performing
-the cross-validation. But what do these scores even mean?</p>
-<p>Same as for the kind of cv-splitter, <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> has a default
-assumption for the scorer to be used to evaluate the cross-validation, which is
-always the model’s default scorer. Remember, we used a support vector classifier
-with the <code class="docutils literal notranslate"><span class="pre">y</span></code> (target) variable being the species of the iris dataset
-(possible values: ‘setosa’, ‘versicolor’ or ‘virginica’). Therefore we have a
-multi-class classification (not to be confused with a multi-label
-classification!). Checking the scikit-learn documentation of a support vector
-classifier’s default scorer, we can see that this is the
-‘mean accuracy on the given test data and labels’ <a class="footnote-reference brackets" href="#id6" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></a>.</p>
-<p>With the <code class="docutils literal notranslate"><span class="pre">scoring</span></code> parameter of <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>, one can define
-the scoring function to be used. On top of the available scikit-learn <a class="reference external" href="https://scikit-learn.org/stable/modules/model_evaluation.html#">scoring</a>
-parameter options, julearn extends the
-functionality with more internal scorers and the possibility to define custom
-scorers. To see the available Julearn scorers, one can use the
-<a class="reference internal" href="../api/generated/julearn.scoring.list_scorers.html#julearn.scoring.list_scorers" title="julearn.scoring.list_scorers"><code class="xref py py-func docutils literal notranslate"><span class="pre">list_scorers()</span></code></a> function:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">julearn</span> <span class="kn">import</span> <span class="n">scoring</span>
-
-<span class="n">scoring</span><span class="o">.</span><span class="n">list_scorers</span><span class="p">()</span>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-06-13 10:27:27,048 - julearn - INFO - ==== Input Data ====
+2023-06-13 10:27:27,048 - julearn - INFO - Using dataframe as input
+2023-06-13 10:27:27,048 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2023-06-13 10:27:27,048 - julearn - INFO -      Target: species
+2023-06-13 10:27:27,048 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2023-06-13 10:27:27,048 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
+2023-06-13 10:27:27,049 - julearn - INFO - ====================
+2023-06-13 10:27:27,049 - julearn - INFO -
+2023-06-13 10:27:27,049 - julearn - INFO - = Model Parameters =
+2023-06-13 10:27:27,049 - julearn - INFO - ====================
+2023-06-13 10:27:27,050 - julearn - INFO -
+2023-06-13 10:27:27,050 - julearn - INFO - = Data Information =
+2023-06-13 10:27:27,050 - julearn - INFO -      Problem type: classification
+2023-06-13 10:27:27,050 - julearn - INFO -      Number of samples: 150
+2023-06-13 10:27:27,050 - julearn - INFO -      Number of features: 4
+2023-06-13 10:27:27,050 - julearn - INFO - ====================
+2023-06-13 10:27:27,050 - julearn - INFO -
+2023-06-13 10:27:27,050 - julearn - INFO -      Number of classes: 3
+2023-06-13 10:27:27,050 - julearn - INFO -      Target type: object
+2023-06-13 10:27:27,051 - julearn - INFO -      Class distributions: species
+setosa        50
+versicolor    50
+virginica     50
+Name: count, dtype: int64
+2023-06-13 10:27:27,051 - julearn - INFO - Using outer CV scheme RepeatedStratifiedKFold(n_repeats=2, n_splits=5, random_state=42)
+2023-06-13 10:27:27,051 - julearn - INFO - Multi-class classification problem detected #classes = 3.
 </pre></div>
 </div>
-<p>To use a Julearn scorer, one can pass the name of the scorer as a string to the
-<code class="docutils literal notranslate"><span class="pre">scoring</span></code> parameter of <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>. If multiple different
-scorers should be used, a list of strings can be passed. For example, if we were
-interested in the <code class="docutils literal notranslate"><span class="pre">accuracy</span></code> and the <code class="docutils literal notranslate"><span class="pre">f1</span></code> as scorer we could do the
-following:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">scoring</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;accuracy&quot;</span><span class="p">,</span> <span class="s2">&quot;f1_macro&quot;</span><span class="p">]</span>
+<p>This will repeat 2 times a 5-fold stratified cross-validation. So the
+returned <code class="docutils literal notranslate"><span class="pre">scores</span></code> dataframe will have 10 rows. We set the <code class="docutils literal notranslate"><span class="pre">random_state</span></code>
+to an arbitrary integer to make the splitting of the data reproducible.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>   fit_time  score_time  ...  fold                          cv_mdsum
+0  0.005732    0.003010  ...     0  7449876d309382acfef94df9d102aa76
+1  0.005422    0.003025  ...     1  7449876d309382acfef94df9d102aa76
+2  0.005451    0.003032  ...     2  7449876d309382acfef94df9d102aa76
+3  0.005409    0.003039  ...     3  7449876d309382acfef94df9d102aa76
+4  0.005323    0.003022  ...     4  7449876d309382acfef94df9d102aa76
+5  0.005398    0.002992  ...     0  7449876d309382acfef94df9d102aa76
+6  0.005369    0.003028  ...     1  7449876d309382acfef94df9d102aa76
+7  0.005410    0.003034  ...     2  7449876d309382acfef94df9d102aa76
+8  0.005427    0.003029  ...     3  7449876d309382acfef94df9d102aa76
+9  0.005414    0.003030  ...     4  7449876d309382acfef94df9d102aa76
+
+[10 rows x 9 columns]
+</pre></div>
+</div>
+</section>
+<section id="id1">
+<h3>Scoring<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h3>
+<p>Nice, we have a basic pipeline, with preprocessing of features and a model,
+we defined the splitting strategy for the cross-validation the way we want it
+and we had a look at our resulting train and test scores when performing
+the cross-validation. But what do these scores even mean?</p>
+<p>Same as for the kind of cv-splitter, <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> has a
+default assumption for the scorer to be used to evaluate the
+cross-validation, which is always the model’s default scorer. Remember, we
+used a support vector classifier with the <code class="docutils literal notranslate"><span class="pre">y</span></code> (target) variable being the
+species of the iris dataset (possible values: ‘setosa’, ‘versicolor’ or
+‘virginica’). Therefore we have a multi-class classification (not to be
+confused with a multi-label classification!). Checking scikit-learn’s
+documentation of a support vector classifier’s default scorer, we can see
+that this is the ‘mean accuracy on the given test data and labels’
+<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC.score" title="(in scikit-learn v1.2)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sklearn.svm.SVC.score()</span></code></a>.</p>
+<p>With the <code class="docutils literal notranslate"><span class="pre">scoring</span></code> parameter of <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>, one can
+define the scoring function to be used. On top of the available scikit-learn
+<a class="reference external" href="https://scikit-learn.org/stable/modules/classes.html#module-sklearn.metrics" title="(in scikit-learn v1.2)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sklearn.metrics</span></code></a> julearn extends the functionality with more internal
+scorers and the possibility to define custom scorers. To see the available
+Julearn scorers, one can use the <a class="reference internal" href="../api/generated/julearn.scoring.list_scorers.html#julearn.scoring.list_scorers" title="julearn.scoring.list_scorers"><code class="xref py py-func docutils literal notranslate"><span class="pre">list_scorers()</span></code></a> function:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">julearn</span> <span class="kn">import</span> <span class="n">scoring</span>
+<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>  <span class="c1"># for nice printing</span>
+
+<span class="n">pprint</span><span class="p">(</span><span class="n">scoring</span><span class="o">.</span><span class="n">list_scorers</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;explained_variance&#39;,
+ &#39;r2&#39;,
+ &#39;max_error&#39;,
+ &#39;matthews_corrcoef&#39;,
+ &#39;neg_median_absolute_error&#39;,
+ &#39;neg_mean_absolute_error&#39;,
+ &#39;neg_mean_absolute_percentage_error&#39;,
+ &#39;neg_mean_squared_error&#39;,
+ &#39;neg_mean_squared_log_error&#39;,
+ &#39;neg_root_mean_squared_error&#39;,
+ &#39;neg_mean_poisson_deviance&#39;,
+ &#39;neg_mean_gamma_deviance&#39;,
+ &#39;accuracy&#39;,
+ &#39;top_k_accuracy&#39;,
+ &#39;roc_auc&#39;,
+ &#39;roc_auc_ovr&#39;,
+ &#39;roc_auc_ovo&#39;,
+ &#39;roc_auc_ovr_weighted&#39;,
+ &#39;roc_auc_ovo_weighted&#39;,
+ &#39;balanced_accuracy&#39;,
+ &#39;average_precision&#39;,
+ &#39;neg_log_loss&#39;,
+ &#39;neg_brier_score&#39;,
+ &#39;positive_likelihood_ratio&#39;,
+ &#39;neg_negative_likelihood_ratio&#39;,
+ &#39;adjusted_rand_score&#39;,
+ &#39;rand_score&#39;,
+ &#39;homogeneity_score&#39;,
+ &#39;completeness_score&#39;,
+ &#39;v_measure_score&#39;,
+ &#39;mutual_info_score&#39;,
+ &#39;adjusted_mutual_info_score&#39;,
+ &#39;normalized_mutual_info_score&#39;,
+ &#39;fowlkes_mallows_score&#39;,
+ &#39;precision&#39;,
+ &#39;precision_macro&#39;,
+ &#39;precision_micro&#39;,
+ &#39;precision_samples&#39;,
+ &#39;precision_weighted&#39;,
+ &#39;recall&#39;,
+ &#39;recall_macro&#39;,
+ &#39;recall_micro&#39;,
+ &#39;recall_samples&#39;,
+ &#39;recall_weighted&#39;,
+ &#39;f1&#39;,
+ &#39;f1_macro&#39;,
+ &#39;f1_micro&#39;,
+ &#39;f1_samples&#39;,
+ &#39;f1_weighted&#39;,
+ &#39;jaccard&#39;,
+ &#39;jaccard_macro&#39;,
+ &#39;jaccard_micro&#39;,
+ &#39;jaccard_samples&#39;,
+ &#39;jaccard_weighted&#39;,
+ &#39;r2_corr&#39;,
+ &#39;pearsonr&#39;]
+</pre></div>
+</div>
+<p>To use a Julearn scorer, one can pass the name of the scorer as a string to
+the <code class="docutils literal notranslate"><span class="pre">scoring</span></code> parameter of <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>. If multiple
+different scorers should be used, a list of strings can be passed. For
+example, if we were interested in the <code class="docutils literal notranslate"><span class="pre">accuracy</span></code> and the <code class="docutils literal notranslate"><span class="pre">f1</span></code> scores we
+could do the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">scoring</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;accuracy&quot;</span><span class="p">,</span> <span class="s2">&quot;f1_macro&quot;</span><span class="p">]</span>
 
 <span class="n">scores</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
     <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
     <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+    <span class="n">X_types</span><span class="o">=</span><span class="n">X_types</span><span class="p">,</span>
     <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
     <span class="n">model</span><span class="o">=</span><span class="n">creator</span><span class="p">,</span>
-    <span class="n">cv</span><span class="o">=</span><span class="n">cv_splitter</span><span class="p">,</span>
     <span class="n">return_train_score</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">cv</span><span class="o">=</span><span class="n">cv_splitter</span><span class="p">,</span>
     <span class="n">scoring</span><span class="o">=</span><span class="n">scoring</span><span class="p">,</span>
 <span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-06-13 10:27:27,187 - julearn - INFO - ==== Input Data ====
+2023-06-13 10:27:27,187 - julearn - INFO - Using dataframe as input
+2023-06-13 10:27:27,187 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2023-06-13 10:27:27,187 - julearn - INFO -      Target: species
+2023-06-13 10:27:27,187 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2023-06-13 10:27:27,187 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
+2023-06-13 10:27:27,188 - julearn - INFO - ====================
+2023-06-13 10:27:27,188 - julearn - INFO -
+2023-06-13 10:27:27,189 - julearn - INFO - = Model Parameters =
+2023-06-13 10:27:27,189 - julearn - INFO - ====================
+2023-06-13 10:27:27,189 - julearn - INFO -
+2023-06-13 10:27:27,189 - julearn - INFO - = Data Information =
+2023-06-13 10:27:27,189 - julearn - INFO -      Problem type: classification
+2023-06-13 10:27:27,189 - julearn - INFO -      Number of samples: 150
+2023-06-13 10:27:27,189 - julearn - INFO -      Number of features: 4
+2023-06-13 10:27:27,189 - julearn - INFO - ====================
+2023-06-13 10:27:27,189 - julearn - INFO -
+2023-06-13 10:27:27,189 - julearn - INFO -      Number of classes: 3
+2023-06-13 10:27:27,189 - julearn - INFO -      Target type: object
+2023-06-13 10:27:27,190 - julearn - INFO -      Class distributions: species
+setosa        50
+versicolor    50
+virginica     50
+Name: count, dtype: int64
+2023-06-13 10:27:27,190 - julearn - INFO - Using outer CV scheme RepeatedStratifiedKFold(n_repeats=2, n_splits=5, random_state=42)
+2023-06-13 10:27:27,190 - julearn - INFO - Multi-class classification problem detected #classes = 3.
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">scores</span></code> dataframe will now have train- and test-score columns for both
 scorers:</p>
-<a class="reference internal image-reference" href="../_images/multiple_scorers_run_cv.png"><img alt="multiple_scorers" src="../_images/multiple_scorers_run_cv.png" style="width: 600px;" /></a>
-</section>
-</section>
-<section id="basic-model-comparisons-with-julearn">
-<h2>Basic model comparisons with Julearn<a class="headerlink" href="#basic-model-comparisons-with-julearn" title="Permalink to this heading">#</a></h2>
-<p>The example model seems to perform decently well. But what if we want to compare
-the performance of different models, for example when using different learning
-algorithms?</p>
-<p>To statistically compare different models, Julearn provides a built-in
-corrected t-test. To see how to apply it, we will first build three different
-models, each with another learning algorithm and then statistically compare them.</p>
-<section id="running-different-models">
-<h3>Running different models<a class="headerlink" href="#running-different-models" title="Permalink to this heading">#</a></h3>
-<p>To perform a binary classification (and not a multi-class classification) we
-will switch to the <code class="docutils literal notranslate"><span class="pre">breast_cancer</span></code> dataset from scikit-learn <a class="footnote-reference brackets" href="#id7" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></a> as an
-example. The to be predicted target states if the cancer is malignant or benign.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_breast_cancer</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>   fit_time  score_time  ...  fold                          cv_mdsum
+0  0.005482    0.004332  ...     0  7449876d309382acfef94df9d102aa76
+1  0.005426    0.004253  ...     1  7449876d309382acfef94df9d102aa76
+2  0.005474    0.004290  ...     2  7449876d309382acfef94df9d102aa76
+3  0.005445    0.004296  ...     3  7449876d309382acfef94df9d102aa76
+4  0.005366    0.004190  ...     4  7449876d309382acfef94df9d102aa76
+5  0.005393    0.004276  ...     0  7449876d309382acfef94df9d102aa76
+6  0.005367    0.004268  ...     1  7449876d309382acfef94df9d102aa76
+7  0.005441    0.004217  ...     2  7449876d309382acfef94df9d102aa76
+8  0.005445    0.004214  ...     3  7449876d309382acfef94df9d102aa76
+9  0.005376    0.004220  ...     4  7449876d309382acfef94df9d102aa76
 
-<span class="n">data</span> <span class="o">=</span> <span class="n">load_breast_cancer</span><span class="p">()</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">feature_names</span><span class="p">)</span>
-<span class="n">df</span><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">target</span>
-
-<span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-<span class="n">y</span> <span class="o">=</span> <span class="s2">&quot;target&quot;</span>
+[10 rows x 11 columns]
 </pre></div>
 </div>
-<p>We start by defining the same cv_splitter as above and two scorers:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cv_splitter</span> <span class="o">=</span> <span class="n">RepeatedStratifiedKFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">n_repeats</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
-
-<span class="n">scoring</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;accuracy&quot;</span><span class="p">,</span> <span class="s2">&quot;roc_auc&quot;</span><span class="p">]</span>
-</pre></div>
-</div>
-<p>We will use the same pipeline as above, but this time without the
-<a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> and instead define the pipeline directly in
-<a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>. We use three different learning algorithms that
-we want to compare and use the default hyperparameters for each of them.</p>
-<p><strong>Model 1</strong>: default SVM.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">scores1</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
-    <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
-    <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
-    <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
-    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;svm&quot;</span><span class="p">,</span>
-    <span class="n">preprocess</span><span class="o">=</span><span class="s2">&quot;zscore&quot;</span><span class="p">,</span>
-    <span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;classification&quot;</span><span class="p">,</span>
-    <span class="n">scoring</span><span class="o">=</span><span class="n">scoring</span><span class="p">,</span>
-    <span class="n">cv</span><span class="o">=</span><span class="n">cv_splitter</span><span class="p">,</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-<p><strong>Model 2</strong>: default Random Forest.</p>
-<p>As we can see in <a class="reference internal" href="../available_pipeline_steps.html#available-models"><span class="std std-ref">Models (Estimators)</span></a>, we can specify to use a random forest
-by passing the <code class="docutils literal notranslate"><span class="pre">rf</span></code> string to the <code class="docutils literal notranslate"><span class="pre">model</span></code> parameter of
-<a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">scores2</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
-    <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
-    <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
-    <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
-    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;rf&quot;</span><span class="p">,</span>
-    <span class="n">preprocess</span><span class="o">=</span><span class="s2">&quot;zscore&quot;</span><span class="p">,</span>
-    <span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;classification&quot;</span><span class="p">,</span>
-    <span class="n">scoring</span><span class="o">=</span><span class="n">scoring</span><span class="p">,</span>
-    <span class="n">cv</span><span class="o">=</span><span class="n">cv_splitter</span><span class="p">,</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-<p><strong>Model 3</strong>: default Logistic Regression.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">scores3</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
-    <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
-    <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
-    <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
-    <span class="n">model</span><span class="o">=</span><span class="s2">&quot;logit&quot;</span><span class="p">,</span>
-    <span class="n">preprocess</span><span class="o">=</span><span class="s2">&quot;zscore&quot;</span><span class="p">,</span>
-    <span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;classification&quot;</span><span class="p">,</span>
-    <span class="n">scoring</span><span class="o">=</span><span class="n">scoring</span><span class="p">,</span>
-    <span class="n">cv</span><span class="o">=</span><span class="n">cv_splitter</span><span class="p">,</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-<p>We will add a column to each scores dataframes to be able to distinguish the
-different models later on.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">scores1</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;svm&quot;</span>
-<span class="n">scores2</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;rf&quot;</span>
-<span class="n">scores3</span><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;logit&quot;</span>
-</pre></div>
-</div>
-</section>
-<section id="statistically-compare-the-models">
-<h3>Statistically compare the models<a class="headerlink" href="#statistically-compare-the-models" title="Permalink to this heading">#</a></h3>
-<p>Comparing the performance of these three models is now as easy as
-the following one-liner:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">julearn.stats.corrected_ttest</span> <span class="kn">import</span> <span class="n">corrected_ttest</span>
-
-<span class="n">stats_df</span> <span class="o">=</span> <span class="n">corrected_ttest</span><span class="p">(</span><span class="n">scores1</span><span class="p">,</span> <span class="n">scores2</span><span class="p">,</span> <span class="n">scores3</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">stats_df</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>This gives us a dataframe with the corrected t-test results for each pairwise
-comparison of the three models’ fit_time, score_time and test scores:</p>
-<a class="reference internal image-reference" href="../_images/corrected_ttest.png"><img alt="corrected_ttest" src="../_images/corrected_ttest.png" style="width: 600px;" /></a>
-<p>We can see, that none of the models performed better with respect to
-neither accuracy nor roc_auc. However, the Random Forest was slower than both
-the SVM and the Logistic Regression.</p>
-</section>
-<section id="visualize-the-models">
-<h3>Visualize the models<a class="headerlink" href="#visualize-the-models" title="Permalink to this heading">#</a></h3>
-<p>Visualizations can help to get a better intuitive understanding of the
-differences between the models. To get a better overview of the performances
-of our three models, we can make use of
-Julearn’s visualization tool to plot the scores in an interactive manner. As
-visualizations are not part of the core functionality of Julearn, you will need
-to first manually <strong>install the additional following dependencies</strong> inside your
-respective environment, using either pip or conda:</p>
-<p>Using pip:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>panel
-pip<span class="w"> </span>install<span class="w"> </span>bokeh
-</pre></div>
-</div>
-<p>Using conda:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>panel
-conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>bokeh<span class="w"> </span>bokeh
-</pre></div>
-</div>
-<p>From here we can create the interactive plot. Interactive, because you can
-choose the models to be displayed and the scorer to be plotted.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">julearn.viz</span> <span class="kn">import</span> <span class="n">plot_scores</span>
-
-<span class="n">panel</span> <span class="o">=</span> <span class="n">plot_scores</span><span class="p">(</span><span class="n">scores1</span><span class="p">,</span> <span class="n">scores2</span><span class="p">,</span> <span class="n">scores3</span><span class="p">)</span>
-<span class="n">panel</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-<p>This is what your plot could look like:</p>
-<a class="reference internal image-reference" href="../_images/plot_scores.png"><img alt="plot_scores" src="../_images/plot_scores.png" style="width: 600px;" /></a>
-<p>Well done, you made it until here and are now ready to dive into
-<a class="reference internal" href="../selected_deeper_topics/index.html#selected-deeper-topics"><span class="std std-ref">Selected deeper topics</span></a>!
-Maybe you are curious to learn <a class="reference internal" href="../selected_deeper_topics/confound_removal.html#confound-removal"><span class="std std-ref">Cross-validation consistent Confound Removal</span></a> or want to learn more
-about <a class="reference internal" href="../selected_deeper_topics/model_inspect.html#model-inspection"><span class="std std-ref">Inspecting Models</span></a>.</p>
-<aside class="topic">
-<p class="topic-title">References:</p>
-<aside class="footnote-list brackets">
-<aside class="footnote brackets" id="id5" role="note">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">4</a><span class="fn-bracket">]</span></span>
-<p><a class="reference external" href="https://scikit-learn.org/stable/modules/classes.html#module-sklearn.model_selection">https://scikit-learn.org/stable/modules/classes.html#module-sklearn.model_selection</a></p>
-</aside>
-<aside class="footnote brackets" id="id6" role="note">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">5</a><span class="fn-bracket">]</span></span>
-<p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC.score">https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC.score</a></p>
-</aside>
-<aside class="footnote brackets" id="id7" role="note">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id4">6</a><span class="fn-bracket">]</span></span>
-<p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_breast_cancer.html">https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_breast_cancer.html</a></p>
-</aside>
-</aside>
-</aside>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.526 seconds)</p>
 </section>
 </section>
 </section>
@@ -732,12 +891,12 @@ about <a class="reference internal" href="../selected_deeper_topics/model_inspec
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="../selected_deeper_topics/index.html">
+          <a class="next-page" href="model_comparison.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title"><span class="section-number">3. </span>Selected deeper topics</div>
+                <div class="title"><span class="section-number">2.5. </span>Model comparison</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -790,13 +949,7 @@ about <a class="reference internal" href="../selected_deeper_topics/model_inspec
 </li>
 <li><a class="reference internal" href="#cross-validation-types-and-scoring">Cross-validation types and scoring</a><ul>
 <li><a class="reference internal" href="#cross-validation-splitters">Cross-validation splitters</a></li>
-<li><a class="reference internal" href="#id2">Scoring</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#basic-model-comparisons-with-julearn">Basic model comparisons with Julearn</a><ul>
-<li><a class="reference internal" href="#running-different-models">Running different models</a></li>
-<li><a class="reference internal" href="#statistically-compare-the-models">Statistically compare the models</a></li>
-<li><a class="reference internal" href="#visualize-the-models">Visualize the models</a></li>
+<li><a class="reference internal" href="#id1">Scoring</a></li>
 </ul>
 </li>
 </ul>

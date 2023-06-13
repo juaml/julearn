@@ -170,6 +170,7 @@
 <li class="toctree-l2"><a class="reference internal" href="data.html">2.2. Data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pipeline.html">2.3. Pipeline</a></li>
 <li class="toctree-l2"><a class="reference internal" href="model_evaluation.html">2.4. Model evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_comparison.html">2.5. Model comparison</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../selected_deeper_topics/index.html">3. Selected deeper topics</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -179,6 +180,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/cross_validation_splitter.html">3.4. Cross-validation splitter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/stacked_models.html">3.5. Stacking Models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/CBPM.html">3.6. Connectome-based Predictive Modeling (CBPM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/target_transformers.html">3.7. Applying preprocessing to the target</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../available_pipeline_steps.html">4. Overview of available Pipeline Steps</a></li>
@@ -374,17 +376,19 @@
           <section id="what-you-really-need-to-know">
 <span id="need-to-know"></span><h1><span class="section-number">2. </span>What you really need to know<a class="headerlink" href="#what-you-really-need-to-know" title="Permalink to this heading">#</a></h1>
 <p>The backbone of Julearn is the function <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>, which
-allows you to do all the <em>magic</em>. All important information needed for your
-machine learning workflow goes into this function, specified via its parameters.</p>
+allows you to do all the <em>magic</em>. All important information needed to estimate
+your machine learning workflow’s performance goes into this function, specified
+via its parameters.</p>
 <p>But why is basically everything based on one <cite>cross_validation</cite> function? Well,
-because doing proper cross-validation is the backbone of machine learning. To
-understand why, reading the sub-chapter <a class="reference external" href="https://scikit-learn.org/stable/modules/cross_validation.html#cross-validation" title="(in scikit-learn v1.2)"><span>Cross-validation: evaluating estimator performance</span></a> ist a good starting
-point.</p>
-<p>Once you are familiar with the importance of cross-validation, to see what is
-needed to setup a basic workflow using Julearn’s <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>,
-function, please follow along the other sub-chapters of this chapter.
-There you can find out more about the data input, a basic pipeline and
-basic model evaluation steps:</p>
+because doing proper cross-validation is of utmost importance in machine
+learning and it is not as easy as it might seem at first glance. If you want to
+understand why, reading the sub-chapter <a class="reference external" href="https://scikit-learn.org/stable/modules/cross_validation.html#cross-validation" title="(in scikit-learn v1.2)"><span>Cross-validation: evaluating estimator performance</span></a> ist a good
+starting point.</p>
+<p>Once you are familiar with the basics of <em>cross-validation</em>, you can follow
+along the other sub-chapters to learn how to setup a basic workflow using
+Julearn’s <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>. There you can find out more about the
+required data, building a basic pipeline and how to evaluate your model’s
+performance.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="cross_validation.html">2.1. Why cross validation?</a><ul>
@@ -403,22 +407,25 @@ basic model evaluation steps:</p>
 <li class="toctree-l2"><a class="reference internal" href="pipeline.html#pipeline-specification-made-easy-with-the-pipelinecreator">Pipeline specification made easy with the <code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="pipeline.html#how-to-specify-hyperparameters">How to specify hyperparameters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pipeline.html#applying-preprocessing-only-to-certain-feature-types">Applying preprocessing only to certain feature types</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pipeline.html#applying-preprocessing-to-the-target">Applying preprocessing to the target</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="model_evaluation.html">2.4. Model evaluation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="model_evaluation.html#the-returns-of-run-cross-validation">The returns of <code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a></li>
 <li class="toctree-l2"><a class="reference internal" href="model_evaluation.html#cross-validation-types-and-scoring">Cross-validation types and scoring</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model_evaluation.html#basic-model-comparisons-with-julearn">Basic model comparisons with Julearn</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="model_comparison.html">2.5. Model comparison</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="model_comparison.html#statistically-compare-the-models">Statistically compare the models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_comparison.html#visualize-the-models">Visualize the models</a></li>
 </ul>
 </li>
 </ul>
 </div>
-<p>If you are just interested in seeing all parameters of <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>,
-click on the function link to have a look at all its parameters in the <cite>api</cite>.</p>
+<p>If you are just interested in seeing all parameters of
+<a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>, click on the function link to have a look at all
+its parameters in the <a class="reference internal" href="../api/index.html#api"><span class="std std-ref">Reference</span></a>.</p>
 <p>If you are already familiar with how to set up a basic workflow using Julearn
-and want to do more fancy stuff, go to <a class="reference internal" href="../selected_deeper_topics/index.html#selected-deeper-topics"><span class="std std-ref">Selected deeper topics</span></a> to pick
-and select specific topics.</p>
+and want to do more fancy stuff, go to <a class="reference internal" href="../selected_deeper_topics/index.html#selected-deeper-topics"><span class="std std-ref">Selected deeper topics</span></a>.</p>
 </section>
 
         </article>

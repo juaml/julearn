@@ -170,6 +170,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/data.html">2.2. Data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/pipeline.html">2.3. Pipeline</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/model_evaluation.html">2.4. Model evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/model_comparison.html">2.5. Model comparison</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../selected_deeper_topics/index.html">3. Selected deeper topics</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -179,6 +180,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/cross_validation_splitter.html">3.4. Cross-validation splitter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/stacked_models.html">3.5. Stacking Models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/CBPM.html">3.6. Connectome-based Predictive Modeling (CBPM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/target_transformers.html">3.7. Applying preprocessing to the target</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../available_pipeline_steps.html">4. Overview of available Pipeline Steps</a></li>
@@ -400,13 +402,13 @@ with and without confound removal using a Random Forest classifier.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-05-26 15:08:23,453 - julearn - INFO - ===== Lib Versions =====
-2023-05-26 15:08:23,453 - julearn - INFO - numpy: 1.23.5
-2023-05-26 15:08:23,453 - julearn - INFO - scipy: 1.10.1
-2023-05-26 15:08:23,454 - julearn - INFO - sklearn: 1.2.2
-2023-05-26 15:08:23,454 - julearn - INFO - pandas: 1.5.3
-2023-05-26 15:08:23,454 - julearn - INFO - julearn: 0.3.0.dev195
-2023-05-26 15:08:23,454 - julearn - INFO - ========================
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-06-13 10:27:18,880 - julearn - INFO - ===== Lib Versions =====
+2023-06-13 10:27:18,880 - julearn - INFO - numpy: 1.24.3
+2023-06-13 10:27:18,880 - julearn - INFO - scipy: 1.10.1
+2023-06-13 10:27:18,880 - julearn - INFO - sklearn: 1.2.2
+2023-06-13 10:27:18,880 - julearn - INFO - pandas: 2.0.2
+2023-06-13 10:27:18,880 - julearn - INFO - julearn: 0.3.0.dev204
+2023-06-13 10:27:18,880 - julearn - INFO - ========================
 </pre></div>
 </div>
 <p>Load the iris data from seaborn</p>
@@ -457,39 +459,40 @@ Note: confounds by default</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-05-26 15:08:23,457 - julearn - INFO - Setting random seed to 200
-2023-05-26 15:08:23,458 - julearn - INFO - ==== Input Data ====
-2023-05-26 15:08:23,458 - julearn - INFO - Using dataframe as input
-2023-05-26 15:08:23,458 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2023-05-26 15:08:23,458 - julearn - INFO -      Target: species
-2023-05-26 15:08:23,458 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2023-05-26 15:08:23,458 - julearn - INFO -      X_types:{}
-2023-05-26 15:08:23,458 - julearn - WARNING - The following columns are not defined in X_types: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]. They will be treated as continuous.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-06-13 10:27:18,884 - julearn - INFO - Setting random seed to 200
+2023-06-13 10:27:18,884 - julearn - INFO - ==== Input Data ====
+2023-06-13 10:27:18,884 - julearn - INFO - Using dataframe as input
+2023-06-13 10:27:18,884 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2023-06-13 10:27:18,884 - julearn - INFO -      Target: species
+2023-06-13 10:27:18,884 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2023-06-13 10:27:18,884 - julearn - INFO -      X_types:{}
+2023-06-13 10:27:18,884 - julearn - WARNING - The following columns are not defined in X_types: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]. They will be treated as continuous.
 /home/runner/work/julearn/julearn/julearn/utils/logging.py:238: RuntimeWarning: The following columns are not defined in X_types: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]. They will be treated as continuous.
   warn(msg, category=category)
-2023-05-26 15:08:23,459 - julearn - INFO - ====================
-2023-05-26 15:08:23,459 - julearn - INFO -
-2023-05-26 15:08:23,459 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2023-05-26 15:08:23,459 - julearn - INFO - Step added
-2023-05-26 15:08:23,459 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2023-05-26 15:08:23,459 - julearn - INFO - Step added
-2023-05-26 15:08:23,460 - julearn - INFO - = Model Parameters =
-2023-05-26 15:08:23,460 - julearn - INFO - ====================
-2023-05-26 15:08:23,460 - julearn - INFO -
-2023-05-26 15:08:23,460 - julearn - INFO - = Data Information =
-2023-05-26 15:08:23,460 - julearn - INFO -      Problem type: classification
-2023-05-26 15:08:23,460 - julearn - INFO -      Number of samples: 100
-2023-05-26 15:08:23,460 - julearn - INFO -      Number of features: 3
-2023-05-26 15:08:23,460 - julearn - INFO - ====================
-2023-05-26 15:08:23,460 - julearn - INFO -
-2023-05-26 15:08:23,460 - julearn - INFO -      Number of classes: 2
-2023-05-26 15:08:23,461 - julearn - INFO -      Target type: object
-2023-05-26 15:08:23,461 - julearn - INFO -      Class distributions: versicolor    50
+2023-06-13 10:27:18,885 - julearn - INFO - ====================
+2023-06-13 10:27:18,885 - julearn - INFO -
+2023-06-13 10:27:18,885 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-06-13 10:27:18,885 - julearn - INFO - Step added
+2023-06-13 10:27:18,886 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-06-13 10:27:18,886 - julearn - INFO - Step added
+2023-06-13 10:27:18,886 - julearn - INFO - = Model Parameters =
+2023-06-13 10:27:18,886 - julearn - INFO - ====================
+2023-06-13 10:27:18,886 - julearn - INFO -
+2023-06-13 10:27:18,887 - julearn - INFO - = Data Information =
+2023-06-13 10:27:18,887 - julearn - INFO -      Problem type: classification
+2023-06-13 10:27:18,887 - julearn - INFO -      Number of samples: 100
+2023-06-13 10:27:18,887 - julearn - INFO -      Number of features: 3
+2023-06-13 10:27:18,887 - julearn - INFO - ====================
+2023-06-13 10:27:18,887 - julearn - INFO -
+2023-06-13 10:27:18,887 - julearn - INFO -      Number of classes: 2
+2023-06-13 10:27:18,887 - julearn - INFO -      Target type: object
+2023-06-13 10:27:18,888 - julearn - INFO -      Class distributions: species
+versicolor    50
 virginica     50
-Name: species, dtype: int64
-2023-05-26 15:08:23,462 - julearn - INFO - Using outer CV scheme StratifiedBootstrap(n_splits=20, random_state=42, test_size=0.3,
+Name: count, dtype: int64
+2023-06-13 10:27:18,888 - julearn - INFO - Using outer CV scheme StratifiedBootstrap(n_splits=20, random_state=42, test_size=0.3,
           train_size=None)
-2023-05-26 15:08:23,462 - julearn - INFO - Binary classification problem detected.
+2023-06-13 10:27:18,888 - julearn - INFO - Binary classification problem detected.
 </pre></div>
 </div>
 <p>Next, we train a model after performing confound removal on the features
@@ -529,39 +532,40 @@ the random forest will only be trained using “features”.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-05-26 15:08:26,518 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;confound&#39;, &#39;features&#39;}; pattern=(?:__:type:__confound|__:type:__features)&gt;
-2023-05-26 15:08:26,518 - julearn - INFO - Step added
-2023-05-26 15:08:26,518 - julearn - INFO - Adding step confound_removal that applies to ColumnTypes&lt;types={&#39;features&#39;}; pattern=(?:__:type:__features)&gt;
-2023-05-26 15:08:26,518 - julearn - INFO - Setting hyperparameter confounds = confound
-2023-05-26 15:08:26,519 - julearn - INFO - Step added
-2023-05-26 15:08:26,519 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={&#39;features&#39;}; pattern=(?:__:type:__features)&gt;
-2023-05-26 15:08:26,519 - julearn - INFO - Step added
-2023-05-26 15:08:26,519 - julearn - INFO - Setting random seed to 200
-2023-05-26 15:08:26,519 - julearn - INFO - ==== Input Data ====
-2023-05-26 15:08:26,519 - julearn - INFO - Using dataframe as input
-2023-05-26 15:08:26,519 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2023-05-26 15:08:26,519 - julearn - INFO -      Target: species
-2023-05-26 15:08:26,519 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2023-05-26 15:08:26,519 - julearn - INFO -      X_types:{&#39;features&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;], &#39;confound&#39;: [&#39;petal_width&#39;]}
-2023-05-26 15:08:26,520 - julearn - INFO - ====================
-2023-05-26 15:08:26,520 - julearn - INFO -
-2023-05-26 15:08:26,522 - julearn - INFO - = Model Parameters =
-2023-05-26 15:08:26,522 - julearn - INFO - ====================
-2023-05-26 15:08:26,522 - julearn - INFO -
-2023-05-26 15:08:26,522 - julearn - INFO - = Data Information =
-2023-05-26 15:08:26,522 - julearn - INFO -      Problem type: classification
-2023-05-26 15:08:26,522 - julearn - INFO -      Number of samples: 100
-2023-05-26 15:08:26,522 - julearn - INFO -      Number of features: 4
-2023-05-26 15:08:26,523 - julearn - INFO - ====================
-2023-05-26 15:08:26,523 - julearn - INFO -
-2023-05-26 15:08:26,523 - julearn - INFO -      Number of classes: 2
-2023-05-26 15:08:26,523 - julearn - INFO -      Target type: object
-2023-05-26 15:08:26,523 - julearn - INFO -      Class distributions: versicolor    50
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-06-13 10:27:21,746 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;confound&#39;, &#39;features&#39;}; pattern=(?:__:type:__confound|__:type:__features)&gt;
+2023-06-13 10:27:21,747 - julearn - INFO - Step added
+2023-06-13 10:27:21,747 - julearn - INFO - Adding step confound_removal that applies to ColumnTypes&lt;types={&#39;features&#39;}; pattern=(?:__:type:__features)&gt;
+2023-06-13 10:27:21,747 - julearn - INFO - Setting hyperparameter confounds = confound
+2023-06-13 10:27:21,747 - julearn - INFO - Step added
+2023-06-13 10:27:21,747 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={&#39;features&#39;}; pattern=(?:__:type:__features)&gt;
+2023-06-13 10:27:21,747 - julearn - INFO - Step added
+2023-06-13 10:27:21,747 - julearn - INFO - Setting random seed to 200
+2023-06-13 10:27:21,747 - julearn - INFO - ==== Input Data ====
+2023-06-13 10:27:21,747 - julearn - INFO - Using dataframe as input
+2023-06-13 10:27:21,748 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2023-06-13 10:27:21,748 - julearn - INFO -      Target: species
+2023-06-13 10:27:21,748 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2023-06-13 10:27:21,748 - julearn - INFO -      X_types:{&#39;features&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;], &#39;confound&#39;: [&#39;petal_width&#39;]}
+2023-06-13 10:27:21,749 - julearn - INFO - ====================
+2023-06-13 10:27:21,749 - julearn - INFO -
+2023-06-13 10:27:21,751 - julearn - INFO - = Model Parameters =
+2023-06-13 10:27:21,751 - julearn - INFO - ====================
+2023-06-13 10:27:21,751 - julearn - INFO -
+2023-06-13 10:27:21,751 - julearn - INFO - = Data Information =
+2023-06-13 10:27:21,751 - julearn - INFO -      Problem type: classification
+2023-06-13 10:27:21,751 - julearn - INFO -      Number of samples: 100
+2023-06-13 10:27:21,751 - julearn - INFO -      Number of features: 4
+2023-06-13 10:27:21,751 - julearn - INFO - ====================
+2023-06-13 10:27:21,751 - julearn - INFO -
+2023-06-13 10:27:21,751 - julearn - INFO -      Number of classes: 2
+2023-06-13 10:27:21,751 - julearn - INFO -      Target type: object
+2023-06-13 10:27:21,752 - julearn - INFO -      Class distributions: species
+versicolor    50
 virginica     50
-Name: species, dtype: int64
-2023-05-26 15:08:26,524 - julearn - INFO - Using outer CV scheme StratifiedBootstrap(n_splits=20, random_state=42, test_size=0.3,
+Name: count, dtype: int64
+2023-06-13 10:27:21,752 - julearn - INFO - Using outer CV scheme StratifiedBootstrap(n_splits=20, random_state=42, test_size=0.3,
           train_size=None)
-2023-05-26 15:08:26,524 - julearn - INFO - Binary classification problem detected.
+2023-06-13 10:27:21,752 - julearn - INFO - Binary classification problem detected.
 </pre></div>
 </div>
 <p>Now we can compare the accuracies. We can combine the two outputs as
@@ -637,7 +641,7 @@ fold.</p>
             <span class="s2">&quot;fold&quot;</span><span class="p">:</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">i_fold</span></a><span class="p">,</span>
         <span class="p">}</span>
     <span class="p">)</span>
-    <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ncr_fi</span></a><span class="o">.</span><span class="n">append</span><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">this_importances</span></a><span class="p">)</span>
+    <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ncr_fi</span><span class="o">.</span><span class="n">append</span></a><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">this_importances</span></a><span class="p">)</span>
 <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ncr_fi</span></a> <span class="o">=</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.concat.html#pandas.concat" title="pandas.concat" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-function"><span class="n">pd</span><span class="o">.</span><span class="n">concat</span></a><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ncr_fi</span></a><span class="p">)</span>
 
 <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cr_fi</span></a> <span class="o">=</span> <span class="p">[]</span>
@@ -650,7 +654,7 @@ fold.</p>
             <span class="s2">&quot;fold&quot;</span><span class="p">:</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">i_fold</span></a><span class="p">,</span>
         <span class="p">}</span>
     <span class="p">)</span>
-    <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cr_fi</span></a><span class="o">.</span><span class="n">append</span><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">this_importances</span></a><span class="p">)</span>
+    <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cr_fi</span><span class="o">.</span><span class="n">append</span></a><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">this_importances</span></a><span class="p">)</span>
 <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cr_fi</span></a> <span class="o">=</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.concat.html#pandas.concat" title="pandas.concat" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-function"><span class="n">pd</span><span class="o">.</span><span class="n">concat</span></a><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cr_fi</span></a><span class="p">)</span>
 
 <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">feature_importance</span></a> <span class="o">=</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.concat.html#pandas.concat" title="pandas.concat" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-function"><span class="n">pd</span><span class="o">.</span><span class="n">concat</span></a><span class="p">([</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cr_fi</span></a><span class="p">,</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ncr_fi</span></a><span class="p">])</span>
@@ -682,7 +686,7 @@ a difference in importances.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_confound_removal_classification_004.png" srcset="../../_images/sphx_glr_plot_confound_removal_classification_004.png" alt="plot confound removal classification" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  7.902 seconds)</p>
+<img src="../../_images/sphx_glr_plot_confound_removal_classification_004.png" srcset="../../_images/sphx_glr_plot_confound_removal_classification_004.png" alt="plot confound removal classification" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  7.363 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-04-confounds-plot-confound-removal-classification-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/431544dd8767c79de542561d3d866115/plot_confound_removal_classification.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_confound_removal_classification.py</span></code></a></p>

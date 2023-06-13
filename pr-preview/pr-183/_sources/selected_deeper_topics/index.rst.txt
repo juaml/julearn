@@ -16,4 +16,5 @@ Selected deeper topics
    cross_validation_splitter.rst
    stacked_models.rst
    CBPM.rst
+   target_transformers.rst
 

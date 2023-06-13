@@ -170,6 +170,7 @@
 <li class="toctree-l2"><a class="reference internal" href="data.html">2.2. Data</a></li>
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">2.3. Pipeline</a></li>
 <li class="toctree-l2"><a class="reference internal" href="model_evaluation.html">2.4. Model evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_comparison.html">2.5. Model comparison</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../selected_deeper_topics/index.html">3. Selected deeper topics</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -179,6 +180,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/cross_validation_splitter.html">3.4. Cross-validation splitter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/stacked_models.html">3.5. Stacking Models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/CBPM.html">3.6. Connectome-based Predictive Modeling (CBPM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/target_transformers.html">3.7. Applying preprocessing to the target</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../available_pipeline_steps.html">4. Overview of available Pipeline Steps</a></li>
@@ -372,24 +374,24 @@
         </div>
         <article role="main">
           <section id="pipeline">
-<span id="pipeline-usage"></span><h1><span class="section-number">2.3. </span>Pipeline<a class="headerlink" href="#pipeline" title="Permalink to this heading">#</a></h1>
-<p>So far we know how to pass input data to <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>
-(see <a class="reference internal" href="data.html#data-usage"><span class="std std-ref">Data</span></a>). Now, we will have a look at the implementation of
-basic machine learning pipelines.</p>
+<span id="sphx-glr-auto-examples-99-docs-run-pipeline-docs-py"></span><span id="pipeline-usage"></span><h1><span class="section-number">2.3. </span>Pipeline<a class="headerlink" href="#pipeline" title="Permalink to this heading">#</a></h1>
+<p>So far we know how to parametrize:func:<cite>.run_cross_validation</cite> in terms of the
+input data (see <a class="reference internal" href="data.html#data-usage"><span class="std std-ref">Data</span></a>). In this section, we will have a look
+on how we can parametrize the learning algorithm and the preprocessing steps,
+also known as the pipeline.</p>
 <p>A machine learning pipeline is a process to automate the workflow of
-building a predictive model. It can be thought of as a combination of pipes and
-filters. At a pipeline’s starting point, the raw data is fed into this
-pipeline. Different filters inside the pipeline modify the data. The output of
-a machine learning pipeline is a model that can be used
-for predictions on unseen data. Before using the pipeline
-to predict new data, the pipeline has to be trained or fitted on data. We call
-this, as scikit-learn does, _fitting_ the pipeline. all of this has to be done
-in a cross-validation-consistent manner. To see what cross-validation is and
-why it is important, please see <a class="reference internal" href="cross_validation.html#why-cv"><span class="std std-ref">Why cross validation?</span></a>.</p>
+a predictive model. It can be thought of as a combination of pipes and
+filters. At a pipeline’s starting point, the raw data is fed into the first
+filter. The output of this filter is then fed into the next filter
+(through a pipe). In supervised Machine Learning, different filters inside the
+pipeline modify the data, while the last step is a learning algorithm that
+generates predictions. Before using the pipeline to predict new data, the
+pipeline has to be trained (<em>fitted</em>) on data. We call this, as scikit-learn
+does, <em>fitting</em> the pipeline.</p>
 <p>Julearn aims to provide a user-friendly way to build and evaluate complex
 machine learning pipelines. The <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> function is the
 entry point to safely evaluate pipelines by making it easy to specify,
-costumize and train the pipeline. We first have a look at the most
+customize and train the pipeline. We first have a look at the most
 basic pipeline, only consisting of a machine learning algorithm. Then we will
 make the pipeline incrementally more complex.</p>
 <section id="basic-cross-validation-with-julearn">
@@ -399,28 +401,84 @@ a learning algorithm. This can be specified in <a class="reference internal" hre
 by setting the <code class="docutils literal notranslate"><span class="pre">model</span></code> parameter. This parameter can be any scikit-learn
 compatible learning algorithm. However, Julearn provides a built-in list of
 <a class="reference internal" href="../available_pipeline_steps.html#available-models"><span class="std std-ref">Models (Estimators)</span></a> that can be specified by name (see <code class="docutils literal notranslate"><span class="pre">Name</span> <span class="pre">(str)</span></code>
-column in <a class="reference internal" href="../available_pipeline_steps.html#available-models"><span class="std std-ref">Models (Estimators)</span></a>). For example, we
-can simply set <code class="docutils literal notranslate"><span class="pre">model==&quot;svm&quot;</span></code> to use a support vector machine (SVM) <a class="footnote-reference brackets" href="#id2" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">run_cross_validation</span><span class="p">(</span>
+column in <a class="reference internal" href="../available_pipeline_steps.html#available-models"><span class="std std-ref">Models (Estimators)</span></a>). For example, we can simply set
+<code class="docutils literal notranslate"><span class="pre">model==&quot;svm&quot;</span></code> to use a support vector machine (SVM) <a class="footnote-reference brackets" href="#id2" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p>
+<p>Let’s first specify the data parameters as we learned in <a class="reference internal" href="data.html#data-usage"><span class="std std-ref">Data</span></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">julearn</span> <span class="kn">import</span> <span class="n">run_cross_validation</span>
+<span class="kn">from</span> <span class="nn">seaborn</span> <span class="kn">import</span> <span class="n">load_dataset</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;iris&quot;</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;sepal_length&quot;</span><span class="p">,</span> <span class="s2">&quot;sepal_width&quot;</span><span class="p">,</span> <span class="s2">&quot;petal_length&quot;</span><span class="p">,</span> <span class="s2">&quot;petal_width&quot;</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="s2">&quot;species&quot;</span>
+<span class="n">X_types</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;continuous&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;sepal_length&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;sepal_width&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;petal_length&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;petal_width&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Now we can run the cross validation with the SVM as learning algorithm:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">scores</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
     <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
     <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
     <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">X_types</span><span class="o">=</span><span class="n">X_types</span><span class="p">,</span>
     <span class="n">model</span><span class="o">=</span><span class="s2">&quot;svm&quot;</span><span class="p">,</span>
     <span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;classification&quot;</span><span class="p">,</span>
 <span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-06-13 10:27:27,469 - julearn - INFO - ==== Input Data ====
+2023-06-13 10:27:27,469 - julearn - INFO - Using dataframe as input
+2023-06-13 10:27:27,469 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2023-06-13 10:27:27,469 - julearn - INFO -      Target: species
+2023-06-13 10:27:27,469 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2023-06-13 10:27:27,469 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
+2023-06-13 10:27:27,470 - julearn - INFO - ====================
+2023-06-13 10:27:27,470 - julearn - INFO -
+2023-06-13 10:27:27,470 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-06-13 10:27:27,471 - julearn - INFO - Step added
+2023-06-13 10:27:27,471 - julearn - INFO - = Model Parameters =
+2023-06-13 10:27:27,471 - julearn - INFO - ====================
+2023-06-13 10:27:27,471 - julearn - INFO -
+2023-06-13 10:27:27,471 - julearn - INFO - = Data Information =
+2023-06-13 10:27:27,471 - julearn - INFO -      Problem type: classification
+2023-06-13 10:27:27,471 - julearn - INFO -      Number of samples: 150
+2023-06-13 10:27:27,471 - julearn - INFO -      Number of features: 4
+2023-06-13 10:27:27,471 - julearn - INFO - ====================
+2023-06-13 10:27:27,471 - julearn - INFO -
+2023-06-13 10:27:27,472 - julearn - INFO -      Number of classes: 3
+2023-06-13 10:27:27,472 - julearn - INFO -      Target type: object
+2023-06-13 10:27:27,472 - julearn - INFO -      Class distributions: species
+setosa        50
+versicolor    50
+virginica     50
+Name: count, dtype: int64
+2023-06-13 10:27:27,473 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2023-06-13 10:27:27,473 - julearn - INFO - Multi-class classification problem detected #classes = 3.
+   fit_time  score_time  ...  fold                          cv_mdsum
+0  0.003577    0.002112  ...     0  b10eef89b4192178d482d7a1587a248a
+1  0.003295    0.002031  ...     1  b10eef89b4192178d482d7a1587a248a
+2  0.003225    0.001992  ...     2  b10eef89b4192178d482d7a1587a248a
+3  0.003245    0.002033  ...     3  b10eef89b4192178d482d7a1587a248a
+4  0.003201    0.002035  ...     4  b10eef89b4192178d482d7a1587a248a
+
+[5 rows x 8 columns]
 </pre></div>
 </div>
 <p>You will notice that this code indicates an extra parameter <code class="docutils literal notranslate"><span class="pre">problem_type</span></code>.
 This is because in machine learning, one can distinguish between regression
-problems -when predicting a continous outcome- and classification problems
+problems -when predicting a continuous outcome- and classification problems
 -for discrete class label predictions-. Therefore,
-<a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> additionally needs to know which problem type we
-are interested in. This is done by specifying the parameter <code class="docutils literal notranslate"><span class="pre">problem_type</span></code>.
-The possible values are <code class="docutils literal notranslate"><span class="pre">classification</span></code> and <code class="docutils literal notranslate"><span class="pre">regression</span></code> and importantly,
-there is no default specified, so you have to explicitely set it. In the
-example we are interested in predicting the species
-(see <code class="docutils literal notranslate"><span class="pre">y</span></code> in <a class="reference internal" href="data.html#data-usage"><span class="std std-ref">Data</span></a>), i.e. a discrete class label. Therefore,
-the <code class="docutils literal notranslate"><span class="pre">problem_type</span></code> is <code class="docutils literal notranslate"><span class="pre">classification</span></code>.</p>
+<a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> additionally needs to know which problem type
+we are interested in. The possible values for <code class="docutils literal notranslate"><span class="pre">problem_type</span></code> are
+<code class="docutils literal notranslate"><span class="pre">classification</span></code> and <code class="docutils literal notranslate"><span class="pre">regression</span></code>. In the example we are interested in
+predicting the species (see <code class="docutils literal notranslate"><span class="pre">y</span></code> in <a class="reference internal" href="data.html#data-usage"><span class="std std-ref">Data</span></a>), i.e. a discrete
+class label.</p>
 <p>Et voilà, your first machine learning pipeline is ready to go.</p>
 </section>
 <section id="feature-preprocessing">
@@ -431,26 +489,70 @@ scenario can be that certain learning algorithms need the features in a
 specific form, for example in standardized form, so that the data resemble a
 normal distribution. This can be achieved by first z-scoring (or standard
 scaling) the features (see <a class="reference internal" href="../available_pipeline_steps.html#available-scalers"><span class="std std-ref">Scalers</span></a>).</p>
-<p>Importantly, in a machine learning workflow all transformations done to the
-data have to be done in a cv-consistent way. That means, that one should do
-steps like feature preprocessing on the training data of each respective cross
-validation fold and then only apply the parameters of the transformation to the
-validation data of the respective fold. One should <strong>never</strong> do preprocessing
-on the entire dataset and then do cross validation on the already preprocessed
-features (or more
+<p>Importantly in a machine learning workflow, all transformations done to the
+data have to be done in a cv-consistent way. That means that
+data-transformation steps have to be done on the training data of each
+respective cross validation fold and then <em>only</em> apply the parameters of the
+transformation to the validation data of the respective fold. One should
+<strong>never</strong> do preprocessing on the entire dataset and then do
+cross-validation on the already preprocessed features (or more
 generally transformed data) because this leads to leakage of information from
 the validation data into the model. This is exactly where
 <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> comes in handy, because you can simply add your
 wished preprocessing step (<a class="reference internal" href="../available_pipeline_steps.html#available-transformers"><span class="std std-ref">Transformers</span></a>) and it
 takes care of doing the respective transformations in a cv-consistent manner.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">run_cross_validation</span><span class="p">(</span>
+<p>Let’s have a look at how we can add a z-scoring step to our pipeline:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">scores</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
     <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
     <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
     <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">X_types</span><span class="o">=</span><span class="n">X_types</span><span class="p">,</span>
     <span class="n">preprocess</span><span class="o">=</span><span class="s2">&quot;zscore&quot;</span><span class="p">,</span>
     <span class="n">model</span><span class="o">=</span><span class="s2">&quot;svm&quot;</span><span class="p">,</span>
     <span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;classification&quot;</span><span class="p">,</span>
 <span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-06-13 10:27:27,511 - julearn - INFO - ==== Input Data ====
+2023-06-13 10:27:27,512 - julearn - INFO - Using dataframe as input
+2023-06-13 10:27:27,512 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2023-06-13 10:27:27,512 - julearn - INFO -      Target: species
+2023-06-13 10:27:27,512 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2023-06-13 10:27:27,512 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
+2023-06-13 10:27:27,513 - julearn - INFO - ====================
+2023-06-13 10:27:27,513 - julearn - INFO -
+2023-06-13 10:27:27,513 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-06-13 10:27:27,513 - julearn - INFO - Step added
+2023-06-13 10:27:27,513 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-06-13 10:27:27,513 - julearn - INFO - Step added
+2023-06-13 10:27:27,514 - julearn - INFO - = Model Parameters =
+2023-06-13 10:27:27,514 - julearn - INFO - ====================
+2023-06-13 10:27:27,514 - julearn - INFO -
+2023-06-13 10:27:27,514 - julearn - INFO - = Data Information =
+2023-06-13 10:27:27,514 - julearn - INFO -      Problem type: classification
+2023-06-13 10:27:27,514 - julearn - INFO -      Number of samples: 150
+2023-06-13 10:27:27,514 - julearn - INFO -      Number of features: 4
+2023-06-13 10:27:27,514 - julearn - INFO - ====================
+2023-06-13 10:27:27,514 - julearn - INFO -
+2023-06-13 10:27:27,514 - julearn - INFO -      Number of classes: 3
+2023-06-13 10:27:27,514 - julearn - INFO -      Target type: object
+2023-06-13 10:27:27,515 - julearn - INFO -      Class distributions: species
+setosa        50
+versicolor    50
+virginica     50
+Name: count, dtype: int64
+2023-06-13 10:27:27,515 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2023-06-13 10:27:27,515 - julearn - INFO - Multi-class classification problem detected #classes = 3.
+   fit_time  score_time  ...  fold                          cv_mdsum
+0  0.005718    0.003079  ...     0  b10eef89b4192178d482d7a1587a248a
+1  0.005448    0.002993  ...     1  b10eef89b4192178d482d7a1587a248a
+2  0.005408    0.003069  ...     2  b10eef89b4192178d482d7a1587a248a
+3  0.005461    0.003090  ...     3  b10eef89b4192178d482d7a1587a248a
+4  0.005406    0.003035  ...     4  b10eef89b4192178d482d7a1587a248a
+
+[5 rows x 8 columns]
 </pre></div>
 </div>
 <div class="admonition note">
@@ -460,8 +562,11 @@ estimators. Preprocessing steps however, are usually transformers, because
 they transform the input data in a certain way. Therefore the parameter
 description in the api of <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>,
 defines valid input for the <cite>preprocess</cite> parameter as <cite>TransformerLike</cite>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
+</pre></div>
+</div>
 <dl class="simple">
-<dt>preprocess<span class="classifier">str, TransformerLike or list or PipelineCreator | None</span></dt><dd><p>Transformer to apply to the features. If string, use one of the
+<dt>preprocess<span class="classifier">str, TransformerLike or list | None</span></dt><dd><p>Transformer to apply to the features. If string, use one of the
 available transformers. If list, each element can be a string or
 scikit-learn compatible transformer. If None (default), no
 transformation is applied.</p>
@@ -469,20 +574,65 @@ transformation is applied.</p>
 </dl>
 </div>
 <p>But what if we want to add more pre-processing steps?
-An examplary scenario can be, that there are many features available, so that one
-wants to first reduce the dimensionality of the features before passing them
-to the learning algorithm. A commonly used approach is a principal component
+For example, in the case that there are many features available, we might
+want to reduce the dimensionality of the features before passing them to the
+learning algorithm. A commonly used approach is a principal component
 analysis (PCA, see <a class="reference internal" href="../available_pipeline_steps.html#available-decompositions"><span class="std std-ref">Decomposition</span></a>). If we nevertheless
 want to keep our previously applied z-scoring, we can simply add the PCA as
 another preprocessing step as follows:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">run_cross_validation</span><span class="p">(</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">scores</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
     <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
     <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
     <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">X_types</span><span class="o">=</span><span class="n">X_types</span><span class="p">,</span>
     <span class="n">preprocess</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;zscore&quot;</span><span class="p">,</span> <span class="s2">&quot;pca&quot;</span><span class="p">],</span>
     <span class="n">model</span><span class="o">=</span><span class="s2">&quot;svm&quot;</span><span class="p">,</span>
     <span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;classification&quot;</span><span class="p">,</span>
 <span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-06-13 10:27:27,570 - julearn - INFO - ==== Input Data ====
+2023-06-13 10:27:27,570 - julearn - INFO - Using dataframe as input
+2023-06-13 10:27:27,570 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2023-06-13 10:27:27,570 - julearn - INFO -      Target: species
+2023-06-13 10:27:27,570 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2023-06-13 10:27:27,571 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
+2023-06-13 10:27:27,571 - julearn - INFO - ====================
+2023-06-13 10:27:27,571 - julearn - INFO -
+2023-06-13 10:27:27,571 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-06-13 10:27:27,572 - julearn - INFO - Step added
+2023-06-13 10:27:27,572 - julearn - INFO - Adding step pca that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-06-13 10:27:27,572 - julearn - INFO - Step added
+2023-06-13 10:27:27,572 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-06-13 10:27:27,572 - julearn - INFO - Step added
+2023-06-13 10:27:27,573 - julearn - INFO - = Model Parameters =
+2023-06-13 10:27:27,573 - julearn - INFO - ====================
+2023-06-13 10:27:27,573 - julearn - INFO -
+2023-06-13 10:27:27,573 - julearn - INFO - = Data Information =
+2023-06-13 10:27:27,573 - julearn - INFO -      Problem type: classification
+2023-06-13 10:27:27,573 - julearn - INFO -      Number of samples: 150
+2023-06-13 10:27:27,573 - julearn - INFO -      Number of features: 4
+2023-06-13 10:27:27,573 - julearn - INFO - ====================
+2023-06-13 10:27:27,573 - julearn - INFO -
+2023-06-13 10:27:27,573 - julearn - INFO -      Number of classes: 3
+2023-06-13 10:27:27,573 - julearn - INFO -      Target type: object
+2023-06-13 10:27:27,574 - julearn - INFO -      Class distributions: species
+setosa        50
+versicolor    50
+virginica     50
+Name: count, dtype: int64
+2023-06-13 10:27:27,574 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2023-06-13 10:27:27,574 - julearn - INFO - Multi-class classification problem detected #classes = 3.
+   fit_time  score_time  ...  fold                          cv_mdsum
+0  0.006946    0.004015  ...     0  b10eef89b4192178d482d7a1587a248a
+1  0.006756    0.003998  ...     1  b10eef89b4192178d482d7a1587a248a
+2  0.006692    0.004038  ...     2  b10eef89b4192178d482d7a1587a248a
+3  0.006809    0.003992  ...     3  b10eef89b4192178d482d7a1587a248a
+4  0.006729    0.004011  ...     4  b10eef89b4192178d482d7a1587a248a
+
+[5 rows x 8 columns]
 </pre></div>
 </div>
 <p>This is nice, but with more steps added to the pipeline this can become
@@ -492,12 +642,10 @@ intransparent. To simplify building complex pipelines, Julearn provides a
 <section id="pipeline-specification-made-easy-with-the-pipelinecreator">
 <span id="pipeline-creator"></span><h2>Pipeline specification made easy with the <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a><a class="headerlink" href="#pipeline-specification-made-easy-with-the-pipelinecreator" title="Permalink to this heading">#</a></h2>
 <p>The <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> is a class that helps the user create complex
-pipelines with straightforward usage by stepwise adding subsequent steps of
-the pipeline.</p>
-<p>Both the pre-processing steps and the passed learning-algorithm
-are subsequent steps of the pipeline. Following this logic, we can add
-both the specified preprocessing steps and the learning algorithm to the
-pipeline creator to define the pipeline.</p>
+pipelines with straightforward usage by adding, in order, the desired steps
+to the pipeline. Once that the pipeline is specified, the
+<a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> will detect that it is a pipeline creator and
+will automatically create the pipeline and run the cross-validation.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> always has to be initialized with the
@@ -507,34 +655,96 @@ pipeline creator to define the pipeline.</p>
 <p>Let’s re-write the previous example, using the <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a>.</p>
 <p>We start by creating an instance of the <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a>, and
 setting the <code class="docutils literal notranslate"><span class="pre">problem_type</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">classification</span></code>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;classification&quot;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">julearn.pipeline</span> <span class="kn">import</span> <span class="n">PipelineCreator</span>
+
+<span class="n">creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;classification&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Then we use the <code class="docutils literal notranslate"><span class="pre">add</span></code> method and add every desired step to the pipeline. Both,
-the pre-processing steps and the learning algorithm are added in the same way.
-As above one can use the names of the step as indicated in
-<a class="reference internal" href="../available_pipeline_steps.html#available-pipeline-steps"><span class="std std-ref">Overview of available Pipeline Steps</span></a>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">)</span>
+<p>Then we use the <code class="docutils literal notranslate"><span class="pre">add</span></code> method to add every desired step to the pipeline.
+Both, the pre-processing steps and the learning algorithm are added in the
+same way.
+As with the <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> functiona, one can use the names
+of the step as indicated in <a class="reference internal" href="../available_pipeline_steps.html#available-pipeline-steps"><span class="std std-ref">Overview of available Pipeline Steps</span></a>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">)</span>
 <span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;pca&quot;</span><span class="p">)</span>
 <span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;svm&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">creator</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-06-13 10:27:27,641 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-06-13 10:27:27,641 - julearn - INFO - Step added
+2023-06-13 10:27:27,642 - julearn - INFO - Adding step pca that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-06-13 10:27:27,642 - julearn - INFO - Step added
+2023-06-13 10:27:27,642 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-06-13 10:27:27,642 - julearn - INFO - Step added
+PipelineCreator:
+  Step 0: zscore
+    estimator:     StandardScaler()
+    apply to:      ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+    needed types:  ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+    tuning params: {}
+  Step 1: pca
+    estimator:     PCA()
+    apply to:      ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+    needed types:  ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+    tuning params: {}
+  Step 2: svm
+    estimator:     SVC()
+    apply to:      ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+    needed types:  ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+    tuning params: {}
 </pre></div>
 </div>
 <p>We then pass the <code class="docutils literal notranslate"><span class="pre">creator</span></code> to <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> as the
-<code class="docutils literal notranslate"><span class="pre">model</span></code> parameter. We do not need to (and cannot) specify the <code class="docutils literal notranslate"><span class="pre">preprocess</span></code>
-parameter.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">run_cross_validation</span><span class="p">(</span>
+<code class="docutils literal notranslate"><span class="pre">model</span></code> parameter. We do not need to (and cannot) specify any other
+pipeline specification step (such as <code class="docutils literal notranslate"><span class="pre">preprocess</span></code>)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">scores</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
     <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
     <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
     <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
-    <span class="n">model</span><span class="o">=</span><span class="n">creator</span>
+    <span class="n">X_types</span><span class="o">=</span><span class="n">X_types</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">creator</span><span class="p">,</span>
 <span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>If the argument passed to the <code class="docutils literal notranslate"><span class="pre">model</span></code>-parameter is a PipelineCreator,
-the preprocess parameter should be None. Otherwise, an error will be raised.
-This can be done by just <strong>not</strong> specifying it as the default is None.</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-06-13 10:27:27,643 - julearn - INFO - ==== Input Data ====
+2023-06-13 10:27:27,643 - julearn - INFO - Using dataframe as input
+2023-06-13 10:27:27,643 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2023-06-13 10:27:27,643 - julearn - INFO -      Target: species
+2023-06-13 10:27:27,643 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2023-06-13 10:27:27,643 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
+2023-06-13 10:27:27,644 - julearn - INFO - ====================
+2023-06-13 10:27:27,644 - julearn - INFO -
+2023-06-13 10:27:27,645 - julearn - INFO - = Model Parameters =
+2023-06-13 10:27:27,645 - julearn - INFO - ====================
+2023-06-13 10:27:27,645 - julearn - INFO -
+2023-06-13 10:27:27,645 - julearn - INFO - = Data Information =
+2023-06-13 10:27:27,645 - julearn - INFO -      Problem type: classification
+2023-06-13 10:27:27,645 - julearn - INFO -      Number of samples: 150
+2023-06-13 10:27:27,645 - julearn - INFO -      Number of features: 4
+2023-06-13 10:27:27,645 - julearn - INFO - ====================
+2023-06-13 10:27:27,645 - julearn - INFO -
+2023-06-13 10:27:27,645 - julearn - INFO -      Number of classes: 3
+2023-06-13 10:27:27,646 - julearn - INFO -      Target type: object
+2023-06-13 10:27:27,646 - julearn - INFO -      Class distributions: species
+setosa        50
+versicolor    50
+virginica     50
+Name: count, dtype: int64
+2023-06-13 10:27:27,646 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2023-06-13 10:27:27,647 - julearn - INFO - Multi-class classification problem detected #classes = 3.
+   fit_time  score_time  ...  fold                          cv_mdsum
+0  0.007249    0.004118  ...     0  b10eef89b4192178d482d7a1587a248a
+1  0.007057    0.004026  ...     1  b10eef89b4192178d482d7a1587a248a
+2  0.006835    0.004030  ...     2  b10eef89b4192178d482d7a1587a248a
+3  0.006830    0.004025  ...     3  b10eef89b4192178d482d7a1587a248a
+4  0.006771    0.004028  ...     4  b10eef89b4192178d482d7a1587a248a
+
+[5 rows x 8 columns]
+</pre></div>
 </div>
 <p>Awesome! We covered how to create a basic machine learning pipeline and
 even added multiple feature pre-preprocessing steps.</p>
@@ -558,26 +768,50 @@ support vector machine or the coefficients/weights in a linear or logistic
 regression.</p>
 <p><strong>Hyperparameters</strong> in turn, are _configuration(s)_ of a learning algorithm,
 which cannot be estimated from data, but nevertheless need to be specified to
-help estimate the model parameters. The best value for a hyperparameter on a
-given problem is usually not known and therefore has to be either set manually,
-based on experience from a previous similar problem, set by using a
-heuristic (rule of thumb) or by being _tuned_. Examples are the learning rate
-for training a neural network, the <code class="docutils literal notranslate"><span class="pre">C</span></code> and <code class="docutils literal notranslate"><span class="pre">sigma</span></code> hyperparameters for
-support vector machines or the number of estimators in a random forest.</p>
+determine how the model parameters will be learnt. The best value for a
+hyperparameter on a given problem is usually not known and therefore has to
+be either set manually, based on experience from a previous similar problem,
+set by using a heuristic (rule of thumb) or by being _tuned_. Examples are
+the learning rate for training a neural network, the <code class="docutils literal notranslate"><span class="pre">C</span></code> and <code class="docutils literal notranslate"><span class="pre">sigma</span></code>
+hyperparameters for support vector machines or the number of estimators in a
+random forest.</p>
 <p>Manually specifying hyperparameters with Julearn is as simple as using the
-<a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> and add or change hyperparameters for each step in the
-pipeline.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;classification&quot;</span><span class="p">)</span>
-<span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">,</span> <span class="n">with_mean</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">])</span>
-<span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;pca&quot;</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="p">[</span><span class="mf">.2</span><span class="p">])</span>
+<a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> and set the hyperparameter when the step is added.</p>
+<p>Let’s say we want to set the <code class="docutils literal notranslate"><span class="pre">with_mean</span></code> parameter of the z-score
+transformer and compute PCA up to 20% of the variance explained.
+This is how the creator would look like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;classification&quot;</span><span class="p">)</span>
+<span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">,</span> <span class="n">with_mean</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;pca&quot;</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
 <span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;svm&quot;</span><span class="p">)</span>
 
-<span class="n">run_cross_validation</span><span class="p">(</span>
-    <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
-    <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
-    <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
-    <span class="n">model</span><span class="o">=</span><span class="n">creator</span><span class="p">,</span>
-<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">creator</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-06-13 10:27:27,715 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-06-13 10:27:27,715 - julearn - INFO - Setting hyperparameter with_mean = True
+2023-06-13 10:27:27,715 - julearn - INFO - Step added
+2023-06-13 10:27:27,715 - julearn - INFO - Adding step pca that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-06-13 10:27:27,715 - julearn - INFO - Setting hyperparameter n_components = 0.2
+2023-06-13 10:27:27,715 - julearn - INFO - Step added
+2023-06-13 10:27:27,715 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-06-13 10:27:27,716 - julearn - INFO - Step added
+PipelineCreator:
+  Step 0: zscore
+    estimator:     StandardScaler()
+    apply to:      ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+    needed types:  ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+    tuning params: {}
+  Step 1: pca
+    estimator:     PCA(n_components=0.2)
+    apply to:      ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+    needed types:  ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+    tuning params: {}
+  Step 2: svm
+    estimator:     SVC()
+    apply to:      ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+    needed types:  ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+    tuning params: {}
 </pre></div>
 </div>
 <p>Usable transformers or estimators can be seen under
@@ -585,47 +819,110 @@ pipeline.</p>
 respective scikit-learn estimators or transformers. To see the valid
 hyperparameters for a certain transformer or estimator, just follow the
 respective link in <a class="reference internal" href="../available_pipeline_steps.html#available-pipeline-steps"><span class="std std-ref">Overview of available Pipeline Steps</span></a> which will lead you to the
-<a class="reference external" href="https://scikit-learn.org/stable/">scikit-learn</a> documentation where you can read more about the respective
-hyperparameters.</p>
+<a class="reference external" href="https://scikit-learn.org/stable/">scikit-learn</a> documentation where you can read more about them.</p>
 <p>In many cases one wants to specify more than one hyperparameter. This can be
 done by passing each hyperparameter separated by a comma. For the <code class="docutils literal notranslate"><span class="pre">svm</span></code> we
 could for example specify the <code class="docutils literal notranslate"><span class="pre">C</span></code> and the kernel hyperparameter like this:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">creator</span> <span class="o">=</span> <span class="p">(</span><span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;classification&quot;</span><span class="p">)</span>
-         <span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">,</span> <span class="n">with_mean</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">])</span>
-         <span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;pca&quot;</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="p">[</span><span class="mf">.2</span><span class="p">])</span>
-         <span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;svm&quot;</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="p">[</span><span class="mf">.9</span><span class="p">],</span> <span class="n">kernel</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;linear&#39;</span><span class="p">])</span>
-        <span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;classification&quot;</span><span class="p">)</span>
+<span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">,</span> <span class="n">with_mean</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;pca&quot;</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+<span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;svm&quot;</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">)</span>
 
-<span class="n">run_cross_validation</span><span class="p">(</span>
-  <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
-  <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
-  <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
-  <span class="n">model</span><span class="o">=</span><span class="n">creator</span><span class="p">,</span>
-<span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">creator</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-06-13 10:27:27,717 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-06-13 10:27:27,717 - julearn - INFO - Setting hyperparameter with_mean = True
+2023-06-13 10:27:27,717 - julearn - INFO - Step added
+2023-06-13 10:27:27,717 - julearn - INFO - Adding step pca that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-06-13 10:27:27,717 - julearn - INFO - Setting hyperparameter n_components = 0.2
+2023-06-13 10:27:27,717 - julearn - INFO - Step added
+2023-06-13 10:27:27,717 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-06-13 10:27:27,717 - julearn - INFO - Setting hyperparameter C = 0.9
+2023-06-13 10:27:27,717 - julearn - INFO - Setting hyperparameter kernel = linear
+2023-06-13 10:27:27,718 - julearn - INFO - Step added
+PipelineCreator:
+  Step 0: zscore
+    estimator:     StandardScaler()
+    apply to:      ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+    needed types:  ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+    tuning params: {}
+  Step 1: pca
+    estimator:     PCA(n_components=0.2)
+    apply to:      ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+    needed types:  ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+    tuning params: {}
+  Step 2: svm
+    estimator:     SVC(C=0.9, kernel=&#39;linear&#39;)
+    apply to:      ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+    needed types:  ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+    tuning params: {}
 </pre></div>
 </div>
 </section>
 <section id="applying-preprocessing-only-to-certain-feature-types">
 <span id="apply-to-feature-types"></span><h2>Applying preprocessing only to certain feature types<a class="headerlink" href="#applying-preprocessing-only-to-certain-feature-types" title="Permalink to this heading">#</a></h2>
 <p>Under <a class="reference internal" href="#pipeline-creator"><span class="std std-ref">Pipeline specification made easy with the PipelineCreator</span></a> you might have wondered, how the
-<a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> makes things easier. Beside the very straight forward
-definition of hyperparameters, the <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> also helps to apply
-certain steps of the pipeline only to pre-defined types of data (see
-<a class="reference internal" href="data.html#data-usage"><span class="std std-ref">Data</span></a> on how to pre-define types of data). This can be useful,
-for example, when one wants to apply a preprocessing step only to a certain
-type of feature, like for example continous features. We here exemplarily
-apply a _PCA_ only to the _petal_ features of the _iris_ dataset.</p>
-<p>First, one needs to define the <code class="docutils literal notranslate"><span class="pre">X_types</span></code> to which the <code class="docutils literal notranslate"><span class="pre">pca</span></code> should be
-applied:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">X_types</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;petal&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;petal_length&quot;</span><span class="p">,</span> <span class="s2">&quot;petal_width&quot;</span><span class="p">]}</span>
+<a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> makes things easier. Beside the straightforward
+definition of hyperparameters, the <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> also allows to
+specify if a certain step must only be applied to certain features types
+(see:ref:<cite>data_usage</cite> on how to define feature types).</p>
+<p>In out example, we can now choose to do two PCA steps, one for the <em>petal</em>
+featuers, and one for the <em>sepal</em> features.</p>
+<p>First, we need to define the <code class="docutils literal notranslate"><span class="pre">X_types</span></code> so we have both <em>petal</em> and <em>sepal</em>
+features:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">X_types</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;sepal&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;sepal_length&quot;</span><span class="p">,</span> <span class="s2">&quot;sepal_width&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;petal&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;petal_length&quot;</span><span class="p">,</span> <span class="s2">&quot;petal_width&quot;</span><span class="p">],</span>
+<span class="p">}</span>
 </pre></div>
 </div>
-<p>Next, in the <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a>, we specify the <code class="docutils literal notranslate"><span class="pre">apply_to</span></code> parameter
-at the respective step of the pipeline (in our case the <code class="docutils literal notranslate"><span class="pre">pca</span></code>) that it should
-only be applied to these <code class="docutils literal notranslate"><span class="pre">X_types</span></code>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;classification&quot;</span><span class="p">)</span>
+<p>Then, we modify the previous creator to add the <code class="docutils literal notranslate"><span class="pre">pca</span></code> step to the creator
+and specify that it should only be applied to the <em>petal</em> and <em>sepal</em>
+features. Since we also want the <code class="docutils literal notranslate"><span class="pre">zscore</span></code> applied to all features, we need
+to specify this as well, indicating that we want to apply it to both
+<em>petal</em> and <em>sepal</em> features:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;classification&quot;</span><span class="p">)</span>
+<span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;petal&quot;</span><span class="p">,</span> <span class="s2">&quot;sepal&quot;</span><span class="p">],</span> <span class="n">with_mean</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;pca&quot;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;petal&quot;</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;pca&quot;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;sepal&quot;</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;svm&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">creator</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-06-13 10:27:27,719 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;sepal&#39;, &#39;petal&#39;}; pattern=(?:__:type:__sepal|__:type:__petal)&gt;
+2023-06-13 10:27:27,719 - julearn - INFO - Setting hyperparameter with_mean = True
+2023-06-13 10:27:27,719 - julearn - INFO - Step added
+2023-06-13 10:27:27,719 - julearn - INFO - Adding step pca that applies to ColumnTypes&lt;types={&#39;petal&#39;}; pattern=(?:__:type:__petal)&gt;
+2023-06-13 10:27:27,719 - julearn - INFO - Setting hyperparameter n_components = 1
+2023-06-13 10:27:27,720 - julearn - INFO - Step added
+2023-06-13 10:27:27,720 - julearn - INFO - Adding step pca_1 that applies to ColumnTypes&lt;types={&#39;sepal&#39;}; pattern=(?:__:type:__sepal)&gt;
+2023-06-13 10:27:27,720 - julearn - INFO - Setting hyperparameter n_components = 1
+2023-06-13 10:27:27,720 - julearn - INFO - Step added
+2023-06-13 10:27:27,720 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-06-13 10:27:27,720 - julearn - INFO - Step added
+PipelineCreator:
+  Step 0: zscore
+    estimator:     StandardScaler()
+    apply to:      ColumnTypes&lt;types={&#39;sepal&#39;, &#39;petal&#39;}; pattern=(?:__:type:__sepal|__:type:__petal)&gt;
+    needed types:  ColumnTypes&lt;types={&#39;sepal&#39;, &#39;petal&#39;}; pattern=(?:__:type:__sepal|__:type:__petal)&gt;
+    tuning params: {}
+  Step 1: pca
+    estimator:     PCA(n_components=1)
+    apply to:      ColumnTypes&lt;types={&#39;petal&#39;}; pattern=(?:__:type:__petal)&gt;
+    needed types:  ColumnTypes&lt;types={&#39;petal&#39;}; pattern=(?:__:type:__petal)&gt;
+    tuning params: {}
+  Step 2: pca_1
+    estimator:     PCA(n_components=1)
+    apply to:      ColumnTypes&lt;types={&#39;sepal&#39;}; pattern=(?:__:type:__sepal)&gt;
+    needed types:  ColumnTypes&lt;types={&#39;sepal&#39;}; pattern=(?:__:type:__sepal)&gt;
+    tuning params: {}
+  Step 3: svm
+    estimator:     SVC()
+    apply to:      ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+    needed types:  ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+    tuning params: {}
 </pre></div>
 </div>
 <p>We here additionally had specified as a hyperparameter of the _PCA_
@@ -633,98 +930,72 @@ that we want to use only the first component. For the <code class="docutils lite
 the default hyperparameters.</p>
 <p>Finally, we again pass the defined <code class="docutils literal notranslate"><span class="pre">X_types</span></code> and the <code class="docutils literal notranslate"><span class="pre">creator</span></code> to
 <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">run_cross_validation</span><span class="p">(</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">scores</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
     <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
     <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
     <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
     <span class="n">X_types</span><span class="o">=</span><span class="n">X_types</span><span class="p">,</span>
-    <span class="n">model</span><span class="o">=</span><span class="n">creator</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">creator</span><span class="p">,</span>
 <span class="p">)</span>
-</pre></div>
-</div>
-<p>In a slightly more complex use-case, one might want to <code class="docutils literal notranslate"><span class="pre">z-score</span></code> all features
-and apply a <code class="docutils literal notranslate"><span class="pre">pca</span></code> only to the _petal_ features. The <code class="docutils literal notranslate"><span class="pre">apply-to</span></code> parameter
-can also receive a list of <code class="docutils literal notranslate"><span class="pre">X_types</span></code>. To demonstrate this we split the
-features in two different types: _petal_ and _sepal_. This also shows that
-<code class="docutils literal notranslate"><span class="pre">X_types</span></code> is a dictionary in which one can specify as many different
-<code class="docutils literal notranslate"><span class="pre">X_types</span></code> as wished in a key-value manner. The key is the name of the type
-and the value a list of column-names in the features that should belong to
-this type. Splitting the _petal_ columns in two different <code class="docutils literal notranslate"><span class="pre">X_types</span></code> is not
-necessary and only for demonstration purposes. We here only want to
-use the first component of the <code class="docutils literal notranslate"><span class="pre">pca</span></code> and therfore specify its <code class="docutils literal notranslate"><span class="pre">n_components</span></code>
-hyperparameter respectively.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">X_types</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;petal&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;petal_length&quot;</span><span class="p">,</span> <span class="s2">&quot;petal_width&quot;</span><span class="p">],</span>
-    <span class="s2">&quot;sepal&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;sepal_length&quot;</span><span class="p">,</span> <span class="s2">&quot;sepal_width&quot;</span><span class="p">]</span>
-<span class="p">}</span>
 
-<span class="n">creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;classification&quot;</span><span class="p">)</span>
-<span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;petal&quot;</span><span class="p">,</span> <span class="s2">&quot;sepal&quot;</span><span class="p">])</span>
-<span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;pca&quot;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;petal&quot;</span><span class="p">,</span> <span class="n">n_components</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;svm&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-06-13 10:27:27,721 - julearn - INFO - ==== Input Data ====
+2023-06-13 10:27:27,721 - julearn - INFO - Using dataframe as input
+2023-06-13 10:27:27,721 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2023-06-13 10:27:27,721 - julearn - INFO -      Target: species
+2023-06-13 10:27:27,722 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2023-06-13 10:27:27,722 - julearn - INFO -      X_types:{&#39;sepal&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;], &#39;petal&#39;: [&#39;petal_length&#39;, &#39;petal_width&#39;]}
+2023-06-13 10:27:27,722 - julearn - INFO - ====================
+2023-06-13 10:27:27,722 - julearn - INFO -
+2023-06-13 10:27:27,724 - julearn - INFO - = Model Parameters =
+2023-06-13 10:27:27,724 - julearn - INFO - ====================
+2023-06-13 10:27:27,724 - julearn - INFO -
+2023-06-13 10:27:27,724 - julearn - INFO - = Data Information =
+2023-06-13 10:27:27,724 - julearn - INFO -      Problem type: classification
+2023-06-13 10:27:27,724 - julearn - INFO -      Number of samples: 150
+2023-06-13 10:27:27,725 - julearn - INFO -      Number of features: 4
+2023-06-13 10:27:27,725 - julearn - INFO - ====================
+2023-06-13 10:27:27,725 - julearn - INFO -
+2023-06-13 10:27:27,725 - julearn - INFO -      Number of classes: 3
+2023-06-13 10:27:27,725 - julearn - INFO -      Target type: object
+2023-06-13 10:27:27,725 - julearn - INFO -      Class distributions: species
+setosa        50
+versicolor    50
+virginica     50
+Name: count, dtype: int64
+2023-06-13 10:27:27,726 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2023-06-13 10:27:27,726 - julearn - INFO - Multi-class classification problem detected #classes = 3.
+   fit_time  score_time  ...  fold                          cv_mdsum
+0  0.021457    0.009393  ...     0  b10eef89b4192178d482d7a1587a248a
+1  0.020954    0.009366  ...     1  b10eef89b4192178d482d7a1587a248a
+2  0.020883    0.009374  ...     2  b10eef89b4192178d482d7a1587a248a
+3  0.021322    0.009406  ...     3  b10eef89b4192178d482d7a1587a248a
+4  0.020844    0.009622  ...     4  b10eef89b4192178d482d7a1587a248a
 
-<span class="n">run_cross_validation</span><span class="p">(</span>
-    <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
-    <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
-    <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
-    <span class="n">X_types</span><span class="o">=</span><span class="n">X_types</span><span class="p">,</span>
-    <span class="n">model</span><span class="o">=</span><span class="n">creator</span>
-<span class="p">)</span>
+[5 rows x 8 columns]
 </pre></div>
 </div>
-</section>
-<section id="applying-preprocessing-to-the-target">
-<h2>Applying preprocessing to the target<a class="headerlink" href="#applying-preprocessing-to-the-target" title="Permalink to this heading">#</a></h2>
-<p>What we covered so far is how to apply preprocessing to the features and train
-a model in a cv-conistent manner by building a pipeline.
-However, sometimes one wants to apply preprocessing to the target. For example,
-when having a regression-task (continous target variable), one might want to
-predict the z-scored target.
-This can be achieved by using a <a class="reference internal" href="../api/generated/julearn.TargetPipelineCreator.html#julearn.TargetPipelineCreator" title="julearn.TargetPipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">TargetPipelineCreator</span></code></a>
-as one step in the general pipeline.</p>
-<p>We first create a <a class="reference internal" href="../api/generated/julearn.TargetPipelineCreator.html#julearn.TargetPipelineCreator" title="julearn.TargetPipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">TargetPipelineCreator</span></code></a>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">target_creator</span> <span class="o">=</span> <span class="n">TargetPipelineCreator</span><span class="p">()</span>
-<span class="n">target_creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Next, we create the general pipeline using a <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a>. We pass
-the <code class="docutils literal notranslate"><span class="pre">target_creator</span></code> as one step of the pipeline and specify that it should
-only be applied to the <code class="docutils literal notranslate"><span class="pre">target</span></code>, which makes it clear for Julearn to only
-apply it to <code class="docutils literal notranslate"><span class="pre">y</span></code>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;regression&quot;</span><span class="p">)</span>
-<span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">target_creator</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;target&quot;</span><span class="p">)</span>
-<span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;svm&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>This <code class="docutils literal notranslate"><span class="pre">creator</span></code> can then be passed to <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> as usual:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">run_cross_validation</span><span class="p">(</span>
-    <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
-    <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
-    <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
-    <span class="n">model</span><span class="o">=</span><span class="n">creator</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-<p>All transformers in (<a class="reference internal" href="../available_pipeline_steps.html#available-transformers"><span class="std std-ref">Transformers</span></a>) can be used for both,
-feature and target transformations. However, features transformations can be
-directly specified as step in the <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a>, while target
-transformations have to be specified using the <a class="reference internal" href="../api/generated/julearn.TargetPipelineCreator.html#julearn.TargetPipelineCreator" title="julearn.TargetPipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">TargetPipelineCreator</span></code></a>,
-which is then passed to the overall <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> as an extra step.</p>
 <p>We covered how to set up basic pipelines, how to use the
 <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a>, how to use the <code class="docutils literal notranslate"><span class="pre">apply_to</span></code> parameter of the
 <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> and covered basics of hyperparameters. Additional,
 we saw a basic use-case of target pre-processing. In the next
-step we will understand the returns of <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>, i.e. the
-model output and the scores of the performed cross-validation.</p>
+step we will understand the returns of <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>, i.e.
+the model output and the scores of the performed cross-validation.</p>
 <aside class="topic">
 <p class="topic-title">References:</p>
 <aside class="footnote-list brackets">
 <aside class="footnote brackets" id="id2" role="note">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">2</a><span class="fn-bracket">]</span></span>
-<p>Boser, B. E., Guyon, I. M., &amp; Vapnik, V. N., <a class="reference external" href="https://dl.acm.org/doi/pdf/10.1145/130385.130401">“A training algorithm for optimal margin classifiers”</a>, COLT ‘92 Proceedings of the fifth annual workshop on Computational learning theory. 1992 Jul; 144-152.</p>
+<p>Boser, B. E., Guyon, I. M., &amp; Vapnik, V. N., <a class="reference external" href="https://dl.acm.org/doi/pdf/10.1145/130385.130401">“A training
+algorithm for optimal margin classifiers”</a>, COLT ‘92
+Proceedings of the fifth annual workshop on Computational learning
+theory. 1992 Jul; 144-152.</p>
 </aside>
 </aside>
 </aside>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.434 seconds)</p>
 </section>
 </section>
 
@@ -789,7 +1060,6 @@ model output and the scores of the performed cross-validation.</p>
 <li><a class="reference internal" href="#pipeline-specification-made-easy-with-the-pipelinecreator">Pipeline specification made easy with the <code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a></li>
 <li><a class="reference internal" href="#how-to-specify-hyperparameters">How to specify hyperparameters</a></li>
 <li><a class="reference internal" href="#applying-preprocessing-only-to-certain-feature-types">Applying preprocessing only to certain feature types</a></li>
-<li><a class="reference internal" href="#applying-preprocessing-to-the-target">Applying preprocessing to the target</a></li>
 </ul>
 </li>
 </ul>

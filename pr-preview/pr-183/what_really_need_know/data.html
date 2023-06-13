@@ -170,6 +170,7 @@
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">2.2. Data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pipeline.html">2.3. Pipeline</a></li>
 <li class="toctree-l2"><a class="reference internal" href="model_evaluation.html">2.4. Model evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_comparison.html">2.5. Model comparison</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../selected_deeper_topics/index.html">3. Selected deeper topics</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -179,6 +180,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/cross_validation_splitter.html">3.4. Cross-validation splitter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/stacked_models.html">3.5. Stacking Models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/CBPM.html">3.6. Connectome-based Predictive Modeling (CBPM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/target_transformers.html">3.7. Applying preprocessing to the target</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../available_pipeline_steps.html">4. Overview of available Pipeline Steps</a></li>
@@ -372,47 +374,114 @@
         </div>
         <article role="main">
           <section id="data">
-<span id="data-usage"></span><h1><span class="section-number">2.2. </span>Data<a class="headerlink" href="#data" title="Permalink to this heading">#</a></h1>
+<span id="sphx-glr-auto-examples-99-docs-run-data-docs-py"></span><span id="data-usage"></span><h1><span class="section-number">2.2. </span>Data<a class="headerlink" href="#data" title="Permalink to this heading">#</a></h1>
 <section id="input-data-to-run-cross-validation">
 <h2>Input data to <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a><a class="headerlink" href="#input-data-to-run-cross-validation" title="Permalink to this heading">#</a></h2>
-<p>Julearn deals with data in the form of pandas DataFrames. Therefore,
-<a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> needs to know the name of the DataFrame that
-contains the features and the target or label. Additionally, one has to specify
-a list of string(s) referring to the column names of the columns containing the
-feature(s) or the target, respectively. This leads to the following
-<strong>parameters for inputting data</strong>:</p>
+<p>Julearn deals with data in the form of pandas DataFrames. This is the kind of
+data structure that the <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> uses to input the data
+and output some of the results.</p>
+<p>The input DataFrame must contain the features and the target or label. This
+will be communicated to <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> by specifying the
+following parameters:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">data</span></code>: Name of the dataframe containing the features and the target or label</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">X</span></code>: List of strings containing the column names of the features</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">y</span></code>: String containing the name of the column wiht the target or label</p></li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">data</span></code>: Name of the dataframe containing the features and the target or</dt><dd><p>label.</p>
+</dd>
+</dl>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">X</span></code>: List of strings containing the column names of the features.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">y</span></code>: String containing the name of the column with the target or label.</p></li>
 </ul>
-<p>For example, using the well known ‘iris’ dataset, we can specify the data input
+<p>For example, using the well known <em>iris</em> dataset, we can specify the data input
 as follows:</p>
 <p>First, we load the data into a pandas dataframe called <code class="docutils literal notranslate"><span class="pre">df</span></code> and specify
 <code class="docutils literal notranslate"><span class="pre">X</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">seaborn</span> <span class="kn">import</span> <span class="n">load_dataset</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">seaborn</span> <span class="kn">import</span> <span class="n">load_dataset</span>
 
 <span class="n">df</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s1">&#39;iris&#39;</span><span class="p">)</span>
-<span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Let’s inspect what our dataframe looks like.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="output_subarea output_html rendered_html output_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>sepal_length</th>
+      <th>sepal_width</th>
+      <th>petal_length</th>
+      <th>petal_width</th>
+      <th>species</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>5.1</td>
+      <td>3.5</td>
+      <td>1.4</td>
+      <td>0.2</td>
+      <td>setosa</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>4.9</td>
+      <td>3.0</td>
+      <td>1.4</td>
+      <td>0.2</td>
+      <td>setosa</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>4.7</td>
+      <td>3.2</td>
+      <td>1.3</td>
+      <td>0.2</td>
+      <td>setosa</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4.6</td>
+      <td>3.1</td>
+      <td>1.5</td>
+      <td>0.2</td>
+      <td>setosa</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5.0</td>
+      <td>3.6</td>
+      <td>1.4</td>
+      <td>0.2</td>
+      <td>setosa</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+<br />
+<br /><p>Given this data, we can now specify the <code class="docutils literal notranslate"><span class="pre">X</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> parameters:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;sepal_length&quot;</span><span class="p">,</span> <span class="s2">&quot;sepal_width&quot;</span><span class="p">,</span> <span class="s2">&quot;petal_length&quot;</span><span class="p">,</span> <span class="s2">&quot;petal_width&quot;</span><span class="p">]</span>
 <span class="n">y</span> <span class="o">=</span> <span class="s2">&quot;species&quot;</span>
 </pre></div>
 </div>
-<p>Let’s inspect what your variables should look like.</p>
-<p>The dataframe:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="../_images/iris_df.png"><img alt="iris_df" src="../_images/iris_df.png" style="width: 600px;" /></a>
-<p>The feature columns:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">X</span>
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="../_images/iris_X.png"><img alt="iris_X" src="../_images/iris_X.png" style="width: 600px;" /></a>
-<p>The target column:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">y</span>
-</pre></div>
-</div>
-<a class="reference internal image-reference" href="../_images/iris_y.png"><img alt="iris_y" src="../_images/iris_y.png" style="width: 600px;" /></a>
 <p>Julearn’s <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> function so far would look like this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">run_cross_validation</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
 </pre></div>
@@ -422,34 +491,54 @@ by step.</p>
 </section>
 <section id="give-the-feature-columns-a-specific-type">
 <h2>Give the feature columns a specific type<a class="headerlink" href="#give-the-feature-columns-a-specific-type" title="Permalink to this heading">#</a></h2>
-<p>A nice add-on that Julearn offers is to specify costum-based types for the
-features. This comes in handy, if within the machine learning workflow one
-wants to apply certain processing steps only to certain types of variables.
-We go into depth of such a scenario in <a class="reference internal" href="pipeline.html#apply-to-feature-types"><span class="std std-ref">Applying preprocessing only to certain feature types</span></a>. If later,
-for example, we want to apply certain processing steps only to the
-variables/columns related to _petal_ information, we can define <code class="docutils literal notranslate"><span class="pre">&quot;petal&quot;</span></code> in
-<code class="docutils literal notranslate"><span class="pre">X_types</span></code>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">X_types</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;petal&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;petal_length&quot;</span><span class="p">,</span> <span class="s2">&quot;petal_width&quot;</span><span class="p">]}</span>
-</pre></div>
+<p>A nice add-on that Julearn offers is the capacity to specify colum-based
+types for the features. This comes in handy if within the pipeline, one
+wants to manipulate only certain columns.</p>
+<p>To specify column types, we must provide a dictionary with the column types
+as keys and the column names as values. The type can be anything, but it is
+recommended to use a string that is meaningful to you.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Every column can only have <strong>one type</strong>!</p>
 </div>
-<p>The <code class="docutils literal notranslate"><span class="pre">X_types</span></code> can be everything, for example we could have also given the
-petal-related columns the name <cite>some_name</cite>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">X_types</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;some_name&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;petal_length&quot;</span><span class="p">,</span> <span class="s2">&quot;petal_width&quot;</span><span class="p">]</span>
+<p>In the case of the iris dataset, we could specify the type of the columns
+related to the _sepal_ and _petal_ information as <code class="docutils literal notranslate"><span class="pre">&quot;sepal&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;petal&quot;</span></code>
+respectively.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">X_types</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;petal&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;petal_length&quot;</span><span class="p">,</span> <span class="s2">&quot;petal_width&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;sepal&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;sepal_length&quot;</span><span class="p">,</span> <span class="s2">&quot;sepal_width&quot;</span><span class="p">],</span>
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>But every column can only have <strong>one type</strong>!</p>
-<p>Adding an <code class="docutils literal notranslate"><span class="pre">X_types</span></code> specification to <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> will make
-it look like this:</p>
+<p>Importantly, Julearn also allows to specify the column names as regular
+expressions. This comes in handy when we are dealing with hundreds or
+thousands of features and we do not want to specify all the names by hand.
+For example, we could specify the type of the _sepal_ columns
+as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">X_types</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;petal&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;petal.*&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;sepal&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;sepal.*&quot;</span><span class="p">],</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Adding an <code class="docutils literal notranslate"><span class="pre">X_types</span></code> specification to <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> will
+make it look like this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">run_cross_validation</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">X_types</span><span class="o">=</span><span class="n">X_types</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>So far, we saw in what form Julearn’s <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> needs to
-and can get input data. However, we want to do machine learning with these data.
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>If no <code class="docutils literal notranslate"><span class="pre">X_types</span></code> is specified, all the columns will be considered as
+<code class="docutils literal notranslate"><span class="pre">&quot;continuous&quot;</span></code> and a warning will be raised.</p>
+</div>
+<p>Up to now, we saw how to parametrize <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> in terms
+of the input data. In the next section we will see how to specify the output
 In the next section we will focus on basic options to use
-<a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> to make different pipelines in a cross-validation
-consistent manner.</p>
+<a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> to evaluate different pipelines in a
+cross-validation consistent manner.</p>
+<p>Advanced uses cases regarding X_types selective processing are covered in
+<a class="reference internal" href="pipeline.html#apply-to-feature-types"><span class="std std-ref">Applying preprocessing only to certain feature types</span></a></p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.006 seconds)</p>
 </section>
 </section>
 
