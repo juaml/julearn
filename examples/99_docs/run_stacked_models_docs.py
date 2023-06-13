@@ -6,8 +6,8 @@ Stacking Models
 ===============
 
 Scikit-learn already provides a stacking implementation for 
-:class:`stacking regression<~sklearn.ensemble.StackingRegressor>` as well
-as for :class:`stacking classification<~sklearn.ensemble.StackingClassifier>`
+:class:`stacking regression<sklearn.ensemble.StackingRegressor>` as well
+as for :class:`stacking classification<sklearn.ensemble.StackingClassifier>`
 as well.
 
 Now, scikit-learn's stacking implementation will fit each estimator on all of

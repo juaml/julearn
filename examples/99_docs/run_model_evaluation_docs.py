@@ -182,7 +182,7 @@ model
 # To define the entire splitting strategy, one can pass all scikit-learn
 # compatible splitters :mod:`sklearn.model_selection` to ``cv``. However,
 # Julearn provides a built-in set of additional splitters that can be found
-# under :mod:`model_selection` (see more about them in :ref:`cv_splitter`).
+# under :mod:`.model_selection` (see more about them in :ref:`cv_splitter`).
 # The fourth option is to pass an iterable that yields the train and test
 # indices for each split.
 #
