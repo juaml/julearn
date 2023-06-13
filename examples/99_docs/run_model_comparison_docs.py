@@ -158,7 +158,7 @@ print(stats_df)
 # of our three models, we can make use of Julearn's visualization tool to plot
 # the scores in an interactive manner. As visualizations are not part of the
 # core functionality of Julearn, you will need to first manually
-#  **install the additional vizualization dependencies**.
+#  **install the additional visualization dependencies**.
 #
 # From here we can create the interactive plot. Interactive, because you can
 # choose the models to be displayed and the scorer to be plotted.

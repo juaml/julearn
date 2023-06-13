@@ -73,7 +73,7 @@ print(scores)
 ##############################################################################
 # You will notice that this code indicates an extra parameter ``problem_type``.
 # This is because in machine learning, one can distinguish between regression
-# problems -when predicting a continous outcome- and classification problems
+# problems -when predicting a continuous outcome- and classification problems
 # -for discrete class label predictions-. Therefore,
 # :func:`.run_cross_validation` additionally needs to know which problem type
 # we are interested in. The possible values for ``problem_type`` are

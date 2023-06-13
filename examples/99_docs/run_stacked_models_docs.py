@@ -23,7 +23,7 @@ some target in a bit of toy data.
 Fitting each estimator on all of the features
 ---------------------------------------------
 First, of course, let's import some necessary packages. Let's also configure
-Julearn's logger to get some additional information about whats happening:
+Julearn's logger to get some additional information about what is happening:
 """
 
 from sklearn.datasets import make_regression

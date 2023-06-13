@@ -56,7 +56,7 @@ scores = run_cross_validation(
 
 ###############################################################################
 # The ``scores`` variable is an pandas DataFrame object which contains the
-# cross-validated metrics for each fold as columns and rows repsectively.
+# cross-validated metrics for each fold as columns and rows respectively.
 
 print(scores)
 
@@ -152,10 +152,10 @@ model
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^
 # When performing a cross-validation, we need to split the data into training
 # and validation sets. This is done by a *cross-validation splitter*, that
-# defines how the data should be split, how many folds should be used wether to
-# repeat the process several times. For example, we might want to shuffle
+# defines how the data should be split, how many folds should be used weather
+# to repeat the process several times. For example, we might want to shuffle
 # the data before splitting, stratify the splits so the distribution of targets
-# are always represented in the individual folds, or consider certan grouping
+# are always represented in the individual folds, or consider certain grouping
 # variables in the splitting process, so that samples from the same group are
 # always in the same fold and not split across folds.
 #

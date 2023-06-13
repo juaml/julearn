@@ -60,7 +60,7 @@ print(creator)
 # values and see which one works best. This process is called *hyperparameter
 # tuning*.
 #
-# Basically, hyperparameter tuning referes to testing several hyperparameter
+# Basically, hyperparameter tuning refers to testing several hyperparameter
 # values and choosing the one that works best.
 #
 # For example, we can try different values for the regularization parameter
@@ -256,8 +256,8 @@ pprint(model_tuned.best_params_)
 # similar to the :class:`~sklearn.model_selection.GridSearchCV`, but instead
 # of trying all the possible combinations of hyperparameters values, it tries
 # a random subset of them. This is useful when we have a lot of hyperparameters
-# to tune, since it can be very time consuming to try all the posible, as well
-# as continous parameters that can be sampled out of a distribution. For
+# to tune, since it can be very time consuming to try all the possible, as well
+# as continuous parameters that can be sampled out of a distribution. For
 # more information, see the
 # :class:`~sklearn.model_selection.RandomizedSearchCV` documentation.
 
