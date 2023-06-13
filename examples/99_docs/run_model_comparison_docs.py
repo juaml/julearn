@@ -130,8 +130,8 @@ scores3.to_csv("/tmp/doc_scores3.csv")
 # sphinx_gallery_end_ignore
 
 ###############################################################################
-# Statistically compare the models
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# Statistical comparisons
+# ^^^^^^^^^^^^^^^^^^^^^^^
 #
 # Comparing the performance of these three models is now as easy as
 # the following one-liner:
@@ -150,7 +150,7 @@ stats_df = corrected_ttest(scores1, scores2, scores3)
 print(stats_df)
 
 ###############################################################################
-# Visualize the models
+# Score visualizations
 # ^^^^^^^^^^^^^^^^^^^^
 #
 # Visualizations can help to get a better intuitive understanding of the

@@ -5,7 +5,7 @@
 Data
 ====
 
-Input data to :func:`.run_cross_validation`
+Data input to :func:`.run_cross_validation`
 -------------------------------------------
 
 Julearn deals with data in the form of pandas DataFrames. This is the kind of
@@ -54,8 +54,8 @@ y = "species"
 # by step.
 
 ##############################################################################
-# Give the feature columns a specific type
-# ----------------------------------------
+# Giving *types* to features
+# --------------------------
 #
 # A nice add-on that Julearn offers is the capacity to specify colum-based
 # types for the features. This comes in handy if within the pipeline, one

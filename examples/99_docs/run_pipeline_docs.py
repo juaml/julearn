@@ -2,15 +2,15 @@
 #          Fede Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL
 """
-Pipeline
-========
+Model Building
+==============
 
 So far we know how to parametrize:func:`.run_cross_validation` in terms of the
-input data (see :ref:`data_usage`). In this section, we will have a look 
+input data (see :ref:`data_usage`). In this section, we will have a look
 on how we can parametrize the learning algorithm and the preprocessing steps,
-also known as the pipeline. 
+also known as the *pipeline*.
 
-A machine learning pipeline is a process to automate the workflow of 
+A machine learning pipeline is a process to automate the workflow of
 a predictive model. It can be thought of as a combination of pipes and 
 filters. At a pipeline's starting point, the raw data is fed into the first
 filter. The output of this filter is then fed into the next filter
@@ -29,8 +29,8 @@ make the pipeline incrementally more complex.
 
 .. _basic_cv:
 
-Basic cross validation with Julearn
------------------------------------
+Pipeline specification in :func:`.run_cross_validation`
+-------------------------------------------------------
 
 One important aspect when building machine learning models is the selection of
 a learning algorithm. This can be specified in :func:`.run_cross_validation`
@@ -84,7 +84,7 @@ print(scores)
 # Et voilà, your first machine learning pipeline is ready to go.
 
 ##############################################################################
-# (Feature) preprocessing
+# Feature preprocessing
 # -----------------------
 # There are cases in which the input data, and in particular the features,
 # should be transformed before passing them to the learning algorithm. One
@@ -226,8 +226,8 @@ print(scores)
 # hyperparameters. If you want to know more about tuning (or optimizing)
 # hyperparameters, please have a look at :ref:`hp_tuning`.
 #
-# How to specify hyperparameters
-# ------------------------------
+# Setting hyperparameters
+# -----------------------
 #
 # If you are new to machine learning, the section heading might confuse you:
 # Parameters, hyperparameters - aren't we doing machine learning, so shouldn't
@@ -287,8 +287,8 @@ print(creator)
 ###############################################################################
 # .. _apply_to_feature_types:
 #
-# Applying preprocessing only to certain feature types
-# ----------------------------------------------------
+# Selective preprocessing using feature types
+# -------------------------------------------
 #
 # Under :ref:`pipeline_creator` you might have wondered, how the
 # :class:`.PipelineCreator` makes things easier. Beside the straightforward

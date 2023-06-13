@@ -5,8 +5,8 @@
 Model evaluation
 ================
 
-The returns of :func:`.run_cross_validation`
---------------------------------------------
+The output of :func:`.run_cross_validation`
+-------------------------------------------
 
 So far, we saw how to run a cross-validation using the :class:`.PipelineCreator`
 and :func:`.run_cross_validation`. But what do we get as output from such a 
@@ -145,11 +145,9 @@ model
 # the model or make predictions on a hold out test set. To learn more about how
 # to inspect models please have a look at :ref:`model_inspection`.
 #
-# Cross-validation types and scoring
-# ----------------------------------
-#
 # Cross-validation splitters
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^
+# --------------------------
+#
 # When performing a cross-validation, we need to split the data into training
 # and validation sets. This is done by a *cross-validation splitter*, that
 # defines how the data should be split, how many folds should be used weather
@@ -211,8 +209,8 @@ scores = run_cross_validation(
 print(scores)
 
 ###############################################################################
-# Scoring
-# ^^^^^^^
+# Scoring metrics
+# ---------------
 #
 # Nice, we have a basic pipeline, with preprocessing of features and a model,
 # we defined the splitting strategy for the cross-validation the way we want it
