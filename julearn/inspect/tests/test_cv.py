@@ -14,16 +14,16 @@ class MockModelReturnsIndex(BaseEstimator):
         return self
 
     def predict(self, X):
-        return X.index
+        return X.index[:, None]
 
     def predict_proba(self, X):
-        return X.index
+        return X.index[:, None]
 
     def predict_log_proba(self, X):
-        return X.index
+        return X.index[:, None]
 
     def decision_function(self, X):
-        return X.index
+        return X.index[:, None]
 
     def __sklearn_is_fitted__(self):
         return True
@@ -34,7 +34,7 @@ class MockRegressorReturnsIndex(BaseEstimator):
         return self
 
     def predict(self, X):
-        return X.index
+        return X.index[:, None]
 
     def __sklearn_is_fitted__(self):
         return True
