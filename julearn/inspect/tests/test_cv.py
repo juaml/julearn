@@ -35,7 +35,7 @@ class MockRegressorReturnsIndex(BaseEstimator):
         return self
 
     def predict(self, X):
-        return np.array(X.index)[:, None]
+        return np.array(X.index)
 
     def __sklearn_is_fitted__(self):
         return True

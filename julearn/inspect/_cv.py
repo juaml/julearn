@@ -118,6 +118,8 @@ class FoldsInspector:
         ):
             t_model = self._scores["estimator"][i_fold]
             t_values = getattr(t_model, func)(self._X.iloc[test])
+            if t_values.ndim == 1:
+                t_values = t_values[:, None]
             column_names = [f"p{i}" for i in range(t_values.shape[1])]
             t_predictions_df = pd.DataFrame(
                 t_values, index=test, columns=column_names
