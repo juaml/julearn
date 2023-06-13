@@ -5,6 +5,7 @@ from julearn.base.estimators import WrapModel
 from julearn.inspect import FoldsInspector, PipelineInspector
 from julearn.utils import _compute_cvmdsum
 from julearn.pipeline import PipelineCreator
+import numpy as np
 from numpy.testing import assert_array_almost_equal
 import pytest
 
@@ -14,16 +15,16 @@ class MockModelReturnsIndex(BaseEstimator):
         return self
 
     def predict(self, X):
-        return X.index[:, None]
+        return np.array(X.index)[:, None]
 
     def predict_proba(self, X):
-        return X.index[:, None]
+        return np.array(X.index)[:, None]
 
     def predict_log_proba(self, X):
-        return X.index[:, None]
+        return np.array(X.index)[:, None]
 
     def decision_function(self, X):
-        return X.index[:, None]
+        return np.array(X.index)[:, None]
 
     def __sklearn_is_fitted__(self):
         return True
@@ -34,7 +35,7 @@ class MockRegressorReturnsIndex(BaseEstimator):
         return self
 
     def predict(self, X):
-        return X.index[:, None]
+        return np.array(X.index)[:, None]
 
     def __sklearn_is_fitted__(self):
         return True
