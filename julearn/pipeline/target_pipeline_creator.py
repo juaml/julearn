@@ -92,3 +92,11 @@ class TargetPipelineCreator:
             )
         count = np.array([_step[0] == name for _step in self._steps]).sum()
         return f"{name}_{count}" if count > 0 else name
+
+    def __str__(self) -> str:
+        """Get a string representation of the TargetPipelineCreator."""
+        out = "TargetPipelineCreator:\n"
+        for i_step, step in enumerate(self._steps):
+            out += f"  Step {i_step}: {step[0]}\n"
+            out += f"    estimator:     {step[1]}\n"
+        return out

@@ -136,10 +136,14 @@ class FoldsInspector:
                     t_repeat_predictions.append(
                         predictions[t_repeat * n_folds + t_fold]
                     )
-                t_series = pd.concat(t_repeat_predictions, axis=0)
-                t_series.name = f"repeat_{t_repeat}"
-                folded_predictions.append(t_series)
+                t_df = pd.concat(t_repeat_predictions, axis=0)
+                prefix = f"repeat{t_repeat}"
+                t_df.columns = [f"{prefix}_{c}" for c in t_df.columns]
+                folded_predictions.append(t_df)
             predictions = folded_predictions
+        else:
+            for i_fold, t_df in enumerate(predictions):
+                t_df.columns = [f"fold{i_fold}_{x}" for x in t_df.columns]
         predictions = pd.concat(predictions, axis=1)
         return predictions.sort_index()
 
