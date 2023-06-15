@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="3.7. Applying preprocessing to the target" href="target_transformers.html" /><link rel="prev" title="3.5. Stacking Models" href="stacked_models.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="4. Overview of available Pipeline Steps" href="../available_pipeline_steps.html" /><link rel="prev" title="3.6. Stacking Models" href="stacked_models.html" />
 
     <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
-        <title>3.6. Connectome-based Predictive Modeling (CBPM) - julearn documentation</title>
+        <title>3.7. Connectome-based Predictive Modeling (CBPM) - julearn documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
@@ -174,13 +174,13 @@
 </ul>
 </li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">3. Selected deeper topics</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="confound_removal.html">3.1. Cross-validation consistent Confound Removal</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hyperparameter_tuning.html">3.2. Hyperparameter Tuning</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model_inspect.html">3.3. Inspecting Models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cross_validation_splitter.html">3.4. Cross-validation splitter</a></li>
-<li class="toctree-l2"><a class="reference internal" href="stacked_models.html">3.5. Stacking Models</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">3.6. Connectome-based Predictive Modeling (CBPM)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="target_transformers.html">3.7. Applying preprocessing to the target</a></li>
+<li class="toctree-l2"><a class="reference internal" href="target_transformers.html">3.1. Applying preprocessing to the target</a></li>
+<li class="toctree-l2"><a class="reference internal" href="confound_removal.html">3.2. Cross-validation consistent Confound Removal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hyperparameter_tuning.html">3.3. Hyperparameter Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_inspect.html">3.4. Inspecting Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cross_validation_splitter.html">3.5. Cross-validation splitter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stacked_models.html">3.6. Stacking Models</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">3.7. Connectome-based Predictive Modeling (CBPM)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../available_pipeline_steps.html">4. Overview of available Pipeline Steps</a></li>
@@ -376,25 +376,26 @@
         </div>
         <article role="main">
           <section id="connectome-based-predictive-modeling-cbpm">
-<h1><span class="section-number">3.6. </span>Connectome-based Predictive Modeling (CBPM)<a class="headerlink" href="#connectome-based-predictive-modeling-cbpm" title="Permalink to this heading">#</a></h1>
-<p>Applications of machine learning in neuroimaging research typically have to deal
-with high-dimensional input features. This can be quite problematic due to the
-curse of dimensionality, especially when sample sizes are low at the same time.
-Recently, connectome-based predictive modeling (CBPM) has been proposed as an
-approach to deal with this problem <a class="footnote-reference brackets" href="#id4" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a> in regression. This approach has been
-used to predict fluid intelligence <a class="footnote-reference brackets" href="#id5" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></a> as well sustained attention <a class="footnote-reference brackets" href="#id6" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></a>
-based on brain functional connectivity.</p>
+<span id="sphx-glr-auto-examples-99-docs-run-cbpm-docs-py"></span><span id="cbpm"></span><h1><span class="section-number">3.7. </span>Connectome-based Predictive Modeling (CBPM)<a class="headerlink" href="#connectome-based-predictive-modeling-cbpm" title="Permalink to this heading">#</a></h1>
+<p>Applications of machine learning in neuroimaging research typically have to
+deal with high-dimensional input features. This can be quite problematic due to
+the curse of dimensionality, especially when sample sizes are low at the same
+time. Recently, connectome-based predictive modeling (CBPM) has been proposed
+as an approach to deal with this problem <a class="footnote-reference brackets" href="#id4" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a> in regression. This approach
+has been used to predict fluid intelligence <a class="footnote-reference brackets" href="#id5" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></a> as well sustained attention
+<a class="footnote-reference brackets" href="#id6" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></a> based on brain functional connectivity.</p>
 <p>In a nutshell, CBPM consists of:</p>
 <ol class="arabic simple">
 <li><p>feature selection</p></li>
 <li><p>feature aggregation</p></li>
 <li><p>model building</p></li>
 </ol>
-<p>In CBPM, features are selected if their correlation to the target is significant
-according to some specified significance threshold alpha. These selected features
-are then summarized according to an aggregation function and subsequently used
-to fit a machine learning model. Most commonly in this approach a linear model
-is used for this, but in principle it could be any other machine learning model.</p>
+<p>In CBPM, features are selected if their correlation to the target is
+significant according to some specified significance threshold alpha. These
+selected features are then summarized according to an aggregation function and
+subsequently used to fit a machine learning model. Most commonly in this
+approach a linear model is used for this, but in principle it could be any
+other machine learning model.</p>
 <section id="cbpm-in-julearn">
 <h2>CBPM in Julearn<a class="headerlink" href="#cbpm-in-julearn" title="Permalink to this heading">#</a></h2>
 <p>Julearn implements a simple, scikit-learn compatible transformer (“cbpm”), that
@@ -404,7 +405,7 @@ easily apply the “cbpm” transformer as a preprocessing step, and then apply 
 sklearn-compatible estimator for the model building part.</p>
 <p>For example, to build a simple CBPM workflow, you can create a pipeline and
 run a cross-validation as follows:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">julearn</span> <span class="kn">import</span> <span class="n">run_cross_validation</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">julearn</span> <span class="kn">import</span> <span class="n">run_cross_validation</span>
 <span class="kn">from</span> <span class="nn">julearn.pipeline</span> <span class="kn">import</span> <span class="n">PipelineCreator</span>
 
 <span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">make_regression</span>
@@ -412,95 +413,216 @@ run a cross-validation as follows:</p>
 
 
 <span class="c1"># prepare some data:</span>
-<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_regression</span>
+<span class="c1"># prepare data</span>
+<span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_regression</span><span class="p">(</span><span class="n">n_features</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+
+<span class="c1"># make dataframe</span>
+<span class="n">X_names</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;feature_</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">21</span><span class="p">)]</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
-<span class="n">features</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">to_list</span><span class="p">()</span>
+<span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">X_names</span>
 <span class="n">data</span><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span>
 
 <span class="c1"># prepare a pipeline creator:</span>
-<span class="n">cbpm_pipeline_creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">()</span>
+<span class="n">cbpm_pipeline_creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;regression&quot;</span><span class="p">)</span>
 <span class="n">cbpm_pipeline_creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;cbpm&quot;</span><span class="p">)</span>
 <span class="n">cbpm_pipeline_creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;linreg&quot;</span><span class="p">)</span>
 
 <span class="c1"># cross-validate the cbpm pipeline</span>
 <span class="n">scores</span><span class="p">,</span> <span class="n">final_model</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
-        <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
-        <span class="n">X</span><span class="o">=</span><span class="n">features</span><span class="p">,</span>
-        <span class="n">y</span><span class="o">=</span><span class="s2">&quot;target&quot;</span><span class="p">,</span>
-        <span class="n">model</span><span class="o">=</span><span class="n">cbpm_pipeline_creator</span><span class="p">,</span>
-        <span class="n">return_estimator</span><span class="o">=</span><span class="s2">&quot;all&quot;</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
+    <span class="n">X</span><span class="o">=</span><span class="n">X_names</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="s2">&quot;target&quot;</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">cbpm_pipeline_creator</span><span class="p">,</span>
+    <span class="n">return_estimator</span><span class="o">=</span><span class="s2">&quot;all&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-06-15 13:01:42,110 - julearn - INFO - Adding step cbpm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-06-15 13:01:42,110 - julearn - INFO - Step added
+2023-06-15 13:01:42,110 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-06-15 13:01:42,110 - julearn - INFO - Step added
+2023-06-15 13:01:42,110 - julearn - INFO - ==== Input Data ====
+2023-06-15 13:01:42,110 - julearn - INFO - Using dataframe as input
+2023-06-15 13:01:42,110 - julearn - INFO -      Features: [&#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;feature_20&#39;]
+2023-06-15 13:01:42,110 - julearn - INFO -      Target: target
+2023-06-15 13:01:42,112 - julearn - INFO -      Expanded features: [&#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;feature_20&#39;]
+2023-06-15 13:01:42,112 - julearn - INFO -      X_types:{}
+2023-06-15 13:01:42,112 - julearn - WARNING - The following columns are not defined in X_types: [&#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;feature_20&#39;]. They will be treated as continuous.
+/home/runner/work/julearn/julearn/julearn/utils/logging.py:238: RuntimeWarning: The following columns are not defined in X_types: [&#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;feature_20&#39;]. They will be treated as continuous.
+  warn(msg, category=category)
+2023-06-15 13:01:42,113 - julearn - INFO - ====================
+2023-06-15 13:01:42,113 - julearn - INFO -
+2023-06-15 13:01:42,114 - julearn - INFO - = Model Parameters =
+2023-06-15 13:01:42,114 - julearn - INFO - ====================
+2023-06-15 13:01:42,114 - julearn - INFO -
+2023-06-15 13:01:42,114 - julearn - INFO - = Data Information =
+2023-06-15 13:01:42,114 - julearn - INFO -      Problem type: regression
+2023-06-15 13:01:42,114 - julearn - INFO -      Number of samples: 200
+2023-06-15 13:01:42,114 - julearn - INFO -      Number of features: 20
+2023-06-15 13:01:42,114 - julearn - INFO - ====================
+2023-06-15 13:01:42,114 - julearn - INFO -
+2023-06-15 13:01:42,115 - julearn - INFO -      Target type: float64
+2023-06-15 13:01:42,115 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2023-06-15 13:01:42,139 - julearn - WARNING - No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
+/home/runner/work/julearn/julearn/julearn/utils/logging.py:238: RuntimeWarning: No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
+  warn(msg, category=category)
+2023-06-15 13:01:42,169 - julearn - WARNING - No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
+/home/runner/work/julearn/julearn/julearn/utils/logging.py:238: RuntimeWarning: No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
+  warn(msg, category=category)
+2023-06-15 13:01:42,199 - julearn - WARNING - No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
+/home/runner/work/julearn/julearn/julearn/utils/logging.py:238: RuntimeWarning: No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
+  warn(msg, category=category)
+2023-06-15 13:01:42,230 - julearn - WARNING - No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
+/home/runner/work/julearn/julearn/julearn/utils/logging.py:238: RuntimeWarning: No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
+  warn(msg, category=category)
+2023-06-15 13:01:42,259 - julearn - WARNING - No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
+/home/runner/work/julearn/julearn/julearn/utils/logging.py:238: RuntimeWarning: No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
+  warn(msg, category=category)
+2023-06-15 13:01:42,290 - julearn - WARNING - No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
+/home/runner/work/julearn/julearn/julearn/utils/logging.py:238: RuntimeWarning: No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
+  warn(msg, category=category)
+</pre></div>
+</div>
 <p>By default the “cbpm” transformer will perform feature selection using the
-Pearson correlation between each feature and the target, and select the features
-for which the p-value of the correlation falls below the default significance
-threshold of 0.01. It will then group the features into negatively and positively
-correlated features, and sum up the features within each of these groups using
-<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.sum.html#numpy.sum" title="(in NumPy v1.24)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.sum()</span></code></a>. That is, the linear model in this case is fitted on two
-features:</p>
-<ol class="arabic simple">
+Pearson correlation between each feature and the target, and select the
+features for which the p-value of the correlation falls below the default
+significance threshold of 0.01. It will then group the features into
+negatively and positively correlated features, and sum up the features within
+each of these groups using <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.sum.html#numpy.sum" title="(in NumPy v1.24)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.sum()</span></code></a>. That is, the linear model in
+this case is fitted on two features:</p>
+<blockquote>
+<div><ol class="arabic simple">
 <li><p>sum of features that are positively correlated to the target</p></li>
 <li><p>sum of features that are negatively correlated to the target</p></li>
 </ol>
+</div></blockquote>
 <p>The pipeline creator also allows easily customising these parameters of the
 “cbpm” transformer according to your needs. For example, to use a different
 significance threshold during feature selection one may set the
 <cite>significance_threshold</cite> keyword to increase it to 0.05 as follows:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># prepare a pipeline creator:</span>
-<span class="n">cbpm_pipeline_creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># prepare a pipeline creator</span>
+<span class="n">cbpm_pipeline_creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;regression&quot;</span><span class="p">)</span>
 <span class="n">cbpm_pipeline_creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;cbpm&quot;</span><span class="p">,</span> <span class="n">significance_threshold</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
 <span class="n">cbpm_pipeline_creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;linreg&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">cbpm_pipeline_creator</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-06-15 13:01:42,294 - julearn - INFO - Adding step cbpm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-06-15 13:01:42,294 - julearn - INFO - Setting hyperparameter significance_threshold = 0.05
+2023-06-15 13:01:42,294 - julearn - INFO - Step added
+2023-06-15 13:01:42,294 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-06-15 13:01:42,294 - julearn - INFO - Step added
+PipelineCreator:
+  Step 0: cbpm
+    estimator:     CBPM()
+    apply to:      ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+    needed types:  ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+    tuning params: {}
+  Step 1: linreg
+    estimator:     LinearRegression()
+    apply to:      ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+    needed types:  ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+    tuning params: {}
 </pre></div>
 </div>
 <p>Julearn also allows this to be tuned as a hyperparameter in a nested
 cross-validation. Simply hand over an iterable of values:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># prepare a pipeline creator:</span>
-<span class="n">cbpm_pipeline_creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># prepare a pipeline creator:</span>
+<span class="n">cbpm_pipeline_creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;regression&quot;</span><span class="p">)</span>
 <span class="n">cbpm_pipeline_creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;cbpm&quot;</span><span class="p">,</span> <span class="n">significance_threshold</span><span class="o">=</span><span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">])</span>
 <span class="n">cbpm_pipeline_creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;linreg&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">cbpm_pipeline_creator</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-06-15 13:01:42,295 - julearn - INFO - Adding step cbpm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-06-15 13:01:42,296 - julearn - INFO - Tuning hyperparameter significance_threshold = [0.01, 0.05]
+2023-06-15 13:01:42,296 - julearn - INFO - Step added
+2023-06-15 13:01:42,296 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-06-15 13:01:42,296 - julearn - INFO - Step added
+PipelineCreator:
+  Step 0: cbpm
+    estimator:     CBPM()
+    apply to:      ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+    needed types:  ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+    tuning params: {&#39;cbpm__significance_threshold&#39;: [0.01, 0.05]}
+  Step 1: linreg
+    estimator:     LinearRegression()
+    apply to:      ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+    needed types:  ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+    tuning params: {}
 </pre></div>
 </div>
 <p>In addition, it may be noteworthy, that you can customise the correlation
-method, the aggregation method, as well as the sign (<cite>“pos”</cite>, <cite>“neg”</cite>, or <cite>“posneg”</cite>)
-of the feature-target correlations that should be selected. For example, a pipeline
-that specifies each of these parameters may look as follows:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+method, the aggregation method, as well as the sign (<cite>“pos”</cite>, <cite>“neg”</cite>,
+or <cite>“posneg”</cite>) of the feature-target correlations that should be selected.
+For example, a pipeline that specifies each of these parameters may look as
+follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">spearmanr</span>
 
 <span class="c1"># prepare a pipeline creator:</span>
-<span class="n">cbpm_pipeline_creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">()</span>
+<span class="n">cbpm_pipeline_creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;regression&quot;</span><span class="p">)</span>
 <span class="n">cbpm_pipeline_creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
-        <span class="s2">&quot;cbpm&quot;</span><span class="p">,</span>
-        <span class="n">significance_threshold</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
-        <span class="n">corr_method</span><span class="o">=</span><span class="n">spearmanr</span><span class="p">,</span>
-        <span class="n">agg_method</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">,</span>
-        <span class="n">corr_sign</span><span class="o">=</span><span class="s2">&quot;pos&quot;</span>
+    <span class="s2">&quot;cbpm&quot;</span><span class="p">,</span>
+    <span class="n">significance_threshold</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+    <span class="n">corr_method</span><span class="o">=</span><span class="n">spearmanr</span><span class="p">,</span>
+    <span class="n">agg_method</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">,</span>
+    <span class="n">corr_sign</span><span class="o">=</span><span class="s2">&quot;pos&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">cbpm_pipeline_creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;linreg&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">cbpm_pipeline_creator</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-06-15 13:01:42,297 - julearn - INFO - Adding step cbpm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-06-15 13:01:42,297 - julearn - INFO - Setting hyperparameter significance_threshold = 0.05
+2023-06-15 13:01:42,297 - julearn - INFO - Setting hyperparameter corr_method = &lt;function spearmanr at 0x7f57a49fe4d0&gt;
+2023-06-15 13:01:42,297 - julearn - INFO - Setting hyperparameter agg_method = &lt;function average at 0x7f57b2760820&gt;
+2023-06-15 13:01:42,297 - julearn - INFO - Setting hyperparameter corr_sign = pos
+2023-06-15 13:01:42,297 - julearn - INFO - Step added
+2023-06-15 13:01:42,297 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-06-15 13:01:42,297 - julearn - INFO - Step added
+PipelineCreator:
+  Step 0: cbpm
+    estimator:     CBPM(agg_method=&lt;function average at 0x7f57b2760820&gt;,
+     corr_method=&lt;function spearmanr at 0x7f57a49fe4d0&gt;, corr_sign=&#39;pos&#39;)
+    apply to:      ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+    needed types:  ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+    tuning params: {}
+  Step 1: linreg
+    estimator:     LinearRegression()
+    apply to:      ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+    needed types:  ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+    tuning params: {}
 </pre></div>
 </div>
 <p>As you may have guessed, this pipeline will use a Spearman correlation and a
-significance level of 0.05 for feature selection. It will only select features
-that are positively correlated to the target and aggregate them using the
-<a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.average.html#numpy.average" title="(in NumPy v1.24)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.average()</span></code></a> aggregation function.</p>
+significance level of 0.05 for feature selection. It will only select
+features that are positively correlated to the target and aggregate them
+using the <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.average.html#numpy.average" title="(in NumPy v1.24)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.average()</span></code></a> aggregation function.</p>
 <aside class="topic">
 <p class="topic-title">References:</p>
 <aside class="footnote-list brackets">
 <aside class="footnote brackets" id="id4" role="note">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">4</a><span class="fn-bracket">]</span></span>
-<p>Shen, Xilin, et al., <a class="reference external" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5526681/">“Using connectome-based predictive modeling to predict individual behavior from brain connectivity”</a>, Nat Protoc. 2017 Mar; 12(3): 506–518.</p>
+<p>Shen, Xilin, et al., <a class="reference external" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5526681/">“Using connectome-based predictive modeling to predict individual behavior from brain connectivity” </a>, Nat Protoc.
+2017 Mar; 12(3): 506–518.</p>
 </aside>
 <aside class="footnote brackets" id="id5" role="note">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">5</a><span class="fn-bracket">]</span></span>
-<p>Finn, Emily S., et al., <a class="reference external" href="https://pubmed.ncbi.nlm.nih.gov/26457551/">“Functional connectome fingerprinting: identifying individuals using patterns of brain connectivity”</a>, Nat Neurosci. 2015 Nov;18(11):1664-71.</p>
+<p>Finn, Emily S., et al., <a class="reference external" href="https://pubmed.ncbi.nlm.nih.gov/26457551/">“Functional connectome fingerprinting: identifying individuals using patterns of brain connectivity” </a>, Nat Neurosci. 2015
+Nov;18(11):1664-71.</p>
 </aside>
 <aside class="footnote brackets" id="id6" role="note">
 <span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">6</a><span class="fn-bracket">]</span></span>
-<p>Rosenberg, Monica D., et al., <a class="reference external" href="https://pubmed.ncbi.nlm.nih.gov/26595653/">“A neuromarker of sustained attention from whole-brain functional connectivity”</a>, Nat Neurosci. 2016 Jan; 19(1):165-71.</p>
+<p>Rosenberg, Monica D., et al., <a class="reference external" href="https://pubmed.ncbi.nlm.nih.gov/26595653/">“A neuromarker of sustained attention from whole-brain functional connectivity” </a>, Nat Neurosci. 2016 Jan;
+19(1):165-71.</p>
 </aside>
 </aside>
 </aside>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.191 seconds)</p>
 </section>
 </section>
 
@@ -509,12 +631,12 @@ that are positively correlated to the target and aggregate them using the
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="target_transformers.html">
+          <a class="next-page" href="../available_pipeline_steps.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title"><span class="section-number">3.7. </span>Applying preprocessing to the target</div>
+                <div class="title"><span class="section-number">4. </span>Overview of available Pipeline Steps</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
@@ -525,7 +647,7 @@ that are positively correlated to the target and aggregate them using the
                   <span>Previous</span>
                 </div>
                 
-                <div class="title"><span class="section-number">3.5. </span>Stacking Models</div>
+                <div class="title"><span class="section-number">3.6. </span>Stacking Models</div>
                 
               </div>
             </a>
@@ -559,7 +681,7 @@ that are positively correlated to the target and aggregate them using the
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
-<li><a class="reference internal" href="#">3.6. Connectome-based Predictive Modeling (CBPM)</a><ul>
+<li><a class="reference internal" href="#">3.7. Connectome-based Predictive Modeling (CBPM)</a><ul>
 <li><a class="reference internal" href="#cbpm-in-julearn">CBPM in Julearn</a></li>
 </ul>
 </li>

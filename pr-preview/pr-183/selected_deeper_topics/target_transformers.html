@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="4. Overview of available Pipeline Steps" href="../available_pipeline_steps.html" /><link rel="prev" title="3.6. Connectome-based Predictive Modeling (CBPM)" href="CBPM.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="3.2. Cross-validation consistent Confound Removal" href="confound_removal.html" /><link rel="prev" title="3. Selected deeper topics" href="index.html" />
 
     <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
-        <title>3.7. Applying preprocessing to the target - julearn documentation</title>
+        <title>3.1. Applying preprocessing to the target - julearn documentation</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
@@ -174,13 +174,13 @@
 </ul>
 </li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">3. Selected deeper topics</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="confound_removal.html">3.1. Cross-validation consistent Confound Removal</a></li>
-<li class="toctree-l2"><a class="reference internal" href="hyperparameter_tuning.html">3.2. Hyperparameter Tuning</a></li>
-<li class="toctree-l2"><a class="reference internal" href="model_inspect.html">3.3. Inspecting Models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="cross_validation_splitter.html">3.4. Cross-validation splitter</a></li>
-<li class="toctree-l2"><a class="reference internal" href="stacked_models.html">3.5. Stacking Models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="CBPM.html">3.6. Connectome-based Predictive Modeling (CBPM)</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">3.7. Applying preprocessing to the target</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">3.1. Applying preprocessing to the target</a></li>
+<li class="toctree-l2"><a class="reference internal" href="confound_removal.html">3.2. Cross-validation consistent Confound Removal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="hyperparameter_tuning.html">3.3. Hyperparameter Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_inspect.html">3.4. Inspecting Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cross_validation_splitter.html">3.5. Cross-validation splitter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stacked_models.html">3.6. Stacking Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="CBPM.html">3.7. Connectome-based Predictive Modeling (CBPM)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../available_pipeline_steps.html">4. Overview of available Pipeline Steps</a></li>
@@ -376,7 +376,7 @@
         </div>
         <article role="main">
           <section id="applying-preprocessing-to-the-target">
-<h1><span class="section-number">3.7. </span>Applying preprocessing to the target<a class="headerlink" href="#applying-preprocessing-to-the-target" title="Permalink to this heading">#</a></h1>
+<span id="sphx-glr-auto-examples-99-docs-run-target-transformer-docs-py"></span><span id="target-transformers"></span><h1><span class="section-number">3.1. </span>Applying preprocessing to the target<a class="headerlink" href="#applying-preprocessing-to-the-target" title="Permalink to this heading">#</a></h1>
 <p>What we covered so far is how to apply preprocessing to the features and train
 a model in a cv-conistent manner by building a pipeline.
 However, sometimes one wants to apply preprocessing to the target. For example,
@@ -384,34 +384,137 @@ when having a regression-task (continous target variable), one might want to
 predict the z-scored target.
 This can be achieved by using a <a class="reference internal" href="../api/generated/julearn.TargetPipelineCreator.html#julearn.TargetPipelineCreator" title="julearn.TargetPipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">TargetPipelineCreator</span></code></a>
 as one step in the general pipeline.</p>
-<p>We first create a <a class="reference internal" href="../api/generated/julearn.TargetPipelineCreator.html#julearn.TargetPipelineCreator" title="julearn.TargetPipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">TargetPipelineCreator</span></code></a>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">target_creator</span> <span class="o">=</span> <span class="n">TargetPipelineCreator</span><span class="p">()</span>
-<span class="n">target_creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">)</span>
+<p>Lets start by loading the data and importing the required modules:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">julearn</span> <span class="kn">import</span> <span class="n">run_cross_validation</span>
+<span class="kn">from</span> <span class="nn">julearn.pipeline</span> <span class="kn">import</span> <span class="n">PipelineCreator</span><span class="p">,</span> <span class="n">TargetPipelineCreator</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_diabetes</span>
 </pre></div>
 </div>
-<p>Next, we create the general pipeline using a <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a>. We pass
-the <code class="docutils literal notranslate"><span class="pre">target_creator</span></code> as one step of the pipeline and specify that it should
-only be applied to the <code class="docutils literal notranslate"><span class="pre">target</span></code>, which makes it clear for Julearn to only
-apply it to <code class="docutils literal notranslate"><span class="pre">y</span></code>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;regression&quot;</span><span class="p">)</span>
+<p>Load the diabetes dataset from sklearn as a pandas dataframe</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">features</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="n">load_diabetes</span><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">as_frame</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Features: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">features</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Target: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">target</span><span class="o">.</span><span class="n">describe</span><span class="p">())</span>
+
+<span class="n">data_diabetes</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">features</span><span class="p">,</span> <span class="n">target</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;age&quot;</span><span class="p">,</span> <span class="s2">&quot;sex&quot;</span><span class="p">,</span> <span class="s2">&quot;bmi&quot;</span><span class="p">,</span> <span class="s2">&quot;bp&quot;</span><span class="p">,</span> <span class="s2">&quot;s1&quot;</span><span class="p">,</span> <span class="s2">&quot;s2&quot;</span><span class="p">,</span> <span class="s2">&quot;s3&quot;</span><span class="p">,</span> <span class="s2">&quot;s4&quot;</span><span class="p">,</span> <span class="s2">&quot;s5&quot;</span><span class="p">,</span> <span class="s2">&quot;s6&quot;</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="s2">&quot;target&quot;</span>
+
+<span class="n">X_types</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;continuous&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;age&quot;</span><span class="p">,</span> <span class="s2">&quot;bmi&quot;</span><span class="p">,</span> <span class="s2">&quot;bp&quot;</span><span class="p">,</span> <span class="s2">&quot;s1&quot;</span><span class="p">,</span> <span class="s2">&quot;s2&quot;</span><span class="p">,</span> <span class="s2">&quot;s3&quot;</span><span class="p">,</span> <span class="s2">&quot;s4&quot;</span><span class="p">,</span> <span class="s2">&quot;s5&quot;</span><span class="p">,</span> <span class="s2">&quot;s6&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;categorical&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;sex&quot;</span><span class="p">],</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Features:
+         age       sex       bmi  ...        s4        s5        s6
+0  0.038076  0.050680  0.061696  ... -0.002592  0.019907 -0.017646
+1 -0.001882 -0.044642 -0.051474  ... -0.039493 -0.068332 -0.092204
+2  0.085299  0.050680  0.044451  ... -0.002592  0.002861 -0.025930
+3 -0.089063 -0.044642 -0.011595  ...  0.034309  0.022688 -0.009362
+4  0.005383 -0.044642 -0.036385  ... -0.002592 -0.031988 -0.046641
+
+[5 rows x 10 columns]
+Target:
+ count    442.000000
+mean     152.133484
+std       77.093005
+min       25.000000
+25%       87.000000
+50%      140.500000
+75%      211.500000
+max      346.000000
+Name: target, dtype: float64
+</pre></div>
+</div>
+<p>We first create a <a class="reference internal" href="../api/generated/julearn.TargetPipelineCreator.html#julearn.TargetPipelineCreator" title="julearn.TargetPipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">TargetPipelineCreator</span></code></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">target_creator</span> <span class="o">=</span> <span class="n">TargetPipelineCreator</span><span class="p">()</span>
+<span class="n">target_creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">target_creator</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>TargetPipelineCreator:
+  Step 0: zscore
+    estimator:     StandardScaler()
+</pre></div>
+</div>
+<p>Next, we create the general pipeline using a <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a>. We
+pass the <code class="docutils literal notranslate"><span class="pre">target_creator</span></code> as one step of the pipeline and specify that it
+should only be applied to the <code class="docutils literal notranslate"><span class="pre">target</span></code>, which makes it clear for Julearn
+to only apply it to <code class="docutils literal notranslate"><span class="pre">y</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span>
+    <span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;regression&quot;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;categorical&quot;</span><span class="p">,</span> <span class="s2">&quot;continuous&quot;</span><span class="p">]</span>
+<span class="p">)</span>
 <span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">target_creator</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;target&quot;</span><span class="p">)</span>
 <span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;svm&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">creator</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This <code class="docutils literal notranslate"><span class="pre">creator</span></code> can then be passed to <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> as usual:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">run_cross_validation</span><span class="p">(</span>
-    <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
-    <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
-    <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
-    <span class="n">model</span><span class="o">=</span><span class="n">creator</span>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-06-15 13:01:41,857 - julearn - INFO - Adding step jutargetpipeline that applies to ColumnTypes&lt;types={&#39;target&#39;}; pattern=(?:target)&gt;
+2023-06-15 13:01:41,857 - julearn - INFO - Step added
+2023-06-15 13:01:41,857 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;, &#39;categorical&#39;}; pattern=(?:__:type:__continuous|__:type:__categorical)&gt;
+2023-06-15 13:01:41,857 - julearn - INFO - Step added
+PipelineCreator:
+  Step 0: target_jutargetpipeline
+    estimator:     &lt;julearn.pipeline.target_pipeline.JuTargetPipeline object at 0x7f579dbdf3a0&gt;
+    apply to:      ColumnTypes&lt;types={&#39;target&#39;}; pattern=(?:target)&gt;
+    needed types:  ColumnTypes&lt;types={&#39;target&#39;}; pattern=(?:target)&gt;
+    tuning params: {}
+  Step 1: svm
+    estimator:     SVR()
+    apply to:      ColumnTypes&lt;types={&#39;continuous&#39;, &#39;categorical&#39;}; pattern=(?:__:type:__continuous|__:type:__categorical)&gt;
+    needed types:  ColumnTypes&lt;types={&#39;continuous&#39;, &#39;categorical&#39;}; pattern=(?:__:type:__continuous|__:type:__categorical)&gt;
+    tuning params: {}
+</pre></div>
+</div>
+<p>This <code class="docutils literal notranslate"><span class="pre">creator</span></code> can then be passed to <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">scores</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data_diabetes</span><span class="p">,</span> <span class="n">X_types</span><span class="o">=</span><span class="n">X_types</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">creator</span>
 <span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-06-15 13:01:41,858 - julearn - INFO - ==== Input Data ====
+2023-06-15 13:01:41,858 - julearn - INFO - Using dataframe as input
+2023-06-15 13:01:41,858 - julearn - INFO -      Features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2023-06-15 13:01:41,858 - julearn - INFO -      Target: target
+2023-06-15 13:01:41,859 - julearn - INFO -      Expanded features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2023-06-15 13:01:41,859 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;], &#39;categorical&#39;: [&#39;sex&#39;]}
+2023-06-15 13:01:41,860 - julearn - INFO - ====================
+2023-06-15 13:01:41,860 - julearn - INFO -
+2023-06-15 13:01:41,861 - julearn - INFO - = Model Parameters =
+2023-06-15 13:01:41,861 - julearn - INFO - ====================
+2023-06-15 13:01:41,861 - julearn - INFO -
+2023-06-15 13:01:41,861 - julearn - INFO - = Data Information =
+2023-06-15 13:01:41,861 - julearn - INFO -      Problem type: regression
+2023-06-15 13:01:41,861 - julearn - INFO -      Number of samples: 442
+2023-06-15 13:01:41,861 - julearn - INFO -      Number of features: 10
+2023-06-15 13:01:41,861 - julearn - INFO - ====================
+2023-06-15 13:01:41,861 - julearn - INFO -
+2023-06-15 13:01:41,861 - julearn - INFO -      Target type: float64
+2023-06-15 13:01:41,862 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+   fit_time  score_time  ...  fold                          cv_mdsum
+0  0.013978    0.004764  ...     0  b10eef89b4192178d482d7a1587a248a
+1  0.012103    0.004750  ...     1  b10eef89b4192178d482d7a1587a248a
+2  0.012814    0.004727  ...     2  b10eef89b4192178d482d7a1587a248a
+3  0.012426    0.004498  ...     3  b10eef89b4192178d482d7a1587a248a
+4  0.012587    0.004677  ...     4  b10eef89b4192178d482d7a1587a248a
+
+[5 rows x 8 columns]
 </pre></div>
 </div>
 <p>All transformers in (<a class="reference internal" href="../available_pipeline_steps.html#available-transformers"><span class="std std-ref">Transformers</span></a>) can be used for both,
 feature and target transformations. However, features transformations can be
 directly specified as step in the <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a>, while target
-transformations have to be specified using the <a class="reference internal" href="../api/generated/julearn.TargetPipelineCreator.html#julearn.TargetPipelineCreator" title="julearn.TargetPipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">TargetPipelineCreator</span></code></a>,
-which is then passed to the overall <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> as an extra step.</p>
+transformations have to be specified using the
+<a class="reference internal" href="../api/generated/julearn.TargetPipelineCreator.html#julearn.TargetPipelineCreator" title="julearn.TargetPipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">TargetPipelineCreator</span></code></a>,  which is then passed to the overall
+<a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> as an extra step.</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.129 seconds)</p>
 </section>
 
         </article>
@@ -419,23 +522,23 @@ which is then passed to the overall <a class="reference internal" href="../api/g
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="../available_pipeline_steps.html">
+          <a class="next-page" href="confound_removal.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title"><span class="section-number">4. </span>Overview of available Pipeline Steps</div>
+                <div class="title"><span class="section-number">3.2. </span>Cross-validation consistent Confound Removal</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
-          <a class="prev-page" href="CBPM.html">
+          <a class="prev-page" href="index.html">
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title"><span class="section-number">3.6. </span>Connectome-based Predictive Modeling (CBPM)</div>
+                <div class="title"><span class="section-number">3. </span>Selected deeper topics</div>
                 
               </div>
             </a>
