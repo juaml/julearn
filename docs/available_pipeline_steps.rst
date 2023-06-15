@@ -46,22 +46,22 @@ Scalers
      - :class:`~sklearn.preprocessing.StandardScaler`
    * - ``scaler_robust``
      - Removing median and scale to IQR
-     - `RobustScaler`_
+     - :class:`~sklearn.preprocessing.RobustScaler`
    * - ``scaler_minmax``
      - Scale to a given range
-     - `MinMaxScaler`_
+     - :class:`~sklearn.preprocessing.MinMaxScaler`
    * - ``scaler_maxabs``
      - Scale by max absolute value
-     - `MaxAbsScaler`_
+     - :class:`~sklearn.preprocessing.MaxAbsScaler`
    * - ``scaler_normalizer``
      - Normalize to unit norm
-     - `Normalizer`_
+     - :class:`~sklearn.preprocessing.Normalizer`
    * - ``scaler_quantile``
      - Transform to uniform or normal distribution (robust)
-     - `QuantileTransformer`_
+     - :class:`~sklearn.preprocessing.QuantileTransformer`
    * - ``scaler_power``
      - *Gaussianise* data
-     - `PowerTransformer`_
+     - :class:`~sklearn.preprocessing.PowerTransformer`
 
 
 Feature Selection
@@ -75,25 +75,25 @@ Feature Selection
      - Class
    * - ``select_univariate``
      - Removing mean and scale to unit variance
-     - `GenericUnivariateSelect`_
+     - :class:`~sklearn.feature_selection.GenericUnivariateSelect`
    * - ``select_percentile``
      - Rank and select percentile
-     - `SelectPercentile`_
+     - :class:`~sklearn.feature_selection.SelectPercentile`
    * - ``select_k``
      - Rank and select K
-     - `SelectKBest`_
+     - :class:`~sklearn.feature_selection.SelectKBest`
    * - ``select_fdr``
      - Select based on estimated FDR
-     - `SelectFdr`_
+     - :class:`~sklearn.feature_selection.SelectFdr`
    * - ``select_fpr``
      - Select based on FPR threshold
-     - `SelectFpr`_
+     - :class:`~sklearn.feature_selection.SelectFpr`
    * - ``select_fwe``
      - Select based on FWE threshold
-     - `SelectFwe`_
+     - :class:`~sklearn.feature_selection.SelectFwe`
    * - ``select_variance``
      - Remove low variance features
-     - `VarianceThreshold`_
+     - :class:`~sklearn.feature_selection.VarianceThreshold`
 
 
 DataFrame operations
@@ -105,21 +105,21 @@ DataFrame operations
    * - Name (str)
      - Description
      - Class
-   * - ``remove_confound``
+   * - ``confound_removal``
      - Removing confounds from features,
        by subtracting the prediction of each feature given all confounds.
        By default this is equal to "independently regressing out 
        the confounds from the features" 
-     - confounds.ConfoundRemover
+     - :class:`.ConfoundRemover`
    * - ``drop_columns``
      - Drop columns from the dataframe
-     - dataframe.DropColumns
+     - :class:`.DropColumns`
    * - ``change_column_types``
      - Change the type of a column in a dataframe
-     - dataframe.ChangeColumnTypes
+     - :class:`.ChangeColumnTypes`
    * - ``filter_columns``
      - Filter columns in a dataframe
-     - dataframe.FilterColumns
+     - :class:`.FilterColumns`
 
 .. _available_decompositions:
 
@@ -134,7 +134,7 @@ Decomposition
      - Class
    * - ``pca``
      - Principal Component Analysis
-     - `PCA`
+     - :class:`~sklearn.decomposition.PCA`
   
 Custom
 ------
@@ -147,7 +147,7 @@ Custom
      - Class
    * - ``cbpm``
      - Connectome-based Predictive Modeling (CBPM) 
-     - cbpm.CBPM
+     - :class:`.CBPM`
 
 .. _available_models:
 
@@ -169,7 +169,7 @@ Support Vector Machines
      - Regression
    * - ``svm``
      - Support Vector Machine
-     - `SVC`_ and `SVR`_
+     - :class:`~sklearn.svm.SVC` and :class:`~sklearn.svm.SVR`
      - Y
      - Y
      - Y
@@ -189,37 +189,37 @@ Ensemble
      - Regression
    * - ``rf``
      - Random Forest
-     - `RandomForestClassifier`_ and `RandomForestRegressor`_
+     - :class:`~sklearn.ensemble.RandomForestClassifier` and :class:`~sklearn.ensemble.RandomForestRegressor`
      - Y
      - Y
      - Y
    * - ``et``
      - Extra-Trees
-     - `ExtraTreesClassifier`_ and `ExtraTreesRegressor`_
+     - :class:`~sklearn.ensemble.ExtraTreesClassifier` and :class:`~sklearn.ensemble.ExtraTreesRegressor`
      - Y
      - Y
      - Y
    * - ``adaboost``
      - AdaBoost
-     - `AdaBoostClassifier`_ and `AdaBoostRegressor`_
+     - :class:`~sklearn.ensemble.AdaBoostClassifier` and :class:`~sklearn.ensemble.AdaBoostRegressor`
      - Y
      - Y
      - Y
    * - ``bagging``
      - Bagging
-     - `BaggingClassifier`_ and `BaggingRegressor`_
+     - :class:`~sklearn.ensemble.BaggingClassifier` and :class:`~sklearn.ensemble.BaggingRegressor`
      - Y
      - Y
      - Y
    * - ``gradientboost``
      - Gradient Boosting 
-     - `GradientBoostingClassifier`_ and `GradientBoostingRegressor`_
+     - :class:`~sklearn.ensemble.GradientBoostingClassifier` and :class:`~sklearn.ensemble.GradientBoostingRegressor`
      - Y
      - Y
      - Y
    * - ``stacking``
      - Stacking
-     - `StackingClassifier`_ and `StackingRegressor`_
+     - :class:`~sklearn.ensemble.StackingClassifier` and :class:`~sklearn.ensemble.StackingRegressor`
      - Y
      - Y
      - Y
@@ -239,7 +239,7 @@ Gaussian Processes
      - Regression
    * - ``gauss``
      - Gaussian Process
-     - `GaussianProcessClassifier`_ and `GaussianProcessRegressor`_
+     - :class:`~sklearn.gaussian_process.GaussianProcessClassifier` and :class:`~sklearn.gaussian_process.GaussianProcessRegressor`
      - Y
      - Y
      - Y
@@ -258,37 +258,37 @@ Linear Models
      - Regression
    * - ``logit``
      - Logistic Regression (aka logit, MaxEnt).
-     - `LogisticRegression`_
+     - :class:`~sklearn.linear_model.LogisticRegression`
      - Y
      - Y
      - N
    * - ``logitcv``
      - Logistic Regression CV (aka logit, MaxEnt).
-     - `LogisticRegressionCV`_
+     - :class:`~sklearn.linear_model.LogisticRegressionCV`
      - Y
      - Y
      - N
    * - ``linreg``
      - Least Squares regression.
-     - `LinearRegression`_
+     - :class:`~sklearn.linear_model.LinearRegression`
      - N
      - N
      - Y
    * - ``ridge``
      - Linear least squares with l2 regularization.
-     - `RidgeClassifier`_ and `Ridge`_
+     - :class:`~sklearn.linear_model.RidgeClassifier` and :class:`~sklearn.linear_model.Ridge`
      - Y
      - Y
      - Y
    * - ``ridgecv``
      - Ridge regression with built-in cross-validation.
-     - `RidgeClassifierCV`_ and `RidgeCV`_
+     - :class:`~sklearn.linear_model.RidgeClassifierCV` and :class:`~sklearn.linear_model.RidgeCV`
      - Y
      - Y
      - Y
    * - ``sgd``
      - Linear model fitted by minimizing a regularized empirical loss with SGD
-     - `SGDClassifier`_ and `SGDRegressor`_
+     - :class:`~sklearn.linear_model.SGDClassifier` and :class:`~sklearn.linear_model.SGDRegressor`
      - Y
      - Y
      - Y
@@ -308,31 +308,31 @@ Naive Bayes
      - Regression
    * - ``nb_bernoulli``
      - Multivariate Bernoulli models.
-     - `BernoulliNB`_
+     - :class:`~sklearn.naive_bayes.BernoulliNB`
      - Y
      - Y
      - N
    * - ``nb_categorical``
      - Categorical features.
-     - `CategoricalNB`_
+     - :class:`~sklearn.naive_bayes.CategoricalNB`
      - Y
      - Y
      - N
    * - ``nb_complement``
      - Complement Naive Bayes
-     - `ComplementNB`_
+     - :class:`~sklearn.naive_bayes.ComplementNB`
      - Y
      - Y
      - N
    * - ``nb_gaussian``
      - Gaussian Naive Bayes 
-     - `GaussianNB`_
+     - :class:`~sklearn.naive_bayes.GaussianNB`
      - Y
      - Y
      - N
    * - ``nb_multinomial``
      - Multinomial models
-     - `MultinomialNB`_
+     - :class:`~sklearn.naive_bayes.MultinomialNB`
      - Y
      - Y
      - N
@@ -352,7 +352,7 @@ Dynamic Selection
      - Regression
    * - ``ds``
      - Support for `DESlib`_ models
-     - dynamic.DynamicSelection
+     - :class:`.DynamicSelection`
      - Y
      - Y
      - Y
@@ -372,7 +372,7 @@ Dummy
      - Regression
    * - ``dummy``
      - Use simple rules (without features).
-     - `DummyClassifier`_ and `DummyRegressor`_
+     - :class:`~sklearn.dummy.DummyClassifier` and :class:`~sklearn.dummy.DummyRegressor`
      - Y
      - Y
      - Y

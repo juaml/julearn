@@ -35,8 +35,6 @@ from .dataframe import ChangeColumnTypes, DropColumns, FilterColumns
 
 
 _available_transformers = {
-    # Decomposition
-    "pca": PCA,
     # Scalers
     "zscore": StandardScaler,
     "scaler_robust": RobustScaler,
@@ -53,13 +51,15 @@ _available_transformers = {
     "select_fpr": SelectFpr,
     "select_fwe": SelectFwe,
     "select_variance": VarianceThreshold,
-    # Custom
-    "cbpm": CBPM,
     # DataFrame operations
     "confound_removal": ConfoundRemover,
     "drop_columns": DropColumns,
     "change_column_types": ChangeColumnTypes,
     "filter_columns": FilterColumns,
+    # Decomposition
+    "pca": PCA,
+    # Custom
+    "cbpm": CBPM,
 }
 
 _available_transformers_reset = deepcopy(_available_transformers)

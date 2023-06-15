@@ -52,10 +52,12 @@ from .dynamic import DynamicSelection
 
 
 _available_models: Dict[str, Dict[str, Any]] = {
+    # SVM
     "svm": {
         "regression": SVR,
         "classification": SVC,
     },
+    # Ensemble
     "rf": {
         "regression": RandomForestRegressor,
         "classification": RandomForestClassifier,
@@ -64,14 +66,28 @@ _available_models: Dict[str, Dict[str, Any]] = {
         "regression": ExtraTreesRegressor,
         "classification": ExtraTreesClassifier,
     },
-    "dummy": {
-        "regression": DummyRegressor,
-        "classification": DummyClassifier,
+    "adaboost": {
+        "regression": AdaBoostRegressor,
+        "classification": AdaBoostClassifier,
     },
+    "bagging": {
+        "regression": BaggingRegressor,
+        "classification": BaggingClassifier,
+    },
+    "gradientboost": {
+        "regression": GradientBoostingRegressor,
+        "classification": GradientBoostingClassifier,
+    },
+    "stacking": {
+        "classification": StackingClassifier,
+        "regression": StackingRegressor,
+    },
+    # Gaussian Processes
     "gauss": {
         "regression": GaussianProcessRegressor,
         "classification": GaussianProcessClassifier,
     },
+    # Linear models
     "logit": {
         "classification": LogisticRegression,
     },
@@ -93,18 +109,7 @@ _available_models: Dict[str, Dict[str, Any]] = {
         "regression": SGDRegressor,
         "classification": SGDClassifier,
     },
-    "adaboost": {
-        "regression": AdaBoostRegressor,
-        "classification": AdaBoostClassifier,
-    },
-    "bagging": {
-        "regression": BaggingRegressor,
-        "classification": BaggingClassifier,
-    },
-    "gradientboost": {
-        "regression": GradientBoostingRegressor,
-        "classification": GradientBoostingClassifier,
-    },
+    # Naive Bayes
     "nb_bernoulli": {
         "classification": BernoulliNB,
     },
@@ -120,13 +125,16 @@ _available_models: Dict[str, Dict[str, Any]] = {
     "nb_multinomial": {
         "classification": MultinomialNB,
     },
+    # Dynamic Selection
     "ds": {
         "classification": DynamicSelection,
     },
-    "stacking": {
-        "classification": StackingClassifier,
-        "regression": StackingRegressor,
+    # Dummy
+    "dummy": {
+        "regression": DummyRegressor,
+        "classification": DummyClassifier,
     },
+
 }
 
 _available_models_reset = deepcopy(_available_models)
