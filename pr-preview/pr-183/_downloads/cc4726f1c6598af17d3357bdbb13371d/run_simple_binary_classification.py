@@ -55,7 +55,7 @@ print(df_unbalanced["species"].value_counts())
 ###############################################################################
 # If we compute the `accuracy`, we might not account for this imbalance. A more
 # suitable metric is the `balanced_accuracy`. More information in scikit-learn:
-# `Balanced Accuracy`_
+# :func:`~sklearn.metrics.balanced_accuracy_score`.
 #
 # We will also set the random seed so we always split the data in the same way.
 scores = run_cross_validation(
@@ -80,7 +80,7 @@ print(scores["test_balanced_accuracy"].mean())
 #
 # Now we might want to evaluate the precision score, or the ratio of true
 # positives (tp) over all positives (true and false positives). More
-# information in scikit-learn: `Precision`_
+# information in scikit-learn: :func:`~sklearn.metrics.precision_score`.
 #
 # For this metric to work, we need to define which are our `positive` values.
 # In this example, we are interested in detecting `versicolor`.

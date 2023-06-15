@@ -57,7 +57,8 @@ scores, model_iris = run_cross_validation(
 ###############################################################################
 # This type of classifier has an internal variable that can inform us on how
 # _important_ is each of the features. Caution: read the proper scikit-learn
-# documentation (`Random Forest`_)
+# documentation :class:`~sklearn.ensemble.RandomForestClassifier` to understand\
+# how this learning algorithm works.
 rf = model_iris["rf"]
 
 to_plot = pd.DataFrame(

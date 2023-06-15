@@ -127,7 +127,7 @@ print(scores["test_score"].mean())
 # To test for unseen subject, we need to make sure that all the data from each
 # subject is either on the training or the testing set, but not in both.
 #
-# We can use scikit-learn's GroupShuffleSplit (see `Cross Validation`_).
+# We can use scikit-learn's :class:`sklearn.model_selection.GroupShuffleSplit`.
 # And specify which is the grouping column using the `group` parameter.
 #
 # By setting `return_estimator='final'`, the :func:`.run_cross_validation`
@@ -182,7 +182,8 @@ sns.scatterplot(
 axes[1].set_title("Preprocessed data")
 
 ###############################################################################
-# In this case, the preprocessing is nothing more than a `Standard Scaler`_.
+# In this case, the preprocessing is nothing more than a
+# :class:`sklearn.preprocessing.StandardScaler`.
 #
 # It seems that the data is not quite linearly separable. Lets now visualize
 # how the SVM does this complex task.
