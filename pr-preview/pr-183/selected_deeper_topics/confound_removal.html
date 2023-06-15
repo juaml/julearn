@@ -259,6 +259,8 @@
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../api/inspect.html">6.5. Inspect</a><input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.inspect.Inspector.html">julearn.inspect.Inspector</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.inspect.FoldsInspector.html">julearn.inspect.FoldsInspector</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.inspect.preprocess.html">julearn.inspect.preprocess</a></li>
 </ul>
 </li>
@@ -374,37 +376,40 @@
         </div>
         <article role="main">
           <section id="cross-validation-consistent-confound-removal">
-<span id="confound-removal"></span><h1><span class="section-number">3.1. </span>Cross-validation consistent Confound Removal<a class="headerlink" href="#cross-validation-consistent-confound-removal" title="Permalink to this heading">#</a></h1>
+<span id="sphx-glr-auto-examples-99-docs-run-confound-removal-docs-py"></span><span id="confound-removal"></span><h1><span class="section-number">3.1. </span>Cross-validation consistent Confound Removal<a class="headerlink" href="#cross-validation-consistent-confound-removal" title="Permalink to this heading">#</a></h1>
 <p>In many machine learning applications, researchers ultimately want to assess
 whether the features are related to the target. However, in most real-world
 scenarios the supposed relationship between the features and the target
 may be confounded by one or more (un)observed variables. Therefore, the effect
-of potential confounding variables is often removed by training a linear regression
-to predict each feature given the confounds, and using the residuals from this
-confound removal model to predict the target <a class="footnote-reference brackets" href="#id8" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>8<span class="fn-bracket">]</span></a>, <a class="footnote-reference brackets" href="#id9" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>9<span class="fn-bracket">]</span></a>. Similarly, one may
-instead remove the confounding effect by performing confound regression on the target.
-That is, one may predict the target given the confounds, and then predict the residuals
-from such a confound removal model using the features <a class="footnote-reference brackets" href="#id10" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>10<span class="fn-bracket">]</span></a>.
-In either case, it is very important that such confound regression models are only trained on the
-training data, rather than on the training and testing data jointly in order to
-prevent test-to-train data leakage <a class="footnote-reference brackets" href="#id11" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>11<span class="fn-bracket">]</span></a>, <a class="footnote-reference brackets" href="#id12" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>12<span class="fn-bracket">]</span></a>.</p>
+of potential confounding variables is often removed by training a linear
+regression to predict each feature given the confounds, and using the residuals
+from this confound removal model to predict the target <a class="footnote-reference brackets" href="#id8" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>8<span class="fn-bracket">]</span></a>, <a class="footnote-reference brackets" href="#id9" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>9<span class="fn-bracket">]</span></a>. Similarly,
+one may instead remove the confounding effect by performing confound regression
+on the target. That is, one may predict the target given the confounds, and
+then predict the residuals from such a confound removal model using the
+features <a class="footnote-reference brackets" href="#id10" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>10<span class="fn-bracket">]</span></a>. In either case, it is important that such confound regression
+models are trained within the cross-validation splits, rather than on the
+training and testing data jointly in order to prevent test-to-train data
+leakage <a class="footnote-reference brackets" href="#id11" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>11<span class="fn-bracket">]</span></a>, <a class="footnote-reference brackets" href="#id12" id="id5" role="doc-noteref"><span class="fn-bracket">[</span>12<span class="fn-bracket">]</span></a>.</p>
 <section id="confound-removal-in-julearn">
 <h2>Confound Removal in Julearn<a class="headerlink" href="#confound-removal-in-julearn" title="Permalink to this heading">#</a></h2>
-<p>Julearn implements cross-validation consistent confound regression for both of the
-scenarios laid out above (i.e. either confound regression on the features or on
-the target) allowing the user to implement complex machine learning pipelines with
-relatively little code while avoiding test-to-train leakage during confound removal.
-Let us initially consider removing a confounding variable from the features.</p>
+<p>Julearn implements cross-validation consistent confound regression for both of
+the scenarios laid out above (i.e. either confound regression on the features
+or on the target) allowing the user to implement complex machine learning
+pipelines with relatively little code while avoiding test-to-train leakage
+during confound removal.</p>
+<p>Let us initially consider removing a confounding variable from the features.</p>
 <section id="removing-confounds-from-the-features">
 <h3>Removing Confounds from the Features<a class="headerlink" href="#removing-confounds-from-the-features" title="Permalink to this heading">#</a></h3>
-<p>The first scenario involves confound regression on the features. In order to do this
-we can simply configure an instance of a <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a>
+<p>The first scenario involves confound regression on the features. In order to
+do this we can simply configure an instance of a <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a>
 by adding the “confound_removal” step.</p>
-<p>We can create some data using scikit-learn’s <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.make_regression.html#sklearn.datasets.make_regression" title="(in scikit-learn v1.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">sklearn.datasets.make_regression()</span></code></a>
+<p>We can create some data using scikit-learn’s
+<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.make_regression.html#sklearn.datasets.make_regression" title="(in scikit-learn v1.2)"><code class="xref py py-func docutils literal notranslate"><span class="pre">make_regression()</span></code></a>
 and then simulate a normally distributed random variable that has a linear
 relationship with the target that we can use as a confound.</p>
 <p>Let’s import some of the functionality we will need:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">julearn</span> <span class="kn">import</span> <span class="n">run_cross_validation</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">julearn</span> <span class="kn">import</span> <span class="n">run_cross_validation</span>
 <span class="kn">from</span> <span class="nn">julearn.pipeline</span> <span class="kn">import</span> <span class="n">PipelineCreator</span><span class="p">,</span> <span class="n">TargetPipelineCreator</span>
 <span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">make_regression</span>
 
@@ -412,9 +417,9 @@ relationship with the target that we can use as a confound.</p>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 </pre></div>
 </div>
-<p>First we create the features and the target, and based on this we create two artificial
-confounds that we can use as an example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># make X and y</span>
+<p>First we create the features and the target, and based on this we create
+two artificial confounds that we can use as an example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># make X and y</span>
 <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_regression</span><span class="p">(</span><span class="n">n_features</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 
 <span class="c1"># create two normally distributed random variables with the same mean</span>
@@ -431,10 +436,9 @@ confounds that we can use as an example:</p>
 <span class="n">confound_two</span> <span class="o">=</span> <span class="n">normal_dist_conf_two</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="n">noise_conf_two</span>
 </pre></div>
 </div>
-<p>Let’s organise these data as a <a class="reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.1.0.dev0+976.g870a504af9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a>, which is the preferred
-data format when using julearn, and also the most common data format for real-world
-examples:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># put the features into a dataframe</span>
+<p>Let’s organise these data as a <a class="reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.1.0.dev0+976.g870a504af9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a>, which is the
+preferred data format when using julearn:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># put the features into a dataframe</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 
 <span class="c1"># give features and confounds human readable names</span>
@@ -452,44 +456,101 @@ examples:</p>
 <span class="n">data</span><span class="p">[</span><span class="s2">&quot;confound_2&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">confound_two</span>
 </pre></div>
 </div>
-<p>In this example, we only distinguish between two types of variables in the “X”.
-That is, we have 1.) our features (or predictors) and 2.) our confounds.
+<p>In this example, we only distinguish between two types of variables in the
+“X”. That is, we have 1.) our features (or predictors) and 2.) our confounds.
 Let’s prepare the “X_types” dictionary that we hand over to
 <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> accordingly:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">X_types</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;features&quot;</span><span class="p">:</span> <span class="n">features</span><span class="p">,</span> <span class="s2">&quot;confounds&quot;</span><span class="p">:</span> <span class="n">confounds</span><span class="p">}</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">X_types</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;features&quot;</span><span class="p">:</span> <span class="n">features</span><span class="p">,</span> <span class="s2">&quot;confounds&quot;</span><span class="p">:</span> <span class="n">confounds</span><span class="p">}</span>
 </pre></div>
 </div>
-<p>Now, that we have all the data prepared, and we have defined our “X_types”, we
-can think about creating the pipeline that we want to run. Now, this is the crucial
-point at which we parametrise the confound removal. We initialise the
-<a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> and add to it as a step the
+<p>Now, that we have all the data prepared, and we have defined our “X_types”,
+we can think about creating the pipeline that we want to run. Now, this is
+the crucial point at which we parametrise the confound removal. We initialise
+the <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> and add to it as a step the
 “confound_removal” transformer (the underlying transformer object is the
-<a class="reference internal" href="../api/generated/julearn.transformers.confound_remover.ConfoundRemover.html#julearn.transformers.confound_remover.ConfoundRemover" title="julearn.transformers.confound_remover.ConfoundRemover"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConfoundRemover</span></code></a>). The following code
-will do just that:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">pipeline_creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;regression&quot;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;features&quot;</span><span class="p">)</span>
+<a class="reference internal" href="../api/generated/julearn.transformers.confound_remover.ConfoundRemover.html#julearn.transformers.confound_remover.ConfoundRemover" title="julearn.transformers.confound_remover.ConfoundRemover"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConfoundRemover</span></code></a>).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pipeline_creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span>
+    <span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;regression&quot;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;features&quot;</span>
+<span class="p">)</span>
 <span class="n">pipeline_creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;confound_removal&quot;</span><span class="p">,</span> <span class="n">confounds</span><span class="o">=</span><span class="s2">&quot;confounds&quot;</span><span class="p">)</span>
 <span class="n">pipeline_creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;linreg&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">pipeline_creator</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>As you can see, we tell the <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> that we want
-to work on a “regression” problem when we initialise the class. We also tell it,
-that by default each “step” of the pipeline should be applied to the “X_type” called
-“features”. In the first step that we add, we specify we want to perform
-“confound_removal”, and that the “X_type” called “confounds” should be used as confounds
-in the confound regression. Note, that because we already specified apply_to=”features”
-during the initialisation, we do not need to explicitly state this again.</p>
-<p>As a second and last step, we simply add a linear regression (“linreg”) to fit a
-predictive model to the de-confounded X and the y.</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-06-15 10:51:53,341 - julearn - INFO - Adding step confound_removal that applies to ColumnTypes&lt;types={&#39;features&#39;}; pattern=(?:__:type:__features)&gt;
+2023-06-15 10:51:53,341 - julearn - INFO - Setting hyperparameter confounds = confounds
+2023-06-15 10:51:53,342 - julearn - INFO - Step added
+2023-06-15 10:51:53,342 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;features&#39;}; pattern=(?:__:type:__features)&gt;
+2023-06-15 10:51:53,342 - julearn - INFO - Step added
+PipelineCreator:
+  Step 0: confound_removal
+    estimator:     ConfoundRemover(apply_to=ColumnTypes&lt;types={&#39;features&#39;}; pattern=(?:__:type:__features)&gt;,
+                confounds=ColumnTypes&lt;types={&#39;confounds&#39;}; pattern=(?:__:type:__confounds)&gt;,
+                model_confound=LinearRegression())
+    apply to:      ColumnTypes&lt;types={&#39;features&#39;}; pattern=(?:__:type:__features)&gt;
+    needed types:  ColumnTypes&lt;types={&#39;confounds&#39;, &#39;features&#39;}; pattern=(?:__:type:__confounds|__:type:__features)&gt;
+    tuning params: {}
+  Step 1: linreg
+    estimator:     LinearRegression()
+    apply to:      ColumnTypes&lt;types={&#39;features&#39;}; pattern=(?:__:type:__features)&gt;
+    needed types:  ColumnTypes&lt;types={&#39;features&#39;}; pattern=(?:__:type:__features)&gt;
+    tuning params: {}
+</pre></div>
+</div>
+<p>As you can see, we tell the <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> that we want to work on
+a “regression” problem when we initialise the class. We also tell that by
+default each “step” of the pipeline should be applied to the features which
+type is “features”. In the first step that we add, we specify we want to
+perform “confound_removal”, and that the features that have the type
+“confounds” should be used as confounds in the confound regression.
+Note, that because we already specified apply_to=”features”
+during the initialisation, we do not need to explicitly state this again.
+In short, the “confounds” will be removed from the “features”.</p>
+<p>As a second and last step, we simply add a linear regression (“linreg”) to
+fit a predictive model to the de-confounded X and the y.</p>
 <p>Lastly, we only need to apply this pipeline in the <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>
-function to perform confound removal on the features in a cross-validation consistent way:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">scores</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
-        <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
-        <span class="n">X</span><span class="o">=</span><span class="n">features</span> <span class="o">+</span> <span class="n">confounds</span><span class="p">,</span>
-        <span class="n">y</span><span class="o">=</span><span class="s2">&quot;my_target&quot;</span><span class="p">,</span>
-        <span class="n">X_types</span><span class="o">=</span><span class="n">X_types</span><span class="p">,</span>
-        <span class="n">model</span><span class="o">=</span><span class="n">pipeline_creator</span><span class="p">,</span>
-        <span class="n">scoring</span><span class="o">=</span><span class="s2">&quot;r2&quot;</span>
+function to perform confound removal on the features in a cross-validation
+consistent way:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">scores</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
+    <span class="n">X</span><span class="o">=</span><span class="n">features</span> <span class="o">+</span> <span class="n">confounds</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="s2">&quot;my_target&quot;</span><span class="p">,</span>
+    <span class="n">X_types</span><span class="o">=</span><span class="n">X_types</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">pipeline_creator</span><span class="p">,</span>
+    <span class="n">scoring</span><span class="o">=</span><span class="s2">&quot;r2&quot;</span><span class="p">,</span>
 <span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-06-15 10:51:53,343 - julearn - INFO - ==== Input Data ====
+2023-06-15 10:51:53,343 - julearn - INFO - Using dataframe as input
+2023-06-15 10:51:53,343 - julearn - INFO -      Features: [&#39;feature_0&#39;, &#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;confound_1&#39;, &#39;confound_2&#39;]
+2023-06-15 10:51:53,343 - julearn - INFO -      Target: my_target
+2023-06-15 10:51:53,345 - julearn - INFO -      Expanded features: [&#39;feature_0&#39;, &#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;confound_1&#39;, &#39;confound_2&#39;]
+2023-06-15 10:51:53,345 - julearn - INFO -      X_types:{&#39;features&#39;: [&#39;feature_0&#39;, &#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;], &#39;confounds&#39;: [&#39;confound_1&#39;, &#39;confound_2&#39;]}
+2023-06-15 10:51:53,347 - julearn - INFO - ====================
+2023-06-15 10:51:53,347 - julearn - INFO -
+2023-06-15 10:51:53,349 - julearn - INFO - = Model Parameters =
+2023-06-15 10:51:53,349 - julearn - INFO - ====================
+2023-06-15 10:51:53,349 - julearn - INFO -
+2023-06-15 10:51:53,349 - julearn - INFO - = Data Information =
+2023-06-15 10:51:53,349 - julearn - INFO -      Problem type: regression
+2023-06-15 10:51:53,349 - julearn - INFO -      Number of samples: 100
+2023-06-15 10:51:53,349 - julearn - INFO -      Number of features: 22
+2023-06-15 10:51:53,349 - julearn - INFO - ====================
+2023-06-15 10:51:53,349 - julearn - INFO -
+2023-06-15 10:51:53,349 - julearn - INFO -      Target type: float64
+2023-06-15 10:51:53,349 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+   fit_time  score_time  ...  fold                          cv_mdsum
+0  0.036157    0.008627  ...     0  b10eef89b4192178d482d7a1587a248a
+1  0.035494    0.008760  ...     1  b10eef89b4192178d482d7a1587a248a
+2  0.036585    0.008646  ...     2  b10eef89b4192178d482d7a1587a248a
+3  0.036301    0.008766  ...     3  b10eef89b4192178d482d7a1587a248a
+4  0.036450    0.008825  ...     4  b10eef89b4192178d482d7a1587a248a
+
+[5 rows x 8 columns]
 </pre></div>
 </div>
 <p>Now, what if we want to remove the confounds from the target rather than the
@@ -497,57 +558,133 @@ features instead?</p>
 </section>
 <section id="removing-confounds-from-the-target">
 <h3>Removing Confounds from the Target<a class="headerlink" href="#removing-confounds-from-the-target" title="Permalink to this heading">#</a></h3>
-<p>If we want to remove the confounds from the target rather than from the features,
-we can use the same code to create the data of course. We only need to adjust the
-creation of the pipeline in the example above. Julearn has a specific
-<a class="reference internal" href="../api/generated/julearn.TargetPipelineCreator.html#julearn.TargetPipelineCreator" title="julearn.TargetPipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">TargetPipelineCreator</span></code></a> to perform transformations on the
-target. We can configure one of these and then insert it as a pipeline step in a
-regular <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">target_pipeline</span> <span class="o">=</span> <span class="n">TargetPipelineCreator</span><span class="p">()</span>
-<span class="n">target_pipeline</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;confound_removal&quot;</span><span class="p">,</span> <span class="n">confounds</span><span class="o">=</span><span class="s2">&quot;confounds&quot;</span><span class="p">)</span>
+<p>If we want to remove the confounds from the target rather than from the
+features, we need to create a slighly different pipeline. Julearn has a
+specific <a class="reference internal" href="../api/generated/julearn.TargetPipelineCreator.html#julearn.TargetPipelineCreator" title="julearn.TargetPipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">TargetPipelineCreator</span></code></a> to perform transformations on the
+target. We first configure this pipeline and add the “confound_removal” step.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">target_pipeline_creator</span> <span class="o">=</span> <span class="n">TargetPipelineCreator</span><span class="p">()</span>
+<span class="n">target_pipeline_creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;confound_removal&quot;</span><span class="p">,</span> <span class="n">confounds</span><span class="o">=</span><span class="s2">&quot;confounds&quot;</span><span class="p">)</span>
 
-<span class="n">pipeline_creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;regression&quot;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;features&quot;</span><span class="p">)</span>
-<span class="n">pipeline_creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">target_pipeline</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;target&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">target_pipeline_creator</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>TargetPipelineCreator:
+  Step 0: confound_removal
+    estimator:     &lt;julearn.transformers.target.target_confound_remover.TargetConfoundRemover object at 0x7f89a1c45f30&gt;
+</pre></div>
+</div>
+<p>Now we insert the target pipeline into the main pipeline that will be used
+to do the prediction. Importantly, we specify that the target pipeline should
+be applied to the “target”.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pipeline_creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span>
+    <span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;regression&quot;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;features&quot;</span>
+<span class="p">)</span>
+<span class="n">pipeline_creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">target_pipeline_creator</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;target&quot;</span><span class="p">)</span>
 <span class="n">pipeline_creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;linreg&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">pipeline_creator</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-06-15 10:51:53,590 - julearn - INFO - Adding step jutargetpipeline that applies to ColumnTypes&lt;types={&#39;target&#39;}; pattern=(?:target)&gt;
+2023-06-15 10:51:53,590 - julearn - INFO - Step added
+2023-06-15 10:51:53,590 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;features&#39;}; pattern=(?:__:type:__features)&gt;
+2023-06-15 10:51:53,590 - julearn - INFO - Step added
+PipelineCreator:
+  Step 0: jutargetpipeline
+    estimator:     &lt;julearn.pipeline.target_pipeline.JuTargetPipeline object at 0x7f89a1c47bb0&gt;
+    apply to:      ColumnTypes&lt;types={&#39;confounds&#39;, &#39;target&#39;}; pattern=(?:__:type:__confounds|target)&gt;
+    needed types:  ColumnTypes&lt;types={&#39;confounds&#39;, &#39;target&#39;}; pattern=(?:__:type:__confounds|target)&gt;
+    tuning params: {}
+  Step 1: linreg
+    estimator:     LinearRegression()
+    apply to:      ColumnTypes&lt;types={&#39;features&#39;}; pattern=(?:__:type:__features)&gt;
+    needed types:  ColumnTypes&lt;types={&#39;features&#39;}; pattern=(?:__:type:__features)&gt;
+    tuning params: {}
 </pre></div>
 </div>
 <p>Having configured this pipeline, we can then simply use the same
 <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> call to obtain our results:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">scores</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
-        <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
-        <span class="n">X</span><span class="o">=</span><span class="n">features</span> <span class="o">+</span> <span class="n">confounds</span><span class="p">,</span>
-        <span class="n">y</span><span class="o">=</span><span class="s2">&quot;my_target&quot;</span><span class="p">,</span>
-        <span class="n">X_types</span><span class="o">=</span><span class="n">X_types</span><span class="p">,</span>
-        <span class="n">model</span><span class="o">=</span><span class="n">pipeline_creator</span><span class="p">,</span>
-        <span class="n">scoring</span><span class="o">=</span><span class="s2">&quot;r2&quot;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">scores</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
+    <span class="n">X</span><span class="o">=</span><span class="n">features</span> <span class="o">+</span> <span class="n">confounds</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="s2">&quot;my_target&quot;</span><span class="p">,</span>
+    <span class="n">X_types</span><span class="o">=</span><span class="n">X_types</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">pipeline_creator</span><span class="p">,</span>
+    <span class="n">scoring</span><span class="o">=</span><span class="s2">&quot;r2&quot;</span>
 <span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>As you can see, applying confound regression in your machine learning workflow
-in a cross-validated fashion is reasonably easy using julearn. If you are considering
-whether or not to use confound regression, however, there are further important
-considerations:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-06-15 10:51:53,591 - julearn - INFO - ==== Input Data ====
+2023-06-15 10:51:53,591 - julearn - INFO - Using dataframe as input
+2023-06-15 10:51:53,591 - julearn - INFO -      Features: [&#39;feature_0&#39;, &#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;confound_1&#39;, &#39;confound_2&#39;]
+2023-06-15 10:51:53,591 - julearn - INFO -      Target: my_target
+2023-06-15 10:51:53,592 - julearn - INFO -      Expanded features: [&#39;feature_0&#39;, &#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;confound_1&#39;, &#39;confound_2&#39;]
+2023-06-15 10:51:53,592 - julearn - INFO -      X_types:{&#39;features&#39;: [&#39;feature_0&#39;, &#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;], &#39;confounds&#39;: [&#39;confound_1&#39;, &#39;confound_2&#39;]}
+2023-06-15 10:51:53,594 - julearn - INFO - ====================
+2023-06-15 10:51:53,594 - julearn - INFO -
+2023-06-15 10:51:53,595 - julearn - INFO - = Model Parameters =
+2023-06-15 10:51:53,595 - julearn - INFO - ====================
+2023-06-15 10:51:53,595 - julearn - INFO -
+2023-06-15 10:51:53,595 - julearn - INFO - = Data Information =
+2023-06-15 10:51:53,595 - julearn - INFO -      Problem type: regression
+2023-06-15 10:51:53,595 - julearn - INFO -      Number of samples: 100
+2023-06-15 10:51:53,595 - julearn - INFO -      Number of features: 22
+2023-06-15 10:51:53,595 - julearn - INFO - ====================
+2023-06-15 10:51:53,595 - julearn - INFO -
+2023-06-15 10:51:53,595 - julearn - INFO -      Target type: float64
+2023-06-15 10:51:53,596 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2023-06-15 10:51:53,609 - julearn - WARNING - The target has been transformed to fit the model, but cannot inverse the model&#39;s prediction. The output of `predict(X)` is still in the transformed space. To remove this warning, use a suitable julearn scorer.
+/home/runner/work/julearn/julearn/julearn/utils/logging.py:238: TransformedTargetWarning: The target has been transformed to fit the model, but cannot inverse the model&#39;s prediction. The output of `predict(X)` is still in the transformed space. To remove this warning, use a suitable julearn scorer.
+  warn(msg, category=category)
+2023-06-15 10:51:53,621 - julearn - WARNING - The target has been transformed to fit the model, but cannot inverse the model&#39;s prediction. The output of `predict(X)` is still in the transformed space. To remove this warning, use a suitable julearn scorer.
+/home/runner/work/julearn/julearn/julearn/utils/logging.py:238: TransformedTargetWarning: The target has been transformed to fit the model, but cannot inverse the model&#39;s prediction. The output of `predict(X)` is still in the transformed space. To remove this warning, use a suitable julearn scorer.
+  warn(msg, category=category)
+2023-06-15 10:51:53,634 - julearn - WARNING - The target has been transformed to fit the model, but cannot inverse the model&#39;s prediction. The output of `predict(X)` is still in the transformed space. To remove this warning, use a suitable julearn scorer.
+/home/runner/work/julearn/julearn/julearn/utils/logging.py:238: TransformedTargetWarning: The target has been transformed to fit the model, but cannot inverse the model&#39;s prediction. The output of `predict(X)` is still in the transformed space. To remove this warning, use a suitable julearn scorer.
+  warn(msg, category=category)
+2023-06-15 10:51:53,646 - julearn - WARNING - The target has been transformed to fit the model, but cannot inverse the model&#39;s prediction. The output of `predict(X)` is still in the transformed space. To remove this warning, use a suitable julearn scorer.
+/home/runner/work/julearn/julearn/julearn/utils/logging.py:238: TransformedTargetWarning: The target has been transformed to fit the model, but cannot inverse the model&#39;s prediction. The output of `predict(X)` is still in the transformed space. To remove this warning, use a suitable julearn scorer.
+  warn(msg, category=category)
+2023-06-15 10:51:53,659 - julearn - WARNING - The target has been transformed to fit the model, but cannot inverse the model&#39;s prediction. The output of `predict(X)` is still in the transformed space. To remove this warning, use a suitable julearn scorer.
+/home/runner/work/julearn/julearn/julearn/utils/logging.py:238: TransformedTargetWarning: The target has been transformed to fit the model, but cannot inverse the model&#39;s prediction. The output of `predict(X)` is still in the transformed space. To remove this warning, use a suitable julearn scorer.
+  warn(msg, category=category)
+   fit_time  score_time  ...  fold                          cv_mdsum
+0  0.009028    0.003250  ...     0  b10eef89b4192178d482d7a1587a248a
+1  0.008538    0.003248  ...     1  b10eef89b4192178d482d7a1587a248a
+2  0.008670    0.003188  ...     2  b10eef89b4192178d482d7a1587a248a
+3  0.008343    0.003131  ...     3  b10eef89b4192178d482d7a1587a248a
+4  0.008261    0.003144  ...     4  b10eef89b4192178d482d7a1587a248a
+
+[5 rows x 8 columns]
+</pre></div>
+</div>
+<p>As you can see, applying confound regression in your machine learning
+pipeline in a cross-validated fashion is reasonably easy using julearn.
+If you are considering whether or not to use confound regression, however,
+there are further important considerations:</p>
 </section>
 </section>
 <section id="should-i-use-confound-regression">
 <h2>Should I use Confound Regression?<a class="headerlink" href="#should-i-use-confound-regression" title="Permalink to this heading">#</a></h2>
 <p>One reason why one might want to perform confound regression in a machine
-learning pipeline is to account for the effects of the confounding variables on
-the target. This can help to mitigate the potential bias introduced by the
+learning pipeline is to account for the effects of the confounding variables
+on the target. This can help to mitigate the potential bias introduced by the
 confounding variables and provide more accurate estimates of the true
 relationship between the features and the target.</p>
 <p>On the other hand, some argue that confound regression may not always be
-necessary or appropriate, as it can lead to loss of valuable information in the data.
-Additionally, confounding variables may sometimes be difficult to identify or
-measure accurately, which can make confound regression challenging or ineffective.
-In particular, controlling for some variables that are not confounds, but in fact
-colliders, may introduce spurious relationships between your features and your targets <a class="footnote-reference brackets" href="#id13" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>13<span class="fn-bracket">]</span></a>.
-Lastly, there is also some evidence that removing confounds
-can leak information about the target into the features, biasing the resulting
-predictive models <a class="footnote-reference brackets" href="#id14" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>14<span class="fn-bracket">]</span></a>. Ultimately, the decision to perform confound
-regression in a machine learning pipeline should be based on careful
-consideration of the specific dataset and research question at hand, as well as
-a thorough understanding of the strengths and limitations of this technique.</p>
+necessary or appropriate, as it can lead to loss of valuable information in
+the data. Additionally, confounding variables may sometimes be difficult to
+identify or measure accurately, which can make confound regression
+challenging or ineffective. In particular, controlling for some variables
+that are not confounds, but in fact colliders, may introduce spurious
+relationships between your features and your targets <a class="footnote-reference brackets" href="#id13" id="id6" role="doc-noteref"><span class="fn-bracket">[</span>13<span class="fn-bracket">]</span></a>. Lastly, there is
+also some evidence that removing confounds can leak information about the
+target into the features, biasing the resulting predictive models <a class="footnote-reference brackets" href="#id14" id="id7" role="doc-noteref"><span class="fn-bracket">[</span>14<span class="fn-bracket">]</span></a>.
+Ultimately, the decision to perform confound regression in a machine learning
+pipeline should be based on careful consideration of the specific dataset
+and research question at hand, as well as a thorough understanding of the
+strengths and limitations of this technique.</p>
 <aside class="topic">
 <p class="topic-title">References:</p>
 <aside class="footnote-list brackets">
@@ -581,6 +718,7 @@ a thorough understanding of the strengths and limitations of this technique.</p>
 </aside>
 </aside>
 </aside>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.331 seconds)</p>
 </section>
 </section>
 
