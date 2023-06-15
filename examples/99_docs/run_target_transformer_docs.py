@@ -5,12 +5,12 @@
 Applying preprocessing to the target
 ------------------------------------
 
-What we covered so far is how to apply preprocessing to the features and train 
+What we covered so far is how to apply preprocessing to the features and train
 a model in a cv-conistent manner by building a pipeline.
 However, sometimes one wants to apply preprocessing to the target. For example,
-when having a regression-task (continous target variable), one might want to 
+when having a regression-task (continuous target variable), one might want to
 predict the z-scored target.
-This can be achieved by using a :class:`.TargetPipelineCreator` 
+This can be achieved by using a :class:`.TargetPipelineCreator`
 as one step in the general pipeline.
 
 Lets start by loading the data and importing the required modules:

@@ -157,7 +157,7 @@ print(scores)
 # **********************************
 #
 # If we want to remove the confounds from the target rather than from the
-# features, we need to create a slighly different pipeline. Julearn has a
+# features, we need to create a slightly different pipeline. Julearn has a
 # specific :class:`.TargetPipelineCreator` to perform transformations on the
 # target. We first configure this pipeline and add the "confound_removal" step.
 

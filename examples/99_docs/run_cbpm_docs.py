@@ -29,7 +29,7 @@ CBPM in Julearn
 ---------------
 
 Julearn implements a simple, scikit-learn compatible transformer ("cbpm"), that
-performs the first two parts of this apporach, i.e. the feature selection and
+performs the first two parts of this approach, i.e. the feature selection and
 feature aggregation. Leveraging julearn's PipelineCreator, one can therefore
 easily apply the "cbpm" transformer as a preprocessing step, and then apply any
 sklearn-compatible estimator for the model building part.
