@@ -226,16 +226,36 @@ print(scores)
 #
 # .. topic:: References:
 #
-# 	.. [#1] Rao, Anil, et al., `"Predictive modelling using neuroimaging data in the presence of confounds" <https://www.sciencedirect.com/science/article/pii/S1053811917300897>`_, NeuroImage, Volume 150, 15 April 2017, Pages 23-49
+#   .. [#1] Rao, Anil, et al., `"Predictive modelling using neuroimaging data \
+#      in the presence of confounds" \
+#      <https://www.sciencedirect.com/science/article/pii/S1053811917300897>`_,
+#      NeuroImage, Volume 150, 15 April 2017, Pages 23-49
 #
-# 	.. [#2] Snoek, Lukas, et al., `"How to control for confounds in decoding analyses of neuroimaging data" <https://www.sciencedirect.com/science/article/pii/S1053811918319463?via%3Dihub>`_, NeuroImage, Volume 184, 1 January 2019, Pages 741-760
+#   .. [#2] Snoek, Lukas, et al., `"How to control for confounds in decoding \
+#      analyses of neuroimaging data" \
+#      <https://www.sciencedirect.com/science/article/pii/S1053811918319463?
+#      via%3Dihub>`_, NeuroImage, Volume 184, 1 January 2019, Pages 741-760
 #
-# 	.. [#3] He, Tong, et al., `"Deep neural networks and kernel regression achieve comparable accuracies for functional connectivity prediction of behavior and demographics" <https://www.sciencedirect.com/science/article/pii/S1053811919308675>`_, NeuroImage, Volume 206, 1 February 2020, 116276
+#   .. [#3] He, Tong, et al., `"Deep neural networks and kernel regression \
+#      achieve comparable accuracies for functional connectivity prediction \
+#      of behavior and demographics" <https://www.sciencedirect.com/science/\
+#      article/pii/S1053811919308675>`_, NeuroImage, Volume 206, 1 February 
+#      2020, 116276
 #
-# 	.. [#4] More, Shammi, et al., `"Confound Removal and Normalization in Practice: A Neuroimaging Based Sex Prediction Case Study" <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7903939/>`_, Machine Learning and Knowledge Discovery in Databases. Applied Data Science and Demo Track. 2021 Jan 30; 12461: 3–18.
+#   .. [#4] More, Shammi, et al., `"Confound Removal and Normalization in \
+#      Practice: A Neuroimaging Based Sex Prediction Case Study" \
+#      <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7903939/>`_, Machine
+#      Learning and Knowledge Discovery in Databases. Applied Data Science and
+#      Demo Track. 2021 Jan 30; 12461: 3–18.
 #
-# 	.. [#5] Chyzhyk, Darya et al., `"How to remove or control confounds in predictive models, with applications to brain biomarkers" <https://pubmed.ncbi.nlm.nih.gov/35277962/>`_, Gigascience, 2022 Mar 12.
+#   .. [#5] Chyzhyk, Darya et al., `"How to remove or control confounds in \
+#      predictive models, with applications to brain biomarkers" \
+#      <https://pubmed.ncbi.nlm.nih.gov/35277962/>`_, Gigascience, 2022 Mar 12.
 #
-# 	.. [#6] Holmberg, Mathias J. `Collider Bias <https://jamanetwork.com/journals/jama/fullarticle/2790247>`_, JAMA. 2022;327(13):1282-1283. doi:10.1001/jama.2022.1820
+#   .. [#6] Holmberg, Mathias J. `"Collider Bias" \
+#      <https://jamanetwork.com/journals/jama/fullarticle/2790247>`_, JAMA.
+#      2022; 327 (13):1282-1283. doi:10.1001/jama.2022.1820
 #
-# 	.. [#7] Hamdan, Sami et al., `"Confound-leakage: Confound Removal in Machine Learning Leads to Leakage" <https://arxiv.org/abs/2210.09232>`_, arXiv:2210.09232, last revised 27 Oct 2022
+#   .. [#7] Hamdan, Sami et al., `"Confound-leakage: Confound Removal in \
+#      Machine Learning Leads to Leakage" <https://arxiv.org/abs/2210.09232>`_,
+#      arXiv:2210.09232, last revised 27 Oct 2022
