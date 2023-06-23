@@ -405,13 +405,13 @@ perform stratified Kfold CV for a regression problem,</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-06-15 13:10:14,650 - julearn - INFO - ===== Lib Versions =====
-2023-06-15 13:10:14,651 - julearn - INFO - numpy: 1.24.3
-2023-06-15 13:10:14,651 - julearn - INFO - scipy: 1.10.1
-2023-06-15 13:10:14,651 - julearn - INFO - sklearn: 1.2.2
-2023-06-15 13:10:14,651 - julearn - INFO - pandas: 2.0.2
-2023-06-15 13:10:14,651 - julearn - INFO - julearn: 0.3.0.dev209
-2023-06-15 13:10:14,651 - julearn - INFO - ========================
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-06-23 08:32:57,953 - julearn - INFO - ===== Lib Versions =====
+2023-06-23 08:32:57,953 - julearn - INFO - numpy: 1.25.0
+2023-06-23 08:32:57,953 - julearn - INFO - scipy: 1.10.1
+2023-06-23 08:32:57,953 - julearn - INFO - sklearn: 1.2.2
+2023-06-23 08:32:57,953 - julearn - INFO - pandas: 2.0.2
+2023-06-23 08:32:57,953 - julearn - INFO - julearn: 0.3.0.dev211
+2023-06-23 08:32:57,954 - julearn - INFO - ========================
 </pre></div>
 </div>
 <p>load the diabetes data from sklearn as a pandas dataframe</p>
@@ -471,10 +471,33 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
   new_df[&quot;target&quot;] = [590, 580, 597, 595, 590, 590, 600]
 </pre></div>
 </div>
-<p>Define number of splits for CV and create bins/group for stratification</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">num_splits</span></a> <span class="o">=</span> <span class="mi">7</span>
+<p>Define number of bins/group for stratification. The idea is that each “bin”
+will be equally represented in each fold. The number of bins should be
+chosen such that each bin has a sufficient number of samples so that each
+fold has more than one sample from each bin.
+Let’s see a couple of histrograms with different number of bins.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">displot</span><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_df</span></a><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;target&quot;</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
 
-<a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">num_bins</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/math.html#math.floor" title="math.floor" class="sphx-glr-backref-module-math sphx-glr-backref-type-py-function"><span class="n">math</span><span class="o">.</span><span class="n">floor</span></a><span class="p">(</span><span class="nb">len</span><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_df</span></a><span class="p">)</span> <span class="o">/</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">num_splits</span></a><span class="p">)</span>  <span class="c1"># num of bins to be created</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">displot</span><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_df</span></a><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;target&quot;</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">displot</span><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_df</span></a><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;target&quot;</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="sphx-glr-horizontal">
+<li><img src="../../_images/sphx_glr_plot_stratified_kfold_reg_001.png" srcset="../../_images/sphx_glr_plot_stratified_kfold_reg_001.png" alt="plot stratified kfold reg" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_stratified_kfold_reg_002.png" srcset="../../_images/sphx_glr_plot_stratified_kfold_reg_002.png" alt="plot stratified kfold reg" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_stratified_kfold_reg_003.png" srcset="../../_images/sphx_glr_plot_stratified_kfold_reg_003.png" alt="plot stratified kfold reg" class = "sphx-glr-multi-img"/></li>
+</ul>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;seaborn.axisgrid.FacetGrid object at 0x7fb103d38d90&gt;
+</pre></div>
+</div>
+<p>From the histogram above, we can see that the data is not uniformly
+distributed. We can see that the data is skewed towards the lower end of
+the target variable. We can also see that there are some outliers in the
+data. In any case, even with a low number of splits, some groups will not be
+represented in each fold. Lets continue with 40 bins which gives a good
+granularity.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">num_bins</span></a> <span class="o">=</span> <span class="mi">40</span>  <span class="c1"># num of bins to be created</span>
 <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.Series.html#pandas.Series" title="pandas.core.series.Series" class="sphx-glr-backref-module-pandas-core-series sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">bins_on</span></a> <span class="o">=</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.Series.html#pandas.Series" title="pandas.core.series.Series" class="sphx-glr-backref-module-pandas-core-series sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_df</span><span class="o">.</span><span class="n">target</span></a>  <span class="c1"># variable to be used for stratification</span>
 <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.Categorical.html#pandas.Categorical" title="pandas.core.arrays.categorical.Categorical" class="sphx-glr-backref-module-pandas-core-arrays-categorical sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">qc</span></a> <span class="o">=</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.cut.html#pandas.cut" title="pandas.cut" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-function"><span class="n">pd</span><span class="o">.</span><span class="n">cut</span></a><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.Series.tolist.html#pandas.Series.tolist" title="pandas.Series.tolist" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method"><span class="n">bins_on</span><span class="o">.</span><span class="n">tolist</span></a><span class="p">(),</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">num_bins</span></a><span class="p">)</span>  <span class="c1"># divides data in bins</span>
 <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_df</span></a><span class="p">[</span><span class="s2">&quot;bins&quot;</span><span class="p">]</span> <span class="o">=</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.Categorical.codes.html#pandas.Categorical.codes" title="pandas.Categorical.codes" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-property"><span class="n">qc</span><span class="o">.</span><span class="n">codes</span></a>
@@ -482,7 +505,7 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
 </pre></div>
 </div>
 <p>Train a linear regression model with stratification on target</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cv_stratified</span> <span class="o">=</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.StratifiedKFold.html#sklearn.model_selection.StratifiedKFold" title="sklearn.model_selection.StratifiedKFold" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class"><span class="n">StratifiedGroupsKFold</span></a><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">num_splits</span></a><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cv_stratified</span> <span class="o">=</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.StratifiedKFold.html#sklearn.model_selection.StratifiedKFold" title="sklearn.model_selection.StratifiedKFold" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class"><span class="n">StratifiedGroupsKFold</span></a><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores_strat</span></a><span class="p">,</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model</span></a> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
     <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span>
     <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span>
@@ -497,41 +520,41 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-06-15 13:10:14,674 - julearn - INFO - ==== Input Data ====
-2023-06-15 13:10:14,674 - julearn - INFO - Using dataframe as input
-2023-06-15 13:10:14,674 - julearn - INFO -      Features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
-2023-06-15 13:10:14,674 - julearn - INFO -      Target: target
-2023-06-15 13:10:14,675 - julearn - INFO -      Expanded features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
-2023-06-15 13:10:14,675 - julearn - INFO -      X_types:{}
-2023-06-15 13:10:14,675 - julearn - WARNING - The following columns are not defined in X_types: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]. They will be treated as continuous.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-06-23 08:32:58,684 - julearn - INFO - ==== Input Data ====
+2023-06-23 08:32:58,685 - julearn - INFO - Using dataframe as input
+2023-06-23 08:32:58,685 - julearn - INFO -      Features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2023-06-23 08:32:58,685 - julearn - INFO -      Target: target
+2023-06-23 08:32:58,686 - julearn - INFO -      Expanded features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2023-06-23 08:32:58,686 - julearn - INFO -      X_types:{}
+2023-06-23 08:32:58,686 - julearn - WARNING - The following columns are not defined in X_types: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]. They will be treated as continuous.
 /home/runner/work/julearn/julearn/julearn/utils/logging.py:238: RuntimeWarning: The following columns are not defined in X_types: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]. They will be treated as continuous.
   warn(msg, category=category)
-2023-06-15 13:10:14,676 - julearn - INFO - Using bins as groups
-2023-06-15 13:10:14,676 - julearn - INFO - ====================
-2023-06-15 13:10:14,676 - julearn - INFO -
-2023-06-15 13:10:14,676 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2023-06-15 13:10:14,676 - julearn - INFO - Step added
-2023-06-15 13:10:14,677 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2023-06-15 13:10:14,677 - julearn - INFO - Step added
-2023-06-15 13:10:14,677 - julearn - INFO - = Model Parameters =
-2023-06-15 13:10:14,677 - julearn - INFO - ====================
-2023-06-15 13:10:14,677 - julearn - INFO -
-2023-06-15 13:10:14,677 - julearn - INFO - = Data Information =
-2023-06-15 13:10:14,677 - julearn - INFO -      Problem type: regression
-2023-06-15 13:10:14,677 - julearn - INFO -      Number of samples: 449
-2023-06-15 13:10:14,677 - julearn - INFO -      Number of features: 10
-2023-06-15 13:10:14,677 - julearn - INFO - ====================
-2023-06-15 13:10:14,678 - julearn - INFO -
-2023-06-15 13:10:14,678 - julearn - INFO -      Target type: float64
-2023-06-15 13:10:14,678 - julearn - INFO - Using outer CV scheme StratifiedGroupsKFold(n_splits=7, random_state=None, shuffle=False)
-/opt/hostedtoolcache/Python/3.10.12/x64/lib/python3.10/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=7.
+2023-06-23 08:32:58,687 - julearn - INFO - Using bins as groups
+2023-06-23 08:32:58,687 - julearn - INFO - ====================
+2023-06-23 08:32:58,687 - julearn - INFO -
+2023-06-23 08:32:58,687 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-06-23 08:32:58,688 - julearn - INFO - Step added
+2023-06-23 08:32:58,688 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-06-23 08:32:58,688 - julearn - INFO - Step added
+2023-06-23 08:32:58,689 - julearn - INFO - = Model Parameters =
+2023-06-23 08:32:58,689 - julearn - INFO - ====================
+2023-06-23 08:32:58,689 - julearn - INFO -
+2023-06-23 08:32:58,689 - julearn - INFO - = Data Information =
+2023-06-23 08:32:58,689 - julearn - INFO -      Problem type: regression
+2023-06-23 08:32:58,689 - julearn - INFO -      Number of samples: 449
+2023-06-23 08:32:58,689 - julearn - INFO -      Number of features: 10
+2023-06-23 08:32:58,689 - julearn - INFO - ====================
+2023-06-23 08:32:58,689 - julearn - INFO -
+2023-06-23 08:32:58,689 - julearn - INFO -      Target type: float64
+2023-06-23 08:32:58,689 - julearn - INFO - Using outer CV scheme StratifiedGroupsKFold(n_splits=5, random_state=None, shuffle=False)
+/opt/hostedtoolcache/Python/3.10.12/x64/lib/python3.10/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=5.
   warnings.warn(
-/opt/hostedtoolcache/Python/3.10.12/x64/lib/python3.10/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=7.
+/opt/hostedtoolcache/Python/3.10.12/x64/lib/python3.10/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=5.
   warnings.warn(
 </pre></div>
 </div>
 <p>Train a linear regression model without stratification on target</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.KFold.html#sklearn.model_selection.KFold" title="sklearn.model_selection.KFold" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cv</span></a> <span class="o">=</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.KFold.html#sklearn.model_selection.KFold" title="sklearn.model_selection.KFold" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class"><span class="n">KFold</span></a><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">num_splits</span></a><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.KFold.html#sklearn.model_selection.KFold" title="sklearn.model_selection.KFold" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cv</span></a> <span class="o">=</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.KFold.html#sklearn.model_selection.KFold" title="sklearn.model_selection.KFold" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class"><span class="n">KFold</span></a><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
 <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">,</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model</span></a> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
     <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span>
     <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span>
@@ -545,32 +568,32 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-06-15 13:10:14,750 - julearn - INFO - ==== Input Data ====
-2023-06-15 13:10:14,750 - julearn - INFO - Using dataframe as input
-2023-06-15 13:10:14,750 - julearn - INFO -      Features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
-2023-06-15 13:10:14,750 - julearn - INFO -      Target: target
-2023-06-15 13:10:14,751 - julearn - INFO -      Expanded features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
-2023-06-15 13:10:14,751 - julearn - INFO -      X_types:{}
-2023-06-15 13:10:14,751 - julearn - WARNING - The following columns are not defined in X_types: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]. They will be treated as continuous.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-06-23 08:32:58,760 - julearn - INFO - ==== Input Data ====
+2023-06-23 08:32:58,761 - julearn - INFO - Using dataframe as input
+2023-06-23 08:32:58,761 - julearn - INFO -      Features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2023-06-23 08:32:58,761 - julearn - INFO -      Target: target
+2023-06-23 08:32:58,761 - julearn - INFO -      Expanded features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2023-06-23 08:32:58,761 - julearn - INFO -      X_types:{}
+2023-06-23 08:32:58,761 - julearn - WARNING - The following columns are not defined in X_types: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]. They will be treated as continuous.
 /home/runner/work/julearn/julearn/julearn/utils/logging.py:238: RuntimeWarning: The following columns are not defined in X_types: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]. They will be treated as continuous.
   warn(msg, category=category)
-2023-06-15 13:10:14,751 - julearn - INFO - ====================
-2023-06-15 13:10:14,752 - julearn - INFO -
-2023-06-15 13:10:14,752 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2023-06-15 13:10:14,752 - julearn - INFO - Step added
-2023-06-15 13:10:14,752 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2023-06-15 13:10:14,752 - julearn - INFO - Step added
-2023-06-15 13:10:14,752 - julearn - INFO - = Model Parameters =
-2023-06-15 13:10:14,752 - julearn - INFO - ====================
-2023-06-15 13:10:14,753 - julearn - INFO -
-2023-06-15 13:10:14,753 - julearn - INFO - = Data Information =
-2023-06-15 13:10:14,753 - julearn - INFO -      Problem type: regression
-2023-06-15 13:10:14,753 - julearn - INFO -      Number of samples: 449
-2023-06-15 13:10:14,753 - julearn - INFO -      Number of features: 10
-2023-06-15 13:10:14,753 - julearn - INFO - ====================
-2023-06-15 13:10:14,753 - julearn - INFO -
-2023-06-15 13:10:14,753 - julearn - INFO -      Target type: float64
-2023-06-15 13:10:14,753 - julearn - INFO - Using outer CV scheme KFold(n_splits=7, random_state=None, shuffle=False)
+2023-06-23 08:32:58,762 - julearn - INFO - ====================
+2023-06-23 08:32:58,762 - julearn - INFO -
+2023-06-23 08:32:58,763 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-06-23 08:32:58,763 - julearn - INFO - Step added
+2023-06-23 08:32:58,763 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-06-23 08:32:58,763 - julearn - INFO - Step added
+2023-06-23 08:32:58,763 - julearn - INFO - = Model Parameters =
+2023-06-23 08:32:58,764 - julearn - INFO - ====================
+2023-06-23 08:32:58,764 - julearn - INFO -
+2023-06-23 08:32:58,764 - julearn - INFO - = Data Information =
+2023-06-23 08:32:58,764 - julearn - INFO -      Problem type: regression
+2023-06-23 08:32:58,764 - julearn - INFO -      Number of samples: 449
+2023-06-23 08:32:58,764 - julearn - INFO -      Number of features: 10
+2023-06-23 08:32:58,764 - julearn - INFO - ====================
+2023-06-23 08:32:58,764 - julearn - INFO -
+2023-06-23 08:32:58,764 - julearn - INFO -      Target type: float64
+2023-06-23 08:32:58,764 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
 </pre></div>
 </div>
 <p>Now we can compare the test score for model trained with and without
@@ -582,15 +605,14 @@ stratification. We can combine the two outputs as pandas dataframes</p>
 </pre></div>
 </div>
 <p>Plot a boxplot with test scores from both the models. We see here that
-the variance for the test score is much higher when CV splits were not
-stratified</p>
+the test score is higher when CV splits were not stratified</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
 <span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s2">&quot;darkgrid&quot;</span><span class="p">)</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;model&quot;</span><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="o">=</span><span class="s2">&quot;test_score&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_scores</span></a><span class="p">)</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">swarmplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;model&quot;</span><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="o">=</span><span class="s2">&quot;test_score&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_scores</span></a><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;.25&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_stratified_kfold_reg_001.png" srcset="../../_images/sphx_glr_plot_stratified_kfold_reg_001.png" alt="plot stratified kfold reg" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.300 seconds)</p>
+<img src="../../_images/sphx_glr_plot_stratified_kfold_reg_004.png" srcset="../../_images/sphx_glr_plot_stratified_kfold_reg_004.png" alt="plot stratified kfold reg" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.093 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-00-starting-plot-stratified-kfold-reg-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/e19d16e33ffa29cdb1e56852178d5909/plot_stratified_kfold_reg.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_stratified_kfold_reg.py</span></code></a></p>

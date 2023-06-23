@@ -72,13 +72,13 @@ Set the logging level to info to see extra information
 
  .. code-block:: none
 
-    2023-06-15 13:10:14,650 - julearn - INFO - ===== Lib Versions =====
-    2023-06-15 13:10:14,651 - julearn - INFO - numpy: 1.24.3
-    2023-06-15 13:10:14,651 - julearn - INFO - scipy: 1.10.1
-    2023-06-15 13:10:14,651 - julearn - INFO - sklearn: 1.2.2
-    2023-06-15 13:10:14,651 - julearn - INFO - pandas: 2.0.2
-    2023-06-15 13:10:14,651 - julearn - INFO - julearn: 0.3.0.dev209
-    2023-06-15 13:10:14,651 - julearn - INFO - ========================
+    2023-06-23 08:32:57,953 - julearn - INFO - ===== Lib Versions =====
+    2023-06-23 08:32:57,953 - julearn - INFO - numpy: 1.25.0
+    2023-06-23 08:32:57,953 - julearn - INFO - scipy: 1.10.1
+    2023-06-23 08:32:57,953 - julearn - INFO - sklearn: 1.2.2
+    2023-06-23 08:32:57,953 - julearn - INFO - pandas: 2.0.2
+    2023-06-23 08:32:57,953 - julearn - INFO - julearn: 0.3.0.dev211
+    2023-06-23 08:32:57,954 - julearn - INFO - ========================
 
 
 
@@ -152,7 +152,7 @@ Let's combine features and target together in one dataframe and create some
 outliers to see the difference in model performance with and without
 stratification
 
-.. GENERATED FROM PYTHON SOURCE LINES 48-61
+.. GENERATED FROM PYTHON SOURCE LINES 48-62
 
 .. code-block:: default
 
@@ -173,6 +173,7 @@ stratification
 
 
 
+
 .. rst-class:: sphx-glr-script-out
 
  .. code-block:: none
@@ -187,17 +188,77 @@ stratification
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 62-63
+.. GENERATED FROM PYTHON SOURCE LINES 63-68
 
-Define number of splits for CV and create bins/group for stratification
+Define number of bins/group for stratification. The idea is that each "bin"
+will be equally represented in each fold. The number of bins should be
+chosen such that each bin has a sufficient number of samples so that each
+fold has more than one sample from each bin.
+Let's see a couple of histrograms with different number of bins.
 
-.. GENERATED FROM PYTHON SOURCE LINES 63-71
+.. GENERATED FROM PYTHON SOURCE LINES 68-75
 
 .. code-block:: default
 
-    num_splits = 7
 
-    num_bins = math.floor(len(data_df) / num_splits)  # num of bins to be created
+    sns.displot(data_df, x="target", bins=60)
+
+    sns.displot(data_df, x="target", bins=40)
+
+    sns.displot(data_df, x="target", bins=20)
+
+
+
+
+.. rst-class:: sphx-glr-horizontal
+
+
+    *
+
+      .. image-sg:: /auto_examples/00_starting/images/sphx_glr_plot_stratified_kfold_reg_001.png
+         :alt: plot stratified kfold reg
+         :srcset: /auto_examples/00_starting/images/sphx_glr_plot_stratified_kfold_reg_001.png
+         :class: sphx-glr-multi-img
+
+    *
+
+      .. image-sg:: /auto_examples/00_starting/images/sphx_glr_plot_stratified_kfold_reg_002.png
+         :alt: plot stratified kfold reg
+         :srcset: /auto_examples/00_starting/images/sphx_glr_plot_stratified_kfold_reg_002.png
+         :class: sphx-glr-multi-img
+
+    *
+
+      .. image-sg:: /auto_examples/00_starting/images/sphx_glr_plot_stratified_kfold_reg_003.png
+         :alt: plot stratified kfold reg
+         :srcset: /auto_examples/00_starting/images/sphx_glr_plot_stratified_kfold_reg_003.png
+         :class: sphx-glr-multi-img
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+
+    <seaborn.axisgrid.FacetGrid object at 0x7fb103d38d90>
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 76-82
+
+From the histogram above, we can see that the data is not uniformly
+distributed. We can see that the data is skewed towards the lower end of
+the target variable. We can also see that there are some outliers in the
+data. In any case, even with a low number of splits, some groups will not be
+represented in each fold. Lets continue with 40 bins which gives a good
+granularity.
+
+.. GENERATED FROM PYTHON SOURCE LINES 82-89
+
+.. code-block:: default
+
+
+    num_bins = 40  # num of bins to be created
     bins_on = data_df.target  # variable to be used for stratification
     qc = pd.cut(bins_on.tolist(), num_bins)  # divides data in bins
     data_df["bins"] = qc.codes
@@ -210,16 +271,16 @@ Define number of splits for CV and create bins/group for stratification
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 72-73
+.. GENERATED FROM PYTHON SOURCE LINES 90-91
 
 Train a linear regression model with stratification on target
 
-.. GENERATED FROM PYTHON SOURCE LINES 73-88
+.. GENERATED FROM PYTHON SOURCE LINES 91-106
 
 .. code-block:: default
 
 
-    cv_stratified = StratifiedGroupsKFold(n_splits=num_splits, shuffle=False)
+    cv_stratified = StratifiedGroupsKFold(n_splits=5, shuffle=False)
     scores_strat, model = run_cross_validation(
         X=X,
         y=y,
@@ -241,51 +302,51 @@ Train a linear regression model with stratification on target
 
  .. code-block:: none
 
-    2023-06-15 13:10:14,674 - julearn - INFO - ==== Input Data ====
-    2023-06-15 13:10:14,674 - julearn - INFO - Using dataframe as input
-    2023-06-15 13:10:14,674 - julearn - INFO -      Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2023-06-15 13:10:14,674 - julearn - INFO -      Target: target
-    2023-06-15 13:10:14,675 - julearn - INFO -      Expanded features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2023-06-15 13:10:14,675 - julearn - INFO -      X_types:{}
-    2023-06-15 13:10:14,675 - julearn - WARNING - The following columns are not defined in X_types: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']. They will be treated as continuous.
+    2023-06-23 08:32:58,684 - julearn - INFO - ==== Input Data ====
+    2023-06-23 08:32:58,685 - julearn - INFO - Using dataframe as input
+    2023-06-23 08:32:58,685 - julearn - INFO -      Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2023-06-23 08:32:58,685 - julearn - INFO -      Target: target
+    2023-06-23 08:32:58,686 - julearn - INFO -      Expanded features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2023-06-23 08:32:58,686 - julearn - INFO -      X_types:{}
+    2023-06-23 08:32:58,686 - julearn - WARNING - The following columns are not defined in X_types: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']. They will be treated as continuous.
     /home/runner/work/julearn/julearn/julearn/utils/logging.py:238: RuntimeWarning: The following columns are not defined in X_types: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']. They will be treated as continuous.
       warn(msg, category=category)
-    2023-06-15 13:10:14,676 - julearn - INFO - Using bins as groups
-    2023-06-15 13:10:14,676 - julearn - INFO - ====================
-    2023-06-15 13:10:14,676 - julearn - INFO - 
-    2023-06-15 13:10:14,676 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2023-06-15 13:10:14,676 - julearn - INFO - Step added
-    2023-06-15 13:10:14,677 - julearn - INFO - Adding step linreg that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2023-06-15 13:10:14,677 - julearn - INFO - Step added
-    2023-06-15 13:10:14,677 - julearn - INFO - = Model Parameters =
-    2023-06-15 13:10:14,677 - julearn - INFO - ====================
-    2023-06-15 13:10:14,677 - julearn - INFO - 
-    2023-06-15 13:10:14,677 - julearn - INFO - = Data Information =
-    2023-06-15 13:10:14,677 - julearn - INFO -      Problem type: regression
-    2023-06-15 13:10:14,677 - julearn - INFO -      Number of samples: 449
-    2023-06-15 13:10:14,677 - julearn - INFO -      Number of features: 10
-    2023-06-15 13:10:14,677 - julearn - INFO - ====================
-    2023-06-15 13:10:14,678 - julearn - INFO - 
-    2023-06-15 13:10:14,678 - julearn - INFO -      Target type: float64
-    2023-06-15 13:10:14,678 - julearn - INFO - Using outer CV scheme StratifiedGroupsKFold(n_splits=7, random_state=None, shuffle=False)
-    /opt/hostedtoolcache/Python/3.10.12/x64/lib/python3.10/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=7.
+    2023-06-23 08:32:58,687 - julearn - INFO - Using bins as groups
+    2023-06-23 08:32:58,687 - julearn - INFO - ====================
+    2023-06-23 08:32:58,687 - julearn - INFO - 
+    2023-06-23 08:32:58,687 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2023-06-23 08:32:58,688 - julearn - INFO - Step added
+    2023-06-23 08:32:58,688 - julearn - INFO - Adding step linreg that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2023-06-23 08:32:58,688 - julearn - INFO - Step added
+    2023-06-23 08:32:58,689 - julearn - INFO - = Model Parameters =
+    2023-06-23 08:32:58,689 - julearn - INFO - ====================
+    2023-06-23 08:32:58,689 - julearn - INFO - 
+    2023-06-23 08:32:58,689 - julearn - INFO - = Data Information =
+    2023-06-23 08:32:58,689 - julearn - INFO -      Problem type: regression
+    2023-06-23 08:32:58,689 - julearn - INFO -      Number of samples: 449
+    2023-06-23 08:32:58,689 - julearn - INFO -      Number of features: 10
+    2023-06-23 08:32:58,689 - julearn - INFO - ====================
+    2023-06-23 08:32:58,689 - julearn - INFO - 
+    2023-06-23 08:32:58,689 - julearn - INFO -      Target type: float64
+    2023-06-23 08:32:58,689 - julearn - INFO - Using outer CV scheme StratifiedGroupsKFold(n_splits=5, random_state=None, shuffle=False)
+    /opt/hostedtoolcache/Python/3.10.12/x64/lib/python3.10/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=5.
       warnings.warn(
-    /opt/hostedtoolcache/Python/3.10.12/x64/lib/python3.10/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=7.
+    /opt/hostedtoolcache/Python/3.10.12/x64/lib/python3.10/site-packages/sklearn/model_selection/_split.py:700: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=5.
       warnings.warn(
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 89-90
+.. GENERATED FROM PYTHON SOURCE LINES 107-108
 
 Train a linear regression model without stratification on target
 
-.. GENERATED FROM PYTHON SOURCE LINES 90-104
+.. GENERATED FROM PYTHON SOURCE LINES 108-122
 
 .. code-block:: default
 
 
-    cv = KFold(n_splits=num_splits, shuffle=False, random_state=None)
+    cv = KFold(n_splits=5, shuffle=False, random_state=None)
     scores, model = run_cross_validation(
         X=X,
         y=y,
@@ -306,42 +367,42 @@ Train a linear regression model without stratification on target
 
  .. code-block:: none
 
-    2023-06-15 13:10:14,750 - julearn - INFO - ==== Input Data ====
-    2023-06-15 13:10:14,750 - julearn - INFO - Using dataframe as input
-    2023-06-15 13:10:14,750 - julearn - INFO -      Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2023-06-15 13:10:14,750 - julearn - INFO -      Target: target
-    2023-06-15 13:10:14,751 - julearn - INFO -      Expanded features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2023-06-15 13:10:14,751 - julearn - INFO -      X_types:{}
-    2023-06-15 13:10:14,751 - julearn - WARNING - The following columns are not defined in X_types: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']. They will be treated as continuous.
+    2023-06-23 08:32:58,760 - julearn - INFO - ==== Input Data ====
+    2023-06-23 08:32:58,761 - julearn - INFO - Using dataframe as input
+    2023-06-23 08:32:58,761 - julearn - INFO -      Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2023-06-23 08:32:58,761 - julearn - INFO -      Target: target
+    2023-06-23 08:32:58,761 - julearn - INFO -      Expanded features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2023-06-23 08:32:58,761 - julearn - INFO -      X_types:{}
+    2023-06-23 08:32:58,761 - julearn - WARNING - The following columns are not defined in X_types: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']. They will be treated as continuous.
     /home/runner/work/julearn/julearn/julearn/utils/logging.py:238: RuntimeWarning: The following columns are not defined in X_types: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']. They will be treated as continuous.
       warn(msg, category=category)
-    2023-06-15 13:10:14,751 - julearn - INFO - ====================
-    2023-06-15 13:10:14,752 - julearn - INFO - 
-    2023-06-15 13:10:14,752 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2023-06-15 13:10:14,752 - julearn - INFO - Step added
-    2023-06-15 13:10:14,752 - julearn - INFO - Adding step linreg that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2023-06-15 13:10:14,752 - julearn - INFO - Step added
-    2023-06-15 13:10:14,752 - julearn - INFO - = Model Parameters =
-    2023-06-15 13:10:14,752 - julearn - INFO - ====================
-    2023-06-15 13:10:14,753 - julearn - INFO - 
-    2023-06-15 13:10:14,753 - julearn - INFO - = Data Information =
-    2023-06-15 13:10:14,753 - julearn - INFO -      Problem type: regression
-    2023-06-15 13:10:14,753 - julearn - INFO -      Number of samples: 449
-    2023-06-15 13:10:14,753 - julearn - INFO -      Number of features: 10
-    2023-06-15 13:10:14,753 - julearn - INFO - ====================
-    2023-06-15 13:10:14,753 - julearn - INFO - 
-    2023-06-15 13:10:14,753 - julearn - INFO -      Target type: float64
-    2023-06-15 13:10:14,753 - julearn - INFO - Using outer CV scheme KFold(n_splits=7, random_state=None, shuffle=False)
+    2023-06-23 08:32:58,762 - julearn - INFO - ====================
+    2023-06-23 08:32:58,762 - julearn - INFO - 
+    2023-06-23 08:32:58,763 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2023-06-23 08:32:58,763 - julearn - INFO - Step added
+    2023-06-23 08:32:58,763 - julearn - INFO - Adding step linreg that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2023-06-23 08:32:58,763 - julearn - INFO - Step added
+    2023-06-23 08:32:58,763 - julearn - INFO - = Model Parameters =
+    2023-06-23 08:32:58,764 - julearn - INFO - ====================
+    2023-06-23 08:32:58,764 - julearn - INFO - 
+    2023-06-23 08:32:58,764 - julearn - INFO - = Data Information =
+    2023-06-23 08:32:58,764 - julearn - INFO -      Problem type: regression
+    2023-06-23 08:32:58,764 - julearn - INFO -      Number of samples: 449
+    2023-06-23 08:32:58,764 - julearn - INFO -      Number of features: 10
+    2023-06-23 08:32:58,764 - julearn - INFO - ====================
+    2023-06-23 08:32:58,764 - julearn - INFO - 
+    2023-06-23 08:32:58,764 - julearn - INFO -      Target type: float64
+    2023-06-23 08:32:58,764 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 105-107
+.. GENERATED FROM PYTHON SOURCE LINES 123-125
 
 Now we can compare the test score for model trained with and without
 stratification. We can combine the two outputs as pandas dataframes
 
-.. GENERATED FROM PYTHON SOURCE LINES 107-113
+.. GENERATED FROM PYTHON SOURCE LINES 125-131
 
 .. code-block:: default
 
@@ -358,13 +419,12 @@ stratification. We can combine the two outputs as pandas dataframes
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 114-117
+.. GENERATED FROM PYTHON SOURCE LINES 132-134
 
 Plot a boxplot with test scores from both the models. We see here that
-the variance for the test score is much higher when CV splits were not
-stratified
+the test score is higher when CV splits were not stratified
 
-.. GENERATED FROM PYTHON SOURCE LINES 117-122
+.. GENERATED FROM PYTHON SOURCE LINES 134-139
 
 .. code-block:: default
 
@@ -376,9 +436,9 @@ stratified
 
 
 
-.. image-sg:: /auto_examples/00_starting/images/sphx_glr_plot_stratified_kfold_reg_001.png
+.. image-sg:: /auto_examples/00_starting/images/sphx_glr_plot_stratified_kfold_reg_004.png
    :alt: plot stratified kfold reg
-   :srcset: /auto_examples/00_starting/images/sphx_glr_plot_stratified_kfold_reg_001.png
+   :srcset: /auto_examples/00_starting/images/sphx_glr_plot_stratified_kfold_reg_004.png
    :class: sphx-glr-single-img
 
 
@@ -388,7 +448,7 @@ stratified
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.300 seconds)
+   **Total running time of the script:** ( 0 minutes  1.093 seconds)
 
 
 .. _sphx_glr_download_auto_examples_00_starting_plot_stratified_kfold_reg.py:

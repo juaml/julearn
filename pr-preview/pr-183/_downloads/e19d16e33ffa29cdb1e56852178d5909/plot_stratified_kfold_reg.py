@@ -58,11 +58,29 @@ data_df = data_df.reset_index(drop=True)
 X = ["age", "sex", "bmi", "bp", "s1", "s2", "s3", "s4", "s5", "s6"]
 y = "target"
 
-###############################################################################
-# Define number of splits for CV and create bins/group for stratification
-num_splits = 7
 
-num_bins = math.floor(len(data_df) / num_splits)  # num of bins to be created
+###############################################################################
+# Define number of bins/group for stratification. The idea is that each "bin"
+# will be equally represented in each fold. The number of bins should be
+# chosen such that each bin has a sufficient number of samples so that each
+# fold has more than one sample from each bin.
+# Let's see a couple of histrograms with different number of bins.
+
+sns.displot(data_df, x="target", bins=60)
+
+sns.displot(data_df, x="target", bins=40)
+
+sns.displot(data_df, x="target", bins=20)
+
+###############################################################################
+# From the histogram above, we can see that the data is not uniformly
+# distributed. We can see that the data is skewed towards the lower end of
+# the target variable. We can also see that there are some outliers in the
+# data. In any case, even with a low number of splits, some groups will not be
+# represented in each fold. Lets continue with 40 bins which gives a good
+# granularity.
+
+num_bins = 40  # num of bins to be created
 bins_on = data_df.target  # variable to be used for stratification
 qc = pd.cut(bins_on.tolist(), num_bins)  # divides data in bins
 data_df["bins"] = qc.codes
@@ -71,7 +89,7 @@ groups = "bins"
 ###############################################################################
 # Train a linear regression model with stratification on target
 
-cv_stratified = StratifiedGroupsKFold(n_splits=num_splits, shuffle=False)
+cv_stratified = StratifiedGroupsKFold(n_splits=5, shuffle=False)
 scores_strat, model = run_cross_validation(
     X=X,
     y=y,
@@ -88,7 +106,7 @@ scores_strat, model = run_cross_validation(
 ###############################################################################
 # Train a linear regression model without stratification on target
 
-cv = KFold(n_splits=num_splits, shuffle=False, random_state=None)
+cv = KFold(n_splits=5, shuffle=False, random_state=None)
 scores, model = run_cross_validation(
     X=X,
     y=y,
@@ -112,8 +130,7 @@ df_scores = pd.concat([df_scores, scores[["test_score", "model"]]])
 
 ###############################################################################
 # Plot a boxplot with test scores from both the models. We see here that
-# the variance for the test score is much higher when CV splits were not
-# stratified
+# the test score is higher when CV splits were not stratified
 
 fig, ax = plt.subplots(1, 1, figsize=(10, 7))
 sns.set_style("darkgrid")
