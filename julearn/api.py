@@ -164,11 +164,8 @@ def run_cross_validation(
     final_estimator : object
         The final estimator, fitted on all the data (only if
         ``return_estimator='all'`` or ``return_estimator='final'``)
-    n_jobs : int | None
-        Number of parallel jobs used by outer cross-validation.
-        Follows scikit-learn/joblib conventions.
-        None is 1 unless you use a joblib.parallel_backend.
-        -1 means use all available processes for parallelisation.
+    inspector : Inspector | None
+        The inspector object (only if ``return_inspector=True``)
 
     """
 
