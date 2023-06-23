@@ -208,5 +208,6 @@ def corrected_ttest(
             corrected_stats.append(metric_df)
 
         all_stats_df = pd.concat(corrected_stats)
-
+    else:
+        all_stats_df["p-val-corrected"] = all_stats_df["p-val"]
     return all_stats_df
