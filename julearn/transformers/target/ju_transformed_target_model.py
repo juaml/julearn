@@ -133,7 +133,7 @@ class JuTransformedTargetModel(JuBaseEstimator):
         if not hasattr(self, "model_"):
             raise_error("Model not fitted yet.")
         self.model_ = typing.cast(ModelLike, self.model_)
-        y_trans = self.transformer.transform(X, y)
+        y_trans = self.transform_target(X, y)
         return self.model_.score(X, y_trans)
 
     @available_if(_wrapped_model_has("predict_proba"))
@@ -176,6 +176,9 @@ class JuTransformedTargetModel(JuBaseEstimator):
             raise_error("Model not fitted yet.")
         self.model_ = typing.cast(ModelLike, self.model_)
         return self.model_.decision_function(X)  # type: ignore
+
+    def transform_target(self, X, y) -> np.ndarray:
+        return self.transformer.transform(X, y)
 
     @property
     def classes_(self) -> np.ndarray:

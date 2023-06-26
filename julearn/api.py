@@ -214,6 +214,7 @@ def run_cross_validation(
             "model, use PipelineCreator instead"
         )
 
+    wrap_score = False
     if isinstance(model, (PipelineCreator, list)):
         if preprocess is not None:
             raise_error(
@@ -247,6 +248,7 @@ def run_cross_validation(
         for m in model:
             expanded_models.extend(m.split())
 
+        wrap_score = expanded_models[-1]._added_target_transformer
         all_pipelines = [
             model.to_pipeline(X_types=X_types, search_params=search_params)
             for model in expanded_models
@@ -316,6 +318,7 @@ def run_cross_validation(
             raise_error(
                 "The following model_params are incorrect: " f"{unused_params}"
             )
+        wrap_score = pipeline_creator._added_target_transformer
         pipeline = pipeline_creator.to_pipeline(
             X_types=X_types, search_params=search_params
         )
@@ -342,7 +345,9 @@ def run_cross_validation(
     check_consistency(y, cv, groups, problem_type)
 
     cv_return_estimator = return_estimator in ["cv", "all"]
-    scoring = check_scoring(pipeline, scoring)
+    scoring = check_scoring(pipeline, scoring,
+                            wrap_score=wrap_score
+                            )
 
     cv_mdsum = _compute_cvmdsum(cv_outer)
     fit_params = {}

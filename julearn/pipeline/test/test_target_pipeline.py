@@ -9,9 +9,12 @@ import pandas as pd
 import pytest
 from numpy.testing import assert_array_equal
 from sklearn.preprocessing import StandardScaler
+import warnings
 
 from julearn.pipeline.target_pipeline import JuTargetPipeline
 from julearn.transformers.target import JuTargetTransformer
+from julearn.pipeline import PipelineCreator, TargetPipelineCreator
+from julearn import run_cross_validation
 
 
 def test_target_pipeline_sklearn(
@@ -154,3 +157,27 @@ def test_target_pipeline_errors() -> None:
 
     with pytest.raises(TypeError, match="steps must be a list"):
         JuTargetPipeline(steps)  # type: ignore
+
+
+def test_target_noninverse(df_iris, X_iris):
+    X = list(X_iris.columns)
+    df_iris["species"] = X_iris["petal_width"]
+    target_pipeline_creator = TargetPipelineCreator()
+    target_pipeline_creator.add("confound_removal", confounds="confounds")
+    pipeline_creator = PipelineCreator(
+        problem_type="regression", apply_to="continuous"
+    )
+    pipeline_creator.add(target_pipeline_creator, apply_to="target")
+    pipeline_creator.add("linreg")
+
+    X_types = {"confounds": ["petal_width"],
+               "continuous": ['sepal_length', 'sepal_width', 'petal_length']
+               }
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        run_cross_validation(
+            X=X, y="species", X_types=X_types,
+            model=pipeline_creator, data=df_iris,
+            scoring="r2"
+        )

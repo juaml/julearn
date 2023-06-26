@@ -7,6 +7,7 @@
 import typing
 from copy import deepcopy
 from typing import Callable, Dict, List, Optional, Union
+import warnings
 
 from sklearn.metrics import SCORERS, _scorer, make_scorer
 from sklearn.metrics._scorer import _check_multimetric_scoring
@@ -14,6 +15,8 @@ from sklearn.metrics._scorer import check_scoring as sklearn_check_scoring
 
 from ..utils import logger, raise_error, warn_with_log
 from ..utils.typing import EstimatorLike, ScorerLike
+from ..transformers.target.ju_transformed_target_model import (
+    TransformedTargetWarning)
 from .metrics import r2_corr
 
 
@@ -121,6 +124,7 @@ def reset_scorer_register():
 def check_scoring(
     estimator: EstimatorLike,
     scoring: Union[ScorerLike, str, Callable, List[str], None],
+    wrap_score: bool
 ) -> Union[None, ScorerLike, Callable, Dict[str, ScorerLike]]:
     """Check the scoring.
 
@@ -130,16 +134,52 @@ def check_scoring(
         estimator to check the scoring for
     scoring : Union[ScorerLike, str, Callable]
         scoring to check
+    wrap_score : bool
+        Does the score needs to be wrapped
+        to handle non_inverse transformable target pipelines.
     """
     if scoring is None:
         return scoring
     if isinstance(scoring, str):
-        scoring = get_scorer(scoring)
+        scoring = _extend_scorer(get_scorer(scoring), wrap_score)
     if callable(scoring):
-        return sklearn_check_scoring(estimator, scoring=scoring)
+        return _extend_scorer(
+            sklearn_check_scoring(estimator, scoring=scoring),
+            wrap_score)
     if isinstance(scoring, list):
         scorer_names = typing.cast(List[str], scoring)
-        scoring_dict = {score: get_scorer(score) for score in scorer_names}
+        scoring_dict = {score: _extend_scorer(get_scorer(score), wrap_score)
+                        for score in scorer_names}
         return _check_multimetric_scoring(  # type: ignore
             estimator, scoring_dict
         )
+
+
+def _extend_scorer(scorer, extend):
+    if extend:
+        return _ExtendedScorer(scorer)
+    return scorer
+
+
+class _ExtendedScorer():
+    def __init__(self, scorer):
+        self.scorer = scorer
+
+    def __call__(self, estimator, X, y):
+        if hasattr(estimator, "best_estimator_"):
+            estimator = estimator.best_estimator_
+
+        X_trans = X
+        for _, transform in estimator.steps[:-1]:
+            X_trans = transform.transform(X_trans)
+        y_true = (
+            estimator
+            .steps[-1][-1]  # last est
+            .transform_target(X_trans, y)
+        )
+        with warnings.catch_warnings():
+            warnings.filterwarnings(
+                action='ignore', category=TransformedTargetWarning
+            )
+            scores = self.scorer(estimator, X, y_true)
+        return scores
