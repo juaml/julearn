@@ -73,7 +73,8 @@ def test_corrected_ttest() -> None:
         out = corrected_ttest(scores1, scores2)
         assert len(out) == 1
         assert "p-val" in out
-        assert "p-val-corrected" not in out
+        assert "p-val-corrected" in out
+        assert out["p-val-corrected"][0] == out["p-val"][0]
         assert "model_1" in out
         assert "model_2" in out
         assert "model_1" in out["model_1"].values
