@@ -8,29 +8,6 @@ What's new
 
 .. towncrier release notes start
 
-Julearn 0.2.6.dev150 (2023-06-13)
----------------------------------
-
-Bugfixes
-^^^^^^^^
-
-- Add ``BaseEstimator`` to ``ConfoundRemoval`` for Target by `Sami Hamdan`_
-  (:gh:`151`)
-
-
-Enhancements
-^^^^^^^^^^^^
-
-- Make CBPM use sum by default by `Sami Hamdan`_ (:gh:`170`)
-
-
-Features
-^^^^^^^^
-
-- Add support for multiple grids in hyperparameter tuning by `Fede Raimondo`_
-  (:gh:`47`)
-
-
 Julearn 0.2.5 (2022-07-21)
 --------------------------
 

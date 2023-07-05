@@ -2,9 +2,12 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from .stratified_groups_kfold import (
-    StratifiedGroupsKFold,
-    RepeatedStratifiedGroupsKFold,
+from .continuous_stratified_kfold import (
+    ContinuousStratifiedKFold,
+    RepeatedSContinuousStratifiedKFold,
+    ContinuousStratifiedGroupKFold,
+    RepeatedSContinuousStratifiedGroupKFold,
+
 )
 from .stratified_bootstrap import StratifiedBootstrap
 from .available_searchers import (

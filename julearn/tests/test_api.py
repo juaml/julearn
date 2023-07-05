@@ -36,8 +36,8 @@ from sklearn.svm import SVC
 from julearn import run_cross_validation
 from julearn.api import _compute_cvmdsum
 from julearn.model_selection import (
-    RepeatedStratifiedGroupsKFold,
-    StratifiedGroupsKFold,
+    RepeatedSContinuousStratifiedGroupKFold,
+    ContinuousStratifiedGroupKFold,
 )
 from julearn.pipeline import PipelineCreator
 from julearn.utils.testing import compare_models, do_scoring_test
@@ -1008,43 +1008,75 @@ def test_return_train_scores(df_iris: pd.DataFrame) -> None:
         ),
         (StratifiedGroupKFold(2), StratifiedGroupKFold(3), False),
         (StratifiedGroupKFold(3), StratifiedGroupKFold(3), True),
-        (StratifiedGroupsKFold(2), StratifiedGroupsKFold(3), False),
         (
-            StratifiedGroupsKFold(2, shuffle=True),
-            StratifiedGroupsKFold(2, shuffle=True),
-            "non-reproducible",
-        ),
-        (
-            StratifiedGroupsKFold(3, random_state=32, shuffle=True),
-            StratifiedGroupsKFold(3, random_state=32, shuffle=True),
-            True,
-        ),
-        (
-            StratifiedGroupsKFold(3, random_state=33, shuffle=True),
-            StratifiedGroupsKFold(3, random_state=32, shuffle=True),
+            ContinuousStratifiedGroupKFold(n_bins=10, n_splits=2),
+            ContinuousStratifiedGroupKFold(n_bins=10, n_splits=3),
             False,
         ),
         (
-            RepeatedStratifiedGroupsKFold(n_splits=2),
-            RepeatedStratifiedGroupsKFold(n_splits=2),
-            "non-reproducible",
-        ),
-        (
-            RepeatedStratifiedGroupsKFold(n_splits=2, random_state=32),
-            RepeatedStratifiedGroupsKFold(n_splits=3, random_state=32),
+            ContinuousStratifiedGroupKFold(n_bins=10, n_splits=2),
+            ContinuousStratifiedGroupKFold(n_bins=11, n_splits=2),
             False,
         ),
         (
-            RepeatedStratifiedGroupsKFold(n_splits=2, random_state=32),
-            RepeatedStratifiedGroupsKFold(n_splits=2, random_state=32),
-            True,
-        ),
-        (
-            RepeatedStratifiedGroupsKFold(
-                n_splits=2, n_repeats=2, random_state=32
+            ContinuousStratifiedGroupKFold(
+                n_bins=10, n_splits=2, method="quantile"
             ),
-            RepeatedStratifiedGroupsKFold(
-                n_splits=2, n_repeats=3, random_state=32
+            ContinuousStratifiedGroupKFold(n_bins=10, n_splits=2),
+            False,
+        ),
+        (
+            ContinuousStratifiedGroupKFold(n_bins=10, n_splits=2, shuffle=True),
+            ContinuousStratifiedGroupKFold(n_bins=10, n_splits=2, shuffle=True),
+            "non-reproducible",
+        ),
+        (
+            ContinuousStratifiedGroupKFold(
+                n_bins=10, n_splits=3, random_state=32, shuffle=True
+            ),
+            ContinuousStratifiedGroupKFold(
+                n_bins=10, n_splits=3, random_state=32, shuffle=True
+            ),
+            True,
+        ),
+        (
+            ContinuousStratifiedGroupKFold(
+                n_bins=10, n_splits=3, random_state=33, shuffle=True
+            ),
+            ContinuousStratifiedGroupKFold(
+                n_bins=10, n_splits=3, random_state=32, shuffle=True
+            ),
+            False,
+        ),
+        (
+            RepeatedSContinuousStratifiedGroupKFold(n_bins=10, n_splits=2),
+            RepeatedSContinuousStratifiedGroupKFold(n_bins=10, n_splits=2),
+            "non-reproducible",
+        ),
+        (
+            RepeatedSContinuousStratifiedGroupKFold(
+                n_bins=10, n_splits=2, random_state=32
+            ),
+            RepeatedSContinuousStratifiedGroupKFold(
+                n_bins=10, n_splits=3, random_state=32
+            ),
+            False,
+        ),
+        (
+            RepeatedSContinuousStratifiedGroupKFold(
+                n_bins=10, n_splits=2, random_state=32
+            ),
+            RepeatedSContinuousStratifiedGroupKFold(
+                n_bins=10, n_splits=2, random_state=32
+            ),
+            True,
+        ),
+        (
+            RepeatedSContinuousStratifiedGroupKFold(
+                n_bins=10, n_splits=2, n_repeats=2, random_state=32
+            ),
+            RepeatedSContinuousStratifiedGroupKFold(
+                n_bins=10, n_splits=2, n_repeats=3, random_state=32
             ),
             False,
         ),

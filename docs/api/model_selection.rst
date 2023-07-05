@@ -17,8 +17,10 @@ Model Selection
    :toctree: generated/
    :template: class.rst
 
-    StratifiedGroupsKFold
-    RepeatedStratifiedGroupsKFold
+    ContinuousStratifiedKFold
+    RepeatedSContinuousStratifiedKFold
+    ContinuousStratifiedGroupKFold
+    RepeatedSContinuousStratifiedGroupKFold
     StratifiedBootstrap
 
 **Functions**

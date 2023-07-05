@@ -22,8 +22,8 @@ from sklearn.model_selection import (
 from sklearn.model_selection._split import _RepeatedSplits
 
 from .model_selection import (
-    RepeatedStratifiedGroupsKFold,
-    StratifiedGroupsKFold,
+    RepeatedSContinuousStratifiedGroupKFold,
+    ContinuousStratifiedGroupKFold,
 )
 from .utils import logger, raise_error, warn_with_log
 
@@ -364,8 +364,8 @@ def check_consistency(
             LeaveOneGroupOut,
             LeavePGroupsOut,
             StratifiedGroupKFold,
-            StratifiedGroupsKFold,
-            RepeatedStratifiedGroupsKFold,
+            ContinuousStratifiedGroupKFold,
+            RepeatedSContinuousStratifiedGroupKFold,
         )
         if not isinstance(cv, valid_instances):
             warn_with_log(

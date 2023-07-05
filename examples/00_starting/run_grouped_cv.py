@@ -26,11 +26,10 @@ cognitive control in context-dependent decision-making. Cerebral Cortex.
 import numpy as np
 
 from seaborn import load_dataset
-from sklearn.model_selection import GroupKFold
+from sklearn.model_selection import GroupKFold, StratifiedGroupKFold
 
 from julearn.utils import configure_logging
 from julearn import run_cross_validation
-from julearn.model_selection import StratifiedGroupsKFold
 
 ###############################################################################
 # Set the logging level to info to see extra information
@@ -113,7 +112,7 @@ print(scores["test_score"].mean())
 
 ###############################################################################
 # Train classification model with stratification on data
-cv_stratified = StratifiedGroupsKFold(n_splits=2)
+cv_stratified = StratifiedGroupKFold(n_splits=2)
 scores, model = run_cross_validation(
     X=X,
     y=y,

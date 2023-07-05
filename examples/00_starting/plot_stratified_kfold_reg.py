@@ -22,7 +22,7 @@ from sklearn.model_selection import KFold
 
 from julearn import run_cross_validation
 from julearn.utils import configure_logging
-from julearn.model_selection import StratifiedGroupsKFold
+from julearn.model_selection import ContinuousStratifiedKFold
 
 ###############################################################################
 # Set the logging level to info to see extra information
@@ -80,23 +80,19 @@ sns.displot(data_df, x="target", bins=20)
 # represented in each fold. Lets continue with 40 bins which gives a good
 # granularity.
 
-num_bins = 40  # num of bins to be created
-bins_on = data_df.target  # variable to be used for stratification
-qc = pd.cut(bins_on.tolist(), num_bins)  # divides data in bins
-data_df["bins"] = qc.codes
-groups = "bins"
+cv_stratified = ContinuousStratifiedKFold(
+    n_bins=40, n_splits=5, shuffle=False
+)
 
 ###############################################################################
 # Train a linear regression model with stratification on target
 
-cv_stratified = StratifiedGroupsKFold(n_splits=5, shuffle=False)
 scores_strat, model = run_cross_validation(
     X=X,
     y=y,
     data=data_df,
     preprocess="zscore",
     cv=cv_stratified,
-    groups=groups,
     problem_type="regression",
     model="linreg",
     return_estimator="final",
