@@ -72,8 +72,9 @@ Features
 ^^^^^^^^
 
 - Add user facing ``create_pipeline`` function by `Sami Hamdan`_
-- Add CV schemes for stratifying based on the grouping variables, useful for
-  regression problems. Check :class:`.StratifiedGroupsKFold` and
-  :class:`.RepeatedStratifiedGroupsKFold` by `Fede Raimondo`_ and `Shammi More`_
+- Add CV schemes for stratifying continous variables, useful for
+  regression problems. Check :class:`.ContinuousStratifiedKFold` and
+  :class:`.RepeatedContinuousStratifiedKFold` by
+  `Fede Raimondo`_ and `Shammi More`_
 - Add ``CBPM`` transformer by `Sami Hamdan`_
 - Add ``register_model`` by `Sami Hamdan`_ (:gh:`105`)
