@@ -178,7 +178,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/confound_removal.html">3.2. Cross-validation consistent Confound Removal</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/hyperparameter_tuning.html">3.3. Hyperparameter Tuning</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/model_inspect.html">3.4. Inspecting Models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/cross_validation_splitter.html">3.5. Cross-validation splitter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/cross_validation_splitter.html">3.5. Cross-validation splitters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/stacked_models.html">3.6. Stacking Models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/CBPM.html">3.7. Connectome-based Predictive Modeling (CBPM)</a></li>
 </ul>
@@ -237,8 +237,10 @@
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../model_selection.html">6.3. Model Selection</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="julearn.model_selection.StratifiedGroupsKFold.html">julearn.model_selection.StratifiedGroupsKFold</a></li>
-<li class="toctree-l3"><a class="reference internal" href="julearn.model_selection.RepeatedStratifiedGroupsKFold.html">julearn.model_selection.RepeatedStratifiedGroupsKFold</a></li>
+<li class="toctree-l3"><a class="reference internal" href="julearn.model_selection.ContinuousStratifiedKFold.html">julearn.model_selection.ContinuousStratifiedKFold</a></li>
+<li class="toctree-l3"><a class="reference internal" href="julearn.model_selection.RepeatedContinuousStratifiedKFold.html">julearn.model_selection.RepeatedContinuousStratifiedKFold</a></li>
+<li class="toctree-l3"><a class="reference internal" href="julearn.model_selection.ContinuousStratifiedGroupKFold.html">julearn.model_selection.ContinuousStratifiedGroupKFold</a></li>
+<li class="toctree-l3"><a class="reference internal" href="julearn.model_selection.RepeatedContinuousStratifiedGroupKFold.html">julearn.model_selection.RepeatedContinuousStratifiedGroupKFold</a></li>
 <li class="toctree-l3"><a class="reference internal" href="julearn.model_selection.StratifiedBootstrap.html">julearn.model_selection.StratifiedBootstrap</a></li>
 <li class="toctree-l3"><a class="reference internal" href="julearn.model_selection.get_searcher.html">julearn.model_selection.get_searcher</a></li>
 <li class="toctree-l3"><a class="reference internal" href="julearn.model_selection.list_searchers.html">julearn.model_selection.list_searchers</a></li>
@@ -332,7 +334,11 @@
 <li class="toctree-l3"><a class="reference internal" href="julearn.prepare.check_consistency.html">julearn.prepare.check_consistency</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../viz.html">6.15. Vizualization</a><input class="toctree-checkbox" id="toctree-checkbox-25" name="toctree-checkbox-25" role="switch" type="checkbox"/><label for="toctree-checkbox-25"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../stats.html">6.15. Stats</a><input class="toctree-checkbox" id="toctree-checkbox-25" name="toctree-checkbox-25" role="switch" type="checkbox"/><label for="toctree-checkbox-25"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="julearn.stats.corrected_ttest.html">julearn.stats.corrected_ttest</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../viz.html">6.16. Vizualization</a><input class="toctree-checkbox" id="toctree-checkbox-26" name="toctree-checkbox-26" role="switch" type="checkbox"/><label for="toctree-checkbox-26"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="julearn.viz.plot_scores.html">julearn.viz.plot_scores</a></li>
 </ul>
 </li>
@@ -487,7 +493,7 @@ in case you use a float for ds_split (default is None).</p>
 <dd class="field-even"><dl class="simple">
 <dt>np.ndarray</dt><dd><p>Returns the probability of the sample for each class in
 the model. The columns correspond to the classes in sorted
-order, as they appear in the attribute <a class="reference external" href="https://scikit-learn.org/stable/glossary.html#term-classes_" title="(in scikit-learn v1.2)"><span class="xref std std-term">classes_</span></a>.</p>
+order, as they appear in the attribute <a class="reference external" href="https://scikit-learn.org/stable/glossary.html#term-classes_" title="(in scikit-learn v1.3)"><span class="xref std std-term">classes_</span></a>.</p>
 </dd>
 </dl>
 </dd>
@@ -512,6 +518,23 @@ order, as they appear in the attribute <a class="reference external" href="https
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>float</dt><dd><p>The score.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="julearn.models.dynamic.DynamicSelection.get_metadata_routing">
+<span class="sig-name descname"><span class="pre">get_metadata_routing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#julearn.models.dynamic.DynamicSelection.get_metadata_routing" title="Permalink to this definition">#</a></dt>
+<dd><p>Get metadata routing of this object.</p>
+<p>Please check <a class="reference external" href="https://scikit-learn.org/stable/metadata_routing.html#metadata-routing" title="(in scikit-learn v1.3)"><span class="xref std std-ref">User Guide</span></a> on how the routing
+mechanism works.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>routing</strong><span class="classifier">MetadataRequest</span></dt><dd><p>A <code class="xref py py-class docutils literal notranslate"><span class="pre">MetadataRequest</span></code> encapsulating
+routing information.</p>
 </dd>
 </dl>
 </dd>
@@ -544,7 +567,7 @@ contained subobjects that are estimators.</p>
 <span class="sig-name descname"><span class="pre">set_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.models.dynamic.DynamicSelection.set_params" title="Permalink to this definition">#</a></dt>
 <dd><p>Set the parameters of this estimator.</p>
 <p>The method works on simple estimators as well as on nested objects
-(such as <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
+(such as <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="(in scikit-learn v1.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Pipeline</span></code></a>). The latter have
 parameters of the form <code class="docutils literal notranslate"><span class="pre">&lt;component&gt;__&lt;parameter&gt;</span></code> so that it’s
 possible to update each component of a nested object.</p>
 <dl class="field-list simple">
@@ -557,6 +580,49 @@ possible to update each component of a nested object.</p>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="julearn.models.dynamic.DynamicSelection.set_score_request">
+<span class="sig-name descname"><span class="pre">set_score_request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sample_weight</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'$UNCHANGED$'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.models.dynamic.DynamicSelection.set_score_request" title="Permalink to this definition">#</a></dt>
+<dd><p>Request metadata passed to the <code class="docutils literal notranslate"><span class="pre">score</span></code> method.</p>
+<p>Note that this method is only relevant if
+<code class="docutils literal notranslate"><span class="pre">enable_metadata_routing=True</span></code> (see <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.set_config.html#sklearn.set_config" title="(in scikit-learn v1.3)"><code class="xref py py-func docutils literal notranslate"><span class="pre">sklearn.set_config()</span></code></a>).
+Please see <a class="reference external" href="https://scikit-learn.org/stable/metadata_routing.html#metadata-routing" title="(in scikit-learn v1.3)"><span class="xref std std-ref">User Guide</span></a> on how the routing
+mechanism works.</p>
+<p>The options for each parameter are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">True</span></code>: metadata is requested, and passed to <code class="docutils literal notranslate"><span class="pre">score</span></code> if provided. The request is ignored if metadata is not provided.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">False</span></code>: metadata is not requested and the meta-estimator will not pass it to <code class="docutils literal notranslate"><span class="pre">score</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">None</span></code>: metadata is not requested, and the meta-estimator will raise an error if the user provides it.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">str</span></code>: metadata should be passed to the meta-estimator with this given alias instead of the original name.</p></li>
+</ul>
+<p>The default (<code class="docutils literal notranslate"><span class="pre">sklearn.utils.metadata_routing.UNCHANGED</span></code>) retains the
+existing request. This allows you to change the request for some
+parameters and not others.</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.3.</span></p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method is only relevant if this estimator is used as a
+sub-estimator of a meta-estimator, e.g. used inside a
+<code class="xref py py-class docutils literal notranslate"><span class="pre">pipeline.Pipeline</span></code>. Otherwise it has no effect.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>sample_weight</strong><span class="classifier">str, True, False, or None,                     default=sklearn.utils.metadata_routing.UNCHANGED</span></dt><dd><p>Metadata routing for <code class="docutils literal notranslate"><span class="pre">sample_weight</span></code> parameter in <code class="docutils literal notranslate"><span class="pre">score</span></code>.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>self</strong><span class="classifier">object</span></dt><dd><p>The updated object.</p>
 </dd>
 </dl>
 </dd>
@@ -629,8 +695,10 @@ possible to update each component of a nested object.</p>
 <li><a class="reference internal" href="#julearn.models.dynamic.DynamicSelection.predict"><code class="docutils literal notranslate"><span class="pre">DynamicSelection.predict()</span></code></a></li>
 <li><a class="reference internal" href="#julearn.models.dynamic.DynamicSelection.predict_proba"><code class="docutils literal notranslate"><span class="pre">DynamicSelection.predict_proba()</span></code></a></li>
 <li><a class="reference internal" href="#julearn.models.dynamic.DynamicSelection.score"><code class="docutils literal notranslate"><span class="pre">DynamicSelection.score()</span></code></a></li>
+<li><a class="reference internal" href="#julearn.models.dynamic.DynamicSelection.get_metadata_routing"><code class="docutils literal notranslate"><span class="pre">DynamicSelection.get_metadata_routing()</span></code></a></li>
 <li><a class="reference internal" href="#julearn.models.dynamic.DynamicSelection.get_params"><code class="docutils literal notranslate"><span class="pre">DynamicSelection.get_params()</span></code></a></li>
 <li><a class="reference internal" href="#julearn.models.dynamic.DynamicSelection.set_params"><code class="docutils literal notranslate"><span class="pre">DynamicSelection.set_params()</span></code></a></li>
+<li><a class="reference internal" href="#julearn.models.dynamic.DynamicSelection.set_score_request"><code class="docutils literal notranslate"><span class="pre">DynamicSelection.set_score_request()</span></code></a></li>
 </ul>
 </li>
 </ul>

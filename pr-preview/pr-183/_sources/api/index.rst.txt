@@ -19,4 +19,5 @@ Reference
    transformers.rst
    utils.rst
    prepare.rst
+   stats.rst
    viz.rst
