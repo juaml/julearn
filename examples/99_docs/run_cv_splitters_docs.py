@@ -28,7 +28,7 @@ the variance of the generalization error.
 
 We will not repeat what our colleagues from scikit-learn have already
 explained in their excellent documentation [#2]_. So we will just add a few
-words about some topics, asuming you have already read the scikit-learn
+words about some topics, assuming you have already read the scikit-learn
 documentation.
 
 As a rule of thumb, K-fold cross-validation is a good compromise between bias
@@ -208,7 +208,7 @@ fig.suptitle("K-fold on normally distributed target variable")
 # that the model will not be evaluated on some of the classes, which can lead
 # to biased results.
 #
-# To this matter, we have implemented a differnt way of discretizing the
+# To this matter, we have implemented a different way of discretizing the
 # target variable. Instead of fixing the size of the bins, we can split the
 # data into bins with the same number of samples. This is called *quantizing*.
 # Let's see how this works on the same data.
@@ -218,7 +218,7 @@ discrete_y = np.digitize(y, bins=bins[:-1])
 sns.histplot(discrete_y, bins=n_bins)
 
 ###############################################################################
-# In this case, each quantile of the target variable is equaly represented in
+# In this case, each quantile of the target variable is equally represented in
 # each "bin". To use this approach, we can simply set ``method="quantile"`` in
 # the :class:`.ContinuousStratifiedKFold`.
 # %%
