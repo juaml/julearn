@@ -36,7 +36,7 @@ from sklearn.svm import SVC
 from julearn import run_cross_validation
 from julearn.api import _compute_cvmdsum
 from julearn.model_selection import (
-    RepeatedSContinuousStratifiedGroupKFold,
+    RepeatedContinuousStratifiedGroupKFold,
     ContinuousStratifiedGroupKFold,
 )
 from julearn.pipeline import PipelineCreator
@@ -1049,33 +1049,33 @@ def test_return_train_scores(df_iris: pd.DataFrame) -> None:
             False,
         ),
         (
-            RepeatedSContinuousStratifiedGroupKFold(n_bins=10, n_splits=2),
-            RepeatedSContinuousStratifiedGroupKFold(n_bins=10, n_splits=2),
+            RepeatedContinuousStratifiedGroupKFold(n_bins=10, n_splits=2),
+            RepeatedContinuousStratifiedGroupKFold(n_bins=10, n_splits=2),
             "non-reproducible",
         ),
         (
-            RepeatedSContinuousStratifiedGroupKFold(
+            RepeatedContinuousStratifiedGroupKFold(
                 n_bins=10, n_splits=2, random_state=32
             ),
-            RepeatedSContinuousStratifiedGroupKFold(
+            RepeatedContinuousStratifiedGroupKFold(
                 n_bins=10, n_splits=3, random_state=32
             ),
             False,
         ),
         (
-            RepeatedSContinuousStratifiedGroupKFold(
+            RepeatedContinuousStratifiedGroupKFold(
                 n_bins=10, n_splits=2, random_state=32
             ),
-            RepeatedSContinuousStratifiedGroupKFold(
+            RepeatedContinuousStratifiedGroupKFold(
                 n_bins=10, n_splits=2, random_state=32
             ),
             True,
         ),
         (
-            RepeatedSContinuousStratifiedGroupKFold(
+            RepeatedContinuousStratifiedGroupKFold(
                 n_bins=10, n_splits=2, n_repeats=2, random_state=32
             ),
-            RepeatedSContinuousStratifiedGroupKFold(
+            RepeatedContinuousStratifiedGroupKFold(
                 n_bins=10, n_splits=2, n_repeats=3, random_state=32
             ),
             False,

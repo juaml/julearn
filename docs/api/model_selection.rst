@@ -18,9 +18,9 @@ Model Selection
    :template: class.rst
 
     ContinuousStratifiedKFold
-    RepeatedSContinuousStratifiedKFold
+    RepeatedContinuousStratifiedKFold
     ContinuousStratifiedGroupKFold
-    RepeatedSContinuousStratifiedGroupKFold
+    RepeatedContinuousStratifiedGroupKFold
     StratifiedBootstrap
 
 **Functions**

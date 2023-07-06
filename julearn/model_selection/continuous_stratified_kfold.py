@@ -128,7 +128,7 @@ class ContinuousStratifiedKFold(StratifiedKFold):
         return super().split(X, discrete_y, groups)
 
 
-class RepeatedSContinuousStratifiedKFold(_RepeatedSplits):
+class RepeatedContinuousStratifiedKFold(_RepeatedSplits):
     """Repeated Contionous Stratified K-Fold cross validator.
 
     Repeats :class:`julearn.model_selection.ContinuousStratifiedKFold`
@@ -150,7 +150,6 @@ class RepeatedSContinuousStratifiedKFold(_RepeatedSplits):
     random_state : int, RandomState instance or None, default=None
         Controls the generation of the random states for each repetition.
         Pass an int for reproducible output across multiple function calls.
-        See :term:`Glossary <random_state>`.
 
     Notes
     -----
@@ -205,7 +204,6 @@ class ContinuousStratifiedGroupKFold(StratifiedGroupKFold):
         indices, which controls the randomness of each fold for each class.
         Otherwise, leave `random_state` as `None`.
         Pass an int for reproducible output across multiple function calls.
-        See :term:`Glossary <random_state>`.
 
     Notes
     -----
@@ -270,7 +268,7 @@ class ContinuousStratifiedGroupKFold(StratifiedGroupKFold):
         return super().split(X, discrete_y, groups)
 
 
-class RepeatedSContinuousStratifiedGroupKFold(_RepeatedSplits):
+class RepeatedContinuousStratifiedGroupKFold(_RepeatedSplits):
     """Repeated Stratified-Groups K-Fold cross validator.
 
     Repeats :class:`julearn.model_selection.ContinuousStratifiedGroupKFold`

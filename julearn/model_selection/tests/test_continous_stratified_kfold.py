@@ -15,9 +15,9 @@ from collections import Counter
 
 
 from julearn.model_selection.continuous_stratified_kfold import (
-    RepeatedSContinuousStratifiedKFold,
+    RepeatedContinuousStratifiedKFold,
     ContinuousStratifiedKFold,
-    # RepeatedSContinuousStratifiedGroupKFold,  # Need in sklearn #24247
+    # RepeatedContinuousStratifiedGroupKFold,  # Need in sklearn #24247
     ContinuousStratifiedGroupKFold,
 )
 
@@ -43,7 +43,7 @@ def test_continuous_stratified_kfold_binning() -> None:
         assert_array_equal(sk_test, ju_test)
 
     skcv = RepeatedStratifiedKFold(n_repeats=4, n_splits=3, random_state=42)
-    jucv = RepeatedSContinuousStratifiedKFold(
+    jucv = RepeatedContinuousStratifiedKFold(
         n_bins=n_bins, n_repeats=4, n_splits=3, random_state=42
     )
     for (sk_train, sk_test), (ju_train, ju_test) in zip(
@@ -82,7 +82,7 @@ def test_continuous_stratified_kfold_quantile() -> None:
         assert_array_equal(sk_test, ju_test)
 
     skcv = RepeatedStratifiedKFold(n_repeats=4, n_splits=3, random_state=42)
-    jucv = RepeatedSContinuousStratifiedKFold(
+    jucv = RepeatedContinuousStratifiedKFold(
         method="quantile",
         n_bins=n_bins,
         n_repeats=4,
@@ -161,7 +161,7 @@ def test_continuous_stratified_group_kfold_quantile() -> None:
         assert_array_equal(sk_test, ju_test)
 
     # skcv = RepeatedStratifiedKFold(n_repeats=4, n_splits=3, random_state=42)
-    # jucv = RepeatedSContinuousStratifiedKFold(
+    # jucv = RepeatedContinuousStratifiedKFold(
     #     method="quantile",
     #     n_bins=n_bins,
     #     n_repeats=4,

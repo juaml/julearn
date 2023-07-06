@@ -22,7 +22,7 @@ from sklearn.model_selection import (
 )
 from sklearn.model_selection._split import PredefinedSplit, _CVIterableWrapper
 from ..model_selection import (
-    RepeatedSContinuousStratifiedGroupKFold,
+    RepeatedContinuousStratifiedGroupKFold,
     ContinuousStratifiedGroupKFold,
 )
 
@@ -81,7 +81,7 @@ def is_nonoverlapping_cv(cv) -> bool:
         LeaveOneGroupOut,
         StratifiedGroupKFold,
         ContinuousStratifiedGroupKFold,
-        RepeatedSContinuousStratifiedGroupKFold,
+        RepeatedContinuousStratifiedGroupKFold,
     )
 
     return isinstance(cv, _valid_instances)

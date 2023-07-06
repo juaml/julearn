@@ -25,7 +25,7 @@ from sklearn.model_selection import (
 )
 
 from julearn.model_selection import (
-    RepeatedSContinuousStratifiedGroupKFold,
+    RepeatedContinuousStratifiedGroupKFold,
     ContinuousStratifiedGroupKFold,
 )
 from julearn.prepare import (
@@ -664,7 +664,7 @@ def test_check_consstency() -> None:
         LeavePGroupsOut(n_groups=2),
         StratifiedGroupKFold(),
         ContinuousStratifiedGroupKFold(n_bins=2),
-        RepeatedSContinuousStratifiedGroupKFold(n_bins=2),
+        RepeatedContinuousStratifiedGroupKFold(n_bins=2),
     )
 
     for cv in valid_instances:

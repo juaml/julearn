@@ -118,19 +118,21 @@ def corrected_ttest(
         Method used for testing and adjustment of pvalues. Can be either the
         full name or initial letters. Available methods are:
 
-        - `bonferroni` : one-step correction
-        - `sidak` : one-step correction
-        - `holm-sidak` : step down method using Sidak adjustments
-        - `holm` : step-down method using Bonferroni adjustments
-        - `simes-hochberg` : step-up method  (independent)
-        - `hommel` : closed method based on Simes tests (non-negative)
-        - `fdr_bh` : Benjamini/Hochberg  (non-negative)
-        - `fdr_by` : Benjamini/Yekutieli (negative)
-        - `fdr_tsbh` : two stage fdr correction (non-negative)
-        - `fdr_tsbky` : two stage fdr correction (non-negative)
+        * `bonferroni` : one-step correction
+        * `sidak` : one-step correction
+        * `holm-sidak` : step down method using Sidak adjustments
+        * `holm` : step-down method using Bonferroni adjustments
+        * `simes-hochberg` : step-up method  (independent)
+        * `hommel` : closed method based on Simes tests (non-negative)
+        * `fdr_bh` : Benjamini/Hochberg  (non-negative)
+        * `fdr_by` : Benjamini/Yekutieli (negative)
+        * `fdr_tsbh` : two stage fdr correction (non-negative)
+        * `fdr_tsbky` : two stage fdr correction (non-negative)
+
     alternative : {'two-sided', 'less', 'greater'}, optional
         Defines the alternative hypothesis.
         The following options are available (default is 'two-sided'):
+
         * 'two-sided': the means of the distributions underlying the samples
           are unequal.
         * 'less': the mean of the distribution underlying the first sample
@@ -139,6 +141,7 @@ def corrected_ttest(
         * 'greater': the mean of the distribution underlying the first
           sample is greater than the mean of the distribution underlying
           the second sample.
+
     """
     scores = check_scores_df(*scores, same_cv=True)
     if len(scores) > 2 and alternative != "two-sided":

@@ -410,7 +410,7 @@ class WrapModel(JuBaseEstimator):
         """Set the parameters of this model.
 
         The method works on simple models as well as on nested objects
-        (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
+        (such as :class:`sklearn.pipeline.Pipeline`). The latter have
         parameters of the form ``<component>__<parameter>`` so that it's
         possible to update each component of a nested object.
 

@@ -4,9 +4,9 @@
 
 from .continuous_stratified_kfold import (
     ContinuousStratifiedKFold,
-    RepeatedSContinuousStratifiedKFold,
+    RepeatedContinuousStratifiedKFold,
     ContinuousStratifiedGroupKFold,
-    RepeatedSContinuousStratifiedGroupKFold,
+    RepeatedContinuousStratifiedGroupKFold,
 
 )
 from .stratified_bootstrap import StratifiedBootstrap
