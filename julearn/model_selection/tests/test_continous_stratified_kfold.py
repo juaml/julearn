@@ -118,7 +118,8 @@ def test_continuous_stratified_group_kfold_binning() -> None:
         assert_array_equal(sk_train, ju_train)
         assert_array_equal(sk_test, ju_test)
 
-    # skcv = RepeatedStratifiedKGroupFold(n_repeats=4, n_splits=3, random_state=42)
+    # skcv = RepeatedStratifiedKGroupFold(
+    #    n_repeats=4, n_splits=3, random_state=42)
     # jucv = RepeatedSContinuousStratifiedKGroupFold(
     #     n_bins=n_bins, n_repeats=4, n_splits=3, random_state=42
     # )
@@ -127,7 +128,6 @@ def test_continuous_stratified_group_kfold_binning() -> None:
     # ):
     #     assert_array_equal(sk_train, ju_train)
     #     assert_array_equal(sk_test, ju_test)
-
 
 
 def test_continuous_stratified_group_kfold_quantile() -> None:

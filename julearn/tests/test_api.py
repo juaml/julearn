@@ -1026,8 +1026,12 @@ def test_return_train_scores(df_iris: pd.DataFrame) -> None:
             False,
         ),
         (
-            ContinuousStratifiedGroupKFold(n_bins=10, n_splits=2, shuffle=True),
-            ContinuousStratifiedGroupKFold(n_bins=10, n_splits=2, shuffle=True),
+            ContinuousStratifiedGroupKFold(
+                n_bins=10, n_splits=2, shuffle=True
+            ),
+            ContinuousStratifiedGroupKFold(
+                n_bins=10, n_splits=2, shuffle=True
+            ),
             "non-reproducible",
         ),
         (
