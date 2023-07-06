@@ -9,7 +9,7 @@ from copy import deepcopy
 from typing import Callable, Dict, List, Optional, Union
 import warnings
 
-from sklearn.metrics import SCORERS, _scorer, make_scorer
+from sklearn.metrics import _scorer, make_scorer, get_scorer_names
 from sklearn.metrics._scorer import _check_multimetric_scoring
 from sklearn.metrics._scorer import check_scoring as sklearn_check_scoring
 
@@ -60,7 +60,7 @@ def list_scorers() -> List[str]:
     list of str
         a list containing all available scorers.
     """
-    scorers = list(SCORERS.keys())
+    scorers = list(get_scorer_names())
     scorers.extend(list(_extra_available_scorers.keys()))
     return scorers
 
