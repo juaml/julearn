@@ -36,4 +36,5 @@ Scoring Metrics
    :toctree: generated/
    :template: function.rst
 
+    r_corr
     r2_corr
