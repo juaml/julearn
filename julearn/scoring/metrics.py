@@ -52,3 +52,23 @@ def r2_corr(y_true: ArrayLike, y_pred: ArrayLike) -> float:
         The squared Pearson product-moment correlation coefficient.
     """
     return np.corrcoef(ensure_1d(y_true), ensure_1d(y_pred))[0, 1] ** 2
+
+
+def r_corr(y_true: ArrayLike, y_pred: ArrayLike) -> float:
+    """Compute Pearson product-moment correlation coefficient.
+
+        Parameters
+    ----------
+    y_true : ArrayLike
+        The true values.
+    y_pred : ArrayLike
+        The predicted values.
+
+    Returns
+    -------
+    float
+        Pearson product-moment correlation coefficient.
+
+    """
+
+    return np.corrcoef(ensure_1d(y_true), ensure_1d(y_pred))[0, 1]

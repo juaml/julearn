@@ -17,10 +17,13 @@ from ..utils import logger, raise_error, warn_with_log
 from ..utils.typing import EstimatorLike, ScorerLike
 from ..transformers.target.ju_transformed_target_model import (
     TransformedTargetWarning)
-from .metrics import r2_corr
+from .metrics import r2_corr, r_corr
 
 
-_extra_available_scorers = {"r2_corr": make_scorer(r2_corr)}
+_extra_available_scorers = {
+    "r2_corr": make_scorer(r2_corr),
+    "r_corr": make_scorer(r_corr),
+}
 
 _extra_available_scorers_reset = deepcopy(_extra_available_scorers)
 
