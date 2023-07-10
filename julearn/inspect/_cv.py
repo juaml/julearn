@@ -145,7 +145,9 @@ class FoldsInspector:
             for i_fold, t_df in enumerate(predictions):
                 t_df.columns = [f"fold{i_fold}_{x}" for x in t_df.columns]
         predictions = pd.concat(predictions, axis=1)
-        return predictions.sort_index()
+        predictions = predictions.sort_index()
+        predictions["target"] = self._y.values
+        return predictions
 
     def __getitem__(self, key):
         return _FoldInspector(self, key)

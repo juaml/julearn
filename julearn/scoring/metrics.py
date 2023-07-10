@@ -57,7 +57,7 @@ def r2_corr(y_true: ArrayLike, y_pred: ArrayLike) -> float:
 def r_corr(y_true: ArrayLike, y_pred: ArrayLike) -> float:
     """Compute Pearson product-moment correlation coefficient.
 
-        Parameters
+    Parameters
     ----------
     y_true : ArrayLike
         The true values.

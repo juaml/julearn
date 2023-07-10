@@ -6,8 +6,8 @@ from julearn.inspect import FoldsInspector, PipelineInspector
 from julearn.utils import _compute_cvmdsum
 from julearn.pipeline import PipelineCreator
 import numpy as np
-from numpy.testing import assert_array_almost_equal
 import pytest
+from pandas.testing import assert_frame_equal
 
 
 class MockModelReturnsIndex(BaseEstimator):
@@ -48,15 +48,16 @@ def scores(df_typed_iris, n_iters=5, mock_model=None):
     if mock_model is None:
         mock_model = MockModelReturnsIndex
 
-    estimators = [WrapModel(mock_model()).fit(X, y)
-                  for _ in range(n_iters)]
+    estimators = [WrapModel(mock_model()).fit(X, y) for _ in range(n_iters)]
 
-    return pd.DataFrame(dict(
-        estimator=estimators,
-        test_scores=[.5]*n_iters,
-        repeat=0, fold=range(n_iters)
-
-    ))
+    return pd.DataFrame(
+        dict(
+            estimator=estimators,
+            test_scores=[0.5] * n_iters,
+            repeat=0,
+            fold=range(n_iters),
+        )
+    )
 
 
 @pytest.fixture
@@ -73,92 +74,75 @@ def get_cv_scores(request, df_typed_iris):
     return cv, df
 
 
-@pytest.mark.parametrize('get_cv_scores', [2, 5, 10], indirect=True)
+@pytest.mark.parametrize("get_cv_scores", [2, 5, 10], indirect=True)
 def test_get_predictions(get_cv_scores, df_typed_iris):
     X = df_typed_iris.iloc[:, :-1]
     y = df_typed_iris.iloc[:, -1]
     cv, df_scores = get_cv_scores
     inspector = FoldsInspector(df_scores, cv=cv, X=X, y=y)
     print(df_scores)
-    assert_array_almost_equal(
-        inspector.predict().values.flatten(),
-        X.index.values
+    expected_df = pd.DataFrame(
+        {"repeat0_p0": X.index.values, "target": y.values}
     )
-    assert_array_almost_equal(
-        inspector.predict_proba().values.flatten(),
-        X.index.values
-    )
-
-    assert_array_almost_equal(
-        inspector.predict_log_proba().values.flatten(),
-        X.index.values
-
-    )
-    assert_array_almost_equal(
-        inspector.decision_function().values.flatten(),
-        X.index.values
-    )
+    assert_frame_equal(inspector.predict(), expected_df)
+    assert_frame_equal(inspector.predict_proba(), expected_df)
+    assert_frame_equal(inspector.predict_log_proba(), expected_df)
+    assert_frame_equal(inspector.decision_function(), expected_df)
 
 
 @pytest.mark.parametrize(
-    'get_cv_scores', [
-        [2, MockRegressorReturnsIndex]
-    ], indirect=True)
+    "get_cv_scores", [[2, MockRegressorReturnsIndex]], indirect=True
+)
 def test_predictions_available(get_cv_scores, df_typed_iris):
     X = df_typed_iris.iloc[:, :-1]
     y = df_typed_iris.iloc[:, -1]
     cv, df_scores = get_cv_scores
     inspector = FoldsInspector(df_scores, cv=cv, X=X, y=y)
     with pytest.raises(
-            AttributeError,
-            match="This 'FoldsInspector' has no attribute 'predict_proba'"
+        AttributeError,
+        match="This 'FoldsInspector' has no attribute 'predict_proba'",
     ):
         inspector.predict_proba()
 
     with pytest.raises(
-            AttributeError,
-            match="This 'FoldsInspector' has no attribute 'predict_log_proba'"
+        AttributeError,
+        match="This 'FoldsInspector' has no attribute 'predict_log_proba'",
     ):
         inspector.predict_log_proba()
 
     with pytest.raises(
-            AttributeError,
-            match="This 'FoldsInspector' has no attribute 'decision_function'"
+        AttributeError,
+        match="This 'FoldsInspector' has no attribute 'decision_function'",
     ):
         inspector.decision_function()
 
 
 @pytest.mark.parametrize(
-    'get_cv_scores', [
-        [2, MockRegressorReturnsIndex]
-    ], indirect=True)
+    "get_cv_scores", [[2, MockRegressorReturnsIndex]], indirect=True
+)
 def test_invalid_func(get_cv_scores, df_typed_iris):
     X = df_typed_iris.iloc[:, :-1]
     y = df_typed_iris.iloc[:, -1]
     cv, df_scores = get_cv_scores
     inspector = FoldsInspector(df_scores, cv=cv, X=X, y=y)
-    with pytest.raises(
-        ValueError,
-        match="Invalid func: no"
-    ):
+    with pytest.raises(ValueError, match="Invalid func: no"):
         inspector._get_predictions("no")
 
 
-@pytest.mark.parametrize(
-    'get_cv_scores', [
-        5
-    ], indirect=True)
+@pytest.mark.parametrize("get_cv_scores", [5], indirect=True)
 def test_foldsinspector_iter(get_cv_scores, df_typed_iris):
-
     X = df_typed_iris.iloc[:, :-1]
     y = df_typed_iris.iloc[:, -1]
     cv, df_scores = get_cv_scores
-    df_scores["estimator"] = [(
-        PipelineCreator(problem_type="regression")
-        .add(MockRegressorReturnsIndex())
-        .to_pipeline()
-        .fit(X, y)
-    ) for _ in range(len(df_scores))]
+    df_scores["estimator"] = [
+        (
+            PipelineCreator(problem_type="regression")
+            .add(MockRegressorReturnsIndex())
+            .to_pipeline()
+            .fit(X, y)
+        )
+        for _ in range(len(df_scores))
+    ]
 
     inspector = FoldsInspector(df_scores, cv=cv, X=X, y=y)
 
@@ -168,4 +152,5 @@ def test_foldsinspector_iter(get_cv_scores, df_typed_iris):
         assert isinstance(fold_inspector.model, PipelineInspector)
         assert isinstance(
             i_model.get_step("mockregressorreturnsindex").estimator,
-            MockRegressorReturnsIndex)
+            MockRegressorReturnsIndex,
+        )

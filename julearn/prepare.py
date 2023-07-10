@@ -120,6 +120,27 @@ def _validate_input_data_df_ext(
         warn_with_log(f"List of features (X) contains the target {y}")
 
 
+def _is_regex(string: str) -> bool:
+    """Check if a string is a regular expression.
+
+    Parameters
+    ----------
+    string : str
+        The string to check.
+
+    Returns
+    -------
+    bool
+        True if the string should be interpreted as a regular expression,
+        False otherwise.
+
+    """
+    _regex_chars = ["*", "+", "?", ".", "|"]
+    if any(char in string for char in _regex_chars):
+        return True
+    return False
+
+
 def _pick_columns(
     regexes: Union[str, List[str]], columns: Union[List[str], pd.Index]
 ) -> List[str]:
@@ -148,13 +169,17 @@ def _pick_columns(
 
     picks = []
     for exp in regexes:
-        cols = [
-            col
-            for col in columns
-            if any([re.fullmatch(exp, col)]) and col not in picks
-        ]
-        if len(cols) > 0:
-            picks.extend(cols)
+        if not _is_regex(exp):
+            if exp in columns:
+                picks.append(exp)
+        else:
+            cols = [
+                col
+                for col in columns
+                if any([re.fullmatch(exp, col)]) and col not in picks
+            ]
+            if len(cols) > 0:
+                picks.extend(cols)
 
     unmatched = []
     for exp in regexes:
