@@ -76,6 +76,10 @@ class SetColumnTypes(JuTransformer):
         SetColumnTypes
             The fitted transformer.
         """
+        if not isinstance(X, (pd.DataFrame, pd.Series)):
+            X = pd.DataFrame(X)
+            X.columns = X.columns.astype(str)
+
         self.feature_names_in_ = X.columns
         logger.debug(f"Setting column types for {self.feature_names_in_}")
 

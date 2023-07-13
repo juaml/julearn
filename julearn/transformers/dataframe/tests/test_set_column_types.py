@@ -58,3 +58,36 @@ def test_SetColumnTypes_input_validation(X_iris: pd.DataFrame) -> None:
         ValueError, match="Each value of X_types must be a list."
     ):
         SetColumnTypes({"confound": "chicken"}).fit(X_iris)  # type: ignore
+
+
+def test_SetColumnTypes_array(
+    X_iris: pd.DataFrame, X_types_iris: Optional[Dict]
+) -> None:
+    """Test SetColumnTypes.
+
+    Parameters
+    ----------
+    X_iris : pd.DataFrame
+        The iris dataset.
+    X_types_iris : dict, optional
+        The types to set in the iris dataset.
+    """
+    _X_types_iris = {} if X_types_iris is None else X_types_iris
+    to_rename = {
+        col: f"{icol}__:type:__{dtype}"
+        for dtype, columns in _X_types_iris.items()
+        for icol, col in enumerate(columns)
+    }
+    # Set the types
+    X_iris_with_types = X_iris.rename(columns=to_rename, inplace=False)
+    # Set the untyped columns to continuous
+    to_rename = {
+        col: f"{icol}__:type:__continuous"
+        for icol, col in enumerate(X_iris.columns)
+        if "__:type:__" not in col
+    }
+    X_iris_with_types.rename(columns=to_rename)
+    st = SetColumnTypes(X_types_iris).set_output(transform="pandas")
+    Xt = st.fit_transform(X_iris.values)
+    Xt_iris_with_types = st.fit_transform(X_iris_with_types.values)
+    assert_frame_equal(Xt, Xt_iris_with_types)
