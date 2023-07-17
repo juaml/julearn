@@ -26,6 +26,7 @@ from .model_selection import (
     ContinuousStratifiedGroupKFold,
 )
 from .utils import logger, raise_error, warn_with_log
+from .config import get
 
 
 def _validate_input_data_df(
@@ -181,15 +182,23 @@ def _pick_columns(
             if len(cols) > 0:
                 picks.extend(cols)
 
-    unmatched = []
-    for exp in regexes:
-        if not any([re.fullmatch(exp, col) for col in columns]):
-            unmatched.append(exp)
-    if len(unmatched) > 0:
-        raise ValueError(
-            "All elements must be matched. "
-            f"The following are missing: {unmatched}"
-        )
+    skip_this_check = get("disable_x_check")
+    if not skip_this_check:
+        if len(columns) > get("MAX_X_WARNS"):
+            warn_with_log(
+                f"The dataframe has {len(columns)} columns. Checking X for "
+                "consistency might take a while. To skip this checks, set the "
+                "config flag `disable_x_check` to `True`."
+            )
+        unmatched = []
+        for exp in regexes:
+            if not any([re.fullmatch(exp, col) for col in columns]):
+                unmatched.append(exp)
+        if len(unmatched) > 0:
+            raise ValueError(
+                "All elements must be matched. "
+                f"The following are missing: {unmatched}"
+            )
     return picks
 
 
@@ -438,43 +447,51 @@ def _check_x_types(X_types: Optional[Dict], X: List[str]) -> Dict[str, List]:
     }
     logger.info(f"\tX_types:{X_types}")
 
-    missing_columns = []
-    defined_columns = []
-    for _, columns in X_types.items():
-        t_columns = [
-            col
-            for col in X
-            if any([re.fullmatch(exp, col) for exp in columns])
+    skip_this_check = get("disable_xtypes_check")
+    if not skip_this_check:
+        if len(X) > get("MAX_X_WARNS"):
+            warn_with_log(
+                f"X has {len(X)} columns. Checking X_types for consistency "
+                "might take a while. To skip this checks, set the config flag "
+                "`disable_xtypes_check` to `True`."
+            )
+        missing_columns = []
+        defined_columns = []
+        for _, columns in X_types.items():
+            t_columns = [
+                col
+                for col in X
+                if any([re.fullmatch(exp, col) for exp in columns])
+            ]
+            t_missing = [
+                exp
+                for exp in columns
+                if not any([re.fullmatch(exp, col) for col in X])
+            ]
+            defined_columns.extend(t_columns)
+            missing_columns.extend(t_missing)
+        duplicated_columns = [
+            k for k, v in Counter(defined_columns).items() if v > 1
         ]
-        t_missing = [
-            exp
-            for exp in columns
-            if not any([re.fullmatch(exp, col) for col in X])
-        ]
-        defined_columns.extend(t_columns)
-        missing_columns.extend(t_missing)
-    duplicated_columns = [
-        k for k, v in Counter(defined_columns).items() if v > 1
-    ]
-    if len(duplicated_columns) > 0:
-        raise_error(
-            f"The following columns are defined more than once in X_types: "
-            f"{duplicated_columns}",
-            ValueError,
-        )
-    undefined_columns = [x for x in X if x not in defined_columns]
+        if len(duplicated_columns) > 0:
+            raise_error(
+                "The following columns are defined more than once in X_types: "
+                f"{duplicated_columns}",
+                ValueError,
+            )
+        undefined_columns = [x for x in X if x not in defined_columns]
 
-    if len(missing_columns) > 0:
-        raise_error(
-            f"The following columns are defined in X_types but not in X: "
-            f"{missing_columns}",
-            ValueError,
-        )
-    if len(undefined_columns) > 0:
-        warn_with_log(
-            f"The following columns are not defined in X_types: "
-            f"{undefined_columns}. They will be treated as continuous."
-        )
+        if len(missing_columns) > 0:
+            raise_error(
+                "The following columns are defined in X_types but not in X: "
+                f"{missing_columns}",
+                ValueError,
+            )
+        if len(undefined_columns) > 0:
+            warn_with_log(
+                f"The following columns are not defined in X_types: "
+                f"{undefined_columns}. They will be treated as continuous."
+            )
     return X_types
 
 

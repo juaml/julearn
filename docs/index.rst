@@ -73,6 +73,7 @@ Table of Contents
    examples.rst
 
    api/index.rst
+   configuration
    contributing
    maintaining
    faq
