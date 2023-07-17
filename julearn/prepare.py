@@ -26,7 +26,7 @@ from .model_selection import (
     ContinuousStratifiedGroupKFold,
 )
 from .utils import logger, raise_error, warn_with_log
-from .config import get
+from .config import get_config
 
 
 def _validate_input_data_df(
@@ -95,14 +95,15 @@ def _validate_input_data_df_ext(
         they are not valid.
 
     """
-    missing_columns = [t_x for t_x in X if t_x not in df.columns]
-    # In reality, this is not needed as the regexp match will fail
-    # Leaving it as additional check in case the regexp match changes
-    if len(missing_columns) > 0:  # pragma: no cover
-        raise_error(  # pragma: no cover
-            "All elements of X must be in the dataframe. "
-            f"The following are missing: {missing_columns}"
-        )
+    if not get_config("disable_x_check"):
+        missing_columns = [t_x for t_x in X if t_x not in df.columns]
+        # In reality, this is not needed as the regexp match will fail
+        # Leaving it as additional check in case the regexp match changes
+        if len(missing_columns) > 0:  # pragma: no cover
+            raise_error(  # pragma: no cover
+                "All elements of X must be in the dataframe. "
+                f"The following are missing: {missing_columns}"
+            )
 
     if y not in df.columns:
         raise_error(f"Target '{y}' (y) is not a valid column in the dataframe")
@@ -182,9 +183,9 @@ def _pick_columns(
             if len(cols) > 0:
                 picks.extend(cols)
 
-    skip_this_check = get("disable_x_check")
+    skip_this_check = get_config("disable_x_check")
     if not skip_this_check:
-        if len(columns) > get("MAX_X_WARNS"):
+        if len(columns) > get_config("MAX_X_WARNS"):
             warn_with_log(
                 f"The dataframe has {len(columns)} columns. Checking X for "
                 "consistency might take a while. To skip this checks, set the "
@@ -273,7 +274,8 @@ def prepare_input_data(
     else:
         X_columns = _pick_columns(X, df.columns)
 
-    logger.info(f"\tExpanded features: {X_columns}")
+    if not get_config("disable_x_verbose"):
+        logger.info(f"\tExpanded features: {X_columns}")
 
     _validate_input_data_df_ext(X_columns, y, df, groups)
 
@@ -445,11 +447,12 @@ def _check_x_types(X_types: Optional[Dict], X: List[str]) -> Dict[str, List]:
     X_types = {
         k: [v] if not isinstance(v, list) else v for k, v in X_types.items()
     }
-    logger.info(f"\tX_types:{X_types}")
+    if not get_config("disable_xtypes_verbose"):
+        logger.info(f"\tX_types:{X_types}")
 
-    skip_this_check = get("disable_xtypes_check")
+    skip_this_check = get_config("disable_xtypes_check")
     if not skip_this_check:
-        if len(X) > get("MAX_X_WARNS"):
+        if len(X) > get_config("MAX_X_WARNS"):
             warn_with_log(
                 f"X has {len(X)} columns. Checking X_types for consistency "
                 "might take a while. To skip this checks, set the config flag "

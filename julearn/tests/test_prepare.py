@@ -34,6 +34,7 @@ from julearn.prepare import (
     check_consistency,
     prepare_input_data,
 )
+from julearn.config import set_config
 
 
 def _check_df_input(prepared, X, y, groups, df):
@@ -246,6 +247,13 @@ def test_prepare_input_data_erors() -> None:
         prepared = prepare_input_data(
             X=X, y=y, df=df, pos_labels=None, groups=groups, X_types=None
         )
+
+    # Disable X check should not raise an error
+    set_config("disable_x_check", True)
+    prepared = prepare_input_data(
+        X=X, y=y, df=df, pos_labels=None, groups=groups, X_types=None
+    )
+    set_config("disable_x_check", False)
 
     # Missing target in dataframe
     X = columns[:5]
@@ -583,7 +591,7 @@ def test_prepare_data_pick_regexp():
     assert X_types == prep_X_types
 
 
-def test_check_consstency() -> None:
+def test_check_consistency() -> None:
     """Test check_consistency function."""
 
     # Test binary classification
@@ -730,9 +738,19 @@ def test__check_x_types() -> None:
 
     X = ["a", "b", "c"]
     X_types = {"categorical": ["a", "b"], "continuous": ["a", "c"]}
-
     with pytest.raises(ValueError, match="more than once in X_types"):
         _check_x_types(X=X, X_types=X_types)
+
+    # Disabling X types check should not raise an error
+    set_config("disable_xtypes_check", True)
+    X = ["a", "b", "c"]
+    X_types = {"categorical": ["a", "b", "d"]}
+    _check_x_types(X=X, X_types=X_types)
+
+    X = ["a", "b", "c"]
+    X_types = {"categorical": ["a", "b"], "continuous": ["a", "c"]}
+    _check_x_types(X=X, X_types=X_types)
+    set_config("disable_xtypes_check", False)
 
 
 def test__check_x_types_regexp() -> None:
