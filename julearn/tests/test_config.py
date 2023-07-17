@@ -12,6 +12,7 @@ def test_set_config_wrong_keys() -> None:
     with pytest.raises(ValueError, match="does not exist"):
         set_config("wrong_key", 1)
 
+
 def test_set_get_config() -> None:
     """Test setting and getting config values."""
     old_value = get_config("MAX_X_WARNS")
