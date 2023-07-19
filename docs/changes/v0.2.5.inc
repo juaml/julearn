@@ -25,7 +25,7 @@ Enhancements
 
 - Refactor scoring to allow for registering and callable scorers (by `Sami Hamdan`_).
 
-- Update :mod:`.model_selection` and add capabilities to register searchers (by `Sami Hamdan`_).
+- Update :mod:`julearn.model_selection` and add capabilities to register searchers (by `Sami Hamdan`_).
 
 - Add user facing `create_pipeline` function (by `Sami Hamdan`_).
 
@@ -33,7 +33,7 @@ Enhancements
              
 - Add tests and more algorithms to `DynamicSelection` (by `Sami Hamdan`_ and `Shammi More`_).
 
-- Add CV schemes for stratifying based on the grouping variables, useful for regression problems. Check :class:`.StratifiedGroupsKFold` and :class:`.RepeatedStratifiedGroupsKFold` (by `Fede Raimondo`_ and `Shammi More`_).
+- Add CV schemes for stratifying based on the grouping variables, useful for regression problems. Check :class:`.ContinuousStratifiedGroupKFold` and :class:`.RepeatedContinuousStratifiedGroupKFold` (by `Fede Raimondo`_ and `Shammi More`_).
 
 - Add example for `tranform_until` (:gh:`63` by `Shammi More`_).
 

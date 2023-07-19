@@ -1,12 +1,12 @@
 .. include:: links.inc
 
-Maintaining julearn
-===================
-
+Maintaining
+===========
 
 Versioning
-^^^^^^^^^^
-julearn version numbers are as follows: *MAJOR.MINOR.MICRO*. Additionally,
+----------
+
+Version numbers are as follows: *MAJOR.MINOR.MICRO*. Additionally,
 development version append *devN* where N is the distance (in commits) to
 the last release.
 
@@ -16,43 +16,72 @@ This plugin reads the latest tagged version from git and automatically
 increments the *MICRO* segment and appends *devN*. This is considered a
 pre-release.
 
-The CI scripts will publish every tag with the format *v.X.Y.Z* to Pypi as
+The CI scripts will publish every tag with the format *v.X.Y.Z* to PyPI as
 version "X.Y.Z". Additionally, for every push to main, it will be published
-as pre-release to TestPypi.
+as pre-release to TestPyPI (for now).
 
 Releasing a new version
-^^^^^^^^^^^^^^^^^^^^^^^
+-----------------------
+
 Once the milestone is reached (all issues closed), it is time to do a new
-release.
+release. Make sure you have
+`towncrier <https://towncrier.readthedocs.io/en/stable/index.html>`_ installed
+before proceeding.
 
-1. Open a PR to update documentation:
-    - `docs/changes/latest.inc` should now be renamed to the version to be
-      released.
-    - `docs/whats_new.rst` must update the link to the new version.
-
-2. Merge PR
-
-3. Make sure you are in sync with the main branch.
+#. Make sure you are in sync with the main branch.
 
 .. code-block:: bash
 
     git checkout main
     git pull --rebase origin main
 
-4. Create tag (replace ``X.Y.Z`` with the proper version).
+#. Run the following to check changelog is properly generated:
 
 .. code-block:: bash
 
-    git tag vX.Y.Z
+   towncrier build --draft
 
-5. Check that the build system is creating the proper version
+#. Then, run:
+
+.. code-block:: bash
+
+   towncrier
+
+to generate the proper changelog that should be reflected in
+``docs/whats_new.rst``.
+
+#. Commit the chages, make a PR and merge via a merge commit.
+
+#. Make sure you are in sync with the main branch.
+
+.. code-block:: bash
+
+    git checkout main
+    git pull --rebase origin main
+
+#. Create tag (replace ``X.Y.Z`` with the proper version) on the merged PR's
+   merge commit.
+
+.. code-block:: bash
+
+    git tag -a vX.Y.Z -m "Release X.Y.Z"
+
+#. Check that the build system is creating the proper version
 
 .. code-block:: bash
 
     SETUPTOOLS_SCM_DEBUG=1 python -m build --source --binary --out-dir dist/ .
 
-6. Push the tag
+#. Push the tag
 
 .. code-block:: bash
 
-    git push origin vX.Y.Z
+    git push origin --follow-tags
+
+#. Optional: bump the *MAJOR* or *MINOR* segment of next release (replace
+   ``D.E.0`` with the proper version).
+
+.. code-block:: bash
+
+    git tag -a vD.E.0.dev -m "Set next release to D.E.0"
+    git push origin --follow-tags

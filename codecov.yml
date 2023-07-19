@@ -1,21 +1,39 @@
-comment: false
-
 codecov:
-  notify:
-    require_ci_to_pass: no
+  notify: {}
+  require_ci_to_pass: false
+
+comment:                  # this is a top-level key
+  layout: "reach, diff, flags, files"
+  behavior: default
+  require_changes: false  # if true: only post the comment if coverage changes
+  require_base: no        # [yes :: must have a base report to post]
 
 coverage:
   status:
-    patch:
-      default:
-        target: 95%
-        if_no_uploads: error
-        if_not_found: success
-        if_ci_failed: failure
-    project:
-      default: false
-      library:
-        target: 90%
-        if_no_uploads: error
-        if_not_found: success
-        if_ci_failed: failure
+    project: off
+    patch: off
+
+flag_management:
+  default_rules:
+    carryforward: true
+  individual_flags:
+    - name: julearn
+      paths:
+        - julearn/
+      statuses:
+        - type: project
+          target: 90%
+          threshold: 1%
+        - type: patch
+          target: 95%
+          threshold: 1%
+    - name: docs
+      paths:
+        - docs/
+      statuses:
+        - type: project
+          target: 100%
+          threshold: 1%
+        - type: patch
+          target: 95%
+          threshold: 1%
