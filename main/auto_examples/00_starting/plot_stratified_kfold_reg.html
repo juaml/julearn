@@ -1,0 +1,720 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Regression Analysis" href="plot_example_regression.html" /><link rel="prev" title="Multiclass Classification." href="plot_cm_acc_multiclass.html" />
+
+    <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
+        <title>Stratified K-fold CV for regression analysis - julearn documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">julearn  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand centered" href="../../index.html">
+  
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../../_static/julearn_logo_it.png" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">julearn  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">1. Getting started</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../what_really_need_know/index.html">2. What you really need to know</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/cross_validation.html">2.1. Why cross validation?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/data.html">2.2. Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/pipeline.html">2.3. Model Building</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/model_evaluation.html">2.4. Model evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/model_comparison.html">2.5. Model comparison</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../selected_deeper_topics/index.html">3. Selected deeper topics</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/target_transformers.html">3.1. Applying preprocessing to the target</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/confound_removal.html">3.2. Cross-validation consistent Confound Removal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/hyperparameter_tuning.html">3.3. Hyperparameter Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/model_inspect.html">3.4. Inspecting Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/cross_validation_splitter.html">3.5. Cross-validation splitters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/stacked_models.html">3.6. Stacking Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/CBPM.html">3.7. Connectome-based Predictive Modeling (CBPM)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../available_pipeline_steps.html">4. Overview of available Pipeline Steps</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../../examples.html">5. Examples</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 current has-children"><a class="reference internal" href="index.html">5.1. Starting with julearn</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="run_combine_pandas.html">Working with pandas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="run_simple_binary_classification.html">Simple Binary Classification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="run_grouped_cv.html">Grouped CV.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_cm_acc_multiclass.html">Multiclass Classification.</a></li>
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Stratified K-fold CV for regression analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_example_regression.html">Regression Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../01_model_comparison/index.html">5.2. Model Comparison</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../01_model_comparison/plot_simple_model_comparison.html">Simple Model Comparison</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../02_inspection/index.html">5.3. Inspection</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../02_inspection/run_binary_inspect_folds.html">Inspecting the fold-wise predictions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../02_inspection/plot_inspect_random_forest.html">Inspecting Random Forest models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../02_inspection/plot_groupcv_inspect_svm.html">Inspecting SVM models.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../02_inspection/plot_preprocess.html">Preprocessing with variance threshold, zscore and PCA</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../03_complex_models/index.html">5.4. Complex Models</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../03_complex_models/run_apply_to_target.html">Transforming target variable with z-score.</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../03_complex_models/run_hyperparameter_multiple_grids.html">Tuning Multiple Hyperparameters Grids</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../03_complex_models/run_stacked_models.html">Stacking Classification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../03_complex_models/run_hyperparameter_tuning.html">Tuning Hyperparameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../03_complex_models/run_example_pca_featsets.html">Regression Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../04_confounds/index.html">5.5. Confounds</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../04_confounds/run_return_confounds.html">Return Confounds in Confound Removal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../04_confounds/plot_confound_removal_classification.html">Confound Removal (model comparison)</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../05_customization/index.html">5.6. Customization</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../05_customization/run_custom_scorers_regression.html">Custom Scoring Function for Regression</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/index.html">6. Reference</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/main.html">6.1. Main API</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.run_cross_validation.html">julearn.run_cross_validation</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/pipeline.html">6.2. Pipeline</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.PipelineCreator.html">julearn.PipelineCreator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.TargetPipelineCreator.html">julearn.TargetPipelineCreator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.pipeline.JuTargetPipeline.html">julearn.pipeline.JuTargetPipeline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.pipeline.pipeline_creator.Step.html">julearn.pipeline.pipeline_creator.Step</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/model_selection.html">6.3. Model Selection</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.model_selection.ContinuousStratifiedKFold.html">julearn.model_selection.ContinuousStratifiedKFold</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.model_selection.RepeatedContinuousStratifiedKFold.html">julearn.model_selection.RepeatedContinuousStratifiedKFold</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.model_selection.ContinuousStratifiedGroupKFold.html">julearn.model_selection.ContinuousStratifiedGroupKFold</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.model_selection.RepeatedContinuousStratifiedGroupKFold.html">julearn.model_selection.RepeatedContinuousStratifiedGroupKFold</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.model_selection.StratifiedBootstrap.html">julearn.model_selection.StratifiedBootstrap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.model_selection.get_searcher.html">julearn.model_selection.get_searcher</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.model_selection.list_searchers.html">julearn.model_selection.list_searchers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.model_selection.register_searcher.html">julearn.model_selection.register_searcher</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.model_selection.reset_searcher_register.html">julearn.model_selection.reset_searcher_register</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/base.html">6.4. Base</a><input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.base.JuBaseEstimator.html">julearn.base.JuBaseEstimator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.base.JuTransformer.html">julearn.base.JuTransformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.base.WrapModel.html">julearn.base.WrapModel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.base.ColumnTypes.html">julearn.base.ColumnTypes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.base.ColumnTypesLike.html">julearn.base.ColumnTypesLike</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.base.change_column_type.html">julearn.base.change_column_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.base.get_column_type.html">julearn.base.get_column_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.base.make_type_selector.html">julearn.base.make_type_selector</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.base.ensure_column_types.html">julearn.base.ensure_column_types</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/inspect.html">6.5. Inspect</a><input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.inspect.Inspector.html">julearn.inspect.Inspector</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.inspect.FoldsInspector.html">julearn.inspect.FoldsInspector</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.inspect.preprocess.html">julearn.inspect.preprocess</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/models.html">6.6. Models</a><input class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.models.list_models.html">julearn.models.list_models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.models.get_model.html">julearn.models.get_model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.models.register_model.html">julearn.models.register_model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.models.reset_model_register.html">julearn.models.reset_model_register</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/models.html#dynamic-selection-deslib">6.7. Dynamic Selection (DESLib)</a><input class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.models.dynamic.DynamicSelection.html">julearn.models.dynamic.DynamicSelection</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/scoring.html">6.8. Scoring</a><input class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.scoring.get_scorer.html">julearn.scoring.get_scorer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.scoring.list_scorers.html">julearn.scoring.list_scorers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.scoring.register_scorer.html">julearn.scoring.register_scorer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.scoring.reset_scorer_register.html">julearn.scoring.reset_scorer_register</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.scoring.check_scoring.html">julearn.scoring.check_scoring</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/scoring.html#module-julearn.scoring.metrics">6.9. Scoring Metrics</a><input class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" role="switch" type="checkbox"/><label for="toctree-checkbox-19"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.scoring.metrics.r_corr.html">julearn.scoring.metrics.r_corr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.scoring.metrics.r2_corr.html">julearn.scoring.metrics.r2_corr</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/transformers.html">6.10. Transformers</a><input class="toctree-checkbox" id="toctree-checkbox-20" name="toctree-checkbox-20" role="switch" type="checkbox"/><label for="toctree-checkbox-20"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.transformers.DropColumns.html">julearn.transformers.DropColumns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.transformers.ChangeColumnTypes.html">julearn.transformers.ChangeColumnTypes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.transformers.SetColumnTypes.html">julearn.transformers.SetColumnTypes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.transformers.FilterColumns.html">julearn.transformers.FilterColumns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.transformers.CBPM.html">julearn.transformers.CBPM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.transformers.JuColumnTransformer.html">julearn.transformers.JuColumnTransformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.transformers.confound_remover.ConfoundRemover.html">julearn.transformers.confound_remover.ConfoundRemover</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.transformers.list_transformers.html">julearn.transformers.list_transformers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.transformers.get_transformer.html">julearn.transformers.get_transformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.transformers.register_transformer.html">julearn.transformers.register_transformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.transformers.reset_transformer_register.html">julearn.transformers.reset_transformer_register</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/transformers.html#module-julearn.transformers.target">6.11. Target Transformers</a><input class="toctree-checkbox" id="toctree-checkbox-21" name="toctree-checkbox-21" role="switch" type="checkbox"/><label for="toctree-checkbox-21"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.transformers.target.JuTransformedTargetModel.html">julearn.transformers.target.JuTransformedTargetModel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.transformers.target.JuTargetTransformer.html">julearn.transformers.target.JuTargetTransformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.transformers.target.TargetConfoundRemover.html">julearn.transformers.target.TargetConfoundRemover</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.transformers.target.TransformedTargetWarning.html">julearn.transformers.target.TransformedTargetWarning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.transformers.target.get_target_transformer.html">julearn.transformers.target.get_target_transformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.transformers.target.list_target_transformers.html">julearn.transformers.target.list_target_transformers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.transformers.target.register_target_transformer.html">julearn.transformers.target.register_target_transformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.transformers.target.reset_target_transformer_register.html">julearn.transformers.target.reset_target_transformer_register</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/utils.html">6.12. Utils</a><input class="toctree-checkbox" id="toctree-checkbox-22" name="toctree-checkbox-22" role="switch" type="checkbox"/><label for="toctree-checkbox-22"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.utils.logger.html">julearn.utils.logger</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.utils.configure_logging.html">julearn.utils.configure_logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.utils.raise_error.html">julearn.utils.raise_error</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.utils.warn_with_log.html">julearn.utils.warn_with_log</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/utils.html#module-julearn.utils.typing">6.13. Typing</a><input class="toctree-checkbox" id="toctree-checkbox-23" name="toctree-checkbox-23" role="switch" type="checkbox"/><label for="toctree-checkbox-23"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.utils.typing.JuEstimatorLike.html">julearn.utils.typing.JuEstimatorLike</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.utils.typing.EstimatorLike.html">julearn.utils.typing.EstimatorLike</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.utils.typing.EstimatorLikeFit1.html">julearn.utils.typing.EstimatorLikeFit1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.utils.typing.EstimatorLikeFit2.html">julearn.utils.typing.EstimatorLikeFit2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.utils.typing.EstimatorLikeFity.html">julearn.utils.typing.EstimatorLikeFity</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/prepare.html">6.14. Prepare</a><input class="toctree-checkbox" id="toctree-checkbox-24" name="toctree-checkbox-24" role="switch" type="checkbox"/><label for="toctree-checkbox-24"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.prepare.prepare_input_data.html">julearn.prepare.prepare_input_data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.prepare.check_consistency.html">julearn.prepare.check_consistency</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/stats.html">6.15. Stats</a><input class="toctree-checkbox" id="toctree-checkbox-25" name="toctree-checkbox-25" role="switch" type="checkbox"/><label for="toctree-checkbox-25"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.stats.corrected_ttest.html">julearn.stats.corrected_ttest</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/viz.html">6.16. Vizualization</a><input class="toctree-checkbox" id="toctree-checkbox-26" name="toctree-checkbox-26" role="switch" type="checkbox"/><label for="toctree-checkbox-26"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.viz.plot_scores.html">julearn.viz.plot_scores</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../configuration.html">7. Configuring julearn</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">8. Contributing to julearn</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maintaining.html">9. Maintaining</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">10. Frequenly Asked Questions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">11. What’s new</a></li>
+</ul>
+
+</div>
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: main
+    <span class="fa fa-caret-down"></span>
+  </span>
+  <div class="rst-other-versions">
+    <dl>
+      <dt>Tags</dt>
+      <dd><a href="../../../v0.2.2/index.html">v0.2.2</a></dd>
+      <dd><a href="../../../v0.2.3/index.html">v0.2.3</a></dd>
+      <dd><a href="../../../v0.2.4/index.html">v0.2.4</a></dd>
+      <dd><a href="../../../v0.2.5/index.html">v0.2.5</a></dd>
+      <dd><a href="../../../v0.2.7/index.html">v0.2.7</a></dd>
+      <dd><a href="../../../v0.3.0/index.html">v0.3.0</a></dd>
+    </dl>
+    <dl>
+      <dt>Branches</dt>
+      <dd><a href="plot_stratified_kfold_reg.html">main</a></dd>
+    </dl>
+  </div>
+</div>
+</div>
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-auto-examples-00-starting-plot-stratified-kfold-reg-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code</p>
+</div>
+<section class="sphx-glr-example-title" id="stratified-k-fold-cv-for-regression-analysis">
+<span id="sphx-glr-auto-examples-00-starting-plot-stratified-kfold-reg-py"></span><h1>Stratified K-fold CV for regression analysis<a class="headerlink" href="#stratified-k-fold-cv-for-regression-analysis" title="Permalink to this heading">#</a></h1>
+<p>This example uses the ‘diabetes’ data from sklearn datasets to
+perform stratified Kfold CV for a regression problem,</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Authors: Shammi More &lt;s.more@fz-juelich.de&gt;</span>
+<span class="c1">#          Federico Raimondo &lt;f.raimondo@fz-juelich.de&gt;</span>
+<span class="c1">#          Leonard Sasse &lt;l.sasse@fz-juelich.de&gt;</span>
+<span class="c1"># License: AGPL</span>
+
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_diabetes.html#sklearn.datasets.load_diabetes" title="sklearn.datasets.load_diabetes" class="sphx-glr-backref-module-sklearn-datasets sphx-glr-backref-type-py-function"><span class="n">load_diabetes</span></a>
+<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.KFold.html#sklearn.model_selection.KFold" title="sklearn.model_selection.KFold" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class"><span class="n">KFold</span></a>
+
+<span class="kn">from</span> <span class="nn">julearn</span> <span class="kn">import</span> <span class="n">run_cross_validation</span>
+<span class="kn">from</span> <span class="nn">julearn.utils</span> <span class="kn">import</span> <span class="n">configure_logging</span>
+<span class="kn">from</span> <span class="nn">julearn.model_selection</span> <span class="kn">import</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.StratifiedKFold.html#sklearn.model_selection.StratifiedKFold" title="sklearn.model_selection.StratifiedKFold" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class"><span class="n">ContinuousStratifiedKFold</span></a>
+</pre></div>
+</div>
+<p>Set the logging level to info to see extra information</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-07-19 12:34:40,423 - julearn - INFO - ===== Lib Versions =====
+2023-07-19 12:34:40,423 - julearn - INFO - numpy: 1.25.1
+2023-07-19 12:34:40,423 - julearn - INFO - scipy: 1.11.1
+2023-07-19 12:34:40,423 - julearn - INFO - sklearn: 1.3.0
+2023-07-19 12:34:40,423 - julearn - INFO - pandas: 2.0.3
+2023-07-19 12:34:40,423 - julearn - INFO - julearn: 0.3.1.dev1
+2023-07-19 12:34:40,423 - julearn - INFO - ========================
+</pre></div>
+</div>
+<p>load the diabetes data from sklearn as a pandas dataframe</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">features</span></a><span class="p">,</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.Series.html#pandas.Series" title="pandas.core.series.Series" class="sphx-glr-backref-module-pandas-core-series sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">target</span></a> <span class="o">=</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_diabetes.html#sklearn.datasets.load_diabetes" title="sklearn.datasets.load_diabetes" class="sphx-glr-backref-module-sklearn-datasets sphx-glr-backref-type-py-function"><span class="n">load_diabetes</span></a><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">as_frame</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Dataset contains ten variables age, sex, body mass index, average  blood
+pressure, and six blood serum measurements (s1-s6) diabetes patients and
+a quantitative measure of disease progression one year after baseline which
+is the target we are interested in predicting.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Features: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.head.html#pandas.DataFrame.head" title="pandas.DataFrame.head" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method"><span class="n">features</span><span class="o">.</span><span class="n">head</span></a><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Target: </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.Series.describe.html#pandas.Series.describe" title="pandas.Series.describe" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method"><span class="n">target</span><span class="o">.</span><span class="n">describe</span></a><span class="p">())</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Features:
+         age       sex       bmi  ...        s4        s5        s6
+0  0.038076  0.050680  0.061696  ... -0.002592  0.019907 -0.017646
+1 -0.001882 -0.044642 -0.051474  ... -0.039493 -0.068332 -0.092204
+2  0.085299  0.050680  0.044451  ... -0.002592  0.002861 -0.025930
+3 -0.089063 -0.044642 -0.011595  ...  0.034309  0.022688 -0.009362
+4  0.005383 -0.044642 -0.036385  ... -0.002592 -0.031988 -0.046641
+
+[5 rows x 10 columns]
+Target:
+ count    442.000000
+mean     152.133484
+std       77.093005
+min       25.000000
+25%       87.000000
+50%      140.500000
+75%      211.500000
+max      346.000000
+Name: target, dtype: float64
+</pre></div>
+</div>
+<p>Let’s combine features and target together in one dataframe and create some
+outliers to see the difference in model performance with and without
+stratification</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_df</span></a> <span class="o">=</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.concat.html#pandas.concat" title="pandas.concat" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-function"><span class="n">pd</span><span class="o">.</span><span class="n">concat</span></a><span class="p">([</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">features</span></a><span class="p">,</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.Series.html#pandas.Series" title="pandas.core.series.Series" class="sphx-glr-backref-module-pandas-core-series sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">target</span></a><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Create outliers for test purpose</span>
+<a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">new_df</span></a> <span class="o">=</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_df</span></a><span class="p">[(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.Series.html#pandas.Series" title="pandas.core.series.Series" class="sphx-glr-backref-module-pandas-core-series sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_df</span><span class="o">.</span><span class="n">target</span></a> <span class="o">&gt;</span> <span class="mi">145</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.Series.html#pandas.Series" title="pandas.core.series.Series" class="sphx-glr-backref-module-pandas-core-series sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_df</span><span class="o">.</span><span class="n">target</span></a> <span class="o">&lt;=</span> <span class="mi">150</span><span class="p">)]</span>
+<a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">new_df</span></a><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">590</span><span class="p">,</span> <span class="mi">580</span><span class="p">,</span> <span class="mi">597</span><span class="p">,</span> <span class="mi">595</span><span class="p">,</span> <span class="mi">590</span><span class="p">,</span> <span class="mi">590</span><span class="p">,</span> <span class="mi">600</span><span class="p">]</span>
+<a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_df</span></a> <span class="o">=</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.concat.html#pandas.concat" title="pandas.concat" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-function"><span class="n">pd</span><span class="o">.</span><span class="n">concat</span></a><span class="p">([</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_df</span></a><span class="p">,</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">new_df</span></a><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_df</span></a> <span class="o">=</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.reset_index.html#pandas.DataFrame.reset_index" title="pandas.DataFrame.reset_index" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method"><span class="n">data_df</span><span class="o">.</span><span class="n">reset_index</span></a><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># define X, y</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;age&quot;</span><span class="p">,</span> <span class="s2">&quot;sex&quot;</span><span class="p">,</span> <span class="s2">&quot;bmi&quot;</span><span class="p">,</span> <span class="s2">&quot;bp&quot;</span><span class="p">,</span> <span class="s2">&quot;s1&quot;</span><span class="p">,</span> <span class="s2">&quot;s2&quot;</span><span class="p">,</span> <span class="s2">&quot;s3&quot;</span><span class="p">,</span> <span class="s2">&quot;s4&quot;</span><span class="p">,</span> <span class="s2">&quot;s5&quot;</span><span class="p">,</span> <span class="s2">&quot;s6&quot;</span><span class="p">]</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a> <span class="o">=</span> <span class="s2">&quot;target&quot;</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/tmp/tmpy4hmj28m/b711d9d97aa6d8c1ca2a28fcff96d89559baff19/examples/00_starting/plot_stratified_kfold_reg.py:53: SettingWithCopyWarning:
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  new_df[&quot;target&quot;] = [590, 580, 597, 595, 590, 590, 600]
+</pre></div>
+</div>
+<p>Define number of bins/group for stratification. The idea is that each “bin”
+will be equally represented in each fold. The number of bins should be
+chosen such that each bin has a sufficient number of samples so that each
+fold has more than one sample from each bin.
+Let’s see a couple of histrograms with different number of bins.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sns</span><span class="o">.</span><span class="n">displot</span><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_df</span></a><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;target&quot;</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">displot</span><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_df</span></a><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;target&quot;</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">displot</span><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_df</span></a><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;target&quot;</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="sphx-glr-horizontal">
+<li><img src="../../_images/sphx_glr_plot_stratified_kfold_reg_001.png" srcset="../../_images/sphx_glr_plot_stratified_kfold_reg_001.png" alt="plot stratified kfold reg" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_stratified_kfold_reg_002.png" srcset="../../_images/sphx_glr_plot_stratified_kfold_reg_002.png" alt="plot stratified kfold reg" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_stratified_kfold_reg_003.png" srcset="../../_images/sphx_glr_plot_stratified_kfold_reg_003.png" alt="plot stratified kfold reg" class = "sphx-glr-multi-img"/></li>
+</ul>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.10.12/x64/lib/python3.10/site-packages/seaborn/axisgrid.py:118: UserWarning: The figure layout has changed to tight
+  self._figure.tight_layout(*args, **kwargs)
+/opt/hostedtoolcache/Python/3.10.12/x64/lib/python3.10/site-packages/seaborn/axisgrid.py:118: UserWarning: The figure layout has changed to tight
+  self._figure.tight_layout(*args, **kwargs)
+/opt/hostedtoolcache/Python/3.10.12/x64/lib/python3.10/site-packages/seaborn/axisgrid.py:118: UserWarning: The figure layout has changed to tight
+  self._figure.tight_layout(*args, **kwargs)
+
+&lt;seaborn.axisgrid.FacetGrid object at 0x7f7387b8e980&gt;
+</pre></div>
+</div>
+<p>From the histogram above, we can see that the data is not uniformly
+distributed. We can see that the data is skewed towards the lower end of
+the target variable. We can also see that there are some outliers in the
+data. In any case, even with a low number of splits, some groups will not be
+represented in each fold. Lets continue with 40 bins which gives a good
+granularity.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cv_stratified</span> <span class="o">=</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.StratifiedKFold.html#sklearn.model_selection.StratifiedKFold" title="sklearn.model_selection.StratifiedKFold" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class"><span class="n">ContinuousStratifiedKFold</span></a><span class="p">(</span>
+    <span class="n">n_bins</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Train a linear regression model with stratification on target</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores_strat</span></a><span class="p">,</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model</span></a> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span>
+    <span class="n">data</span><span class="o">=</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_df</span></a><span class="p">,</span>
+    <span class="n">preprocess</span><span class="o">=</span><span class="s2">&quot;zscore&quot;</span><span class="p">,</span>
+    <a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.KFold.html#sklearn.model_selection.KFold" title="sklearn.model_selection.KFold" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cv</span></a><span class="o">=</span><span class="n">cv_stratified</span><span class="p">,</span>
+    <span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;regression&quot;</span><span class="p">,</span>
+    <a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model</span></a><span class="o">=</span><span class="s2">&quot;linreg&quot;</span><span class="p">,</span>
+    <span class="n">return_estimator</span><span class="o">=</span><span class="s2">&quot;final&quot;</span><span class="p">,</span>
+    <span class="n">scoring</span><span class="o">=</span><span class="s2">&quot;neg_mean_absolute_error&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-07-19 12:34:41,010 - julearn - INFO - ==== Input Data ====
+2023-07-19 12:34:41,010 - julearn - INFO - Using dataframe as input
+2023-07-19 12:34:41,010 - julearn - INFO -      Features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2023-07-19 12:34:41,010 - julearn - INFO -      Target: target
+2023-07-19 12:34:41,011 - julearn - INFO -      Expanded features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2023-07-19 12:34:41,011 - julearn - INFO -      X_types:{}
+2023-07-19 12:34:41,011 - julearn - WARNING - The following columns are not defined in X_types: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]. They will be treated as continuous.
+/home/runner/work/julearn/julearn/julearn/utils/logging.py:238: RuntimeWarning: The following columns are not defined in X_types: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]. They will be treated as continuous.
+  warn(msg, category=category)
+2023-07-19 12:34:41,012 - julearn - INFO - ====================
+2023-07-19 12:34:41,012 - julearn - INFO -
+2023-07-19 12:34:41,012 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-07-19 12:34:41,012 - julearn - INFO - Step added
+2023-07-19 12:34:41,012 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-07-19 12:34:41,012 - julearn - INFO - Step added
+2023-07-19 12:34:41,013 - julearn - INFO - = Model Parameters =
+2023-07-19 12:34:41,013 - julearn - INFO - ====================
+2023-07-19 12:34:41,013 - julearn - INFO -
+2023-07-19 12:34:41,013 - julearn - INFO - = Data Information =
+2023-07-19 12:34:41,013 - julearn - INFO -      Problem type: regression
+2023-07-19 12:34:41,013 - julearn - INFO -      Number of samples: 449
+2023-07-19 12:34:41,013 - julearn - INFO -      Number of features: 10
+2023-07-19 12:34:41,013 - julearn - INFO - ====================
+2023-07-19 12:34:41,013 - julearn - INFO -
+2023-07-19 12:34:41,013 - julearn - INFO -      Target type: float64
+2023-07-19 12:34:41,013 - julearn - INFO - Using outer CV scheme ContinuousStratifiedKFold(method=None, n_bins=None, n_splits=5,
+             random_state=None, shuffle=False)
+/opt/hostedtoolcache/Python/3.10.12/x64/lib/python3.10/site-packages/sklearn/model_selection/_split.py:725: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=5.
+  warnings.warn(
+/opt/hostedtoolcache/Python/3.10.12/x64/lib/python3.10/site-packages/sklearn/model_selection/_split.py:725: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=5.
+  warnings.warn(
+</pre></div>
+</div>
+<p>Train a linear regression model without stratification on target</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.KFold.html#sklearn.model_selection.KFold" title="sklearn.model_selection.KFold" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cv</span></a> <span class="o">=</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.KFold.html#sklearn.model_selection.KFold" title="sklearn.model_selection.KFold" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class"><span class="n">KFold</span></a><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">,</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model</span></a> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span>
+    <span class="n">data</span><span class="o">=</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_df</span></a><span class="p">,</span>
+    <span class="n">preprocess</span><span class="o">=</span><span class="s2">&quot;zscore&quot;</span><span class="p">,</span>
+    <a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.KFold.html#sklearn.model_selection.KFold" title="sklearn.model_selection.KFold" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cv</span></a><span class="o">=</span><a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.KFold.html#sklearn.model_selection.KFold" title="sklearn.model_selection.KFold" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cv</span></a><span class="p">,</span>
+    <span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;regression&quot;</span><span class="p">,</span>
+    <a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model</span></a><span class="o">=</span><span class="s2">&quot;linreg&quot;</span><span class="p">,</span>
+    <span class="n">return_estimator</span><span class="o">=</span><span class="s2">&quot;final&quot;</span><span class="p">,</span>
+    <span class="n">scoring</span><span class="o">=</span><span class="s2">&quot;neg_mean_absolute_error&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-07-19 12:34:41,067 - julearn - INFO - ==== Input Data ====
+2023-07-19 12:34:41,067 - julearn - INFO - Using dataframe as input
+2023-07-19 12:34:41,067 - julearn - INFO -      Features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2023-07-19 12:34:41,067 - julearn - INFO -      Target: target
+2023-07-19 12:34:41,068 - julearn - INFO -      Expanded features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2023-07-19 12:34:41,068 - julearn - INFO -      X_types:{}
+2023-07-19 12:34:41,068 - julearn - WARNING - The following columns are not defined in X_types: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]. They will be treated as continuous.
+/home/runner/work/julearn/julearn/julearn/utils/logging.py:238: RuntimeWarning: The following columns are not defined in X_types: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]. They will be treated as continuous.
+  warn(msg, category=category)
+2023-07-19 12:34:41,068 - julearn - INFO - ====================
+2023-07-19 12:34:41,069 - julearn - INFO -
+2023-07-19 12:34:41,069 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-07-19 12:34:41,069 - julearn - INFO - Step added
+2023-07-19 12:34:41,069 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-07-19 12:34:41,069 - julearn - INFO - Step added
+2023-07-19 12:34:41,069 - julearn - INFO - = Model Parameters =
+2023-07-19 12:34:41,069 - julearn - INFO - ====================
+2023-07-19 12:34:41,069 - julearn - INFO -
+2023-07-19 12:34:41,070 - julearn - INFO - = Data Information =
+2023-07-19 12:34:41,070 - julearn - INFO -      Problem type: regression
+2023-07-19 12:34:41,070 - julearn - INFO -      Number of samples: 449
+2023-07-19 12:34:41,070 - julearn - INFO -      Number of features: 10
+2023-07-19 12:34:41,070 - julearn - INFO - ====================
+2023-07-19 12:34:41,070 - julearn - INFO -
+2023-07-19 12:34:41,070 - julearn - INFO -      Target type: float64
+2023-07-19 12:34:41,070 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+</pre></div>
+</div>
+<p>Now we can compare the test score for model trained with and without
+stratification. We can combine the two outputs as pandas dataframes</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores_strat</span></a><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;With stratification&quot;</span>
+<a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Without stratification&quot;</span>
+<a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_scores</span></a> <span class="o">=</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores_strat</span></a><span class="p">[[</span><span class="s2">&quot;test_score&quot;</span><span class="p">,</span> <span class="s2">&quot;model&quot;</span><span class="p">]]</span>
+<a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_scores</span></a> <span class="o">=</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.concat.html#pandas.concat" title="pandas.concat" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-function"><span class="n">pd</span><span class="o">.</span><span class="n">concat</span></a><span class="p">([</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_scores</span></a><span class="p">,</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">[[</span><span class="s2">&quot;test_score&quot;</span><span class="p">,</span> <span class="s2">&quot;model&quot;</span><span class="p">]]])</span>
+</pre></div>
+</div>
+<p>Plot a boxplot with test scores from both the models. We see here that
+the test score is higher when CV splits were not stratified</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">set_style</span><span class="p">(</span><span class="s2">&quot;darkgrid&quot;</span><span class="p">)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;model&quot;</span><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="o">=</span><span class="s2">&quot;test_score&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_scores</span></a><span class="p">)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">swarmplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;model&quot;</span><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="o">=</span><span class="s2">&quot;test_score&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_scores</span></a><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;.25&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img src="../../_images/sphx_glr_plot_stratified_kfold_reg_004.png" srcset="../../_images/sphx_glr_plot_stratified_kfold_reg_004.png" alt="plot stratified kfold reg" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.861 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-00-starting-plot-stratified-kfold-reg-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/e19d16e33ffa29cdb1e56852178d5909/plot_stratified_kfold_reg.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_stratified_kfold_reg.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/69c2ca44a56fee8ffb7f1947c8eb82aa/plot_stratified_kfold_reg.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_stratified_kfold_reg.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="plot_example_regression.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Regression Analysis</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="plot_cm_acc_multiclass.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">Multiclass Classification.</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2023, Authors of julearn
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer no-toc">
+      
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/scripts/furo.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/js/custom.js"></script>
+    </body>
+</html>
