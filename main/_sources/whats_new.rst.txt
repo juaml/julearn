@@ -72,7 +72,7 @@ Features
 ^^^^^^^^
 
 - Add user facing ``create_pipeline`` function by `Sami Hamdan`_
-- Add CV schemes for stratifying continous variables, useful for
+- Add CV schemes for stratifying continuous variables, useful for
   regression problems. Check :class:`.ContinuousStratifiedKFold` and
   :class:`.RepeatedContinuousStratifiedKFold` by
   `Fede Raimondo`_ and `Shammi More`_
