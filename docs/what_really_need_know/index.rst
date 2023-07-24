@@ -15,7 +15,7 @@ via its parameters.
 But why is basically everything based on one `cross_validation` function? Well,
 because doing proper cross-validation is of utmost importance in machine
 learning and it is not as easy as it might seem at first glance. If you want to
-understand why, reading the sub-chapter :ref:`cross_validation` ist a good
+understand why, reading the sub-chapter :ref:`cross_validation` is a good
 starting point.
 
 Once you are familiar with the basics of *cross-validation*, you can follow

@@ -50,7 +50,7 @@ before proceeding.
 to generate the proper changelog that should be reflected in
 ``docs/whats_new.rst``.
 
-#. Commit the chages, make a PR and merge via a merge commit.
+#. Commit the changes, make a PR and merge via a merge commit.
 
 #. Make sure you are in sync with the main branch.
 

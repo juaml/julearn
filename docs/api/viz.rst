@@ -1,5 +1,5 @@
 *************
-Vizualization
+Visualization
 *************
 
 .. warning::

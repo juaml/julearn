@@ -16,7 +16,7 @@ Cross-validation - The fundamentals
 This means that in order to evaluate if a model is *successful* in learning,
 we need to evaluate if it is able to predict new data. Thus, we need to have
 separate data for learning and testing. At the same time, data is a valuable
-ressource in machine learning and one wants to use it as efficeint as possible.
+resource in machine learning and one wants to use it as efficeint as possible.
 
 To solve this, we use *cross validation*. The core idea is that we want to
 train (also named *fit*) a model on a subset of our data and evaluate it on a
