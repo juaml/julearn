@@ -73,7 +73,7 @@ Optional Dependencies
 =====================
 
 Some functionality of Julearn requires additional packages. These are not
-insalled by default. If you want to use these features, you need to specify
+installed by default. If you want to use these features, you need to specify
 them during installation. For example, if you want to use the `:mod:.viz`
 module, you need to install the ``viz`` optional dependencies as follows:
 

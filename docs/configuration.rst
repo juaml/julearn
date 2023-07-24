@@ -39,10 +39,10 @@ Here you can find the comprehensive list of flags that can be set:
      - The user might think that a certain feature is considered in the model
        when it is not.
    * - ``disable_x_verbose``
-     - Disable printing the list of expaneded column names in ``X``. If set
+     - Disable printing the list of expanded column names in ``X``. If set
        to ``True``, the list of column names will not be printed.
      - The user will not see the expanded column names in ``X``.
    * - ``disable_xtypes_verbose``
-     - Disable printing the list of expaneded column names in ``X_types``. If
+     - Disable printing the list of expanded column names in ``X_types``. If
        set to ``True``, the list of types of X will not be printed.
-     - The user will not see the expaned ``X_types`` column names.
+     - The user will not see the expanded ``X_types`` column names.
