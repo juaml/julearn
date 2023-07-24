@@ -20,6 +20,15 @@ from sphinx_gallery.sorting import ExplicitOrder
 from pathlib import Path
 import sys
 
+# Check if sphinx-multiversion is installed
+use_multiversion = False
+try:
+    import sphinx_multiversion  # noqa: F401
+
+    use_multiversion = True
+except ImportError:
+    pass
+
 curdir = Path(__file__).parent
 sys.path.append((curdir / "sphinxext").as_posix())
 
@@ -43,12 +52,14 @@ extensions = [
     "sphinx.ext.intersphinx",
     "sphinx.ext.mathjax",
     "sphinx_gallery.gen_gallery",
-    "sphinx_multiversion",
     "numpydoc",
     "gh_substitutions",
     "sphinx_copybutton",
     "bokeh.sphinxext.bokeh_plot",
 ]
+
+if use_multiversion:
+    extensions.append("sphinx_multiversion")
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
