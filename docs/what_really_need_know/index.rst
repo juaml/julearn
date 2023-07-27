@@ -2,9 +2,8 @@
 
 .. _need_to_know:
 
-############################
 What you really need to know
-############################
+============================
 
 
 The backbone of Julearn is the function :func:`.run_cross_validation`, which
