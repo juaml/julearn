@@ -38,15 +38,15 @@ def _validate_input_data_df(
     ----------
     X : str, list(str)
         The features to use.
-        See https://juaml.github.io/julearn/input.html for details.
+        See :ref:`data_usage` for details.
     y : str
         The targets to predict.
-        See https://juaml.github.io/julearn/input.html for details.
+        See :ref:`data_usage` for details.
     df : pandas.DataFrame with the data.
-        See https://juaml.github.io/julearn/input.html for details.
+        See :ref:`data_usage` for details.
     groups : str | None
         The grouping labels in case a Group CV is used.
-        See https://juaml.github.io/julearn/input.html for details.
+        See :ref:`data_usage` for details.
 
     Raises
     ------
@@ -78,15 +78,15 @@ def _validate_input_data_df_ext(
     ----------
     X : str, list(str)
         The features to use.
-        See https://juaml.github.io/julearn/input.html for details.
+        See :ref:`data_usage` for details.
     y : str
         The targets to predict.
-        See https://juaml.github.io/julearn/input.html for details.
+        See :ref:`data_usage` for details.
     df : pandas.DataFrame with the data.
-        See https://juaml.github.io/julearn/input.html for details.
+        See :ref:`data_usage` for details.
     groups : str | None
         The grouping labels in case a Group CV is used.
-        See https://juaml.github.io/julearn/input.html for details.
+        See :ref:`data_usage` for details.
 
     Raises
     ------
@@ -217,18 +217,18 @@ def prepare_input_data(
     ----------
     X : str, list(str)
         The features to use.
-        See https://juaml.github.io/julearn/input.html for details.
+        See :ref:`data_usage` for details.
     y : str
         The targets to predict.
-        See https://juaml.github.io/julearn/input.html for details.
+        See :ref:`data_usage` for details.
     df : pandas.DataFrame with the data.
-        See https://juaml.github.io/julearn/input.html for details.
+        See :ref:`data_usage` for details.
     pos_labels : str, int, float or list | None
         The labels to interpret as positive. If not None, every element from y
         will be converted to 1 if is equal or in pos_labels and to 0 if not.
     groups : str | None
         The grouping labels in case a Group CV is used.
-        See https://juaml.github.io/julearn/input.html for details.
+        See :ref:`data_usage` for details.
     X_types : dict | None
         A dictionary containing keys with column type as a str and the
         columns of this column type as a list of str.
