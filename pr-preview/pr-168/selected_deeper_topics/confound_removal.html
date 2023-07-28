@@ -444,7 +444,7 @@ two artificial confounds that we can use as an example:</p>
 <span class="n">confound_two</span> <span class="o">=</span> <span class="n">normal_dist_conf_two</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="n">noise_conf_two</span>
 </pre></div>
 </div>
-<p>Let’s organise these data as a <a class="reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.1.0.dev0+1303.g577bb7239c)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a>, which is the
+<p>Let’s organise these data as a <a class="reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(in pandas v2.1.0.dev0+1307.g0e8c730fd8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a>, which is the
 preferred data format when using julearn:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># put the features into a dataframe</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
@@ -486,11 +486,11 @@ the <a class="reference internal" href="../api/generated/julearn.PipelineCreator
 <span class="nb">print</span><span class="p">(</span><span class="n">pipeline_creator</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-07-27 12:03:08,617 - julearn - INFO - Adding step confound_removal that applies to ColumnTypes&lt;types={&#39;features&#39;}; pattern=(?:__:type:__features)&gt;
-2023-07-27 12:03:08,617 - julearn - INFO - Setting hyperparameter confounds = confounds
-2023-07-27 12:03:08,617 - julearn - INFO - Step added
-2023-07-27 12:03:08,617 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;features&#39;}; pattern=(?:__:type:__features)&gt;
-2023-07-27 12:03:08,618 - julearn - INFO - Step added
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-07-28 04:54:08,358 - julearn - INFO - Adding step confound_removal that applies to ColumnTypes&lt;types={&#39;features&#39;}; pattern=(?:__:type:__features)&gt;
+2023-07-28 04:54:08,358 - julearn - INFO - Setting hyperparameter confounds = confounds
+2023-07-28 04:54:08,358 - julearn - INFO - Step added
+2023-07-28 04:54:08,358 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;features&#39;}; pattern=(?:__:type:__features)&gt;
+2023-07-28 04:54:08,358 - julearn - INFO - Step added
 PipelineCreator:
   Step 0: confound_removal
     estimator:     ConfoundRemover(apply_to=ColumnTypes&lt;types={&#39;features&#39;}; pattern=(?:__:type:__features)&gt;,
@@ -532,31 +532,31 @@ consistent way:</p>
 <span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-07-27 12:03:08,619 - julearn - INFO - ==== Input Data ====
-2023-07-27 12:03:08,619 - julearn - INFO - Using dataframe as input
-2023-07-27 12:03:08,619 - julearn - INFO -      Features: [&#39;feature_0&#39;, &#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;confound_1&#39;, &#39;confound_2&#39;]
-2023-07-27 12:03:08,619 - julearn - INFO -      Target: my_target
-2023-07-27 12:03:08,620 - julearn - INFO -      Expanded features: [&#39;feature_0&#39;, &#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;confound_1&#39;, &#39;confound_2&#39;]
-2023-07-27 12:03:08,620 - julearn - INFO -      X_types:{&#39;features&#39;: [&#39;feature_0&#39;, &#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;], &#39;confounds&#39;: [&#39;confound_1&#39;, &#39;confound_2&#39;]}
-2023-07-27 12:03:08,622 - julearn - INFO - ====================
-2023-07-27 12:03:08,622 - julearn - INFO -
-2023-07-27 12:03:08,623 - julearn - INFO - = Model Parameters =
-2023-07-27 12:03:08,623 - julearn - INFO - ====================
-2023-07-27 12:03:08,624 - julearn - INFO -
-2023-07-27 12:03:08,624 - julearn - INFO - = Data Information =
-2023-07-27 12:03:08,624 - julearn - INFO -      Problem type: regression
-2023-07-27 12:03:08,624 - julearn - INFO -      Number of samples: 100
-2023-07-27 12:03:08,624 - julearn - INFO -      Number of features: 22
-2023-07-27 12:03:08,624 - julearn - INFO - ====================
-2023-07-27 12:03:08,624 - julearn - INFO -
-2023-07-27 12:03:08,624 - julearn - INFO -      Target type: float64
-2023-07-27 12:03:08,624 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-07-28 04:54:08,360 - julearn - INFO - ==== Input Data ====
+2023-07-28 04:54:08,360 - julearn - INFO - Using dataframe as input
+2023-07-28 04:54:08,360 - julearn - INFO -      Features: [&#39;feature_0&#39;, &#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;confound_1&#39;, &#39;confound_2&#39;]
+2023-07-28 04:54:08,360 - julearn - INFO -      Target: my_target
+2023-07-28 04:54:08,361 - julearn - INFO -      Expanded features: [&#39;feature_0&#39;, &#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;confound_1&#39;, &#39;confound_2&#39;]
+2023-07-28 04:54:08,361 - julearn - INFO -      X_types:{&#39;features&#39;: [&#39;feature_0&#39;, &#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;], &#39;confounds&#39;: [&#39;confound_1&#39;, &#39;confound_2&#39;]}
+2023-07-28 04:54:08,363 - julearn - INFO - ====================
+2023-07-28 04:54:08,363 - julearn - INFO -
+2023-07-28 04:54:08,364 - julearn - INFO - = Model Parameters =
+2023-07-28 04:54:08,364 - julearn - INFO - ====================
+2023-07-28 04:54:08,364 - julearn - INFO -
+2023-07-28 04:54:08,364 - julearn - INFO - = Data Information =
+2023-07-28 04:54:08,364 - julearn - INFO -      Problem type: regression
+2023-07-28 04:54:08,364 - julearn - INFO -      Number of samples: 100
+2023-07-28 04:54:08,364 - julearn - INFO -      Number of features: 22
+2023-07-28 04:54:08,364 - julearn - INFO - ====================
+2023-07-28 04:54:08,364 - julearn - INFO -
+2023-07-28 04:54:08,364 - julearn - INFO -      Target type: float64
+2023-07-28 04:54:08,365 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
    fit_time  score_time  ...  fold                          cv_mdsum
-0  0.028874    0.008632  ...     0  b10eef89b4192178d482d7a1587a248a
-1  0.027970    0.008571  ...     1  b10eef89b4192178d482d7a1587a248a
-2  0.028454    0.008689  ...     2  b10eef89b4192178d482d7a1587a248a
-3  0.028219    0.008643  ...     3  b10eef89b4192178d482d7a1587a248a
-4  0.028326    0.008858  ...     4  b10eef89b4192178d482d7a1587a248a
+0  0.028502    0.008526  ...     0  b10eef89b4192178d482d7a1587a248a
+1  0.027634    0.008491  ...     1  b10eef89b4192178d482d7a1587a248a
+2  0.027744    0.008490  ...     2  b10eef89b4192178d482d7a1587a248a
+3  0.027677    0.008492  ...     3  b10eef89b4192178d482d7a1587a248a
+4  0.027719    0.008462  ...     4  b10eef89b4192178d482d7a1587a248a
 
 [5 rows x 8 columns]
 </pre></div>
@@ -578,7 +578,7 @@ target. We first configure this pipeline and add the “confound_removal” step
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>TargetPipelineCreator:
   Step 0: confound_removal
-    estimator:     &lt;julearn.transformers.target.target_confound_remover.TargetConfoundRemover object at 0x7fbf124fd3c0&gt;
+    estimator:     &lt;julearn.transformers.target.target_confound_remover.TargetConfoundRemover object at 0x7fb37884e1a0&gt;
 </pre></div>
 </div>
 <p>Now we insert the target pipeline into the main pipeline that will be used
@@ -593,15 +593,15 @@ be applied to the “target”.</p>
 <span class="nb">print</span><span class="p">(</span><span class="n">pipeline_creator</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-07-27 12:03:08,824 - julearn - INFO - Adding step jutargetpipeline that applies to ColumnTypes&lt;types={&#39;target&#39;}; pattern=(?:target)&gt;
-2023-07-27 12:03:08,824 - julearn - INFO - Step added
-2023-07-27 12:03:08,825 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;features&#39;}; pattern=(?:__:type:__features)&gt;
-2023-07-27 12:03:08,825 - julearn - INFO - Step added
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-07-28 04:54:08,561 - julearn - INFO - Adding step jutargetpipeline that applies to ColumnTypes&lt;types={&#39;target&#39;}; pattern=(?:target)&gt;
+2023-07-28 04:54:08,561 - julearn - INFO - Step added
+2023-07-28 04:54:08,561 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;features&#39;}; pattern=(?:__:type:__features)&gt;
+2023-07-28 04:54:08,561 - julearn - INFO - Step added
 PipelineCreator:
   Step 0: jutargetpipeline
-    estimator:     &lt;julearn.pipeline.target_pipeline.JuTargetPipeline object at 0x7fbf125f5360&gt;
-    apply to:      ColumnTypes&lt;types={&#39;target&#39;, &#39;confounds&#39;}; pattern=(?:target|__:type:__confounds)&gt;
-    needed types:  ColumnTypes&lt;types={&#39;target&#39;, &#39;confounds&#39;}; pattern=(?:target|__:type:__confounds)&gt;
+    estimator:     &lt;julearn.pipeline.target_pipeline.JuTargetPipeline object at 0x7fb37884f1c0&gt;
+    apply to:      ColumnTypes&lt;types={&#39;confounds&#39;, &#39;target&#39;}; pattern=(?:__:type:__confounds|target)&gt;
+    needed types:  ColumnTypes&lt;types={&#39;confounds&#39;, &#39;target&#39;}; pattern=(?:__:type:__confounds|target)&gt;
     tuning params: {}
   Step 1: linreg
     estimator:     LinearRegression()
@@ -623,36 +623,36 @@ PipelineCreator:
 <span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-07-27 12:03:08,825 - julearn - INFO - ==== Input Data ====
-2023-07-27 12:03:08,826 - julearn - INFO - Using dataframe as input
-2023-07-27 12:03:08,826 - julearn - INFO -      Features: [&#39;feature_0&#39;, &#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;confound_1&#39;, &#39;confound_2&#39;]
-2023-07-27 12:03:08,826 - julearn - INFO -      Target: my_target
-2023-07-27 12:03:08,826 - julearn - INFO -      Expanded features: [&#39;feature_0&#39;, &#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;confound_1&#39;, &#39;confound_2&#39;]
-2023-07-27 12:03:08,826 - julearn - INFO -      X_types:{&#39;features&#39;: [&#39;feature_0&#39;, &#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;], &#39;confounds&#39;: [&#39;confound_1&#39;, &#39;confound_2&#39;]}
-2023-07-27 12:03:08,828 - julearn - INFO - ====================
-2023-07-27 12:03:08,828 - julearn - INFO -
-2023-07-27 12:03:08,829 - julearn - INFO - = Model Parameters =
-2023-07-27 12:03:08,829 - julearn - INFO - ====================
-2023-07-27 12:03:08,829 - julearn - INFO -
-2023-07-27 12:03:08,829 - julearn - INFO - = Data Information =
-2023-07-27 12:03:08,829 - julearn - INFO -      Problem type: regression
-2023-07-27 12:03:08,829 - julearn - INFO -      Number of samples: 100
-2023-07-27 12:03:08,829 - julearn - INFO -      Number of features: 22
-2023-07-27 12:03:08,829 - julearn - INFO - ====================
-2023-07-27 12:03:08,829 - julearn - INFO -
-2023-07-27 12:03:08,830 - julearn - INFO -      Target type: float64
-2023-07-27 12:03:08,830 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2023-07-27 12:03:08,844 - julearn - WARNING - The target has been transformed to fit the model, but cannot inverse the model&#39;s prediction. The output of `predict(X)` is still in the transformed space. To remove this warning, use a suitable julearn scorer.
-2023-07-27 12:03:08,857 - julearn - WARNING - The target has been transformed to fit the model, but cannot inverse the model&#39;s prediction. The output of `predict(X)` is still in the transformed space. To remove this warning, use a suitable julearn scorer.
-2023-07-27 12:03:08,870 - julearn - WARNING - The target has been transformed to fit the model, but cannot inverse the model&#39;s prediction. The output of `predict(X)` is still in the transformed space. To remove this warning, use a suitable julearn scorer.
-2023-07-27 12:03:08,884 - julearn - WARNING - The target has been transformed to fit the model, but cannot inverse the model&#39;s prediction. The output of `predict(X)` is still in the transformed space. To remove this warning, use a suitable julearn scorer.
-2023-07-27 12:03:08,897 - julearn - WARNING - The target has been transformed to fit the model, but cannot inverse the model&#39;s prediction. The output of `predict(X)` is still in the transformed space. To remove this warning, use a suitable julearn scorer.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-07-28 04:54:08,562 - julearn - INFO - ==== Input Data ====
+2023-07-28 04:54:08,562 - julearn - INFO - Using dataframe as input
+2023-07-28 04:54:08,562 - julearn - INFO -      Features: [&#39;feature_0&#39;, &#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;confound_1&#39;, &#39;confound_2&#39;]
+2023-07-28 04:54:08,562 - julearn - INFO -      Target: my_target
+2023-07-28 04:54:08,563 - julearn - INFO -      Expanded features: [&#39;feature_0&#39;, &#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;confound_1&#39;, &#39;confound_2&#39;]
+2023-07-28 04:54:08,563 - julearn - INFO -      X_types:{&#39;features&#39;: [&#39;feature_0&#39;, &#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;], &#39;confounds&#39;: [&#39;confound_1&#39;, &#39;confound_2&#39;]}
+2023-07-28 04:54:08,565 - julearn - INFO - ====================
+2023-07-28 04:54:08,565 - julearn - INFO -
+2023-07-28 04:54:08,566 - julearn - INFO - = Model Parameters =
+2023-07-28 04:54:08,566 - julearn - INFO - ====================
+2023-07-28 04:54:08,566 - julearn - INFO -
+2023-07-28 04:54:08,566 - julearn - INFO - = Data Information =
+2023-07-28 04:54:08,566 - julearn - INFO -      Problem type: regression
+2023-07-28 04:54:08,566 - julearn - INFO -      Number of samples: 100
+2023-07-28 04:54:08,566 - julearn - INFO -      Number of features: 22
+2023-07-28 04:54:08,566 - julearn - INFO - ====================
+2023-07-28 04:54:08,566 - julearn - INFO -
+2023-07-28 04:54:08,566 - julearn - INFO -      Target type: float64
+2023-07-28 04:54:08,566 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2023-07-28 04:54:08,580 - julearn - WARNING - The target has been transformed to fit the model, but cannot inverse the model&#39;s prediction. The output of `predict(X)` is still in the transformed space. To remove this warning, use a suitable julearn scorer.
+2023-07-28 04:54:08,593 - julearn - WARNING - The target has been transformed to fit the model, but cannot inverse the model&#39;s prediction. The output of `predict(X)` is still in the transformed space. To remove this warning, use a suitable julearn scorer.
+2023-07-28 04:54:08,607 - julearn - WARNING - The target has been transformed to fit the model, but cannot inverse the model&#39;s prediction. The output of `predict(X)` is still in the transformed space. To remove this warning, use a suitable julearn scorer.
+2023-07-28 04:54:08,620 - julearn - WARNING - The target has been transformed to fit the model, but cannot inverse the model&#39;s prediction. The output of `predict(X)` is still in the transformed space. To remove this warning, use a suitable julearn scorer.
+2023-07-28 04:54:08,633 - julearn - WARNING - The target has been transformed to fit the model, but cannot inverse the model&#39;s prediction. The output of `predict(X)` is still in the transformed space. To remove this warning, use a suitable julearn scorer.
    fit_time  score_time  ...  fold                          cv_mdsum
-0  0.007993    0.005080  ...     0  b10eef89b4192178d482d7a1587a248a
-1  0.007574    0.004972  ...     1  b10eef89b4192178d482d7a1587a248a
-2  0.007540    0.004992  ...     2  b10eef89b4192178d482d7a1587a248a
-3  0.007505    0.004978  ...     3  b10eef89b4192178d482d7a1587a248a
-4  0.007560    0.004991  ...     4  b10eef89b4192178d482d7a1587a248a
+0  0.007797    0.005000  ...     0  b10eef89b4192178d482d7a1587a248a
+1  0.007479    0.004996  ...     1  b10eef89b4192178d482d7a1587a248a
+2  0.007462    0.004971  ...     2  b10eef89b4192178d482d7a1587a248a
+3  0.007517    0.004947  ...     3  b10eef89b4192178d482d7a1587a248a
+4  0.007457    0.004952  ...     4  b10eef89b4192178d482d7a1587a248a
 
 [5 rows x 8 columns]
 </pre></div>
@@ -722,7 +722,7 @@ arXiv:2210.09232, last revised 27 Oct 2022</p>
 </aside>
 </aside>
 </aside>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.293 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.288 seconds)</p>
 </section>
 </section>
 
