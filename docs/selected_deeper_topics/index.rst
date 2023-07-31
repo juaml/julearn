@@ -2,9 +2,8 @@
     
 .. _selected_deeper_topics:
 
-######################
 Selected deeper topics
-######################
+======================
 
 .. toctree::
    :maxdepth: 2
