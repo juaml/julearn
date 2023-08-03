@@ -2,7 +2,7 @@
 #          Fede Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL
 """
-Model evaluation
+Model Evaluation
 ================
 
 The output of :func:`.run_cross_validation`
@@ -13,7 +13,7 @@ and :func:`.run_cross_validation`. But what do we get as output from such a
 pipeline?
 
 Cross-validation scores
-^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~
 
 We consider the _iris_ data example and one of the pipelines from the previous 
 section (feature z-scoring and a ``svm``). 
