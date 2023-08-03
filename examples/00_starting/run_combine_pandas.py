@@ -87,8 +87,8 @@ df_fmri = df_fmri.reset_index()
 print(df_fmri.head())
 
 ###############################################################################
-# Merging or joining data frames
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# Merging or joining ``DataFrame``
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # So now we have our fMRI data tabulated for julearn. However, it might be the
 # case that we have some important information in another file. For example,
@@ -123,8 +123,8 @@ df_fmri = df_fmri.reset_index()
 
 ###############################################################################
 # Reshaping data frames (more complex)
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # Lets suppose that our prediction target is now the *age* and we want to use
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # as features the frontal and parietal value during each event. For this
 # purpose, we need to convert the event values into columns. There are two
 # events: *cue* and *stim*. So this will result in 4 columns.
