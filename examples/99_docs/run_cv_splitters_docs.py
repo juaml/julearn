@@ -54,7 +54,7 @@ trying to solve. In this section we will shed some light on two important
 topics: stratification and grouping.
 
 Stratification
-^^^^^^^^^^^^^^
+--------------
 
 Stratification is a technique used to ensure that the distribution of the
 target variable is the same in the training and testing sets. This is
@@ -255,7 +255,7 @@ fig.suptitle(
 #
 #
 # Grouping
-# ^^^^^^^^
+# --------
 #
 # Another important aspect of cross-validation is grouping. In some cases, we
 # might want to split the data in a way that ensures that samples from the same
