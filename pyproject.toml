@@ -91,6 +91,85 @@ ignore-words = "ignore_words.txt"
 interactive = 0
 builtin = "clear,rare,informal,names,usage,code"
 
+[tool.ruff]
+line-length = 79
+select = [
+    # flake8-bugbear
+    "B",
+    # flake8-blind-except
+    "BLE",
+    # flake8-comprehensions
+    "C4",
+    # mccabe
+    "C90",
+    # pydocstyle
+    "D",
+    # pycodestyle errors
+    "E",
+    # pyflakes
+    "F",
+    # isort
+    "I",
+    # pep8-naming
+    "N",
+    # pygrep-hooks
+    "PGH",
+    # ruff
+    "RUF",
+    # flake8-type-checking
+    "TCH",
+    # pyupgrade
+    "UP",
+    # pycodestyle warnings
+    "W",
+    # flake8-2020
+    "YTT",
+]
+extend-exclude = [
+    "__init__.py",
+    "docs",
+    "examples",
+]
+extend-ignore = [
+    # Use of `functools.lru_cache` or `functools.cache` on methods can lead to
+    # memory leaks. The cache may retain instance references, preventing garbage
+    # collection.
+    "B019",
+    # abstract class with no abstract methods
+    "B024",
+    "D202",
+    # missing docstring in __init__, incompatible with numpydoc
+    "D107",
+    # use r""" if any backslashes in a docstring
+    "D301",
+    # class names should use CapWords convention
+    "N801",
+    # function name should be lowercase
+    "N802",
+    # variable in function should be lowercase
+    "N806",
+    # use specific rule codes when ignoring type issues
+    "PGH003",
+]
+
+[tool.ruff.isort]
+lines-after-imports = 2
+known-first-party = ["julearn"]
+known-third-party =[
+    "numpy",
+    "pandas",
+    "sklearn",
+    "statsmodels",
+    "bokeh",
+    "panel",
+    "param",
+    "deslib",
+    "pytest",
+]
+
+[tool.ruff.mccabe]
+max-complexity = 20
+
 [tool.towncrier]
 directory = "docs/changes/newsfragments"
 filename = "docs/whats_new.rst"
