@@ -12,18 +12,18 @@ plots. These packages are not installed by default when you install
 be as robust as we want.
 
 Usually, installing julearn with the ``[viz]`` option will install the
-necessary dependencies using pip. However, if you have issues with the
+necessary dependencies using ``pip``. However, if you have issues with the
 installation or you want to install them through other package managers,
 you can install them manually.
 
-Using pip:
+Using ``pip``:
 
 .. code-block:: bash
 
   pip install panel
   pip install bokeh
 
-Using conda:
+Using ``conda``:
 
 .. code-block:: bash
 
@@ -37,39 +37,39 @@ How do I use the :mod:`.viz` interactive plots?
 The interactive plots are based on `bokeh`_ and `panel`_. You can use them
 in different ways:
 
-1. As a standalone application, in a browser.
+#. As a standalone application, in a browser:
 
-To do so, you need to call the function ``show`` on the plot object. For
-example:
+   To do so, you need to call the function ``show`` on the plot object. For
+   example:
 
-.. code-block:: python
+   .. code-block:: python
 
-    panel = plot_scores(scores1, scores2, scores3)
-    panel.show()
+       panel = plot_scores(scores1, scores2, scores3)
+       panel.show()
 
 
-2. As part of a Jupyter notebook.
+#. As part of a Jupyter notebook:
 
-You will need to install the ``jupyter_bokeh`` package.
+   You will need to install the ``jupyter_bokeh`` package.
 
-Using conda:
+   Using ``pip``:
 
-.. code-block:: bash
+   .. code-block:: bash
 
-    conda install -c bokeh jupyter_bokeh
+       pip install jupyter_bokeh
 
-Using pip:
+   Using ``conda``:
 
-.. code-block:: bash
+   .. code-block:: bash
 
-    pip install jupyter_bokeh
+       conda install -c bokeh jupyter_bokeh
 
-This will allow you to see the plots interactively in the notebook. To do so,
-you need to call the function ``servable`` on the plot object. For example:
+   This will allow you to see the plots interactively in the notebook. To do so,
+   you need to call the function ``servable`` on the plot object. For example:
 
-.. code-block:: python
+   .. code-block:: python
 
-    panel = plot_scores(scores1, scores2, scores3)
-    panel.servable()
+       panel = plot_scores(scores1, scores2, scores3)
+       panel.servable()
 
 .. TODO: As part of a Binder notebook to share with colleagues.
