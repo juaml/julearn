@@ -5,6 +5,7 @@
 ![PyPI - Wheel](https://img.shields.io/pypi/wheel/julearn?style=flat-square)
 ![GitHub](https://img.shields.io/github/license/juaml/julearn?style=flat-square)
 ![Codecov](https://img.shields.io/codecov/c/github/juaml/julearn?style=flat-square)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/charliermarsh/ruff/main/assets/badge/v2.json)](https://github.com/charliermarsh/ruff)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
 
 ## About
