@@ -2,7 +2,7 @@
 Stacking Classification
 =======================
 
-This example uses the 'iris' dataset and performs a complex stacking
+This example uses the ``iris`` dataset and performs a complex stacking
 classification. We will use two different classifiers, one applied to petal
 features and one applied to sepal features. A final logistic regression
 classifier will be applied on the predictions of the two classifiers.
@@ -10,15 +10,15 @@ classifier will be applied on the predictions of the two classifiers.
 .. include:: ../../links.inc
 """
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
-#
 # License: AGPL
+
 from seaborn import load_dataset
 from julearn import run_cross_validation
 from julearn.pipeline import PipelineCreator
 from julearn.utils import configure_logging
 
 ###############################################################################
-# Set the logging level to info to see extra information
+# Set the logging level to info to see extra information.
 configure_logging(level="INFO")
 
 ###############################################################################
@@ -41,7 +41,6 @@ X_types = {
     "sepal": ["sepal_length", "sepal_width"],
     "petal": ["petal_length", "petal_width"],
 }
-
 
 # Create the pipeline for the sepal features, by default will apply to "sepal"
 model_sepal = PipelineCreator(problem_type="classification", apply_to="sepal")
