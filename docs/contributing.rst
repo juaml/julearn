@@ -2,8 +2,8 @@
 
 .. _contribution_guidelines:
 
-Contributing to julearn
-=======================
+Contributing
+============
 
 Setting up the local development environment
 --------------------------------------------
