@@ -1,12 +1,13 @@
-*******
 Prepare
-*******
+=======
 
 .. automodule:: julearn.prepare
    :no-members:
    :no-inherited-members:
 
-**Functions**
+Functions
+---------
+
 .. currentmodule:: julearn.prepare
 
 .. autosummary::
