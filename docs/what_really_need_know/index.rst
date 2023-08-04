@@ -11,7 +11,7 @@ allows you to do all the *magic*. All important information needed to estimate
 your machine learning workflow's performance goes into this function, specified
 via its parameters.
 
-But why is basically everything based on one `cross_validation` function? Well,
+But why is basically everything based on one *cross-validation* function? Well,
 because doing proper cross-validation is of utmost importance in machine
 learning and it is not as easy as it might seem at first glance. If you want to
 understand why, reading the sub-chapter :ref:`cross_validation` is a good
