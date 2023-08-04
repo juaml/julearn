@@ -1,12 +1,12 @@
-*******
 Scoring
-*******
+=======
 
 .. automodule:: julearn.scoring
    :no-members:
    :no-inherited-members:
 
-**Functions**
+Functions
+---------
 
 .. currentmodule:: julearn.scoring
 
@@ -20,15 +20,15 @@ Scoring
     reset_scorer_register
     check_scoring
 
-***************
 Scoring Metrics
-***************
+===============
 
 .. automodule:: julearn.scoring.metrics
    :no-members:
    :no-inherited-members:
 
-**Functions**
+Functions
+---------
 
 .. currentmodule:: julearn.scoring.metrics
 
