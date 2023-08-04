@@ -2,20 +2,19 @@
 Inspecting SVM models
 =====================
 
-This example uses the 'fmri' dataset, performs simple binary classification
+This example uses the ``fmri`` dataset, performs simple binary classification
 using a Support Vector Machine classifier and analyse the model.
 
 References
 ----------
-Waskom, M.L., Frank, M.C., Wagner, A.D. (2016). Adaptive engagement of
-cognitive control in context-dependent decision-making. Cerebral Cortex.
 
+  Waskom, M.L., Frank, M.C., Wagner, A.D. (2016). Adaptive engagement of
+  cognitive control in context-dependent decision-making. Cerebral Cortex.
 
 .. include:: ../../links.inc
 """
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Shammi More <s.more@fz-juelich.de>
-#
 # License: AGPL
 
 import numpy as np
@@ -32,7 +31,7 @@ from julearn.utils import configure_logging
 from julearn.inspect import preprocess
 
 ###############################################################################
-# Set the logging level to info to see extra information
+# Set the logging level to info to see extra information.
 configure_logging(level="INFO")
 
 
@@ -44,7 +43,7 @@ df_fmri = load_dataset("fmri")
 
 ###############################################################################
 # First, lets get some information on what the dataset has:
-#
+
 print(df_fmri.head())
 
 ###############################################################################
@@ -126,12 +125,12 @@ print(scores["test_score"].mean())
 # To test for unseen subject, we need to make sure that all the data from each
 # subject is either on the training or the testing set, but not in both.
 #
-# We can use scikit-learn's :class:`sklearn.model_selection.GroupShuffleSplit`.
-# And specify which is the grouping column using the `group` parameter.
-#
-# By setting `return_estimator='final'`, the :func:`.run_cross_validation`
-# function return the estimator fitted with all the data. We will use this
-# later to do some analysis.
+# We can use ``scikit-learn``'s
+# :class:`sklearn.model_selection.GroupShuffleSplit` and specify which is the
+# grouping column using the ``group`` parameter.
+# By setting ``return_estimator="final"``, the :func:`.run_cross_validation`
+# function returns the estimator fitted with all the data. We will use this
+# later to do some analyses.
 cv = GroupShuffleSplit(n_splits=5, test_size=0.5, random_state=42)
 
 scores, model = run_cross_validation(
@@ -152,7 +151,7 @@ print(scores["test_score"].mean())
 # After testing on independent subjects, we can now claim that given a new
 # subject, we can predict the kind of event.
 #
-# Lets do some visualization on how these two features interact and what
+# Let's do some visualization on how these two features interact and what
 # the preprocessing part of the model does.
 
 # Plot the raw features
@@ -184,10 +183,10 @@ axes[1].set_title("Preprocessed data")
 # In this case, the preprocessing is nothing more than a
 # :class:`sklearn.preprocessing.StandardScaler`.
 #
-# It seems that the data is not quite linearly separable. Lets now visualize
+# It seems that the data is not quite linearly separable. Let's now visualize
 # how the SVM does this complex task.
 
-# get the model from the pipeline
+# Get the model from the pipeline
 clf = model[2]
 fig = plt.figure()
 ax = sns.scatterplot(
@@ -201,13 +200,13 @@ ax = sns.scatterplot(
 xlim = ax.get_xlim()
 ylim = ax.get_ylim()
 
-# create grid to evaluate model
+# Create grid to evaluate model
 xx = np.linspace(xlim[0], xlim[1], 30)
 yy = np.linspace(ylim[0], ylim[1], 30)
 YY, XX = np.meshgrid(yy, xx)
 xy = np.vstack([XX.ravel(), YY.ravel()]).T
 
-# Create pandas dataframe
+# Create pandas.DataFrame
 xy_df = pd.DataFrame(
     data=xy,
     columns=["parietal__:type:__continuous", "frontal__:type:__continuous"],
