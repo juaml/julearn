@@ -1,13 +1,12 @@
-
-****
 Base
-****
+====
 
 .. automodule:: julearn.base
    :no-members:
    :no-inherited-members:
 
-**Classes**
+Classes
+-------
 
 .. currentmodule:: julearn.base
 
@@ -22,8 +21,8 @@ Base
     ColumnTypes
     ColumnTypesLike
 
-
-**Functions**
+Functions
+---------
 
 .. currentmodule:: julearn.base
 
