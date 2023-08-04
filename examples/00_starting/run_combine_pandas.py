@@ -1,53 +1,53 @@
 """
-Working with pandas
-===================
+Working with ``pandas``
+=======================
 
-This example uses the 'fmri' dataset to transform and combine data in order
-to prepare it to bse used by julearn.
+This example uses the ``fmri`` dataset to transform and combine data in order
+to prepare it to be used by ``julearn``.
 
 
 References
 ----------
-Waskom, M.L., Frank, M.C., Wagner, A.D. (2016). Adaptive engagement of
-cognitive control in context-dependent decision-making. Cerebral Cortex.
 
+  Waskom, M.L., Frank, M.C., Wagner, A.D. (2016). Adaptive engagement of
+  cognitive control in context-dependent decision-making. Cerebral Cortex.
 
 .. include:: ../../links.inc
 """
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #
 # License: AGPL
+
 from seaborn import load_dataset
 import pandas as pd
 
 ###############################################################################
-# One of the key elements that make julearn easy to use, is the possibility to
-# work directly with pandas data frames. Also known as excel spreadsheets or
-# csv files.
+# One of the key elements that make ``julearn`` easy to use, is the possibility
+# to work directly with ``pandas.DataFrame``, similar to MS Excel spreadsheets
+# or csv files.
 #
-# Ideally, we will have everything tabulated and organised for julearn, but it
-# might not be your case. You might have some files with the fMRI values, some
-# others with demographics, some other with diagnostic metrics or behavioural
+# Ideally, we will have everything tabulated and organised for ``julearn``, but
+# it might not be your case. You might have some files with the fMRI values, some
+# others with demographics, some other with diagnostic metrics or behavioral
 # results.
 #
-# You need to prepare this files for julearn.
+# You need to prepare these files for ``julearn``.
 #
 # One option is to manually edit the files and make sure that everything is
-# ready to do some machine-learning. However, this is prune to introduce
-# errors.
+# ready to do some machine-learning. However, this is error-prone.
 #
 # Fortunately, `pandas`_ provides several tools to deal with this task.
 #
-# This example is a collection on some of this useful methods
+# This example is a collection of some of these useful methods.
 #
-# Lets start with the fmri dataset.
+# Let's start with the ``fmri`` dataset.
 
 df_fmri = load_dataset("fmri")
 
 ###############################################################################
-# Lets see what this dataset has.
+# Let's see what this dataset has.
 #
-print(df_fmri.head())
+df_fmri.head()
 
 ###############################################################################
 # From long to wide format
@@ -63,7 +63,7 @@ df_fmri = df_fmri.pivot(
 )
 
 ###############################################################################
-# This method reshapes the table, keeping a the specified elements as index,
+# This method reshapes the table, keeping the specified elements as index,
 # columns and values.
 #
 # In our case, the values are extracted from the *signal* column. The columns
@@ -72,36 +72,35 @@ df_fmri = df_fmri.pivot(
 #
 # The index is what identifies each sample. As a rule, the index can't be
 # duplicated. If each subject has more than one timepoint, and each timepoint
-# has more than one event, then this 3 elements are needed as the index.
+# has more than one event, then these 3 elements are needed as the index.
 #
-# Lets see what we have here:
-print(df_fmri.head())
-
+# Let's see what we have here:
+df_fmri.head()
 
 ###############################################################################
 # Now this is in the format we want. However, in order to access the index
-# as columns ``df_fmri['subject']`` we need to reset the index.
+# as columns ``df_fmri["subject"]`` we need to reset the index.
 #
-# Check the sutil but important difference:
+# Check the subtle but important difference:
 df_fmri = df_fmri.reset_index()
-print(df_fmri.head())
+df_fmri.head()
 
 ###############################################################################
 # Merging or joining ``DataFrame``
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# So now we have our fMRI data tabulated for julearn. However, it might be the
-# case that we have some important information in another file. For example,
+# So now we have our fMRI data tabulated for ``julearn``. However, it might be
+# the case that we have some important information in another file. For example,
 # the subjects' age and the place where they were scanned.
 #
-# For the purpose of the example, I will create the dataframe here.
+# For the purpose of the example, we'll create the dataframe here.
 metadata = {
     "subject": [f"s{i}" for i in range(14)],
     "age": [23, 21, 31, 29, 43, 23, 43, 28, 48, 29, 35, 23, 34, 25],
     "scanner": ["a"] * 6 + ["b"] * 8,
 }
 df_meta = pd.DataFrame(metadata)
-print(df_meta)
+df_meta
 
 ###############################################################################
 # We will use the ``join`` method. This method will join the two dataframes,
@@ -112,10 +111,10 @@ print(df_meta)
 df_fmri = df_fmri.set_index("subject")
 df_meta = df_meta.set_index("subject")
 df_fmri = df_fmri.join(df_meta)
-print(df_fmri)
+df_fmri
 
 ###############################################################################
-# Finally, lets reset the index and have it ready for julearn
+# Finally, let's reset the index and have it ready for ``julearn``.
 df_fmri = df_fmri.reset_index()
 
 ###############################################################################
@@ -135,18 +134,19 @@ df_fmri = df_fmri.pivot(
     columns="event",
     values=["frontal", "parietal"],
 )
+df_fmri
 
-print(df_fmri)
 ###############################################################################
-# Since the columns names are combinations of the values in the *event* column
+# Since the column names are combinations of the values in the *event* column
 # and the previous *frontal* and *parietal* columns, it is now a multi-level
 # column name.
-print(df_fmri.columns)
+df_fmri.columns
+
 ###############################################################################
 # The following trick will join the different levels using an underscore (*_*)
 df_fmri.columns = ["_".join(x) for x in df_fmri.columns]
+df_fmri
 
-print(df_fmri)
 ###############################################################################
-# We have finally the information we want. We can now reset the index
+# We have finally the information we want. We can now reset the index.
 df_fmri = df_fmri.reset_index()
