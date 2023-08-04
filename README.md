@@ -1,5 +1,10 @@
 # julearn
 
+![PyPI](https://img.shields.io/pypi/v/julearn?style=flat-square)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/julearn?style=flat-square)
+![PyPI - Wheel](https://img.shields.io/pypi/wheel/julearn?style=flat-square)
+![GitHub](https://img.shields.io/github/license/juaml/julearn?style=flat-square)
+![Codecov](https://img.shields.io/codecov/c/github/juaml/julearn?style=flat-square)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
 
 The Forschungszentrum Jülich Machine Learning Library
