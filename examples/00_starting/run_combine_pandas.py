@@ -51,9 +51,9 @@ print(df_fmri.head())
 
 ###############################################################################
 # From long to wide format
-# ^^^^^^^^^^^^^^^^^^^^^^^^
 # We have seen this in other examples. If we want to use julearn, each feature
 # must be a columns. In order to use the signals from different regions as
+# ~~~~~~~~~~~~~~~~~~~~~~~~
 # features, we need to convert this dataframe from the long format to the wide
 # format.
 #
