@@ -7,12 +7,22 @@
 ![Codecov](https://img.shields.io/codecov/c/github/juaml/julearn?style=flat-square)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
 
+## About
+
 The Forschungszentrum Jülich Machine Learning Library
 
 Check our full documentation here: https://juaml.github.io/julearn/index.html
 Check our video tutorial here: [Julearn Playlist](https://youtube.com/playlist?list=PLvb39y5Ge21CUjccmY_0kXRCwBBaikGf_)
 
+It is currently being developed and maintained at the [Applied Machine Learning](https://www.fz-juelich.de/en/inm/inm-7/research-groups/applied-machine-learning-aml) group at [Forschungszentrum Juelich](https://www.fz-juelich.de/en), Germany.
 
+## Installation
+
+Use `pip` to install from PyPI like so:
+
+```
+pip install julearn
+```
 
 ## Licensing
 
@@ -33,8 +43,8 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
 ## Citing
+
 We still do not have a publication that you can use to cite julearn in your
 manuscript. However, julearn realies heavily on scikit-learn.
 
