@@ -18,31 +18,32 @@ value.
 Here you can find the comprehensive list of flags that can be set:
 
 .. list-table::
-   :widths: 30 80 80
+   :widths: auto
    :header-rows: 1
 
    * - Flag
      - Description
      - Potential problem(s)
    * - ``disable_x_check``
-     - Disable checking for unmatched column names in ``X``. If set to
-       ``True``, any element in ``X`` that is not present in the dataframe will
-       not result in an error.
-     - The user might think that a certain feature is used in the model when
-       it is not.
+     - | Disable checking for unmatched column names in ``X``.
+       | If set to ``True``, any element in ``X`` that is not present in the
+       | dataframe will not result in an error.
+     - | The user might think that a certain feature is used in the model when
+       | it is not.
    * - ``disable_xtypes_check``
-     - Disable checking for missing/present ``X_types`` in the ``X`` parameter
-       of the :meth`.run_cross_validation` method. If set to ``True``, the
-       ``X_types`` parameter will not be checked for consistency with the
-       ``X`` parameter, including undefined columns in ``X``, missing types
-       in ``X_types`` or duplicated columns in ``X_types``.
-     - The user might think that a certain feature is considered in the model
-       when it is not.
+     - | Disable checking for missing/present ``X_types`` in the ``X`` parameter
+       | of the :func:`.run_cross_validation` method.
+       | If set to ``True``, the ``X_types`` parameter will not be checked for
+       | consistency with the ``X`` parameter, including undefined columns in
+       | ``X``, missing types in ``X_types`` or duplicated columns in
+       | ``X_types``.
+     - | The user might think that a certain feature is considered in the model
+       | when it is not.
    * - ``disable_x_verbose``
-     - Disable printing the list of expanded column names in ``X``. If set
-       to ``True``, the list of column names will not be printed.
+     - | Disable printing the list of expanded column names in ``X``.
+       | If set to ``True``, the list of column names will not be printed.
      - The user will not see the expanded column names in ``X``.
    * - ``disable_xtypes_verbose``
-     - Disable printing the list of expanded column names in ``X_types``. If
-       set to ``True``, the list of types of X will not be printed.
+     - | Disable printing the list of expanded column names in ``X_types``.
+       | If set to ``True``, the list of types of X will not be printed.
      - The user will not see the expanded ``X_types`` column names.
