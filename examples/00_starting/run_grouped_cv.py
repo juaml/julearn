@@ -2,14 +2,14 @@
 Grouped CV
 ==========
 
-This example uses the 'fMRI' dataset and performs GroupKFold
+This example uses the ``fMRI`` dataset and performs GroupKFold
 Cross-Validation for classification using Random Forest Classifier.
 
 References
 ----------
-Waskom, M.L., Frank, M.C., Wagner, A.D. (2016). Adaptive engagement of
-cognitive control in context-dependent decision-making. Cerebral Cortex.
 
+  Waskom, M.L., Frank, M.C., Wagner, A.D. (2016). Adaptive engagement of
+  cognitive control in context-dependent decision-making. Cerebral Cortex.
 
 .. include:: ../../links.inc
 
@@ -18,10 +18,8 @@ cognitive control in context-dependent decision-making. Cerebral Cortex.
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Shammi More <s.more@fz-juelich.de>
 #          Kimia Nazarzadeh <k.nazarzadeh@fz-juelich.de>
-
-
-#
 # License: AGPL
+
 # Importing the necessary Python libraries
 import numpy as np
 
@@ -43,7 +41,6 @@ df_fmri = load_dataset("fmri")
 
 ###############################################################################
 # First, lets get some information on what the dataset has:
-#
 
 print(df_fmri.head())
 
