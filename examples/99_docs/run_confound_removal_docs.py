@@ -36,9 +36,9 @@ Removing Confounds from the Features
 
 The first scenario involves confound regression on the features. In order to
 do this we can simply configure an instance of a :class:`.PipelineCreator`
-by adding the "confound_removal" step.
+by adding the ``"confound_removal"`` step.
 
-We can create some data using scikit-learn's 
+We can create some data using ``scikit-learn``'s
 :func:`~sklearn.datasets.make_regression`
 and then simulate a normally distributed random variable that has a linear
 relationship with the target that we can use as a confound.
@@ -61,7 +61,7 @@ import pandas as pd
 X, y = make_regression(n_features=20)
 
 # create two normally distributed random variables with the same mean
-# and standard deviation as the y
+# and standard deviation as y
 normal_dist_conf_one = np.random.normal(y.mean(), y.std(), y.size)
 normal_dist_conf_two = np.random.normal(y.mean(), y.std(), y.size)
 
@@ -75,8 +75,7 @@ confound_two = normal_dist_conf_two + y * noise_conf_two
 
 ###############################################################################
 # Let's organise these data as a :class:`pandas.DataFrame`, which is the
-# preferred data format when using julearn:
-
+# preferred data format when using ``julearn``:
 
 # put the features into a dataframe
 data = pd.DataFrame(X)
@@ -97,19 +96,18 @@ data["confound_2"] = confound_two
 
 ###############################################################################
 # In this example, we only distinguish between two types of variables in the
-# "X". That is, we have 1.) our features (or predictors) and 2.) our confounds.
-# Let's prepare the "X_types" dictionary that we hand over to
+# ``X``. That is, we have 1. our features (or predictors) and 2. our confounds.
+# Let's prepare the ``X_types`` dictionary that we hand over to
 # :func:`.run_cross_validation` accordingly:
-
 
 X_types = {"features": features, "confounds": confounds}
 
 ###############################################################################
-# Now, that we have all the data prepared, and we have defined our "X_types",
+# Now, that we have all the data prepared, and we have defined our ``X_types``,
 # we can think about creating the pipeline that we want to run. Now, this is
-# the crucial point at which we parametrise the confound removal. We initialise
-# the :class:`.PipelineCreator` and add to it as a step the
-# "confound_removal" transformer (the underlying transformer object is the
+# the crucial point at which we parametrize the confound removal. We initialize
+# the :class:`.PipelineCreator` and add to it as a step using the
+# ``"confound_removal"`` transformer (the underlying transformer object is the
 # :class:`.ConfoundRemover`).
 
 pipeline_creator = PipelineCreator(
@@ -122,17 +120,17 @@ print(pipeline_creator)
 
 ###############################################################################
 # As you can see, we tell the :class:`.PipelineCreator` that we want to work on
-# a "regression" problem when we initialise the class. We also tell that by
-# default each "step" of the pipeline should be applied to the features which
-# type is "features". In the first step that we add, we specify we want to
-# perform "confound_removal", and that the features that have the type
-# "confounds" should be used as confounds in the confound regression.
-# Note, that because we already specified apply_to="features"
-# during the initialisation, we do not need to explicitly state this again.
-# In short, the "confounds" will be removed from the "features".
+# a "regression" problem when we initialize the class. We also tell that by
+# default each "step" of the pipeline should be applied to the features whose
+# type is ``"features"``. In the first step that we add, we specify we want to
+# perform ``"confound_removal"``, and that the features that have the type
+# ``"confounds"`` should be used as confounds in the confound regression.
+# Note, that because we already specified ``apply_to="features"``
+# during the initialization, we do not need to explicitly state this again.
+# In short, the ``"confounds"`` will be removed from the ``"features"``.
 #
-# As a second and last step, we simply add a linear regression ("linreg") to
-# fit a predictive model to the de-confounded X and the y.
+# As a second and last step, we simply add a linear regression (``"linreg"``) to
+# fit a predictive model to the de-confounded ``X`` and the ``y``.
 #
 # Lastly, we only need to apply this pipeline in the :func:`.run_cross_validation`
 # function to perform confound removal on the features in a cross-validation
@@ -159,8 +157,8 @@ print(scores)
 # If we want to remove the confounds from the target rather than from the
 # features, we need to create a slightly different pipeline. Julearn has a
 # specific :class:`.TargetPipelineCreator` to perform transformations on the
-# target. We first configure this pipeline and add the "confound_removal" step.
-
+# target. We first configure this pipeline and add the ``"confound_removal"``
+# step.
 
 target_pipeline_creator = TargetPipelineCreator()
 target_pipeline_creator.add("confound_removal", confounds="confounds")
@@ -170,7 +168,7 @@ print(target_pipeline_creator)
 ###############################################################################
 # Now we insert the target pipeline into the main pipeline that will be used
 # to do the prediction. Importantly, we specify that the target pipeline should
-# be applied to the "target".
+# be applied to the ``"target"``.
 
 pipeline_creator = PipelineCreator(
     problem_type="regression", apply_to="features"
@@ -190,8 +188,9 @@ scores = run_cross_validation(
     y="my_target",
     X_types=X_types,
     model=pipeline_creator,
-    scoring="r2"
+    scoring="r2",
 )
+
 print(scores)
 
 ###############################################################################
