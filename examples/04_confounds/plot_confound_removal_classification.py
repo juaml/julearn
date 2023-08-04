@@ -2,11 +2,10 @@
 Confound Removal (model comparison)
 ===================================
 
-This example uses the 'iris' dataset, performs simple binary classification
+This example uses the ``iris`` dataset, performs simple binary classification
 with and without confound removal using a Random Forest classifier.
 
 """
-
 # Authors: Shammi More <s.more@fz-juelich.de>
 #          Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Leonard Sasse <l.sasse@fz-juelich.de>
@@ -22,20 +21,18 @@ from julearn.model_selection import StratifiedBootstrap
 from julearn.pipeline import PipelineCreator
 from julearn.utils import configure_logging
 
-
 ###############################################################################
-# Set the logging level to info to see extra information
+# Set the logging level to info to see extra information.
 configure_logging(level="INFO")
 
 ###############################################################################
-# Load the iris data from seaborn
+# Load the iris data from seaborn.
 df_iris = load_dataset("iris")
 
 ###############################################################################
 # The dataset has three kind of species. We will keep two to perform a binary
 # classification.
 df_iris = df_iris[df_iris["species"].isin(["versicolor", "virginica"])]
-
 
 ###############################################################################
 # As features, we will use the sepal length, width and petal length and use
@@ -57,15 +54,15 @@ confounds = ["petal_width"]
 # difference. If the 95% CI is above 0 (or below), we can claim that the models
 # are different with p < 0.05.
 #
-# Lets use a bootstrap CV. In the interest of time we do 20 iterations,
+# Let's use a bootstrap CV. In the interest of time we do 20 iterations,
 # change the number of bootstrap iterations to at least 2000 for a valid test.
 n_bootstrap = 20
 n_elements = len(df_iris)
 cv = StratifiedBootstrap(n_splits=n_bootstrap, test_size=0.3, random_state=42)
 
 ###############################################################################
-# First, we will train a model without performing confound removal on features
-# Note: confounds by default
+# First, we will train a model without performing confound removal on features.
+# Note: confounds by default.
 scores_ncr = run_cross_validation(
     X=X,
     y=y,
@@ -79,17 +76,14 @@ scores_ncr = run_cross_validation(
     seed=200,
 )
 
-
 ###############################################################################
-# Next, we train a model after performing confound removal on the features
-# Note: we initialize the CV again to use the same folds as before
+# Next, we train a model after performing confound removal on the features.
+# Note: we initialize the CV again to use the same folds as before.
 cv = StratifiedBootstrap(n_splits=n_bootstrap, test_size=0.3, random_state=42)
 
-
-# In order to tell 'run_cross_validation' which columns are confounds,
+# In order to tell ``run_cross_validation`` which columns are confounds,
 # and which columns are features, we have to define the X_types:
 X_types = {"features": X, "confound": confounds}
-
 
 ##############################################################################
 # We can now define a pipeline creator and add a confound removal step.
@@ -102,7 +96,7 @@ X_types = {"features": X, "confound": confounds}
 # "features".
 #
 # Finally, a random forest will be trained.
-# Given the default apply_to in the pipeline creator,
+# Given the default ``apply_to`` in the pipeline creator,
 # the random forest will only be trained using "features".
 creator = PipelineCreator(problem_type="classification", apply_to="features")
 creator.add("zscore", apply_to=["features", "confound"])
@@ -123,13 +117,13 @@ scores_cr = run_cross_validation(
 
 ###############################################################################
 # Now we can compare the accuracies. We can combine the two outputs as
-# pandas dataframes
+# ``pandas.DataFrame``.
 scores_ncr["confounds"] = "Not Removed"
 scores_cr["confounds"] = "Removed"
 
 ###############################################################################
 # Now we convert the metrics to a column for easier seaborn plotting (convert
-# to long format)
+# to long format).
 
 index = ["fold", "confounds"]
 scorings = ["test_accuracy", "test_roc_auc"]
@@ -145,10 +139,10 @@ df_cr_metrics.name = "value"
 df_metrics = pd.concat((df_ncr_metrics, df_cr_metrics))
 
 df_metrics = df_metrics.reset_index()
-# print(df_metrics.head())
+df_metrics.head()
 
 ###############################################################################
-# And finally plot the results
+# And finally plot the results.
 sns.catplot(
     x="confounds", y="value", col="metric", data=df_metrics, kind="swarm"
 )
@@ -160,9 +154,8 @@ plt.tight_layout()
 # difference, we need to check the distribution of differeces between the
 # the models.
 #
-# First we remove the column "confounds" from the index and make the difference
-# between the metrics
-
+# First, we remove the column "confounds" from the index and make the difference
+# between the metrics.
 df_cr_metrics = df_cr_metrics.reset_index().set_index(["fold", "metric"])
 df_ncr_metrics = df_ncr_metrics.reset_index().set_index(["fold", "metric"])
 
@@ -186,8 +179,7 @@ plt.tight_layout()
 # Maybe the percentiles will be more accuracy with the proper amount of
 # bootstrap iterations?
 #
-#
-# But the main point of confound removal is for interpretability. Lets see
+# But the main point of confound removal is for interpretability. Let's see
 # if there is a change in the feature importances.
 #
 # First, we need to collect the feature importances for each model, for each
@@ -222,7 +214,7 @@ cr_fi = pd.concat(cr_fi)
 feature_importance = pd.concat([cr_fi, ncr_fi])
 
 ###############################################################################
-# We can now plot the importances
+# We can now plot the importances.
 sns.catplot(
     x="feature",
     y="importance",
