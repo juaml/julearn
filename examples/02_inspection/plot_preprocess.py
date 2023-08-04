@@ -2,13 +2,12 @@
 Preprocessing with variance threshold, zscore and PCA
 =====================================================
 
-This example uses the 'make_regression' function to create a simple dataset,
-performs a simple regression after the pre-processing of the features
+This example uses the ``make_regression`` function to create a simple dataset,
+performs a simple regression after the preprocessing of the features
 including removal of low variance features, feature normalization for only
 two features using zscore and feature reduction using PCA.
 We will check the features after each preprocessing step.
 """
-
 # Authors: Shammi More <s.more@fz-juelich.de>
 #          Leonard Sasse <l.sasse@fz-juelich.de>
 # License: AGPL
@@ -23,13 +22,12 @@ from julearn.inspect import preprocess
 from julearn.pipeline import PipelineCreator
 from julearn.utils import configure_logging
 
-
 ###############################################################################
-# Set the logging level to info to see extra information
+# Set the logging level to info to see extra information.
 configure_logging(level="INFO")
 
 ###############################################################################
-# Create a dataset using sklearn's make_regression
+# Create a dataset using ``sklearn`` ``make_regression``.
 df = pd.DataFrame()
 X, y = [f"Feature {x}" for x in range(1, 5)], "y"
 df[X], df[y] = make_regression(
@@ -45,7 +43,7 @@ first_two = X[:2]
 X_types = {"X_to_zscore": first_two}
 
 ###############################################################################
-# Let's look at the summary statistics of the raw features
+# Let's look at the summary statistics of the raw features.
 print("Summary Statistics of the raw features : \n", df.describe())
 
 ###############################################################################
@@ -54,13 +52,13 @@ print("Summary Statistics of the raw features : \n", df.describe())
 # features. We will zscore the target and then train a random forest model.
 # Since we use the PipelineCreator object we have to explicitly declare which
 # `X_types` each preprocessing step should be applied to. If we do not declare
-# the type in the 'add' method using the 'apply_to' keyword argument,
-# the step will default to 'continuous' or to another type that can be declared
-# in the 'init' method of the 'PipelineCreator'.
-# To transform the target we could set 'apply_to='target'', which is a special
+# the type in the ``add`` method using the ``apply_to`` keyword argument,
+# the step will default to ``"continuous"`` or to another type that can be
+# declared in the constructor of the ``PipelineCreator``.
+# To transform the target we could set ``apply_to="target"``, which is a special
 # type, that cannot be user-defined. Please note also that if a step is added
 # to transform the target, you also have to explicitly add the model that is
-# to be used in the regression to the 'PipelineCreator'.
+# to be used in the regression to the ``PipelineCreator``.
 
 # Define model parameters and preprocessing steps first
 # The hyperparameters for each step can be added as a keyword argument and
@@ -68,7 +66,7 @@ print("Summary Statistics of the raw features : \n", df.describe())
 # search.
 
 # Setting the threshold for variance to 0.15, number of PCA components to 2
-# and number of trees for random forest to 200
+# and number of trees for random forest to 200.
 
 # By setting "apply_to=*", we can apply the preprocessing step to all features.
 pipeline_creator = PipelineCreator(problem_type="regression")
@@ -79,9 +77,9 @@ pipeline_creator.add("pca", apply_to="*", n_components=2)
 pipeline_creator.add("rf", apply_to="*", n_estimators=200)
 
 # Because we have already added the model to the pipeline creator, we can
-# simply drop in the pipeline_creator as a model. If we did not add a model
-# here, we could add the pipeline_creator using the keyword argument
-# 'preprocess' and hand over a model separately.
+# simply drop in the ``pipeline_creator`` as a model. If we did not add a model
+# here, we could add the ``pipeline_creator`` using the keyword argument
+# ``preprocess`` and hand over a model separately.
 
 scores, model = run_cross_validation(
     X=X,
@@ -114,12 +112,12 @@ print("=" * 79)
 print(X_after_zscore)
 
 # However, to make this less confusing you can also simply use the high-level
-# function 'preprocess' to explicitly refer to a pipeline step by name:
+# function ``preprocess`` to explicitly refer to a pipeline step by name:
 
 X_after_pca = preprocess(model, X=X, data=df, until="pca")
 X_after_zscore = preprocess(model, X=X, data=df, until="zscore")
 
-# Let's plot scatter plots for raw features and the PCA components
+# Let's plot scatter plots for raw features and the PCA components.
 fig, axes = plt.subplots(1, 2, figsize=(12, 6))
 sns.scatterplot(x=X[0], y=X[1], data=df, ax=axes[0])
 axes[0].set_title("Raw features")
@@ -133,5 +131,3 @@ print(
     "Summary Statistics of the zscored features : \n",
     X_after_zscore.describe(),
 )
-
-###############################################################################
