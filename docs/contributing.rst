@@ -31,6 +31,12 @@ Setting up the local development environment
 
    Now you can make your changes locally.
 
+#. Make sure you install git pre-commit hooks like so:
+
+   .. code-block:: bash
+
+       pre-commit install
+
 #. When making changes locally, it is helpful to ``git commit`` your work
    regularly. On one hand to save your work and on the other hand, the smaller
    the steps, the easier it is to review your work later. Please use `semantic
