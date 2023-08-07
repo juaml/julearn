@@ -1,0 +1,48 @@
+ci:
+  autofix_prs: false
+  autoupdate_commit_msg: "chore: bump pre-commit repositories"
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: check-ast
+      - id: check-docstring-first
+      - id: check-executables-have-shebangs
+      - id: check-merge-conflict
+      - id: check-yaml
+      - id: check-toml
+      - id: debug-statements
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+  - repo: https://github.com/abravalheri/validate-pyproject
+    rev: v0.12.2
+    hooks:
+      - id: validate-pyproject
+  - repo: https://github.com/psf/black
+    rev: 23.3.0
+    hooks:
+      - id: black
+        exclude: ^(docs/|examples/)
+        args: [--check]
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: v0.0.267
+    hooks:
+      - id: ruff
+        exclude: ^(__init__.py)
+        args: [--format, grouped, --show-fixes]
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.2.4
+    hooks:
+      - id: codespell
+        exclude: ^(.github/|docs/)
+        args: [--config, tox.ini]
+  - repo: https://github.com/pre-commit/pygrep-hooks
+    rev: v1.10.0
+    hooks:
+      - id: python-no-eval
+      - id: python-no-log-warn
+      - id: rst-backticks
+      - id: rst-directive-colons
+      - id: rst-inline-touching-normal
