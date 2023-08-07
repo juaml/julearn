@@ -7,7 +7,7 @@ The following are a set of examples that use julearn.
 .. this needs to be done manually to avoid TOC issues
 .. see https://github.com/sphinx-gallery/sphinx-gallery/pull/944/
 
-.. toctree:: 
+.. toctree::
     :maxdepth: 2
     :caption: Contents:
 

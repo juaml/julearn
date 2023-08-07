@@ -34,4 +34,3 @@ We still do not have a publication that you can use to cite julearn in your
 manuscript. However, julearn realies heavily on scikit-learn.
 
 Please cite scikit-learn: https://scikit-learn.org/stable/about.html#citing-scikit-learn
-

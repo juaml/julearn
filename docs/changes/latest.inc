@@ -1,5 +1,5 @@
 .. NOTE: we are now using links to highlight new functions and classes.
-   Please follow the examples below like 
+   Please follow the examples below like
    :func:`julearn.api.run_cross_validation`, so the
    whats_new page will have a link to the function/class documentation.
 
@@ -26,5 +26,3 @@ Bugs
 
 API changes
 ~~~~~~~~~~~
-
-

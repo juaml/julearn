@@ -9,7 +9,7 @@ The output of :func:`.run_cross_validation`
 -------------------------------------------
 
 So far, we saw how to run a cross-validation using the :class:`.PipelineCreator`
-and :func:`.run_cross_validation`. But what do we get as output from such a 
+and :func:`.run_cross_validation`. But what do we get as output from such a
 pipeline?
 
 Cross-validation scores

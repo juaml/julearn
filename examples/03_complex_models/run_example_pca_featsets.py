@@ -65,8 +65,8 @@ X_types = {
 }
 
 ###############################################################################
-# Create a pipeline to process the data and the fit a model. We must specify 
-# how each X_type will be used. For example if in the last step we do not 
+# Create a pipeline to process the data and the fit a model. We must specify
+# how each X_type will be used. For example if in the last step we do not
 # specify `apply_to=['continuous', 'categorical']`, then the pipeline will not
 # know what to do with the categorical features.
 creator = PipelineCreator(problem_type="regression")

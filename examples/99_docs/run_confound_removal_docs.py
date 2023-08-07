@@ -239,7 +239,7 @@ print(scores)
 #   .. [#3] He, Tong, et al., `"Deep neural networks and kernel regression \
 #      achieve comparable accuracies for functional connectivity prediction \
 #      of behavior and demographics" <https://www.sciencedirect.com/science/\
-#      article/pii/S1053811919308675>`_, NeuroImage, Volume 206, 1 February 
+#      article/pii/S1053811919308675>`_, NeuroImage, Volume 206, 1 February
 #      2020, 116276
 #
 #   .. [#4] More, Shammi, et al., `"Confound Removal and Normalization in \

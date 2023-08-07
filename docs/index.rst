@@ -18,13 +18,13 @@ Welcome to julearn's documentation!
 What is Julearn?
 ================
 
-At the Applied Machine Learning (`AML`_) group, as part of the Institute of 
+At the Applied Machine Learning (`AML`_) group, as part of the Institute of
 Neuroscience and Medicine - Brain and Behaviour (`INM-7`_), we thought that
-using ML in research could be simpler. 
+using ML in research could be simpler.
 
 In the same way as `seaborn`_ provides an abstraction of `matplotlib`_'s
-functionality aiming for powerful data visualization with minor coding, we 
 built julearn on top of `scikit-learn`_.
+functionality aiming for powerful data visualization with minor coding, we
 
 Julearn is a library that provides users with the possibility of easy 
 testing ML models directly from `pandas`_ dataframes, while keeping the

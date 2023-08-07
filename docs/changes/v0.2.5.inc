@@ -1,5 +1,5 @@
 .. NOTE: we are now using links to highlight new functions and classes.
-   Please follow the examples below like 
+   Please follow the examples below like
    :func:`julearn.api.run_cross_validation`, so the
    whats_new page will have a link to the function/class documentation.
 
@@ -21,7 +21,7 @@ Enhancements
 
 - Add information on updating the *What's new* section before releasing (by `Fede Raimondo`_).
 
-- Update docs to make it more uniform (by `Kaustubh Patil`_). 
+- Update docs to make it more uniform (by `Kaustubh Patil`_).
 
 - Refactor scoring to allow for registering and callable scorers (by `Sami Hamdan`_).
 
@@ -30,7 +30,7 @@ Enhancements
 - Add user facing `create_pipeline` function (by `Sami Hamdan`_).
 
 - Update default behavior of setting inner cv according to scikit-learn instead of using outer cv as default (by `Sami Hamdan`_).
-             
+
 - Add tests and more algorithms to `DynamicSelection` (by `Sami Hamdan`_ and `Shammi More`_).
 
 - Add CV schemes for stratifying based on the grouping variables, useful for regression problems. Check :class:`.ContinuousStratifiedGroupKFold` and :class:`.RepeatedContinuousStratifiedGroupKFold` (by `Fede Raimondo`_ and `Shammi More`_).
@@ -64,7 +64,7 @@ Bugs
 
 - Fix Bug of showing Warnings when using confound removal (:gh:`152` by `Sami Hamdan`_).
 
-- Fix Bug registered scorer not working in dictionary for scoring  ( by `Sami Hamdan`_). 
+- Fix Bug registered scorer not working in dictionary for scoring  ( by `Sami Hamdan`_).
 
 
 API changes
@@ -76,4 +76,3 @@ API changes
 - Inner `cv` needs to be provided using `search_params`. Deprecating `cv` in `model_params` (:gh:`146`  by `Sami Hamdan`_).
 
 - Add `n_jobs` and `verbose` to `run_cross_validation` (by `Sami Hamdan`_).
-

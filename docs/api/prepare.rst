@@ -12,6 +12,6 @@ Prepare
 .. autosummary::
    :toctree: generated/
    :template: function.rst
-  
+
     prepare_input_data
     check_consistency

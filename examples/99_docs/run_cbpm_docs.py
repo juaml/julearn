@@ -34,7 +34,7 @@ feature aggregation. Leveraging julearn's PipelineCreator, one can therefore
 easily apply the "cbpm" transformer as a preprocessing step, and then apply any
 sklearn-compatible estimator for the model building part.
 
-For example, to build a simple CBPM workflow, you can create a pipeline and 
+For example, to build a simple CBPM workflow, you can create a pipeline and
 run a cross-validation as follows:
 """
 

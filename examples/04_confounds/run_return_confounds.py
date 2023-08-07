@@ -83,7 +83,7 @@ scores, model = run_cross_validation(
 )
 
 ###############################################################################
-# We can use the `preprocess` method of the `inspect` module to inspect the 
+# We can use the `preprocess` method of the `inspect` module to inspect the
 # transformations steps of the returned estimator.
 # By providing a step name to the `until` argument of the
 # `preprocess` method we return the transformed X and y up to
@@ -148,7 +148,7 @@ print(len(model.steps[-1][1].model.coef_))
 
 ###############################################################################
 # Lastly, you can also use the confound as a normal feature after confound
-# removal. 
+# removal.
 creator = PipelineCreator(problem_type="regression", apply_to="continuous")
 creator.add("confound_removal", keep_confounds=True)
 creator.add("pca")
