@@ -48,6 +48,14 @@ Setting up the local development environment
        git add .
        git commit -m "<prefix>: <summary of changes>"
 
+   In case, you want to commit some WIP (work-in-progress) code, please indicate
+   that in the commit message and use the flag ``--no-verify`` with
+   ``git commit`` like so:
+
+   .. code-block:: bash
+
+       git commit --no-verify -m "WIP: <summary of changes>"
+
 #. When you're done making changes, check that your changes pass our test suite.
    This is all included with ``tox``.
 
