@@ -54,6 +54,7 @@ Why not just use ``scikit-learn``? ``julearn`` offers **three essential benefits
    * Model **comparison**: ``julearn`` provides out-of-the-box interactive
      **visualizations** and **statistics** to compare your models.
 
+
 Table of Contents
 =================
 
@@ -62,15 +63,10 @@ Table of Contents
    :numbered: 2
 
    getting_started
-
    what_really_need_know/index.rst
-
    selected_deeper_topics/index.rst
-
    available_pipeline_steps.rst
-
    examples.rst
-
    api/index.rst
    configuration
    contributing
