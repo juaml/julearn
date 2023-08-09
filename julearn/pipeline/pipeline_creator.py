@@ -789,6 +789,13 @@ class PipelineCreator:
             The step to wrap.
         column_types : ColumnTypesLike
             The types of the columns the step is applied to.
+        row_select_col_type : str or list of str or set of str or ColumnTypes
+            The column types needed to select rows (default None).
+        row_select_vals : str, int, bool or list of str, int, bool
+            The value(s) which should be selected in the
+            ``row_select_col_type`` to select the rows used for training
+            (default None).
+
         """
         return JuColumnTransformer(
             name,

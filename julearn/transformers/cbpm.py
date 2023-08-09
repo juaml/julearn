@@ -1,3 +1,5 @@
+"""Provide scikit-learn-compatible transformer for CBPM."""
+
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 #          Kaustubh, Patil <k.patil@fz-juelich.de>
@@ -265,9 +267,11 @@ class CBPM(BaseEstimator, TransformerMixin):
                 self.used_significant_mask_ = self.significant_mask_
 
     def aggregate(self, X, mask):  # noqa: N803
+        """Aggregate."""
         return self.agg_method(X[:, mask], axis=1)
 
     def get_feature_names_out(self, input_features=None):
+        """Get output feature names."""
         check_is_fitted(self)
         cols = (
             ["positive"]

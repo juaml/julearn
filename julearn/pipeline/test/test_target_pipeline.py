@@ -173,6 +173,8 @@ def test_target_pipeline_errors() -> None:
 
 
 def test_target_noninverse(df_iris, X_iris):  # noqa: N803
+    """Test the target non-inverse."""
+
     X = list(X_iris.columns)
     df_iris["species"] = X_iris["petal_width"]
     target_pipeline_creator = TargetPipelineCreator()

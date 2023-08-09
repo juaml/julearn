@@ -1,3 +1,9 @@
+"""Provide tests for cross-validation inspection."""
+
+# Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
+#          Sami Hamdan <s.hamdan@fz-juelich.de>
+# License: AGPL
+
 import numpy as np
 import pandas as pd
 import pytest
@@ -12,37 +18,52 @@ from julearn.utils import _compute_cvmdsum
 
 
 class MockModelReturnsIndex(BaseEstimator):
+    """Class for mock model."""
+
     def fit(self, X, y=None, **fit_params):  # noqa: N803
+        """Fit the model."""
         return self
 
     def predict(self, X):  # noqa: N803
+        """Predict using the model."""
         return np.array(X.index)[:, None]
 
     def predict_proba(self, X):  # noqa: N803
+        """Predict probability using the model."""
         return np.array(X.index)[:, None]
 
     def predict_log_proba(self, X):  # noqa: N803
+        """Predict log probability using the model."""
         return np.array(X.index)[:, None]
 
     def decision_function(self, X):  # noqa: N803
+        """Decision function."""
         return np.array(X.index)[:, None]
 
     def __sklearn_is_fitted__(self):
+        """Check if model is fitted on data."""
         return True
 
 
 class MockRegressorReturnsIndex(BaseEstimator):
+    """Class for mock regressor."""
+
     def fit(self, X, y=None, **fit_params):  # noqa: N803
+        """Fit the model."""
         return self
 
     def predict(self, X):  # noqa: N803
+        """Predict using the model."""
         return np.array(X.index)
 
     def __sklearn_is_fitted__(self):
+        """Check if model is fitted on data."""
         return True
 
 
 def scores(df_typed_iris, n_iters=5, mock_model=None):
+    """Pre-define scores."""
+
     X = df_typed_iris.iloc[:, :-1]
     y = df_typed_iris.iloc[:, -1]
 
@@ -63,6 +84,8 @@ def scores(df_typed_iris, n_iters=5, mock_model=None):
 
 @pytest.fixture
 def get_cv_scores(request, df_typed_iris):
+    """Fixture for getting CV scores."""
+
     n_iters = request.param
     mock_model = None
     if isinstance(n_iters, list):
@@ -77,6 +100,8 @@ def get_cv_scores(request, df_typed_iris):
 
 @pytest.mark.parametrize("get_cv_scores", [2, 5, 10], indirect=True)
 def test_get_predictions(get_cv_scores, df_typed_iris):
+    """Test predictions."""
+
     X = df_typed_iris.iloc[:, :-1]
     y = df_typed_iris.iloc[:, -1]
     cv, df_scores = get_cv_scores
@@ -95,6 +120,8 @@ def test_get_predictions(get_cv_scores, df_typed_iris):
     "get_cv_scores", [[2, MockRegressorReturnsIndex]], indirect=True
 )
 def test_predictions_available(get_cv_scores, df_typed_iris):
+    """Test available predictions."""
+
     X = df_typed_iris.iloc[:, :-1]
     y = df_typed_iris.iloc[:, -1]
     cv, df_scores = get_cv_scores
@@ -122,6 +149,8 @@ def test_predictions_available(get_cv_scores, df_typed_iris):
     "get_cv_scores", [[2, MockRegressorReturnsIndex]], indirect=True
 )
 def test_invalid_func(get_cv_scores, df_typed_iris):
+    """Test invalid function."""
+
     X = df_typed_iris.iloc[:, :-1]
     y = df_typed_iris.iloc[:, -1]
     cv, df_scores = get_cv_scores
@@ -132,6 +161,8 @@ def test_invalid_func(get_cv_scores, df_typed_iris):
 
 @pytest.mark.parametrize("get_cv_scores", [5], indirect=True)
 def test_foldsinspector_iter(get_cv_scores, df_typed_iris):
+    """Test folds inspector iterations."""
+
     X = df_typed_iris.iloc[:, :-1]
     y = df_typed_iris.iloc[:, -1]
     cv, df_scores = get_cv_scores

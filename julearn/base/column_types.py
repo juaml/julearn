@@ -68,23 +68,25 @@ def get_renamer(X_df):  # noqa: N803
     }
 
 
-class make_type_selector(object):
+class make_type_selector:
+    """Make a type selector.
+
+    This type selector is to be used with
+    :class:`sklearn.compose.ColumnTransformer`
+
+    Parameters
+    ----------
+    pattern : str
+        The pattern to select the columns.
+
+    Returns
+    -------
+    function
+        The type selector.
+
+    """
+
     def __init__(self, pattern):
-        """Make a type selector.
-
-        This type selector is to be used with
-        :class:`sklearn.compose.ColumnTransformer`
-
-        Parameters
-        ----------
-        pattern : str
-            The pattern to select the columns.
-
-        Returns
-        -------
-        function
-            The type selector.
-        """
         self.pattern = pattern
 
     def __call__(self, X_df):  # noqa: N803

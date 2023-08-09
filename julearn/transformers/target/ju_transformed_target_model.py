@@ -129,7 +129,21 @@ class JuTransformedTargetModel(JuBaseEstimator):
         return y_pred
 
     def score(self, X: pd.DataFrame, y: DataLike) -> float:  # noqa: N803
+        """Score the model.
 
+        Parameters
+        ----------
+        X : pd.DataFrame
+            The input data.
+        y : DataLike
+            The target.
+
+        Returns
+        -------
+        float
+            Score for the model.
+
+        """
         if not hasattr(self, "model_"):
             raise_error("Model not fitted yet.")
         self.model_ = typing.cast(ModelLike, self.model_)
@@ -180,6 +194,21 @@ class JuTransformedTargetModel(JuBaseEstimator):
     def transform_target(
         self, X: pd.DataFrame, y: DataLike  # noqa: N803
     ) -> DataLike:
+        """Transform target.
+
+        Parameters
+        ----------
+        X : pd.DataFrame
+            The input data.
+        y : DataLike
+            The target.
+
+        Returns
+        -------
+        DataLike
+            The transformed target.
+
+        """
         return self.transformer.transform(X, y)
 
     @property

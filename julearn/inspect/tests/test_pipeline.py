@@ -1,4 +1,11 @@
+"""Provide tests for pipeline and estimator inspectors."""
+
+# Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
+#          Sami Hamdan <s.hamdan@fz-juelich.de>
+# License: AGPL
+
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Type
+
 import pytest
 from sklearn.base import BaseEstimator
 from sklearn.decomposition import PCA
@@ -12,6 +19,17 @@ from julearn.transformers import JuColumnTransformer
 
 class TestEst(BaseEstimator):
     def __init__(self, hype_0=0, hype_1=1):
+    """Class for estimator tests.
+
+    Parameters
+    ----------
+    hype_0 : int
+        First hyperparameter.
+    hype_1 : int
+        Second hyperparameter.
+
+    """
+
         self.hype_0 = hype_0
         self.hype_1 = hype_1
 
@@ -21,11 +39,41 @@ class TestEst(BaseEstimator):
         y: Optional[str] = None,
         **fit_params: Any,
     ) -> "TestEst":
+        """Fit the estimator.
+
+        Parameters
+        ----------
+        X : list of str
+            The features to use.
+        y : str, optional
+            The target to use (default None).
+        **fit_params : dict
+            Parameters for fitting the estimator.
+
+        Returns
+        -------
+        TestEst
+            The fitted estimator.
+
+        """
         self.param_0_ = 0
         self.param_1_ = 1
         return self
 
     def transform(self, X: List[str]) -> List[str]:  # noqa: N803
+        """Transform the estimator.
+
+        Parameters
+        ----------
+        X : list of str
+            The features to use.
+
+        Returns
+        -------
+        list of str
+            The transformed estimator.
+
+        """
         return X
 
 
@@ -37,6 +85,18 @@ class TestEst(BaseEstimator):
         ["pca", "svm"],
         ["zscore", "pca", "svm"],
 def test_get_stepnames(steps, df_iris):
+    ],
+)
+    """Test step names fetch.
+
+    Parameters
+    ----------
+    steps : list of str
+        The parametrized step names.
+    df_iris : pd.DataFrame
+        The iris dataset.
+
+    """
     pipe = (
         PipelineCreator(problem_type="classification")
         .from_list(steps, model_params={}, problem_type="classification")
@@ -57,6 +117,20 @@ def test_get_stepnames(steps, df_iris):
 def test_steps(steps, as_estimator, returns, df_iris):
     ],
 )
+    """Test steps.
+
+    Parameters
+    ----------
+    steps : list of str
+        The parametrized step names.
+    as_estimator : bool
+        The parametrized flag to indicate whether to use as estimator.
+    returns : list
+        The parametrized list of object instances to return.
+    df_iris : pd.DataFrame
+        The iris dataset.
+
+    """
     pipe = (
         PipelineCreator(problem_type="classification")
         .from_list(steps, model_params={}, problem_type="classification")
@@ -80,6 +154,18 @@ def test_inspect_estimator(est, fitted_params, df_iris):
         ],
     ],
 )
+    """Test estimator inspector.
+
+    Parameters
+    ----------
+    est : Estimator-like
+        Estimator-like object.
+    fitted_params : dict of str and int
+        The fitted parameters for ``est``.
+    df_iris : pd.DataFrame
+        The iris dataset.
+
+    """
     est.fit(df_iris.iloc[:, :-1], df_iris.species)
     inspector = _EstimatorInspector(est)
     assert est.get_params() == inspector.get_params()
@@ -89,7 +175,14 @@ def test_inspect_estimator(est, fitted_params, df_iris):
 
 
 def test_inspect_pipeline(df_iris):
+    """Test pipeline inspector.
 
+    Parameters
+    ----------
+    df_iris : pd.DataFrame
+        The iris dataset.
+
+    """
     expected_fitted_params = {
         "jucolumntransformer__param_0_": 0,
         "jucolumntransformer__param_1_": 1,
@@ -116,6 +209,14 @@ def test_inspect_pipeline(df_iris):
 
 
 def test_get_estimator(df_iris):
+    """Test estimator fetch from inspector.
+
+    Parameters
+    ----------
+    df_iris : pd.DataFrame
+        The iris dataset.
+
+    """
     pipe = (
         PipelineCreator(problem_type="classification")
         .add(JuColumnTransformer("test", TestEst(), "continuous"))

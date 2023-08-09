@@ -1,3 +1,5 @@
+"""Provide functions for corrected t-test."""
+
 # Author: Authors of scikit-learn
 #         Martina G. Vilas <https://github.com/martinagvilas>
 #         Federico Raimondo <f.raimondo@fz-juelich.de>

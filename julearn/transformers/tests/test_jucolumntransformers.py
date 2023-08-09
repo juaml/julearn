@@ -112,6 +112,7 @@ def test_jucolumntransformer(
 
 
 def test_row_select():
+    """Test row selection for JuColumnTransformer."""
     X = pd.DataFrame(
         {
             "a__:type:__continuous": [0, 0, 1, 1],

@@ -144,6 +144,11 @@ def run_cross_validation(  # noqa: C901
     seed : int | None
         If not None, set the random seed before any operation. Useful for
         reproducibility.
+    n_jobs : int, optional
+        Number of jobs to run in parallel. Training the estimator and computing
+        the score are parallelized over the cross-validation splits.
+        ``None`` means 1 unless in a :obj:`joblib.parallel_backend` context.
+        ``-1`` means using all processors (default None).
     verbose: int
         Verbosity level of outer cross-validation.
         Follows scikit-learn/joblib converntions.

@@ -71,6 +71,7 @@ def test_JuTransformedTargetModel_noinverse(
 
 
 def test_JuTransformedTargetModel_not_fitted(X_iris, y_iris):  # noqa: N803
+    """Test unfitted model for JuTransformedTargetModel."""
     steps = [("scaler", StandardScaler())]
     transformer = JuTargetPipeline(steps)  # type: ignore
     model = SVC(probability=True)

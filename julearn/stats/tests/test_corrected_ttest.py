@@ -1,3 +1,8 @@
+"""Provide tests for corrected t-test."""
+
+# Author: Federico Raimondo <f.raimondo@fz-juelich.de>
+# License: AGPL
+
 import warnings
 
 import numpy as np

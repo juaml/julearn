@@ -1158,6 +1158,14 @@ def test_api_stacking_models() -> None:
 
 
 def test_inspection_error(df_iris):
+    """Test error for inspector.
+
+    Parameters
+    ----------
+    df_iris : pd.DataFrame
+        The iris dataset.
+
+    """
     X = ["sepal_length", "sepal_width", "petal_length"]
     y = "species"
     with pytest.raises(ValueError, match="return_inspector=True requires"):
@@ -1183,6 +1191,16 @@ def test_inspection_error(df_iris):
 
 
 def test_final_estimator_picklable(tmp_path, df_iris) -> None:
+    """Test if final estimator is picklable.
+
+    Parameters
+    ----------
+    tmp_path : pathlib.Path
+        The path to the test directory.
+    df_iris : pd.DataFrame
+        The iris dataset.
+
+    """
     X = ["sepal_length", "sepal_width", "petal_length"]
     y = "species"
     pickled_file = tmp_path / "final_estimator.joblib"
@@ -1200,6 +1218,16 @@ def test_final_estimator_picklable(tmp_path, df_iris) -> None:
 
 
 def test_inspector_picklable(tmp_path, df_iris) -> None:
+    """Test if inspector is picklable.
+
+    Parameters
+    ----------
+    tmp_path : pathlib.Path
+        The path to the test directory.
+    df_iris : pd.DataFrame
+        The iris dataset.
+
+    """
     X = ["sepal_length", "sepal_width", "petal_length"]
     y = "species"
     pickled_file = tmp_path / "inspector.joblib"

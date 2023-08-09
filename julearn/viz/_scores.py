@@ -27,8 +27,7 @@ SCORE_PLOT_TOOLS = "hover,save,pan,box_zoom,reset,wheel_zoom"
 
 
 class _JulearnScoresViewer(param.Parameterized):
-    """
-    A class to visualize the scores for model comparison.
+    """A class to visualize the scores for model comparison.
 
     Parameters
     ----------
@@ -69,6 +68,7 @@ class _JulearnScoresViewer(param.Parameterized):
         scores : list of pd.DataFrame
             DataFrames containing the scores of the models. The DataFrames must
             be the output of `run_cross_validation`
+
         Returns
         -------
         self : _JulearnScoresViewer

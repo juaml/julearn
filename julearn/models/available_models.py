@@ -161,6 +161,8 @@ def get_model(name: str, problem_type: str, **kwargs: Any) -> ModelLike:
         The model name
     problem_type : str
         The type of problem. See :func:`.run_cross_validation`.
+    **kwargs : dict
+        Extra keyword arguments.
 
     Returns
     -------

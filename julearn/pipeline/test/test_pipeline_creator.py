@@ -144,6 +144,9 @@ def test_hyperparameter_tuning(
         The problem type to test.
     get_tuning_params : Callable
         A function that returns the tuning hyperparameters for a given step.
+    search_params : dict of str and list
+        The parameters for the search.
+
     """
     if isinstance(preprocess, str):
         preprocess = [preprocess]

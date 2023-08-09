@@ -1,9 +1,23 @@
+"""Provide tests for the ChangeColumnTypes transformer."""
+
+# Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
+#          Sami Hamdan <s.hamdan@fz-juelich.de>
+# License: AGPL
+
 from julearn.transformers.dataframe.change_column_types import (
     ChangeColumnTypes,
 )
 
 
 def test_change_column_types(df_typed_iris):
+    """Test ChangeColumnTypes transformer.
+
+    Parameters
+    ----------
+    df_typed_iris : pd.DataFrame
+        The iris dataset with typed features.
+
+    """
     X = df_typed_iris.iloc[:, :-1]
     y = df_typed_iris.loc[:, "species"]
 

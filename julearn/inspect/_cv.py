@@ -1,5 +1,10 @@
-from typing import List, Union, Optional
+"""Provide base classes and functions to inspect folds of cross-validation."""
 
+# Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
+#          Sami Hamdan <s.hamdan@fz-juelich.de>
+# License: AGPL
+
+from typing import List, Optional, Union
 
 import pandas as pd
 from sklearn.model_selection import BaseCrossValidator, check_cv

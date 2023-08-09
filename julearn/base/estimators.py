@@ -165,7 +165,26 @@ class JuTransformer(JuBaseEstimator, TransformerMixin):
         self.row_select_vals = row_select_vals
 
     def fit(self, X, y=None, **fit_params):  # noqa: N803
+        """Fit the model.
 
+        This method will fit the model using only the columns selected by
+        `apply_to`.
+
+        Parameters
+        ----------
+        X : pd.DataFrame
+            The data to fit the model on.
+        y : DataLike, optional
+            The target data (default is None).
+        **fit_params : Any
+            Additional parameters to pass to the model's fit method.
+
+        Returns
+        -------
+        JuTransformer
+            The fitted model.
+
+        """
         if self.row_select_col_type is None:
             return self._fit(X, y, **fit_params)
 
@@ -420,7 +439,7 @@ class WrapModel(JuBaseEstimator):
 
         Parameters
         ----------
-        **params : dict
+        **kwargs : dict
             Model parameters.
 
         Returns

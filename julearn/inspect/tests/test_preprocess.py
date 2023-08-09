@@ -1,4 +1,4 @@
-"""Provide tests for inspecting preprocess module."""
+"""Provide tests for inspecting preprocessors."""
 
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
@@ -121,7 +121,18 @@ def test_preprocess_sklearn_nodataframe(
 
 
 def test_preprocess_no_step(X_iris, y_iris, df_iris) -> None:  # noqa: N803
+    """Test error for preprocess with no step.
 
+    Parameters
+    ----------
+    X_iris : pd.DataFrame
+        The iris dataset features.
+    y_iris : pd.Series
+        The iris dataset target.
+    df_iris : pd.DataFrame
+        The iris dataset.
+
+    """
     pipeline = Pipeline([("scaler", StandardScaler()), ("svm", SVC())])
     pipeline.fit(X_iris, y=y_iris)
     with pytest.raises(ValueError, match="No step named"):
@@ -133,6 +144,14 @@ def test_preprocess_no_step(X_iris, y_iris, df_iris) -> None:  # noqa: N803
         )
 
 
+    """Test preprocess with column types.
+
+    Parameters
+    ----------
+    df_iris : pd.DataFrame
+        The iris dataset.
+
+    """
 
 def test_preprocess_with_column_types(df_iris):
     X = list(df_iris.iloc[:, :-1].columns)

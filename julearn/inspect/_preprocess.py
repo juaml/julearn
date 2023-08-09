@@ -1,4 +1,4 @@
-"""Functions to inspect the preprocessing steps of pipeline."""
+"""Provide functions to inspect the preprocessing steps of pipeline."""
 
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
