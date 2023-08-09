@@ -2,6 +2,7 @@
 #          Vera Komeyer <v.komeyer@fz-juelich.de>
 #          Fede Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL
+
 """
 Inspecting Models
 =================
@@ -29,7 +30,6 @@ effectively and interpret their outputs with greater confidence.
 Let's start by importing some useful utilities:
 
 """
-
 from pprint import pprint
 import seaborn as sns
 import numpy as np
@@ -73,7 +73,7 @@ print(pipeline_creator)
 # :func:`.run_cross_validation`. Notice, how we set the ``return_inspector``
 # parameter to ``True``. Importantly, we also have to set the
 # ``return_estimator`` parameter to ``"all"``. This is because julearn's
-# :class:`.Inspector` extracts all relevant nformation from estimators after
+# :class:`.Inspector` extracts all relevant information from estimators after
 # the pipeline has been run. The pipeline will take a few minutes in our
 # example:
 
@@ -93,7 +93,6 @@ scores, final_model, inspector = run_cross_validation(
 # parameters, but also at the parameters of individual models from each fold of
 # the cross-validation. The final model can be inspected using the ``.model``
 # attribute. For example to get a quick overview over the model parameters, run:
-
 
 # remember to actually import pprint as above, or just print out using print
 pprint(inspector.model.get_params())
@@ -115,7 +114,6 @@ pprint(inspector.model.get_fitted_params())
 
 print(inspector.model.get_fitted_params()["zscore__mean_"])
 
-
 ##############################################################################
 # In addition, sometimes it can be very useful to know what predictions were
 # made in each individual train-test split of the cross-validation. This is
@@ -133,11 +131,10 @@ print(fold_predictions)
 # This ``.folds`` attribute is actually an iterator, that can iterate over
 # every single fold used in the cross-validation, and it yields an instance of
 # a :class:`.FoldsInspector`, which can then be used to explore each model that
-# was fitted during cross-validation. For example, we can collect the _C_
+# was fitted during cross-validation. For example, we can collect the ``C``
 # parameters that were selected in each outer fold of our nested
 # cross-validation. That way, we can assess the amount of variance on that
 # particular parameter across folds:
-
 
 c_values = []
 for fold_inspector in inspector.folds:
@@ -147,7 +144,7 @@ for fold_inspector in inspector.folds:
     )
 
 ##############################################################################
-# By printing out the unique values in the ``c_values`` list, we realise, that
+# By printing out the unique values in the ``c_values`` list, we realize, that
 # actually there was not much variance across models. In fact, there was only
 # one parameter value ever selected. This may indicate that this is in fact
 # the optimal value, or it may indicate that there is a potential problem with
