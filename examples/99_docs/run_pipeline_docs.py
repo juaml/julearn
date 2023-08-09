@@ -35,8 +35,8 @@ Pipeline specification in :func:`.run_cross_validation`
 
 One important aspect when building machine learning models is the selection of
 a learning algorithm. This can be specified in :func:`.run_cross_validation`
-compatible learning algorithm. However, Julearn provides a built-in list of
 by setting the ``model`` parameter. This parameter can be any ``scikit-learn``
+compatible learning algorithm. However, ``julearn`` provides a list of built-in
 :ref:`available_models` that can be specified by name (see ``Name`` column in
 :ref:`available_models`). For example, we can simply set
 ``model=="svm"`` to use a Support Vector Machine (SVM) [#1]_.
@@ -159,7 +159,7 @@ print(scores)
 
 ##############################################################################
 # This is nice, but with more steps added to the pipeline this can become
-# intransparent. To simplify building complex pipelines, Julearn provides a
+# opaque. To simplify building complex pipelines, ``julearn`` provides a
 # :class:`.PipelineCreator` which helps keeping things neat.
 #
 # .. _pipeline_creator:
@@ -250,7 +250,7 @@ print(scores)
 # hyperparameters for support vector machines or the number of estimators in a
 # random forest.
 #
-# Manually specifying hyperparameters with Julearn is as simple as using the
+# Manually specifying hyperparameters with ``julearn`` is as simple as using the
 # :class:`.PipelineCreator` and set the hyperparameter when the step is added.
 #
 # Let's say we want to set the ``with_mean`` parameter of the z-score

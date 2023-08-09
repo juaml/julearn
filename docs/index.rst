@@ -9,50 +9,49 @@ Welcome to julearn's documentation!
 ===================================
 
 .. image:: images/julearn_logo_it.png
-   :width: 300
-   :alt: julearn
-
+   :width: 300px
+   :alt: julearn logo
 
 ... a user-oriented machine-learning library.
 
-What is Julearn?
-----------------
+What is ``julearn``?
+--------------------
 
 At the Applied Machine Learning (`AML`_) group, as part of the Institute of
 Neuroscience and Medicine - Brain and Behaviour (`INM-7`_), we thought that
 using ML in research could be simpler.
 
 In the same way as `seaborn`_ provides an abstraction of `matplotlib`_'s
-built julearn on top of `scikit-learn`_.
 functionality aiming for powerful data visualization with minor coding, we
+built ``julearn`` on top of `scikit-learn`_.
 
-Julearn is a library that provides users with the possibility of easy 
-testing ML models directly from `pandas`_ dataframes, while keeping the
-flexibiliy of using `scikit-learn`_'s models.
+``julearn`` is a library that provides users with the possibility of easy
+testing ML models directly from `pandas`_ DataFrames, while keeping the
+flexibility of using `scikit-learn`_'s models.
 
-To get started with Julearn just keep reading here. Additionally You can 
+To get started with ``julearn`` just keep reading here. Additionally you can
 check out our `video tutorial`_.
 
-Why Julearn?
-------------
+Why ``julearn``?
+----------------
 
-Why not just using `scikit-learn`? Julearn offers **three essential benefits**:
+Why not just use ``scikit-learn``? ``julearn`` offers **three essential benefits**:
 
-1. You can do machine learning with **less amount of code** than in
-   `scikit-learn`
-2. Julearn helps you to build and evaluate pipelines in an easy way and thereby
+#. You can do machine learning with **less amount of code** than in
+   ``scikit-learn``.
+#. ``julearn`` helps you build and evaluate pipelines in an easy way and thereby
    helps you **avoid data leakage**!
-3. It offers you nice **additional functionality**:
-   
-   * Easy to implement **confound removal**: Julearn offers you a simple way
+#. It offers you nice **additional functionality**:
+
+   * Easy to implement **confound removal**: ``julearn`` offers you a simple way
      to remove confounds from your data in a cross-validated way.
-   * Data **typing**: Julearn provides a system to specify **data types** for
-     your features, and then provides you with the possibility to 
-     filter and transform your data according to these types.
-   * Model **inspection**: Julearn provides you with a simple way to **inspect**
-     your models and pipelines, and thereby helps you to understand what is
-     going on in your pipeline.
-   * Model **comparison**: Julearn provides out-of-the-box interactive
+   * Data **typing**: ``julearn`` provides a system to specify **data types**
+     for your features, and then provides you with the possibility to filter and
+     transform your data according to these types.
+   * Model **inspection**: ``julearn`` provides you with a simple way to
+     **inspect** your models and pipelines, and thereby helps you to understand
+     what is going on in your pipeline.
+   * Model **comparison**: ``julearn`` provides out-of-the-box interactive
      **visualizations** and **statistics** to compare your models.
 
 Table of Contents
@@ -86,4 +85,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-

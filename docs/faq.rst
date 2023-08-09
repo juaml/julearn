@@ -11,7 +11,7 @@ plots. These packages are not installed by default when you install
 ``julearn``. This libraries are also under development and they might not
 be as robust as we want.
 
-Usually, installing julearn with the ``[viz]`` option will install the
+Usually, installing ``julearn`` with the ``[viz]`` option will install the
 necessary dependencies using ``pip``. However, if you have issues with the
 installation or you want to install them through other package managers,
 you can install them manually.

@@ -20,14 +20,14 @@ models are trained within the cross-validation splits, rather than on the
 training and testing data jointly in order to prevent test-to-train data
 leakage [#4]_, [#5]_.
 
-Confound Removal in Julearn
----------------------------
+Confound Removal in ``julearn``
+-------------------------------
 
-Julearn implements cross-validation consistent confound regression for both of
-the scenarios laid out above (i.e. either confound regression on the features
-or on the target) allowing the user to implement complex machine learning
-pipelines with relatively little code while avoiding test-to-train leakage
-during confound removal.
+``julearn`` implements cross-validation consistent confound regression for both
+of the scenarios laid out above (i.e., either confound regression on the
+features or on the target) allowing the user to implement complex machine
+learning pipelines with relatively little code while avoiding test-to-train
+leakage during confound removal.
 
 Let us initially consider removing a confounding variable from the features.
 
@@ -155,7 +155,7 @@ print(scores)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # If we want to remove the confounds from the target rather than from the
-# features, we need to create a slightly different pipeline. Julearn has a
+# features, we need to create a slightly different pipeline. ``julearn`` has a
 # specific :class:`.TargetPipelineCreator` to perform transformations on the
 # target. We first configure this pipeline and add the ``"confound_removal"``
 # step.
@@ -195,7 +195,7 @@ print(scores)
 
 ###############################################################################
 # As you can see, applying confound regression in your machine learning
-# pipeline in a cross-validated fashion is reasonably easy using julearn.
+# pipeline in a cross-validated fashion is reasonably easy using ``julearn``.
 # If you are considering whether or not to use confound regression, however,
 # there are further important considerations:
 #

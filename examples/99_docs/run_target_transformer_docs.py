@@ -48,8 +48,8 @@ print(target_creator)
 
 ##############################################################################
 # Next, we create the general pipeline using a :class:`.PipelineCreator`. We
-# should only be applied to the ``target``, which makes it clear for Julearn
 # pass the ``target_creator`` as a step of the pipeline and specify that it
+# should only be applied to the ``target``, which makes it clear for ``julearn``
 # to only apply it to ``y``:
 
 creator = PipelineCreator(

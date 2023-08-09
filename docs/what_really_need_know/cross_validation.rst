@@ -49,12 +49,12 @@ The essence of :func:`.run_cross_validation`
 Building pipelines (see :ref:`pipeline_usage`) within a (nested)
 cross-validation scheme, without accidentally leaking some information between
 steps can quickly become complicated and errors are often not-obvious to
-detect. Julearn's :func:`.run_cross_validation` provides a simple and
+detect. ``julearn``'s :func:`.run_cross_validation` provides a simple and
 straightforward way to do cross-validation less prone to such accidental
 mistakes and more transparent for debugging. The user only needs to specify
 the model to be used, the data to be used and the evaluation scheme to be used.
-Julearn then builds the pipeline, splits the data into training and validation
-sets accordingly, and most importantly, does all specified steps in a
+``julearn`` then builds the pipeline, splits the data into training and
+validation sets accordingly, and most importantly, does all specified steps in a
 cross-validation consistent manner.
 
 The main parameters needed for :func:`.run_cross_validation` include the

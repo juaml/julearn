@@ -68,17 +68,18 @@ poorly on the testing set. To solve this issue, you can use stratification.
 That is, you can ensure that the distribution of the target variable is the
 same in the training and testing sets.
 
-Fortunately, scikit-learn already implements stratification (e.g., stratified
-K-fold in the :class:`sklearn.model_selection.StratifiedKFold`). However, this
-implementation is only valid for discrete target variables. In the case of
-continuous target variables, Julearn comes to rescue you with the
+Fortunately, ``scikit-learn`` already implements stratification
+(e.g., stratified K-fold in the
+:class:`sklearn.model_selection.StratifiedKFold`). However, this implementation
+is only valid for discrete target variables. In the case of continuous target
+variables, ``julearn`` comes to rescue you with the
 :class:`.ContinuousStratifiedKFold` splitter.
 
 The main issue with continuous target variables is that it is not just a simple
 matter of counting the number of samples of each class. In this case, we need
 to ensure that the distribution of the target variable is the same in the
 training and testing sets. This is a more complex problem, and there are
-several ways to solve it. In Julearn, we have implemented two ways of doing
+several ways to solve it. In ``julearn``, we have implemented two ways of doing
 this: *binning* and *quantizing*.
 
 Binning is a technique that consists of dividing the target variable into
@@ -246,8 +247,10 @@ fig.suptitle(
 # importantly, due to how the bins are defined (dashed lines), each quantile is
 # now equally represented in each fold.
 #
-# .. note:: Julearn provides :class:`.RepeatedContinuousStratifiedKFold` as
-#           the repeated version of :class:`.ContinuousStratifiedKFold`.
+# .. note::
+#
+#   ``julearn`` provides :class:`.RepeatedContinuousStratifiedKFold` as
+#   the repeated version of :class:`.ContinuousStratifiedKFold`.
 #
 #
 # Grouping
@@ -261,7 +264,7 @@ fig.suptitle(
 # measured multiple times, we might want to ensure that the model is not
 # evaluated on data from the same subject that was used to train it.
 #
-# To this matter, Julearn provides :class:`.ContinuousStratifiedGroupKFold`,
+# To this matter, ``julearn`` provides :class:`.ContinuousStratifiedGroupKFold`,
 # which provides support for a grouping variable and
 # :class:`.RepeatedContinuousStratifiedGroupKFold` as the repeated version of
 # it.

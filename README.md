@@ -12,7 +12,7 @@
 The Forschungszentrum Jülich Machine Learning Library
 
 Check our full documentation here: https://juaml.github.io/julearn/index.html
-Check our video tutorial here: [Julearn Playlist](https://youtube.com/playlist?list=PLvb39y5Ge21CUjccmY_0kXRCwBBaikGf_)
+Check our video tutorial here: [julearn Playlist](https://youtube.com/playlist?list=PLvb39y5Ge21CUjccmY_0kXRCwBBaikGf_)
 
 It is currently being developed and maintained at the [Applied Machine Learning](https://www.fz-juelich.de/en/inm/inm-7/research-groups/applied-machine-learning-aml) group at [Forschungszentrum Juelich](https://www.fz-juelich.de/en), Germany.
 

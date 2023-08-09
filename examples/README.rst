@@ -1,4 +1,4 @@
 Examples
 ========
 
-The following are a set of examples that use julearn.
+The following are a set of examples that use ``julearn``.

@@ -7,12 +7,12 @@ Stacking Models
 
 ``scikit-learn`` already provides a stacking implementation for
 :class:`stacking regression<sklearn.ensemble.StackingRegressor>` as well
-another estimator on another type of features. Julearn's API provides some
 as for :class:`stacking classification<sklearn.ensemble.StackingClassifier>`.
 
 Now, ``scikit-learn``'s stacking implementation will fit each estimator on all
 of the data. However, this may not always be what you want. Sometimes you want
 one estimator in the ensemble to be fitted on one type of features, while fitting
+another estimator on another type of features. ``julearn``'s API provides some
 extra flexibility to build more flexible and customizable stacking pipelines.
 In order to explore its capabilities, let's first look at this simple example
 of fitting each estimator on all of the data. For example, we can stack a
@@ -22,7 +22,7 @@ some target in a bit of toy data.
 Fitting each estimator on all of the features
 ---------------------------------------------
 First, of course, let's import some necessary packages. Let's also configure
-Julearn's logger to get some additional information about what is happening:
+``julearn``'s logger to get some additional information about what is happening:
 """
 
 from sklearn.datasets import make_regression
@@ -37,8 +37,8 @@ configure_logging(level="INFO")
 
 ###############################################################################
 # Now, that we have these out of the way, we can create some artificial toy
-# data to demonstrate a very simple stacking estimator within Julearn. We will
-# use a dataset with 20 features and 200 samples.
+# data to demonstrate a very simple stacking estimator within ``julearn``. We
+# will use a dataset with 20 features and 200 samples.
 
 # Prepare data
 X, y = make_regression(n_features=20, n_samples=200)
@@ -88,7 +88,7 @@ model.add(
 
 ###############################################################################
 # This final stacking :class:`.PipelineCreator` can now simply be handed over
-# to Julearn's :func:`.run_cross_validation`:
+# to ``julearn``'s :func:`.run_cross_validation`:
 
 scores, final = run_cross_validation(
     X=X_names,
@@ -103,13 +103,13 @@ scores, final = run_cross_validation(
 # Fitting each estimator on a specific feature type
 # -------------------------------------------------
 #
-# relatively simple with Julearn. However, sometimes it may be desirable to
 # As you can see, fitting a standard ``scikit-learn`` stacking estimator is
+# relatively simple with ``julearn``. However, sometimes it may be desirable to
 # have a bit more control over which features are used to fit each estimator.
 # For example, there may be two types of features. One of these feature types
 # we may want to use for fitting the SVR, and one of these feature types we
 # may want to use for fitting the RF. To demonstrate how this can be done in
-# Julearn, let's now create some very similar toy data, but distinguish
+# ``julearn``, let's now create some very similar toy data, but distinguish
 # between two different types of features: ``"type1"`` and ``"type2"``.
 
 # Prepare data

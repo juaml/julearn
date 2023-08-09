@@ -5,8 +5,7 @@
 What you really need to know
 ============================
 
-
-The backbone of Julearn is the function :func:`.run_cross_validation`, which
+The backbone of ``julearn`` is the function :func:`.run_cross_validation`, which
 allows you to do all the *magic*. All important information needed to estimate
 your machine learning workflow's performance goes into this function, specified
 via its parameters.
@@ -19,8 +18,8 @@ starting point.
 
 Once you are familiar with the basics of *cross-validation*, you can follow
 along the other sub-chapters to learn how to setup a basic workflow using
-Julearn's :func:`.run_cross_validation`. There you can find out more about the
-required data, building a basic pipeline and how to evaluate your model's
+``julearn``'s :func:`.run_cross_validation`. There you can find out more about
+the required data, building a basic pipeline and how to evaluate your model's
 performance.
 
 .. toctree::
@@ -36,5 +35,6 @@ If you are just interested in seeing all parameters of
 :func:`.run_cross_validation`, click on the function link to have a look at all
 its parameters in the :ref:`api`.
 
-If you are already familiar with how to set up a basic workflow using Julearn
-and want to do more fancy stuff, go to :ref:`selected_deeper_topics`.
+If you are already familiar with how to set up a basic workflow using
+``julearn`` and want to do more fancy stuff, go to
+:ref:`selected_deeper_topics`.

@@ -1,6 +1,6 @@
 """
-Parallelize Julearn
-===================
+Parallelize ``julearn``
+=======================
 
 In this example we will parallelize outer cross-validation
 and/or inner cross-validation for hyperparameter search.

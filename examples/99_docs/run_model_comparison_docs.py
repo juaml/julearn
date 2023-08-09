@@ -10,7 +10,6 @@ In the previous section, we saw how to evaluate a single model using
 cross-validation. The example model seems to perform decently well. However,
 how do we know that it can't be better? Building machine-learning models is
 always a matter of *benchmarking*. We want to know how well our model performs,
-To statistically compare different models, Julearn provides a built-in
 compared to other models. We already saw how to evaluate a model's performance
 using cross-validation. This is a good start, but it is not enough. We can use
 cross-validation to evaluate the performance of a single model, but we can't use
@@ -19,6 +18,7 @@ using cross-validation, but then we would have to compare the results manually.
 This is not only tedious, but also error-prone. We need a way to compare
 different models in a statistically sound way.
 
+To statistically compare different models, ``julearn`` provides a built-in
 corrected ``t-test``. To see how to apply it, we will first build three
 different models, each with different learning algorithms.
 
@@ -158,9 +158,9 @@ print(stats_df)
 #
 # Visualizations can help to get a better intuitive understanding of the
 # differences between the models. To get a better overview of the performances
-# of our three models, we can make use of Julearn's visualization tool to plot
-# the scores in an interactive manner. As visualizations are not part of the
-# core functionality of Julearn, you will need to first manually
+# of our three models, we can make use of ``julearn``'s visualization tool to
+# plot the scores in an interactive manner. As visualizations are not part of the
+# core functionality of ``julearn``, you will need to first manually
 # **install the additional visualization dependencies**.
 #
 # From here we can create the interactive plot. Interactive, because you can

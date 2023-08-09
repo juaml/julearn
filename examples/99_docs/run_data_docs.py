@@ -9,9 +9,9 @@ Data
 Data input to :func:`.run_cross_validation`
 -------------------------------------------
 
-Julearn deals with data in the form of pandas DataFrames. This is the kind of
-data structure that the :func:`.run_cross_validation` uses to input the data
-and output some of the results.
+``julearn`` deals with data in the form of ``pandas.DataFrames``. This is the
+kind of data structure that the :func:`.run_cross_validation` uses to input the
+data and output some of the results.
 
 The input DataFrame must contain the features and the target or label. This
 will be communicated to :func:`.run_cross_validation` by specifying the
@@ -45,7 +45,8 @@ X = ["sepal_length", "sepal_width", "petal_length", "petal_width"]
 y = "species"
 
 ##############################################################################
-# Julearn's :func:`.run_cross_validation` function so far would look like this:
+# ``julearn``'s :func:`.run_cross_validation` function so far would look like
+# this:
 #
 # .. code-block:: python
 #
@@ -58,7 +59,7 @@ y = "species"
 # Giving ``types`` to features
 # ----------------------------
 #
-# A nice add-on that Julearn offers is the capacity to specify colum-based
+# A nice add-on that ``julearn`` offers is the capacity to specify colum-based
 # types for the features. This comes in handy if within the pipeline, one
 # wants to manipulate only certain columns.
 #
@@ -80,7 +81,7 @@ X_types = {
 }
 
 ##############################################################################
-# Importantly, Julearn also allows to specify the column names as regular
+# Importantly, ``julearn`` also allows to specify the column names as regular
 # expressions. This comes in handy when we are dealing with hundreds or
 # thousands of features and we do not want to specify all the names by hand.
 # For example, we could specify the type of the ``sepal`` columns

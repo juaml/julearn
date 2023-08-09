@@ -24,7 +24,7 @@ Running the examples require:
 
 Depending on the installation method (e.g. the `pip install` option below),
 these packages might be installed automatically. It is nevertheless good to be
-aware of these dependencies as installing Julearn might lead to changes in
+aware of these dependencies as installing ``julearn`` might lead to changes in
 these packages.
 
 Setup suggestion
@@ -48,7 +48,7 @@ Installing
 
 
 Depending on your aimed usage of ``julearn`` you have two different options
-how to install Julearn:
+how to install ``julearn``:
 
 #. Install the *latest release*: Likely most suitable for most
    **end users**. This is done by installing the latest stable release from
@@ -73,7 +73,7 @@ how to install Julearn:
 Optional Dependencies
 =====================
 
-Some functionality of Julearn requires additional packages. These are not
+Some functionality of ``julearn`` requires additional packages. These are not
 installed by default. If you want to use these features, you need to specify
 them during installation. For example, if you want to use the :mod:`.viz`
 module, you need to install the ``viz`` optional dependencies as follows:
@@ -84,6 +84,6 @@ module, you need to install the ``viz`` optional dependencies as follows:
 
 The following optional dependencies are available:
 
-* ``viz``: Visualization tools for Julearn. This includes the
+* ``viz``: Visualization tools for ``julearn``. This includes the
   :mod:`.viz` module.
 * ``deslib``: The :mod:`.dynamic` module requires the `deslib`_ package.

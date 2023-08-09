@@ -4,7 +4,7 @@ Custom Scoring Function for Regression
 
 This example uses the ``diabetes`` data from ``sklearn datasets`` and performs
 a regression analysis using a Ridge Regression model. As scorers, it uses
-scikit-learn, julearn and a custom metric defined by the user.
+``scikit-learn``, ``julearn`` and a custom metric defined by the user.
 
 """
 # Authors: Shammi More <s.more@fz-juelich.de>
@@ -98,8 +98,9 @@ def pearson_scorer(y_true, y_pred):
 
 
 ###############################################################################
-# with julearn.
 # Before using it, we need to convert it to a ``sklearn scorer`` and register it
+# with ``julearn``.
+
 register_scorer(scorer_name="pearsonr", scorer=make_scorer(pearson_scorer))
 
 ###############################################################################

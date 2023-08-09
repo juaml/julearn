@@ -23,14 +23,15 @@ subsequently used to fit a machine learning model. Most commonly in this
 approach a linear model is used for this, but in principle it could be any
 other machine learning model.
 
-CBPM in Julearn
----------------
+CBPM in ``julearn``
+-------------------
 
-Julearn implements a simple, scikit-learn compatible transformer ("cbpm"), that
-performs the first two parts of this approach, i.e. the feature selection and
-feature aggregation. Leveraging julearn's PipelineCreator, one can therefore
-easily apply the "cbpm" transformer as a preprocessing step, and then apply any
-sklearn-compatible estimator for the model building part.
+``julearn`` implements a simple, ``scikit-learn`` compatible transformer
+("cbpm"), that performs the first two parts of this approach, i.e., the feature
+selection and feature aggregation. Leveraging ``julearn``'s ``PipelineCreator``,
+one can therefore easily apply the ``"cbpm"`` transformer as a preprocessing
+step, and then apply any ``scikit-learn``-compatible estimator for the model
+building part.
 
 For example, to build a simple CBPM workflow, you can create a pipeline and
 run a cross-validation as follows:

@@ -110,7 +110,7 @@ print(f"Score with C=0.01: {scores2['test_score'].mean()}")
 # (outer loop), and then we split the training set into two sets to tune the
 # hyperparameters (inner loop).
 #
-# Julearn has a simple way to do hyperparameter tuning using nested cross-
+# ``julearn`` has a simple way to do hyperparameter tuning using nested cross-
 # validation. When we use a :class:`.PipelineCreator` to create a pipeline,
 # we can set the hyperparameters we want to tune and the values we want to try.
 #
@@ -232,25 +232,25 @@ print(f"Scores with best hyperparameter: {scores_tuned['test_score'].mean()}")
 pprint(model_tuned.best_params_)
 
 ###############################################################################
-# But how will Julearn find the optimal hyperparameter set?
+# But how will ``julearn`` find the optimal hyperparameter set?
 #
 # Searchers
 # ---------
 #
-# Julearn uses the same concept as `scikit-learn`_ to tune hyperparameters: it
-# uses a *searcher* to find the best hyperparameter set. A searcher is an
+# ``julearn`` uses the same concept as `scikit-learn`_ to tune hyperparameters:
+# it uses a *searcher* to find the best hyperparameter set. A searcher is an
 # object that receives a set of hyperparameters and their values, and then
 # tries to find the best combination of values for the hyperparameters using
 # cross-validation.
 #
-# By default, Julearn uses a :class:`~sklearn.model_selection.GridSearchCV`.
+# By default, ``julearn`` uses a :class:`~sklearn.model_selection.GridSearchCV`.
 # This searcher is very simple. First, it construct the "grid" of
 # hyperparameters to try. As we see above, we have 3 hyperparameters to tune.
 # So it constructs a 3-dimentional grid with all the possible combinations of
 # the hyperparameters values. The second step is to perform cross-validation
 # on each of the possible combinations of hyperparameters values.
 #
-# Another searcher that Julearn provides is the
+# Another searcher that ``julearn`` provides is the
 # :class:`~sklearn.model_selection.RandomizedSearchCV`. This searcher is
 # similar to the :class:`~sklearn.model_selection.GridSearchCV`, but instead
 # of trying all the possible combinations of hyperparameters values, it tries
@@ -289,7 +289,7 @@ print(creator)
 # We can avoid this by using multiple *grids*. One grid for the ``linear``
 # kernel and one grid for the ``rbf`` kernel.
 #
-# Julearn allows to specify multiple *grid* using two different approaches.
+# ``julearn`` allows to specify multiple *grid* using two different approaches.
 #
 # 1. Repeating the step name with different hyperparameters:
 
@@ -326,9 +326,9 @@ pprint(model1.best_params_)
 ###############################################################################
 # .. important::
 #    Note that the ``name`` parameter is required when repeating a step name.
-#    If we do not specify the ``name`` parameter, julearn will auto-determine
-#    the step name in an unique way. The only way to force repated names is
-#    to do so explicitly.
+#    If we do not specify the ``name`` parameter, ``julearn`` will
+#    auto-determine the step name in an unique way. The only way to force repated
+#    names is to do so explicitly.
 
 ###############################################################################
 # 2. Using multiple pipeline creators:

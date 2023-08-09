@@ -96,7 +96,7 @@ print(scores)
 #
 # The column ``cv_mdsum`` on the first glance might appear a bit cryptic.
 # This column is used in internal checks, to verify that the same CV was used
-# when results are compared using julearn's provided statistical tests.
+# when results are compared using ``julearn``'s provided statistical tests.
 # This is nothing you need to worry about at this point.
 #
 # Returning a model (estimator)
@@ -166,8 +166,8 @@ model
 # for regression.
 #
 # .. note::
-#   Julearn just uses scikit-learn's defaults.
 #   These defaults will change when they are changed in ``scikit-learn`` as here
+#   ``julearn`` uses ``scikit-learn``'s defaults.
 #
 # We can define the cross-validation splitting strategy ourselves by passing an
 # ``int, str or cross-validation generator`` to the ``cv`` parameter of
@@ -179,7 +179,7 @@ model
 # folds will be changed to the value of the provided integer (e.g., ``cv=10``).
 # To define the entire splitting strategy, one can pass all ``scikit-learn``
 # compatible splitters :mod:`sklearn.model_selection` to ``cv``. However,
-# Julearn provides a built-in set of additional splitters that can be found
+# ``julearn`` provides a built-in set of additional splitters that can be found
 # under :mod:`.model_selection` (see more about them in :ref:`cv_splitter`).
 # The fourth option is to pass an iterable that yields the train and test
 # indices for each split.
@@ -229,10 +229,11 @@ print(scores)
 # 'mean accuracy on the given test data and labels'.
 #
 # With the ``scoring`` parameter of :func:`.run_cross_validation`, one can
-# define the scoring function to be used. On top of the available scikit-learn
-# :mod:`sklearn.metrics` julearn extends the functionality with more internal
-# scorers and the possibility to define custom scorers. To see the available
-# Julearn scorers, one can use the :func:`.list_scorers` function:
+# define the scoring function to be used. On top of the available
+# ``scikit-learn`` :mod:`sklearn.metrics`, ``julearn`` extends the functionality
+# with more internal scorers and the possibility to define custom scorers. To see
+# the available ``julearn`` scorers, one can use the :func:`.list_scorers`
+# function:
 
 from julearn import scoring
 from pprint import pprint  # for nice printing
@@ -240,9 +241,9 @@ from pprint import pprint  # for nice printing
 pprint(scoring.list_scorers())
 
 ###############################################################################
-# To use a Julearn scorer, one can pass the name of the scorer as a string to
-# the ``scoring`` parameter of :func:`.run_cross_validation`. If multiple
-# different scorers should be used, a list of strings can be passed. For 
+# To use a ``julearn`` scorer, one can pass the name of the scorer as a string
+# to the ``scoring`` parameter of :func:`.run_cross_validation`. If multiple
+# different scorers need to be used, a list of strings can be passed. For
 # example, if we were interested in the ``accuracy`` and the ``f1`` scores we
 # could do the following:
 

@@ -19,9 +19,9 @@ learning models can help us identify the most critical features that influence
 the model's predictions, understand how the model works and make informed
 decisions about its deployment.
 
-In this context, we will explore how to perform model inspection in julearn.
-Julearn provides an intuitive suite of tools for model inspection and
-interpretation. We will focus on how to inspect models in julearn's nested
+In this context, we will explore how to perform model inspection in ``julearn``.
+``julearn`` provides an intuitive suite of tools for model inspection and
+interpretation. We will focus on how to inspect models in ``julearn``'s nested
 cross-validation workflow. With these techniques, we can gain a better
 understanding of how the model works and identify any patterns or anomalies that
 could affect its performance. This knowledge can help us deploy models more
@@ -42,10 +42,10 @@ from julearn.utils import configure_logging
 
 
 ##############################################################################
-# Now, let's configure julearn's logger to get some output as the pipeline is
-# running and get some toy data to play with. In this example, we will use the
-# penguin dataset, and classify the penguin species based on the continuous
-# measures in the dataset.
+# Now, let's configure ``julearn``'s logger to get some output as the pipeline
+# is running and get some toy data to play with. In this example, we will use
+# the ``penguin`` dataset, and classify the penguin species based on the
+# continuous measures in the dataset.
 
 configure_logging(level="INFO")
 
@@ -69,10 +69,10 @@ pipeline_creator.add("svm", kernel="linear", C=np.geomspace(1e-2, 1e2, 5))
 print(pipeline_creator)
 
 ##############################################################################
-# Once this is set up, we can simply call julearn's
+# Once this is set up, we can simply call ``julearn``'s
 # :func:`.run_cross_validation`. Notice, how we set the ``return_inspector``
 # parameter to ``True``. Importantly, we also have to set the
-# ``return_estimator`` parameter to ``"all"``. This is because julearn's
+# ``return_estimator`` parameter to ``"all"``. This is because ``julearn``'s
 # :class:`.Inspector` extracts all relevant information from estimators after
 # the pipeline has been run. The pipeline will take a few minutes in our
 # example:
@@ -160,7 +160,7 @@ print(set(c_values))
 # you can gain deeper insights, interpret your models effectively, and address
 # any issues that may arise. Model inspection serves as a valuable asset in the
 # deployment of machine learning models, ensuring transparency,
-# interpretability, and reliable decision-making. With julearn's model
+# interpretability, and reliable decision-making. With ``julearn``'s model
 # inspection capabilities, you can confidently navigate the complexities of
 # machine learning models and harness their full potential in real-world
 # applications.
