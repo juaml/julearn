@@ -1,5 +1,6 @@
 # Authors: Fede Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL
+
 """
 Hyperparameter Tuning
 =====================
@@ -21,10 +22,9 @@ Let's see an example of a :class:`~sklearn.svm.SVC` model with a regularization
 parameter ``C``. We will use the ``iris`` dataset, which is a dataset of
 measurements of flowers.
 
-Lets start by loading the dataset and setting the features and target
+We start by loading the dataset and setting the features and target
 variables.
 """
-
 from seaborn import load_dataset
 from pprint import pprint  # To print in a pretty way
 
@@ -98,7 +98,7 @@ print(f"Score with C=0.01: {scores2['test_score'].mean()}")
 # try more values. And since this is only one hyperparameter, it is not that
 # difficult. But what if we have more hyperparameters? And what if we have
 # several steps in the pipeline (e.g. feature selection, PCA, etc.)?
-# This has a main problem: the more hyperparameters we have, the more
+# This is a major problem: the more hyperparameters we have, the more
 # times we use the same data for training and testing. This usually gives an
 # optimistic estimation of the performance of the model.
 #
@@ -152,7 +152,7 @@ pprint(model_tuned.best_params_)
 # hyperparameter was not on the boundary of the values we tried, we can
 # conclude that our search for the best ``C`` value was successful.
 #
-# However, by checking on the :class:`~sklearn.svm.SVC` documentation, we can
+# However, by checking the :class:`~sklearn.svm.SVC` documentation, we can
 # see that there are more hyperparameters that we can tune. For example, for
 # the default ``rbf`` kernel, we can tune the ``gamma`` hyperparameter:
 
@@ -179,7 +179,7 @@ pprint(model_tuned.best_params_)
 # But since ``gamma`` was on the boundary of the values we tried, we should
 # try more values to be sure that we are using the best hyperparameter set.
 #
-# We can even give a mixture of different variable types, like the words
+# We can even give a combination of different variable types, like the words
 # ``"scale"`` and ``"auto"`` for the ``gamma`` hyperparameter:
 creator = PipelineCreator(problem_type="classification")
 creator.add("zscore")
@@ -230,7 +230,6 @@ scores_tuned, model_tuned = run_cross_validation(
 
 print(f"Scores with best hyperparameter: {scores_tuned['test_score'].mean()}")
 pprint(model_tuned.best_params_)
-
 
 ###############################################################################
 # But how will Julearn find the optimal hyperparameter set?
@@ -292,7 +291,7 @@ print(creator)
 #
 # Julearn allows to specify multiple *grid* using two different approaches.
 #
-# 1) Repeating the step name with different hyperparameters:
+# 1. Repeating the step name with different hyperparameters:
 
 creator = PipelineCreator(problem_type="classification")
 creator.add("zscore")
@@ -311,7 +310,6 @@ creator.add(
 )
 
 print(creator)
-
 
 scores1, model1 = run_cross_validation(
     X=X,
@@ -333,7 +331,7 @@ pprint(model1.best_params_)
 #    to do so explicitly.
 
 ###############################################################################
-# 2) Using multiple pipeline creators:
+# 2. Using multiple pipeline creators:
 
 creator1 = PipelineCreator(problem_type="classification")
 creator1.add("zscore")
@@ -369,8 +367,6 @@ pprint(model2.best_params_)
 # .. important::
 #    All the pipeline creators must have the same problem type and steps names
 #    in order for this approach to work.
-
-###############################################################################
 
 ###############################################################################
 # Indeed, if we compare both approaches, we can see that they are equivalent.
@@ -425,7 +421,6 @@ creator4.add(
     solver="liblinear",
     name="model",
 )
-
 
 scores3, model3 = run_cross_validation(
     X=X,
