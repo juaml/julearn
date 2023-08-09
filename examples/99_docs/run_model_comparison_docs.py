@@ -1,26 +1,26 @@
 # Authors: Vera Komeyer <v.komeyer@fz-juelich.de>
 #          Fede Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL
+
 """
-Model comparison
+Model Comparison
 ================
 
 In the previous section, we saw how to evaluate a single model using
 cross-validation. The example model seems to perform decently well. However,
 how do we know that it can't be better? Building machine-learning models is
 always a matter of *benchmarking*. We want to know how well our model performs,
-compared to other models. In the previous section we saw how to evaluate a
-model's performance using cross-validation. This is a good start, but it is not
-enough. We can use cross-validation to evaluate the performance of a single
-model, but we can't use it to compare different models. We could build
-different models and evaluate them using cross-validation, but then we would
-have to compare the results manually. This is not only tedious, but also
-error-prone. We need a way to compare different models in a statistically
-sound way.
-
 To statistically compare different models, Julearn provides a built-in
-corrected t-test. To see how to apply it, we will first build three different
-models, each with another learning algorithm.
+compared to other models. We already saw how to evaluate a model's performance
+using cross-validation. This is a good start, but it is not enough. We can use
+cross-validation to evaluate the performance of a single model, but we can't use
+it to compare different models. We could build different models and evaluate them
+using cross-validation, but then we would have to compare the results manually.
+This is not only tedious, but also error-prone. We need a way to compare
+different models in a statistically sound way.
+
+corrected ``t-test``. To see how to apply it, we will first build three
+different models, each with different learning algorithms.
 
 To perform a binary classification (and not a multi-class classification) we
 will switch to the :func:`breast cancer dataset from scikit-learn
@@ -39,6 +39,10 @@ X = data.feature_names.tolist()
 y = "target"
 X_types = {"continuous": [".*"]}
 
+# sphinx_gallery_start_ignore
+pd.set_option("display.max_columns", 9)
+# sphinx_gallery_end_ignore
+
 df.head()
 
 ###############################################################################
@@ -50,7 +54,6 @@ from sklearn.model_selection import RepeatedStratifiedKFold
 cv_splitter = RepeatedStratifiedKFold(n_splits=5, n_repeats=2, random_state=42)
 
 scoring = ["accuracy", "roc_auc"]
-
 
 ###############################################################################
 # We use three different learning algorithms to build three different models.
@@ -113,7 +116,7 @@ scores3 = run_cross_validation(
 )
 
 ###############################################################################
-# We will add a column to each scores dataframes to be able to use names to
+# We will add a column to each scores DataFrames to be able to use names to
 # identify the models later on.
 
 scores1["model"] = "svm"
@@ -141,7 +144,7 @@ from julearn.stats.corrected_ttest import corrected_ttest
 stats_df = corrected_ttest(scores1, scores2, scores3)
 
 ###############################################################################
-# This gives us a dataframe with the corrected t-test results for each pairwise
+# This gives us a DataFrame with the corrected t-test results for each pairwise
 # comparison of the three models' test scores:
 #
 # We can see, that none of the models performed better with respect to
