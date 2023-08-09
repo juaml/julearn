@@ -235,7 +235,7 @@ class TransformerLike(EstimatorLikeFit1, Protocol):
         Returns
         -------
         DataLike
-            The transfomed data.
+            The transformed data.
 
         """
         return X
