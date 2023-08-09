@@ -11,6 +11,13 @@ from ._pipeline import PipelineInspector
 from ._cv import FoldsInspector
 
 
+if TYPE_CHECKING:
+    import pandas as pd
+    from sklearn.base import BaseEstimator
+
+    from ..pipeline.pipeline_creator import PipelineCreator
+
+
 class Inspector:
     """Base class for inspector.
 
@@ -54,7 +61,7 @@ class Inspector:
         self._cv = cv
 
     @property
-    def model(self):
+    def model(self) -> PipelineInspector:
         """Return the model.
 
         Returns
@@ -73,7 +80,7 @@ class Inspector:
         return PipelineInspector(model=self._model)
 
     @property
-    def folds(self):
+    def folds(self) -> FoldsInspector:
         """Return the folds.
 
         Returns

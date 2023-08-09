@@ -253,14 +253,15 @@ def test_CBPM_set_output_posneg(
     X_iris: pd.DataFrame,  # noqa: N803
     y_iris: pd.DataFrame,
 ) -> None:
-    """
+    """Test the CBPM transformer for setting posneg output.
 
     Parameters
     ----------
     X_iris : pd.DataFrame
-        The iris dataset features
+        The iris dataset features.
     y_iris : pd.Series
-        The iris dataset target
+        The iris dataset target.
+
     """
 
     X_pos = ["sepal_length", "petal_length", "petal_width"]
@@ -286,14 +287,15 @@ def test_CBPM_set_output_pos(
     X_iris: pd.DataFrame,  # noqa: N803
     y_iris: pd.DataFrame,
 ) -> None:
-    """
+    """Test the CBPM transformer for setting pos output.
 
     Parameters
     ----------
     X_iris : pd.DataFrame
-        The iris dataset features
+        The iris dataset features.
     y_iris : pd.Series
-        The iris dataset target
+        The iris dataset target.
+
     """
 
     X_pos = ["sepal_length", "petal_length", "petal_width"]
@@ -311,16 +313,18 @@ def test_CBPM_set_output_pos(
 
 
 def test_CBPM_set_output_neg(
-    X_iris: pd.DataFrame, y_iris: pd.DataFrame,
+    X_iris: pd.DataFrame,  # noqa: N803
+    y_iris: pd.DataFrame,
 ) -> None:
-    """
+    """Test the CBPM transformer for setting neg output.
 
     Parameters
     ----------
     X_iris : pd.DataFrame
-        The iris dataset features
+        The iris dataset features.
     y_iris : pd.Series
-        The iris dataset target
+        The iris dataset target.
+
     """
 
     X_neg = ["sepal_width"]

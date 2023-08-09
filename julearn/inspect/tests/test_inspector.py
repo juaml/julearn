@@ -4,40 +4,47 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
+from typing import TYPE_CHECKING
+
 import pytest
 
 from julearn import PipelineCreator, run_cross_validation
 from julearn.inspect import Inspector
 
+
+if TYPE_CHECKING:
+    import pandas as pd
+
+
 def test_no_cv() -> None:
     """Test inspector with no cross-validation."""
     inspector = Inspector({})
     with pytest.raises(ValueError, match="No cv"):
-        inspector.folds
+        _ = inspector.folds
 
 
 def test_no_X() -> None:
     """Test inspector with no features."""
     inspector = Inspector({}, cv=5)
     with pytest.raises(ValueError, match="No X"):
-        inspector.folds
+        _ = inspector.folds
 
 
 def test_no_y() -> None:
     """Test inspector with no targets."""
     inspector = Inspector({}, cv=5, X=[1, 2, 3])
     with pytest.raises(ValueError, match="No y"):
-        inspector.folds
+        _ = inspector.folds
 
 
 def test_no_model() -> None:
     """Test inspector with no model."""
     inspector = Inspector({})
     with pytest.raises(ValueError, match="No model"):
-        inspector.model
+        _ = inspector.model
 
 
-def test_normal_usage(df_iris):
+def test_normal_usage(df_iris: "pd.DataFrame") -> None:
     """Test inspector.
 
     Parameters
@@ -61,7 +68,7 @@ def test_normal_usage(df_iris):
         assert score["estimator"] == inspect_fold.model._model
 
 
-def test_normal_usage_with_search(df_iris):
+def test_normal_usage_with_search(df_iris: "pd.DataFrame") -> None:
     """Test inspector with search.
 
     Parameters

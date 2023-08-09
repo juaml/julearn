@@ -185,12 +185,13 @@ class DynamicSelection(BaseEstimator):
         y : DataLike
             The true target values.
         sample_weight : DataLike, optional
-            Sample weights to use when computing the score (default is None).
+            Sample weights to use when computing the score (default None).
 
         Returns
         -------
         float
             The score.
+
         """
         return self._dsmodel.score(X, y, sample_weight)
 

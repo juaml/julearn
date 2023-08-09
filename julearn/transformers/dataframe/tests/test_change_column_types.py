@@ -4,12 +4,18 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
+from typing import TYPE_CHECKING
+
 from julearn.transformers.dataframe.change_column_types import (
     ChangeColumnTypes,
 )
 
 
-def test_change_column_types(df_typed_iris):
+if TYPE_CHECKING:
+    import pandas as pd
+
+
+def test_change_column_types(df_typed_iris: "pd.DataFrame") -> None:
     """Test ChangeColumnTypes transformer.
 
     Parameters

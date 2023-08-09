@@ -101,6 +101,7 @@ class JuBaseEstimator(BaseEstimator):
         -------
         ColumnTypes
             The column types needed by the estimator.
+
         """
         needed_types = self.get_apply_to().copy()
         if self.needed_types is not None:
@@ -114,6 +115,7 @@ class JuBaseEstimator(BaseEstimator):
         -------
         ColumnTypes
             The column types the estimator applies to.
+
         """
         return ensure_column_types(self.apply_to)
 
@@ -327,6 +329,7 @@ class WrapModel(JuBaseEstimator):
         -------
         DataLike
             The predictions.
+
         """
         Xt = self.filter_columns(X)
         return self.model_.predict(Xt)

@@ -84,13 +84,14 @@ class JuTransformedTargetModel(JuBaseEstimator):
             The input data.
         y : DataLike
             The target.
-        fit_params : Any
+        **fit_params : dict
             Additional parameters to be passed to the model fit method.
 
         Returns
         -------
-        self : JuTransformedTargetModel
+        JuTransformedTargetModel
             The fitted model.
+
         """
         y = self.transformer.fit_transform(X, y)
         self.model_ = clone(self.model)
@@ -109,6 +110,7 @@ class JuTransformedTargetModel(JuBaseEstimator):
         -------
         DataLike
             The predictions.
+
         """
         if not hasattr(self, "model_"):
             raise_error("Model not fitted yet.")

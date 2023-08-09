@@ -4,6 +4,8 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
+from pathlib import Path
+
 import joblib
 import numpy as np
 import pandas as pd
@@ -186,7 +188,7 @@ def test_run_cv_simple_binary_groups(df_iris: pd.DataFrame) -> None:
 def test_run_cv_simple_binary_errors(
     df_binary: pd.DataFrame, df_iris: pd.DataFrame
 ) -> None:
-    """Test a simple classification problem errors
+    """Test a simple classification problem errors.
 
     Parameters
     ----------
@@ -1108,7 +1110,7 @@ def test__compute_cvmdsum(cv1, cv2, expected):
 
 
 def test_api_stacking_models() -> None:
-    """ "Test API of stacking models."""
+    """Test API of stacking models."""
     # prepare data
     X, y = make_regression(n_features=6, n_samples=50)
 
@@ -1157,7 +1159,7 @@ def test_api_stacking_models() -> None:
     assert isinstance(final.steps[1][1].model.estimators[0][1], GridSearchCV)
 
 
-def test_inspection_error(df_iris):
+def test_inspection_error(df_iris: pd.DataFrame) -> None:
     """Test error for inspector.
 
     Parameters
@@ -1190,7 +1192,9 @@ def test_inspection_error(df_iris):
     assert len(res) == 3
 
 
-def test_final_estimator_picklable(tmp_path, df_iris) -> None:
+def test_final_estimator_picklable(
+    tmp_path: Path, df_iris: pd.DataFrame
+) -> None:
     """Test if final estimator is picklable.
 
     Parameters
@@ -1217,7 +1221,7 @@ def test_final_estimator_picklable(tmp_path, df_iris) -> None:
     joblib.load(pickled_file)
 
 
-def test_inspector_picklable(tmp_path, df_iris) -> None:
+def test_inspector_picklable(tmp_path: Path, df_iris: pd.DataFrame) -> None:
     """Test if inspector is picklable.
 
     Parameters

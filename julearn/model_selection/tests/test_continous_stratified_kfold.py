@@ -3,6 +3,7 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL
 
+# RepeatedStratifiedGroupKFold,  # Need sklearn #24247
 from collections import Counter
 
 import numpy as np
@@ -10,7 +11,6 @@ from numpy.testing._private.utils import assert_array_equal
 from sklearn.model_selection import (
     RepeatedStratifiedKFold,
     StratifiedGroupKFold,
-    # RepeatedStratifiedGroupKFold,  # Need sklearn #24247
     StratifiedKFold,
 )
 

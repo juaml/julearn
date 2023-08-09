@@ -87,5 +87,5 @@ def test_JuTransformedTargetModel_not_fitted(X_iris, y_iris):  # noqa: N803
         target_model.predict_proba(X_iris)
     with pytest.raises(ValueError, match="Model not fitted "):
         target_model.decision_function(X_iris)
-        target_model.classes_
     with pytest.raises(ValueError, match="Model not fitted "):
+        _ = target_model.classes_

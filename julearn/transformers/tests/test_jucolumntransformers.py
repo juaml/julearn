@@ -33,6 +33,7 @@ def df_X_confounds() -> pd.DataFrame:
     -------
     pd.DataFrame
         A dataframe with confounds.
+
     """
     X = pd.DataFrame(
         {
@@ -59,7 +60,7 @@ def df_X_confounds() -> pd.DataFrame:
         ("scaler_power", PowerTransformer, {}),
     ],
 )
-def test_jucolumntransformer(
+def test_JuColumnTransformer(
     name: str,
     klass: Type[EstimatorLike],
     params: Dict,
@@ -111,7 +112,7 @@ def test_jucolumntransformer(
     assert_array_equal(df_X_transformed[trans].values, manual)
 
 
-def test_row_select():
+def test_JuColumnTransformer_row_select():
     """Test row selection for JuColumnTransformer."""
     X = pd.DataFrame(
         {

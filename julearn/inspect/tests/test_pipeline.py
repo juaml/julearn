@@ -17,8 +17,11 @@ from julearn.pipeline import PipelineCreator
 from julearn.transformers import JuColumnTransformer
 
 
+if TYPE_CHECKING:
+    import pandas as pd
+
+
 class TestEst(BaseEstimator):
-    def __init__(self, hype_0=0, hype_1=1):
     """Class for estimator tests.
 
     Parameters
@@ -30,6 +33,7 @@ class TestEst(BaseEstimator):
 
     """
 
+    def __init__(self, hype_0: int = 0, hype_1: int = 1) -> None:
         self.hype_0 = hype_0
         self.hype_1 = hype_1
 
@@ -84,9 +88,9 @@ class TestEst(BaseEstimator):
         ["zscore", "svm"],
         ["pca", "svm"],
         ["zscore", "pca", "svm"],
-def test_get_stepnames(steps, df_iris):
     ],
 )
+def test_get_stepnames(steps: List[str], df_iris: "pd.DataFrame") -> None:
     """Test step names fetch.
 
     Parameters
@@ -114,9 +118,14 @@ def test_get_stepnames(steps, df_iris):
         (["svm"], True, [SVC()]),
         (["zscore", "pca", "svm"], True, [StandardScaler(), PCA(), SVC()]),
         (["svm"], False, [_EstimatorInspector(SVC())]),
-def test_steps(steps, as_estimator, returns, df_iris):
     ],
 )
+def test_steps(
+    steps: List[str],
+    as_estimator: bool,
+    returns: List[Type],
+    df_iris: "pd.DataFrame",
+) -> None:
     """Test steps.
 
     Parameters
@@ -147,13 +156,15 @@ def test_steps(steps, as_estimator, returns, df_iris):
     "est,fitted_params",
     [
         [TestEst(), {"param_0_": 0, "param_1_": 1}],
-def test_inspect_estimator(est, fitted_params, df_iris):
         [
             JuColumnTransformer("test", TestEst(), "continuous"),
             {"param_0_": 0, "param_1_": 1},
         ],
     ],
 )
+def test_inspect_estimator(
+    est: Type, fitted_params: Dict[str, int], df_iris: "pd.DataFrame"
+) -> None:
     """Test estimator inspector.
 
     Parameters
@@ -174,7 +185,7 @@ def test_inspect_estimator(est, fitted_params, df_iris):
     assert fitted_params == inspect_params
 
 
-def test_inspect_pipeline(df_iris):
+def test_inspect_pipeline(df_iris: "pd.DataFrame") -> None:
     """Test pipeline inspector.
 
     Parameters
@@ -208,7 +219,7 @@ def test_inspect_pipeline(df_iris):
     assert expected_fitted_params == inspect_params
 
 
-def test_get_estimator(df_iris):
+def test_get_estimator(df_iris: "pd.DataFrame") -> None:
     """Test estimator fetch from inspector.
 
     Parameters

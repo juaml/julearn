@@ -62,7 +62,7 @@ def test_preprocess_sklearn(
     transformers: List[TransformerLike],
     until: Optional[str],
 ) -> None:
-    """Test the preprocess_sklearn function.
+    """Test the preprocess function.
 
     Parameters
     ----------
@@ -74,8 +74,9 @@ def test_preprocess_sklearn(
         The pipeline to test.
     transformers : list of TransformerLike
         The transformers to test.
-    until : str, optional
+    until : str or None
         The transformer to stop at.
+
     """
     X = list(X_iris.columns)
     X = cast(List[str], X)
@@ -144,6 +145,7 @@ def test_preprocess_no_step(X_iris, y_iris, df_iris) -> None:  # noqa: N803
         )
 
 
+def test_preprocess_with_column_types(df_iris: pd.DataFrame) -> None:
     """Test preprocess with column types.
 
     Parameters
@@ -153,7 +155,6 @@ def test_preprocess_no_step(X_iris, y_iris, df_iris) -> None:  # noqa: N803
 
     """
 
-def test_preprocess_with_column_types(df_iris):
     X = list(df_iris.iloc[:, :-1].columns)
     y = "species"
     _, model = run_cross_validation(

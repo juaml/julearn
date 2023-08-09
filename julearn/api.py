@@ -32,7 +32,7 @@ def run_cross_validation(  # noqa: C901
     return_estimator: Optional[str] = None,
     return_inspector: bool = False,
     return_train_score: bool = False,
-    cv: Union[None, int] = None,
+    cv: Optional[int] = None,
     groups: Optional[str] = None,
     scoring: Union[str, List[str], None] = None,
     pos_labels: Union[str, List[str], None] = None,
@@ -46,10 +46,10 @@ def run_cross_validation(  # noqa: C901
 
     Parameters
     ----------
-    X : str, list(str) or numpy.array
+    X : list of str
         The features to use.
         See :ref:`data_usage` for details.
-    y : str or numpy.array
+    y : str
         The targets to predict.
         See :ref:`data_usage` for details.
     model : str or scikit-learn compatible model.
@@ -105,7 +105,7 @@ def run_cross_validation(  # noqa: C901
         * CV Splitter (see scikit-learn documentation on CV)
         * An iterable yielding (train, test) splits as arrays of indices.
 
-    groups : str or numpy.array | None
+    groups : str | None
         The grouping labels in case a Group CV is used.
         See :ref:`data_usage` for details.
     scoring : ScorerLike, optional

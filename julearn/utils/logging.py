@@ -159,6 +159,7 @@ def configure_logging(
                 f"File ({fname.absolute()!s}) exists. "
                 "Messages will be appended. Use overwrite=True to "
                 "overwrite or overwrite=False to avoid this message.",
+                stacklevel=2,
             )
             overwrite = False
         mode = "w" if overwrite else "a"
@@ -235,12 +236,11 @@ def warn_with_log(
 
     """
     logger.warning(msg)
-    warn(msg, category=category)
+    warn(msg, category=category, stacklevel=2)
 
 
 class WrapStdOut(logging.StreamHandler):
-    """
-    Dynamically wrap to sys.stdout.
+    """Dynamically wrap to sys.stdout.
 
     This makes packages that monkey-patch sys.stdout (e.g.doctest,
     sphinx-gallery) work properly.

@@ -2,7 +2,7 @@
 
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
-#          Kaustubh, Patil <k.patil@fz-juelich.de>
+#          Kaustubh Patil <k.patil@fz-juelich.de>
 # License: AGPL
 
 from typing import Callable, Optional
@@ -18,20 +18,17 @@ from ..utils.versions import _joblib_parallel_args
 
 
 class CBPM(BaseEstimator, TransformerMixin):
-    '''Transformer that aggregates together all features significantly
-    correlated to the target.
+    """Transformer for connectome-based predictive modeling.
 
-    Significant negative and positive correlations are aggregateed separately.
-    Non-significant ones are dropped.
+    It aggregates all features significantly correlated to the target.
+    The significant negative and positive correlations are aggregateed
+    separately and non-significant ones are dropped.
 
-    User can choose to use negative, positive or both correlations.
-
-    In case that there are no significant correlations the mean of the
+    The user can choose to use negative, positive or both correlations.
+    In case that there are no significant correlations and the mean of the
     target will be returned as the only feature.
 
-    This transformer implements the procedure described in :
-    Shen, X., Finn, E., Scheinost, D. et al. 2016
-    https://doi.org/10.1038/nprot.2016.178
+    This transformer implements the procedure described in [1]_.
 
     Parameters
     ----------
@@ -87,7 +84,16 @@ class CBPM(BaseEstimator, TransformerMixin):
     used_significant_mask_ : np.array of bools
         Array of bools showing which of the original features will be used
         by this transformer.
-   '''
+
+    References
+    ----------
+    .. [1] Shen, X., Finn, E., Scheinost, D. et al.
+           Using connectome-based predictive modeling to predict individual
+           behavior from brain connectivity.
+           Nat Protoc 12, 506-518 (2017).
+           https://doi.org/10.1038/nprot.2016.178
+
+    """
 
     def __init__(
         self,

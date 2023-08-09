@@ -56,7 +56,7 @@ class EstimatorLikeFit1(Protocol):
         """
         return self
 
-    def get_params(self, deep=True) -> Dict:
+    def get_params(self, deep: bool = True) -> Dict:
         """Get params.
 
         Parameters
@@ -72,7 +72,7 @@ class EstimatorLikeFit1(Protocol):
         """
         return {}
 
-    def set_params(self, **params) -> "EstimatorLikeFit1":
+    def set_params(self, **params: Any) -> "EstimatorLikeFit1":
         """Set params.
 
         Parameters
@@ -111,7 +111,7 @@ class EstimatorLikeFit2(Protocol):
         """
         return self
 
-    def get_params(self, deep=True) -> Dict:
+    def get_params(self, deep: bool = True) -> Dict:
         """Get params.
 
         Parameters
@@ -127,7 +127,7 @@ class EstimatorLikeFit2(Protocol):
         """
         return {}
 
-    def set_params(self, **params) -> "EstimatorLikeFit2":
+    def set_params(self, **params: Any) -> "EstimatorLikeFit2":
         """Set params.
 
         Parameters
@@ -146,9 +146,9 @@ class EstimatorLikeFit2(Protocol):
 
 @runtime_checkable
 class EstimatorLikeFity(Protocol):
-    def fit(self, y) -> "EstimatorLikeFity":
     """Class for estimator-like fit y."""
 
+    def fit(self, y: str) -> "EstimatorLikeFity":
         """Fit estimator.
 
         Parameters
@@ -164,7 +164,7 @@ class EstimatorLikeFity(Protocol):
         """
         return self
 
-    def get_params(self, deep=True) -> Dict:
+    def get_params(self, deep: bool = True) -> Dict:
         """Get params.
 
         Parameters
@@ -180,7 +180,7 @@ class EstimatorLikeFity(Protocol):
         """
         return {}
 
-    def set_params(self, **params) -> "EstimatorLikeFity":
+    def set_params(self, **params: Any) -> "EstimatorLikeFity":
         """Set params.
 
         Parameters
