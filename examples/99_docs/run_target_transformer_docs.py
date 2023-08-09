@@ -1,6 +1,7 @@
 # Authors: Vera Komeyer <v.komeyer@fz-juelich.de>
 #          Fede Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL
+
 """
 Applying preprocessing to the target
 ------------------------------------
@@ -11,18 +12,17 @@ However, sometimes one wants to apply preprocessing to the target. For example,
 when having a regression-task (continuous target variable), one might want to
 predict the z-scored target.
 This can be achieved by using a :class:`.TargetPipelineCreator`
-as one step in the general pipeline.
+as a step in the general pipeline.
 
-Lets start by loading the data and importing the required modules:
+Let's start by loading the data and importing the required modules:
 """
 import pandas as pd
 from julearn import run_cross_validation
 from julearn.pipeline import PipelineCreator, TargetPipelineCreator
-
 from sklearn.datasets import load_diabetes
 
 ###############################################################################
-# Load the diabetes dataset from sklearn as a pandas dataframe
+# Load the diabetes dataset from ``scikit-learn`` as a ``pandas.DataFrame``
 features, target = load_diabetes(return_X_y=True, as_frame=True)
 
 print("Features: \n", features.head())
@@ -48,8 +48,8 @@ print(target_creator)
 
 ##############################################################################
 # Next, we create the general pipeline using a :class:`.PipelineCreator`. We
-# pass the ``target_creator`` as one step of the pipeline and specify that it
 # should only be applied to the ``target``, which makes it clear for Julearn
+# pass the ``target_creator`` as a step of the pipeline and specify that it
 # to only apply it to ``y``:
 
 creator = PipelineCreator(
@@ -73,5 +73,5 @@ print(scores)
 # feature and target transformations. However, features transformations can be
 # directly specified as step in the :class:`.PipelineCreator`, while target
 # transformations have to be specified using the
-# :class:`.TargetPipelineCreator`,  which is then passed to the overall
+# :class:`.TargetPipelineCreator`, which is then passed to the overall
 # :class:`.PipelineCreator` as an extra step.
