@@ -1,20 +1,21 @@
 # Authors: Fede Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL
+
 """
 Cross-validation splitters
 ==========================
 
 As mentioned in the :ref:`why_cv`, cross-validation is a *must use* technique
-to evaluate the performance of a model when we don't have _almost_ infinite
-data. However, there are several ways to split the data into training and 
+to evaluate the performance of a model when we don't have *almost* infinite
+data. However, there are several ways to split the data into training and
 testing sets, and each of them has different properties. In this section we
 will see why it is important to choose the right cross-validation splitter for
 your evaluation.
 
 The most important argument is because we want to have an unbiased estimate of
 the performance of our model, mostly avoiding overestimation. Remember, we are
-evaluating how well a model will predict _unseen_ data. So if later in the
-future someone uses our model, we want to be sure that it will perform as well
+evaluating how well a model will predict *unseen* data. So if in the future
+someone uses our model, we want to be sure that it will perform as well
 as we estimated. If we overestimate the performance, we might be in for a
 surprise.
 
@@ -26,9 +27,9 @@ to this question, it is impossible for many reasons. According to Bengio and
 Grandvalet [#1]_, it is simply not possible to have an unbiased estimate of
 the variance of the generalization error.
 
-We will not repeat what our colleagues from scikit-learn have already
+We will not repeat what our colleagues from ``scikit-learn`` have already
 explained in their excellent documentation [#2]_. So we will just add a few
-words about some topics, assuming you have already read the scikit-learn
+words about some topics, assuming you have already read the ``scikit-learn``
 documentation.
 
 As a rule of thumb, K-fold cross-validation is a good compromise between bias
@@ -39,14 +40,13 @@ The final performance is the average of the K performances. The variance of
 this estimate is lower than the variance of the leave-one-out cross-validation
 (LOOCV), but higher than the variance of the holdout method. The bias is
 higher than the bias of LOOCV, but lower than the bias of the holdout method.
-But this claims must be taken with caution. There has been intense research on
+But these claims must be taken with caution. There has been intense research on
 this topic, and there are still unconclusive results. While intuition points in
-one direction, empirical evidence points in others. If you want to know more
+one direction, empirical evidence points in other. If you want to know more
 about this topic, we suggest you start with this thread on Cross
-Validated [#3]_. Emirical evidence shows that choosing any K between the 
+Validated [#3]_. Empirical evidence shows that choosing any K between the
 extremes [n, 2] is a good compromise between bias and variance. In practice,
 `K=10` is a good choice [#4]_.
-
 
 Now the fun part begins, which of the many variants of K-fold shall we choose?
 The answer is: it depends. It depends on the data and the problem you are
@@ -56,7 +56,7 @@ topics: stratification and grouping.
 Stratification
 --------------
 
-Stratification is a technique used to ensure that the distribution of the
+It is a technique used to ensure that the distribution of the
 target variable is the same in the training and testing sets. This is
 important because if the distribution of the target variable is different in
 the training and testing sets, the model will learn a different distribution
@@ -84,10 +84,10 @@ this: *binning* and *quantizing*.
 Binning is a technique that consists of dividing the target variable into
 discrete bins, each of equal size, and then ensuring that the distribution of
 the target variable is the same in the training and testing sets in terms of
-samples per bin.  Let's see an example using a uniform distribution, creating
+samples per bin. Let's see an example using a uniform distribution, creating
 200 samples and 10 bins.
+
 """
-# %%
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -111,7 +111,6 @@ cv = ContinuousStratifiedKFold(
     n_bins=n_bins, n_splits=3, shuffle=True, random_state=42
 )
 
-# %%
 fig, axis = plt.subplots(1, 2, figsize=(20, 4))
 train_sets = []
 test_sets = []
@@ -129,10 +128,11 @@ fig.suptitle(
 )
 
 ###############################################################################
-# Now lets see how K-fold would have split this data.
+# Now let's see how K-fold would have split this data.
 from sklearn.model_selection import KFold
 
 cv = KFold(n_splits=3, shuffle=True, random_state=42)
+
 fig, axis = plt.subplots(1, 2, figsize=(20, 4))
 train_sets = []
 test_sets = []
@@ -156,7 +156,6 @@ fig.suptitle("K-fold on uniformly distributed target variable")
 # differences between the distributions of the training and testing sets can be
 # much more evident. Let's take a look at the same analysis but using a
 # Gaussian distribution.
-# %%
 y = np.random.normal(size=200)
 sns.histplot(y, bins=n_bins)
 
@@ -183,9 +182,8 @@ fig.suptitle(
 
 ###############################################################################
 # Now lets see how K-fold would have split this data.
-from sklearn.model_selection import KFold
-
 cv = KFold(n_splits=3, shuffle=True, random_state=42)
+
 fig, axis = plt.subplots(1, 2, figsize=(20, 4))
 train_sets = []
 test_sets = []
@@ -212,7 +210,6 @@ fig.suptitle("K-fold on normally distributed target variable")
 # target variable. Instead of fixing the size of the bins, we can split the
 # data into bins with the same number of samples. This is called *quantizing*.
 # Let's see how this works on the same data.
-# %%
 bins = np.quantile(y, np.linspace(0, 1, n_bins + 1))
 discrete_y = np.digitize(y, bins=bins[:-1])
 sns.histplot(discrete_y, bins=n_bins)
@@ -221,7 +218,6 @@ sns.histplot(discrete_y, bins=n_bins)
 # In this case, each quantile of the target variable is equally represented in
 # each "bin". To use this approach, we can simply set ``method="quantile"`` in
 # the :class:`.ContinuousStratifiedKFold`.
-# %%
 cv = ContinuousStratifiedKFold(
     n_bins=n_bins, method="quantile", n_splits=3, shuffle=True, random_state=42
 )
@@ -288,5 +284,3 @@ fig.suptitle(
 #      estimation and model selection" \
 #      <https://dl.acm.org/doi/10.5555/1643031.1643047>`_, IJCAI'95, pages
 #      1137-1145.
-
-# %%
