@@ -393,16 +393,14 @@ Please refer to the <a class="reference internal" href="../../what_really_need_k
 <dl class="py class">
 <dt class="sig sig-object py" id="julearn.transformers.CBPM">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">julearn.transformers.</span></span><span class="sig-name descname"><span class="pre">CBPM</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">significance_threshold=0.05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">corr_method=&lt;function</span> <span class="pre">pearsonr&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agg_method=&lt;function</span> <span class="pre">sum&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">corr_sign='posneg'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose=0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.transformers.CBPM" title="Permalink to this definition">#</a></dt>
-<dd><p>Transformer that aggregates together all features significantly
-correlated to the target.</p>
-<p>Significant negative and positive correlations are aggregateed separately.
-Non-significant ones are dropped.</p>
-<p>User can choose to use negative, positive or both correlations.</p>
-<p>In case that there are no significant correlations the mean of the
+<dd><p>Transformer for connectome-based predictive modeling.</p>
+<p>It aggregates all features significantly correlated to the target.
+The significant negative and positive correlations are aggregateed
+separately and non-significant ones are dropped.</p>
+<p>The user can choose to use negative, positive or both correlations.
+In case that there are no significant correlations and the mean of the
 target will be returned as the only feature.</p>
-<p>This transformer implements the procedure described in :
-Shen, X., Finn, E., Scheinost, D. et al. 2016
-<a class="reference external" href="https://doi.org/10.1038/nprot.2016.178">https://doi.org/10.1038/nprot.2016.178</a></p>
+<p>This transformer implements the procedure described in <a class="reference internal" href="#r647a0645b9e1-1" id="id1">[1]</a>.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
@@ -437,8 +435,21 @@ follows joblib and scikit-learn standards.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Attributes<span class="colon">:</span></dt>
-<dd class="field-even"><dl class="simple">
+</dl>
+<p class="rubric">References</p>
+<div role="list" class="citation-list">
+<div class="citation" id="r647a0645b9e1-1" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>Shen, X., Finn, E., Scheinost, D. et al.
+Using connectome-based predictive modeling to predict individual
+behavior from brain connectivity.
+Nat Protoc 12, 506-518 (2017).
+<a class="reference external" href="https://doi.org/10.1038/nprot.2016.178">https://doi.org/10.1038/nprot.2016.178</a></p>
+</div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
 <dt><strong>y_mean_</strong><span class="classifier">np.array</span></dt><dd><p>Contains the mean of the target, to be used for the transformation in
 case that there are no significant correlations.</p>
 </dd>
@@ -521,12 +532,14 @@ per sample).</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="julearn.transformers.CBPM.aggregate">
 <span class="sig-name descname"><span class="pre">aggregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.transformers.CBPM.aggregate" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Aggregate.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="julearn.transformers.CBPM.get_feature_names_out">
 <span class="sig-name descname"><span class="pre">get_feature_names_out</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.transformers.CBPM.get_feature_names_out" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Get output feature names.</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="julearn.transformers.CBPM.fit_transform">

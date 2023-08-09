@@ -393,20 +393,71 @@ Please refer to the <a class="reference internal" href="../../what_really_need_k
 <dl class="py class">
 <dt class="sig sig-object py" id="julearn.inspect.Inspector">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">julearn.inspect.</span></span><span class="sig-name descname"><span class="pre">Inspector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scores</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.inspect.Inspector" title="Permalink to this definition">#</a></dt>
-<dd><dl class="py method">
+<dd><p>Base class for inspector.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>scores</strong><span class="classifier">pd.DataFrame</span></dt><dd><p>The scores as dataframe.</p>
+</dd>
+<dt><strong>model</strong><span class="classifier">str, optional</span></dt><dd><p>The model to inspect (default None).</p>
+</dd>
+<dt><strong>X</strong><span class="classifier">list of str, optional</span></dt><dd><p>The features as list (default None).</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">str, optional</span></dt><dd><p>The target (default None).</p>
+</dd>
+<dt><strong>groups</strong><span class="classifier">str, optional</span></dt><dd><p>The grouping labels in case a group CV is used (default None).</p>
+</dd>
+<dt><strong>cv</strong><span class="classifier">int, optional</span></dt><dd><p>The number of folds for cross-validation (default None).</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
 <dt class="sig sig-object py" id="julearn.inspect.Inspector.__init__">
 <span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scores</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.inspect.Inspector.__init__" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><dl class="field-list simple">
+</dl>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="julearn.inspect.Inspector.model">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#julearn.inspect.Inspector.model" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">model</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">PipelineInspector</span></em><a class="headerlink" href="#julearn.inspect.Inspector.model" title="Permalink to this definition">#</a></dt>
+<dd><p>Return the model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>PipelineInspector</dt><dd><p>A PipelineInspector instance with model set.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ValueError</dt><dd><p>If no <code class="docutils literal notranslate"><span class="pre">model</span></code> is provided.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="julearn.inspect.Inspector.folds">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">folds</span></span><a class="headerlink" href="#julearn.inspect.Inspector.folds" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">folds</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="julearn.inspect.FoldsInspector.html#julearn.inspect.FoldsInspector" title="julearn.inspect._cv.FoldsInspector"><span class="pre">FoldsInspector</span></a></em><a class="headerlink" href="#julearn.inspect.Inspector.folds" title="Permalink to this definition">#</a></dt>
+<dd><p>Return the folds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt>FoldsInspector</dt><dd><p>A FoldsInspector instance with parameters set.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>ValueError</dt><dd><p>If no <code class="docutils literal notranslate"><span class="pre">cv</span></code>, <code class="docutils literal notranslate"><span class="pre">X</span></code> or <code class="docutils literal notranslate"><span class="pre">y</span></code> is provided.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 

@@ -397,10 +397,10 @@ Please refer to the <a class="reference internal" href="../../what_really_need_k
 <dl class="field-list">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl>
-<dt><strong>X</strong><span class="classifier">str, list(str) or numpy.array</span></dt><dd><p>The features to use.
+<dt><strong>X</strong><span class="classifier">list of str</span></dt><dd><p>The features to use.
 See <a class="reference external" href="https://juaml.github.io/julearn/input.html">https://juaml.github.io/julearn/input.html</a> for details.</p>
 </dd>
-<dt><strong>y</strong><span class="classifier">str or numpy.array</span></dt><dd><p>The targets to predict.
+<dt><strong>y</strong><span class="classifier">str</span></dt><dd><p>The targets to predict.
 See <a class="reference external" href="https://juaml.github.io/julearn/input.html">https://juaml.github.io/julearn/input.html</a> for details.</p>
 </dd>
 <dt><strong>model</strong><span class="classifier">str or scikit-learn compatible model.</span></dt><dd><p>If string, it will use one of the available models.</p>
@@ -451,7 +451,7 @@ training data.</p></li>
 <li><p>An iterable yielding (train, test) splits as arrays of indices.</p></li>
 </ul>
 </dd>
-<dt><strong>groups</strong><span class="classifier">str or numpy.array | None</span></dt><dd><p>The grouping labels in case a Group CV is used.
+<dt><strong>groups</strong><span class="classifier">str | None</span></dt><dd><p>The grouping labels in case a Group CV is used.
 See <a class="reference external" href="https://juaml.github.io/julearn/input.html">https://juaml.github.io/julearn/input.html</a> for details.</p>
 </dd>
 <dt><strong>scoring</strong><span class="classifier">ScorerLike, optional</span></dt><dd><p>The scoring metric to use.
@@ -497,6 +497,11 @@ evaluation.</p>
 </dd>
 <dt><strong>seed</strong><span class="classifier">int | None</span></dt><dd><p>If not None, set the random seed before any operation. Useful for
 reproducibility.</p>
+</dd>
+<dt><strong>n_jobs</strong><span class="classifier">int, optional</span></dt><dd><p>Number of jobs to run in parallel. Training the estimator and computing
+the score are parallelized over the cross-validation splits.
+<code class="docutils literal notranslate"><span class="pre">None</span></code> means 1 unless in a <code class="xref py py-obj docutils literal notranslate"><span class="pre">joblib.parallel_backend</span></code> context.
+<code class="docutils literal notranslate"><span class="pre">-1</span></code> means using all processors (default None).</p>
 </dd>
 <dt><strong>verbose: int</strong></dt><dd><p>Verbosity level of outer cross-validation.
 Follows scikit-learn/joblib converntions.
