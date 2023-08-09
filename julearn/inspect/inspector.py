@@ -1,7 +1,8 @@
-from ._pipeline import PipelineInspector
-from ._cv import FoldsInspector
+from typing import TYPE_CHECKING, List, Optional, Union
 
 from ..utils.logging import raise_error
+from ._pipeline import PipelineInspector
+from ._cv import FoldsInspector
 
 
 class Inspector:

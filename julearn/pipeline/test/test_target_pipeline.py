@@ -4,17 +4,18 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
+import warnings
+
 import numpy as np
 import pandas as pd
 import pytest
 from numpy.testing import assert_array_equal
 from sklearn.preprocessing import StandardScaler
-import warnings
 
+from julearn import run_cross_validation
+from julearn.pipeline import PipelineCreator, TargetPipelineCreator
 from julearn.pipeline.target_pipeline import JuTargetPipeline
 from julearn.transformers.target import JuTargetTransformer
-from julearn.pipeline import PipelineCreator, TargetPipelineCreator
-from julearn import run_cross_validation
 
 
 def test_target_pipeline_sklearn(
@@ -170,14 +171,18 @@ def test_target_noninverse(df_iris, X_iris):
     pipeline_creator.add(target_pipeline_creator, apply_to="target")
     pipeline_creator.add("linreg")
 
-    X_types = {"confounds": ["petal_width"],
-               "continuous": ['sepal_length', 'sepal_width', 'petal_length']
-               }
+    X_types = {
+        "confounds": ["petal_width"],
+        "continuous": ["sepal_length", "sepal_width", "petal_length"],
+    }
 
     with warnings.catch_warnings():
         warnings.simplefilter("error")
         run_cross_validation(
-            X=X, y="species", X_types=X_types,
-            model=pipeline_creator, data=df_iris,
-            scoring="r2"
+            X=X,
+            y="species",
+            X_types=X_types,
+            model=pipeline_creator,
+            data=df_iris,
+            scoring="r2",
         )

@@ -106,12 +106,12 @@ def log_versions() -> None:
     logger.info("========================")
 
 
-_logging_types = dict(
-    DEBUG=logging.DEBUG,
-    INFO=logging.INFO,
-    WARNING=logging.WARNING,
-    ERROR=logging.ERROR,
-)
+_logging_types = {
+    "DEBUG": logging.DEBUG,
+    "INFO": logging.INFO,
+    "WARNING": logging.WARNING,
+    "ERROR": logging.ERROR,
+}
 
 
 def configure_logging(
@@ -156,9 +156,9 @@ def configure_logging(
             fname = Path(fname)
         if fname.exists() and overwrite is None:
             warn(
-                f"File ({str(fname.absolute())}) exists. "
+                f"File ({fname.absolute()!s}) exists. "
                 "Messages will be appended. Use overwrite=True to "
-                "overwrite or overwrite=False to avoid this message."
+                "overwrite or overwrite=False to avoid this message.",
             )
             overwrite = False
         mode = "w" if overwrite else "a"

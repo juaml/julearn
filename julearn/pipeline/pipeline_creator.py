@@ -14,14 +14,13 @@ from sklearn.pipeline import Pipeline
 from ..base import ColumnTypes, ColumnTypesLike, JuTransformer, WrapModel
 from ..model_selection.available_searchers import get_searcher, list_searchers
 from ..models import get_model, list_models
+from ..prepare import prepare_search_params
 from ..transformers import (
     JuColumnTransformer,
     SetColumnTypes,
     get_transformer,
     list_transformers,
 )
-from ..prepare import prepare_search_params
-
 from ..transformers.target import JuTransformedTargetModel
 from ..utils import logger, raise_error, warn_with_log
 from ..utils.typing import (
@@ -230,8 +229,8 @@ class PipelineCreator:
         logger.info(f"Adding step {name} that applies to {apply_to}")
 
         # Find which parameters should be set and which should be tuned.
-        params_to_set = dict()
-        params_to_tune = dict()
+        params_to_set = {}
+        params_to_tune = {}
         for param, vals in params.items():
             # If we have more than 1 value, we will tune it.
             # If not, it will be set in the model.
@@ -360,7 +359,7 @@ class PipelineCreator:
             To what should the transformers be applied to if not specified in
             the `add` method (default is continuous).
 
-            Returns
+        Returns
         -------
         PipelineCreator
             The PipelineCreator with the steps added
@@ -744,9 +743,7 @@ class PipelineCreator:
         # All available types are the ones in the X_types + wildcard types +
         # target + the ones that can be created by a transformer.
         # So far, we only know of transformers that output continuous
-        available_types = set(
-            [*all_X_types, "*", ".*", "target", "continuous"]
-        )
+        available_types = {*all_X_types, "*", ".*", "target", "continuous"}
         for needed_type in needed_types:
             if needed_type not in available_types:
                 warn_with_log(
@@ -755,7 +752,7 @@ class PipelineCreator:
                     "this type."
                 )
 
-        self.wrap = needed_types != set(["continuous"])
+        self.wrap = needed_types != {"continuous"}
         return X_types
 
     @staticmethod

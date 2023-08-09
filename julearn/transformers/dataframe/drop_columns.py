@@ -33,15 +33,15 @@ class DropColumns(JuTransformer):
 
     def __init__(
         self,
-            apply_to: ColumnTypesLike,
-            row_select_col_type:  Optional[ColumnTypesLike] = None,
-            row_select_vals:  Optional[Union[str,
-                                             int, list, bool]] = None,
+        apply_to: ColumnTypesLike,
+        row_select_col_type: Optional[ColumnTypesLike] = None,
+        row_select_vals: Optional[Union[str, int, list, bool]] = None,
     ):
         super().__init__(
-            apply_to=apply_to, needed_types=None,
+            apply_to=apply_to,
+            needed_types=None,
             row_select_col_type=row_select_col_type,
-            row_select_vals=row_select_vals
+            row_select_vals=row_select_vals,
         )
 
     def _fit(

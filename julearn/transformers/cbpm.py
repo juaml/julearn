@@ -9,10 +9,10 @@ import numpy as np
 from joblib import Parallel, delayed
 from scipy.stats import pearsonr
 from sklearn.base import BaseEstimator, TransformerMixin
-
 from sklearn.utils.validation import check_is_fitted
-from ..utils.versions import _joblib_parallel_args
+
 from ..utils import warn_with_log
+from ..utils.versions import _joblib_parallel_args
 
 
 class CBPM(BaseEstimator, TransformerMixin):
@@ -172,25 +172,20 @@ class CBPM(BaseEstimator, TransformerMixin):
             out = np.ones(X.shape[0]) * self.y_mean_
             return out
 
-        elif self.used_corr_sign_ == 'posneg':
-            X_meaned_pos = self.aggregate(
-                X, mask=self.pos_significant_mask_
-            )
+        elif self.used_corr_sign_ == "posneg":
+            X_meaned_pos = self.aggregate(X, mask=self.pos_significant_mask_)
 
-            X_meaned_neg = self.aggregate(
-                X, mask=self.neg_significant_mask_
-            )
+            X_meaned_neg = self.aggregate(X, mask=self.neg_significant_mask_)
 
             X_meaned = np.concatenate(
-                [
-                    X_meaned_pos.reshape(-1, 1),
-                    X_meaned_neg.reshape(-1, 1)],
-                axis=1)
+                [X_meaned_pos.reshape(-1, 1), X_meaned_neg.reshape(-1, 1)],
+                axis=1,
+            )
 
-        elif self.used_corr_sign_ == 'pos':
+        elif self.used_corr_sign_ == "pos":
             X_meaned = self.aggregate(X, self.pos_significant_mask_)
 
-        elif self.used_corr_sign_ == 'neg':
+        elif self.used_corr_sign_ == "neg":
             X_meaned = self.aggregate(X, self.neg_significant_mask_)
 
         return X_meaned
@@ -274,8 +269,11 @@ class CBPM(BaseEstimator, TransformerMixin):
 
     def get_feature_names_out(self, input_features=None):
         check_is_fitted(self)
-        cols = (["positive"] if self.used_corr_sign_ == "pos" else
-                ["negative"] if self.used_corr_sign_ == "neg" else
-                ["positive", "negative"]
-                )
+        cols = (
+            ["positive"]
+            if self.used_corr_sign_ == "pos"
+            else ["negative"]
+            if self.used_corr_sign_ == "neg"
+            else ["positive", "negative"]
+        )
         return np.array(cols, dtype=object)

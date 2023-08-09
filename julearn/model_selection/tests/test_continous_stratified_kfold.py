@@ -3,22 +3,22 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL
 
+from collections import Counter
+
 import numpy as np
 from numpy.testing._private.utils import assert_array_equal
 from sklearn.model_selection import (
-    StratifiedKFold,
     RepeatedStratifiedKFold,
     StratifiedGroupKFold,
     # RepeatedStratifiedGroupKFold,  # Need sklearn #24247
+    StratifiedKFold,
 )
-from collections import Counter
-
 
 from julearn.model_selection.continuous_stratified_kfold import (
-    RepeatedContinuousStratifiedKFold,
-    ContinuousStratifiedKFold,
     # RepeatedContinuousStratifiedGroupKFold,  # Need in sklearn #24247
     ContinuousStratifiedGroupKFold,
+    ContinuousStratifiedKFold,
+    RepeatedContinuousStratifiedKFold,
 )
 
 

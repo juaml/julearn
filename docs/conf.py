@@ -5,10 +5,9 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 import os
 import re
-from sphinx_gallery.sorting import ExplicitOrder
+import sys
 
 # -- Path setup --------------------------------------------------------------
-
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
@@ -16,9 +15,8 @@ from sphinx_gallery.sorting import ExplicitOrder
 # import os
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
-
 from pathlib import Path
-import sys
+
 
 # Check if sphinx-multiversion is installed
 use_multiversion = False
@@ -157,7 +155,6 @@ intersphinx_mapping = {
     "nilearn": ("https://nilearn.github.io/stable/", None),
     "nibabel": ("https://nipy.org/nibabel/", None),
     "numpy": ("https://numpy.org/doc/stable/", None),
-    "numpy": ("https://numpy.org/doc/stable/", None),
     "pandas": ("https://pandas.pydata.org/pandas-docs/dev", None),
     # "sqlalchemy": ("https://docs.sqlalchemy.org/en/20/", None),
     "scipy": ("https://docs.scipy.org/doc/scipy/", None),
@@ -219,7 +216,7 @@ class SubSectionTitleOrder:
         self.regex = re.compile(r"^([\w ]+)\n-", re.MULTILINE)
 
     def __repr__(self):
-        return "<%s>" % (self.__class__.__name__,)
+        return f"<{self.__class__.__name__}>"
 
     def __call__(self, directory):
         src_path = os.path.normpath(os.path.join(self.src_dir, directory))
@@ -231,7 +228,7 @@ class SubSectionTitleOrder:
         readme = os.path.join(src_path, "README.txt")
 
         try:
-            with open(readme, "r") as f:
+            with open(readme) as f:
                 content = f.read()
         except FileNotFoundError:
             return directory

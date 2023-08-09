@@ -38,18 +38,17 @@ class FilterColumns(JuTransformer):
     def __init__(
         self,
         keep: Optional[ColumnTypesLike] = None,
-        row_select_col_type:  Optional[ColumnTypesLike] = None,
-        row_select_vals:  Optional[Union[str,
-                                         int, list, bool]] = None,
+        row_select_col_type: Optional[ColumnTypesLike] = None,
+        row_select_vals: Optional[Union[str, int, list, bool]] = None,
     ):
         if keep is None:
             keep = "continuous"
         self.keep: ColumnTypes = ensure_column_types(keep)
         super().__init__(
-            apply_to="*", needed_types=keep,
+            apply_to="*",
+            needed_types=keep,
             row_select_col_type=row_select_col_type,
-            row_select_vals=row_select_vals
-
+            row_select_vals=row_select_vals,
         )
 
     def _fit(

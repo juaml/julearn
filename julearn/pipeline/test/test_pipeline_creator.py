@@ -10,9 +10,9 @@ from typing import Callable, Dict, List
 import pandas as pd
 import pytest
 from pytest_lazyfixture import lazy_fixture
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 from sklearn.preprocessing import RobustScaler, StandardScaler
-from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
 
 from julearn.base import ColumnTypesLike, WrapModel
@@ -153,7 +153,7 @@ def test_hyperparameter_tuning(
 
     used_types = (
         ["continuous"]
-        if X_types_iris in [None, dict()]
+        if X_types_iris in [None, {}]
         else list(X_types_iris.keys())
     )
     for step in preprocess:
@@ -375,7 +375,7 @@ def test_target_pipe(X_iris, y_iris) -> None:
         .add("svm", C=[1, 2])
     )
     pipe = pipeline_creator.to_pipeline(
-        X_types, search_params=dict(kind="random")
+        X_types, search_params={"kind": "random"}
     )
     pipe.fit(X_iris, y_iris)
 
@@ -438,7 +438,7 @@ def test_raise_pipe_wrong_searcher() -> None:
         match="The searcher no_search is not a valid julearn searcher",
     ):
         pipeline_creator.to_pipeline(
-            X_types, search_params=dict(kind="no_search")
+            X_types, search_params={"kind": "no_search"}
         )
 
 

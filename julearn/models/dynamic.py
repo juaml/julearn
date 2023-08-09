@@ -113,7 +113,7 @@ class DynamicSelection(BaseEstimator):
                     f"You tried to use {n_splits} splits."
                 )
 
-            train, test = list(cv_split.split(X, y))[0]  # type: ignore
+            train, test = next(iter(cv_split.split(X, y)))  # type: ignore
             if isinstance(X, pd.DataFrame):
                 X_train = X.iloc[train, :]
                 X_dsel = X.iloc[test, :]

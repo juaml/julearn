@@ -217,7 +217,7 @@ def do_scoring_test(
     if sk_y is None:
         sk_y = data[y].values  # type: ignore
 
-    params_dict = {k: v for k, v in api_params.items()}
+    params_dict = dict(api_params.items())
     if isinstance(cv, int):
         jucv = KFold(n_splits=cv, random_state=42, shuffle=True)
         sk_cv = KFold(n_splits=cv, random_state=42, shuffle=True)

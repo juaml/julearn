@@ -4,7 +4,7 @@ from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 
-from julearn.inspect import _EstimatorInspector, PipelineInspector
+from julearn.inspect import PipelineInspector, _EstimatorInspector
 from julearn.pipeline import PipelineCreator
 from julearn.transformers import JuColumnTransformer
 
@@ -24,36 +24,38 @@ class TestEst(BaseEstimator):
 
 
 @pytest.mark.parametrize(
-    "steps", [
+    "steps",
+    [
         ["svm"],
         ["zscore", "svm"],
         ["pca", "svm"],
         ["zscore", "pca", "svm"],
-    ])
 def test_get_stepnames(steps, df_iris):
-    pipe = (PipelineCreator(problem_type="classification")
-            .from_list(steps, model_params={}, problem_type="classification")
-            .to_pipeline()
-            )
+    pipe = (
+        PipelineCreator(problem_type="classification")
+        .from_list(steps, model_params={}, problem_type="classification")
+        .to_pipeline()
+    )
     pipe.fit(df_iris.iloc[:, :-1], df_iris.species)
-    assert (["set_column_types"] + steps
-            == PipelineInspector(pipe).get_step_names()
-            )
+    assert ["set_column_types", *steps] == PipelineInspector(
+        pipe
+    ).get_step_names()
 
 
 @pytest.mark.parametrize(
-    "steps,as_estimator,returns", [
+    "steps,as_estimator,returns",
+    [
         (["svm"], True, [SVC()]),
         (["zscore", "pca", "svm"], True, [StandardScaler(), PCA(), SVC()]),
         (["svm"], False, [_EstimatorInspector(SVC())]),
-
-    ])
 def test_steps(steps, as_estimator, returns, df_iris):
-
-    pipe = (PipelineCreator(problem_type="classification")
-            .from_list(steps, model_params={}, problem_type="classification")
-            .to_pipeline()
-            )
+    ],
+)
+    pipe = (
+        PipelineCreator(problem_type="classification")
+        .from_list(steps, model_params={}, problem_type="classification")
+        .to_pipeline()
+    )
     pipe.fit(df_iris.iloc[:, :-1], df_iris.species)
     inspector = PipelineInspector(pipe)
     for i, _ in enumerate(steps):
@@ -62,13 +64,16 @@ def test_steps(steps, as_estimator, returns, df_iris):
 
 
 @pytest.mark.parametrize(
-    "est,fitted_params", [
+    "est,fitted_params",
+    [
         [TestEst(), {"param_0_": 0, "param_1_": 1}],
-        [JuColumnTransformer("test", TestEst(), "continuous"),
-         {"param_0_": 0, "param_1_": 1}],
-    ])
 def test_inspect_estimator(est, fitted_params, df_iris):
-
+        [
+            JuColumnTransformer("test", TestEst(), "continuous"),
+            {"param_0_": 0, "param_1_": 1},
+        ],
+    ],
+)
     est.fit(df_iris.iloc[:, :-1], df_iris.species)
     inspector = _EstimatorInspector(est)
     assert est.get_params() == inspector.get_params()
@@ -80,34 +85,39 @@ def test_inspect_estimator(est, fitted_params, df_iris):
 def test_inspect_pipeline(df_iris):
 
     expected_fitted_params = {
-        "jucolumntransformer__param_0_": 0, "jucolumntransformer__param_1_": 1}
+        "jucolumntransformer__param_0_": 0,
+        "jucolumntransformer__param_1_": 1,
+    }
 
-    pipe = (PipelineCreator(problem_type="classification")
-            .add(JuColumnTransformer("test", TestEst(), "continuous"))
-            .add(SVC())
-            .to_pipeline()
-            )
+    pipe = (
+        PipelineCreator(problem_type="classification")
+        .add(JuColumnTransformer("test", TestEst(), "continuous"))
+        .add(SVC())
+        .to_pipeline()
+    )
     pipe.fit(df_iris.iloc[:, :-1], df_iris.species)
     inspector = PipelineInspector(pipe)
     inspect_params = inspector.get_fitted_params()
     inspect_params.pop("jucolumntransformer__column_transformer_", None)
     inspect_params = {
-        key: val for key, val in inspect_params.items()
-        if (not key.startswith("svc")) and (
-            not key.startswith("set_column_types"))
+        key: val
+        for key, val in inspect_params.items()
+        if (not key.startswith("svc"))
+        and (not key.startswith("set_column_types"))
     }
 
     assert expected_fitted_params == inspect_params
 
 
 def test_get_estimator(df_iris):
-    pipe = (PipelineCreator(problem_type="classification")
-            .add(JuColumnTransformer("test", TestEst(), "continuous"))
-            .add(SVC())
-            .to_pipeline()
-            )
+    pipe = (
+        PipelineCreator(problem_type="classification")
+        .add(JuColumnTransformer("test", TestEst(), "continuous"))
+        .add(SVC())
+        .to_pipeline()
+    )
     pipe.fit(df_iris.iloc[:, :-1], df_iris.species)
     inspector = PipelineInspector(pipe)
     svc = inspector.get_step("svc").estimator
     assert isinstance(svc, SVC)
-    assert pipe.get_params() ==  inspector.get_params()
+    assert pipe.get_params() == inspector.get_params()

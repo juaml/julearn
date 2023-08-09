@@ -4,7 +4,9 @@
 # License: AGPL
 
 from typing import Any
+
 from .utils import logger, raise_error
+
 
 _global_config = {}
 _global_config["MAX_X_WARNS"] = 5000

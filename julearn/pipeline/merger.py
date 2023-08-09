@@ -8,10 +8,10 @@ from typing import Dict
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 from sklearn.pipeline import Pipeline
 
+from ..prepare import prepare_search_params
 from ..utils.logging import raise_error
 from ..utils.typing import EstimatorLike
 from .pipeline_creator import _prepare_hyperparameter_tuning
-from ..prepare import prepare_search_params
 
 
 def merge_pipelines(
@@ -41,7 +41,8 @@ def merge_pipelines(
         if not isinstance(p, (Pipeline, GridSearchCV, RandomizedSearchCV)):
             raise_error(
                 "Only pipelines and searchers are supported. "
-                f"Found {type(p)} instead.")
+                f"Found {type(p)} instead."
+            )
         if isinstance(p, GridSearchCV):
             if search_params["kind"] != "grid":
                 raise_error(

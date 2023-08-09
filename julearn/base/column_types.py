@@ -137,7 +137,7 @@ class ColumnTypes:
         if isinstance(column_types, ColumnTypes):
             _types = column_types._column_types.copy()
         elif isinstance(column_types, str):
-            _types = set([column_types])
+            _types = {column_types}
         elif not isinstance(column_types, Set):
             _types = set(column_types)
         elif isinstance(column_types, Set):

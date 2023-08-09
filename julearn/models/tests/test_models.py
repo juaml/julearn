@@ -215,7 +215,7 @@ def test_classificationestimators(
 
     # keep only two species
     X = ["sepal_length", "sepal_width", "petal_length"]
-    X_types = dict(continuous=X)
+    X_types = {"continuous": X}
     y = "species"
 
     ju_model_params = None
@@ -311,7 +311,7 @@ def test_regression_estimators(
         Parameters to pass to the model.
     """
     X = ["sepal_length", "sepal_width", "petal_length"]
-    X_types = dict(continuous=X)
+    X_types = {"continuous": X}
     y = "petal_width"
 
     ju_model_params = None

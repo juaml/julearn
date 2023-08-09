@@ -1,13 +1,14 @@
-import pandas as pd
-from sklearn.model_selection import RepeatedKFold
-from sklearn.base import BaseEstimator
-from julearn.base.estimators import WrapModel
-from julearn.inspect import FoldsInspector, PipelineInspector
-from julearn.utils import _compute_cvmdsum
-from julearn.pipeline import PipelineCreator
 import numpy as np
+import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal
+from sklearn.base import BaseEstimator
+from sklearn.model_selection import RepeatedKFold
+
+from julearn.base.estimators import WrapModel
+from julearn.inspect import FoldsInspector, PipelineInspector
+from julearn.pipeline import PipelineCreator
+from julearn.utils import _compute_cvmdsum
 
 
 class MockModelReturnsIndex(BaseEstimator):
@@ -51,12 +52,12 @@ def scores(df_typed_iris, n_iters=5, mock_model=None):
     estimators = [WrapModel(mock_model()).fit(X, y) for _ in range(n_iters)]
 
     return pd.DataFrame(
-        dict(
-            estimator=estimators,
-            test_scores=[0.5] * n_iters,
-            repeat=0,
-            fold=range(n_iters),
-        )
+        {
+            "estimator": estimators,
+            "test_scores": [0.5] * n_iters,
+            "repeat": 0,
+            "fold": range(n_iters),
+        }
     )
 
 

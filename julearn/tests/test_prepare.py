@@ -24,9 +24,10 @@ from sklearn.model_selection import (
     StratifiedShuffleSplit,
 )
 
+from julearn.config import set_config
 from julearn.model_selection import (
-    RepeatedContinuousStratifiedGroupKFold,
     ContinuousStratifiedGroupKFold,
+    RepeatedContinuousStratifiedGroupKFold,
 )
 from julearn.prepare import (
     _check_x_types,
@@ -34,7 +35,6 @@ from julearn.prepare import (
     check_consistency,
     prepare_input_data,
 )
-from julearn.config import set_config
 
 
 def _check_df_input(prepared, X, y, groups, df):
@@ -233,7 +233,7 @@ def test_prepare_input_data_erors() -> None:
         prepared = prepare_input_data(
             X=X,
             y=y,
-            df=dict(),  # type: ignore
+            df={},  # type: ignore
             pos_labels=None,
             groups=None,
             X_types=None,  # type: ignore
@@ -512,7 +512,7 @@ def test_prepare_data_pick_regexp():
 
     df_X, df_y, _, prep_X_types = prepared
 
-    assert all([x in df_X.columns for x in X])
+    assert all(x in df_X.columns for x in X)
     assert y not in df_X.columns
     assert df_y.name == y
     assert X_types == prep_X_types
@@ -523,7 +523,7 @@ def test_prepare_data_pick_regexp():
 
     df_X, df_y, _, prep_X_types = prepared
 
-    assert all([x in df_X.columns for x in X])
+    assert all(x in df_X.columns for x in X)
     assert y not in df_X.columns
     assert df_y.name == y
     assert X_types == prep_X_types
@@ -536,7 +536,7 @@ def test_prepare_data_pick_regexp():
 
     df_X, df_y, _, prep_X_types = prepared
 
-    assert all([x in df_X.columns for x in X])
+    assert all(x in df_X.columns for x in X)
     assert y not in df_X.columns
     assert df_y.name == y
     assert X_types == prep_X_types
@@ -550,7 +550,7 @@ def test_prepare_data_pick_regexp():
 
     df_X, df_y, df_groups, prep_X_types = prepared
 
-    assert all([x in df_X.columns for x in X])
+    assert all(x in df_X.columns for x in X)
     assert y not in df_X.columns
     assert groups not in df_X.columns
     assert df_y.name == y
@@ -566,7 +566,7 @@ def test_prepare_data_pick_regexp():
 
     df_X, df_y, _, prep_X_types = prepared
 
-    assert all([x in df_X.columns for x in X])
+    assert all(x in df_X.columns for x in X)
     assert y not in df_X.columns
     assert df_y.name == y
     assert X_types == prep_X_types
@@ -585,7 +585,7 @@ def test_prepare_data_pick_regexp():
 
     df_X, df_y, _, prep_X_types = prepared
 
-    assert all([x in df_X.columns for x in X])
+    assert all(x in df_X.columns for x in X)
     assert y not in df_X.columns
     assert df_y.name == y
     assert X_types == prep_X_types

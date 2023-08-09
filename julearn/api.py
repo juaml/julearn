@@ -4,8 +4,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import List, Optional, Union, Dict
-
+from typing import Dict, List, Optional, Union
 
 import numpy as np
 import pandas as pd
@@ -14,12 +13,12 @@ from sklearn.model_selection import check_cv, cross_validate
 from sklearn.model_selection._search import BaseSearchCV
 from sklearn.pipeline import Pipeline
 
+from .inspect import Inspector
 from .pipeline import PipelineCreator
 from .pipeline.merger import merge_pipelines
 from .prepare import check_consistency, prepare_input_data
 from .scoring import check_scoring
-from .utils import logger, raise_error, _compute_cvmdsum
-from .inspect import Inspector
+from .utils import _compute_cvmdsum, logger, raise_error
 
 
 def run_cross_validation(
@@ -237,7 +236,7 @@ def run_cross_validation(
         else:
             model = [model]
 
-        problem_types = set([m.problem_type for m in model])
+        problem_types = {m.problem_type for m in model}
         if len(problem_types) > 1:
             raise_error(
                 "If model is a list of PipelineCreator, all elements must have"
@@ -345,9 +344,7 @@ def run_cross_validation(
     check_consistency(y, cv, groups, problem_type)
 
     cv_return_estimator = return_estimator in ["cv", "all"]
-    scoring = check_scoring(pipeline, scoring,
-                            wrap_score=wrap_score
-                            )
+    scoring = check_scoring(pipeline, scoring, wrap_score=wrap_score)
 
     cv_mdsum = _compute_cvmdsum(cv_outer)
     fit_params = {}

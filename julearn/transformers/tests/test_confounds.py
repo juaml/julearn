@@ -264,7 +264,7 @@ def test_return_confound(df_X_confounds: pd.DataFrame) -> None:
 
 def test_no_confound_found() -> None:
     """Test that an error is raised if no confound is found."""
-    _X = pd.DataFrame(dict(a=np.arange(10)))
+    _X = pd.DataFrame({"a": np.arange(10)})
     remover = ConfoundRemover()
     with pytest.raises(ValueError, match="No confound was found"):
         remover.fit_transform(_X)

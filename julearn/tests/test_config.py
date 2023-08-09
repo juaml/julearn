@@ -3,8 +3,9 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL
 
-from julearn.config import set_config, get_config
 import pytest
+
+from julearn.config import get_config, set_config
 
 
 def test_set_config_wrong_keys() -> None:

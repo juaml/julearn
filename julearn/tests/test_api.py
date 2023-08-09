@@ -4,9 +4,9 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
+import joblib
 import numpy as np
 import pandas as pd
-import joblib
 import pytest
 from sklearn.base import clone
 from sklearn.datasets import make_regression
@@ -36,8 +36,8 @@ from sklearn.svm import SVC
 from julearn import run_cross_validation
 from julearn.api import _compute_cvmdsum
 from julearn.model_selection import (
-    RepeatedContinuousStratifiedGroupKFold,
     ContinuousStratifiedGroupKFold,
+    RepeatedContinuousStratifiedGroupKFold,
 )
 from julearn.pipeline import PipelineCreator
 from julearn.utils.testing import compare_models, do_scoring_test
@@ -431,10 +431,8 @@ def test_tune_hyperparam_gridsearch(df_iris: pd.DataFrame) -> None:
     assert len(actual.columns) == len(expected) + 5
     assert len(actual["test_accuracy"]) == len(expected["test_accuracy"])
     assert all(
-        [
-            a == b
-            for a, b in zip(actual["test_accuracy"], expected["test_accuracy"])
-        ]
+        a == b
+        for a, b in zip(actual["test_accuracy"], expected["test_accuracy"])
     )
 
     # Compare the models
@@ -511,10 +509,8 @@ def test_tune_hyperparam_gridsearch_groups(df_iris: pd.DataFrame) -> None:
     assert len(actual.columns) == len(expected) + 5
     assert len(actual["test_accuracy"]) == len(expected["test_accuracy"])
     assert all(
-        [
-            a == b
-            for a, b in zip(actual["test_accuracy"], expected["test_accuracy"])
-        ]
+        a == b
+        for a, b in zip(actual["test_accuracy"], expected["test_accuracy"])
     )
 
     # Compare the models
@@ -587,10 +583,8 @@ def test_tune_hyperparam_randomsearch(df_iris: pd.DataFrame) -> None:
     assert len(actual.columns) == len(expected) + 5
     assert len(actual["test_accuracy"]) == len(expected["test_accuracy"])
     assert all(
-        [
-            a == b
-            for a, b in zip(actual["test_accuracy"], expected["test_accuracy"])
-        ]
+        a == b
+        for a, b in zip(actual["test_accuracy"], expected["test_accuracy"])
     )
 
     # Compare the models
@@ -694,20 +688,12 @@ def test_tune_hyperparams_multiple_grid(df_iris: pd.DataFrame) -> None:
     assert len(actual1["test_accuracy"]) == len(expected["test_accuracy"])
     assert len(actual2["test_accuracy"]) == len(expected["test_accuracy"])
     assert all(
-        [
-            a == b
-            for a, b in zip(
-                actual1["test_accuracy"], expected["test_accuracy"]
-            )
-        ]
+        a == b
+        for a, b in zip(actual1["test_accuracy"], expected["test_accuracy"])
     )
     assert all(
-        [
-            a == b
-            for a, b in zip(
-                actual2["test_accuracy"], expected["test_accuracy"]
-            )
-        ]
+        a == b
+        for a, b in zip(actual2["test_accuracy"], expected["test_accuracy"])
     )
     # Compare the models
     clf1 = actual_estimator1.best_estimator_.steps[-1][1]
@@ -832,8 +818,8 @@ def test_return_train_scores(df_iris: pd.DataFrame) -> None:
     train_scores = [f"train_{s}" for s in scoring]
     test_scores = [f"test_{s}" for s in scoring]
 
-    assert all([s not in scores.columns for s in train_scores])
-    assert all([s in scores.columns for s in test_scores])
+    assert all(s not in scores.columns for s in train_scores)
+    assert all(s in scores.columns for s in test_scores)
 
     with pytest.warns(RuntimeWarning, match="treated as continuous"):
         scores = run_cross_validation(
@@ -850,8 +836,8 @@ def test_return_train_scores(df_iris: pd.DataFrame) -> None:
     train_scores = [f"train_{s}" for s in scoring]
     test_scores = [f"test_{s}" for s in scoring]
 
-    assert all([s in scores.columns for s in train_scores])
-    assert all([s in scores.columns for s in test_scores])
+    assert all(s in scores.columns for s in train_scores)
+    assert all(s in scores.columns for s in test_scores)
 
 
 @pytest.mark.parametrize(

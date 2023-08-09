@@ -99,7 +99,7 @@ class SetColumnTypes(JuTransformer):
             t_columns = [
                 col
                 for col in X.columns
-                if any([re.fullmatch(exp, col) for exp in columns])
+                if any(re.fullmatch(exp, col) for exp in columns)
             ]
             column_mapper_.update(
                 {col: change_column_type(col, X_type) for col in t_columns}

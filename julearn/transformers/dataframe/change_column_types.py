@@ -36,16 +36,15 @@ class ChangeColumnTypes(JuTransformer):
         self,
         X_types_renamer: Dict[str, str],
         apply_to: ColumnTypesLike,
-        row_select_col_type:  Optional[ColumnTypesLike] = None,
-        row_select_vals:  Optional[Union[
-            str, int, list, bool]] = None,
+        row_select_col_type: Optional[ColumnTypesLike] = None,
+        row_select_vals: Optional[Union[str, int, list, bool]] = None,
     ):
         self.X_types_renamer = X_types_renamer
         super().__init__(
-            apply_to=apply_to, needed_types=None,
+            apply_to=apply_to,
+            needed_types=None,
             row_select_col_type=row_select_col_type,
-            row_select_vals=row_select_vals
-
+            row_select_vals=row_select_vals,
         )
 
     def _fit(

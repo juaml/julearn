@@ -156,8 +156,8 @@ class JuTransformer(JuBaseEstimator, TransformerMixin):
         self,
         apply_to: ColumnTypesLike,
         needed_types: Optional[ColumnTypesLike] = None,
-        row_select_col_type:  Optional[ColumnTypesLike] = None,
-        row_select_vals:  Optional[Union[str, int, list, bool]] = None,
+        row_select_col_type: Optional[ColumnTypesLike] = None,
+        row_select_vals: Optional[Union[str, int, list, bool]] = None,
     ):
         self.apply_to = apply_to
         self.needed_types = needed_types
@@ -170,7 +170,8 @@ class JuTransformer(JuBaseEstimator, TransformerMixin):
             return self._fit(X, y, **fit_params)
 
         self._col_to_select_rows = make_type_selector(
-            ColumnTypes(self.row_select_col_type)._to_pattern())(X)
+            ColumnTypes(self.row_select_col_type)._to_pattern()
+        )(X)
         if len(self._col_to_select_rows) != 1:
             raise_error(
                 "Only, one column can be selected for row_select_col_type."

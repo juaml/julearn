@@ -1,11 +1,11 @@
 from typing import List, Union, Optional
 
+
+import pandas as pd
 from sklearn.model_selection import BaseCrossValidator, check_cv
 from sklearn.utils.metaestimators import available_if
 
-import pandas as pd
-
-from ..utils import raise_error, _compute_cvmdsum, is_nonoverlapping_cv
+from ..utils import _compute_cvmdsum, is_nonoverlapping_cv, raise_error
 from ._pipeline import PipelineInspector
 
 

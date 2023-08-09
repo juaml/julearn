@@ -45,8 +45,8 @@ class JuColumnTransformer(JuTransformer):
         transformer: EstimatorLike,
         apply_to: ColumnTypesLike,
         needed_types: Optional[ColumnTypesLike] = None,
-        row_select_col_type:  Optional[ColumnTypesLike] = None,
-        row_select_vals:  Optional[Union[str, int, List, bool]] = None,
+        row_select_col_type: Optional[ColumnTypesLike] = None,
+        row_select_vals: Optional[Union[str, int, List, bool]] = None,
         **params: Any,
     ):
         self.name = name

@@ -2,8 +2,8 @@
 # Author: Federico Raimondo <f.raimondo@fz-juelich.de>
 # License: BSD 3 clause
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 
 from .logging import raise_error
 

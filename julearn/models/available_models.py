@@ -134,7 +134,6 @@ _available_models: Dict[str, Dict[str, Any]] = {
         "regression": DummyRegressor,
         "classification": DummyClassifier,
     },
-
 }
 
 _available_models_reset = deepcopy(_available_models)

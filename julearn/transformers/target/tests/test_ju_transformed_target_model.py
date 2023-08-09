@@ -8,7 +8,7 @@ import pandas as pd
 import pytest
 from numpy.testing import assert_array_equal
 from sklearn.preprocessing import Normalizer, StandardScaler
-from sklearn.svm import SVR, SVC
+from sklearn.svm import SVC, SVR
 
 from julearn.pipeline import JuTargetPipeline
 from julearn.transformers.target import (
@@ -79,13 +79,13 @@ def test_not_fitted(X_iris, y_iris):
     target_model = JuTransformedTargetModel(
         transformer=transformer, model=model  # type: ignore
     )
-    with pytest.raises(ValueError, match='Model not fitted '):
+    with pytest.raises(ValueError, match="Model not fitted "):
         target_model.score(X_iris, y_iris)
-    with pytest.raises(ValueError, match='Model not fitted '):
+    with pytest.raises(ValueError, match="Model not fitted "):
         target_model.predict(X_iris)
-    with pytest.raises(ValueError, match='Model not fitted '):
+    with pytest.raises(ValueError, match="Model not fitted "):
         target_model.predict_proba(X_iris)
-    with pytest.raises(ValueError, match='Model not fitted '):
+    with pytest.raises(ValueError, match="Model not fitted "):
         target_model.decision_function(X_iris)
-    with pytest.raises(ValueError, match='Model not fitted '):
         target_model.classes_
+    with pytest.raises(ValueError, match="Model not fitted "):
