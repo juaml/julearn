@@ -131,7 +131,7 @@ scores3.to_csv("/tmp/doc_scores3.csv")
 
 ###############################################################################
 # Statistical comparisons
-# ^^^^^^^^^^^^^^^^^^^^^^^
+# -----------------------
 #
 # Comparing the performance of these three models is now as easy as
 # the following one-liner:
@@ -151,7 +151,7 @@ print(stats_df)
 
 ###############################################################################
 # Score visualizations
-# ^^^^^^^^^^^^^^^^^^^^
+# --------------------
 #
 # Visualizations can help to get a better intuitive understanding of the
 # differences between the models. To get a better overview of the performances
