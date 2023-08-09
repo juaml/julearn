@@ -21,7 +21,7 @@ from .scoring import check_scoring
 from .utils import _compute_cvmdsum, logger, raise_error
 
 
-def run_cross_validation(
+def run_cross_validation(  # noqa: C901
     X: List[str],  # noqa: N803
     y: str,
     model: Union[str, PipelineCreator, BaseEstimator, List[PipelineCreator]],

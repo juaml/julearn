@@ -54,8 +54,9 @@ from julearn.base import WrapModel
 from julearn.utils.typing import DataLike, EstimatorLike
 
 
-def compare_models(  # pragma: no cover
-    clf1: EstimatorLike, clf2: EstimatorLike
+def compare_models(  # noqa: C901, pragma: no cover
+    clf1: EstimatorLike,
+    clf2: EstimatorLike,
 ) -> None:
     """Compare two models.
 

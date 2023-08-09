@@ -14,7 +14,7 @@ from ..utils.typing import EstimatorLike
 from .pipeline_creator import _prepare_hyperparameter_tuning
 
 
-def merge_pipelines(
+def merge_pipelines(  # noqa: C901
     *pipelines: EstimatorLike, search_params: Dict
 ) -> Pipeline:
     """Merge multiple pipelines into a single one.
