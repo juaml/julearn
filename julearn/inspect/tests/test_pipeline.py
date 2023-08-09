@@ -1,3 +1,4 @@
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Type
 import pytest
 from sklearn.base import BaseEstimator
 from sklearn.decomposition import PCA
@@ -14,12 +15,17 @@ class TestEst(BaseEstimator):
         self.hype_0 = hype_0
         self.hype_1 = hype_1
 
-    def fit(self, X, y=None, **fit_params):
+    def fit(
+        self,
+        X: List[str],  # noqa: N803
+        y: Optional[str] = None,
+        **fit_params: Any,
+    ) -> "TestEst":
         self.param_0_ = 0
         self.param_1_ = 1
         return self
 
-    def transform(self, X):
+    def transform(self, X: List[str]) -> List[str]:  # noqa: N803
         return X
 
 

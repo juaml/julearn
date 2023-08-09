@@ -63,7 +63,7 @@ def test_jucolumntransformer(
     name: str,
     klass: Type[EstimatorLike],
     params: Dict,
-    df_X_confounds: pd.DataFrame,
+    df_X_confounds: pd.DataFrame,  # noqa: N803
 ):
     """Test JuColumnTransformer class."""
 

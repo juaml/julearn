@@ -34,7 +34,9 @@ from .target_pipeline_creator import TargetPipelineCreator
 
 
 def _params_to_pipeline(
-    param: Any, X_types: Dict[str, List], search_params: Optional[Dict]
+    param: Any,
+    X_types: Dict[str, List],  # noqa: N803
+    search_params: Optional[Dict],
 ):
     """Recursively convert params to pipelines.
 
@@ -436,7 +438,7 @@ class PipelineCreator:
 
     def to_pipeline(
         self,
-        X_types: Optional[Dict[str, List]] = None,
+        X_types: Optional[Dict[str, List]] = None,  # noqa: N803
         search_params: Optional[Dict[str, Any]] = None,
     ) -> Pipeline:
         """Create a pipeline from the PipelineCreator.
@@ -686,7 +688,7 @@ class PipelineCreator:
             raise_error(f"Cannot add a {step}. I don't know what it is.")
 
     def _check_X_types(
-        self, X_types: Optional[Dict] = None
+        self, X_types: Optional[Dict] = None  # noqa: N803
     ) -> Dict[str, List[str]]:
         """Check the X_types against the pipeline creator settings.
 

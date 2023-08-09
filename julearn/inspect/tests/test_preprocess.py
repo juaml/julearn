@@ -56,7 +56,7 @@ from julearn.utils.typing import TransformerLike
     ],
 )
 def test_preprocess_sklearn(
-    X_iris: pd.DataFrame,
+    X_iris: pd.DataFrame,  # noqa: N803
     y_iris: pd.Series,
     pipeline: Pipeline,
     transformers: List[TransformerLike],
@@ -96,7 +96,7 @@ def test_preprocess_sklearn(
 
 
 def test_preprocess_sklearn_nodataframe(
-    X_iris: pd.DataFrame,
+    X_iris: pd.DataFrame,  # noqa: N803
     y_iris: pd.Series,
 ) -> None:
     """Test preprocess with non-dataframe output and column types removal.
@@ -120,7 +120,7 @@ def test_preprocess_sklearn_nodataframe(
         )
 
 
-def test_preprocess_no_step(X_iris, y_iris, df_iris):
+def test_preprocess_no_step(X_iris, y_iris, df_iris) -> None:  # noqa: N803
 
     pipeline = Pipeline([("scaler", StandardScaler()), ("svm", SVC())])
     pipeline.fit(X_iris, y=y_iris)

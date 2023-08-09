@@ -84,7 +84,7 @@ def test_construction_working(
     ],
 )
 def test_fit_and_transform_no_error(
-    X_iris: pd.DataFrame,
+    X_iris: pd.DataFrame,  # noqa: N803
     y_iris: pd.Series,
     model: str,
     preprocess: List[str],
@@ -123,7 +123,7 @@ def test_fit_and_transform_no_error(
     ],
 )
 def test_hyperparameter_tuning(
-    X_types_iris: Dict[str, List[str]],
+    X_types_iris: Dict[str, List[str]],  # noqa: N803
     model: str,
     preprocess: List[str],
     problem_type: str,
@@ -199,7 +199,9 @@ def test_hyperparameter_tuning(
     ],
 )
 def test_X_types_to_pattern_warnings(
-    X_types: Dict[str, List[str]], apply_to: ColumnTypesLike, warns: bool
+    X_types: Dict[str, List[str]],  # noqa: N803
+    apply_to: ColumnTypesLike,
+    warns: bool,
 ) -> None:
     """Test that the X_types raises the expected warnings.
 
@@ -236,7 +238,9 @@ def test_X_types_to_pattern_warnings(
     ],
 )
 def test_X_types_to_pattern_errors(
-    X_types: Dict[str, List[str]], apply_to: ColumnTypesLike, error: bool
+    X_types: Dict[str, List[str]],  # noqa: N803
+    apply_to: ColumnTypesLike,
+    error: bool,
 ) -> None:
     """Test that the X_types raises the expected errors.
 
@@ -309,7 +313,9 @@ def test_added_model_target_transform() -> None:
     assert pipeline_creator._added_model
 
 
-def test_stacking(X_iris: pd.DataFrame, y_iris: pd.Series) -> None:
+def test_stacking(
+    X_iris: pd.DataFrame, y_iris: pd.Series  # noqa: N803
+) -> None:
     """Test that the stacking model works correctly."""
     # Define our feature types
     X_types = {
@@ -360,7 +366,7 @@ def test_added_repeated_transformers() -> None:
 #     )
 
 
-def test_target_pipe(X_iris, y_iris) -> None:
+def test_target_pipe(X_iris, y_iris) -> None:  # noqa: N803
     """Test that the target pipeline works correctly."""
     X_types = {
         "continuous": ["sepal_length", "sepal_width", "petal_length"],

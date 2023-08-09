@@ -12,19 +12,19 @@ from julearn.utils import _compute_cvmdsum
 
 
 class MockModelReturnsIndex(BaseEstimator):
-    def fit(self, X, y=None, **fit_params):
+    def fit(self, X, y=None, **fit_params):  # noqa: N803
         return self
 
-    def predict(self, X):
+    def predict(self, X):  # noqa: N803
         return np.array(X.index)[:, None]
 
-    def predict_proba(self, X):
+    def predict_proba(self, X):  # noqa: N803
         return np.array(X.index)[:, None]
 
-    def predict_log_proba(self, X):
+    def predict_log_proba(self, X):  # noqa: N803
         return np.array(X.index)[:, None]
 
-    def decision_function(self, X):
+    def decision_function(self, X):  # noqa: N803
         return np.array(X.index)[:, None]
 
     def __sklearn_is_fitted__(self):
@@ -32,10 +32,10 @@ class MockModelReturnsIndex(BaseEstimator):
 
 
 class MockRegressorReturnsIndex(BaseEstimator):
-    def fit(self, X, y=None, **fit_params):
+    def fit(self, X, y=None, **fit_params):  # noqa: N803
         return self
 
-    def predict(self, X):
+    def predict(self, X):  # noqa: N803
         return np.array(X.index)
 
     def __sklearn_is_fitted__(self):

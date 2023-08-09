@@ -171,7 +171,7 @@ class _ExtendedScorer:
     def __init__(self, scorer):
         self.scorer = scorer
 
-    def __call__(self, estimator, X, y):
+    def __call__(self, estimator, X, y):  # noqa: N803
         if hasattr(estimator, "best_estimator_"):
             estimator = estimator.best_estimator_
 

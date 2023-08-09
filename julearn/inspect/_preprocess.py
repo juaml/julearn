@@ -14,7 +14,7 @@ from ..utils import raise_error
 
 def preprocess(
     pipeline: Pipeline,
-    X: List[str],
+    X: List[str],  # noqa: N803
     data: pd.DataFrame,
     until: Optional[str] = None,
     with_column_types: bool = False,

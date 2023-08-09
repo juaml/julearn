@@ -174,14 +174,14 @@ def compare_models(  # pragma: no cover
 
 
 def do_scoring_test(
-    X: List[str],
+    X: List[str],  # noqa: N803
     y: str,
     data: pd.DataFrame,
     api_params: Dict[str, Any],
     sklearn_model: EstimatorLike,
     scorers: List[str],
     groups: Optional[str] = None,
-    X_types: Optional[Dict[str, List[str]]] = None,
+    X_types: Optional[Dict[str, List[str]]] = None,  # noqa: N803
     cv: int = 5,
     sk_y: Optional[np.ndarray] = None,
     decimal: int = 5,
@@ -274,7 +274,7 @@ class PassThroughTransformer(TransformerMixin, BaseEstimator):
         pass
 
     def fit(
-        self, X: DataLike, y: Optional[DataLike] = None
+        self, X: DataLike, y: Optional[DataLike] = None  # noqa: N803
     ) -> "PassThroughTransformer":
         """Fit the transformer.
 
@@ -293,7 +293,7 @@ class PassThroughTransformer(TransformerMixin, BaseEstimator):
         """
         return self
 
-    def transform(self, X: DataLike) -> DataLike:
+    def transform(self, X: DataLike) -> DataLike:  # noqa: N803
         """Transform the data.
 
         Parameters
@@ -316,7 +316,9 @@ class TargetPassThroughTransformer(PassThroughTransformer):
         super().__init__()
 
     def transform(
-        self, X: Optional[DataLike] = None, y: Optional[DataLike] = None
+        self,
+        X: Optional[DataLike] = None,  # noqa: N803
+        y: Optional[DataLike] = None,
     ) -> Optional[DataLike]:
         """Transform the data.
 
@@ -335,7 +337,9 @@ class TargetPassThroughTransformer(PassThroughTransformer):
         return y
 
     def fit_transform(
-        self, X: Optional[DataLike] = None, y: Optional[DataLike] = None
+        self,
+        X: Optional[DataLike] = None,  # noqa: N803
+        y: Optional[DataLike] = None,
     ) -> Optional[DataLike]:
         """Fit the model and transform the data.
 

@@ -22,10 +22,10 @@ from .utils import _compute_cvmdsum, logger, raise_error
 
 
 def run_cross_validation(
-    X: List[str],
+    X: List[str],  # noqa: N803
     y: str,
     model: Union[str, PipelineCreator, BaseEstimator, List[PipelineCreator]],
-    X_types: Optional[Dict] = None,
+    X_types: Optional[Dict] = None,  # noqa: N803
     data: Optional[pd.DataFrame] = None,
     problem_type: Optional[str] = None,
     preprocess: Union[None, str, List[str]] = None,

@@ -15,7 +15,7 @@ from julearn.transformers import CBPM
 
 
 def test_CBPM_posneg_correlated_features(
-    X_iris: pd.DataFrame, y_iris: pd.DataFrame
+    X_iris: pd.DataFrame, y_iris: pd.DataFrame  # noqa: N803
 ) -> None:
     """Test the CBPM transformer with posneg correlated features.
 
@@ -42,7 +42,7 @@ def test_CBPM_posneg_correlated_features(
 
 
 def test_CBPM_pos_correlated_features(
-    X_iris: pd.DataFrame, y_iris: pd.DataFrame
+    X_iris: pd.DataFrame, y_iris: pd.DataFrame  # noqa: N803
 ) -> None:
     """Test the CBPM transformer with positive correlated features.
 
@@ -71,7 +71,7 @@ def test_CBPM_pos_correlated_features(
 
 
 def test_CBPM_neg_correlated_features(
-    X_iris: pd.DataFrame, y_iris: pd.DataFrame
+    X_iris: pd.DataFrame, y_iris: pd.DataFrame  # noqa: N803
 ) -> None:
     """Test the CBPM transformer with positive correlated features.
 
@@ -99,7 +99,9 @@ def test_CBPM_neg_correlated_features(
     assert_array_equal(trans_X_neg, trans_man)
 
 
-def test_CBPM_warnings(X_iris: pd.DataFrame, y_iris: pd.DataFrame) -> None:
+def test_CBPM_warnings(
+    X_iris: pd.DataFrame, y_iris: pd.DataFrame  # noqa: N803
+) -> None:
     """Test the CBPM transformer warnings.
 
     Parameters
@@ -171,7 +173,7 @@ def test_CBPM_warnings(X_iris: pd.DataFrame, y_iris: pd.DataFrame) -> None:
 
 
 def test_CBPM_lower_sign_threshhold(
-    X_iris: pd.DataFrame, y_iris: pd.DataFrame
+    X_iris: pd.DataFrame, y_iris: pd.DataFrame  # noqa: N803
 ) -> None:
     """Test the CBPM transformer with lower significance threshold.
 
@@ -193,7 +195,7 @@ def test_CBPM_lower_sign_threshhold(
 
 
 def test_CBPM_lower_sign_threshhold_no_sig(
-    X_iris: pd.DataFrame, y_iris: pd.DataFrame
+    X_iris: pd.DataFrame, y_iris: pd.DataFrame  # noqa: N803
 ) -> None:
     """Test the CBPM transformer with an even lower significance threshold.
 
@@ -218,7 +220,9 @@ def test_CBPM_lower_sign_threshhold_no_sig(
     assert (trans_posneg == y_iris.values.mean()).all()
 
 
-def test_CBPM_spearman(X_iris: pd.DataFrame, y_iris: pd.DataFrame) -> None:
+def test_CBPM_spearman(
+    X_iris: pd.DataFrame, y_iris: pd.DataFrame  # noqa: N803
+) -> None:
     """Test the CBPM transformer with spearman correlation.
 
     Parameters
@@ -246,7 +250,8 @@ def test_CBPM_spearman(X_iris: pd.DataFrame, y_iris: pd.DataFrame) -> None:
 
 
 def test_CBPM_set_output_posneg(
-    X_iris: pd.DataFrame, y_iris: pd.DataFrame,
+    X_iris: pd.DataFrame,  # noqa: N803
+    y_iris: pd.DataFrame,
 ) -> None:
     """
 
@@ -278,7 +283,8 @@ def test_CBPM_set_output_posneg(
 
 
 def test_CBPM_set_output_pos(
-    X_iris: pd.DataFrame, y_iris: pd.DataFrame,
+    X_iris: pd.DataFrame,  # noqa: N803
+    y_iris: pd.DataFrame,
 ) -> None:
     """
 

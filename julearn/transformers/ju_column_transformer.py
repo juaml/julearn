@@ -58,7 +58,10 @@ class JuColumnTransformer(JuTransformer):
         self.set_params(**params)
 
     def _fit(
-        self, X: pd.DataFrame, y: Optional[DataLike] = None, **fit_params: Any
+        self,
+        X: pd.DataFrame,  # noqa: N803
+        y: Optional[DataLike] = None,
+        **fit_params: Any,
     ) -> "JuColumnTransformer":
         """Fit the transformer.
 
@@ -89,7 +92,7 @@ class JuColumnTransformer(JuTransformer):
 
         return self
 
-    def transform(self, X: pd.DataFrame) -> DataLike:
+    def transform(self, X: pd.DataFrame) -> DataLike:  # noqa: N803
         """Apply the transformer.
 
         Parameters

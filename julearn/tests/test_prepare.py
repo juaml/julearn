@@ -37,7 +37,7 @@ from julearn.prepare import (
 )
 
 
-def _check_df_input(prepared, X, y, groups, df):
+def _check_df_input(prepared, X, y, groups, df):  # noqa: N803
     df_X, df_y, df_groups, _ = prepared
 
     assert_array_equal(df[X].values, df_X[X].values)

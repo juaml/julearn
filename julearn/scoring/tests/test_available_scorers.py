@@ -11,7 +11,9 @@ from julearn.scoring import get_scorer, register_scorer, reset_scorer_register
 from julearn.utils.typing import DataLike, EstimatorLike
 
 
-def _return_1(estimator: EstimatorLike, X: DataLike, y: DataLike) -> float:
+def _return_1(
+    estimator: EstimatorLike, X: DataLike, y: DataLike  # noqa: N803
+) -> float:
     """Return 1."""
     return 1
 

@@ -18,7 +18,7 @@ from julearn.transformers.target import (
 
 
 def test_JuTransformedTargetModel(
-    X_iris: pd.DataFrame, y_iris: pd.Series
+    X_iris: pd.DataFrame, y_iris: pd.Series  # noqa: N803
 ) -> None:
     """Test JuTransformedTargetModel."""
 
@@ -43,7 +43,7 @@ def test_JuTransformedTargetModel(
 
 
 def test_JuTransformedTargetModel_noinverse(
-    X_iris: pd.DataFrame, y_iris: pd.Series
+    X_iris: pd.DataFrame, y_iris: pd.Series  # noqa: N803
 ) -> None:
     """Test JuTransformedTargetModel."""
     steps = [("quantile", Normalizer())]
@@ -70,8 +70,7 @@ def test_JuTransformedTargetModel_noinverse(
     assert_array_equal(y_pred, y_pred_sk)
 
 
-def test_not_fitted(X_iris, y_iris):
-
+def test_JuTransformedTargetModel_not_fitted(X_iris, y_iris):  # noqa: N803
     steps = [("scaler", StandardScaler())]
     transformer = JuTargetPipeline(steps)  # type: ignore
     model = SVC(probability=True)

@@ -40,7 +40,9 @@ class JuTargetPipeline:
             raise TypeError("steps must be a list")
         self.steps = steps
 
-    def fit_transform(self, X: pd.DataFrame, y: DataLike) -> DataLike:
+    def fit_transform(
+        self, X: pd.DataFrame, y: DataLike  # noqa: N803
+    ) -> DataLike:
         """Fit and transform the target.
 
         Parameters
@@ -57,7 +59,9 @@ class JuTargetPipeline:
         """
         return self.fit(X, y).transform(X, y)
 
-    def fit(self, X: pd.DataFrame, y: DataLike) -> "JuTargetPipeline":
+    def fit(
+        self, X: pd.DataFrame, y: DataLike  # noqa: N803
+    ) -> "JuTargetPipeline":
         """Fit the target pipeline.
 
         Parameters
@@ -81,7 +85,9 @@ class JuTargetPipeline:
                 y = t_step.fit_transform(y[:, None])[:, 0]  # type: ignore
         return self
 
-    def transform(self, X: pd.DataFrame, y: DataLike) -> DataLike:
+    def transform(
+        self, X: pd.DataFrame, y: DataLike  # noqa: N803
+    ) -> DataLike:
         """Transform the target.
 
         Parameters
@@ -105,7 +111,9 @@ class JuTargetPipeline:
                 y = t_step.transform(y[:, None])[:, 0]  # type: ignore
         return y
 
-    def inverse_transform(self, X: pd.DataFrame, y: DataLike) -> DataLike:
+    def inverse_transform(
+        self, X: pd.DataFrame, y: DataLike  # noqa: N803
+    ) -> DataLike:
         """Inverse transform the target.
 
         Parameters

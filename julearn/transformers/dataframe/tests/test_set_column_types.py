@@ -13,7 +13,7 @@ from julearn.transformers.dataframe import SetColumnTypes
 
 
 def test_SetColumnTypes(
-    X_iris: pd.DataFrame, X_types_iris: Optional[Dict]
+    X_iris: pd.DataFrame, X_types_iris: Optional[Dict]  # noqa: N803
 ) -> None:
     """Test SetColumnTypes.
 
@@ -45,7 +45,9 @@ def test_SetColumnTypes(
     assert_frame_equal(Xt_iris_with_types, X_iris_with_types)
 
 
-def test_SetColumnTypes_input_validation(X_iris: pd.DataFrame) -> None:
+def test_SetColumnTypes_input_validation(
+    X_iris: pd.DataFrame,  # noqa: N803
+) -> None:
     """Test SetColumnTypes input validation.
 
     Parameters
@@ -61,7 +63,7 @@ def test_SetColumnTypes_input_validation(X_iris: pd.DataFrame) -> None:
 
 
 def test_SetColumnTypes_array(
-    X_iris: pd.DataFrame, X_types_iris: Optional[Dict]
+    X_iris: pd.DataFrame, X_types_iris: Optional[Dict]  # noqa:  N803
 ) -> None:
     """Test SetColumnTypes.
 

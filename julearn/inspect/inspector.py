@@ -10,11 +10,11 @@ class Inspector:
         self,
         scores,
         model=None,
-        X=None,
         y=None,
         groups=None,
         cv=None,
     ):
+        X: Optional[List[str]] = (None,)  # noqa: N803
         self._scores = scores
         self._model = model
         self._X = X

@@ -55,7 +55,7 @@ class FoldsInspector:
         self,
         scores: pd.DataFrame,
         cv: BaseCrossValidator,
-        X: Union[str, List[str]],
+        X: Union[str, List[str]],  # noqa: N803
         y: str,
         func: str = "predict",
         groups: Optional[str] = None,

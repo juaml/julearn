@@ -45,7 +45,7 @@ class DropColumns(JuTransformer):
         )
 
     def _fit(
-        self, X: pd.DataFrame, y: Optional[DataLike] = None
+        self, X: pd.DataFrame, y: Optional[DataLike] = None  # noqa: N803
     ) -> "DropColumns":
         """Fit the transformer.
 
@@ -73,7 +73,7 @@ class DropColumns(JuTransformer):
         self.support_mask_ = self.support_mask_.values
         return self
 
-    def transform(self, X: pd.DataFrame) -> pd.DataFrame:
+    def transform(self, X: pd.DataFrame) -> pd.DataFrame:  # noqa: N803
         """Drop the columns.
 
         Parameters

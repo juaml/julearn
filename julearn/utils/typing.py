@@ -20,7 +20,9 @@ ScorerLike = Union[_ProbaScorer, _ThresholdScorer, _PredictScorer]
 
 @runtime_checkable
 class EstimatorLikeFit1(Protocol):
-    def fit(self, X, y, **kwargs: Any) -> "EstimatorLikeFit1":
+    def fit(
+        self, X: List[str], y: str, **kwargs: Any  # noqa: N803
+    ) -> "EstimatorLikeFit1":
         return self
 
     def get_params(self, deep=True) -> Dict:
@@ -32,7 +34,7 @@ class EstimatorLikeFit1(Protocol):
 
 @runtime_checkable
 class EstimatorLikeFit2(Protocol):
-    def fit(self, X, y) -> "EstimatorLikeFit2":
+    def fit(self, X: List[str], y: str) -> "EstimatorLikeFit2":  # noqa: N803
         return self
 
     def get_params(self, deep=True) -> Dict:
@@ -59,14 +61,19 @@ EstimatorLike = Union[EstimatorLikeFit1, EstimatorLikeFit2, EstimatorLikeFity]
 
 @runtime_checkable
 class TransformerLike(EstimatorLikeFit1, Protocol):
-    def fit(self, X, y=None, **fit_params):
+    def fit(
+        self,
+        X: List[str],  # noqa: N803
+        y: Optional[str] = None,
+        **fit_params: Any,
+    ) -> None:
         pass
 
-    def transform(self, X: DataLike) -> DataLike:
+    def transform(self, X: DataLike) -> DataLike:  # noqa: N803
         return X
 
     def fit_transform(
-        self, X: DataLike, y: Optional[DataLike] = None
+        self, X: DataLike, y: Optional[DataLike] = None  # noqa: N803
     ) -> DataLike:
         return X
 
@@ -75,10 +82,15 @@ class TransformerLike(EstimatorLikeFit1, Protocol):
 class ModelLike(EstimatorLikeFit1, Protocol):
     classes_: np.ndarray
 
-    def predict(self, X) -> DataLike:
+    def predict(self, X: pd.DataFrame) -> DataLike:  # noqa: N803
         return np.zeros(1)
 
-    def score(self, X, y, sample_weight=None) -> float:
+    def score(
+        self,
+        X: pd.DataFrame,  # noqa: N803
+        y: DataLike,
+        sample_weight: Optional[DataLike] = None,
+    ) -> float:
         return 0.0
 
 

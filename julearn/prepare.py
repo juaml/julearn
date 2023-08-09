@@ -30,7 +30,10 @@ from .utils import logger, raise_error, warn_with_log
 
 
 def _validate_input_data_df(
-    X: Union[str, List[str]], y: str, df: pd.DataFrame, groups: Optional[str]
+    X: Union[str, List[str]],  # noqa: N803
+    y: str,
+    df: pd.DataFrame,
+    groups: Optional[str],
 ) -> None:
     """Validate the input data types for the pipeline.
 
@@ -70,7 +73,10 @@ def _validate_input_data_df(
 
 
 def _validate_input_data_df_ext(
-    X: Union[str, List[str]], y: str, df: pd.DataFrame, groups: Optional[str]
+    X: Union[str, List[str]],  # noqa: N803
+    y: str,
+    df: pd.DataFrame,
+    groups: Optional[str],
 ) -> None:
     """Validate the input dataframe for the pipeline.
 
@@ -204,12 +210,12 @@ def _pick_columns(
 
 
 def prepare_input_data(
-    X: Union[str, List[str]],
+    X: Union[str, List[str]],  # noqa: N803
     y: str,
     df: pd.DataFrame,
     pos_labels: Union[str, int, float, List, None],
     groups: Optional[str],
-    X_types: Optional[Dict],
+    X_types: Optional[Dict],  # noqa: N803
 ) -> Tuple[pd.DataFrame, pd.Series, Union[pd.Series, None], Dict]:
     """Prepare the input data and variables for the pipeline.
 
@@ -411,7 +417,9 @@ def check_consistency(
             )
 
 
-def _check_x_types(X_types: Optional[Dict], X: List[str]) -> Dict[str, List]:
+def _check_x_types(
+    X_types: Optional[Dict], X: List[str]  # noqa: N803
+) -> Dict[str, List]:
     """Check validity of X_types with respect to X.
 
     Parameters

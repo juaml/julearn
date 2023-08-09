@@ -97,7 +97,7 @@ def test_ConfoundRemover__apply_threshold() -> None:
     ],
 )
 def test_ConfoundRemover_confound_auto_find_conf(
-    df_X_confounds: pd.DataFrame,
+    df_X_confounds: pd.DataFrame,  # noqa: N803
     drop: Optional[List[str]],
     confounds: Optional[List[str]],
     models_confound_remover: str,
@@ -183,7 +183,7 @@ def test_ConfoundRemover_confound_auto_find_conf(
 def test_confound_set_confounds(
     model_class: Type[ModelLike],
     confounds: List[str],
-    df_X_confounds: pd.DataFrame,
+    df_X_confounds: pd.DataFrame,  # noqa: N803
 ):
     """Test confound removal confounds parameter setting.
 
@@ -246,7 +246,7 @@ def test_confound_set_confounds(
     assert_frame_equal(df_cofound_removed, df_confound_removed_manual)
 
 
-def test_return_confound(df_X_confounds: pd.DataFrame) -> None:
+def test_return_confound(df_X_confounds: pd.DataFrame) -> None:  # noqa: N803
     """Test that the confound is returned if keep_confounds is True.
 
     Parameters

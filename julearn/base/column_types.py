@@ -48,7 +48,7 @@ def get_column_type(column):
     return column.split("__:type:__")[1]
 
 
-def get_renamer(X_df):
+def get_renamer(X_df):  # noqa: N803
     """Get the dictionary that will rename the columns to add the type.
 
     Parameters
@@ -87,7 +87,7 @@ class make_type_selector(object):
         """
         self.pattern = pattern
 
-    def __call__(self, X_df):
+    def __call__(self, X_df):  # noqa: N803
         """Select the columns based on the pattern.
 
         Parameters

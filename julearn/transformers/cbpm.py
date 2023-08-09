@@ -108,7 +108,7 @@ class CBPM(BaseEstimator, TransformerMixin):
         self.n_jobs = n_jobs
         self.verbose = verbose
 
-    def fit(self, X: np.ndarray, y: np.ndarray) -> "CBPM":
+    def fit(self, X: np.ndarray, y: np.ndarray) -> "CBPM":  # noqa: N803
         """Fit the transformer.
 
         Compute the correlations of each feature to the target, threhsold and
@@ -148,7 +148,7 @@ class CBPM(BaseEstimator, TransformerMixin):
 
         return self
 
-    def transform(self, X: np.ndarray) -> np.ndarray:
+    def transform(self, X: np.ndarray) -> np.ndarray:  # noqa: N803
         """Transform the data.
 
         Replace each of the features that had a significant correlation on
@@ -264,7 +264,7 @@ class CBPM(BaseEstimator, TransformerMixin):
                 self.used_corr_sign_ = "posneg"
                 self.used_significant_mask_ = self.significant_mask_
 
-    def aggregate(self, X, mask):
+    def aggregate(self, X, mask):  # noqa: N803
         return self.agg_method(X[:, mask], axis=1)
 
     def get_feature_names_out(self, input_features=None):

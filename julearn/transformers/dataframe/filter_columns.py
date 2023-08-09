@@ -52,7 +52,7 @@ class FilterColumns(JuTransformer):
         )
 
     def _fit(
-        self, X: pd.DataFrame, y: Optional[DataLike] = None
+        self, X: pd.DataFrame, y: Optional[DataLike] = None  # noqa: N803
     ) -> "FilterColumns":
         """Fit the transformer.
 
@@ -77,7 +77,7 @@ class FilterColumns(JuTransformer):
         self.filter_columns_.fit(X, y)
         return self
 
-    def transform(self, X: pd.DataFrame) -> pd.DataFrame:
+    def transform(self, X: pd.DataFrame) -> pd.DataFrame:  # noqa: N803
         """Transform the data.
 
         Parameters
