@@ -49,10 +49,10 @@ def run_cross_validation(
     ----------
     X : str, list(str) or numpy.array
         The features to use.
-        See https://juaml.github.io/julearn/input.html for details.
+        See :ref:`data_usage` for details.
     y : str or numpy.array
         The targets to predict.
-        See https://juaml.github.io/julearn/input.html for details.
+        See :ref:`data_usage` for details.
     model : str or scikit-learn compatible model.
         If string, it will use one of the available models.
     X_types : dict[str, list of str]
@@ -60,7 +60,7 @@ def run_cross_validation(
         columns of this column type as a list of str.
     data : pandas.DataFrame | None
         DataFrame with the data (optional).
-        See https://juaml.github.io/julearn/input.html for details.
+        See :ref:`data_usage` for details.
     problem_type : str
         The kind of problem to model.
 
@@ -108,7 +108,7 @@ def run_cross_validation(
 
     groups : str or numpy.array | None
         The grouping labels in case a Group CV is used.
-        See https://juaml.github.io/julearn/input.html for details.
+        See :ref:`data_usage` for details.
     scoring : ScorerLike, optional
         The scoring metric to use.
         See https://scikit-learn.org/stable/modules/model_evaluation.html for
@@ -141,7 +141,7 @@ def run_cross_validation(
         * 'scoring': If a searcher is going to be used, the scoring metric to
             evaluate the performance.
 
-        See https://juaml.github.io/julearn/hyperparameters.html for details.
+        See :ref:`hp_tuning` for details.
     seed : int | None
         If not None, set the random seed before any operation. Useful for
         reproducibility.
