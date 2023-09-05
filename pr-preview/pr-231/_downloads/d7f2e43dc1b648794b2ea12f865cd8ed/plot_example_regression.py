@@ -1,6 +1,6 @@
 """
 Regression Analysis
-============================
+===================
 
 This example uses the 'diabetes' data from sklearn datasets and performs
 a regression analysis using a Ridge Regression model.

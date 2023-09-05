@@ -1,12 +1,12 @@
-********
 Main API
-********
+========
 
 .. automodule:: julearn.api
    :no-members:
    :no-inherited-members:
 
-**Functions**
+Functions
+---------
 
 .. currentmodule:: julearn
 

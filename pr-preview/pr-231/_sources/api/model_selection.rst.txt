@@ -1,14 +1,14 @@
 .. _model_selection:
 
-***************
 Model Selection
-***************
+===============
 
 .. automodule:: julearn.model_selection
    :no-members:
    :no-inherited-members:
 
-**Classes**
+Classes
+-------
 
 .. currentmodule:: julearn.model_selection
 
@@ -23,7 +23,8 @@ Model Selection
     RepeatedContinuousStratifiedGroupKFold
     StratifiedBootstrap
 
-**Functions**
+Functions
+---------
 
 .. currentmodule:: julearn.model_selection
 

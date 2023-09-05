@@ -2,9 +2,8 @@
 
 .. _available_pipeline_steps:
 
-####################################
 Overview of available Pipeline Steps
-####################################
+====================================
 
 The following is a list of all available steps that can be used to create
 a pipeline by name. The overview is sorted based on the type of the step: 
@@ -27,12 +26,12 @@ with the ``PipelineCreator`` and for target transformation with the
 .. _available_transformers:
 
 Transformers
-============
+------------
 
 .. _available_scalers:
 
 Scalers
--------
+~~~~~~~
 
 .. list-table::
    :widths: 30 80 40
@@ -65,7 +64,8 @@ Scalers
 
 
 Feature Selection
------------------
+~~~~~~~~~~~~~~~~~
+
 .. list-table::
    :widths: 30 80 40
    :header-rows: 1
@@ -97,7 +97,8 @@ Feature Selection
 
 
 DataFrame operations
---------------------
+~~~~~~~~~~~~~~~~~~~~
+
 .. list-table::
    :widths: 30 80 40
    :header-rows: 1
@@ -124,7 +125,8 @@ DataFrame operations
 .. _available_decompositions:
 
 Decomposition
--------------
+~~~~~~~~~~~~~
+
 .. list-table::
    :widths: 30 80 40
    :header-rows: 1
@@ -137,7 +139,8 @@ Decomposition
      - :class:`~sklearn.decomposition.PCA`
   
 Custom
-------
+~~~~~~
+
 .. list-table::
    :widths: 30 80 40
    :header-rows: 1
@@ -152,11 +155,11 @@ Custom
 .. _available_models:
 
 Models (Estimators)
-===================
-
+-------------------
 
 Support Vector Machines
------------------------
+~~~~~~~~~~~~~~~~~~~~~~~
+
 .. list-table::
    :widths: 30 80 40 20 20 20
    :header-rows: 1
@@ -174,9 +177,9 @@ Support Vector Machines
      - Y
      - Y
 
-
 Ensemble
---------
+~~~~~~~~
+
 .. list-table::
    :widths: 30 30 70 20 20 20
    :header-rows: 1
@@ -224,9 +227,9 @@ Ensemble
      - Y
      - Y
 
-
 Gaussian Processes
-------------------
+~~~~~~~~~~~~~~~~~~
+
 .. list-table::
    :widths: 30 30 70 20 20 20
    :header-rows: 1
@@ -245,7 +248,8 @@ Gaussian Processes
      - Y
 
 Linear Models
--------------
+~~~~~~~~~~~~~
+
 .. list-table::
    :widths: 30 50 70 10 10 10
    :header-rows: 1
@@ -293,9 +297,9 @@ Linear Models
      - Y
      - Y
 
-
 Naive Bayes
------------
+~~~~~~~~~~~
+
 .. list-table::
    :widths: 30 50 70 10 10 10
    :header-rows: 1
@@ -337,9 +341,9 @@ Naive Bayes
      - Y
      - N
 
-
 Dynamic Selection
------------------
+~~~~~~~~~~~~~~~~~
+
 .. list-table::
    :widths: 30 50 70 10 10 10
    :header-rows: 1
@@ -357,9 +361,9 @@ Dynamic Selection
      - Y
      - Y
 
-
 Dummy
------
+~~~~~
+
 .. list-table::
    :widths: 30 50 70 10 10 10
    :header-rows: 1

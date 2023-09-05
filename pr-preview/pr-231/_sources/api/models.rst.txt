@@ -1,13 +1,12 @@
-
-******
 Models
-******
+======
 
 .. automodule:: julearn.models
    :no-members:
    :no-inherited-members:
 
-**Functions**
+Functions
+---------
 
 .. currentmodule:: julearn.models
 
@@ -20,10 +19,8 @@ Models
     register_model
     reset_model_register
 
-
-**************************
 Dynamic Selection (DESLib)
-**************************
+==========================
 
 .. important::
    This module requires the ``deslib`` optional dependencies. Please install
@@ -34,7 +31,8 @@ Dynamic Selection (DESLib)
    :no-members:
    :no-inherited-members:
 
-**Classes**
+Classes
+-------
 
 .. currentmodule:: julearn.models.dynamic
 
