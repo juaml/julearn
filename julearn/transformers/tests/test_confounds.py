@@ -207,7 +207,7 @@ def test_confound_set_confounds(
     df_cofound_removed = confound_remover.fit_transform(df_X_confounds)
 
     np.random.seed(42)
-    conf_as_feat = confounds if type(confounds) is list else [confounds]
+    conf_as_feat = confounds if isinstance(confounds, list) else [confounds]
     df_confounds = df_X_confounds.loc[:, conf_as_feat]  # type: ignore
     confound_regressions = [
         model_class().fit(
