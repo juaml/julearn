@@ -32,7 +32,7 @@ during confound removal.
 Let us initially consider removing a confounding variable from the features.
 
 Removing Confounds from the Features
-************************************
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The first scenario involves confound regression on the features. In order to
 do this we can simply configure an instance of a :class:`.PipelineCreator`
@@ -154,7 +154,7 @@ print(scores)
 # features instead?
 #
 # Removing Confounds from the Target
-# **********************************
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # If we want to remove the confounds from the target rather than from the
 # features, we need to create a slightly different pipeline. Julearn has a

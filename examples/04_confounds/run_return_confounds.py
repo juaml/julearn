@@ -45,7 +45,7 @@ data["target"] = target
 # using Julearns pipeline functionalities.
 #
 # Confound Removal Typical Use Case
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# ---------------------------------
 # Here, we want to deconfound the features and not include the confound as a
 # feature into our last model. We will use the `remove_confound` step for this.
 # Then we will use the `pca` step to reduce the dimensionality of the features.

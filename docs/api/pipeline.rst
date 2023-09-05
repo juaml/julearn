@@ -1,13 +1,12 @@
-
-********  
 Pipeline
-********
+========
 
 .. automodule:: julearn.pipeline
    :no-members:
    :no-inherited-members:
 
-**Classes**
+Classes
+-------
 
 .. currentmodule:: julearn
 

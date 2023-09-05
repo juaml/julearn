@@ -1,12 +1,12 @@
-*****
 Stats
-*****
+=====
 
 .. automodule:: julearn.stats
    :no-members:
    :no-inherited-members:
 
-**Functions**
+Functions
+---------
 
 .. currentmodule:: julearn.stats
 

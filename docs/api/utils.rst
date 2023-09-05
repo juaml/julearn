@@ -1,12 +1,13 @@
-*****
 Utils
-*****
+=====
 
 .. automodule:: julearn.utils
    :no-members:
    :no-inherited-members:
 
-**Classes**
+Classes
+-------
+
 .. currentmodule:: julearn.utils
 
 .. autosummary::
@@ -15,8 +16,8 @@ Utils
 
     logger
 
-
-**Functions**
+Functions
+---------
 .. currentmodule:: julearn.utils
 
 .. autosummary::
@@ -28,15 +29,16 @@ Utils
     warn_with_log
 
 
-******
 Typing
-******
+======
 
 .. automodule:: julearn.utils.typing
    :no-members:
    :no-inherited-members:
 
-**Classes**
+Classes
+-------
+
 .. currentmodule:: julearn.utils.typing
 
 .. autosummary::
