@@ -1,12 +1,11 @@
 .. include:: links.inc
 
-###############
-Getting started
-###############
 
+Getting started
+===============
 
 Requirements
-============
+------------
 
 Julearn requires the following packages:
 

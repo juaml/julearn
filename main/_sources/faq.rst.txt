@@ -1,10 +1,10 @@
 .. include:: links.inc
 
-*************************
-Frequenly Asked Questions
-*************************
+FAQs
+====
 
-1. I have issues with the dependencies for the :mod:`.viz` module.
+I have issues with the dependencies for the :mod:`.viz` module.
+---------------------------------------------------------------
 
 The :mod:`.viz` module uses `bokeh`_ and `panel`_ to create interactive
 plots. These packages are not installed by default when you install
@@ -30,8 +30,9 @@ Using conda:
   conda install -c conda-forge panel
   conda install -c bokeh bokeh
 
-2. How do I use the julearn :mod:`.viz` interactive plots?
-----------------------------------------------------------
+
+How do I use the :mod:`.viz` interactive plots?
+-----------------------------------------------
 
 The interactive plots are based on `bokeh`_ and `panel`_. You can use them
 in different ways:

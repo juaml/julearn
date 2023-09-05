@@ -1,12 +1,13 @@
-************
 Transformers
-************
+============
 
 .. automodule:: julearn.transformers
    :no-members:
    :no-inherited-members:
 
-**Classes**
+Classes
+-------
+
 .. currentmodule:: julearn.transformers
 
 .. autosummary::
@@ -21,7 +22,8 @@ Transformers
     JuColumnTransformer
     confound_remover.ConfoundRemover
 
-**Functions**
+Functions
+---------
 
 .. currentmodule:: julearn.transformers
 
@@ -34,15 +36,16 @@ Transformers
     register_transformer
     reset_transformer_register
 
-*******************
 Target Transformers
-*******************
+===================
 
 .. automodule:: julearn.transformers.target
    :no-members:
    :no-inherited-members:
 
-**Classes**
+Classes
+-------
+
 .. currentmodule:: julearn.transformers.target
 
 .. autosummary::
@@ -54,7 +57,8 @@ Target Transformers
     TargetConfoundRemover
     TransformedTargetWarning
 
-**Functions**
+Functions
+---------
 
 .. currentmodule:: julearn.transformers.target
 

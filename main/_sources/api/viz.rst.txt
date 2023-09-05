@@ -1,6 +1,5 @@
-*************
 Visualization
-*************
+=============
 
 .. warning::
    This module is experimental. This means that it may change in the future
@@ -17,7 +16,8 @@ Visualization
    :no-members:
    :no-inherited-members:
 
-**Functions**
+Functions
+---------
 
 .. currentmodule:: julearn.viz
 
