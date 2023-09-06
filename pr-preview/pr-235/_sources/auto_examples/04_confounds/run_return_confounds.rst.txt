@@ -140,7 +140,7 @@ In the following we will explore different settings of confound removal
 using ``julearn``'s pipeline functionalities.
 
 Confound Removal Typical Use Case
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+---------------------------------
 Here, we want to deconfound the features and not include the confound as a
 feature into our last model. We will use the ``remove_confound`` step for this.
 Then we will use the ``pca`` step to reduce the dimensionality of the features.
@@ -164,14 +164,14 @@ Finally, we will fit a linear regression model.
 
  .. code-block:: none
 
-    2023-08-09 13:15:07,161 - julearn - INFO - Adding step confound_removal that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2023-08-09 13:15:07,162 - julearn - INFO - Step added
-    2023-08-09 13:15:07,162 - julearn - INFO - Adding step pca that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2023-08-09 13:15:07,162 - julearn - INFO - Step added
-    2023-08-09 13:15:07,163 - julearn - INFO - Adding step linreg that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2023-08-09 13:15:07,163 - julearn - INFO - Step added
+    2023-09-06 09:16:17,957 - julearn - INFO - Adding step confound_removal that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2023-09-06 09:16:17,957 - julearn - INFO - Step added
+    2023-09-06 09:16:17,957 - julearn - INFO - Adding step pca that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2023-09-06 09:16:17,958 - julearn - INFO - Step added
+    2023-09-06 09:16:17,958 - julearn - INFO - Adding step linreg that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2023-09-06 09:16:17,958 - julearn - INFO - Step added
 
-    <julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7f8ce5da8940>
+    <julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7f17ea7bd1e0>
 
 
 
@@ -226,25 +226,25 @@ Now we can run the cross validation and get the scores.
 
  .. code-block:: none
 
-    2023-08-09 13:15:07,164 - julearn - INFO - ==== Input Data ====
-    2023-08-09 13:15:07,164 - julearn - INFO - Using dataframe as input
-    2023-08-09 13:15:07,164 - julearn - INFO -      Features: ['age', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6', 'sex']
-    2023-08-09 13:15:07,164 - julearn - INFO -      Target: target
-    2023-08-09 13:15:07,165 - julearn - INFO -      Expanded features: ['age', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6', 'sex']
-    2023-08-09 13:15:07,165 - julearn - INFO -      X_types:{'continuous': ['age', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6'], 'confound': ['sex']}
-    2023-08-09 13:15:07,166 - julearn - INFO - ====================
-    2023-08-09 13:15:07,166 - julearn - INFO - 
-    2023-08-09 13:15:07,168 - julearn - INFO - = Model Parameters =
-    2023-08-09 13:15:07,168 - julearn - INFO - ====================
-    2023-08-09 13:15:07,168 - julearn - INFO - 
-    2023-08-09 13:15:07,168 - julearn - INFO - = Data Information =
-    2023-08-09 13:15:07,168 - julearn - INFO -      Problem type: regression
-    2023-08-09 13:15:07,168 - julearn - INFO -      Number of samples: 442
-    2023-08-09 13:15:07,168 - julearn - INFO -      Number of features: 10
-    2023-08-09 13:15:07,169 - julearn - INFO - ====================
-    2023-08-09 13:15:07,169 - julearn - INFO - 
-    2023-08-09 13:15:07,169 - julearn - INFO -      Target type: float64
-    2023-08-09 13:15:07,169 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+    2023-09-06 09:16:17,959 - julearn - INFO - ==== Input Data ====
+    2023-09-06 09:16:17,959 - julearn - INFO - Using dataframe as input
+    2023-09-06 09:16:17,959 - julearn - INFO -      Features: ['age', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6', 'sex']
+    2023-09-06 09:16:17,959 - julearn - INFO -      Target: target
+    2023-09-06 09:16:17,959 - julearn - INFO -      Expanded features: ['age', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6', 'sex']
+    2023-09-06 09:16:17,959 - julearn - INFO -      X_types:{'continuous': ['age', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6'], 'confound': ['sex']}
+    2023-09-06 09:16:17,960 - julearn - INFO - ====================
+    2023-09-06 09:16:17,960 - julearn - INFO - 
+    2023-09-06 09:16:17,962 - julearn - INFO - = Model Parameters =
+    2023-09-06 09:16:17,962 - julearn - INFO - ====================
+    2023-09-06 09:16:17,962 - julearn - INFO - 
+    2023-09-06 09:16:17,962 - julearn - INFO - = Data Information =
+    2023-09-06 09:16:17,962 - julearn - INFO -      Problem type: regression
+    2023-09-06 09:16:17,962 - julearn - INFO -      Number of samples: 442
+    2023-09-06 09:16:17,962 - julearn - INFO -      Number of features: 10
+    2023-09-06 09:16:17,962 - julearn - INFO - ====================
+    2023-09-06 09:16:17,962 - julearn - INFO - 
+    2023-09-06 09:16:17,963 - julearn - INFO -      Target type: float64
+    2023-09-06 09:16:17,963 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
 
 
 
@@ -411,15 +411,15 @@ This will keep the confounds after confound removal.
 
  .. code-block:: none
 
-    2023-08-09 13:15:07,513 - julearn - INFO - Adding step confound_removal that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2023-08-09 13:15:07,513 - julearn - INFO - Setting hyperparameter keep_confounds = True
-    2023-08-09 13:15:07,514 - julearn - INFO - Step added
-    2023-08-09 13:15:07,514 - julearn - INFO - Adding step pca that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2023-08-09 13:15:07,514 - julearn - INFO - Step added
-    2023-08-09 13:15:07,515 - julearn - INFO - Adding step linreg that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2023-08-09 13:15:07,515 - julearn - INFO - Step added
+    2023-09-06 09:16:18,218 - julearn - INFO - Adding step confound_removal that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2023-09-06 09:16:18,218 - julearn - INFO - Setting hyperparameter keep_confounds = True
+    2023-09-06 09:16:18,219 - julearn - INFO - Step added
+    2023-09-06 09:16:18,219 - julearn - INFO - Adding step pca that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2023-09-06 09:16:18,219 - julearn - INFO - Step added
+    2023-09-06 09:16:18,219 - julearn - INFO - Adding step linreg that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2023-09-06 09:16:18,219 - julearn - INFO - Step added
 
-    <julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7f8ce5daa890>
+    <julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7f17ea9ff730>
 
 
 
@@ -448,25 +448,25 @@ Now we can run the cross validation and get the scores.
 
  .. code-block:: none
 
-    2023-08-09 13:15:07,515 - julearn - INFO - ==== Input Data ====
-    2023-08-09 13:15:07,515 - julearn - INFO - Using dataframe as input
-    2023-08-09 13:15:07,516 - julearn - INFO -      Features: ['age', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6', 'sex']
-    2023-08-09 13:15:07,516 - julearn - INFO -      Target: target
-    2023-08-09 13:15:07,516 - julearn - INFO -      Expanded features: ['age', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6', 'sex']
-    2023-08-09 13:15:07,516 - julearn - INFO -      X_types:{'continuous': ['age', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6'], 'confound': ['sex']}
-    2023-08-09 13:15:07,517 - julearn - INFO - ====================
-    2023-08-09 13:15:07,517 - julearn - INFO - 
-    2023-08-09 13:15:07,519 - julearn - INFO - = Model Parameters =
-    2023-08-09 13:15:07,519 - julearn - INFO - ====================
-    2023-08-09 13:15:07,519 - julearn - INFO - 
-    2023-08-09 13:15:07,519 - julearn - INFO - = Data Information =
-    2023-08-09 13:15:07,519 - julearn - INFO -      Problem type: regression
-    2023-08-09 13:15:07,520 - julearn - INFO -      Number of samples: 442
-    2023-08-09 13:15:07,520 - julearn - INFO -      Number of features: 10
-    2023-08-09 13:15:07,520 - julearn - INFO - ====================
-    2023-08-09 13:15:07,520 - julearn - INFO - 
-    2023-08-09 13:15:07,520 - julearn - INFO -      Target type: float64
-    2023-08-09 13:15:07,520 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+    2023-09-06 09:16:18,220 - julearn - INFO - ==== Input Data ====
+    2023-09-06 09:16:18,220 - julearn - INFO - Using dataframe as input
+    2023-09-06 09:16:18,220 - julearn - INFO -      Features: ['age', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6', 'sex']
+    2023-09-06 09:16:18,220 - julearn - INFO -      Target: target
+    2023-09-06 09:16:18,220 - julearn - INFO -      Expanded features: ['age', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6', 'sex']
+    2023-09-06 09:16:18,220 - julearn - INFO -      X_types:{'continuous': ['age', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6'], 'confound': ['sex']}
+    2023-09-06 09:16:18,221 - julearn - INFO - ====================
+    2023-09-06 09:16:18,221 - julearn - INFO - 
+    2023-09-06 09:16:18,223 - julearn - INFO - = Model Parameters =
+    2023-09-06 09:16:18,223 - julearn - INFO - ====================
+    2023-09-06 09:16:18,223 - julearn - INFO - 
+    2023-09-06 09:16:18,223 - julearn - INFO - = Data Information =
+    2023-09-06 09:16:18,223 - julearn - INFO -      Problem type: regression
+    2023-09-06 09:16:18,223 - julearn - INFO -      Number of samples: 442
+    2023-09-06 09:16:18,223 - julearn - INFO -      Number of features: 10
+    2023-09-06 09:16:18,223 - julearn - INFO - ====================
+    2023-09-06 09:16:18,223 - julearn - INFO - 
+    2023-09-06 09:16:18,223 - julearn - INFO -      Target type: float64
+    2023-09-06 09:16:18,223 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
 
 
 
@@ -778,32 +778,32 @@ removal.
 
  .. code-block:: none
 
-    2023-08-09 13:15:07,890 - julearn - INFO - Adding step confound_removal that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2023-08-09 13:15:07,890 - julearn - INFO - Setting hyperparameter keep_confounds = True
-    2023-08-09 13:15:07,890 - julearn - INFO - Step added
-    2023-08-09 13:15:07,890 - julearn - INFO - Adding step pca that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2023-08-09 13:15:07,891 - julearn - INFO - Step added
-    2023-08-09 13:15:07,891 - julearn - INFO - Adding step linreg that applies to ColumnTypes<types={'*'}; pattern=.*>
-    2023-08-09 13:15:07,891 - julearn - INFO - Step added
-    2023-08-09 13:15:07,891 - julearn - INFO - ==== Input Data ====
-    2023-08-09 13:15:07,891 - julearn - INFO - Using dataframe as input
-    2023-08-09 13:15:07,891 - julearn - INFO -      Features: ['age', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6', 'sex']
-    2023-08-09 13:15:07,891 - julearn - INFO -      Target: target
-    2023-08-09 13:15:07,891 - julearn - INFO -      Expanded features: ['age', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6', 'sex']
-    2023-08-09 13:15:07,892 - julearn - INFO -      X_types:{'continuous': ['age', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6'], 'confound': ['sex']}
-    2023-08-09 13:15:07,893 - julearn - INFO - ====================
-    2023-08-09 13:15:07,893 - julearn - INFO - 
-    2023-08-09 13:15:07,895 - julearn - INFO - = Model Parameters =
-    2023-08-09 13:15:07,895 - julearn - INFO - ====================
-    2023-08-09 13:15:07,895 - julearn - INFO - 
-    2023-08-09 13:15:07,895 - julearn - INFO - = Data Information =
-    2023-08-09 13:15:07,895 - julearn - INFO -      Problem type: regression
-    2023-08-09 13:15:07,895 - julearn - INFO -      Number of samples: 442
-    2023-08-09 13:15:07,895 - julearn - INFO -      Number of features: 10
-    2023-08-09 13:15:07,895 - julearn - INFO - ====================
-    2023-08-09 13:15:07,895 - julearn - INFO - 
-    2023-08-09 13:15:07,895 - julearn - INFO -      Target type: float64
-    2023-08-09 13:15:07,895 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+    2023-09-06 09:16:18,500 - julearn - INFO - Adding step confound_removal that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2023-09-06 09:16:18,500 - julearn - INFO - Setting hyperparameter keep_confounds = True
+    2023-09-06 09:16:18,501 - julearn - INFO - Step added
+    2023-09-06 09:16:18,501 - julearn - INFO - Adding step pca that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2023-09-06 09:16:18,501 - julearn - INFO - Step added
+    2023-09-06 09:16:18,501 - julearn - INFO - Adding step linreg that applies to ColumnTypes<types={'*'}; pattern=.*>
+    2023-09-06 09:16:18,501 - julearn - INFO - Step added
+    2023-09-06 09:16:18,501 - julearn - INFO - ==== Input Data ====
+    2023-09-06 09:16:18,501 - julearn - INFO - Using dataframe as input
+    2023-09-06 09:16:18,501 - julearn - INFO -      Features: ['age', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6', 'sex']
+    2023-09-06 09:16:18,501 - julearn - INFO -      Target: target
+    2023-09-06 09:16:18,501 - julearn - INFO -      Expanded features: ['age', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6', 'sex']
+    2023-09-06 09:16:18,502 - julearn - INFO -      X_types:{'continuous': ['age', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6'], 'confound': ['sex']}
+    2023-09-06 09:16:18,502 - julearn - INFO - ====================
+    2023-09-06 09:16:18,503 - julearn - INFO - 
+    2023-09-06 09:16:18,504 - julearn - INFO - = Model Parameters =
+    2023-09-06 09:16:18,504 - julearn - INFO - ====================
+    2023-09-06 09:16:18,504 - julearn - INFO - 
+    2023-09-06 09:16:18,504 - julearn - INFO - = Data Information =
+    2023-09-06 09:16:18,504 - julearn - INFO -      Problem type: regression
+    2023-09-06 09:16:18,504 - julearn - INFO -      Number of samples: 442
+    2023-09-06 09:16:18,504 - julearn - INFO -      Number of features: 10
+    2023-09-06 09:16:18,504 - julearn - INFO - ====================
+    2023-09-06 09:16:18,504 - julearn - INFO - 
+    2023-09-06 09:16:18,505 - julearn - INFO -      Target type: float64
+    2023-09-06 09:16:18,505 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
 
 
 .. raw:: html
@@ -840,8 +840,8 @@ removal.
       <tbody>
         <tr>
           <th>0</th>
-          <td>0.038291</td>
-          <td>0.014861</td>
+          <td>0.029545</td>
+          <td>0.011078</td>
           <td>0.429556</td>
           <td>353</td>
           <td>89</td>
@@ -851,8 +851,8 @@ removal.
         </tr>
         <tr>
           <th>1</th>
-          <td>0.038382</td>
-          <td>0.014848</td>
+          <td>0.029012</td>
+          <td>0.011244</td>
           <td>0.522599</td>
           <td>353</td>
           <td>89</td>
@@ -862,8 +862,8 @@ removal.
         </tr>
         <tr>
           <th>2</th>
-          <td>0.039358</td>
-          <td>0.015336</td>
+          <td>0.028485</td>
+          <td>0.011237</td>
           <td>0.482681</td>
           <td>354</td>
           <td>88</td>
@@ -873,8 +873,8 @@ removal.
         </tr>
         <tr>
           <th>3</th>
-          <td>0.039228</td>
-          <td>0.015010</td>
+          <td>0.029226</td>
+          <td>0.011433</td>
           <td>0.426498</td>
           <td>354</td>
           <td>88</td>
@@ -884,8 +884,8 @@ removal.
         </tr>
         <tr>
           <th>4</th>
-          <td>0.037692</td>
-          <td>0.014315</td>
+          <td>0.029702</td>
+          <td>0.011264</td>
           <td>0.550248</td>
           <td>354</td>
           <td>88</td>
@@ -930,7 +930,7 @@ and the confound).
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  1.079 seconds)
+   **Total running time of the script:** ( 0 minutes  0.811 seconds)
 
 
 .. _sphx_glr_download_auto_examples_04_confounds_run_return_confounds.py:

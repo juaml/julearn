@@ -1,6 +1,6 @@
 """
-Inspecting SVM models.
-======================
+Inspecting SVM models
+=====================
 
 This example uses the ``fmri`` dataset, performs simple binary classification
 using a Support Vector Machine classifier and analyse the model.
@@ -37,8 +37,7 @@ configure_logging(level="INFO")
 
 ###############################################################################
 # Dealing with Cross-Validation techniques
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#
+# ----------------------------------------
 
 df_fmri = load_dataset("fmri")
 

@@ -1,6 +1,6 @@
 """
-Multiclass Classification.
-==========================
+Multiclass Classification
+=========================
 
 This example uses the ``iris`` dataset and performs multiclass
 classification using a Support Vector Machine classifier and plots

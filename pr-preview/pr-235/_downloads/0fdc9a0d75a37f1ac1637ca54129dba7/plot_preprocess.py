@@ -1,6 +1,6 @@
 """
 Preprocessing with variance threshold, zscore and PCA
-=======================================================
+=====================================================
 
 This example uses the ``make_regression`` function to create a simple dataset,
 performs a simple regression after the preprocessing of the features

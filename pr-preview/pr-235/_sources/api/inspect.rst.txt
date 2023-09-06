@@ -1,12 +1,12 @@
-*******
 Inspect
-*******
+=======
 
 .. automodule:: julearn.inspect
    :no-members:
    :no-inherited-members:
 
-**Classes**
+Classes
+-------
 
 .. currentmodule:: julearn.inspect
 
@@ -18,8 +18,8 @@ Inspect
     Inspector
     FoldsInspector
 
-
-**Functions**
+Functions
+---------
 
 .. currentmodule:: julearn.inspect
 

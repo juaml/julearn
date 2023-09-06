@@ -1,6 +1,6 @@
 """
-Grouped CV.
-===========
+Grouped CV
+==========
 
 This example uses the ``fMRI`` dataset and performs GroupKFold
 Cross-Validation for classification using Random Forest Classifier.
@@ -35,8 +35,7 @@ configure_logging(level="INFO")
 
 ###############################################################################
 # Dealing with Cross-Validation techniques
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 df_fmri = load_dataset("fmri")
 

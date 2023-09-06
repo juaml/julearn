@@ -18,8 +18,8 @@
 .. _sphx_glr_auto_examples_02_inspection_plot_groupcv_inspect_svm.py:
 
 
-Inspecting SVM models.
-======================
+Inspecting SVM models
+=====================
 
 This example uses the ``fmri`` dataset, performs simple binary classification
 using a Support Vector Machine classifier and analyse the model.
@@ -79,24 +79,23 @@ Set the logging level to info to see extra information.
 
  .. code-block:: none
 
-    2023-08-09 13:14:48,875 - julearn - INFO - ===== Lib Versions =====
-    2023-08-09 13:14:48,875 - julearn - INFO - numpy: 1.25.2
-    2023-08-09 13:14:48,876 - julearn - INFO - scipy: 1.11.1
-    2023-08-09 13:14:48,876 - julearn - INFO - sklearn: 1.3.0
-    2023-08-09 13:14:48,876 - julearn - INFO - pandas: 2.0.3
-    2023-08-09 13:14:48,876 - julearn - INFO - julearn: 0.3.1.dev54
-    2023-08-09 13:14:48,876 - julearn - INFO - ========================
+    2023-09-06 09:16:04,927 - julearn - INFO - ===== Lib Versions =====
+    2023-09-06 09:16:04,927 - julearn - INFO - numpy: 1.25.2
+    2023-09-06 09:16:04,927 - julearn - INFO - scipy: 1.11.2
+    2023-09-06 09:16:04,927 - julearn - INFO - sklearn: 1.3.0
+    2023-09-06 09:16:04,927 - julearn - INFO - pandas: 2.0.3
+    2023-09-06 09:16:04,927 - julearn - INFO - julearn: 0.3.1.dev103
+    2023-09-06 09:16:04,927 - julearn - INFO - ========================
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 39-42
+.. GENERATED FROM PYTHON SOURCE LINES 39-41
 
 Dealing with Cross-Validation techniques
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+----------------------------------------
 
-
-.. GENERATED FROM PYTHON SOURCE LINES 42-45
+.. GENERATED FROM PYTHON SOURCE LINES 41-44
 
 .. code-block:: default
 
@@ -110,11 +109,11 @@ Dealing with Cross-Validation techniques
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 46-47
+.. GENERATED FROM PYTHON SOURCE LINES 45-46
 
 First, lets get some information on what the dataset has:
 
-.. GENERATED FROM PYTHON SOURCE LINES 47-50
+.. GENERATED FROM PYTHON SOURCE LINES 46-49
 
 .. code-block:: default
 
@@ -139,7 +138,7 @@ First, lets get some information on what the dataset has:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 51-56
+.. GENERATED FROM PYTHON SOURCE LINES 50-55
 
 From this information, we can infer that it is an fMRI study in which there
 were several subjects, timepoints, events and signal extracted from several
@@ -147,7 +146,7 @@ brain regions.
 
 Lets check how many kinds of each we have.
 
-.. GENERATED FROM PYTHON SOURCE LINES 56-62
+.. GENERATED FROM PYTHON SOURCE LINES 55-61
 
 .. code-block:: default
 
@@ -173,13 +172,13 @@ Lets check how many kinds of each we have.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 63-66
+.. GENERATED FROM PYTHON SOURCE LINES 62-65
 
 We have data from parietal and frontal regions during 2 types of events
 (*cue* and *stim*) during 18 timepoints and for 14 subjects.
 Lets see how many samples we have for each condition
 
-.. GENERATED FROM PYTHON SOURCE LINES 66-76
+.. GENERATED FROM PYTHON SOURCE LINES 65-75
 
 .. code-block:: default
 
@@ -221,7 +220,7 @@ Lets see how many samples we have for each condition
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 77-83
+.. GENERATED FROM PYTHON SOURCE LINES 76-82
 
 We have exactly one value per condition.
 
@@ -230,7 +229,7 @@ whether the event was a *cue* or a *stim*.
 
 First we define our X and y variables.
 
-.. GENERATED FROM PYTHON SOURCE LINES 83-86
+.. GENERATED FROM PYTHON SOURCE LINES 82-85
 
 .. code-block:: default
 
@@ -244,7 +243,7 @@ First we define our X and y variables.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 87-92
+.. GENERATED FROM PYTHON SOURCE LINES 86-91
 
 In order for this to work, both *parietal* and *frontal* must be columns.
 We need to *pivot* the table.
@@ -252,7 +251,7 @@ We need to *pivot* the table.
 The values of *region* will be the columns. The column *signal* will be the
 values. And the columns *subject*, *timepoint* and *event* will be the index
 
-.. GENERATED FROM PYTHON SOURCE LINES 92-98
+.. GENERATED FROM PYTHON SOURCE LINES 91-97
 
 .. code-block:: default
 
@@ -269,12 +268,12 @@ values. And the columns *subject*, *timepoint* and *event* will be the index
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 99-101
+.. GENERATED FROM PYTHON SOURCE LINES 98-100
 
 Here we want to zscore all the features and then train a Support Vector
 Machine classifier.
 
-.. GENERATED FROM PYTHON SOURCE LINES 101-113
+.. GENERATED FROM PYTHON SOURCE LINES 100-112
 
 .. code-block:: default
 
@@ -298,44 +297,44 @@ Machine classifier.
 
  .. code-block:: none
 
-    2023-08-09 13:14:48,914 - julearn - INFO - ==== Input Data ====
-    2023-08-09 13:14:48,914 - julearn - INFO - Using dataframe as input
-    2023-08-09 13:14:48,915 - julearn - INFO -      Features: ['parietal', 'frontal']
-    2023-08-09 13:14:48,915 - julearn - INFO -      Target: event
-    2023-08-09 13:14:48,915 - julearn - INFO -      Expanded features: ['parietal', 'frontal']
-    2023-08-09 13:14:48,915 - julearn - INFO -      X_types:{}
-    2023-08-09 13:14:48,915 - julearn - WARNING - The following columns are not defined in X_types: ['parietal', 'frontal']. They will be treated as continuous.
+    2023-09-06 09:16:04,952 - julearn - INFO - ==== Input Data ====
+    2023-09-06 09:16:04,952 - julearn - INFO - Using dataframe as input
+    2023-09-06 09:16:04,952 - julearn - INFO -      Features: ['parietal', 'frontal']
+    2023-09-06 09:16:04,952 - julearn - INFO -      Target: event
+    2023-09-06 09:16:04,952 - julearn - INFO -      Expanded features: ['parietal', 'frontal']
+    2023-09-06 09:16:04,952 - julearn - INFO -      X_types:{}
+    2023-09-06 09:16:04,952 - julearn - WARNING - The following columns are not defined in X_types: ['parietal', 'frontal']. They will be treated as continuous.
     /home/runner/work/julearn/julearn/julearn/utils/logging.py:238: RuntimeWarning: The following columns are not defined in X_types: ['parietal', 'frontal']. They will be treated as continuous.
       warn(msg, category=category)
-    2023-08-09 13:14:48,916 - julearn - INFO - ====================
-    2023-08-09 13:14:48,916 - julearn - INFO - 
-    2023-08-09 13:14:48,916 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2023-08-09 13:14:48,917 - julearn - INFO - Step added
-    2023-08-09 13:14:48,917 - julearn - INFO - Adding step svm that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2023-08-09 13:14:48,917 - julearn - INFO - Step added
-    2023-08-09 13:14:48,918 - julearn - INFO - = Model Parameters =
-    2023-08-09 13:14:48,918 - julearn - INFO - ====================
-    2023-08-09 13:14:48,918 - julearn - INFO - 
-    2023-08-09 13:14:48,918 - julearn - INFO - = Data Information =
-    2023-08-09 13:14:48,918 - julearn - INFO -      Problem type: classification
-    2023-08-09 13:14:48,918 - julearn - INFO -      Number of samples: 532
-    2023-08-09 13:14:48,918 - julearn - INFO -      Number of features: 2
-    2023-08-09 13:14:48,918 - julearn - INFO - ====================
-    2023-08-09 13:14:48,918 - julearn - INFO - 
-    2023-08-09 13:14:48,918 - julearn - INFO -      Number of classes: 2
-    2023-08-09 13:14:48,919 - julearn - INFO -      Target type: object
-    2023-08-09 13:14:48,919 - julearn - INFO -      Class distributions: event
+    2023-09-06 09:16:04,953 - julearn - INFO - ====================
+    2023-09-06 09:16:04,953 - julearn - INFO - 
+    2023-09-06 09:16:04,954 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2023-09-06 09:16:04,954 - julearn - INFO - Step added
+    2023-09-06 09:16:04,954 - julearn - INFO - Adding step svm that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2023-09-06 09:16:04,954 - julearn - INFO - Step added
+    2023-09-06 09:16:04,954 - julearn - INFO - = Model Parameters =
+    2023-09-06 09:16:04,955 - julearn - INFO - ====================
+    2023-09-06 09:16:04,955 - julearn - INFO - 
+    2023-09-06 09:16:04,955 - julearn - INFO - = Data Information =
+    2023-09-06 09:16:04,955 - julearn - INFO -      Problem type: classification
+    2023-09-06 09:16:04,955 - julearn - INFO -      Number of samples: 532
+    2023-09-06 09:16:04,955 - julearn - INFO -      Number of features: 2
+    2023-09-06 09:16:04,955 - julearn - INFO - ====================
+    2023-09-06 09:16:04,955 - julearn - INFO - 
+    2023-09-06 09:16:04,955 - julearn - INFO -      Number of classes: 2
+    2023-09-06 09:16:04,955 - julearn - INFO -      Target type: object
+    2023-09-06 09:16:04,956 - julearn - INFO -      Class distributions: event
     cue     266
     stim    266
     Name: count, dtype: int64
-    2023-08-09 13:14:48,920 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-    2023-08-09 13:14:48,920 - julearn - INFO - Binary classification problem detected.
+    2023-09-06 09:16:04,956 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+    2023-09-06 09:16:04,956 - julearn - INFO - Binary classification problem detected.
     0.7218303650149884
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 114-135
+.. GENERATED FROM PYTHON SOURCE LINES 113-134
 
 This results indicate that we can decode the kind of event by looking at
 the *parietal* and *frontal* signal. However, that claim is true only if we
@@ -359,7 +358,7 @@ By setting ``return_estimator="final"``, the :func:`.run_cross_validation`
 function returns the estimator fitted with all the data. We will use this
 later to do some analyses.
 
-.. GENERATED FROM PYTHON SOURCE LINES 135-151
+.. GENERATED FROM PYTHON SOURCE LINES 134-150
 
 .. code-block:: default
 
@@ -387,45 +386,45 @@ later to do some analyses.
 
  .. code-block:: none
 
-    2023-08-09 13:14:49,021 - julearn - INFO - ==== Input Data ====
-    2023-08-09 13:14:49,021 - julearn - INFO - Using dataframe as input
-    2023-08-09 13:14:49,021 - julearn - INFO -      Features: ['parietal', 'frontal']
-    2023-08-09 13:14:49,021 - julearn - INFO -      Target: event
-    2023-08-09 13:14:49,021 - julearn - INFO -      Expanded features: ['parietal', 'frontal']
-    2023-08-09 13:14:49,021 - julearn - INFO -      X_types:{}
-    2023-08-09 13:14:49,021 - julearn - WARNING - The following columns are not defined in X_types: ['parietal', 'frontal']. They will be treated as continuous.
+    2023-09-06 09:16:05,030 - julearn - INFO - ==== Input Data ====
+    2023-09-06 09:16:05,030 - julearn - INFO - Using dataframe as input
+    2023-09-06 09:16:05,030 - julearn - INFO -      Features: ['parietal', 'frontal']
+    2023-09-06 09:16:05,030 - julearn - INFO -      Target: event
+    2023-09-06 09:16:05,030 - julearn - INFO -      Expanded features: ['parietal', 'frontal']
+    2023-09-06 09:16:05,030 - julearn - INFO -      X_types:{}
+    2023-09-06 09:16:05,030 - julearn - WARNING - The following columns are not defined in X_types: ['parietal', 'frontal']. They will be treated as continuous.
     /home/runner/work/julearn/julearn/julearn/utils/logging.py:238: RuntimeWarning: The following columns are not defined in X_types: ['parietal', 'frontal']. They will be treated as continuous.
       warn(msg, category=category)
-    2023-08-09 13:14:49,022 - julearn - INFO - Using subject as groups
-    2023-08-09 13:14:49,023 - julearn - INFO - ====================
-    2023-08-09 13:14:49,023 - julearn - INFO - 
-    2023-08-09 13:14:49,023 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2023-08-09 13:14:49,023 - julearn - INFO - Step added
-    2023-08-09 13:14:49,023 - julearn - INFO - Adding step svm that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2023-08-09 13:14:49,023 - julearn - INFO - Step added
-    2023-08-09 13:14:49,024 - julearn - INFO - = Model Parameters =
-    2023-08-09 13:14:49,024 - julearn - INFO - ====================
-    2023-08-09 13:14:49,024 - julearn - INFO - 
-    2023-08-09 13:14:49,024 - julearn - INFO - = Data Information =
-    2023-08-09 13:14:49,025 - julearn - INFO -      Problem type: classification
-    2023-08-09 13:14:49,025 - julearn - INFO -      Number of samples: 532
-    2023-08-09 13:14:49,025 - julearn - INFO -      Number of features: 2
-    2023-08-09 13:14:49,025 - julearn - INFO - ====================
-    2023-08-09 13:14:49,025 - julearn - INFO - 
-    2023-08-09 13:14:49,025 - julearn - INFO -      Number of classes: 2
-    2023-08-09 13:14:49,025 - julearn - INFO -      Target type: object
-    2023-08-09 13:14:49,026 - julearn - INFO -      Class distributions: event
+    2023-09-06 09:16:05,031 - julearn - INFO - Using subject as groups
+    2023-09-06 09:16:05,031 - julearn - INFO - ====================
+    2023-09-06 09:16:05,031 - julearn - INFO - 
+    2023-09-06 09:16:05,031 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2023-09-06 09:16:05,031 - julearn - INFO - Step added
+    2023-09-06 09:16:05,031 - julearn - INFO - Adding step svm that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2023-09-06 09:16:05,032 - julearn - INFO - Step added
+    2023-09-06 09:16:05,032 - julearn - INFO - = Model Parameters =
+    2023-09-06 09:16:05,032 - julearn - INFO - ====================
+    2023-09-06 09:16:05,032 - julearn - INFO - 
+    2023-09-06 09:16:05,032 - julearn - INFO - = Data Information =
+    2023-09-06 09:16:05,032 - julearn - INFO -      Problem type: classification
+    2023-09-06 09:16:05,032 - julearn - INFO -      Number of samples: 532
+    2023-09-06 09:16:05,032 - julearn - INFO -      Number of features: 2
+    2023-09-06 09:16:05,033 - julearn - INFO - ====================
+    2023-09-06 09:16:05,033 - julearn - INFO - 
+    2023-09-06 09:16:05,033 - julearn - INFO -      Number of classes: 2
+    2023-09-06 09:16:05,033 - julearn - INFO -      Target type: object
+    2023-09-06 09:16:05,033 - julearn - INFO -      Class distributions: event
     cue     266
     stim    266
     Name: count, dtype: int64
-    2023-08-09 13:14:49,026 - julearn - INFO - Using outer CV scheme GroupShuffleSplit(n_splits=5, random_state=42, test_size=0.5, train_size=None)
-    2023-08-09 13:14:49,027 - julearn - INFO - Binary classification problem detected.
+    2023-09-06 09:16:05,034 - julearn - INFO - Using outer CV scheme GroupShuffleSplit(n_splits=5, random_state=42, test_size=0.5, train_size=None)
+    2023-09-06 09:16:05,034 - julearn - INFO - Binary classification problem detected.
     0.7210526315789474
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 152-157
+.. GENERATED FROM PYTHON SOURCE LINES 151-156
 
 After testing on independent subjects, we can now claim that given a new
 subject, we can predict the kind of event.
@@ -433,7 +432,7 @@ subject, we can predict the kind of event.
 Let's do some visualization on how these two features interact and what
 the preprocessing part of the model does.
 
-.. GENERATED FROM PYTHON SOURCE LINES 157-183
+.. GENERATED FROM PYTHON SOURCE LINES 156-182
 
 .. code-block:: default
 
@@ -481,7 +480,7 @@ the preprocessing part of the model does.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 184-189
+.. GENERATED FROM PYTHON SOURCE LINES 183-188
 
 In this case, the preprocessing is nothing more than a
 :class:`sklearn.preprocessing.StandardScaler`.
@@ -489,7 +488,7 @@ In this case, the preprocessing is nothing more than a
 It seems that the data is not quite linearly separable. Let's now visualize
 how the SVM does this complex task.
 
-.. GENERATED FROM PYTHON SOURCE LINES 189-219
+.. GENERATED FROM PYTHON SOURCE LINES 188-218
 
 .. code-block:: default
 
@@ -544,7 +543,7 @@ how the SVM does this complex task.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.767 seconds)
+   **Total running time of the script:** ( 0 minutes  0.551 seconds)
 
 
 .. _sphx_glr_download_auto_examples_02_inspection_plot_groupcv_inspect_svm.py:
