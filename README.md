@@ -1,5 +1,7 @@
 # julearn
 
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
+
 The Forschungszentrum Jülich Machine Learning Library
 
 Check our full documentation here: https://juaml.github.io/julearn/index.html
@@ -32,4 +34,3 @@ We still do not have a publication that you can use to cite julearn in your
 manuscript. However, julearn realies heavily on scikit-learn.
 
 Please cite scikit-learn: https://scikit-learn.org/stable/about.html#citing-scikit-learn
-

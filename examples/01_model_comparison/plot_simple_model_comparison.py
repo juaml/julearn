@@ -140,7 +140,7 @@ scores3.to_csv("/tmp/scores3.csv")
 
 from julearn.viz import plot_scores
 panel = plot_scores(scores1, scores2, scores3)
-# panel.show() 
+# panel.show()
 # uncomment the previous line show the plot
 # read the documentation for more information
 #  https://panel.holoviz.org/getting_started/build_app.html#deploying-panels

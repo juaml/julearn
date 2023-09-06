@@ -40,5 +40,3 @@
 
 
 .. _`DESlib`: https://github.com/scikit-learn-contrib/DESlib
-
-

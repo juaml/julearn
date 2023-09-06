@@ -6,21 +6,21 @@ Overview of available Pipeline Steps
 ====================================
 
 The following is a list of all available steps that can be used to create
-a pipeline by name. The overview is sorted based on the type of the step: 
+a pipeline by name. The overview is sorted based on the type of the step:
 :ref:`available_transformers` or :ref:`available_models`.
 
-The column 'Name (str)' refers to the string-name of 
+The column 'Name (str)' refers to the string-name of
 the respective step, i.e. how it should be specified when passed to e.g. the
-``PipelineCreator``. The column 'Description' gives a short 
-description of what the step is doing. The column 'Class' either indicates the 
-underlying `scikit-learn`_ class of the respective pipeline-step together with 
-a link to the class in the `scikit-learn`_ documentation (follow the link to 
-see the valid parameters) or indicates the class in 
-the Julearn code, so one can have a closer look at it in Julearn's 
+``PipelineCreator``. The column 'Description' gives a short
+description of what the step is doing. The column 'Class' either indicates the
+underlying `scikit-learn`_ class of the respective pipeline-step together with
+a link to the class in the `scikit-learn`_ documentation (follow the link to
+see the valid parameters) or indicates the class in
+the Julearn code, so one can have a closer look at it in Julearn's
 :ref:`api`.
 
-For feature transformations the :ref:`available_transformers` have to be used 
-with the ``PipelineCreator`` and for target transformation with the 
+For feature transformations the :ref:`available_transformers` have to be used
+with the ``PipelineCreator`` and for target transformation with the
 ``TargetPipelineCreator``.
 
 .. _available_transformers:
@@ -109,8 +109,8 @@ DataFrame operations
    * - ``confound_removal``
      - Removing confounds from features,
        by subtracting the prediction of each feature given all confounds.
-       By default this is equal to "independently regressing out 
-       the confounds from the features" 
+       By default this is equal to "independently regressing out
+       the confounds from the features"
      - :class:`.ConfoundRemover`
    * - ``drop_columns``
      - Drop columns from the dataframe
@@ -137,7 +137,7 @@ Decomposition
    * - ``pca``
      - Principal Component Analysis
      - :class:`~sklearn.decomposition.PCA`
-  
+
 Custom
 ~~~~~~
 
@@ -149,7 +149,7 @@ Custom
      - Description
      - Class
    * - ``cbpm``
-     - Connectome-based Predictive Modeling (CBPM) 
+     - Connectome-based Predictive Modeling (CBPM)
      - :class:`.CBPM`
 
 .. _available_models:
@@ -215,7 +215,7 @@ Ensemble
      - Y
      - Y
    * - ``gradientboost``
-     - Gradient Boosting 
+     - Gradient Boosting
      - :class:`~sklearn.ensemble.GradientBoostingClassifier` and :class:`~sklearn.ensemble.GradientBoostingRegressor`
      - Y
      - Y
@@ -329,7 +329,7 @@ Naive Bayes
      - Y
      - N
    * - ``nb_gaussian``
-     - Gaussian Naive Bayes 
+     - Gaussian Naive Bayes
      - :class:`~sklearn.naive_bayes.GaussianNB`
      - Y
      - Y

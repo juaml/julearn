@@ -21,7 +21,7 @@ surprise.
 Another important argument is that we want to have a good estimate of the
 variance of our model. This is important because we want to know how much the
 performance of our model will change if we train it on a different dataset.
-So which CV splitter we should use? As much as we would like to have an answer
+So which CV splitter should we use? As much as we would like to have an answer
 to this question, it is impossible for many reasons. According to Bengio and
 Grandvalet [#1]_, it is simply not possible to have an unbiased estimate of
 the variance of the generalization error.
