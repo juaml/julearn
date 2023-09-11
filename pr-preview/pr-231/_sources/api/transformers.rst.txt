@@ -30,7 +30,7 @@ Functions
 .. autosummary::
    :toctree: generated/
    :template: function.rst
-  
+
     list_transformers
     get_transformer
     register_transformer
@@ -65,9 +65,8 @@ Functions
 .. autosummary::
    :toctree: generated/
    :template: function.rst
-  
+
     get_target_transformer
     list_target_transformers
     register_target_transformer
     reset_target_transformer_register
-

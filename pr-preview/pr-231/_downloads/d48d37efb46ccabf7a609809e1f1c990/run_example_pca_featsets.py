@@ -2,10 +2,10 @@
 Regression Analysis
 ===================
 
-This example uses the 'diabetes' data from sklearn datasets and performs
-a regression analysis using a Ridge Regression model. I will use the Julearn
-PipelineCreator to create a pipeline with two different PCA steps are used
-to reduce the dimensionality of the data, each one computed on a different
+This example uses the ``diabetes`` data from ``sklearn datasets`` and performs
+a regression analysis using a Ridge Regression model. We'll use the
+``julearn.PipelineCreator`` to create a pipeline with two different PCA steps and
+reduce the dimensionality of the data, each one computed on a different
 subset of features.
 
 """
@@ -13,7 +13,6 @@ subset of features.
 #          Kaustubh R. Patil <k.patil@fz-juelich.de>
 #          Shammi More <s.more@fz-juelich.de>
 #          Federico Raimondo <f.raimondo@fz-juelich.de>
-#
 # License: AGPL
 
 import pandas as pd
@@ -30,11 +29,11 @@ from julearn.pipeline import PipelineCreator
 from julearn.inspect import preprocess
 
 ###############################################################################
-# Set the logging level to info to see extra information
+# Set the logging level to info to see extra information.
 configure_logging(level="INFO")
 
 ###############################################################################
-# load the diabetes data from sklearn as a pandas dataframe
+# Load the diabetes data from ``sklearn`` as a ``pandas.DataFrame``.
 features, target = load_diabetes(return_X_y=True, as_frame=True)
 
 ###############################################################################
@@ -55,9 +54,8 @@ X = ["age", "sex", "bmi", "bp", "s1", "s2", "s3", "s4", "s5", "s6"]
 y = "target"
 
 ###############################################################################
-# Assign types to the features
-# and create feature groups for PCA
-# we will keep 1 component per PCA group
+# Assign types to the features and create feature groups for PCA.
+# We will keep 1 component per PCA group.
 X_types = {
     "pca1": ["age", "bmi", "bp"],
     "pca2": ["s1", "s2", "s3", "s4", "s5", "s6"],
@@ -65,9 +63,9 @@ X_types = {
 }
 
 ###############################################################################
-# Create a pipeline to process the data and the fit a model. We must specify 
-# how each X_type will be used. For example if in the last step we do not 
-# specify `apply_to=['continuous', 'categorical']`, then the pipeline will not
+# Create a pipeline to process the data and the fit a model. We must specify
+# how each ``X_type`` will be used. For example if in the last step we do not
+# specify ``apply_to=["continuous", "categorical"]``, then the pipeline will not
 # know what to do with the categorical features.
 creator = PipelineCreator(problem_type="regression")
 creator.add("pca", apply_to="pca1", n_components=1, name="pca_feats1")
@@ -75,12 +73,12 @@ creator.add("pca", apply_to="pca2", n_components=1, name="pca_feats2")
 creator.add("ridge", apply_to=["continuous", "categorical"])
 
 ###############################################################################
-# Split the dataset into train and test
+# Split the dataset into train and test.
 train_diabetes, test_diabetes = train_test_split(data_diabetes, test_size=0.3)
 
 ###############################################################################
 # Train a ridge regression model on train dataset and use mean absolute error
-# for scoring/
+# for scoring.
 scores, model = run_cross_validation(
     X=X,
     y=y,
@@ -96,23 +94,23 @@ scores, model = run_cross_validation(
 print(scores.head())
 
 ###############################################################################
-# Mean value of mean absolute error across CV
+# Mean value of mean absolute error across CV.
 print(scores["test_score"].mean())
 
-
 ###############################################################################
-# Let's see how the data looks like after preprocessing
-# We will process the data until the first PCA step
-# We should get the first
-# PCA component for ['age', 'bmi', 'bp'] and other  features untouched
+# Let's see how the data looks like after preprocessing. We will process the
+# data until the first PCA step. We should get the first PCA component for
+# ["age", "bmi", "bp"] and leave other features untouched.
 data_processed1 = preprocess(model, X, data=train_diabetes, until="pca_feats1")
 print("Data after preprocessing until PCA step 1")
-print(data_processed1.head())
-# We will process the data until the second PCA step
-# We should now also get one PCA component for ['s1', 's2', 's3', 's4', 's5', 's6']
+data_processed1.head()
+
+###############################################################################
+# We will process the data until the second PCA step. We should now also get
+# one PCA component for ["s1", "s2", "s3", "s4", "s5", "s6"].
 data_processed2 = preprocess(model, X, data=train_diabetes, until="pca_feats2")
 print("Data after preprocessing until PCA step 2")
-print(data_processed2.head())
+data_processed2.head()
 
 ###############################################################################
 # Now we can get the MAE fold and repetition:
@@ -123,14 +121,14 @@ df_mae.columns.name = "K-fold splits"
 print(df_mae)
 
 ###############################################################################
-# Plot heatmap of mean absolute error (MAE) over all repeats and CV splits
+# Plot heatmap of mean absolute error (MAE) over all repeats and CV splits.
 fig, ax = plt.subplots(1, 1, figsize=(10, 7))
 sns.heatmap(df_mae, cmap="YlGnBu")
 plt.title("Cross-validation MAE")
 
 ###############################################################################
 # Use the final model to make predictions on test data and plot scatterplot
-# of true values vs predicted values
+# of true values vs predicted values.
 y_true = test_diabetes[y]
 y_pred = model.predict(test_diabetes[X])
 mae = format(mean_absolute_error(y_true, y_pred), ".2f")

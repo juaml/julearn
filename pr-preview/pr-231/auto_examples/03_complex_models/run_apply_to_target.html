@@ -173,7 +173,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/data.html">5.2. Data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/pipeline.html">5.3. Model Building</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/model_evaluation.html">5.4. Model Evaluation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/model_comparison.html">5.5. Model comparison</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/model_comparison.html">5.5. Model Comparison</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../selected_deeper_topics/index.html">6. Selected deeper topics</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -188,8 +188,8 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../available_pipeline_steps.html">7. Overview of available Pipeline Steps</a></li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="../../examples.html">8. Examples</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
-<li class="toctree-l2 has-children"><a class="reference internal" href="../00_starting/index.html">8.1. Starting with julearn</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../00_starting/run_combine_pandas.html">Working with pandas</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../00_starting/index.html">8.1. Starting with <code class="docutils literal notranslate"><span class="pre">julearn</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../00_starting/run_combine_pandas.html">Working with <code class="docutils literal notranslate"><span class="pre">pandas</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../00_starting/run_simple_binary_classification.html">Simple Binary Classification</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../00_starting/run_grouped_cv.html">Grouped CV</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../00_starting/plot_cm_acc_multiclass.html">Multiclass Classification</a></li>
@@ -348,8 +348,8 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../../configuration.html">10. Configuring julearn</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">11. Contributing to julearn</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../configuration.html">10. Configuring <code class="docutils literal notranslate"><span class="pre">julearn</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">11. Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../maintaining.html">12. Maintaining</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../faq.html">13. FAQs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">14. What’s new</a></li>
@@ -393,7 +393,7 @@ to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="transforming-target-variable-with-z-score">
 <span id="sphx-glr-auto-examples-03-complex-models-run-apply-to-target-py"></span><h1>Transforming target variable with z-score<a class="headerlink" href="#transforming-target-variable-with-z-score" title="Permalink to this heading">#</a></h1>
-<p>This example uses the sklearn “diabetes” regression dataset, and transforms the
+<p>This example uses the sklearn <code class="docutils literal notranslate"><span class="pre">diabetes</span></code> regression dataset, and transforms the
 target variable, in this case, using z-score. Then, we perform a regression
 analysis using Ridge Regression model.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Authors: Lya K. Paas Oliveros &lt;l.paas.oliveros@fz-juelich.de&gt;</span>
@@ -402,32 +402,29 @@ analysis using Ridge Regression model.</p>
 <span class="c1"># License: AGPL</span>
 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_diabetes.html#sklearn.datasets.load_diabetes" title="sklearn.datasets.load_diabetes" class="sphx-glr-backref-module-sklearn-datasets sphx-glr-backref-type-py-function"><span class="n">load_diabetes</span></a>
 <span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html#sklearn.model_selection.train_test_split" title="sklearn.model_selection.train_test_split" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-function"><span class="n">train_test_split</span></a>
 
 <span class="kn">from</span> <span class="nn">julearn</span> <span class="kn">import</span> <span class="n">run_cross_validation</span>
 <span class="kn">from</span> <span class="nn">julearn.utils</span> <span class="kn">import</span> <span class="n">configure_logging</span>
 
-<span class="c1"># this is crucial for creating the model in the new version</span>
 <span class="kn">from</span> <span class="nn">julearn.pipeline</span> <span class="kn">import</span> <span class="n">PipelineCreator</span><span class="p">,</span> <span class="n">TargetPipelineCreator</span>
 </pre></div>
 </div>
-<p>Set the logging level to info to see extra information</p>
+<p>Set the logging level to info to see extra information.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-09-05 12:40:55,343 - julearn - INFO - ===== Lib Versions =====
-2023-09-05 12:40:55,343 - julearn - INFO - numpy: 1.25.2
-2023-09-05 12:40:55,343 - julearn - INFO - scipy: 1.11.2
-2023-09-05 12:40:55,343 - julearn - INFO - sklearn: 1.3.0
-2023-09-05 12:40:55,343 - julearn - INFO - pandas: 2.0.3
-2023-09-05 12:40:55,343 - julearn - INFO - julearn: 0.3.1.dev68
-2023-09-05 12:40:55,343 - julearn - INFO - ========================
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-09-11 09:51:05,615 - julearn - INFO - ===== Lib Versions =====
+2023-09-11 09:51:05,616 - julearn - INFO - numpy: 1.25.2
+2023-09-11 09:51:05,616 - julearn - INFO - scipy: 1.11.2
+2023-09-11 09:51:05,616 - julearn - INFO - sklearn: 1.3.0
+2023-09-11 09:51:05,616 - julearn - INFO - pandas: 2.0.3
+2023-09-11 09:51:05,616 - julearn - INFO - julearn: 0.3.1.dev121
+2023-09-11 09:51:05,616 - julearn - INFO - ========================
 </pre></div>
 </div>
-<p>Load the diabetes dataset from sklearn as a pandas dataframe</p>
+<p>Load the diabetes dataset from <code class="docutils literal notranslate"><span class="pre">sklearn</span></code> as a <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code>.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">features</span></a><span class="p">,</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.Series.html#pandas.Series" title="pandas.core.series.Series" class="sphx-glr-backref-module-pandas-core-series sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">target</span></a> <span class="o">=</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_diabetes.html#sklearn.datasets.load_diabetes" title="sklearn.datasets.load_diabetes" class="sphx-glr-backref-module-sklearn-datasets sphx-glr-backref-type-py-function"><span class="n">load_diabetes</span></a><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">as_frame</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -461,14 +458,14 @@ Name: target, dtype: float64
 </pre></div>
 </div>
 <p>Let’s combine features and target together in one dataframe and define X
-and y</p>
+and y.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_diabetes</span></a> <span class="o">=</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.concat.html#pandas.concat" title="pandas.concat" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-function"><span class="n">pd</span><span class="o">.</span><span class="n">concat</span></a><span class="p">([</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">features</span></a><span class="p">,</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.Series.html#pandas.Series" title="pandas.core.series.Series" class="sphx-glr-backref-module-pandas-core-series sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">target</span></a><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;age&quot;</span><span class="p">,</span> <span class="s2">&quot;sex&quot;</span><span class="p">,</span> <span class="s2">&quot;bmi&quot;</span><span class="p">,</span> <span class="s2">&quot;bp&quot;</span><span class="p">,</span> <span class="s2">&quot;s1&quot;</span><span class="p">,</span> <span class="s2">&quot;s2&quot;</span><span class="p">,</span> <span class="s2">&quot;s3&quot;</span><span class="p">,</span> <span class="s2">&quot;s4&quot;</span><span class="p">,</span> <span class="s2">&quot;s5&quot;</span><span class="p">,</span> <span class="s2">&quot;s6&quot;</span><span class="p">]</span>
 <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a> <span class="o">=</span> <span class="s2">&quot;target&quot;</span>
 </pre></div>
 </div>
-<p>Split the dataset into train and test</p>
+<p>Split the dataset into train and test.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">train_diabetes</span></a><span class="p">,</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">test_diabetes</span></a> <span class="o">=</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.train_test_split.html#sklearn.model_selection.train_test_split" title="sklearn.model_selection.train_test_split" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-function"><span class="n">train_test_split</span></a><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data_diabetes</span></a><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -478,7 +475,7 @@ we will first need to create a TargetPipelineCreator for this.</p>
 <span class="n">target_creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;julearn.pipeline.target_pipeline_creator.TargetPipelineCreator object at 0x7f1541a16ad0&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;julearn.pipeline.target_pipeline_creator.TargetPipelineCreator object at 0x7f97782e6b00&gt;
 </pre></div>
 </div>
 <p>Now we can create the pipeline using a PipelineCreator.</p>
@@ -498,38 +495,38 @@ we will first need to create a TargetPipelineCreator for this.</p>
 <span class="nb">print</span><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.head.html#pandas.DataFrame.head" title="pandas.DataFrame.head" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method"><span class="n">scores</span><span class="o">.</span><span class="n">head</span></a><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-09-05 12:40:55,362 - julearn - INFO - Adding step jutargetpipeline that applies to ColumnTypes&lt;types={&#39;target&#39;}; pattern=(?:target)&gt;
-2023-09-05 12:40:55,362 - julearn - INFO - Step added
-2023-09-05 12:40:55,362 - julearn - INFO - Adding step ridge that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2023-09-05 12:40:55,362 - julearn - INFO - Step added
-2023-09-05 12:40:55,362 - julearn - INFO - ==== Input Data ====
-2023-09-05 12:40:55,362 - julearn - INFO - Using dataframe as input
-2023-09-05 12:40:55,362 - julearn - INFO -      Features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
-2023-09-05 12:40:55,362 - julearn - INFO -      Target: target
-2023-09-05 12:40:55,362 - julearn - INFO -      Expanded features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
-2023-09-05 12:40:55,363 - julearn - INFO -      X_types:{}
-2023-09-05 12:40:55,363 - julearn - WARNING - The following columns are not defined in X_types: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]. They will be treated as continuous.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-09-11 09:51:05,637 - julearn - INFO - Adding step jutargetpipeline that applies to ColumnTypes&lt;types={&#39;target&#39;}; pattern=(?:target)&gt;
+2023-09-11 09:51:05,638 - julearn - INFO - Step added
+2023-09-11 09:51:05,638 - julearn - INFO - Adding step ridge that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-09-11 09:51:05,638 - julearn - INFO - Step added
+2023-09-11 09:51:05,638 - julearn - INFO - ==== Input Data ====
+2023-09-11 09:51:05,638 - julearn - INFO - Using dataframe as input
+2023-09-11 09:51:05,638 - julearn - INFO -      Features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2023-09-11 09:51:05,638 - julearn - INFO -      Target: target
+2023-09-11 09:51:05,638 - julearn - INFO -      Expanded features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2023-09-11 09:51:05,638 - julearn - INFO -      X_types:{}
+2023-09-11 09:51:05,638 - julearn - WARNING - The following columns are not defined in X_types: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]. They will be treated as continuous.
 /home/runner/work/julearn/julearn/julearn/prepare.py:503: RuntimeWarning: The following columns are not defined in X_types: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]. They will be treated as continuous.
   warn_with_log(
-2023-09-05 12:40:55,363 - julearn - INFO - ====================
-2023-09-05 12:40:55,363 - julearn - INFO -
-2023-09-05 12:40:55,365 - julearn - INFO - = Model Parameters =
-2023-09-05 12:40:55,365 - julearn - INFO - ====================
-2023-09-05 12:40:55,365 - julearn - INFO -
-2023-09-05 12:40:55,365 - julearn - INFO - = Data Information =
-2023-09-05 12:40:55,365 - julearn - INFO -      Problem type: regression
-2023-09-05 12:40:55,365 - julearn - INFO -      Number of samples: 309
-2023-09-05 12:40:55,365 - julearn - INFO -      Number of features: 10
-2023-09-05 12:40:55,365 - julearn - INFO - ====================
-2023-09-05 12:40:55,365 - julearn - INFO -
-2023-09-05 12:40:55,365 - julearn - INFO -      Target type: float64
-2023-09-05 12:40:55,365 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2023-09-11 09:51:05,639 - julearn - INFO - ====================
+2023-09-11 09:51:05,639 - julearn - INFO -
+2023-09-11 09:51:05,640 - julearn - INFO - = Model Parameters =
+2023-09-11 09:51:05,641 - julearn - INFO - ====================
+2023-09-11 09:51:05,641 - julearn - INFO -
+2023-09-11 09:51:05,641 - julearn - INFO - = Data Information =
+2023-09-11 09:51:05,641 - julearn - INFO -      Problem type: regression
+2023-09-11 09:51:05,641 - julearn - INFO -      Number of samples: 309
+2023-09-11 09:51:05,641 - julearn - INFO -      Number of features: 10
+2023-09-11 09:51:05,641 - julearn - INFO - ====================
+2023-09-11 09:51:05,641 - julearn - INFO -
+2023-09-11 09:51:05,641 - julearn - INFO -      Target type: float64
+2023-09-11 09:51:05,641 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
    fit_time  score_time  ...  fold                          cv_mdsum
-0  0.005326    0.003935  ...     0  b10eef89b4192178d482d7a1587a248a
-1  0.004944    0.003884  ...     1  b10eef89b4192178d482d7a1587a248a
-2  0.004951    0.003826  ...     2  b10eef89b4192178d482d7a1587a248a
-3  0.004918    0.003858  ...     3  b10eef89b4192178d482d7a1587a248a
-4  0.004908    0.003845  ...     4  b10eef89b4192178d482d7a1587a248a
+0  0.005727    0.004127  ...     0  b10eef89b4192178d482d7a1587a248a
+1  0.005212    0.004091  ...     1  b10eef89b4192178d482d7a1587a248a
+2  0.005199    0.004047  ...     2  b10eef89b4192178d482d7a1587a248a
+3  0.005143    0.004040  ...     3  b10eef89b4192178d482d7a1587a248a
+4  0.005164    0.004088  ...     4  b10eef89b4192178d482d7a1587a248a
 
 [5 rows x 8 columns]
 </pre></div>
@@ -541,7 +538,7 @@ we will first need to create a TargetPipelineCreator for this.</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>154.0615805903489
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.089 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.097 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-03-complex-models-run-apply-to-target-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/c8ced6d3b1e6a1327ae1ec5f6d6352a4/run_apply_to_target.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">run_apply_to_target.py</span></code></a></p>

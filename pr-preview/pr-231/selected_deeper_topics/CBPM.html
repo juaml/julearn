@@ -173,7 +173,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../what_really_need_know/data.html">5.2. Data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../what_really_need_know/pipeline.html">5.3. Model Building</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../what_really_need_know/model_evaluation.html">5.4. Model Evaluation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../what_really_need_know/model_comparison.html">5.5. Model comparison</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../what_really_need_know/model_comparison.html">5.5. Model Comparison</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">6. Selected deeper topics</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
@@ -188,8 +188,8 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../available_pipeline_steps.html">7. Overview of available Pipeline Steps</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../examples.html">8. Examples</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../auto_examples/00_starting/index.html">8.1. Starting with julearn</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../auto_examples/00_starting/run_combine_pandas.html">Working with pandas</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../auto_examples/00_starting/index.html">8.1. Starting with <code class="docutils literal notranslate"><span class="pre">julearn</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../auto_examples/00_starting/run_combine_pandas.html">Working with <code class="docutils literal notranslate"><span class="pre">pandas</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../auto_examples/00_starting/run_simple_binary_classification.html">Simple Binary Classification</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../auto_examples/00_starting/run_grouped_cv.html">Grouped CV</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../auto_examples/00_starting/plot_cm_acc_multiclass.html">Multiclass Classification</a></li>
@@ -348,8 +348,8 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../configuration.html">10. Configuring julearn</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../contributing.html">11. Contributing to julearn</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration.html">10. Configuring <code class="docutils literal notranslate"><span class="pre">julearn</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">11. Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../maintaining.html">12. Maintaining</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq.html">13. FAQs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../whats_new.html">14. What’s new</a></li>
@@ -397,9 +397,9 @@ has been used to predict fluid intelligence <a class="footnote-reference bracket
 <a class="footnote-reference brackets" href="#id6" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></a> based on brain functional connectivity.</p>
 <p>In a nutshell, CBPM consists of:</p>
 <ol class="arabic simple">
-<li><p>feature selection</p></li>
-<li><p>feature aggregation</p></li>
-<li><p>model building</p></li>
+<li><p>Feature selection</p></li>
+<li><p>Feature aggregation</p></li>
+<li><p>Model building</p></li>
 </ol>
 <p>In CBPM, features are selected if their correlation to the target is
 significant according to some specified significance threshold alpha. These
@@ -408,37 +408,39 @@ subsequently used to fit a machine learning model. Most commonly in this
 approach a linear model is used for this, but in principle it could be any
 other machine learning model.</p>
 <section id="cbpm-in-julearn">
-<h2>CBPM in Julearn<a class="headerlink" href="#cbpm-in-julearn" title="Permalink to this heading">#</a></h2>
-<p>Julearn implements a simple, scikit-learn compatible transformer (“cbpm”), that
-performs the first two parts of this approach, i.e. the feature selection and
-feature aggregation. Leveraging julearn’s PipelineCreator, one can therefore
-easily apply the “cbpm” transformer as a preprocessing step, and then apply any
-sklearn-compatible estimator for the model building part.</p>
+<h2>CBPM in <code class="docutils literal notranslate"><span class="pre">julearn</span></code><a class="headerlink" href="#cbpm-in-julearn" title="Permalink to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">julearn</span></code> implements a simple, <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code> compatible transformer
+(“cbpm”), that performs the first two parts of this approach, i.e., the feature
+selection and feature aggregation. Leveraging <code class="docutils literal notranslate"><span class="pre">julearn</span></code>’s <code class="docutils literal notranslate"><span class="pre">PipelineCreator</span></code>,
+one can therefore easily apply the <code class="docutils literal notranslate"><span class="pre">&quot;cbpm&quot;</span></code> transformer as a preprocessing
+step, and then apply any <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code>-compatible estimator for the model
+building part.</p>
 <p>For example, to build a simple CBPM workflow, you can create a pipeline and
 run a cross-validation as follows:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">julearn</span> <span class="kn">import</span> <span class="n">run_cross_validation</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Authors: Leonard Sasse &lt;l.sasse@fz-juelich.de&gt;</span>
+<span class="c1"># License: AGPL</span>
+
+<span class="kn">from</span> <span class="nn">julearn</span> <span class="kn">import</span> <span class="n">run_cross_validation</span>
 <span class="kn">from</span> <span class="nn">julearn.pipeline</span> <span class="kn">import</span> <span class="n">PipelineCreator</span>
 
 <span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">make_regression</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 
-
-<span class="c1"># prepare some data:</span>
-<span class="c1"># prepare data</span>
+<span class="c1"># Prepare data</span>
 <span class="n">X</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">make_regression</span><span class="p">(</span><span class="n">n_features</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">n_samples</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
 
-<span class="c1"># make dataframe</span>
+<span class="c1"># Make dataframe</span>
 <span class="n">X_names</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;feature_</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">21</span><span class="p">)]</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
 <span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">X_names</span>
 <span class="n">data</span><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span>
 
-<span class="c1"># prepare a pipeline creator:</span>
+<span class="c1"># Prepare a pipeline creator</span>
 <span class="n">cbpm_pipeline_creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;regression&quot;</span><span class="p">)</span>
 <span class="n">cbpm_pipeline_creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;cbpm&quot;</span><span class="p">)</span>
 <span class="n">cbpm_pipeline_creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;linreg&quot;</span><span class="p">)</span>
 
-<span class="c1"># cross-validate the cbpm pipeline</span>
+<span class="c1"># Cross-validate the cbpm pipeline</span>
 <span class="n">scores</span><span class="p">,</span> <span class="n">final_model</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
     <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
     <span class="n">X</span><span class="o">=</span><span class="n">X_names</span><span class="p">,</span>
@@ -448,70 +450,68 @@ run a cross-validation as follows:</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-09-05 12:41:13,923 - julearn - INFO - Adding step cbpm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2023-09-05 12:41:13,924 - julearn - INFO - Step added
-2023-09-05 12:41:13,924 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2023-09-05 12:41:13,924 - julearn - INFO - Step added
-2023-09-05 12:41:13,924 - julearn - INFO - ==== Input Data ====
-2023-09-05 12:41:13,924 - julearn - INFO - Using dataframe as input
-2023-09-05 12:41:13,924 - julearn - INFO -      Features: [&#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;feature_20&#39;]
-2023-09-05 12:41:13,924 - julearn - INFO -      Target: target
-2023-09-05 12:41:13,925 - julearn - INFO -      Expanded features: [&#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;feature_20&#39;]
-2023-09-05 12:41:13,925 - julearn - INFO -      X_types:{}
-2023-09-05 12:41:13,926 - julearn - WARNING - The following columns are not defined in X_types: [&#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;feature_20&#39;]. They will be treated as continuous.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-09-11 09:51:26,312 - julearn - INFO - Adding step cbpm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-09-11 09:51:26,313 - julearn - INFO - Step added
+2023-09-11 09:51:26,313 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-09-11 09:51:26,313 - julearn - INFO - Step added
+2023-09-11 09:51:26,313 - julearn - INFO - ==== Input Data ====
+2023-09-11 09:51:26,313 - julearn - INFO - Using dataframe as input
+2023-09-11 09:51:26,313 - julearn - INFO -      Features: [&#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;feature_20&#39;]
+2023-09-11 09:51:26,313 - julearn - INFO -      Target: target
+2023-09-11 09:51:26,314 - julearn - INFO -      Expanded features: [&#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;feature_20&#39;]
+2023-09-11 09:51:26,315 - julearn - INFO -      X_types:{}
+2023-09-11 09:51:26,315 - julearn - WARNING - The following columns are not defined in X_types: [&#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;feature_20&#39;]. They will be treated as continuous.
 /home/runner/work/julearn/julearn/julearn/prepare.py:503: RuntimeWarning: The following columns are not defined in X_types: [&#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;feature_20&#39;]. They will be treated as continuous.
   warn_with_log(
-2023-09-05 12:41:13,926 - julearn - INFO - ====================
-2023-09-05 12:41:13,927 - julearn - INFO -
-2023-09-05 12:41:13,927 - julearn - INFO - = Model Parameters =
-2023-09-05 12:41:13,927 - julearn - INFO - ====================
-2023-09-05 12:41:13,927 - julearn - INFO -
-2023-09-05 12:41:13,927 - julearn - INFO - = Data Information =
-2023-09-05 12:41:13,927 - julearn - INFO -      Problem type: regression
-2023-09-05 12:41:13,927 - julearn - INFO -      Number of samples: 200
-2023-09-05 12:41:13,927 - julearn - INFO -      Number of features: 20
-2023-09-05 12:41:13,927 - julearn - INFO - ====================
-2023-09-05 12:41:13,927 - julearn - INFO -
-2023-09-05 12:41:13,927 - julearn - INFO -      Target type: float64
-2023-09-05 12:41:13,928 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2023-09-05 12:41:13,949 - julearn - WARNING - No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
+2023-09-11 09:51:26,316 - julearn - INFO - ====================
+2023-09-11 09:51:26,316 - julearn - INFO -
+2023-09-11 09:51:26,316 - julearn - INFO - = Model Parameters =
+2023-09-11 09:51:26,316 - julearn - INFO - ====================
+2023-09-11 09:51:26,316 - julearn - INFO -
+2023-09-11 09:51:26,316 - julearn - INFO - = Data Information =
+2023-09-11 09:51:26,316 - julearn - INFO -      Problem type: regression
+2023-09-11 09:51:26,317 - julearn - INFO -      Number of samples: 200
+2023-09-11 09:51:26,317 - julearn - INFO -      Number of features: 20
+2023-09-11 09:51:26,317 - julearn - INFO - ====================
+2023-09-11 09:51:26,317 - julearn - INFO -
+2023-09-11 09:51:26,317 - julearn - INFO -      Target type: float64
+2023-09-11 09:51:26,317 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2023-09-11 09:51:26,339 - julearn - WARNING - No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
 /home/runner/work/julearn/julearn/julearn/transformers/cbpm.py:265: RuntimeWarning: No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
   warn_with_log(
-2023-09-05 12:41:13,975 - julearn - WARNING - No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
+2023-09-11 09:51:26,367 - julearn - WARNING - No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
 /home/runner/work/julearn/julearn/julearn/transformers/cbpm.py:265: RuntimeWarning: No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
   warn_with_log(
-2023-09-05 12:41:14,000 - julearn - WARNING - No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
+2023-09-11 09:51:26,394 - julearn - WARNING - No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
 /home/runner/work/julearn/julearn/julearn/transformers/cbpm.py:265: RuntimeWarning: No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
   warn_with_log(
-2023-09-05 12:41:14,025 - julearn - WARNING - No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
+2023-09-11 09:51:26,421 - julearn - WARNING - No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
 /home/runner/work/julearn/julearn/julearn/transformers/cbpm.py:265: RuntimeWarning: No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
   warn_with_log(
-2023-09-05 12:41:14,051 - julearn - WARNING - No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
+2023-09-11 09:51:26,448 - julearn - WARNING - No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
 /home/runner/work/julearn/julearn/julearn/transformers/cbpm.py:265: RuntimeWarning: No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
   warn_with_log(
-2023-09-05 12:41:14,077 - julearn - WARNING - No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
+2023-09-11 09:51:26,475 - julearn - WARNING - No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
 /home/runner/work/julearn/julearn/julearn/transformers/cbpm.py:265: RuntimeWarning: No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
   warn_with_log(
 </pre></div>
 </div>
-<p>By default the “cbpm” transformer will perform feature selection using the
+<p>By default the <code class="docutils literal notranslate"><span class="pre">&quot;cbpm&quot;</span></code> transformer will perform feature selection using the
 Pearson correlation between each feature and the target, and select the
 features for which the p-value of the correlation falls below the default
 significance threshold of 0.01. It will then group the features into
 negatively and positively correlated features, and sum up the features within
 each of these groups using <a class="reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.sum.html#numpy.sum" title="(in NumPy v1.25)"><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.sum()</span></code></a>. That is, the linear model in
 this case is fitted on two features:</p>
-<blockquote>
-<div><ol class="arabic simple">
-<li><p>sum of features that are positively correlated to the target</p></li>
-<li><p>sum of features that are negatively correlated to the target</p></li>
+<ol class="arabic simple">
+<li><p>Sum of features that are positively correlated to the target</p></li>
+<li><p>Sum of features that are negatively correlated to the target</p></li>
 </ol>
-</div></blockquote>
 <p>The pipeline creator also allows easily customising these parameters of the
-“cbpm” transformer according to your needs. For example, to use a different
+<code class="docutils literal notranslate"><span class="pre">&quot;cbpm&quot;</span></code> transformer according to your needs. For example, to use a different
 significance threshold during feature selection one may set the
-<cite>significance_threshold</cite> keyword to increase it to 0.05 as follows:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># prepare a pipeline creator</span>
+<code class="docutils literal notranslate"><span class="pre">significance_threshold</span></code> keyword to increase it to 0.05 as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Prepare a pipeline creator</span>
 <span class="n">cbpm_pipeline_creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;regression&quot;</span><span class="p">)</span>
 <span class="n">cbpm_pipeline_creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;cbpm&quot;</span><span class="p">,</span> <span class="n">significance_threshold</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>
 <span class="n">cbpm_pipeline_creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;linreg&quot;</span><span class="p">)</span>
@@ -519,11 +519,11 @@ significance threshold during feature selection one may set the
 <span class="nb">print</span><span class="p">(</span><span class="n">cbpm_pipeline_creator</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-09-05 12:41:14,080 - julearn - INFO - Adding step cbpm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2023-09-05 12:41:14,080 - julearn - INFO - Setting hyperparameter significance_threshold = 0.05
-2023-09-05 12:41:14,080 - julearn - INFO - Step added
-2023-09-05 12:41:14,080 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2023-09-05 12:41:14,080 - julearn - INFO - Step added
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-09-11 09:51:26,479 - julearn - INFO - Adding step cbpm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-09-11 09:51:26,479 - julearn - INFO - Setting hyperparameter significance_threshold = 0.05
+2023-09-11 09:51:26,479 - julearn - INFO - Step added
+2023-09-11 09:51:26,479 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-09-11 09:51:26,479 - julearn - INFO - Step added
 PipelineCreator:
   Step 0: cbpm
     estimator:     CBPM()
@@ -537,9 +537,9 @@ PipelineCreator:
     tuning params: {}
 </pre></div>
 </div>
-<p>Julearn also allows this to be tuned as a hyperparameter in a nested
+<p><code class="docutils literal notranslate"><span class="pre">julearn</span></code> also allows this to be tuned as a hyperparameter in a nested
 cross-validation. Simply hand over an iterable of values:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># prepare a pipeline creator:</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Prepare a pipeline creator</span>
 <span class="n">cbpm_pipeline_creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;regression&quot;</span><span class="p">)</span>
 <span class="n">cbpm_pipeline_creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;cbpm&quot;</span><span class="p">,</span> <span class="n">significance_threshold</span><span class="o">=</span><span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">])</span>
 <span class="n">cbpm_pipeline_creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;linreg&quot;</span><span class="p">)</span>
@@ -547,11 +547,11 @@ cross-validation. Simply hand over an iterable of values:</p>
 <span class="nb">print</span><span class="p">(</span><span class="n">cbpm_pipeline_creator</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-09-05 12:41:14,081 - julearn - INFO - Adding step cbpm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2023-09-05 12:41:14,082 - julearn - INFO - Tuning hyperparameter significance_threshold = [0.01, 0.05]
-2023-09-05 12:41:14,082 - julearn - INFO - Step added
-2023-09-05 12:41:14,082 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2023-09-05 12:41:14,082 - julearn - INFO - Step added
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-09-11 09:51:26,480 - julearn - INFO - Adding step cbpm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-09-11 09:51:26,480 - julearn - INFO - Tuning hyperparameter significance_threshold = [0.01, 0.05]
+2023-09-11 09:51:26,481 - julearn - INFO - Step added
+2023-09-11 09:51:26,481 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-09-11 09:51:26,481 - julearn - INFO - Step added
 PipelineCreator:
   Step 0: cbpm
     estimator:     CBPM()
@@ -565,15 +565,15 @@ PipelineCreator:
     tuning params: {}
 </pre></div>
 </div>
-<p>In addition, it may be noteworthy, that you can customise the correlation
-method, the aggregation method, as well as the sign (<cite>“pos”</cite>, <cite>“neg”</cite>,
-or <cite>“posneg”</cite>) of the feature-target correlations that should be selected.
+<p>In addition, it may be noteworthy, that you can customize the correlation
+method, the aggregation method, as well as the sign (<code class="docutils literal notranslate"><span class="pre">&quot;pos&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;neg&quot;</span></code>,
+or <code class="docutils literal notranslate"><span class="pre">&quot;posneg&quot;</span></code>) of the feature-target correlations that should be selected.
 For example, a pipeline that specifies each of these parameters may look as
 follows:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">spearmanr</span>
 
-<span class="c1"># prepare a pipeline creator:</span>
+<span class="c1"># Prepare a pipeline creator</span>
 <span class="n">cbpm_pipeline_creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;regression&quot;</span><span class="p">)</span>
 <span class="n">cbpm_pipeline_creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
     <span class="s2">&quot;cbpm&quot;</span><span class="p">,</span>
@@ -587,18 +587,18 @@ follows:</p>
 <span class="nb">print</span><span class="p">(</span><span class="n">cbpm_pipeline_creator</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-09-05 12:41:14,083 - julearn - INFO - Adding step cbpm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2023-09-05 12:41:14,083 - julearn - INFO - Setting hyperparameter significance_threshold = 0.05
-2023-09-05 12:41:14,083 - julearn - INFO - Setting hyperparameter corr_method = &lt;function spearmanr at 0x7f1547264b80&gt;
-2023-09-05 12:41:14,083 - julearn - INFO - Setting hyperparameter agg_method = &lt;function average at 0x7f1554d50670&gt;
-2023-09-05 12:41:14,083 - julearn - INFO - Setting hyperparameter corr_sign = pos
-2023-09-05 12:41:14,083 - julearn - INFO - Step added
-2023-09-05 12:41:14,083 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2023-09-05 12:41:14,083 - julearn - INFO - Step added
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-09-11 09:51:26,482 - julearn - INFO - Adding step cbpm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-09-11 09:51:26,482 - julearn - INFO - Setting hyperparameter significance_threshold = 0.05
+2023-09-11 09:51:26,482 - julearn - INFO - Setting hyperparameter corr_method = &lt;function spearmanr at 0x7f977ec649d0&gt;
+2023-09-11 09:51:26,482 - julearn - INFO - Setting hyperparameter agg_method = &lt;function average at 0x7f9793c344c0&gt;
+2023-09-11 09:51:26,482 - julearn - INFO - Setting hyperparameter corr_sign = pos
+2023-09-11 09:51:26,482 - julearn - INFO - Step added
+2023-09-11 09:51:26,482 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-09-11 09:51:26,482 - julearn - INFO - Step added
 PipelineCreator:
   Step 0: cbpm
-    estimator:     CBPM(agg_method=&lt;function average at 0x7f1554d4c970&gt;,
-     corr_method=&lt;function spearmanr at 0x7f1547264b80&gt;, corr_sign=&#39;pos&#39;)
+    estimator:     CBPM(agg_method=&lt;function average at 0x7f9793c31130&gt;,
+     corr_method=&lt;function spearmanr at 0x7f977ec649d0&gt;, corr_sign=&#39;pos&#39;)
     apply to:      ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
     needed types:  ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
     tuning params: {}
@@ -633,7 +633,7 @@ Nov;18(11):1664-71.</p>
 </aside>
 </aside>
 </aside>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.163 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.173 seconds)</p>
 </section>
 </section>
 
@@ -693,7 +693,7 @@ Nov;18(11):1664-71.</p>
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">6.7. Connectome-based Predictive Modeling (CBPM)</a><ul>
-<li><a class="reference internal" href="#cbpm-in-julearn">CBPM in Julearn</a></li>
+<li><a class="reference internal" href="#cbpm-in-julearn">CBPM in <code class="docutils literal notranslate"><span class="pre">julearn</span></code></a></li>
 </ul>
 </li>
 </ul>

@@ -2,7 +2,7 @@
 Inspecting the fold-wise predictions
 ====================================
 
-This example uses the 'iris' dataset and performs a simple binary
+This example uses the ``iris`` dataset and performs a simple binary
 classification using a Support Vector Machine classifier.
 
 We later inspect the predictions of the model for each fold.
@@ -10,8 +10,8 @@ We later inspect the predictions of the model for each fold.
 .. include:: ../../links.inc
 """
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
-#
 # License: AGPL
+
 from seaborn import load_dataset
 
 from sklearn.model_selection import RepeatedStratifiedKFold, ShuffleSplit
@@ -21,7 +21,7 @@ from julearn.pipeline import PipelineCreator
 from julearn.utils import configure_logging
 
 ###############################################################################
-# Set the logging level to info to see extra information
+# Set the logging level to info to see extra information.
 configure_logging(level="INFO")
 
 ###############################################################################
@@ -44,7 +44,7 @@ creator = PipelineCreator(problem_type="classification")
 creator.add("zscore")
 creator.add("svm")
 
-cv = ShuffleSplit(n_splits=5, train_size=.7, random_state=200)
+cv = ShuffleSplit(n_splits=5, train_size=0.7, random_state=200)
 cv = RepeatedStratifiedKFold(n_splits=5, n_repeats=4, random_state=200)
 
 scores, model, inspector = run_cross_validation(

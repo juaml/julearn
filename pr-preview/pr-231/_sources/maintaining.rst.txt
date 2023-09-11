@@ -18,7 +18,7 @@ pre-release.
 
 The CI scripts will publish every tag with the format *v.X.Y.Z* to PyPI as
 version "X.Y.Z". Additionally, for every push to main, it will be published
-as pre-release to TestPyPI (for now).
+as pre-release to PyPI.
 
 Releasing a new version
 -----------------------
@@ -30,58 +30,58 @@ before proceeding.
 
 #. Make sure you are in sync with the main branch.
 
-.. code-block:: bash
+   .. code-block:: bash
 
-    git checkout main
-    git pull --rebase origin main
+       git checkout main
+       git pull --rebase origin main
 
 #. Run the following to check changelog is properly generated:
 
-.. code-block:: bash
+   .. code-block:: bash
 
-   towncrier build --draft
+      towncrier build --draft
 
 #. Then, run:
 
-.. code-block:: bash
+   .. code-block:: bash
 
-   towncrier
+      towncrier
 
-to generate the proper changelog that should be reflected in
-``docs/whats_new.rst``.
+   to generate the proper changelog that should be reflected in
+   ``docs/whats_new.rst``.
 
 #. Commit the changes, make a PR and merge via a merge commit.
 
 #. Make sure you are in sync with the main branch.
 
-.. code-block:: bash
+   .. code-block:: bash
 
-    git checkout main
-    git pull --rebase origin main
+       git checkout main
+       git pull --rebase origin main
 
 #. Create tag (replace ``X.Y.Z`` with the proper version) on the merged PR's
    merge commit.
 
-.. code-block:: bash
+   .. code-block:: bash
 
-    git tag -a vX.Y.Z -m "Release X.Y.Z"
+       git tag -a vX.Y.Z -m "Release X.Y.Z"
 
 #. Check that the build system is creating the proper version
 
-.. code-block:: bash
+   .. code-block:: bash
 
-    SETUPTOOLS_SCM_DEBUG=1 python -m build --source --binary --out-dir dist/ .
+       SETUPTOOLS_SCM_DEBUG=1 python -m build --outdir dist/ .
 
 #. Push the tag
 
-.. code-block:: bash
+   .. code-block:: bash
 
-    git push origin --follow-tags
+       git push origin --follow-tags
 
 #. Optional: bump the *MAJOR* or *MINOR* segment of next release (replace
    ``D.E.0`` with the proper version).
 
-.. code-block:: bash
+   .. code-block:: bash
 
-    git tag -a vD.E.0.dev -m "Set next release to D.E.0"
-    git push origin --follow-tags
+       git tag -a vD.E.0.dev -m "Set next release to D.E.0"
+       git push origin --follow-tags

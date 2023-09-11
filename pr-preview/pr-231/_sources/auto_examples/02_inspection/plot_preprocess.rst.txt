@@ -21,16 +21,15 @@
 Preprocessing with variance threshold, zscore and PCA
 =====================================================
 
-This example uses the 'make_regression' function to create a simple dataset,
-performs a simple regression after the pre-processing of the features
+This example uses the ``make_regression`` function to create a simple dataset,
+performs a simple regression after the preprocessing of the features
 including removal of low variance features, feature normalization for only
 two features using zscore and feature reduction using PCA.
 We will check the features after each preprocessing step.
 
-.. GENERATED FROM PYTHON SOURCE LINES 11-27
+.. GENERATED FROM PYTHON SOURCE LINES 11-25
 
 .. code-block:: default
-
 
     # Authors: Shammi More <s.more@fz-juelich.de>
     #          Leonard Sasse <l.sasse@fz-juelich.de>
@@ -53,12 +52,11 @@ We will check the features after each preprocessing step.
 
 
 
+.. GENERATED FROM PYTHON SOURCE LINES 26-27
 
-.. GENERATED FROM PYTHON SOURCE LINES 28-29
+Set the logging level to info to see extra information.
 
-Set the logging level to info to see extra information
-
-.. GENERATED FROM PYTHON SOURCE LINES 29-31
+.. GENERATED FROM PYTHON SOURCE LINES 27-29
 
 .. code-block:: default
 
@@ -72,22 +70,22 @@ Set the logging level to info to see extra information
 
  .. code-block:: none
 
-    2023-09-05 12:40:53,644 - julearn - INFO - ===== Lib Versions =====
-    2023-09-05 12:40:53,644 - julearn - INFO - numpy: 1.25.2
-    2023-09-05 12:40:53,644 - julearn - INFO - scipy: 1.11.2
-    2023-09-05 12:40:53,644 - julearn - INFO - sklearn: 1.3.0
-    2023-09-05 12:40:53,644 - julearn - INFO - pandas: 2.0.3
-    2023-09-05 12:40:53,644 - julearn - INFO - julearn: 0.3.1.dev68
-    2023-09-05 12:40:53,644 - julearn - INFO - ========================
+    2023-09-11 09:51:03,705 - julearn - INFO - ===== Lib Versions =====
+    2023-09-11 09:51:03,705 - julearn - INFO - numpy: 1.25.2
+    2023-09-11 09:51:03,706 - julearn - INFO - scipy: 1.11.2
+    2023-09-11 09:51:03,706 - julearn - INFO - sklearn: 1.3.0
+    2023-09-11 09:51:03,706 - julearn - INFO - pandas: 2.0.3
+    2023-09-11 09:51:03,706 - julearn - INFO - julearn: 0.3.1.dev121
+    2023-09-11 09:51:03,706 - julearn - INFO - ========================
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 32-33
+.. GENERATED FROM PYTHON SOURCE LINES 30-31
 
-Create a dataset using sklearn's make_regression
+Create a dataset using ``sklearn`` ``make_regression``.
 
-.. GENERATED FROM PYTHON SOURCE LINES 33-47
+.. GENERATED FROM PYTHON SOURCE LINES 31-45
 
 .. code-block:: default
 
@@ -112,11 +110,11 @@ Create a dataset using sklearn's make_regression
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 48-49
+.. GENERATED FROM PYTHON SOURCE LINES 46-47
 
-Let's look at the summary statistics of the raw features
+Let's look at the summary statistics of the raw features.
 
-.. GENERATED FROM PYTHON SOURCE LINES 49-51
+.. GENERATED FROM PYTHON SOURCE LINES 47-49
 
 .. code-block:: default
 
@@ -144,22 +142,22 @@ Let's look at the summary statistics of the raw features
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 52-64
+.. GENERATED FROM PYTHON SOURCE LINES 50-62
 
 We will preprocess all features using variance thresholding.
 We will only zscore the first two features, and then perform PCA using all
 features. We will zscore the target and then train a random forest model.
 Since we use the PipelineCreator object we have to explicitly declare which
 `X_types` each preprocessing step should be applied to. If we do not declare
-the type in the 'add' method using the 'apply_to' keyword argument,
-the step will default to 'continuous' or to another type that can be declared
-in the 'init' method of the 'PipelineCreator'.
-To transform the target we could set 'apply_to='target'', which is a special
+the type in the ``add`` method using the ``apply_to`` keyword argument,
+the step will default to ``"continuous"`` or to another type that can be
+declared in the constructor of the ``PipelineCreator``.
+To transform the target we could set ``apply_to="target"``, which is a special
 type, that cannot be user-defined. Please note also that if a step is added
 to transform the target, you also have to explicitly add the model that is
-to be used in the regression to the 'PipelineCreator'.
+to be used in the regression to the ``PipelineCreator``.
 
-.. GENERATED FROM PYTHON SOURCE LINES 64-129
+.. GENERATED FROM PYTHON SOURCE LINES 62-127
 
 .. code-block:: default
 
@@ -170,7 +168,7 @@ to be used in the regression to the 'PipelineCreator'.
     # search.
 
     # Setting the threshold for variance to 0.15, number of PCA components to 2
-    # and number of trees for random forest to 200
+    # and number of trees for random forest to 200.
 
     # By setting "apply_to=*", we can apply the preprocessing step to all features.
     pipeline_creator = PipelineCreator(problem_type="regression")
@@ -181,9 +179,9 @@ to be used in the regression to the 'PipelineCreator'.
     pipeline_creator.add("rf", apply_to="*", n_estimators=200)
 
     # Because we have already added the model to the pipeline creator, we can
-    # simply drop in the pipeline_creator as a model. If we did not add a model
-    # here, we could add the pipeline_creator using the keyword argument
-    # 'preprocess' and hand over a model separately.
+    # simply drop in the ``pipeline_creator`` as a model. If we did not add a model
+    # here, we could add the ``pipeline_creator`` using the keyword argument
+    # ``preprocess`` and hand over a model separately.
 
     scores, model = run_cross_validation(
         X=X,
@@ -216,12 +214,12 @@ to be used in the regression to the 'PipelineCreator'.
     print(X_after_zscore)
 
     # However, to make this less confusing you can also simply use the high-level
-    # function 'preprocess' to explicitly refer to a pipeline step by name:
+    # function ``preprocess`` to explicitly refer to a pipeline step by name:
 
     X_after_pca = preprocess(model, X=X, data=df, until="pca")
     X_after_zscore = preprocess(model, X=X, data=df, until="zscore")
 
-    # Let's plot scatter plots for raw features and the PCA components
+    # Let's plot scatter plots for raw features and the PCA components.
     fig, axes = plt.subplots(1, 2, figsize=(12, 6))
     sns.scatterplot(x=X[0], y=X[1], data=df, ax=axes[0])
     axes[0].set_title("Raw features")
@@ -241,40 +239,40 @@ to be used in the regression to the 'PipelineCreator'.
 
  .. code-block:: none
 
-    2023-09-05 12:40:53,662 - julearn - INFO - Adding step select_variance that applies to ColumnTypes<types={'*'}; pattern=.*>
-    2023-09-05 12:40:53,663 - julearn - INFO - Setting hyperparameter threshold = 0.15
-    2023-09-05 12:40:53,663 - julearn - INFO - Step added
-    2023-09-05 12:40:53,663 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'X_to_zscore'}; pattern=(?:__:type:__X_to_zscore)>
-    2023-09-05 12:40:53,663 - julearn - INFO - Step added
-    2023-09-05 12:40:53,663 - julearn - INFO - Adding step pca that applies to ColumnTypes<types={'*'}; pattern=.*>
-    2023-09-05 12:40:53,663 - julearn - INFO - Setting hyperparameter n_components = 2
-    2023-09-05 12:40:53,663 - julearn - INFO - Step added
-    2023-09-05 12:40:53,663 - julearn - INFO - Adding step rf that applies to ColumnTypes<types={'*'}; pattern=.*>
-    2023-09-05 12:40:53,663 - julearn - INFO - Setting hyperparameter n_estimators = 200
-    2023-09-05 12:40:53,663 - julearn - INFO - Step added
-    2023-09-05 12:40:53,663 - julearn - INFO - Setting random seed to 200
-    2023-09-05 12:40:53,664 - julearn - INFO - ==== Input Data ====
-    2023-09-05 12:40:53,664 - julearn - INFO - Using dataframe as input
-    2023-09-05 12:40:53,664 - julearn - INFO -      Features: ['Feature 1', 'Feature 2', 'Feature 3', 'Feature 4']
-    2023-09-05 12:40:53,664 - julearn - INFO -      Target: y
-    2023-09-05 12:40:53,664 - julearn - INFO -      Expanded features: ['Feature 1', 'Feature 2', 'Feature 3', 'Feature 4']
-    2023-09-05 12:40:53,664 - julearn - INFO -      X_types:{'X_to_zscore': ['Feature 1', 'Feature 2']}
-    2023-09-05 12:40:53,664 - julearn - WARNING - The following columns are not defined in X_types: ['Feature 3', 'Feature 4']. They will be treated as continuous.
+    2023-09-11 09:51:03,725 - julearn - INFO - Adding step select_variance that applies to ColumnTypes<types={'*'}; pattern=.*>
+    2023-09-11 09:51:03,725 - julearn - INFO - Setting hyperparameter threshold = 0.15
+    2023-09-11 09:51:03,726 - julearn - INFO - Step added
+    2023-09-11 09:51:03,726 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'X_to_zscore'}; pattern=(?:__:type:__X_to_zscore)>
+    2023-09-11 09:51:03,726 - julearn - INFO - Step added
+    2023-09-11 09:51:03,726 - julearn - INFO - Adding step pca that applies to ColumnTypes<types={'*'}; pattern=.*>
+    2023-09-11 09:51:03,726 - julearn - INFO - Setting hyperparameter n_components = 2
+    2023-09-11 09:51:03,726 - julearn - INFO - Step added
+    2023-09-11 09:51:03,726 - julearn - INFO - Adding step rf that applies to ColumnTypes<types={'*'}; pattern=.*>
+    2023-09-11 09:51:03,726 - julearn - INFO - Setting hyperparameter n_estimators = 200
+    2023-09-11 09:51:03,726 - julearn - INFO - Step added
+    2023-09-11 09:51:03,726 - julearn - INFO - Setting random seed to 200
+    2023-09-11 09:51:03,726 - julearn - INFO - ==== Input Data ====
+    2023-09-11 09:51:03,727 - julearn - INFO - Using dataframe as input
+    2023-09-11 09:51:03,727 - julearn - INFO -      Features: ['Feature 1', 'Feature 2', 'Feature 3', 'Feature 4']
+    2023-09-11 09:51:03,727 - julearn - INFO -      Target: y
+    2023-09-11 09:51:03,727 - julearn - INFO -      Expanded features: ['Feature 1', 'Feature 2', 'Feature 3', 'Feature 4']
+    2023-09-11 09:51:03,727 - julearn - INFO -      X_types:{'X_to_zscore': ['Feature 1', 'Feature 2']}
+    2023-09-11 09:51:03,727 - julearn - WARNING - The following columns are not defined in X_types: ['Feature 3', 'Feature 4']. They will be treated as continuous.
     /home/runner/work/julearn/julearn/julearn/prepare.py:503: RuntimeWarning: The following columns are not defined in X_types: ['Feature 3', 'Feature 4']. They will be treated as continuous.
       warn_with_log(
-    2023-09-05 12:40:53,665 - julearn - INFO - ====================
-    2023-09-05 12:40:53,665 - julearn - INFO - 
-    2023-09-05 12:40:53,667 - julearn - INFO - = Model Parameters =
-    2023-09-05 12:40:53,667 - julearn - INFO - ====================
-    2023-09-05 12:40:53,667 - julearn - INFO - 
-    2023-09-05 12:40:53,667 - julearn - INFO - = Data Information =
-    2023-09-05 12:40:53,667 - julearn - INFO -      Problem type: regression
-    2023-09-05 12:40:53,667 - julearn - INFO -      Number of samples: 100
-    2023-09-05 12:40:53,667 - julearn - INFO -      Number of features: 4
-    2023-09-05 12:40:53,668 - julearn - INFO - ====================
-    2023-09-05 12:40:53,668 - julearn - INFO - 
-    2023-09-05 12:40:53,668 - julearn - INFO -      Target type: float64
-    2023-09-05 12:40:53,668 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+    2023-09-11 09:51:03,728 - julearn - INFO - ====================
+    2023-09-11 09:51:03,728 - julearn - INFO - 
+    2023-09-11 09:51:03,730 - julearn - INFO - = Model Parameters =
+    2023-09-11 09:51:03,730 - julearn - INFO - ====================
+    2023-09-11 09:51:03,730 - julearn - INFO - 
+    2023-09-11 09:51:03,730 - julearn - INFO - = Data Information =
+    2023-09-11 09:51:03,730 - julearn - INFO -      Problem type: regression
+    2023-09-11 09:51:03,731 - julearn - INFO -      Number of samples: 100
+    2023-09-11 09:51:03,731 - julearn - INFO -      Number of features: 4
+    2023-09-11 09:51:03,731 - julearn - INFO - ====================
+    2023-09-11 09:51:03,731 - julearn - INFO - 
+    2023-09-11 09:51:03,731 - julearn - INFO -      Target type: float64
+    2023-09-11 09:51:03,731 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
     X after PCA:
     ===============================================================================
         pca__pca0  pca__pca1
@@ -312,12 +310,12 @@ to be used in the regression to the 'PipelineCreator'.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 130-132
+.. GENERATED FROM PYTHON SOURCE LINES 128-130
 
 Let's look at the summary statistics of the zscored features. We see here
 that the mean of all the features is zero and standard deviation is one.
 
-.. GENERATED FROM PYTHON SOURCE LINES 132-137
+.. GENERATED FROM PYTHON SOURCE LINES 130-134
 
 .. code-block:: default
 
@@ -325,7 +323,6 @@ that the mean of all the features is zero and standard deviation is one.
         "Summary Statistics of the zscored features : \n",
         X_after_zscore.describe(),
     )
-
 
 
 
@@ -351,7 +348,7 @@ that the mean of all the features is zero and standard deviation is one.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  1.558 seconds)
+   **Total running time of the script:** ( 0 minutes  1.729 seconds)
 
 
 .. _sphx_glr_download_auto_examples_02_inspection_plot_preprocess.py:

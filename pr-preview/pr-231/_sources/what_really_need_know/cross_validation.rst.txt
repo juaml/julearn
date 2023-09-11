@@ -49,26 +49,26 @@ The essence of :func:`.run_cross_validation`
 Building pipelines (see :ref:`pipeline_usage`) within a (nested)
 cross-validation scheme, without accidentally leaking some information between
 steps can quickly become complicated and errors are often not-obvious to
-detect. Julearn's :func:`.run_cross_validation` provides a simple and
-straightforward way to do cross-validation less prone for such accidental
+detect. ``julearn``'s :func:`.run_cross_validation` provides a simple and
+straightforward way to do cross-validation less prone to such accidental
 mistakes and more transparent for debugging. The user only needs to specify
 the model to be used, the data to be used and the evaluation scheme to be used.
-Julearn then builds the pipeline, splits the data into training and validation
-sets accordingly, and most importantly, does all specified steps in a
+``julearn`` then builds the pipeline, splits the data into training and
+validation sets accordingly, and most importantly, does all specified steps in a
 cross-validation consistent manner.
 
 The main parameters needed for :func:`.run_cross_validation` include the
 specification of:
 
-1. *data*: the data, including features, labels and feature types
+#. ``data``: the data, including features, labels and feature types
    (see :ref:`data_usage`)
-2. *model*: the model to evaluate, including the data transformation steps
-   and the learning algorithm to use(see :ref:`pipeline_usage`).
-3. *model evaluation*: how the model performance should be estimated,
+#. ``model``: the model to evaluate, including the data transformation steps
+   and the learning algorithm to use (see :ref:`pipeline_usage`).
+#. ``model evaluation``: how the model performance should be estimated,
    like the cross validation scheme or the metrics to be computed
    (see :ref:`model_evaluation_usage`)
 
-The  :func:`.run_cross_validation` function will then output of dataframe with
+The  :func:`.run_cross_validation` function will then output the DataFrame with
 the fold-wise metrics, which can then be used to visualize and evaluate the
 estimation of the models' performance.
 

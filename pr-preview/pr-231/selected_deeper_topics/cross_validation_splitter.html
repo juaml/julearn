@@ -173,7 +173,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../what_really_need_know/data.html">5.2. Data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../what_really_need_know/pipeline.html">5.3. Model Building</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../what_really_need_know/model_evaluation.html">5.4. Model Evaluation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../what_really_need_know/model_comparison.html">5.5. Model comparison</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../what_really_need_know/model_comparison.html">5.5. Model Comparison</a></li>
 </ul>
 </li>
 <li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">6. Selected deeper topics</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
@@ -188,8 +188,8 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../available_pipeline_steps.html">7. Overview of available Pipeline Steps</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../examples.html">8. Examples</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../auto_examples/00_starting/index.html">8.1. Starting with julearn</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l3"><a class="reference internal" href="../auto_examples/00_starting/run_combine_pandas.html">Working with pandas</a></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../auto_examples/00_starting/index.html">8.1. Starting with <code class="docutils literal notranslate"><span class="pre">julearn</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../auto_examples/00_starting/run_combine_pandas.html">Working with <code class="docutils literal notranslate"><span class="pre">pandas</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../auto_examples/00_starting/run_simple_binary_classification.html">Simple Binary Classification</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../auto_examples/00_starting/run_grouped_cv.html">Grouped CV</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../auto_examples/00_starting/plot_cm_acc_multiclass.html">Multiclass Classification</a></li>
@@ -348,8 +348,8 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="../configuration.html">10. Configuring julearn</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../contributing.html">11. Contributing to julearn</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration.html">10. Configuring <code class="docutils literal notranslate"><span class="pre">julearn</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">11. Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../maintaining.html">12. Maintaining</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../faq.html">13. FAQs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../whats_new.html">14. What’s new</a></li>
@@ -389,27 +389,27 @@
           <section id="cross-validation-splitters">
 <span id="sphx-glr-auto-examples-99-docs-run-cv-splitters-docs-py"></span><span id="cv-splitter"></span><h1><span class="section-number">6.5. </span>Cross-validation splitters<a class="headerlink" href="#cross-validation-splitters" title="Permalink to this heading">#</a></h1>
 <p>As mentioned in the <a class="reference internal" href="../what_really_need_know/cross_validation.html#why-cv"><span class="std std-ref">Why cross validation?</span></a>, cross-validation is a <em>must use</em> technique
-to evaluate the performance of a model when we don’t have _almost_ infinite
+to evaluate the performance of a model when we don’t have <em>almost</em> infinite
 data. However, there are several ways to split the data into training and
 testing sets, and each of them has different properties. In this section we
 will see why it is important to choose the right cross-validation splitter for
 your evaluation.</p>
 <p>The most important argument is because we want to have an unbiased estimate of
 the performance of our model, mostly avoiding overestimation. Remember, we are
-evaluating how well a model will predict _unseen_ data. So if later in the
-future someone uses our model, we want to be sure that it will perform as well
+evaluating how well a model will predict <em>unseen</em> data. So if in the future
+someone uses our model, we want to be sure that it will perform as well
 as we estimated. If we overestimate the performance, we might be in for a
 surprise.</p>
 <p>Another important argument is that we want to have a good estimate of the
 variance of our model. This is important because we want to know how much the
 performance of our model will change if we train it on a different dataset.
-So which CV splitter we should use? As much as we would like to have an answer
+So which CV splitter should we use? As much as we would like to have an answer
 to this question, it is impossible for many reasons. According to Bengio and
 Grandvalet <a class="footnote-reference brackets" href="#id5" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></a>, it is simply not possible to have an unbiased estimate of
 the variance of the generalization error.</p>
-<p>We will not repeat what our colleagues from scikit-learn have already
+<p>We will not repeat what our colleagues from <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code> have already
 explained in their excellent documentation <a class="footnote-reference brackets" href="#id6" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>6<span class="fn-bracket">]</span></a>. So we will just add a few
-words about some topics, assuming you have already read the scikit-learn
+words about some topics, assuming you have already read the <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code>
 documentation.</p>
 <p>As a rule of thumb, K-fold cross-validation is a good compromise between bias
 and variance. With K-fold cross-validation, we split the data into K folds,
@@ -419,11 +419,11 @@ The final performance is the average of the K performances. The variance of
 this estimate is lower than the variance of the leave-one-out cross-validation
 (LOOCV), but higher than the variance of the holdout method. The bias is
 higher than the bias of LOOCV, but lower than the bias of the holdout method.
-But this claims must be taken with caution. There has been intense research on
+But these claims must be taken with caution. There has been intense research on
 this topic, and there are still unconclusive results. While intuition points in
-one direction, empirical evidence points in others. If you want to know more
+one direction, empirical evidence points in other. If you want to know more
 about this topic, we suggest you start with this thread on Cross
-Validated <a class="footnote-reference brackets" href="#id7" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>7<span class="fn-bracket">]</span></a>. Emirical evidence shows that choosing any K between the
+Validated <a class="footnote-reference brackets" href="#id7" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>7<span class="fn-bracket">]</span></a>. Empirical evidence shows that choosing any K between the
 extremes [n, 2] is a good compromise between bias and variance. In practice,
 <cite>K=10</cite> is a good choice <a class="footnote-reference brackets" href="#id8" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>8<span class="fn-bracket">]</span></a>.</p>
 <p>Now the fun part begins, which of the many variants of K-fold shall we choose?
@@ -432,7 +432,7 @@ trying to solve. In this section we will shed some light on two important
 topics: stratification and grouping.</p>
 <section id="stratification">
 <h2>Stratification<a class="headerlink" href="#stratification" title="Permalink to this heading">#</a></h2>
-<p>Stratification is a technique used to ensure that the distribution of the
+<p>It is a technique used to ensure that the distribution of the
 target variable is the same in the training and testing sets. This is
 important because if the distribution of the target variable is different in
 the training and testing sets, the model will learn a different distribution
@@ -443,21 +443,22 @@ case, the model will learn to predict only one class, and it will perform
 poorly on the testing set. To solve this issue, you can use stratification.
 That is, you can ensure that the distribution of the target variable is the
 same in the training and testing sets.</p>
-<p>Fortunately, scikit-learn already implements stratification (e.g., stratified
-K-fold in the <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.StratifiedKFold.html#sklearn.model_selection.StratifiedKFold" title="(in scikit-learn v1.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.model_selection.StratifiedKFold</span></code></a>). However, this
-implementation is only valid for discrete target variables. In the case of
-continuous target variables, Julearn comes to rescue you with the
+<p>Fortunately, <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code> already implements stratification
+(e.g., stratified K-fold in the
+<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.StratifiedKFold.html#sklearn.model_selection.StratifiedKFold" title="(in scikit-learn v1.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.model_selection.StratifiedKFold</span></code></a>). However, this implementation
+is only valid for discrete target variables. In the case of continuous target
+variables, <code class="docutils literal notranslate"><span class="pre">julearn</span></code> comes to rescue you with the
 <a class="reference internal" href="../api/generated/julearn.model_selection.ContinuousStratifiedKFold.html#julearn.model_selection.ContinuousStratifiedKFold" title="julearn.model_selection.ContinuousStratifiedKFold"><code class="xref py py-class docutils literal notranslate"><span class="pre">ContinuousStratifiedKFold</span></code></a> splitter.</p>
 <p>The main issue with continuous target variables is that it is not just a simple
 matter of counting the number of samples of each class. In this case, we need
 to ensure that the distribution of the target variable is the same in the
 training and testing sets. This is a more complex problem, and there are
-several ways to solve it. In Julearn, we have implemented two ways of doing
+several ways to solve it. In <code class="docutils literal notranslate"><span class="pre">julearn</span></code>, we have implemented two ways of doing
 this: <em>binning</em> and <em>quantizing</em>.</p>
 <p>Binning is a technique that consists of dividing the target variable into
 discrete bins, each of equal size, and then ensuring that the distribution of
 the target variable is the same in the training and testing sets in terms of
-samples per bin.  Let’s see an example using a uniform distribution, creating
+samples per bin. Let’s see an example using a uniform distribution, creating
 200 samples and 10 bins.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -484,9 +485,8 @@ the target variable in both sets.</p>
 <span class="n">cv</span> <span class="o">=</span> <span class="n">ContinuousStratifiedKFold</span><span class="p">(</span>
     <span class="n">n_bins</span><span class="o">=</span><span class="n">n_bins</span><span class="p">,</span> <span class="n">n_splits</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span>
 <span class="p">)</span>
-</pre></div>
-</div>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
 <span class="n">train_sets</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">test_sets</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="ow">in</span> <span class="n">cv</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
@@ -506,10 +506,11 @@ the target variable in both sets.</p>
 <img src="../_images/sphx_glr_run_cv_splitters_docs_002.png" srcset="../_images/sphx_glr_run_cv_splitters_docs_002.png" alt="ContinuousStratifiedKFold on uniformly distributed target variable, Training sets, Testing sets" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Text(0.5, 0.98, &#39;ContinuousStratifiedKFold on uniformly distributed target variable&#39;)
 </pre></div>
 </div>
-<p>Now lets see how K-fold would have split this data.</p>
+<p>Now let’s see how K-fold would have split this data.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">KFold</span>
 
 <span class="n">cv</span> <span class="o">=</span> <span class="n">KFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
 <span class="n">fig</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
 <span class="n">train_sets</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">test_sets</span> <span class="o">=</span> <span class="p">[]</span>
@@ -534,8 +535,7 @@ same in the training and testing sets, particularly across folds.</p>
 practice, the target variable is not uniformly distributed, and the
 differences between the distributions of the training and testing sets can be
 much more evident. Let’s take a look at the same analysis but using a
-Gaussian distribution.
-%%</p>
+Gaussian distribution.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
 <span class="n">sns</span><span class="o">.</span><span class="n">histplot</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">n_bins</span><span class="p">)</span>
 </pre></div>
@@ -564,16 +564,15 @@ Gaussian distribution.
 <span class="p">)</span>
 </pre></div>
 </div>
-<img src="../_images/sphx_glr_run_cv_splitters_docs_005.png" srcset="../_images/sphx_glr_run_cv_splitters_docs_005.png" alt="ContinuousStratifiedKFold on normally distributed target variable, Training sets, Testing sets" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.10.12/x64/lib/python3.10/site-packages/sklearn/model_selection/_split.py:725: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=3.
+<img src="../_images/sphx_glr_run_cv_splitters_docs_005.png" srcset="../_images/sphx_glr_run_cv_splitters_docs_005.png" alt="ContinuousStratifiedKFold on normally distributed target variable, Training sets, Testing sets" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.10.13/x64/lib/python3.10/site-packages/sklearn/model_selection/_split.py:725: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=3.
   warnings.warn(
 
 Text(0.5, 0.98, &#39;ContinuousStratifiedKFold on normally distributed target variable&#39;)
 </pre></div>
 </div>
 <p>Now lets see how K-fold would have split this data.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">KFold</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cv</span> <span class="o">=</span> <span class="n">KFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 
-<span class="n">cv</span> <span class="o">=</span> <span class="n">KFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
 <span class="n">fig</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
 <span class="n">train_sets</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">test_sets</span> <span class="o">=</span> <span class="p">[]</span>
@@ -601,8 +600,7 @@ to biased results.</p>
 <p>To this matter, we have implemented a different way of discretizing the
 target variable. Instead of fixing the size of the bins, we can split the
 data into bins with the same number of samples. This is called <em>quantizing</em>.
-Let’s see how this works on the same data.
-%%</p>
+Let’s see how this works on the same data.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n_bins</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
 <span class="n">discrete_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">digitize</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">bins</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 <span class="n">sns</span><span class="o">.</span><span class="n">histplot</span><span class="p">(</span><span class="n">discrete_y</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">n_bins</span><span class="p">)</span>
@@ -613,8 +611,7 @@ Let’s see how this works on the same data.
 </div>
 <p>In this case, each quantile of the target variable is equally represented in
 each “bin”. To use this approach, we can simply set <code class="docutils literal notranslate"><span class="pre">method=&quot;quantile&quot;</span></code> in
-the <a class="reference internal" href="../api/generated/julearn.model_selection.ContinuousStratifiedKFold.html#julearn.model_selection.ContinuousStratifiedKFold" title="julearn.model_selection.ContinuousStratifiedKFold"><code class="xref py py-class docutils literal notranslate"><span class="pre">ContinuousStratifiedKFold</span></code></a>.
-%%</p>
+the <a class="reference internal" href="../api/generated/julearn.model_selection.ContinuousStratifiedKFold.html#julearn.model_selection.ContinuousStratifiedKFold" title="julearn.model_selection.ContinuousStratifiedKFold"><code class="xref py py-class docutils literal notranslate"><span class="pre">ContinuousStratifiedKFold</span></code></a>.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cv</span> <span class="o">=</span> <span class="n">ContinuousStratifiedKFold</span><span class="p">(</span>
     <span class="n">n_bins</span><span class="o">=</span><span class="n">n_bins</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;quantile&quot;</span><span class="p">,</span> <span class="n">n_splits</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span>
 <span class="p">)</span>
@@ -647,7 +644,7 @@ importantly, due to how the bins are defined (dashed lines), each quantile is
 now equally represented in each fold.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Julearn provides <a class="reference internal" href="../api/generated/julearn.model_selection.RepeatedContinuousStratifiedKFold.html#julearn.model_selection.RepeatedContinuousStratifiedKFold" title="julearn.model_selection.RepeatedContinuousStratifiedKFold"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepeatedContinuousStratifiedKFold</span></code></a> as
+<p><code class="docutils literal notranslate"><span class="pre">julearn</span></code> provides <a class="reference internal" href="../api/generated/julearn.model_selection.RepeatedContinuousStratifiedKFold.html#julearn.model_selection.RepeatedContinuousStratifiedKFold" title="julearn.model_selection.RepeatedContinuousStratifiedKFold"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepeatedContinuousStratifiedKFold</span></code></a> as
 the repeated version of <a class="reference internal" href="../api/generated/julearn.model_selection.ContinuousStratifiedKFold.html#julearn.model_selection.ContinuousStratifiedKFold" title="julearn.model_selection.ContinuousStratifiedKFold"><code class="xref py py-class docutils literal notranslate"><span class="pre">ContinuousStratifiedKFold</span></code></a>.</p>
 </div>
 </section>
@@ -660,7 +657,7 @@ particularly important when the data is not independent and identically
 distributed (i.i.d.). For example, in a study where the same subject is
 measured multiple times, we might want to ensure that the model is not
 evaluated on data from the same subject that was used to train it.</p>
-<p>To this matter, Julearn provides <a class="reference internal" href="../api/generated/julearn.model_selection.ContinuousStratifiedGroupKFold.html#julearn.model_selection.ContinuousStratifiedGroupKFold" title="julearn.model_selection.ContinuousStratifiedGroupKFold"><code class="xref py py-class docutils literal notranslate"><span class="pre">ContinuousStratifiedGroupKFold</span></code></a>,
+<p>To this matter, <code class="docutils literal notranslate"><span class="pre">julearn</span></code> provides <a class="reference internal" href="../api/generated/julearn.model_selection.ContinuousStratifiedGroupKFold.html#julearn.model_selection.ContinuousStratifiedGroupKFold" title="julearn.model_selection.ContinuousStratifiedGroupKFold"><code class="xref py py-class docutils literal notranslate"><span class="pre">ContinuousStratifiedGroupKFold</span></code></a>,
 which provides support for a grouping variable and
 <a class="reference internal" href="../api/generated/julearn.model_selection.RepeatedContinuousStratifiedGroupKFold.html#julearn.model_selection.RepeatedContinuousStratifiedGroupKFold" title="julearn.model_selection.RepeatedContinuousStratifiedGroupKFold"><code class="xref py py-class docutils literal notranslate"><span class="pre">RepeatedContinuousStratifiedGroupKFold</span></code></a> as the repeated version of
 it.</p>
@@ -688,7 +685,7 @@ scikit-learn documentation.</p>
 </aside>
 </aside>
 </aside>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.814 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.819 seconds)</p>
 </section>
 </section>
 

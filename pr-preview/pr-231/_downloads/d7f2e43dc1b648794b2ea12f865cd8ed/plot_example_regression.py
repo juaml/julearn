@@ -2,13 +2,12 @@
 Regression Analysis
 ===================
 
-This example uses the 'diabetes' data from sklearn datasets and performs
+This example uses the ``diabetes`` data from ``sklearn datasets`` and performs
 a regression analysis using a Ridge Regression model.
 
 """
 # Authors: Shammi More <s.more@fz-juelich.de>
 #          Federico Raimondo <f.raimondo@fz-juelich.de>
-#
 # License: AGPL
 
 import pandas as pd
@@ -23,15 +22,15 @@ from julearn import run_cross_validation
 from julearn.utils import configure_logging
 
 ###############################################################################
-# Set the logging level to info to see extra information
+# Set the logging level to info to see extra information.
 configure_logging(level="INFO")
 
 ###############################################################################
-# load the diabetes data from sklearn as a pandas dataframe
+# Load the diabetes data from ``sklearn`` as a ``pandas.DataFrame``.
 features, target = load_diabetes(return_X_y=True, as_frame=True)
 
 ###############################################################################
-# Dataset contains ten variables age, sex, body mass index, average  blood
+# Dataset contains ten variables age, sex, body mass index, average blood
 # pressure, and six blood serum measurements (s1-s6) diabetes patients and
 # a quantitative measure of disease progression one year after baseline which
 # is the target we are interested in predicting.
@@ -48,8 +47,9 @@ X = ["age", "sex", "bmi", "bp", "s1", "s2", "s3", "s4", "s5", "s6"]
 y = "target"
 
 ###############################################################################
-# calculate correlations between the features/variables and plot it as heat map
+# Calculate correlations between the features/variables and plot it as heat map.
 corr = data_diabetes.corr()
+
 fig, ax = plt.subplots(1, 1, figsize=(10, 7))
 sns.set(font_scale=1.2)
 sns.heatmap(
@@ -60,14 +60,13 @@ sns.heatmap(
     fmt="0.1f",
 )
 
-
 ###############################################################################
-# Split the dataset into train and test
+# Split the dataset into train and test.
 train_diabetes, test_diabetes = train_test_split(data_diabetes, test_size=0.3)
 
 ###############################################################################
 # Train a ridge regression model on train dataset and use mean absolute error
-# for scoring
+# for scoring.
 scores, model = run_cross_validation(
     X=X,
     y=y,
@@ -82,7 +81,7 @@ scores, model = run_cross_validation(
 ###############################################################################
 # The scores dataframe has all the values for each CV split.
 
-print(scores.head())
+scores.head()
 
 ###############################################################################
 # Mean value of mean absolute error across CV
@@ -95,17 +94,16 @@ df_mae = scores.set_index(["repeat", "fold"])["test_score"].unstack() * -1
 df_mae.index.name = "Repeats"
 df_mae.columns.name = "K-fold splits"
 
-print(df_mae)
+df_mae
 
 ###############################################################################
-# Plot heatmap of mean absolute error (MAE) over all repeats and CV splits
+# Plot heatmap of mean absolute error (MAE) over all repeats and CV splits.
 fig, ax = plt.subplots(1, 1, figsize=(10, 7))
 sns.heatmap(df_mae, cmap="YlGnBu")
 plt.title("Cross-validation MAE")
 
 ###############################################################################
-# Let's plot the feature importance using the coefficients of the trained model
-
+# Let's plot the feature importance using the coefficients of the trained model.
 features = pd.DataFrame({"Features": X, "importance": model["ridge"].coef_})
 features.sort_values(by=["importance"], ascending=True, inplace=True)
 features["positive"] = features["importance"] > 0
@@ -117,10 +115,9 @@ features.importance.plot(
 )
 ax.set(xlabel="Importance", title="Variable importance for Ridge Regression")
 
-
 ###############################################################################
 # Use the final model to make predictions on test data and plot scatterplot
-# of true values vs predicted values
+# of true values vs predicted values.
 
 y_true = test_diabetes[y]
 y_pred = model.predict(test_diabetes[X])

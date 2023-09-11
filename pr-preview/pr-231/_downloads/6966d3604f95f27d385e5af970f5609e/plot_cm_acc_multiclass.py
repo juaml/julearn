@@ -2,7 +2,7 @@
 Multiclass Classification
 =========================
 
-This example uses the 'iris' dataset and performs multiclass
+This example uses the ``iris`` dataset and performs multiclass
 classification using a Support Vector Machine classifier and plots
 heatmaps for cross-validation accuracies and plots confusion matrix
 for the test data.
@@ -10,7 +10,6 @@ for the test data.
 """
 # Authors: Shammi More <s.more@fz-juelich.de>
 #          Federico Raimondo <f.raimondo@fz-juelich.de>
-#
 # License: AGPL
 
 import pandas as pd
@@ -61,7 +60,7 @@ scores, model_iris = run_cross_validation(
 ###############################################################################
 # The scores dataframe has all the values for each CV split.
 
-print(scores.head())
+scores.head()
 
 ###############################################################################
 # Now we can get the accuracy per fold and repetition:
@@ -69,7 +68,7 @@ print(scores.head())
 df_accuracy = scores.set_index(["repeat", "fold"])["test_accuracy"].unstack()
 df_accuracy.index.name = "Repeats"
 df_accuracy.columns.name = "K-fold splits"
-print(df_accuracy)
+df_accuracy
 
 ###############################################################################
 # Plot heatmap of accuracy over all repeats and CV splits
@@ -86,6 +85,7 @@ y_pred = model_iris.predict(test_iris[X])
 cm = confusion_matrix(y_true, y_pred, labels=np.unique(y_true))
 
 print(cm)
+
 ###############################################################################
 # Now that we have our confusion matrix, let's build another matrix with
 # annotations.
@@ -102,12 +102,14 @@ for i in range(nrows):
         else:
             s = cm_sum[i]
             annot[i, j] = "%.1f%%\n%d/%d" % (p, c, s)
+
 ###############################################################################
 # Finally we create another dataframe with the confusion matrix and plot
 # the heatmap with annotations.
 cm = pd.DataFrame(cm, index=np.unique(y_true), columns=np.unique(y_true))
 cm.index.name = "Actual"
 cm.columns.name = "Predicted"
+
 fig, ax = plt.subplots(1, 1, figsize=(10, 7))
 sns.heatmap(cm, cmap="YlGnBu", annot=annot, fmt="", ax=ax)
 plt.title("Confusion matrix")

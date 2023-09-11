@@ -21,7 +21,7 @@
 Stacking Classification
 =======================
 
-This example uses the 'iris' dataset and performs a complex stacking
+This example uses the ``iris`` dataset and performs a complex stacking
 classification. We will use two different classifiers, one applied to petal
 features and one applied to sepal features. A final logistic regression
 classifier will be applied on the predictions of the two classifiers.
@@ -33,8 +33,8 @@ classifier will be applied on the predictions of the two classifiers.
 .. code-block:: default
 
     # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
-    #
     # License: AGPL
+
     from seaborn import load_dataset
     from julearn import run_cross_validation
     from julearn.pipeline import PipelineCreator
@@ -49,7 +49,7 @@ classifier will be applied on the predictions of the two classifiers.
 
 .. GENERATED FROM PYTHON SOURCE LINES 21-22
 
-Set the logging level to info to see extra information
+Set the logging level to info to see extra information.
 
 .. GENERATED FROM PYTHON SOURCE LINES 22-24
 
@@ -65,13 +65,13 @@ Set the logging level to info to see extra information
 
  .. code-block:: none
 
-    2023-09-05 12:40:57,315 - julearn - INFO - ===== Lib Versions =====
-    2023-09-05 12:40:57,315 - julearn - INFO - numpy: 1.25.2
-    2023-09-05 12:40:57,315 - julearn - INFO - scipy: 1.11.2
-    2023-09-05 12:40:57,315 - julearn - INFO - sklearn: 1.3.0
-    2023-09-05 12:40:57,315 - julearn - INFO - pandas: 2.0.3
-    2023-09-05 12:40:57,315 - julearn - INFO - julearn: 0.3.1.dev68
-    2023-09-05 12:40:57,315 - julearn - INFO - ========================
+    2023-09-11 09:51:07,779 - julearn - INFO - ===== Lib Versions =====
+    2023-09-11 09:51:07,779 - julearn - INFO - numpy: 1.25.2
+    2023-09-11 09:51:07,779 - julearn - INFO - scipy: 1.11.2
+    2023-09-11 09:51:07,779 - julearn - INFO - sklearn: 1.3.0
+    2023-09-11 09:51:07,779 - julearn - INFO - pandas: 2.0.3
+    2023-09-11 09:51:07,779 - julearn - INFO - julearn: 0.3.1.dev121
+    2023-09-11 09:51:07,779 - julearn - INFO - ========================
 
 
 
@@ -112,7 +112,7 @@ classification.
 As features, we will use the sepal length, width and petal length.
 We will try to predict the species.
 
-.. GENERATED FROM PYTHON SOURCE LINES 35-71
+.. GENERATED FROM PYTHON SOURCE LINES 35-70
 
 .. code-block:: default
 
@@ -125,7 +125,6 @@ We will try to predict the species.
         "sepal": ["sepal_length", "sepal_width"],
         "petal": ["petal_length", "petal_width"],
     }
-
 
     # Create the pipeline for the sepal features, by default will apply to "sepal"
     model_sepal = PipelineCreator(problem_type="classification", apply_to="sepal")
@@ -160,54 +159,54 @@ We will try to predict the species.
 
  .. code-block:: none
 
-    2023-09-05 12:40:57,319 - julearn - INFO - Adding step filter_columns that applies to ColumnTypes<types={'*'}; pattern=.*>
-    2023-09-05 12:40:57,319 - julearn - INFO - Setting hyperparameter keep = sepal
-    2023-09-05 12:40:57,319 - julearn - INFO - Step added
-    2023-09-05 12:40:57,319 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'sepal'}; pattern=(?:__:type:__sepal)>
-    2023-09-05 12:40:57,319 - julearn - INFO - Step added
-    2023-09-05 12:40:57,319 - julearn - INFO - Adding step svm that applies to ColumnTypes<types={'sepal'}; pattern=(?:__:type:__sepal)>
-    2023-09-05 12:40:57,319 - julearn - INFO - Step added
-    2023-09-05 12:40:57,319 - julearn - INFO - Adding step filter_columns that applies to ColumnTypes<types={'*'}; pattern=.*>
-    2023-09-05 12:40:57,319 - julearn - INFO - Setting hyperparameter keep = petal
-    2023-09-05 12:40:57,320 - julearn - INFO - Step added
-    2023-09-05 12:40:57,320 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'petal'}; pattern=(?:__:type:__petal)>
-    2023-09-05 12:40:57,320 - julearn - INFO - Step added
-    2023-09-05 12:40:57,320 - julearn - INFO - Adding step rf that applies to ColumnTypes<types={'petal'}; pattern=(?:__:type:__petal)>
-    2023-09-05 12:40:57,320 - julearn - INFO - Step added
-    2023-09-05 12:40:57,320 - julearn - INFO - Adding step stacking that applies to ColumnTypes<types={'*'}; pattern=.*>
-    2023-09-05 12:40:57,320 - julearn - INFO - Setting hyperparameter estimators = [('model_sepal', <julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7f1541bfe6b0>), ('model_petal', <julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7f1541bfc280>)]
-    2023-09-05 12:40:57,320 - julearn - INFO - Step added
-    2023-09-05 12:40:57,320 - julearn - INFO - ==== Input Data ====
-    2023-09-05 12:40:57,320 - julearn - INFO - Using dataframe as input
-    2023-09-05 12:40:57,321 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length', 'petal_width']
-    2023-09-05 12:40:57,321 - julearn - INFO -      Target: species
-    2023-09-05 12:40:57,321 - julearn - INFO -      Expanded features: ['sepal_length', 'sepal_width', 'petal_length', 'petal_width']
-    2023-09-05 12:40:57,321 - julearn - INFO -      X_types:{'sepal': ['sepal_length', 'sepal_width'], 'petal': ['petal_length', 'petal_width']}
-    2023-09-05 12:40:57,322 - julearn - INFO - ====================
-    2023-09-05 12:40:57,322 - julearn - INFO - 
-    2023-09-05 12:40:57,323 - julearn - INFO - = Model Parameters =
-    2023-09-05 12:40:57,323 - julearn - INFO - ====================
-    2023-09-05 12:40:57,323 - julearn - INFO - 
-    2023-09-05 12:40:57,325 - julearn - INFO - = Model Parameters =
-    2023-09-05 12:40:57,325 - julearn - INFO - ====================
-    2023-09-05 12:40:57,325 - julearn - INFO - 
-    2023-09-05 12:40:57,454 - julearn - INFO - = Model Parameters =
-    2023-09-05 12:40:57,454 - julearn - INFO - ====================
-    2023-09-05 12:40:57,454 - julearn - INFO - 
-    2023-09-05 12:40:57,454 - julearn - INFO - = Data Information =
-    2023-09-05 12:40:57,454 - julearn - INFO -      Problem type: classification
-    2023-09-05 12:40:57,454 - julearn - INFO -      Number of samples: 100
-    2023-09-05 12:40:57,454 - julearn - INFO -      Number of features: 4
-    2023-09-05 12:40:57,454 - julearn - INFO - ====================
-    2023-09-05 12:40:57,454 - julearn - INFO - 
-    2023-09-05 12:40:57,454 - julearn - INFO -      Number of classes: 2
-    2023-09-05 12:40:57,454 - julearn - INFO -      Target type: object
-    2023-09-05 12:40:57,455 - julearn - INFO -      Class distributions: species
+    2023-09-11 09:51:07,783 - julearn - INFO - Adding step filter_columns that applies to ColumnTypes<types={'*'}; pattern=.*>
+    2023-09-11 09:51:07,783 - julearn - INFO - Setting hyperparameter keep = sepal
+    2023-09-11 09:51:07,784 - julearn - INFO - Step added
+    2023-09-11 09:51:07,784 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'sepal'}; pattern=(?:__:type:__sepal)>
+    2023-09-11 09:51:07,784 - julearn - INFO - Step added
+    2023-09-11 09:51:07,784 - julearn - INFO - Adding step svm that applies to ColumnTypes<types={'sepal'}; pattern=(?:__:type:__sepal)>
+    2023-09-11 09:51:07,784 - julearn - INFO - Step added
+    2023-09-11 09:51:07,784 - julearn - INFO - Adding step filter_columns that applies to ColumnTypes<types={'*'}; pattern=.*>
+    2023-09-11 09:51:07,784 - julearn - INFO - Setting hyperparameter keep = petal
+    2023-09-11 09:51:07,784 - julearn - INFO - Step added
+    2023-09-11 09:51:07,784 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'petal'}; pattern=(?:__:type:__petal)>
+    2023-09-11 09:51:07,785 - julearn - INFO - Step added
+    2023-09-11 09:51:07,785 - julearn - INFO - Adding step rf that applies to ColumnTypes<types={'petal'}; pattern=(?:__:type:__petal)>
+    2023-09-11 09:51:07,785 - julearn - INFO - Step added
+    2023-09-11 09:51:07,785 - julearn - INFO - Adding step stacking that applies to ColumnTypes<types={'*'}; pattern=.*>
+    2023-09-11 09:51:07,785 - julearn - INFO - Setting hyperparameter estimators = [('model_sepal', <julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7f977865ffa0>), ('model_petal', <julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7f977865ed40>)]
+    2023-09-11 09:51:07,785 - julearn - INFO - Step added
+    2023-09-11 09:51:07,785 - julearn - INFO - ==== Input Data ====
+    2023-09-11 09:51:07,785 - julearn - INFO - Using dataframe as input
+    2023-09-11 09:51:07,785 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length', 'petal_width']
+    2023-09-11 09:51:07,785 - julearn - INFO -      Target: species
+    2023-09-11 09:51:07,785 - julearn - INFO -      Expanded features: ['sepal_length', 'sepal_width', 'petal_length', 'petal_width']
+    2023-09-11 09:51:07,786 - julearn - INFO -      X_types:{'sepal': ['sepal_length', 'sepal_width'], 'petal': ['petal_length', 'petal_width']}
+    2023-09-11 09:51:07,786 - julearn - INFO - ====================
+    2023-09-11 09:51:07,786 - julearn - INFO - 
+    2023-09-11 09:51:07,788 - julearn - INFO - = Model Parameters =
+    2023-09-11 09:51:07,788 - julearn - INFO - ====================
+    2023-09-11 09:51:07,788 - julearn - INFO - 
+    2023-09-11 09:51:07,790 - julearn - INFO - = Model Parameters =
+    2023-09-11 09:51:07,790 - julearn - INFO - ====================
+    2023-09-11 09:51:07,790 - julearn - INFO - 
+    2023-09-11 09:51:07,922 - julearn - INFO - = Model Parameters =
+    2023-09-11 09:51:07,923 - julearn - INFO - ====================
+    2023-09-11 09:51:07,923 - julearn - INFO - 
+    2023-09-11 09:51:07,923 - julearn - INFO - = Data Information =
+    2023-09-11 09:51:07,923 - julearn - INFO -      Problem type: classification
+    2023-09-11 09:51:07,923 - julearn - INFO -      Number of samples: 100
+    2023-09-11 09:51:07,923 - julearn - INFO -      Number of features: 4
+    2023-09-11 09:51:07,923 - julearn - INFO - ====================
+    2023-09-11 09:51:07,923 - julearn - INFO - 
+    2023-09-11 09:51:07,923 - julearn - INFO -      Number of classes: 2
+    2023-09-11 09:51:07,923 - julearn - INFO -      Target type: object
+    2023-09-11 09:51:07,924 - julearn - INFO -      Class distributions: species
     versicolor    50
     virginica     50
     Name: count, dtype: int64
-    2023-09-05 12:40:57,455 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-    2023-09-05 12:40:57,456 - julearn - INFO - Binary classification problem detected.
+    2023-09-11 09:51:07,924 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+    2023-09-11 09:51:07,925 - julearn - INFO - Binary classification problem detected.
     0    1.00
     1    0.85
     2    0.95
@@ -221,7 +220,7 @@ We will try to predict the species.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  4.353 seconds)
+   **Total running time of the script:** ( 0 minutes  4.914 seconds)
 
 
 .. _sphx_glr_download_auto_examples_03_complex_models_run_stacked_models.py:

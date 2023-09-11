@@ -21,16 +21,15 @@
 Regression Analysis
 ===================
 
-This example uses the 'diabetes' data from sklearn datasets and performs
+This example uses the ``diabetes`` data from ``sklearn datasets`` and performs
 a regression analysis using a Ridge Regression model.
 
-.. GENERATED FROM PYTHON SOURCE LINES 9-25
+.. GENERATED FROM PYTHON SOURCE LINES 9-24
 
 .. code-block:: default
 
     # Authors: Shammi More <s.more@fz-juelich.de>
     #          Federico Raimondo <f.raimondo@fz-juelich.de>
-    #
     # License: AGPL
 
     import pandas as pd
@@ -51,11 +50,11 @@ a regression analysis using a Ridge Regression model.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 26-27
+.. GENERATED FROM PYTHON SOURCE LINES 25-26
 
-Set the logging level to info to see extra information
+Set the logging level to info to see extra information.
 
-.. GENERATED FROM PYTHON SOURCE LINES 27-29
+.. GENERATED FROM PYTHON SOURCE LINES 26-28
 
 .. code-block:: default
 
@@ -69,22 +68,22 @@ Set the logging level to info to see extra information
 
  .. code-block:: none
 
-    2023-09-05 12:40:45,994 - julearn - INFO - ===== Lib Versions =====
-    2023-09-05 12:40:45,994 - julearn - INFO - numpy: 1.25.2
-    2023-09-05 12:40:45,994 - julearn - INFO - scipy: 1.11.2
-    2023-09-05 12:40:45,994 - julearn - INFO - sklearn: 1.3.0
-    2023-09-05 12:40:45,994 - julearn - INFO - pandas: 2.0.3
-    2023-09-05 12:40:45,994 - julearn - INFO - julearn: 0.3.1.dev68
-    2023-09-05 12:40:45,994 - julearn - INFO - ========================
+    2023-09-11 09:50:55,073 - julearn - INFO - ===== Lib Versions =====
+    2023-09-11 09:50:55,073 - julearn - INFO - numpy: 1.25.2
+    2023-09-11 09:50:55,073 - julearn - INFO - scipy: 1.11.2
+    2023-09-11 09:50:55,073 - julearn - INFO - sklearn: 1.3.0
+    2023-09-11 09:50:55,074 - julearn - INFO - pandas: 2.0.3
+    2023-09-11 09:50:55,074 - julearn - INFO - julearn: 0.3.1.dev121
+    2023-09-11 09:50:55,074 - julearn - INFO - ========================
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 30-31
+.. GENERATED FROM PYTHON SOURCE LINES 29-30
 
-load the diabetes data from sklearn as a pandas dataframe
+Load the diabetes data from ``sklearn`` as a ``pandas.DataFrame``.
 
-.. GENERATED FROM PYTHON SOURCE LINES 31-33
+.. GENERATED FROM PYTHON SOURCE LINES 30-32
 
 .. code-block:: default
 
@@ -97,14 +96,14 @@ load the diabetes data from sklearn as a pandas dataframe
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 34-38
+.. GENERATED FROM PYTHON SOURCE LINES 33-37
 
-Dataset contains ten variables age, sex, body mass index, average  blood
+Dataset contains ten variables age, sex, body mass index, average blood
 pressure, and six blood serum measurements (s1-s6) diabetes patients and
 a quantitative measure of disease progression one year after baseline which
 is the target we are interested in predicting.
 
-.. GENERATED FROM PYTHON SOURCE LINES 38-42
+.. GENERATED FROM PYTHON SOURCE LINES 37-41
 
 .. code-block:: default
 
@@ -143,12 +142,12 @@ is the target we are interested in predicting.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 43-45
+.. GENERATED FROM PYTHON SOURCE LINES 42-44
 
 Let's combine features and target together in one dataframe and define X
 and y
 
-.. GENERATED FROM PYTHON SOURCE LINES 45-50
+.. GENERATED FROM PYTHON SOURCE LINES 44-49
 
 .. code-block:: default
 
@@ -164,15 +163,16 @@ and y
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 51-52
+.. GENERATED FROM PYTHON SOURCE LINES 50-51
 
-calculate correlations between the features/variables and plot it as heat map
+Calculate correlations between the features/variables and plot it as heat map.
 
-.. GENERATED FROM PYTHON SOURCE LINES 52-64
+.. GENERATED FROM PYTHON SOURCE LINES 51-63
 
 .. code-block:: default
 
     corr = data_diabetes.corr()
+
     fig, ax = plt.subplots(1, 1, figsize=(10, 7))
     sns.set(font_scale=1.2)
     sns.heatmap(
@@ -182,7 +182,6 @@ calculate correlations between the features/variables and plot it as heat map
         annot=True,
         fmt="0.1f",
     )
-
 
 
 
@@ -202,11 +201,11 @@ calculate correlations between the features/variables and plot it as heat map
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 65-66
+.. GENERATED FROM PYTHON SOURCE LINES 64-65
 
-Split the dataset into train and test
+Split the dataset into train and test.
 
-.. GENERATED FROM PYTHON SOURCE LINES 66-68
+.. GENERATED FROM PYTHON SOURCE LINES 65-67
 
 .. code-block:: default
 
@@ -219,12 +218,12 @@ Split the dataset into train and test
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 69-71
+.. GENERATED FROM PYTHON SOURCE LINES 68-70
 
 Train a ridge regression model on train dataset and use mean absolute error
-for scoring
+for scoring.
 
-.. GENERATED FROM PYTHON SOURCE LINES 71-82
+.. GENERATED FROM PYTHON SOURCE LINES 70-81
 
 .. code-block:: default
 
@@ -247,72 +246,151 @@ for scoring
 
  .. code-block:: none
 
-    2023-09-05 12:40:46,265 - julearn - INFO - ==== Input Data ====
-    2023-09-05 12:40:46,265 - julearn - INFO - Using dataframe as input
-    2023-09-05 12:40:46,265 - julearn - INFO -      Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2023-09-05 12:40:46,265 - julearn - INFO -      Target: target
-    2023-09-05 12:40:46,266 - julearn - INFO -      Expanded features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2023-09-05 12:40:46,266 - julearn - INFO -      X_types:{}
-    2023-09-05 12:40:46,266 - julearn - WARNING - The following columns are not defined in X_types: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']. They will be treated as continuous.
+    2023-09-11 09:50:55,378 - julearn - INFO - ==== Input Data ====
+    2023-09-11 09:50:55,378 - julearn - INFO - Using dataframe as input
+    2023-09-11 09:50:55,378 - julearn - INFO -      Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2023-09-11 09:50:55,378 - julearn - INFO -      Target: target
+    2023-09-11 09:50:55,379 - julearn - INFO -      Expanded features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2023-09-11 09:50:55,379 - julearn - INFO -      X_types:{}
+    2023-09-11 09:50:55,379 - julearn - WARNING - The following columns are not defined in X_types: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']. They will be treated as continuous.
     /home/runner/work/julearn/julearn/julearn/prepare.py:503: RuntimeWarning: The following columns are not defined in X_types: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']. They will be treated as continuous.
       warn_with_log(
-    2023-09-05 12:40:46,267 - julearn - INFO - ====================
-    2023-09-05 12:40:46,267 - julearn - INFO - 
-    2023-09-05 12:40:46,267 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2023-09-05 12:40:46,267 - julearn - INFO - Step added
-    2023-09-05 12:40:46,267 - julearn - INFO - Adding step ridge that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2023-09-05 12:40:46,267 - julearn - INFO - Step added
-    2023-09-05 12:40:46,268 - julearn - INFO - = Model Parameters =
-    2023-09-05 12:40:46,268 - julearn - INFO - ====================
-    2023-09-05 12:40:46,268 - julearn - INFO - 
-    2023-09-05 12:40:46,268 - julearn - INFO - = Data Information =
-    2023-09-05 12:40:46,268 - julearn - INFO -      Problem type: regression
-    2023-09-05 12:40:46,268 - julearn - INFO -      Number of samples: 309
-    2023-09-05 12:40:46,268 - julearn - INFO -      Number of features: 10
-    2023-09-05 12:40:46,268 - julearn - INFO - ====================
-    2023-09-05 12:40:46,268 - julearn - INFO - 
-    2023-09-05 12:40:46,268 - julearn - INFO -      Target type: float64
-    2023-09-05 12:40:46,268 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+    2023-09-11 09:50:55,380 - julearn - INFO - ====================
+    2023-09-11 09:50:55,380 - julearn - INFO - 
+    2023-09-11 09:50:55,380 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2023-09-11 09:50:55,380 - julearn - INFO - Step added
+    2023-09-11 09:50:55,380 - julearn - INFO - Adding step ridge that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2023-09-11 09:50:55,380 - julearn - INFO - Step added
+    2023-09-11 09:50:55,381 - julearn - INFO - = Model Parameters =
+    2023-09-11 09:50:55,381 - julearn - INFO - ====================
+    2023-09-11 09:50:55,381 - julearn - INFO - 
+    2023-09-11 09:50:55,381 - julearn - INFO - = Data Information =
+    2023-09-11 09:50:55,381 - julearn - INFO -      Problem type: regression
+    2023-09-11 09:50:55,381 - julearn - INFO -      Number of samples: 309
+    2023-09-11 09:50:55,381 - julearn - INFO -      Number of features: 10
+    2023-09-11 09:50:55,381 - julearn - INFO - ====================
+    2023-09-11 09:50:55,381 - julearn - INFO - 
+    2023-09-11 09:50:55,382 - julearn - INFO -      Target type: float64
+    2023-09-11 09:50:55,382 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 83-84
+.. GENERATED FROM PYTHON SOURCE LINES 82-83
 
 The scores dataframe has all the values for each CV split.
 
-.. GENERATED FROM PYTHON SOURCE LINES 84-87
+.. GENERATED FROM PYTHON SOURCE LINES 83-86
 
 .. code-block:: default
 
 
-    print(scores.head())
+    scores.head()
 
 
 
 
 
-.. rst-class:: sphx-glr-script-out
 
- .. code-block:: none
+.. raw:: html
 
-       fit_time  score_time  ...  fold                          cv_mdsum
-    0  0.005899    0.002974  ...     0  b10eef89b4192178d482d7a1587a248a
-    1  0.005540    0.002944  ...     1  b10eef89b4192178d482d7a1587a248a
-    2  0.005421    0.002956  ...     2  b10eef89b4192178d482d7a1587a248a
-    3  0.005431    0.002919  ...     3  b10eef89b4192178d482d7a1587a248a
-    4  0.005421    0.002911  ...     4  b10eef89b4192178d482d7a1587a248a
+    <div class="output_subarea output_html rendered_html output_result">
+    <div>
+    <style scoped>
+        .dataframe tbody tr th:only-of-type {
+            vertical-align: middle;
+        }
 
-    [5 rows x 8 columns]
+        .dataframe tbody tr th {
+            vertical-align: top;
+        }
 
+        .dataframe thead th {
+            text-align: right;
+        }
+    </style>
+    <table border="1" class="dataframe">
+      <thead>
+        <tr style="text-align: right;">
+          <th></th>
+          <th>fit_time</th>
+          <th>score_time</th>
+          <th>test_score</th>
+          <th>n_train</th>
+          <th>n_test</th>
+          <th>repeat</th>
+          <th>fold</th>
+          <th>cv_mdsum</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>0</th>
+          <td>0.006490</td>
+          <td>0.003150</td>
+          <td>-48.783874</td>
+          <td>247</td>
+          <td>62</td>
+          <td>0</td>
+          <td>0</td>
+          <td>b10eef89b4192178d482d7a1587a248a</td>
+        </tr>
+        <tr>
+          <th>1</th>
+          <td>0.005837</td>
+          <td>0.003112</td>
+          <td>-47.573568</td>
+          <td>247</td>
+          <td>62</td>
+          <td>0</td>
+          <td>1</td>
+          <td>b10eef89b4192178d482d7a1587a248a</td>
+        </tr>
+        <tr>
+          <th>2</th>
+          <td>0.005770</td>
+          <td>0.003096</td>
+          <td>-37.617474</td>
+          <td>247</td>
+          <td>62</td>
+          <td>0</td>
+          <td>2</td>
+          <td>b10eef89b4192178d482d7a1587a248a</td>
+        </tr>
+        <tr>
+          <th>3</th>
+          <td>0.005764</td>
+          <td>0.003102</td>
+          <td>-47.686852</td>
+          <td>247</td>
+          <td>62</td>
+          <td>0</td>
+          <td>3</td>
+          <td>b10eef89b4192178d482d7a1587a248a</td>
+        </tr>
+        <tr>
+          <th>4</th>
+          <td>0.005693</td>
+          <td>0.003072</td>
+          <td>-45.558655</td>
+          <td>248</td>
+          <td>61</td>
+          <td>0</td>
+          <td>4</td>
+          <td>b10eef89b4192178d482d7a1587a248a</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+    </div>
+    <br />
+    <br />
 
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 88-89
+.. GENERATED FROM PYTHON SOURCE LINES 87-88
 
 Mean value of mean absolute error across CV
 
-.. GENERATED FROM PYTHON SOURCE LINES 89-91
+.. GENERATED FROM PYTHON SOURCE LINES 88-90
 
 .. code-block:: default
 
@@ -331,11 +409,11 @@ Mean value of mean absolute error across CV
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 92-93
+.. GENERATED FROM PYTHON SOURCE LINES 91-92
 
 Now we can get the MAE fold and repetition:
 
-.. GENERATED FROM PYTHON SOURCE LINES 93-100
+.. GENERATED FROM PYTHON SOURCE LINES 92-99
 
 .. code-block:: default
 
@@ -344,28 +422,70 @@ Now we can get the MAE fold and repetition:
     df_mae.index.name = "Repeats"
     df_mae.columns.name = "K-fold splits"
 
-    print(df_mae)
+    df_mae
 
 
 
 
 
-.. rst-class:: sphx-glr-script-out
 
- .. code-block:: none
+.. raw:: html
 
-    K-fold splits          0          1          2          3          4
-    Repeats                                                             
-    0              48.783874  47.573568  37.617474  47.686852  45.558655
+    <div class="output_subarea output_html rendered_html output_result">
+    <div>
+    <style scoped>
+        .dataframe tbody tr th:only-of-type {
+            vertical-align: middle;
+        }
 
+        .dataframe tbody tr th {
+            vertical-align: top;
+        }
 
+        .dataframe thead th {
+            text-align: right;
+        }
+    </style>
+    <table border="1" class="dataframe">
+      <thead>
+        <tr style="text-align: right;">
+          <th>K-fold splits</th>
+          <th>0</th>
+          <th>1</th>
+          <th>2</th>
+          <th>3</th>
+          <th>4</th>
+        </tr>
+        <tr>
+          <th>Repeats</th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>0</th>
+          <td>48.783874</td>
+          <td>47.573568</td>
+          <td>37.617474</td>
+          <td>47.686852</td>
+          <td>45.558655</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+    </div>
+    <br />
+    <br />
 
+.. GENERATED FROM PYTHON SOURCE LINES 100-101
 
-.. GENERATED FROM PYTHON SOURCE LINES 101-102
+Plot heatmap of mean absolute error (MAE) over all repeats and CV splits.
 
-Plot heatmap of mean absolute error (MAE) over all repeats and CV splits
-
-.. GENERATED FROM PYTHON SOURCE LINES 102-106
+.. GENERATED FROM PYTHON SOURCE LINES 101-105
 
 .. code-block:: default
 
@@ -391,14 +511,13 @@ Plot heatmap of mean absolute error (MAE) over all repeats and CV splits
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 107-108
+.. GENERATED FROM PYTHON SOURCE LINES 106-107
 
-Let's plot the feature importance using the coefficients of the trained model
+Let's plot the feature importance using the coefficients of the trained model.
 
-.. GENERATED FROM PYTHON SOURCE LINES 108-121
+.. GENERATED FROM PYTHON SOURCE LINES 107-118
 
 .. code-block:: default
-
 
     features = pd.DataFrame({"Features": X, "importance": model["ridge"].coef_})
     features.sort_values(by=["importance"], ascending=True, inplace=True)
@@ -410,7 +529,6 @@ Let's plot the feature importance using the coefficients of the trained model
         kind="barh", color=features.positive.map({True: "blue", False: "red"})
     )
     ax.set(xlabel="Importance", title="Variable importance for Ridge Regression")
-
 
 
 
@@ -430,12 +548,12 @@ Let's plot the feature importance using the coefficients of the trained model
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 122-124
+.. GENERATED FROM PYTHON SOURCE LINES 119-121
 
 Use the final model to make predictions on test data and plot scatterplot
-of true values vs predicted values
+of true values vs predicted values.
 
-.. GENERATED FROM PYTHON SOURCE LINES 124-148
+.. GENERATED FROM PYTHON SOURCE LINES 121-145
 
 .. code-block:: default
 
@@ -484,7 +602,7 @@ of true values vs predicted values
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.737 seconds)
+   **Total running time of the script:** ( 0 minutes  0.796 seconds)
 
 
 .. _sphx_glr_download_auto_examples_00_starting_plot_example_regression.py:

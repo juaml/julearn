@@ -2,7 +2,7 @@
 Simple Model Comparison
 =======================
 
-This example uses the 'iris' dataset and performs binary classifications
+This example uses the ``iris`` dataset and performs binary classifications
 using different models. At the end, it compares the performance of the models
 using different scoring functions and performs a statistical test to assess
 whether the difference in performance is significant.
@@ -10,7 +10,6 @@ whether the difference in performance is significant.
 .. include:: ../../links.inc
 """
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
-#
 # License: AGPL
 
 from seaborn import load_dataset
@@ -20,7 +19,7 @@ from julearn.utils import configure_logging
 from julearn.stats.corrected_ttest import corrected_ttest
 
 ###############################################################################
-# Set the logging level to info to see extra information
+# Set the logging level to info to see extra information.
 configure_logging(level="INFO")
 
 ###############################################################################
@@ -59,7 +58,7 @@ print(df_unbalanced["species"].value_counts())
 
 ###############################################################################
 # So we will choose to use the `balanced_accuracy` and `roc_auc` metrics.
-#
+
 scoring = ["balanced_accuracy", "roc_auc"]
 
 ###############################################################################
@@ -115,7 +114,7 @@ scores3 = run_cross_validation(
 scores3["model"] = "svm_linear"
 
 ###############################################################################
-# We can now compare the performance of the models using corrected statistics
+# We can now compare the performance of the models using corrected statistics.
 
 stats_df = corrected_ttest(scores1, scores2, scores3)
 print(stats_df)
@@ -135,12 +134,13 @@ scores3.to_csv("/tmp/scores3.csv")
 # sphinx_gallery_end_ignore
 
 ###############################################################################
-# We can also plot the performance of the models using the Julearn Score Viewer
-#
+# We can also plot the performance of the models using the ``julearn`` Score
+# Viewer.
 
 from julearn.viz import plot_scores
+
 panel = plot_scores(scores1, scores2, scores3)
-# panel.show() 
+# panel.show()
 # uncomment the previous line show the plot
 # read the documentation for more information
 #  https://panel.holoviz.org/getting_started/build_app.html#deploying-panels
