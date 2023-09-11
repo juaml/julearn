@@ -2,6 +2,7 @@
 #          Vera Komeyer <v.komeyer@fz-juelich.de>
 #          Fede Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL
+
 """
 Inspecting Models
 =================
@@ -18,9 +19,9 @@ learning models can help us identify the most critical features that influence
 the model's predictions, understand how the model works and make informed
 decisions about its deployment.
 
-In this context, we will explore how to perform model inspection in julearn.
-Julearn provides an intuitive suite of tools for model inspection and
-interpretation. We will focus on how to inspect models in julearn's nested
+In this context, we will explore how to perform model inspection in ``julearn``.
+``julearn`` provides an intuitive suite of tools for model inspection and
+interpretation. We will focus on how to inspect models in ``julearn``'s nested
 cross-validation workflow. With these techniques, we can gain a better
 understanding of how the model works and identify any patterns or anomalies that
 could affect its performance. This knowledge can help us deploy models more
@@ -29,7 +30,6 @@ effectively and interpret their outputs with greater confidence.
 Let's start by importing some useful utilities:
 
 """
-
 from pprint import pprint
 import seaborn as sns
 import numpy as np
@@ -42,10 +42,10 @@ from julearn.utils import configure_logging
 
 
 ##############################################################################
-# Now, let's configure julearn's logger to get some output as the pipeline is
-# running and get some toy data to play with. In this example, we will use the
-# penguin dataset, and classify the penguin species based on the continuous
-# measures in the dataset.
+# Now, let's configure ``julearn``'s logger to get some output as the pipeline
+# is running and get some toy data to play with. In this example, we will use
+# the ``penguin`` dataset, and classify the penguin species based on the
+# continuous measures in the dataset.
 
 configure_logging(level="INFO")
 
@@ -69,11 +69,11 @@ pipeline_creator.add("svm", kernel="linear", C=np.geomspace(1e-2, 1e2, 5))
 print(pipeline_creator)
 
 ##############################################################################
-# Once this is set up, we can simply call julearn's
+# Once this is set up, we can simply call ``julearn``'s
 # :func:`.run_cross_validation`. Notice, how we set the ``return_inspector``
 # parameter to ``True``. Importantly, we also have to set the
-# ``return_estimator`` parameter to ``"all"``. This is because julearn's
-# :class:`.Inspector` extracts all relevant nformation from estimators after
+# ``return_estimator`` parameter to ``"all"``. This is because ``julearn``'s
+# :class:`.Inspector` extracts all relevant information from estimators after
 # the pipeline has been run. The pipeline will take a few minutes in our
 # example:
 
@@ -93,7 +93,6 @@ scores, final_model, inspector = run_cross_validation(
 # parameters, but also at the parameters of individual models from each fold of
 # the cross-validation. The final model can be inspected using the ``.model``
 # attribute. For example to get a quick overview over the model parameters, run:
-
 
 # remember to actually import pprint as above, or just print out using print
 pprint(inspector.model.get_params())
@@ -115,7 +114,6 @@ pprint(inspector.model.get_fitted_params())
 
 print(inspector.model.get_fitted_params()["zscore__mean_"])
 
-
 ##############################################################################
 # In addition, sometimes it can be very useful to know what predictions were
 # made in each individual train-test split of the cross-validation. This is
@@ -133,11 +131,10 @@ print(fold_predictions)
 # This ``.folds`` attribute is actually an iterator, that can iterate over
 # every single fold used in the cross-validation, and it yields an instance of
 # a :class:`.FoldsInspector`, which can then be used to explore each model that
-# was fitted during cross-validation. For example, we can collect the _C_
+# was fitted during cross-validation. For example, we can collect the ``C``
 # parameters that were selected in each outer fold of our nested
 # cross-validation. That way, we can assess the amount of variance on that
 # particular parameter across folds:
-
 
 c_values = []
 for fold_inspector in inspector.folds:
@@ -147,7 +144,7 @@ for fold_inspector in inspector.folds:
     )
 
 ##############################################################################
-# By printing out the unique values in the ``c_values`` list, we realise, that
+# By printing out the unique values in the ``c_values`` list, we realize, that
 # actually there was not much variance across models. In fact, there was only
 # one parameter value ever selected. This may indicate that this is in fact
 # the optimal value, or it may indicate that there is a potential problem with
@@ -163,7 +160,7 @@ print(set(c_values))
 # you can gain deeper insights, interpret your models effectively, and address
 # any issues that may arise. Model inspection serves as a valuable asset in the
 # deployment of machine learning models, ensuring transparency,
-# interpretability, and reliable decision-making. With julearn's model
+# interpretability, and reliable decision-making. With ``julearn``'s model
 # inspection capabilities, you can confidently navigate the complexities of
 # machine learning models and harness their full potential in real-world
 # applications.

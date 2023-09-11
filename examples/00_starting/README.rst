@@ -1,4 +1,4 @@
-Starting with julearn
-=====================
+Starting with ``julearn``
+=========================
 
-Examples showing how to use basic julearn functionality.
+Examples showing how to use basic ``julearn`` functionality.

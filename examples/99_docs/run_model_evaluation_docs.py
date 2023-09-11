@@ -1,6 +1,7 @@
 # Authors: Vera Komeyer <v.komeyer@fz-juelich.de>
 #          Fede Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL
+
 """
 Model Evaluation
 ================
@@ -15,8 +16,8 @@ pipeline?
 Cross-validation scores
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-We consider the _iris_ data example and one of the pipelines from the previous 
-section (feature z-scoring and a ``svm``). 
+We consider the ``iris`` data example and one of the pipelines from the previous
+section (feature z-scoring and a ``svm``).
 """
 from julearn import run_cross_validation
 from julearn.pipeline import PipelineCreator
@@ -25,6 +26,7 @@ from seaborn import load_dataset
 
 # sphinx_gallery_start_ignore
 from sklearn import set_config
+
 set_config(display="diagram")
 # sphinx_gallery_end_ignore
 
@@ -40,12 +42,12 @@ X_types = {
     ]
 }
 
-# create a pipeline
+# Create a pipeline
 creator = PipelineCreator(problem_type="classification")
 creator.add("zscore")
 creator.add("svm")
 
-# run cross-validation
+# Run cross-validation
 scores = run_cross_validation(
     X=X,
     y=y,
@@ -55,11 +57,10 @@ scores = run_cross_validation(
 )
 
 ###############################################################################
-# The ``scores`` variable is an pandas DataFrame object which contains the
+# The ``scores`` variable is a ``pandas.DataFrame`` object which contains the
 # cross-validated metrics for each fold as columns and rows respectively.
 
 print(scores)
-
 
 ###############################################################################
 # We see that for example the ``test_score`` for the third fold is 0.933. This
@@ -95,7 +96,7 @@ print(scores)
 #
 # The column ``cv_mdsum`` on the first glance might appear a bit cryptic.
 # This column is used in internal checks, to verify that the same CV was used
-# when results are compared using julearn's provided statistical tests.
+# when results are compared using ``julearn``'s provided statistical tests.
 # This is nothing you need to worry about at this point.
 #
 # Returning a model (estimator)
@@ -104,22 +105,21 @@ print(scores)
 # Now that we saw that our model doesn't seem to overfit, we might be
 # interested in checking how our model parameters look like. By setting the
 # parameter ``return_estimator``, we can tell :func:`.run_cross_validation` to
-# give us models. It can have three different values:
+# give us the models. It can have three different values:
 #
 # 1. ``"cv"``: This option indicates that we want to get the model that was
 #    trained on the entire training data of each CV fold. This means that we
 #    get as many models as we have CV folds. They will be returned within the
-#    scores dataframe.
+#    scores DataFrame.
 #
 # 2. ``"final"``: With this setting, an additional model will be trained on the
 #    entire input dataset. This model will be returned as a separate variable.
 #
-# 3. ``"all"``: In this scenario, all the estimators (final and cv) will be
-#    returned.
+# 3. ``"all"``: In this scenario, all the estimators (``"final"`` and ``"cv"``)
+#    will be returned.
 #
 # For demonstration purposes we will have a closer look at the ``"final"``
 # estimator option.
-
 
 scores, model = run_cross_validation(
     X=X,
@@ -134,7 +134,7 @@ scores, model = run_cross_validation(
 print(scores)
 
 ###############################################################################
-# As we see, the scores dataframe is the same as before. However, we now have
+# As we see, the scores DataFrame is the same as before. However, we now have
 # an additional variable ``model``. This variable contains the final estimator
 # that was trained on the entire training dataset.
 
@@ -150,36 +150,36 @@ model
 #
 # When performing a cross-validation, we need to split the data into training
 # and validation sets. This is done by a *cross-validation splitter*, that
-# defines how the data should be split, how many folds should be used weather
-# to repeat the process several times. For example, we might want to shuffle
-# the data before splitting, stratify the splits so the distribution of targets
-# are always represented in the individual folds, or consider certain grouping
-# variables in the splitting process, so that samples from the same group are
-# always in the same fold and not split across folds.
+# defines how the data should be split, how many folds should be used and
+# whether to repeat the process several times. For example, we might want to
+# shuffle the data before splitting, stratify the splits so the distribution of
+# targets are always represented in the individual folds, or consider certain
+# grouping variables in the splitting process, so that samples from the same
+# group are always in the same fold and not split across folds.
 #
 # So far, however, we didn't specify anything in that regard and still the
 # cross-validation was performed and we got five folds (see the five rows above
 # in the scores dataframe). This is because the default behaviour in
-# :func:`.run_cross_validation` falls back to the scikit-learn defaults,
-# which is a :class:`~sklearn.model_selection.StratifiedKFold` (with ``k=5``)
-# for classification and :class:`~sklearn.model_selection.KFold` (with ``k=5``)
+# :func:`.run_cross_validation` falls back to the ``scikit-learn`` defaults,
+# which is a :class:`sklearn.model_selection.StratifiedKFold` (with ``k=5``)
+# for classification and :class:`sklearn.model_selection.KFold` (with ``k=5``)
 # for regression.
 #
 # .. note::
-#   These defaults will change when they are changed in scikit-learn as here
-#   Julearn just uses scikit-learn's defaults.
+#   These defaults will change when they are changed in ``scikit-learn`` as here
+#   ``julearn`` uses ``scikit-learn``'s defaults.
 #
 # We can define the cross-validation splitting strategy ourselves by passing an
-# int, str or cross-validation generator to the ``cv`` parameter of
+# ``int, str or cross-validation generator`` to the ``cv`` parameter of
 # :func:`.run_cross_validation`. The default described above is ``cv=None``.
-# the second options is to pass only an integer to ``cv``. In that case, the
+# the second option is to pass only an integer to ``cv``. In that case, the
 # same default splitting strategies will be used
-# (:class:`~sklearn.model_selection.StratifiedKFold` for classification,
-# :class:`~sklearn.model_selection.KFold` for regression), but the number of
-# folds will be changed to the value of the provided integer (e.g. ``cv=10``).
-# To define the entire splitting strategy, one can pass all scikit-learn
+# (:class:`sklearn.model_selection.StratifiedKFold` for classification,
+# :class:`sklearn.model_selection.KFold` for regression), but the number of
+# folds will be changed to the value of the provided integer (e.g., ``cv=10``).
+# To define the entire splitting strategy, one can pass all ``scikit-learn``
 # compatible splitters :mod:`sklearn.model_selection` to ``cv``. However,
-# Julearn provides a built-in set of additional splitters that can be found
+# ``julearn`` provides a built-in set of additional splitters that can be found
 # under :mod:`.model_selection` (see more about them in :ref:`cv_splitter`).
 # The fourth option is to pass an iterable that yields the train and test
 # indices for each split.
@@ -203,7 +203,7 @@ scores = run_cross_validation(
 
 ###############################################################################
 # This will repeat 2 times a 5-fold stratified cross-validation. So the
-# returned ``scores`` dataframe will have 10 rows. We set the ``random_state``
+# returned ``scores`` DataFrame will have 10 rows. We set the ``random_state``
 # to an arbitrary integer to make the splitting of the data reproducible.
 
 print(scores)
@@ -221,18 +221,19 @@ print(scores)
 # default assumption for the scorer to be used to evaluate the
 # cross-validation, which is always the model's default scorer. Remember, we
 # used a support vector classifier with the ``y`` (target) variable being the
-# species of the iris dataset (possible values: 'setosa', 'versicolor' or
-# 'virginica'). Therefore we have a multi-class classification (not to be
-# confused with a multi-label classification!). Checking scikit-learn's
-# documentation of a support vector classifier's default scorer, we can see
-# that this is the 'mean accuracy on the given test data and labels'
-# :meth:`sklearn.svm.SVC.score`.
+# species of the ``iris`` dataset (possible values: ``'setosa'``,
+# ``'versicolor'`` or ``'virginica'``). Therefore we have a multi-class
+# classification (not to be confused with a multi-label classification!).
+# Checking ``scikit-learn``'s documentation of a support vector classifier's
+# default scorer :meth:`sklearn.svm.SVC.score`, we can see that this is the
+# 'mean accuracy on the given test data and labels'.
 #
 # With the ``scoring`` parameter of :func:`.run_cross_validation`, one can
-# define the scoring function to be used. On top of the available scikit-learn
-# :mod:`sklearn.metrics` julearn extends the functionality with more internal
-# scorers and the possibility to define custom scorers. To see the available
-# Julearn scorers, one can use the :func:`.list_scorers` function:
+# define the scoring function to be used. On top of the available
+# ``scikit-learn`` :mod:`sklearn.metrics`, ``julearn`` extends the functionality
+# with more internal scorers and the possibility to define custom scorers. To see
+# the available ``julearn`` scorers, one can use the :func:`.list_scorers`
+# function:
 
 from julearn import scoring
 from pprint import pprint  # for nice printing
@@ -240,9 +241,9 @@ from pprint import pprint  # for nice printing
 pprint(scoring.list_scorers())
 
 ###############################################################################
-# To use a Julearn scorer, one can pass the name of the scorer as a string to
-# the ``scoring`` parameter of :func:`.run_cross_validation`. If multiple
-# different scorers should be used, a list of strings can be passed. For 
+# To use a ``julearn`` scorer, one can pass the name of the scorer as a string
+# to the ``scoring`` parameter of :func:`.run_cross_validation`. If multiple
+# different scorers need to be used, a list of strings can be passed. For
 # example, if we were interested in the ``accuracy`` and the ``f1`` scores we
 # could do the following:
 
@@ -260,7 +261,7 @@ scores = run_cross_validation(
 )
 
 ###############################################################################
-# The ``scores`` dataframe will now have train- and test-score columns for both
+# The ``scores`` DataFrame will now have train- and test-score columns for both
 # scorers:
 
 print(scores)

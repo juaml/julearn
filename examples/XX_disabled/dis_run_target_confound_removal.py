@@ -2,33 +2,27 @@
 Confound Removal (model comparison)
 ===================================
 
-This example uses the 'iris' dataset, performs simple binary classification
+This example uses the ``iris`` dataset, performs simple binary classification
 with and without confound removal using a Random Forest classifier.
 
 """
-
 # Authors: Shammi More <s.more@fz-juelich.de>
 #          Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Leonard Sasse <l.sasse@fz-juelich.de>
 # License: AGPL
 
-import matplotlib.pyplot as plt
-import pandas as pd
-import seaborn as sns
 from seaborn import load_dataset
 
 from julearn import run_cross_validation
-from julearn.model_selection import StratifiedBootstrap
 from julearn.pipeline import PipelineCreator, TargetPipelineCreator
 from julearn.utils import configure_logging
 
-
 ###############################################################################
-# Set the logging level to info to see extra information
+# Set the logging level to info to see extra information.
 configure_logging(level="INFO")
 
 ###############################################################################
-# Load the iris data from seaborn
+# Load the iris data from seaborn.
 df_iris = load_dataset("iris")
 
 ###############################################################################
@@ -36,18 +30,15 @@ df_iris = load_dataset("iris")
 # classification.
 df_iris = df_iris[df_iris["species"].isin(["versicolor", "virginica"])]
 
-
 ###############################################################################
 # As features, we will use the sepal length, width and petal length and use
 # petal width as confound.
-
 X = ["sepal_length", "sepal_width"]
 y = "petal_length"
 confounds = ["petal_width"]
 
-
-# In order to tell 'run_cross_validation' which columns are confounds,
-# and which columns are features, we have to define the X_types:
+# In order to tell ``run_cross_validation`` which columns are confounds,
+# and which columns are features, we have to define the ``X_types``:
 X_types = {"features": X, "confound": confounds}
 
 target_creator = TargetPipelineCreator()
@@ -71,4 +62,4 @@ scores_cr = run_cross_validation(
     pos_labels=["virginica"],
 )
 
-print(scores_cr)
+scores_cr

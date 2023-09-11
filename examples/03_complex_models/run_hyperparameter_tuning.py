@@ -2,21 +2,20 @@
 Tuning Hyperparameters
 =======================
 
-This example uses the 'fmri' dataset, performs simple binary classification
-using a Support Vector Machine classifier and analyse the model.
-
+This example uses the ``fmri`` dataset, performs simple binary classification
+using a Support Vector Machine classifier and analyze the model.
 
 References
 ----------
-Waskom, M.L., Frank, M.C., Wagner, A.D. (2016). Adaptive engagement of
-cognitive control in context-dependent decision-making. Cerebral Cortex.
 
+  Waskom, M.L., Frank, M.C., Wagner, A.D. (2016). Adaptive engagement of
+  cognitive control in context-dependent decision-making. Cerebral Cortex.
 
 .. include:: ../../links.inc
 """
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
-#
 # License: AGPL
+
 import numpy as np
 from seaborn import load_dataset
 
@@ -25,33 +24,31 @@ from julearn.utils import configure_logging
 from julearn.pipeline import PipelineCreator
 
 ###############################################################################
-# Set the logging level to info to see extra information
+# Set the logging level to info to see extra information.
 configure_logging(level="INFO")
 
 ###############################################################################
-# Set the random seed to always have the same example
+# Set the random seed to always have the same example.
 np.random.seed(42)
 
-
 ###############################################################################
-# Load the dataset
+# Load the dataset.
 df_fmri = load_dataset("fmri")
-print(df_fmri.head())
+df_fmri.head()
 
 ###############################################################################
-# Set the dataframe in the right format
+# Set the dataframe in the right format.
 df_fmri = df_fmri.pivot(
     index=["subject", "timepoint", "event"], columns="region", values="signal"
 )
 
 df_fmri = df_fmri.reset_index()
-print(df_fmri.head())
-
-X = ["frontal", "parietal"]
-y = "event"
+df_fmri.head()
 
 ###############################################################################
-# Lets do a first attempt and use a linear SVM with the default parameters.
+# Let's do a first attempt and use a linear SVM with the default parameters.
+X = ["frontal", "parietal"]
+y = "event"
 
 creator = PipelineCreator(problem_type="classification")
 creator.add("zscore")
@@ -62,9 +59,9 @@ scores = run_cross_validation(X=X, y=y, data=df_fmri, model=creator)
 print(scores["test_score"].mean())
 
 ###############################################################################
-# The score is not so good. Lets try to see if there is an optimal
+# The score is not so good. Let's try to see if there is an optimal
 # regularization parameter (C) for the linear SVM.
-# We will use a grid search to find the best C.
+# We will use a grid search to find the best ``C``.
 
 creator = PipelineCreator(problem_type="classification")
 creator.add("zscore")
@@ -113,9 +110,7 @@ print(estimator.best_params_)
 
 creator = PipelineCreator(problem_type="classification")
 creator.add("zscore")
-creator.add(
-    "svm", kernel="rbf", C=[0.01, 0.1], gamma=[1e-2, 1e-3]
-)
+creator.add("svm", kernel="rbf", C=[0.01, 0.1], gamma=[1e-2, 1e-3])
 
 scores, estimator = run_cross_validation(
     X=X,
@@ -135,9 +130,7 @@ print(estimator.best_params_)
 
 creator = PipelineCreator(problem_type="classification")
 creator.add("zscore")
-creator.add(
-    "svm", kernel="rbf", C=[0.01, 0.1], gamma=[1e-2, 1e-3, "scale"]
-)
+creator.add("svm", kernel="rbf", C=[0.01, 0.1], gamma=[1e-2, 1e-3, "scale"])
 X = ["frontal", "parietal"]
 y = "event"
 

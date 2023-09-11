@@ -9,19 +9,23 @@ The following is a list of all available steps that can be used to create
 a pipeline by name. The overview is sorted based on the type of the step:
 :ref:`available_transformers` or :ref:`available_models`.
 
-The column 'Name (str)' refers to the string-name of
-the respective step, i.e. how it should be specified when passed to e.g. the
-``PipelineCreator``. The column 'Description' gives a short
-description of what the step is doing. The column 'Class' either indicates the
-underlying `scikit-learn`_ class of the respective pipeline-step together with
-a link to the class in the `scikit-learn`_ documentation (follow the link to
-see the valid parameters) or indicates the class in
-the Julearn code, so one can have a closer look at it in Julearn's
-:ref:`api`.
+* The column ``Name`` refers to the string-name of
+  the respective step, i.e. how it should be specified when passed to e.g., the
+  :class:`.PipelineCreator`.
 
-For feature transformations the :ref:`available_transformers` have to be used
-with the ``PipelineCreator`` and for target transformation with the
-``TargetPipelineCreator``.
+* The column ``Description`` gives a short
+  description of what the step is doing.
+
+* The column ``Class`` either indicates the underlying `scikit-learn`_ class of
+  the respective pipeline step together with a link to the class in the
+  `scikit-learn`_ documentation (follow the link to see the valid parameters) or
+  indicates the class in ``julearn``, so one can have a closer look at it in
+  ``julearn``'s :ref:`api`.
+
+For feature transformations, the :ref:`available_transformers` are to be used
+with the :class:`.PipelineCreator` and for target transformations, the
+:ref:`available_transformers` are to be used with the
+:class:`.TargetPipelineCreator`.
 
 .. _available_transformers:
 
@@ -34,10 +38,10 @@ Scalers
 ~~~~~~~
 
 .. list-table::
-   :widths: 30 80 40
+   :widths: auto
    :header-rows: 1
 
-   * - Name (str)
+   * - Name
      - Description
      - Class
    * - ``zscore``
@@ -62,15 +66,14 @@ Scalers
      - *Gaussianise* data
      - :class:`~sklearn.preprocessing.PowerTransformer`
 
-
 Feature Selection
 ~~~~~~~~~~~~~~~~~
 
 .. list-table::
-   :widths: 30 80 40
+   :widths: auto
    :header-rows: 1
 
-   * - Name (str)
+   * - Name
      - Description
      - Class
    * - ``select_univariate``
@@ -95,31 +98,30 @@ Feature Selection
      - Remove low variance features
      - :class:`~sklearn.feature_selection.VarianceThreshold`
 
-
 DataFrame operations
 ~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
-   :widths: 30 80 40
+   :widths: auto
    :header-rows: 1
 
-   * - Name (str)
+   * - Name
      - Description
      - Class
    * - ``confound_removal``
-     - Removing confounds from features,
-       by subtracting the prediction of each feature given all confounds.
-       By default this is equal to "independently regressing out
-       the confounds from the features"
+     - | Removing confounds from features,
+       | by subtracting the prediction of each feature given all confounds.
+       | By default this is equal to "independently regressing out
+       | the confounds from the features"
      - :class:`.ConfoundRemover`
    * - ``drop_columns``
-     - Drop columns from the dataframe
+     - Drop columns from the DataFrame
      - :class:`.DropColumns`
    * - ``change_column_types``
-     - Change the type of a column in a dataframe
+     - Change the type of a column in a DataFrame
      - :class:`.ChangeColumnTypes`
    * - ``filter_columns``
-     - Filter columns in a dataframe
+     - Filter columns in a DataFrame
      - :class:`.FilterColumns`
 
 .. _available_decompositions:
@@ -128,10 +130,10 @@ Decomposition
 ~~~~~~~~~~~~~
 
 .. list-table::
-   :widths: 30 80 40
+   :widths: auto
    :header-rows: 1
 
-   * - Name (str)
+   * - Name
      - Description
      - Class
    * - ``pca``
@@ -142,10 +144,10 @@ Custom
 ~~~~~~
 
 .. list-table::
-   :widths: 30 80 40
+   :widths: auto
    :header-rows: 1
 
-   * - Name (str)
+   * - Name
      - Description
      - Class
    * - ``cbpm``
@@ -161,10 +163,10 @@ Support Vector Machines
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 .. list-table::
-   :widths: 30 80 40 20 20 20
+   :widths: auto
    :header-rows: 1
 
-   * - Name (str)
+   * - Name
      - Description
      - Class
      - Binary
@@ -172,7 +174,8 @@ Support Vector Machines
      - Regression
    * - ``svm``
      - Support Vector Machine
-     - :class:`~sklearn.svm.SVC` and :class:`~sklearn.svm.SVR`
+     - | :class:`~sklearn.svm.SVC` and
+       | :class:`~sklearn.svm.SVR`
      - Y
      - Y
      - Y
@@ -181,10 +184,10 @@ Ensemble
 ~~~~~~~~
 
 .. list-table::
-   :widths: 30 30 70 20 20 20
+   :widths: auto
    :header-rows: 1
 
-   * - Name (str)
+   * - Name
      - Description
      - Class
      - Binary
@@ -192,37 +195,43 @@ Ensemble
      - Regression
    * - ``rf``
      - Random Forest
-     - :class:`~sklearn.ensemble.RandomForestClassifier` and :class:`~sklearn.ensemble.RandomForestRegressor`
+     - | :class:`~sklearn.ensemble.RandomForestClassifier` and
+       | :class:`~sklearn.ensemble.RandomForestRegressor`
      - Y
      - Y
      - Y
    * - ``et``
      - Extra-Trees
-     - :class:`~sklearn.ensemble.ExtraTreesClassifier` and :class:`~sklearn.ensemble.ExtraTreesRegressor`
+     - | :class:`~sklearn.ensemble.ExtraTreesClassifier` and
+       | :class:`~sklearn.ensemble.ExtraTreesRegressor`
      - Y
      - Y
      - Y
    * - ``adaboost``
      - AdaBoost
-     - :class:`~sklearn.ensemble.AdaBoostClassifier` and :class:`~sklearn.ensemble.AdaBoostRegressor`
+     - | :class:`~sklearn.ensemble.AdaBoostClassifier` and
+       | :class:`~sklearn.ensemble.AdaBoostRegressor`
      - Y
      - Y
      - Y
    * - ``bagging``
      - Bagging
-     - :class:`~sklearn.ensemble.BaggingClassifier` and :class:`~sklearn.ensemble.BaggingRegressor`
+     - | :class:`~sklearn.ensemble.BaggingClassifier` and
+       | :class:`~sklearn.ensemble.BaggingRegressor`
      - Y
      - Y
      - Y
    * - ``gradientboost``
      - Gradient Boosting
-     - :class:`~sklearn.ensemble.GradientBoostingClassifier` and :class:`~sklearn.ensemble.GradientBoostingRegressor`
+     - | :class:`~sklearn.ensemble.GradientBoostingClassifier` and
+       | :class:`~sklearn.ensemble.GradientBoostingRegressor`
      - Y
      - Y
      - Y
    * - ``stacking``
      - Stacking
-     - :class:`~sklearn.ensemble.StackingClassifier` and :class:`~sklearn.ensemble.StackingRegressor`
+     - | :class:`~sklearn.ensemble.StackingClassifier` and
+       | :class:`~sklearn.ensemble.StackingRegressor`
      - Y
      - Y
      - Y
@@ -231,10 +240,10 @@ Gaussian Processes
 ~~~~~~~~~~~~~~~~~~
 
 .. list-table::
-   :widths: 30 30 70 20 20 20
+   :widths: auto
    :header-rows: 1
 
-   * - Name (str)
+   * - Name
      - Description
      - Class
      - Binary
@@ -242,7 +251,8 @@ Gaussian Processes
      - Regression
    * - ``gauss``
      - Gaussian Process
-     - :class:`~sklearn.gaussian_process.GaussianProcessClassifier` and :class:`~sklearn.gaussian_process.GaussianProcessRegressor`
+     - | :class:`~sklearn.gaussian_process.GaussianProcessClassifier` and
+       | :class:`~sklearn.gaussian_process.GaussianProcessRegressor`
      - Y
      - Y
      - Y
@@ -251,10 +261,10 @@ Linear Models
 ~~~~~~~~~~~~~
 
 .. list-table::
-   :widths: 30 50 70 10 10 10
+   :widths: auto
    :header-rows: 1
 
-   * - Name (str)
+   * - Name
      - Description
      - Class
      - Binary
@@ -280,19 +290,22 @@ Linear Models
      - Y
    * - ``ridge``
      - Linear least squares with l2 regularization.
-     - :class:`~sklearn.linear_model.RidgeClassifier` and :class:`~sklearn.linear_model.Ridge`
+     - | :class:`~sklearn.linear_model.RidgeClassifier` and
+       | :class:`~sklearn.linear_model.Ridge`
      - Y
      - Y
      - Y
    * - ``ridgecv``
      - Ridge regression with built-in cross-validation.
-     - :class:`~sklearn.linear_model.RidgeClassifierCV` and :class:`~sklearn.linear_model.RidgeCV`
+     - | :class:`~sklearn.linear_model.RidgeClassifierCV` and
+       | :class:`~sklearn.linear_model.RidgeCV`
      - Y
      - Y
      - Y
    * - ``sgd``
      - Linear model fitted by minimizing a regularized empirical loss with SGD
-     - :class:`~sklearn.linear_model.SGDClassifier` and :class:`~sklearn.linear_model.SGDRegressor`
+     - | :class:`~sklearn.linear_model.SGDClassifier` and
+       | :class:`~sklearn.linear_model.SGDRegressor`
      - Y
      - Y
      - Y
@@ -301,10 +314,10 @@ Naive Bayes
 ~~~~~~~~~~~
 
 .. list-table::
-   :widths: 30 50 70 10 10 10
+   :widths: auto
    :header-rows: 1
 
-   * - Name (str)
+   * - Name
      - Description
      - Class
      - Binary
@@ -345,10 +358,10 @@ Dynamic Selection
 ~~~~~~~~~~~~~~~~~
 
 .. list-table::
-   :widths: 30 50 70 10 10 10
+   :widths: auto
    :header-rows: 1
 
-   * - Name (str)
+   * - Name
      - Description
      - Class
      - Binary
@@ -365,10 +378,10 @@ Dummy
 ~~~~~
 
 .. list-table::
-   :widths: 30 50 70 10 10 10
+   :widths: auto
    :header-rows: 1
 
-   * - Name (str)
+   * - Name
      - Description
      - Class
      - Binary
@@ -376,7 +389,8 @@ Dummy
      - Regression
    * - ``dummy``
      - Use simple rules (without features).
-     - :class:`~sklearn.dummy.DummyClassifier` and :class:`~sklearn.dummy.DummyRegressor`
+     - | :class:`~sklearn.dummy.DummyClassifier` and
+       | :class:`~sklearn.dummy.DummyRegressor`
      - Y
      - Y
      - Y

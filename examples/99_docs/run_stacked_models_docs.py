@@ -5,16 +5,15 @@
 Stacking Models
 ===============
 
-Scikit-learn already provides a stacking implementation for 
+``scikit-learn`` already provides a stacking implementation for
 :class:`stacking regression<sklearn.ensemble.StackingRegressor>` as well
-as for :class:`stacking classification<sklearn.ensemble.StackingClassifier>`
-as well.
+as for :class:`stacking classification<sklearn.ensemble.StackingClassifier>`.
 
-Now, scikit-learn's stacking implementation will fit each estimator on all of
-the data. However, this may not always be what you want. Sometimes you want one
-estimator in the ensemble to be fitted on one type of features, while fitting
-another estimator on another type of features. Julearn's API provides some
-extra flexibility to build more flexible and customisable stacking pipelines.
+Now, ``scikit-learn``'s stacking implementation will fit each estimator on all
+of the data. However, this may not always be what you want. Sometimes you want
+one estimator in the ensemble to be fitted on one type of features, while fitting
+another estimator on another type of features. ``julearn``'s API provides some
+extra flexibility to build more flexible and customizable stacking pipelines.
 In order to explore its capabilities, let's first look at this simple example
 of fitting each estimator on all of the data. For example, we can stack a
 support vector regression (SVR) and a random forest regression (RF) to predict
@@ -23,7 +22,7 @@ some target in a bit of toy data.
 Fitting each estimator on all of the features
 ---------------------------------------------
 First, of course, let's import some necessary packages. Let's also configure
-Julearn's logger to get some additional information about what is happening:
+``julearn``'s logger to get some additional information about what is happening:
 """
 
 from sklearn.datasets import make_regression
@@ -38,22 +37,22 @@ configure_logging(level="INFO")
 
 ###############################################################################
 # Now, that we have these out of the way, we can create some artificial toy
-# data to demonstrate a very simple stacking estimator within Julearn. We will
-# use a dataset with 20 features and 200 samples.
+# data to demonstrate a very simple stacking estimator within ``julearn``. We
+# will use a dataset with 20 features and 200 samples.
 
-# prepare data
+# Prepare data
 X, y = make_regression(n_features=20, n_samples=200)
 
-# make dataframe
+# Make dataframe
 X_names = [f"feature_{x}" for x in range(1, 21)]
 data = pd.DataFrame(X)
 data.columns = X_names
 data["target"] = y
 
 ###############################################################################
-# To build a stacking pipeline, we have to initialise each estimator that we
+# To build a stacking pipeline, we have to initialize each estimator that we
 # want to use in stacking, and then of course the stacking estimator itself.
-# Let's start by initialising an SVR. For this we can use the
+# Let's start by initializing an SVR. For this we can use the
 # :class:`.PipelineCreator`. Keep in mind that this is only an example, and
 # the hyperparameter grids we use here are somewhat arbitrary:
 
@@ -76,7 +75,7 @@ model_2.add(
 
 ###############################################################################
 # We can now provide these two models to a :class:`.PipelineCreator` to
-# initialise a stacking model. The interface for this is very similar to a
+# initialize a stacking model. The interface for this is very similar to a
 # :class:`sklearn.pipeline.Pipeline`:
 
 # Create the stacking model
@@ -89,7 +88,7 @@ model.add(
 
 ###############################################################################
 # This final stacking :class:`.PipelineCreator` can now simply be handed over
-# to Julearn's :func:`.run_cross_validation`:
+# to ``julearn``'s :func:`.run_cross_validation`:
 
 scores, final = run_cross_validation(
     X=X_names,
@@ -104,29 +103,28 @@ scores, final = run_cross_validation(
 # Fitting each estimator on a specific feature type
 # -------------------------------------------------
 #
-# As you can see, fitting a standard scikit-learn stacking estimator is
-# relatively simple with Julearn. However, sometimes it may be desirable to
+# As you can see, fitting a standard ``scikit-learn`` stacking estimator is
+# relatively simple with ``julearn``. However, sometimes it may be desirable to
 # have a bit more control over which features are used to fit each estimator.
 # For example, there may be two types of features. One of these feature types
 # we may want to use for fitting the SVR, and one of these feature types we
 # may want to use for fitting the RF. To demonstrate how this can be done in
-# Julearn, let's now create some very similar toy data, but distinguish
+# ``julearn``, let's now create some very similar toy data, but distinguish
 # between two different types of features: ``"type1"`` and ``"type2"``.
 
-
-# prepare data
+# Prepare data
 X, y = make_regression(n_features=20, n_samples=200)
 
-# prepare feature names and types
+# Prepare feature names and types
 X_types = {
     "type1": [f"type1_{x}" for x in range(1, 11)],
     "type2": [f"type2_{x}" for x in range(1, 11)],
 }
 
-# first 10 features are "type1", second 10 features are "type2"
+# First 10 features are "type1", second 10 features are "type2"
 X_names = X_types["type1"] + X_types["type2"]
 
-# make df, apply correct column names according to X_names
+# Make dataframe, apply correct column names according to X_names
 data = pd.DataFrame(X)
 data.columns = X_names
 data["target"] = y
@@ -140,7 +138,7 @@ model_1.add("filter_columns", apply_to="*", keep="type1")
 model_1.add("svm", kernel="linear", C=np.geomspace(1e-2, 1e2, 10))
 
 ###############################################################################
-# Afterwards, lets configure a :class:`.PipelineCreator` to fit a RF on the
+# Afterwards, let's configure a :class:`.PipelineCreator` to fit a RF on the
 # features of ``"type2"```:
 
 model_2 = PipelineCreator(problem_type="regression", apply_to="type2")
@@ -166,7 +164,7 @@ model.add(
     apply_to="*",
 )
 
-# run
+# Run
 scores, final = run_cross_validation(
     X=X_names,
     X_types=X_types,

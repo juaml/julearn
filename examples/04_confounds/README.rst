@@ -1,4 +1,4 @@
 Confounds
 =========
 
-Examples that show the confound-related functionality of Julearn.
+Examples that show the confound-related functionality of ``julearn``.

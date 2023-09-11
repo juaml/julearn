@@ -2,7 +2,7 @@
 Transforming target variable with z-score
 =========================================
 
-This example uses the sklearn "diabetes" regression dataset, and transforms the
+This example uses the sklearn ``diabetes`` regression dataset, and transforms the
 target variable, in this case, using z-score. Then, we perform a regression
 analysis using Ridge Regression model.
 
@@ -13,27 +13,21 @@ analysis using Ridge Regression model.
 # License: AGPL
 
 import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
 from sklearn.datasets import load_diabetes
 from sklearn.model_selection import train_test_split
 
 from julearn import run_cross_validation
 from julearn.utils import configure_logging
 
-# this is crucial for creating the model in the new version
 from julearn.pipeline import PipelineCreator, TargetPipelineCreator
 
-
 ###############################################################################
-# Set the logging level to info to see extra information
+# Set the logging level to info to see extra information.
 configure_logging(level="INFO")
 
-
 ###############################################################################
-# Load the diabetes dataset from sklearn as a pandas dataframe
+# Load the diabetes dataset from ``sklearn`` as a ``pandas.DataFrame``.
 features, target = load_diabetes(return_X_y=True, as_frame=True)
-
 
 ###############################################################################
 # Dataset contains ten variables age, sex, body mass index, average  blood
@@ -43,19 +37,17 @@ features, target = load_diabetes(return_X_y=True, as_frame=True)
 print("Features: \n", features.head())
 print("Target: \n", target.describe())
 
-
 ###############################################################################
 # Let's combine features and target together in one dataframe and define X
-# and y
+# and y.
 data_diabetes = pd.concat([features, target], axis=1)
 
 X = ["age", "sex", "bmi", "bp", "s1", "s2", "s3", "s4", "s5", "s6"]
 y = "target"
 
 ###############################################################################
-# Split the dataset into train and test
+# Split the dataset into train and test.
 train_diabetes, test_diabetes = train_test_split(data_diabetes, test_size=0.3)
-
 
 ###############################################################################
 # Let's create the model. Since we will be transforming the target variable
@@ -63,7 +55,6 @@ train_diabetes, test_diabetes = train_test_split(data_diabetes, test_size=0.3)
 
 target_creator = TargetPipelineCreator()
 target_creator.add("zscore")
-
 
 ##############################################################################
 # Now we can create the pipeline using a PipelineCreator.
