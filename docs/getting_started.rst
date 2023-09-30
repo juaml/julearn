@@ -10,9 +10,9 @@ Requirements
 ``julearn`` is compatible with `Python`_ >= 3.8 and requires the following
 packages:
 
-* ``numpy>=1.24,<1.26``
-* ``pandas>=1.5.0,<2.1``
-* ``scikit-learn>=1.2.0``
+* ``numpy>=1.24,<1.27``
+* ``pandas>=1.5.0,<2.2``
+* ``scikit-learn>=1.2,<1.4``
 * ``statsmodels>=0.13,<0.15``
 
 Running the examples require:

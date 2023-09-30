@@ -39,7 +39,9 @@ def _corrected_std(
     # kr = k times r, r times repeated k-fold crossvalidation,
     # kr equals the number of times the model was evaluated
     kr = len(differences)
-    corrected_var = np.var(differences, ddof=1) * (1 / kr + n_test / n_train)
+    corrected_var = np.var(differences, ddof=1, axis=0) * (
+        1 / kr + n_test / n_train
+    )
     corrected_std = np.sqrt(corrected_var)
     return corrected_std
 
