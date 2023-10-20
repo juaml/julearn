@@ -44,7 +44,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 ## Citing
 
-We still do not have a publication that you can use to cite julearn in your
-manuscript. However, julearn realies heavily on scikit-learn.
+If you use julearn in a scientific publication, please use the following reference
 
-Please cite scikit-learn: https://scikit-learn.org/stable/about.html#citing-scikit-learn
+> Hamdan, Sami, Shammi More, Leonard Sasse, Vera Komeyer, Kaustubh R. Patil, and Federico Raimondo. ‘Julearn: An Easy-to-Use Library for Leakage-Free Evaluation and Inspection of ML Models’. arXiv, 19 October 2023. https://doi.org/10.48550/arXiv.2310.12568.
+
+Since julearn is also heavily reliant on scikit-learn, plase also cite them: https://scikit-learn.org/stable/about.html#citing-scikit-learn
