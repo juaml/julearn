@@ -153,7 +153,7 @@ def run_cross_validation(  # noqa: C901
         Verbosity level of outer cross-validation.
         Follows scikit-learn/joblib converntions.
         0 means no additional information is printed.
-        Larger number genereally mean more information is printed.
+        Larger number generally mean more information is printed.
         Note: verbosity up to 50 will print into standard error,
         while larger than 50 will print in standrad output.
 

@@ -1,4 +1,4 @@
-"""Provides tests for the stratified bootstra CV generator."""
+"""Provides tests for the stratified bootstrap CV generator."""
 
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL

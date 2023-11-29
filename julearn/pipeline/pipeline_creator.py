@@ -666,7 +666,7 @@ class PipelineCreator:
         Raises
         ------
         ValueError
-            If the step is not a valid step, if the tranformer is added after
+            If the step is not a valid step, if the transformer is added after
             adding a model, or if a transformer is added after a target
             transformer.
 
