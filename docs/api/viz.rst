@@ -11,11 +11,6 @@ Visualization
    ``julearn`` with the ``viz`` extra to use this module
    (see :ref:`install_optional_dependencies`).
 
-
-.. automodule:: julearn.viz
-   :no-members:
-   :no-inherited-members:
-
 Functions
 ---------
 
