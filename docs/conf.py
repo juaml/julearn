@@ -158,6 +158,7 @@ intersphinx_mapping = {
     "numpy": ("https://numpy.org/doc/stable/", None),
     "pandas": ("https://pandas.pydata.org/pandas-docs/dev", None),
     # "sqlalchemy": ("https://docs.sqlalchemy.org/en/20/", None),
+    "joblib": ("https://joblib.readthedocs.io/en/latest/", None),
     "scipy": ("https://docs.scipy.org/doc/scipy/", None),
 }
 
