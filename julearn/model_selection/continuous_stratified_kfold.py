@@ -80,12 +80,12 @@ class ContinuousStratifiedKFold(StratifiedKFold):
         shuffle=False,
         random_state=None,
     ):
-        self._n_bins = n_bins
+        self.n_bins = n_bins
         if method not in ["binning", "quantile"]:
             raise_error(
                 "The method parameter must be either 'binning' or 'quantile'.",
             )
-        self._method = method
+        self.method = method
         super().__init__(
             n_splits=n_splits, shuffle=shuffle, random_state=random_state
         )
@@ -127,7 +127,7 @@ class ContinuousStratifiedKFold(StratifiedKFold):
         split. You can make the results identical by setting `random_state`
         to an integer.
         """
-        discrete_y = _discretize_y(self._method, y, self._n_bins)
+        discrete_y = _discretize_y(self.method, y, self.n_bins)
         return super().split(X, discrete_y, groups)
 
 
@@ -223,12 +223,12 @@ class ContinuousStratifiedGroupKFold(StratifiedGroupKFold):
         shuffle=False,
         random_state=None,
     ):
-        self._n_bins = n_bins
+        self.n_bins = n_bins
         if method not in ["binning", "quantile"]:
             raise_error(
                 "The method parameter must be either 'binning' or 'quantile'.",
             )
-        self._method = method
+        self.method = method
         super().__init__(
             n_splits=n_splits, shuffle=shuffle, random_state=random_state
         )
@@ -270,7 +270,7 @@ class ContinuousStratifiedGroupKFold(StratifiedGroupKFold):
         split. You can make the results identical by setting `random_state`
         to an integer.
         """
-        discrete_y = _discretize_y(self._method, y, self._n_bins)
+        discrete_y = _discretize_y(self.method, y, self.n_bins)
         return super().split(X, discrete_y, groups)
 
 
