@@ -1,0 +1,1205 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Confound Removal (model comparison)" href="plot_confound_removal_classification.html" /><link rel="prev" title="8.5. Confounds" href="index.html" />
+
+    <!-- Generated with Sphinx 6.2.1 and Furo 2022.12.07 -->
+        <title>Return Confounds in Confound Removal - julearn documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../../index.html"><div class="brand">julearn  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand" href="../../index.html">
+  
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../../_static/julearn_logo_it.png" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">julearn  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">1. Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html#setup-suggestion">2. Setup suggestion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html#installing">3. Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html#optional-dependencies">4. Optional Dependencies</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../what_really_need_know/index.html">5. What you really need to know</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/cross_validation.html">5.1. Why cross validation?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/data.html">5.2. Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/pipeline.html">5.3. Model Building</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/model_evaluation.html">5.4. Model Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../what_really_need_know/model_comparison.html">5.5. Model Comparison</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../selected_deeper_topics/index.html">6. Selected deeper topics</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/target_transformers.html">6.1. Applying preprocessing to the target</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/confound_removal.html">6.2. Cross-validation consistent Confound Removal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/hyperparameter_tuning.html">6.3. Hyperparameter Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/model_inspect.html">6.4. Inspecting Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/cross_validation_splitter.html">6.5. Cross-validation splitters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/stacked_models.html">6.6. Stacking Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/CBPM.html">6.7. Connectome-based Predictive Modeling (CBPM)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../available_pipeline_steps.html">7. Overview of available Pipeline Steps</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="../../examples.html">8. Examples</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="../00_starting/index.html">8.1. Starting with <code class="docutils literal notranslate"><span class="pre">julearn</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../00_starting/run_combine_pandas.html">Working with <code class="docutils literal notranslate"><span class="pre">pandas</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../00_starting/run_simple_binary_classification.html">Simple Binary Classification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../00_starting/run_grouped_cv.html">Grouped CV</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../00_starting/plot_cm_acc_multiclass.html">Multiclass Classification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../00_starting/plot_stratified_kfold_reg.html">Stratified K-fold CV for regression analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../00_starting/plot_example_regression.html">Regression Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../01_model_comparison/index.html">8.2. Model Comparison</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../01_model_comparison/plot_simple_model_comparison.html">Simple Model Comparison</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../02_inspection/index.html">8.3. Inspection</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../02_inspection/run_binary_inspect_folds.html">Inspecting the fold-wise predictions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../02_inspection/plot_inspect_random_forest.html">Inspecting Random Forest models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../02_inspection/plot_groupcv_inspect_svm.html">Inspecting SVM models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../02_inspection/plot_preprocess.html">Preprocessing with variance threshold, zscore and PCA</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../03_complex_models/index.html">8.4. Complex Models</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../03_complex_models/run_apply_to_target.html">Transforming target variable with z-score</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../03_complex_models/run_hyperparameter_multiple_grids.html">Tuning Multiple Hyperparameters Grids</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../03_complex_models/run_stacked_models.html">Stacking Classification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../03_complex_models/run_hyperparameter_tuning.html">Tuning Hyperparameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../03_complex_models/run_example_pca_featsets.html">Regression Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current has-children"><a class="reference internal" href="index.html">8.5. Confounds</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Return Confounds in Confound Removal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="plot_confound_removal_classification.html">Confound Removal (model comparison)</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../05_customization/index.html">8.6. Customization</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../05_customization/run_custom_scorers_regression.html">Custom Scoring Function for Regression</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/index.html">9. API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/main.html">9.1. Main API</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.run_cross_validation.html">julearn.run_cross_validation</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/pipeline.html">9.2. Pipeline</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.PipelineCreator.html">julearn.PipelineCreator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.TargetPipelineCreator.html">julearn.TargetPipelineCreator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.pipeline.JuTargetPipeline.html">julearn.pipeline.JuTargetPipeline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.pipeline.pipeline_creator.Step.html">julearn.pipeline.pipeline_creator.Step</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/model_selection.html">9.3. Model Selection</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.model_selection.ContinuousStratifiedKFold.html">julearn.model_selection.ContinuousStratifiedKFold</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.model_selection.RepeatedContinuousStratifiedKFold.html">julearn.model_selection.RepeatedContinuousStratifiedKFold</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.model_selection.ContinuousStratifiedGroupKFold.html">julearn.model_selection.ContinuousStratifiedGroupKFold</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.model_selection.RepeatedContinuousStratifiedGroupKFold.html">julearn.model_selection.RepeatedContinuousStratifiedGroupKFold</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.model_selection.StratifiedBootstrap.html">julearn.model_selection.StratifiedBootstrap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.model_selection.get_searcher.html">julearn.model_selection.get_searcher</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.model_selection.list_searchers.html">julearn.model_selection.list_searchers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.model_selection.register_searcher.html">julearn.model_selection.register_searcher</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.model_selection.reset_searcher_register.html">julearn.model_selection.reset_searcher_register</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/base.html">9.4. Base</a><input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.base.JuBaseEstimator.html">julearn.base.JuBaseEstimator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.base.JuTransformer.html">julearn.base.JuTransformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.base.WrapModel.html">julearn.base.WrapModel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.base.ColumnTypes.html">julearn.base.ColumnTypes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.base.ColumnTypesLike.html">julearn.base.ColumnTypesLike</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.base.change_column_type.html">julearn.base.change_column_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.base.get_column_type.html">julearn.base.get_column_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.base.make_type_selector.html">julearn.base.make_type_selector</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.base.ensure_column_types.html">julearn.base.ensure_column_types</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/inspect.html">9.5. Inspect</a><input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.inspect.Inspector.html">julearn.inspect.Inspector</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.inspect.FoldsInspector.html">julearn.inspect.FoldsInspector</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.inspect.preprocess.html">julearn.inspect.preprocess</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/models.html">9.6. Models</a><input class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.models.list_models.html">julearn.models.list_models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.models.get_model.html">julearn.models.get_model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.models.register_model.html">julearn.models.register_model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.models.reset_model_register.html">julearn.models.reset_model_register</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/models.html#dynamic-selection-deslib">9.7. Dynamic Selection (DESLib)</a><input class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.models.dynamic.DynamicSelection.html">julearn.models.dynamic.DynamicSelection</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/scoring.html">9.8. Scoring</a><input class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.scoring.get_scorer.html">julearn.scoring.get_scorer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.scoring.list_scorers.html">julearn.scoring.list_scorers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.scoring.register_scorer.html">julearn.scoring.register_scorer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.scoring.reset_scorer_register.html">julearn.scoring.reset_scorer_register</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.scoring.check_scoring.html">julearn.scoring.check_scoring</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/scoring.html#module-julearn.scoring.metrics">9.9. Scoring Metrics</a><input class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" role="switch" type="checkbox"/><label for="toctree-checkbox-19"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.scoring.metrics.r_corr.html">julearn.scoring.metrics.r_corr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.scoring.metrics.r2_corr.html">julearn.scoring.metrics.r2_corr</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/transformers.html">9.10. Transformers</a><input class="toctree-checkbox" id="toctree-checkbox-20" name="toctree-checkbox-20" role="switch" type="checkbox"/><label for="toctree-checkbox-20"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.transformers.DropColumns.html">julearn.transformers.DropColumns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.transformers.ChangeColumnTypes.html">julearn.transformers.ChangeColumnTypes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.transformers.SetColumnTypes.html">julearn.transformers.SetColumnTypes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.transformers.FilterColumns.html">julearn.transformers.FilterColumns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.transformers.CBPM.html">julearn.transformers.CBPM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.transformers.JuColumnTransformer.html">julearn.transformers.JuColumnTransformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.transformers.confound_remover.ConfoundRemover.html">julearn.transformers.confound_remover.ConfoundRemover</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.transformers.list_transformers.html">julearn.transformers.list_transformers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.transformers.get_transformer.html">julearn.transformers.get_transformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.transformers.register_transformer.html">julearn.transformers.register_transformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.transformers.reset_transformer_register.html">julearn.transformers.reset_transformer_register</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/transformers.html#module-julearn.transformers.target">9.11. Target Transformers</a><input class="toctree-checkbox" id="toctree-checkbox-21" name="toctree-checkbox-21" role="switch" type="checkbox"/><label for="toctree-checkbox-21"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.transformers.target.JuTransformedTargetModel.html">julearn.transformers.target.JuTransformedTargetModel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.transformers.target.JuTargetTransformer.html">julearn.transformers.target.JuTargetTransformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.transformers.target.TargetConfoundRemover.html">julearn.transformers.target.TargetConfoundRemover</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.transformers.target.TransformedTargetWarning.html">julearn.transformers.target.TransformedTargetWarning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.transformers.target.get_target_transformer.html">julearn.transformers.target.get_target_transformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.transformers.target.list_target_transformers.html">julearn.transformers.target.list_target_transformers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.transformers.target.register_target_transformer.html">julearn.transformers.target.register_target_transformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.transformers.target.reset_target_transformer_register.html">julearn.transformers.target.reset_target_transformer_register</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/utils.html">9.12. Utils</a><input class="toctree-checkbox" id="toctree-checkbox-22" name="toctree-checkbox-22" role="switch" type="checkbox"/><label for="toctree-checkbox-22"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.utils.logger.html">julearn.utils.logger</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.utils.configure_logging.html">julearn.utils.configure_logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.utils.raise_error.html">julearn.utils.raise_error</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.utils.warn_with_log.html">julearn.utils.warn_with_log</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/utils.html#module-julearn.utils.typing">9.13. Typing</a><input class="toctree-checkbox" id="toctree-checkbox-23" name="toctree-checkbox-23" role="switch" type="checkbox"/><label for="toctree-checkbox-23"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.utils.typing.JuEstimatorLike.html">julearn.utils.typing.JuEstimatorLike</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.utils.typing.EstimatorLike.html">julearn.utils.typing.EstimatorLike</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.utils.typing.EstimatorLikeFit1.html">julearn.utils.typing.EstimatorLikeFit1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.utils.typing.EstimatorLikeFit2.html">julearn.utils.typing.EstimatorLikeFit2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.utils.typing.EstimatorLikeFity.html">julearn.utils.typing.EstimatorLikeFity</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/prepare.html">9.14. Prepare</a><input class="toctree-checkbox" id="toctree-checkbox-24" name="toctree-checkbox-24" role="switch" type="checkbox"/><label for="toctree-checkbox-24"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.prepare.prepare_input_data.html">julearn.prepare.prepare_input_data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.prepare.check_consistency.html">julearn.prepare.check_consistency</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/stats.html">9.15. Stats</a><input class="toctree-checkbox" id="toctree-checkbox-25" name="toctree-checkbox-25" role="switch" type="checkbox"/><label for="toctree-checkbox-25"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.stats.corrected_ttest.html">julearn.stats.corrected_ttest</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/viz.html">9.16. Visualization</a><input class="toctree-checkbox" id="toctree-checkbox-26" name="toctree-checkbox-26" role="switch" type="checkbox"/><label for="toctree-checkbox-26"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.viz.plot_scores.html">julearn.viz.plot_scores</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../configuration.html">10. Configuring <code class="docutils literal notranslate"><span class="pre">julearn</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">11. Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../maintaining.html">12. Maintaining</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../faq.html">13. FAQs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">14. What’s new</a></li>
+</ul>
+
+</div>
+</div>
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-auto-examples-04-confounds-run-return-confounds-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code</p>
+</div>
+<section class="sphx-glr-example-title" id="return-confounds-in-confound-removal">
+<span id="sphx-glr-auto-examples-04-confounds-run-return-confounds-py"></span><h1>Return Confounds in Confound Removal<a class="headerlink" href="#return-confounds-in-confound-removal" title="Permalink to this heading">#</a></h1>
+<p>In most cases confound removal is a simple operation.
+You regress out the confound from the features and only continue working with
+these new confound removed features. This is also the default setting for
+<code class="docutils literal notranslate"><span class="pre">julearn</span></code>’s <code class="docutils literal notranslate"><span class="pre">remove_confound</span></code> step. But sometimes you want to work with the
+confound even after removing it from the features. In this example, we
+will discuss the options you have.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Authors: Sami Hamdan &lt;s.hamdan@fz-juelich.de&gt;</span>
+<span class="c1"># License: AGPL</span>
+
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_diabetes.html#sklearn.datasets.load_diabetes" title="sklearn.datasets.load_diabetes" class="sphx-glr-backref-module-sklearn-datasets sphx-glr-backref-type-py-function"><span class="n">load_diabetes</span></a>  <span class="c1"># to load data</span>
+<span class="kn">from</span> <span class="nn">julearn.pipeline</span> <span class="kn">import</span> <span class="n">PipelineCreator</span>
+<span class="kn">from</span> <span class="nn">julearn</span> <span class="kn">import</span> <span class="n">run_cross_validation</span>
+<span class="kn">from</span> <span class="nn">julearn.inspect</span> <span class="kn">import</span> <span class="n">preprocess</span>
+
+<span class="c1"># Load in the data</span>
+<a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_features</span></a><span class="p">,</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.Series.html#pandas.Series" title="pandas.core.series.Series" class="sphx-glr-backref-module-pandas-core-series sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">target</span></a> <span class="o">=</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_diabetes.html#sklearn.datasets.load_diabetes" title="sklearn.datasets.load_diabetes" class="sphx-glr-backref-module-sklearn-datasets sphx-glr-backref-type-py-function"><span class="n">load_diabetes</span></a><span class="p">(</span><span class="n">return_X_y</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">as_frame</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>First, we can have a look at our features.
+You can see it includes Age, BMI, average blood pressure (bp) and 6 other
+measures from s1 to s6. Furthermore, it includes sex which will be considered
+as a confound in this example.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Features: &quot;</span><span class="p">,</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.head.html#pandas.DataFrame.head" title="pandas.DataFrame.head" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method"><span class="n">df_features</span><span class="o">.</span><span class="n">head</span></a><span class="p">())</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Features:          age       sex       bmi  ...        s4        s5        s6
+0  0.038076  0.050680  0.061696  ... -0.002592  0.019907 -0.017646
+1 -0.001882 -0.044642 -0.051474  ... -0.039493 -0.068332 -0.092204
+2  0.085299  0.050680  0.044451  ... -0.002592  0.002861 -0.025930
+3 -0.089063 -0.044642 -0.011595  ...  0.034309  0.022688 -0.009362
+4  0.005383 -0.044642 -0.036385  ... -0.002592 -0.031988 -0.046641
+
+[5 rows x 10 columns]
+</pre></div>
+</div>
+<p>Second, we can have a look at the target.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Target: &quot;</span><span class="p">,</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.Series.describe.html#pandas.Series.describe" title="pandas.Series.describe" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method"><span class="n">target</span><span class="o">.</span><span class="n">describe</span></a><span class="p">())</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Target:  count    442.000000
+mean     152.133484
+std       77.093005
+min       25.000000
+25%       87.000000
+50%      140.500000
+75%      211.500000
+max      346.000000
+Name: target, dtype: float64
+</pre></div>
+</div>
+<p>Now, we can put both into one DataFrame:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a> <span class="o">=</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.copy.html#pandas.DataFrame.copy" title="pandas.DataFrame.copy" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method"><span class="n">df_features</span><span class="o">.</span><span class="n">copy</span></a><span class="p">()</span>
+<a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a><span class="p">[</span><span class="s2">&quot;target&quot;</span><span class="p">]</span> <span class="o">=</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.Series.html#pandas.Series" title="pandas.core.series.Series" class="sphx-glr-backref-module-pandas-core-series sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">target</span></a>
+</pre></div>
+</div>
+<p>In the following we will explore different settings of confound removal
+using <code class="docutils literal notranslate"><span class="pre">julearn</span></code>’s pipeline functionalities.</p>
+<section id="confound-removal-typical-use-case">
+<h2>Confound Removal Typical Use Case<a class="headerlink" href="#confound-removal-typical-use-case" title="Permalink to this heading">#</a></h2>
+<p>Here, we want to deconfound the features and not include the confound as a
+feature into our last model. We will use the <code class="docutils literal notranslate"><span class="pre">remove_confound</span></code> step for this.
+Then we will use the <code class="docutils literal notranslate"><span class="pre">pca</span></code> step to reduce the dimensionality of the features.
+Finally, we will fit a linear regression model.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;regression&quot;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">)</span>
+<span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;confound_removal&quot;</span><span class="p">)</span>
+<span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;pca&quot;</span><span class="p">)</span>
+<span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;linreg&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-11-30 09:24:29,812 - julearn - INFO - Adding step confound_removal that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-11-30 09:24:29,813 - julearn - INFO - Step added
+2023-11-30 09:24:29,813 - julearn - INFO - Adding step pca that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-11-30 09:24:29,813 - julearn - INFO - Step added
+2023-11-30 09:24:29,813 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-11-30 09:24:29,813 - julearn - INFO - Step added
+
+&lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7f11ef780d60&gt;
+</pre></div>
+</div>
+<p>Now we need to set the <code class="docutils literal notranslate"><span class="pre">X_types</span></code> argument of the <code class="docutils literal notranslate"><span class="pre">run_cross_validation</span></code>
+function. This argument is a dictionary that maps the names of the different
+types of X to the features that belong to this type. In this example, we
+have two types of features: <cite>continuous</cite> and <cite>confound</cite>. The <cite>continuous</cite>
+features are the features that we want to deconfound and the <cite>confound</cite>
+features are the features that we want to remove from the <cite>continuous</cite>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">feature_names</span></a> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.drop.html#pandas.DataFrame.drop" title="pandas.DataFrame.drop" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method"><span class="n">df_features</span><span class="o">.</span><span class="n">drop</span></a><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="s2">&quot;sex&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X_types</span></a> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;continuous&quot;</span><span class="p">:</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">feature_names</span></a><span class="p">,</span> <span class="s2">&quot;confound&quot;</span><span class="p">:</span> <span class="s2">&quot;sex&quot;</span><span class="p">}</span>
+
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">feature_names</span></a> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;sex&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Now we can run the cross validation and get the scores.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">,</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model</span></a> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="s2">&quot;target&quot;</span><span class="p">,</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X_types</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X_types</span></a><span class="p">,</span>
+    <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a><span class="o">=</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a><span class="p">,</span>
+    <a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model</span></a><span class="o">=</span><span class="n">creator</span><span class="p">,</span>
+    <span class="n">return_estimator</span><span class="o">=</span><span class="s2">&quot;final&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-11-30 09:24:29,814 - julearn - INFO - ==== Input Data ====
+2023-11-30 09:24:29,814 - julearn - INFO - Using dataframe as input
+2023-11-30 09:24:29,814 - julearn - INFO -      Features: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;, &#39;sex&#39;]
+2023-11-30 09:24:29,814 - julearn - INFO -      Target: target
+2023-11-30 09:24:29,815 - julearn - INFO -      Expanded features: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;, &#39;sex&#39;]
+2023-11-30 09:24:29,815 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;], &#39;confound&#39;: [&#39;sex&#39;]}
+2023-11-30 09:24:29,815 - julearn - INFO - ====================
+2023-11-30 09:24:29,815 - julearn - INFO -
+2023-11-30 09:24:29,817 - julearn - INFO - = Model Parameters =
+2023-11-30 09:24:29,817 - julearn - INFO - ====================
+2023-11-30 09:24:29,817 - julearn - INFO -
+2023-11-30 09:24:29,817 - julearn - INFO - = Data Information =
+2023-11-30 09:24:29,817 - julearn - INFO -      Problem type: regression
+2023-11-30 09:24:29,817 - julearn - INFO -      Number of samples: 442
+2023-11-30 09:24:29,817 - julearn - INFO -      Number of features: 10
+2023-11-30 09:24:29,817 - julearn - INFO - ====================
+2023-11-30 09:24:29,817 - julearn - INFO -
+2023-11-30 09:24:29,817 - julearn - INFO -      Target type: float64
+2023-11-30 09:24:29,817 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+</pre></div>
+</div>
+<p>We can use the <code class="docutils literal notranslate"><span class="pre">preprocess</span></code> method of the <code class="docutils literal notranslate"><span class="pre">inspect</span></code> module to inspect the
+transformations steps of the returned estimator.
+By providing a step name to the <code class="docutils literal notranslate"><span class="pre">until</span></code> argument of the
+<code class="docutils literal notranslate"><span class="pre">preprocess</span></code> method we return the transformed X and y up to
+the provided step (inclusive).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_deconfounded</span></a> <span class="o">=</span> <span class="n">preprocess</span><span class="p">(</span><a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a><span class="o">=</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a><span class="p">,</span> <span class="n">until</span><span class="o">=</span><span class="s2">&quot;confound_removal&quot;</span><span class="p">)</span>
+<a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.head.html#pandas.DataFrame.head" title="pandas.DataFrame.head" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method"><span class="n">df_deconfounded</span><span class="o">.</span><span class="n">head</span></a><span class="p">()</span>
+</pre></div>
+</div>
+<div class="output_subarea output_html rendered_html output_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>age</th>
+      <th>bmi</th>
+      <th>bp</th>
+      <th>s1</th>
+      <th>s2</th>
+      <th>s3</th>
+      <th>s4</th>
+      <th>s5</th>
+      <th>s6</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.029271</td>
+      <td>0.057228</td>
+      <td>0.009658</td>
+      <td>-0.046011</td>
+      <td>-0.042050</td>
+      <td>-0.024189</td>
+      <td>-0.019424</td>
+      <td>0.012310</td>
+      <td>-0.028194</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.005874</td>
+      <td>-0.047538</td>
+      <td>-0.015568</td>
+      <td>-0.006874</td>
+      <td>-0.012796</td>
+      <td>0.057488</td>
+      <td>-0.024667</td>
+      <td>-0.061639</td>
+      <td>-0.082913</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.076494</td>
+      <td>0.039983</td>
+      <td>-0.017885</td>
+      <td>-0.047387</td>
+      <td>-0.041423</td>
+      <td>-0.013144</td>
+      <td>-0.019424</td>
+      <td>-0.004736</td>
+      <td>-0.036479</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>-0.081307</td>
+      <td>-0.007659</td>
+      <td>-0.025897</td>
+      <td>0.013765</td>
+      <td>0.031358</td>
+      <td>-0.052961</td>
+      <td>0.049135</td>
+      <td>0.029380</td>
+      <td>-0.000071</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.013139</td>
+      <td>-0.032449</td>
+      <td>0.032631</td>
+      <td>0.005510</td>
+      <td>0.021964</td>
+      <td>-0.008781</td>
+      <td>0.012234</td>
+      <td>-0.025295</td>
+      <td>-0.037349</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+<br />
+<br /><p>As you can see the confound <code class="docutils literal notranslate"><span class="pre">sex</span></code> was dropped and only the confound removed
+features are used in the following PCA.</p>
+<p>But what if you want to keep the confound after removal for
+other transformations?</p>
+<p>For example, let’s assume that you want to do a PCA on the confound removed
+feature, but want to keep the confound for the actual modelling step.
+Let us have a closer look to the confound remover in order to understand
+how we could achieve such a task:</p>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">julearn.transformers.confound_remover.</span></span><span class="sig-name descname"><span class="pre">ConfoundRemover</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">apply_to</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'continuous'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model_confound</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">confounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'confound'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_confounds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row_select_col_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row_select_vals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span></dt>
+<dd><p>Remove confounds from specific features.</p>
+<p>Transformer which removes the confounds from specific features by
+subtracting the predicted features given the confounds from the actual
+features.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>apply_to</strong><span class="classifier">ColumnTypesLike, optional</span></dt><dd><p>From which feature types (‘X_types’) to remove confounds.
+If not specified, ‘apply_to’ defaults to ‘continuous’. To apply
+confound removal to all features, you can use the ‘*’ regular
+expression syntax.</p>
+</dd>
+<dt><strong>model_confound</strong><span class="classifier">ModelLike, optional</span></dt><dd><p>Sklearn compatible model used to predict specified features
+independently using the confounds as features. The predictions of
+these models are then subtracted from each of the specified
+features, defaults to LinearRegression().</p>
+</dd>
+<dt><strong>confounds</strong><span class="classifier">str or list of str, optional</span></dt><dd><p>The name of the ‘confounds’ type(s), i.e. which column type(s)
+represents the confounds. By default this is set to ‘confounds’.</p>
+</dd>
+<dt><strong>threshold</strong><span class="classifier">float, optional</span></dt><dd><p>All residual values after confound removal which fall under the
+threshold will be set to 0. None (default) means that no threshold
+will be applied.</p>
+</dd>
+<dt><strong>keep_confounds</strong><span class="classifier">bool, optional</span></dt><dd><p>Whether you want to return the confound together with the confound
+removed features, default is False.</p>
+</dd>
+<dt><strong>row_select_col_type</strong><span class="classifier">str or list of str or set of str or ColumnTypes</span></dt><dd><p>The column types needed to select rows (default is None)</p>
+</dd>
+<dt><strong>row_select_vals</strong><span class="classifier">str, int, bool or list of str, int, bool</span></dt><dd><p>The value(s) which should be selected in the row_select_col_type
+to select the rows used for training (default is None)</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">get_metadata_routing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span></dt>
+<dd><p>Get metadata routing of this object.</p>
+<p>Please check <a class="reference external" href="https://scikit-learn.org/stable/metadata_routing.html#metadata-routing" title="(in scikit-learn v1.3)"><span class="xref std std-ref">User Guide</span></a> on how the routing
+mechanism works.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>routing</strong><span class="classifier">MetadataRequest</span></dt><dd><p>A <code class="xref py py-class docutils literal notranslate"><span class="pre">MetadataRequest</span></code> encapsulating
+routing information.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<p>In this example, we will set the <code class="docutils literal notranslate"><span class="pre">keep_confounds</span></code> argument to True.
+This will keep the confounds after confound removal.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;regression&quot;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">)</span>
+<span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;confound_removal&quot;</span><span class="p">,</span> <span class="n">keep_confounds</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;pca&quot;</span><span class="p">)</span>
+<span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;linreg&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-11-30 09:24:30,064 - julearn - INFO - Adding step confound_removal that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-11-30 09:24:30,065 - julearn - INFO - Setting hyperparameter keep_confounds = True
+2023-11-30 09:24:30,065 - julearn - INFO - Step added
+2023-11-30 09:24:30,065 - julearn - INFO - Adding step pca that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-11-30 09:24:30,065 - julearn - INFO - Step added
+2023-11-30 09:24:30,065 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-11-30 09:24:30,065 - julearn - INFO - Step added
+
+&lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7f11ef2cfe20&gt;
+</pre></div>
+</div>
+<p>Now we can run the cross validation and get the scores.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">,</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model</span></a> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="s2">&quot;target&quot;</span><span class="p">,</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X_types</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X_types</span></a><span class="p">,</span>
+    <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a><span class="o">=</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a><span class="p">,</span>
+    <a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model</span></a><span class="o">=</span><span class="n">creator</span><span class="p">,</span>
+    <span class="n">return_estimator</span><span class="o">=</span><span class="s2">&quot;final&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-11-30 09:24:30,066 - julearn - INFO - ==== Input Data ====
+2023-11-30 09:24:30,066 - julearn - INFO - Using dataframe as input
+2023-11-30 09:24:30,066 - julearn - INFO -      Features: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;, &#39;sex&#39;]
+2023-11-30 09:24:30,066 - julearn - INFO -      Target: target
+2023-11-30 09:24:30,066 - julearn - INFO -      Expanded features: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;, &#39;sex&#39;]
+2023-11-30 09:24:30,066 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;], &#39;confound&#39;: [&#39;sex&#39;]}
+2023-11-30 09:24:30,067 - julearn - INFO - ====================
+2023-11-30 09:24:30,067 - julearn - INFO -
+2023-11-30 09:24:30,070 - julearn - INFO - = Model Parameters =
+2023-11-30 09:24:30,070 - julearn - INFO - ====================
+2023-11-30 09:24:30,070 - julearn - INFO -
+2023-11-30 09:24:30,070 - julearn - INFO - = Data Information =
+2023-11-30 09:24:30,070 - julearn - INFO -      Problem type: regression
+2023-11-30 09:24:30,070 - julearn - INFO -      Number of samples: 442
+2023-11-30 09:24:30,070 - julearn - INFO -      Number of features: 10
+2023-11-30 09:24:30,070 - julearn - INFO - ====================
+2023-11-30 09:24:30,070 - julearn - INFO -
+2023-11-30 09:24:30,070 - julearn - INFO -      Target type: float64
+2023-11-30 09:24:30,070 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+</pre></div>
+</div>
+<p>As you can see this kept the confound variable <code class="docutils literal notranslate"><span class="pre">sex</span></code> in the data.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_deconfounded</span></a> <span class="o">=</span> <span class="n">preprocess</span><span class="p">(</span><a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a><span class="o">=</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a><span class="p">,</span> <span class="n">until</span><span class="o">=</span><span class="s2">&quot;confound_removal&quot;</span><span class="p">)</span>
+<a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.head.html#pandas.DataFrame.head" title="pandas.DataFrame.head" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method"><span class="n">df_deconfounded</span><span class="o">.</span><span class="n">head</span></a><span class="p">()</span>
+</pre></div>
+</div>
+<div class="output_subarea output_html rendered_html output_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>age</th>
+      <th>bmi</th>
+      <th>bp</th>
+      <th>s1</th>
+      <th>s2</th>
+      <th>s3</th>
+      <th>s4</th>
+      <th>s5</th>
+      <th>s6</th>
+      <th>sex</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.029271</td>
+      <td>0.057228</td>
+      <td>0.009658</td>
+      <td>-0.046011</td>
+      <td>-0.042050</td>
+      <td>-0.024189</td>
+      <td>-0.019424</td>
+      <td>0.012310</td>
+      <td>-0.028194</td>
+      <td>0.050680</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.005874</td>
+      <td>-0.047538</td>
+      <td>-0.015568</td>
+      <td>-0.006874</td>
+      <td>-0.012796</td>
+      <td>0.057488</td>
+      <td>-0.024667</td>
+      <td>-0.061639</td>
+      <td>-0.082913</td>
+      <td>-0.044642</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.076494</td>
+      <td>0.039983</td>
+      <td>-0.017885</td>
+      <td>-0.047387</td>
+      <td>-0.041423</td>
+      <td>-0.013144</td>
+      <td>-0.019424</td>
+      <td>-0.004736</td>
+      <td>-0.036479</td>
+      <td>0.050680</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>-0.081307</td>
+      <td>-0.007659</td>
+      <td>-0.025897</td>
+      <td>0.013765</td>
+      <td>0.031358</td>
+      <td>-0.052961</td>
+      <td>0.049135</td>
+      <td>0.029380</td>
+      <td>-0.000071</td>
+      <td>-0.044642</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.013139</td>
+      <td>-0.032449</td>
+      <td>0.032631</td>
+      <td>0.005510</td>
+      <td>0.021964</td>
+      <td>-0.008781</td>
+      <td>0.012234</td>
+      <td>-0.025295</td>
+      <td>-0.037349</td>
+      <td>-0.044642</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+<br />
+<br /><p>Even after the PCA, the confound will still be present.
+This is the case because by default transformers only transform continuous
+features (including features without a specified type) and ignore confounds
+and categorical variables.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_transformed</span></a> <span class="o">=</span> <span class="n">preprocess</span><span class="p">(</span><a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a><span class="o">=</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a><span class="p">)</span>
+<a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.head.html#pandas.DataFrame.head" title="pandas.DataFrame.head" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method"><span class="n">df_transformed</span><span class="o">.</span><span class="n">head</span></a><span class="p">()</span>
+</pre></div>
+</div>
+<div class="output_subarea output_html rendered_html output_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>pca__pca0</th>
+      <th>pca__pca1</th>
+      <th>pca__pca2</th>
+      <th>pca__pca3</th>
+      <th>pca__pca4</th>
+      <th>pca__pca5</th>
+      <th>pca__pca6</th>
+      <th>pca__pca7</th>
+      <th>pca__pca8</th>
+      <th>sex</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>-0.014051</td>
+      <td>0.075715</td>
+      <td>0.017395</td>
+      <td>-0.012591</td>
+      <td>-0.046676</td>
+      <td>-0.013408</td>
+      <td>0.034497</td>
+      <td>-0.008604</td>
+      <td>-0.002330</td>
+      <td>0.050680</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-0.099883</td>
+      <td>-0.062829</td>
+      <td>0.014516</td>
+      <td>-0.013673</td>
+      <td>-0.048058</td>
+      <td>0.010254</td>
+      <td>-0.004124</td>
+      <td>0.024022</td>
+      <td>0.002075</td>
+      <td>-0.044642</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-0.029015</td>
+      <td>0.053253</td>
+      <td>0.032477</td>
+      <td>-0.061933</td>
+      <td>-0.049167</td>
+      <td>-0.029565</td>
+      <td>0.042031</td>
+      <td>-0.001197</td>
+      <td>-0.002579</td>
+      <td>0.050680</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.035162</td>
+      <td>-0.001324</td>
+      <td>-0.106807</td>
+      <td>0.028981</td>
+      <td>0.020850</td>
+      <td>0.023413</td>
+      <td>-0.008421</td>
+      <td>-0.006566</td>
+      <td>-0.003545</td>
+      <td>-0.044642</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>-0.003951</td>
+      <td>-0.025445</td>
+      <td>0.000421</td>
+      <td>-0.018411</td>
+      <td>-0.039692</td>
+      <td>0.025022</td>
+      <td>-0.043086</td>
+      <td>0.002095</td>
+      <td>-0.000517</td>
+      <td>-0.044642</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+<br />
+<br /><p>This means that the resulting Linear Regression can use the deconfounded
+features together with the confound to predict the target. However, in the
+pipeline creator, the model is only applied to the continuous features.
+This means that the confound is not used in the model.
+Here we can see that the model is using 9 features.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model</span><span class="o">.</span><span class="n">steps</span></a><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model</span></a><span class="o">.</span><span class="n">coef_</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>9
+</pre></div>
+</div>
+<p>Lastly, you can also use the confound as a normal feature after confound
+removal.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;regression&quot;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;continuous&quot;</span><span class="p">)</span>
+<span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;confound_removal&quot;</span><span class="p">,</span> <span class="n">keep_confounds</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;pca&quot;</span><span class="p">)</span>
+<span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;linreg&quot;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">)</span>
+
+<a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">,</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model</span></a> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="s2">&quot;target&quot;</span><span class="p">,</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X_types</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X_types</span></a><span class="p">,</span>
+    <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a><span class="o">=</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">data</span></a><span class="p">,</span>
+    <a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model</span></a><span class="o">=</span><span class="n">creator</span><span class="p">,</span>
+    <span class="n">return_estimator</span><span class="o">=</span><span class="s2">&quot;final&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2023-11-30 09:24:30,311 - julearn - INFO - Adding step confound_removal that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-11-30 09:24:30,311 - julearn - INFO - Setting hyperparameter keep_confounds = True
+2023-11-30 09:24:30,311 - julearn - INFO - Step added
+2023-11-30 09:24:30,311 - julearn - INFO - Adding step pca that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2023-11-30 09:24:30,311 - julearn - INFO - Step added
+2023-11-30 09:24:30,311 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
+2023-11-30 09:24:30,311 - julearn - INFO - Step added
+2023-11-30 09:24:30,311 - julearn - INFO - ==== Input Data ====
+2023-11-30 09:24:30,312 - julearn - INFO - Using dataframe as input
+2023-11-30 09:24:30,312 - julearn - INFO -      Features: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;, &#39;sex&#39;]
+2023-11-30 09:24:30,312 - julearn - INFO -      Target: target
+2023-11-30 09:24:30,312 - julearn - INFO -      Expanded features: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;, &#39;sex&#39;]
+2023-11-30 09:24:30,312 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;], &#39;confound&#39;: [&#39;sex&#39;]}
+2023-11-30 09:24:30,313 - julearn - INFO - ====================
+2023-11-30 09:24:30,313 - julearn - INFO -
+2023-11-30 09:24:30,314 - julearn - INFO - = Model Parameters =
+2023-11-30 09:24:30,314 - julearn - INFO - ====================
+2023-11-30 09:24:30,314 - julearn - INFO -
+2023-11-30 09:24:30,314 - julearn - INFO - = Data Information =
+2023-11-30 09:24:30,314 - julearn - INFO -      Problem type: regression
+2023-11-30 09:24:30,314 - julearn - INFO -      Number of samples: 442
+2023-11-30 09:24:30,314 - julearn - INFO -      Number of features: 10
+2023-11-30 09:24:30,314 - julearn - INFO - ====================
+2023-11-30 09:24:30,314 - julearn - INFO -
+2023-11-30 09:24:30,314 - julearn - INFO -      Target type: float64
+2023-11-30 09:24:30,315 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+</pre></div>
+</div>
+<div class="output_subarea output_html rendered_html output_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>fit_time</th>
+      <th>score_time</th>
+      <th>test_score</th>
+      <th>n_train</th>
+      <th>n_test</th>
+      <th>repeat</th>
+      <th>fold</th>
+      <th>cv_mdsum</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.025570</td>
+      <td>0.009589</td>
+      <td>0.429556</td>
+      <td>353</td>
+      <td>89</td>
+      <td>0</td>
+      <td>0</td>
+      <td>b10eef89b4192178d482d7a1587a248a</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.024914</td>
+      <td>0.009237</td>
+      <td>0.522599</td>
+      <td>353</td>
+      <td>89</td>
+      <td>0</td>
+      <td>1</td>
+      <td>b10eef89b4192178d482d7a1587a248a</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.025124</td>
+      <td>0.009927</td>
+      <td>0.482681</td>
+      <td>354</td>
+      <td>88</td>
+      <td>0</td>
+      <td>2</td>
+      <td>b10eef89b4192178d482d7a1587a248a</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.025595</td>
+      <td>0.009755</td>
+      <td>0.426498</td>
+      <td>354</td>
+      <td>88</td>
+      <td>0</td>
+      <td>3</td>
+      <td>b10eef89b4192178d482d7a1587a248a</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.025156</td>
+      <td>0.009554</td>
+      <td>0.550248</td>
+      <td>354</td>
+      <td>88</td>
+      <td>0</td>
+      <td>4</td>
+      <td>b10eef89b4192178d482d7a1587a248a</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+<br />
+<br /><p>As you can see the confound is now used in the linear regression model.
+This is the case because we set the <code class="docutils literal notranslate"><span class="pre">apply_to</span></code> argument of the <code class="docutils literal notranslate"><span class="pre">linreg</span></code>
+step to <code class="docutils literal notranslate"><span class="pre">*</span></code>. This means that the step will be applied to all features
+(including confounds and categorical variables).
+Here we can see that the model is using 10 features (9 deconfounded features
+and the confound).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model</span><span class="o">.</span><span class="n">steps</span></a><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model</span></a><span class="o">.</span><span class="n">coef_</span><span class="p">))</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>10
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.731 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-04-confounds-run-return-confounds-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/9bec4977b6944e6a410f67726ba6437f/run_return_confounds.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">run_return_confounds.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/6c774f4eca75f20ba6b46ff437a810e9/run_return_confounds.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">run_return_confounds.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="plot_confound_removal_classification.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Confound Removal (model comparison)</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="index.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title"><span class="section-number">8.5. </span>Confounds</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2023, Authors of julearn
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">Return Confounds in Confound Removal</a><ul>
+<li><a class="reference internal" href="#confound-removal-typical-use-case">Confound Removal Typical Use Case</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/scripts/furo.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/js/custom.js"></script>
+    </body>
+</html>
