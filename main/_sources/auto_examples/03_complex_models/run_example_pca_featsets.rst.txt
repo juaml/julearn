@@ -21,13 +21,13 @@
 Regression Analysis
 ===================
 
-This example uses the 'diabetes' data from sklearn datasets and performs
-a regression analysis using a Ridge Regression model. I will use the Julearn
-PipelineCreator to create a pipeline with two different PCA steps are used
-to reduce the dimensionality of the data, each one computed on a different
+This example uses the ``diabetes`` data from ``sklearn datasets`` and performs
+a regression analysis using a Ridge Regression model. We'll use the
+``julearn.PipelineCreator`` to create a pipeline with two different PCA steps and
+reduce the dimensionality of the data, each one computed on a different
 subset of features.
 
-.. GENERATED FROM PYTHON SOURCE LINES 12-32
+.. GENERATED FROM PYTHON SOURCE LINES 12-31
 
 .. code-block:: default
 
@@ -35,7 +35,6 @@ subset of features.
     #          Kaustubh R. Patil <k.patil@fz-juelich.de>
     #          Shammi More <s.more@fz-juelich.de>
     #          Federico Raimondo <f.raimondo@fz-juelich.de>
-    #
     # License: AGPL
 
     import pandas as pd
@@ -58,11 +57,11 @@ subset of features.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 33-34
+.. GENERATED FROM PYTHON SOURCE LINES 32-33
 
-Set the logging level to info to see extra information
+Set the logging level to info to see extra information.
 
-.. GENERATED FROM PYTHON SOURCE LINES 34-36
+.. GENERATED FROM PYTHON SOURCE LINES 33-35
 
 .. code-block:: default
 
@@ -76,22 +75,22 @@ Set the logging level to info to see extra information
 
  .. code-block:: none
 
-    2023-09-06 08:38:15,357 - julearn - INFO - ===== Lib Versions =====
-    2023-09-06 08:38:15,358 - julearn - INFO - numpy: 1.25.2
-    2023-09-06 08:38:15,358 - julearn - INFO - scipy: 1.11.2
-    2023-09-06 08:38:15,358 - julearn - INFO - sklearn: 1.3.0
-    2023-09-06 08:38:15,358 - julearn - INFO - pandas: 2.0.3
-    2023-09-06 08:38:15,358 - julearn - INFO - julearn: 0.3.1.dev58
-    2023-09-06 08:38:15,358 - julearn - INFO - ========================
+    2023-11-30 08:43:40,222 - julearn - INFO - ===== Lib Versions =====
+    2023-11-30 08:43:40,222 - julearn - INFO - numpy: 1.25.2
+    2023-11-30 08:43:40,222 - julearn - INFO - scipy: 1.11.4
+    2023-11-30 08:43:40,222 - julearn - INFO - sklearn: 1.3.2
+    2023-11-30 08:43:40,222 - julearn - INFO - pandas: 2.0.3
+    2023-11-30 08:43:40,222 - julearn - INFO - julearn: 0.3.1.dev106
+    2023-11-30 08:43:40,222 - julearn - INFO - ========================
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 37-38
+.. GENERATED FROM PYTHON SOURCE LINES 36-37
 
-load the diabetes data from sklearn as a pandas dataframe
+Load the diabetes data from ``sklearn`` as a ``pandas.DataFrame``.
 
-.. GENERATED FROM PYTHON SOURCE LINES 38-40
+.. GENERATED FROM PYTHON SOURCE LINES 37-39
 
 .. code-block:: default
 
@@ -104,14 +103,14 @@ load the diabetes data from sklearn as a pandas dataframe
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 41-45
+.. GENERATED FROM PYTHON SOURCE LINES 40-44
 
 Dataset contains ten variables age, sex, body mass index, average  blood
 pressure, and six blood serum measurements (s1-s6) diabetes patients and
 a quantitative measure of disease progression one year after baseline which
 is the target we are interested in predicting.
 
-.. GENERATED FROM PYTHON SOURCE LINES 45-49
+.. GENERATED FROM PYTHON SOURCE LINES 44-48
 
 .. code-block:: default
 
@@ -150,12 +149,12 @@ is the target we are interested in predicting.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 50-52
+.. GENERATED FROM PYTHON SOURCE LINES 49-51
 
 Let's combine features and target together in one dataframe and define X
 and y
 
-.. GENERATED FROM PYTHON SOURCE LINES 52-57
+.. GENERATED FROM PYTHON SOURCE LINES 51-56
 
 .. code-block:: default
 
@@ -171,13 +170,12 @@ and y
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 58-61
+.. GENERATED FROM PYTHON SOURCE LINES 57-59
 
-Assign types to the features
-and create feature groups for PCA
-we will keep 1 component per PCA group
+Assign types to the features and create feature groups for PCA.
+We will keep 1 component per PCA group.
 
-.. GENERATED FROM PYTHON SOURCE LINES 61-67
+.. GENERATED FROM PYTHON SOURCE LINES 59-65
 
 .. code-block:: default
 
@@ -194,14 +192,14 @@ we will keep 1 component per PCA group
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 68-72
+.. GENERATED FROM PYTHON SOURCE LINES 66-70
 
 Create a pipeline to process the data and the fit a model. We must specify
-how each X_type will be used. For example if in the last step we do not
-specify `apply_to=['continuous', 'categorical']`, then the pipeline will not
+how each ``X_type`` will be used. For example if in the last step we do not
+specify ``apply_to=["continuous", "categorical"]``, then the pipeline will not
 know what to do with the categorical features.
 
-.. GENERATED FROM PYTHON SOURCE LINES 72-77
+.. GENERATED FROM PYTHON SOURCE LINES 70-75
 
 .. code-block:: default
 
@@ -218,24 +216,24 @@ know what to do with the categorical features.
 
  .. code-block:: none
 
-    2023-09-06 08:38:15,379 - julearn - INFO - Adding step pca_feats1 that applies to ColumnTypes<types={'pca1'}; pattern=(?:__:type:__pca1)>
-    2023-09-06 08:38:15,380 - julearn - INFO - Setting hyperparameter n_components = 1
-    2023-09-06 08:38:15,380 - julearn - INFO - Step added
-    2023-09-06 08:38:15,380 - julearn - INFO - Adding step pca_feats2 that applies to ColumnTypes<types={'pca2'}; pattern=(?:__:type:__pca2)>
-    2023-09-06 08:38:15,380 - julearn - INFO - Setting hyperparameter n_components = 1
-    2023-09-06 08:38:15,380 - julearn - INFO - Step added
-    2023-09-06 08:38:15,380 - julearn - INFO - Adding step ridge that applies to ColumnTypes<types={'categorical', 'continuous'}; pattern=(?:__:type:__categorical|__:type:__continuous)>
-    2023-09-06 08:38:15,380 - julearn - INFO - Step added
+    2023-11-30 08:43:40,238 - julearn - INFO - Adding step pca_feats1 that applies to ColumnTypes<types={'pca1'}; pattern=(?:__:type:__pca1)>
+    2023-11-30 08:43:40,238 - julearn - INFO - Setting hyperparameter n_components = 1
+    2023-11-30 08:43:40,238 - julearn - INFO - Step added
+    2023-11-30 08:43:40,239 - julearn - INFO - Adding step pca_feats2 that applies to ColumnTypes<types={'pca2'}; pattern=(?:__:type:__pca2)>
+    2023-11-30 08:43:40,239 - julearn - INFO - Setting hyperparameter n_components = 1
+    2023-11-30 08:43:40,239 - julearn - INFO - Step added
+    2023-11-30 08:43:40,239 - julearn - INFO - Adding step ridge that applies to ColumnTypes<types={'continuous', 'categorical'}; pattern=(?:__:type:__continuous|__:type:__categorical)>
+    2023-11-30 08:43:40,239 - julearn - INFO - Step added
 
-    <julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7f0dd93e9990>
+    <julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7f5108fc7880>
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 78-79
+.. GENERATED FROM PYTHON SOURCE LINES 76-77
 
-Split the dataset into train and test
+Split the dataset into train and test.
 
-.. GENERATED FROM PYTHON SOURCE LINES 79-81
+.. GENERATED FROM PYTHON SOURCE LINES 77-79
 
 .. code-block:: default
 
@@ -248,12 +246,12 @@ Split the dataset into train and test
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 82-84
+.. GENERATED FROM PYTHON SOURCE LINES 80-82
 
 Train a ridge regression model on train dataset and use mean absolute error
-for scoring/
+for scoring.
 
-.. GENERATED FROM PYTHON SOURCE LINES 84-94
+.. GENERATED FROM PYTHON SOURCE LINES 82-92
 
 .. code-block:: default
 
@@ -275,34 +273,34 @@ for scoring/
 
  .. code-block:: none
 
-    2023-09-06 08:38:15,382 - julearn - INFO - ==== Input Data ====
-    2023-09-06 08:38:15,382 - julearn - INFO - Using dataframe as input
-    2023-09-06 08:38:15,382 - julearn - INFO -      Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2023-09-06 08:38:15,382 - julearn - INFO -      Target: target
-    2023-09-06 08:38:15,382 - julearn - INFO -      Expanded features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2023-09-06 08:38:15,382 - julearn - INFO -      X_types:{'pca1': ['age', 'bmi', 'bp'], 'pca2': ['s1', 's2', 's3', 's4', 's5', 's6'], 'categorical': ['sex']}
-    2023-09-06 08:38:15,383 - julearn - INFO - ====================
-    2023-09-06 08:38:15,383 - julearn - INFO - 
-    2023-09-06 08:38:15,385 - julearn - INFO - = Model Parameters =
-    2023-09-06 08:38:15,385 - julearn - INFO - ====================
-    2023-09-06 08:38:15,385 - julearn - INFO - 
-    2023-09-06 08:38:15,385 - julearn - INFO - = Data Information =
-    2023-09-06 08:38:15,385 - julearn - INFO -      Problem type: regression
-    2023-09-06 08:38:15,385 - julearn - INFO -      Number of samples: 309
-    2023-09-06 08:38:15,385 - julearn - INFO -      Number of features: 10
-    2023-09-06 08:38:15,385 - julearn - INFO - ====================
-    2023-09-06 08:38:15,385 - julearn - INFO - 
-    2023-09-06 08:38:15,385 - julearn - INFO -      Target type: float64
-    2023-09-06 08:38:15,386 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+    2023-11-30 08:43:40,240 - julearn - INFO - ==== Input Data ====
+    2023-11-30 08:43:40,240 - julearn - INFO - Using dataframe as input
+    2023-11-30 08:43:40,240 - julearn - INFO -      Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2023-11-30 08:43:40,240 - julearn - INFO -      Target: target
+    2023-11-30 08:43:40,240 - julearn - INFO -      Expanded features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2023-11-30 08:43:40,240 - julearn - INFO -      X_types:{'pca1': ['age', 'bmi', 'bp'], 'pca2': ['s1', 's2', 's3', 's4', 's5', 's6'], 'categorical': ['sex']}
+    2023-11-30 08:43:40,241 - julearn - INFO - ====================
+    2023-11-30 08:43:40,241 - julearn - INFO - 
+    2023-11-30 08:43:40,242 - julearn - INFO - = Model Parameters =
+    2023-11-30 08:43:40,243 - julearn - INFO - ====================
+    2023-11-30 08:43:40,243 - julearn - INFO - 
+    2023-11-30 08:43:40,243 - julearn - INFO - = Data Information =
+    2023-11-30 08:43:40,243 - julearn - INFO -      Problem type: regression
+    2023-11-30 08:43:40,243 - julearn - INFO -      Number of samples: 309
+    2023-11-30 08:43:40,243 - julearn - INFO -      Number of features: 10
+    2023-11-30 08:43:40,243 - julearn - INFO - ====================
+    2023-11-30 08:43:40,243 - julearn - INFO - 
+    2023-11-30 08:43:40,243 - julearn - INFO -      Target type: float64
+    2023-11-30 08:43:40,243 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 95-96
+.. GENERATED FROM PYTHON SOURCE LINES 93-94
 
 The scores dataframe has all the values for each CV split.
 
-.. GENERATED FROM PYTHON SOURCE LINES 96-98
+.. GENERATED FROM PYTHON SOURCE LINES 94-96
 
 .. code-block:: default
 
@@ -317,27 +315,26 @@ The scores dataframe has all the values for each CV split.
  .. code-block:: none
 
        fit_time  score_time  ...  fold                          cv_mdsum
-    0  0.019350    0.008408  ...     0  b10eef89b4192178d482d7a1587a248a
-    1  0.018560    0.008730  ...     1  b10eef89b4192178d482d7a1587a248a
-    2  0.018550    0.008641  ...     2  b10eef89b4192178d482d7a1587a248a
-    3  0.018168    0.008878  ...     3  b10eef89b4192178d482d7a1587a248a
-    4  0.018478    0.008861  ...     4  b10eef89b4192178d482d7a1587a248a
+    0  0.014588    0.006378  ...     0  b10eef89b4192178d482d7a1587a248a
+    1  0.014062    0.006444  ...     1  b10eef89b4192178d482d7a1587a248a
+    2  0.014178    0.006644  ...     2  b10eef89b4192178d482d7a1587a248a
+    3  0.013733    0.006356  ...     3  b10eef89b4192178d482d7a1587a248a
+    4  0.013594    0.006258  ...     4  b10eef89b4192178d482d7a1587a248a
 
     [5 rows x 8 columns]
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 99-100
+.. GENERATED FROM PYTHON SOURCE LINES 97-98
 
-Mean value of mean absolute error across CV
+Mean value of mean absolute error across CV.
 
-.. GENERATED FROM PYTHON SOURCE LINES 100-103
+.. GENERATED FROM PYTHON SOURCE LINES 98-100
 
 .. code-block:: default
 
     print(scores["test_score"].mean())
-
 
 
 
@@ -352,25 +349,19 @@ Mean value of mean absolute error across CV
 
 
 
+.. GENERATED FROM PYTHON SOURCE LINES 101-104
+
+Let's see how the data looks like after preprocessing. We will process the
+data until the first PCA step. We should get the first PCA component for
+["age", "bmi", "bp"] and leave other features untouched.
+
 .. GENERATED FROM PYTHON SOURCE LINES 104-108
-
-Let's see how the data looks like after preprocessing
-We will process the data until the first PCA step
-We should get the first
-PCA component for ['age', 'bmi', 'bp'] and other  features untouched
-
-.. GENERATED FROM PYTHON SOURCE LINES 108-117
 
 .. code-block:: default
 
     data_processed1 = preprocess(model, X, data=train_diabetes, until="pca_feats1")
     print("Data after preprocessing until PCA step 1")
-    print(data_processed1.head())
-    # We will process the data until the second PCA step
-    # We should now also get one PCA component for ['s1', 's2', 's3', 's4', 's5', 's6']
-    data_processed2 = preprocess(model, X, data=train_diabetes, until="pca_feats2")
-    print("Data after preprocessing until PCA step 2")
-    print(data_processed2.head())
+    data_processed1.head()
 
 
 
@@ -381,30 +372,195 @@ PCA component for ['age', 'bmi', 'bp'] and other  features untouched
  .. code-block:: none
 
     Data after preprocessing until PCA step 1
-         pca_feats1__pca0       sex        s1  ...        s4        s5        s6
-    161         -0.063175  0.050680  0.133274  ...  0.108111  0.075741  0.085907
-    140         -0.054779  0.050680 -0.030464  ... -0.002592 -0.033246  0.015491
-    145         -0.098172 -0.044642 -0.033216  ... -0.039493 -0.015999 -0.050783
-    9            0.032289 -0.044642 -0.012577  ... -0.002592  0.067737 -0.013504
-    315          0.045025 -0.044642  0.031454  ... -0.039493 -0.010903 -0.001078
 
-    [5 rows x 8 columns]
+
+.. raw:: html
+
+    <div class="output_subarea output_html rendered_html output_result">
+    <div>
+    <style scoped>
+        .dataframe tbody tr th:only-of-type {
+            vertical-align: middle;
+        }
+
+        .dataframe tbody tr th {
+            vertical-align: top;
+        }
+
+        .dataframe thead th {
+            text-align: right;
+        }
+    </style>
+    <table border="1" class="dataframe">
+      <thead>
+        <tr style="text-align: right;">
+          <th></th>
+          <th>pca_feats1__pca0</th>
+          <th>sex</th>
+          <th>s1</th>
+          <th>s2</th>
+          <th>s3</th>
+          <th>s4</th>
+          <th>s5</th>
+          <th>s6</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>161</th>
+          <td>-0.063175</td>
+          <td>0.050680</td>
+          <td>0.133274</td>
+          <td>0.131461</td>
+          <td>-0.039719</td>
+          <td>0.108111</td>
+          <td>0.075741</td>
+          <td>0.085907</td>
+        </tr>
+        <tr>
+          <th>140</th>
+          <td>-0.054779</td>
+          <td>0.050680</td>
+          <td>-0.030464</td>
+          <td>-0.001314</td>
+          <td>-0.043401</td>
+          <td>-0.002592</td>
+          <td>-0.033246</td>
+          <td>0.015491</td>
+        </tr>
+        <tr>
+          <th>145</th>
+          <td>-0.098172</td>
+          <td>-0.044642</td>
+          <td>-0.033216</td>
+          <td>-0.032629</td>
+          <td>0.011824</td>
+          <td>-0.039493</td>
+          <td>-0.015999</td>
+          <td>-0.050783</td>
+        </tr>
+        <tr>
+          <th>9</th>
+          <td>0.032289</td>
+          <td>-0.044642</td>
+          <td>-0.012577</td>
+          <td>-0.034508</td>
+          <td>-0.024993</td>
+          <td>-0.002592</td>
+          <td>0.067737</td>
+          <td>-0.013504</td>
+        </tr>
+        <tr>
+          <th>315</th>
+          <td>0.045025</td>
+          <td>-0.044642</td>
+          <td>0.031454</td>
+          <td>0.020607</td>
+          <td>0.056003</td>
+          <td>-0.039493</td>
+          <td>-0.010903</td>
+          <td>-0.001078</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+    </div>
+    <br />
+    <br />
+
+.. GENERATED FROM PYTHON SOURCE LINES 109-111
+
+We will process the data until the second PCA step. We should now also get
+one PCA component for ["s1", "s2", "s3", "s4", "s5", "s6"].
+
+.. GENERATED FROM PYTHON SOURCE LINES 111-115
+
+.. code-block:: default
+
+    data_processed2 = preprocess(model, X, data=train_diabetes, until="pca_feats2")
+    print("Data after preprocessing until PCA step 2")
+    data_processed2.head()
+
+
+
+
+
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
     Data after preprocessing until PCA step 2
-         pca_feats2__pca0  pca_feats1__pca0       sex
-    161          0.234716         -0.063175  0.050680
-    140         -0.012141         -0.054779  0.050680
-    145         -0.078784         -0.098172 -0.044642
-    9            0.006290          0.032289 -0.044642
-    315         -0.026190          0.045025 -0.044642
 
 
+.. raw:: html
 
+    <div class="output_subarea output_html rendered_html output_result">
+    <div>
+    <style scoped>
+        .dataframe tbody tr th:only-of-type {
+            vertical-align: middle;
+        }
 
-.. GENERATED FROM PYTHON SOURCE LINES 118-119
+        .dataframe tbody tr th {
+            vertical-align: top;
+        }
+
+        .dataframe thead th {
+            text-align: right;
+        }
+    </style>
+    <table border="1" class="dataframe">
+      <thead>
+        <tr style="text-align: right;">
+          <th></th>
+          <th>pca_feats2__pca0</th>
+          <th>pca_feats1__pca0</th>
+          <th>sex</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>161</th>
+          <td>0.234716</td>
+          <td>-0.063175</td>
+          <td>0.050680</td>
+        </tr>
+        <tr>
+          <th>140</th>
+          <td>-0.012141</td>
+          <td>-0.054779</td>
+          <td>0.050680</td>
+        </tr>
+        <tr>
+          <th>145</th>
+          <td>-0.078784</td>
+          <td>-0.098172</td>
+          <td>-0.044642</td>
+        </tr>
+        <tr>
+          <th>9</th>
+          <td>0.006290</td>
+          <td>0.032289</td>
+          <td>-0.044642</td>
+        </tr>
+        <tr>
+          <th>315</th>
+          <td>-0.026190</td>
+          <td>0.045025</td>
+          <td>-0.044642</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+    </div>
+    <br />
+    <br />
+
+.. GENERATED FROM PYTHON SOURCE LINES 116-117
 
 Now we can get the MAE fold and repetition:
 
-.. GENERATED FROM PYTHON SOURCE LINES 119-125
+.. GENERATED FROM PYTHON SOURCE LINES 117-123
 
 .. code-block:: default
 
@@ -429,11 +585,11 @@ Now we can get the MAE fold and repetition:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 126-127
+.. GENERATED FROM PYTHON SOURCE LINES 124-125
 
-Plot heatmap of mean absolute error (MAE) over all repeats and CV splits
+Plot heatmap of mean absolute error (MAE) over all repeats and CV splits.
 
-.. GENERATED FROM PYTHON SOURCE LINES 127-131
+.. GENERATED FROM PYTHON SOURCE LINES 125-129
 
 .. code-block:: default
 
@@ -459,12 +615,12 @@ Plot heatmap of mean absolute error (MAE) over all repeats and CV splits
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 132-134
+.. GENERATED FROM PYTHON SOURCE LINES 130-132
 
 Use the final model to make predictions on test data and plot scatterplot
-of true values vs predicted values
+of true values vs predicted values.
 
-.. GENERATED FROM PYTHON SOURCE LINES 134-157
+.. GENERATED FROM PYTHON SOURCE LINES 132-155
 
 .. code-block:: default
 
@@ -512,7 +668,7 @@ of true values vs predicted values
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.536 seconds)
+   **Total running time of the script:** ( 0 minutes  0.429 seconds)
 
 
 .. _sphx_glr_download_auto_examples_03_complex_models_run_example_pca_featsets.py:
