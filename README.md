@@ -49,4 +49,4 @@ If you use julearn in a scientific publication, please use the following referen
 
 > Hamdan, Sami, Shammi More, Leonard Sasse, Vera Komeyer, Kaustubh R. Patil, and Federico Raimondo. ‘Julearn: An Easy-to-Use Library for Leakage-Free Evaluation and Inspection of ML Models’. arXiv, 19 October 2023. https://doi.org/10.48550/arXiv.2310.12568.
 
-Since julearn is also heavily reliant on scikit-learn, plase also cite them: https://scikit-learn.org/stable/about.html#citing-scikit-learn
+Since julearn is also heavily reliant on scikit-learn, please also cite them: https://scikit-learn.org/stable/about.html#citing-scikit-learn
