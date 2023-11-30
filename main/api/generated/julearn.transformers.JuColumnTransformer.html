@@ -418,9 +418,9 @@ Please refer to the <a class="reference internal" href="../../what_really_need_k
 <dl class="py class">
 <dt class="sig sig-object py" id="julearn.transformers.JuColumnTransformer">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">julearn.transformers.</span></span><span class="sig-name descname"><span class="pre">JuColumnTransformer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transformer</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">apply_to</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">needed_types</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row_select_col_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">row_select_vals</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.transformers.JuColumnTransformer" title="Permalink to this definition">#</a></dt>
-<dd><p>Column transformer that can be used in a Junifer pipeline.</p>
+<dd><p>Column transformer that can be used in a julearn pipeline.</p>
 <p>This column transformer is a wrapper around the sklearn column transformer,
-so it can be used directly with Junifer pipelines.</p>
+so it can be used directly with julearn pipelines.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -432,10 +432,12 @@ so it can be used directly with Junifer pipelines.</p>
 </dd>
 <dt><strong>needed_types</strong><span class="classifier">ColumnTypesLike, optional</span></dt><dd><p>Which feature types are needed for the transformer to work.</p>
 </dd>
-<dt><strong>row_select_col_type</strong><span class="classifier">str or list of str or set of str or ColumnTypes</span></dt><dd><p>The column types needed to select rows (default is None)</p>
+<dt><strong>row_select_col_type</strong><span class="classifier">str or list of str or set of str or ColumnTypes</span></dt><dd><p>The column types needed to select rows (default is None).</p>
 </dd>
 <dt><strong>row_select_vals</strong><span class="classifier">str, int, bool or list of str, int, bool</span></dt><dd><p>The value(s) which should be selected in the row_select_col_type
-to select the rows used for training (default is None)</p>
+to select the rows used for training (default is None).</p>
+</dd>
+<dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Extra keyword arguments for the transformer.</p>
 </dd>
 </dl>
 </dd>
@@ -460,7 +462,7 @@ to select the rows used for training (default is None)</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>out</strong><span class="classifier">pd.DataFrame</span></dt><dd><p>Transformed data.</p>
+<dt>pd.DataFrame</dt><dd><p>Transformed data.</p>
 </dd>
 </dl>
 </dd>
@@ -474,20 +476,22 @@ to select the rows used for training (default is None)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>input_features</strong><span class="classifier">array-like of str or None, default=None</span></dt><dd><ul class="simple">
-<li><p>If <cite>input_features</cite> is <cite>None</cite>, then <cite>feature_names_in_</cite> is
-used as feature names in. If <cite>feature_names_in_</cite> is not defined,
-then the following input feature names are generated:
-<cite>[“x0”, “x1”, …, “x(n_features_in_ - 1)”]</cite>.</p></li>
-<li><p>If <cite>input_features</cite> is an array-like, then <cite>input_features</cite> must
-match <cite>feature_names_in_</cite> if <cite>feature_names_in_</cite> is defined.</p></li>
+<dt><strong>input_features</strong><span class="classifier">array-like of str or None, default=None</span></dt><dd><p>Input features to use.</p>
+<ul class="simple">
+<li><p>If <code class="docutils literal notranslate"><span class="pre">None</span></code>, then <code class="docutils literal notranslate"><span class="pre">feature_names_in_</span></code> is
+used as input feature names if it’s defined. If
+<code class="docutils literal notranslate"><span class="pre">feature_names_in_</span></code> is undefined, then the following input
+feature names are generated:
+<code class="docutils literal notranslate"><span class="pre">[&quot;x0&quot;,</span> <span class="pre">&quot;x1&quot;,</span> <span class="pre">...,</span> <span class="pre">&quot;x(n_features_in_</span> <span class="pre">-</span> <span class="pre">1)&quot;]</span></code>.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">array-like</span></code>, then <code class="docutils literal notranslate"><span class="pre">input_features</span></code> must
+match <code class="docutils literal notranslate"><span class="pre">feature_names_in_</span></code> if it’s defined.</p></li>
 </ul>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt>list</dt><dd><p>Names of features to be kept in the output pd.DataFrame.</p>
+<dt>list of str</dt><dd><p>Names of features to be kept in the output pd.DataFrame.</p>
 </dd>
 </dl>
 </dd>
@@ -507,7 +511,7 @@ match <cite>feature_names_in_</cite> if <cite>feature_names_in_</cite> is define
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>params</strong><span class="classifier">dict</span></dt><dd><p>Parameter names mapped to their values.</p>
+<dt>dict</dt><dd><p>Parameter names mapped to their values.</p>
 </dd>
 </dl>
 </dd>
@@ -525,13 +529,13 @@ possible to update each component of a nested object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>**params</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
+<dt><strong>**kwargs</strong><span class="classifier">dict</span></dt><dd><p>Estimator parameters.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
-<dt><strong>self</strong><span class="classifier">estimator instance</span></dt><dd><p>Estimator instance.</p>
+<dt>JuColumnTransformer</dt><dd><p>JuColumnTransformer instance with params set.</p>
 </dd>
 </dl>
 </dd>
@@ -561,7 +565,28 @@ possible to update each component of a nested object.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="julearn.transformers.JuColumnTransformer.fit">
 <span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">fit_params</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.transformers.JuColumnTransformer.fit" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Fit the model.</p>
+<p>This method will fit the model using only the columns selected by
+<cite>apply_to</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong><span class="classifier">pd.DataFrame</span></dt><dd><p>The data to fit the model on.</p>
+</dd>
+<dt><strong>y</strong><span class="classifier">DataLike, optional</span></dt><dd><p>The target data (default is None).</p>
+</dd>
+<dt><strong>**fit_params</strong><span class="classifier">Any</span></dt><dd><p>Additional parameters to pass to the model’s fit method.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>JuTransformer</dt><dd><p>The fitted model.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="julearn.transformers.JuColumnTransformer.fit_transform">
