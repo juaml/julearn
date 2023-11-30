@@ -43,9 +43,9 @@ class _JulearnScoresViewer(param.Parameterized):
         The confidence interval to use for the error bars (default is 0.95).
     """
 
-    metric = param.Selector(None, default=None)
-    models = param.ListSelector(default=None, objects=None)
-    sets = param.ListSelector(default=None, objects=None)
+    metric = param.Selector([], default=None)
+    models = param.ListSelector(default=None, objects=[])
+    sets = param.ListSelector(default=None, objects=[])
     show_stats = param.Boolean(False)
     group_repeats = param.Selector(
         objects=["mean", "median", "no"], default="no"

@@ -86,7 +86,7 @@ nitpick_ignore_regex = [
     ("py:obj", "sqlalchemy.engine.Engine"),  # ignore sqlalchemy
     # Sklearn doc issue to be solved in next release
     ("py:class", "pipeline.Pipeline"),
-    ("py:class", "utils.metadata_routing.MetadataRequest"),
+    ("py:class", "sklearn.utils.metadata_routing.MetadataRequest"),
 ]
 
 
