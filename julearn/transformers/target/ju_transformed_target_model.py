@@ -74,7 +74,7 @@ class JuTransformedTargetModel(JuBaseEstimator):
         self.transformer = transformer
 
     def fit(
-        self, X: pd.DataFrame, y: DataLike, **fit_params: Any
+        self, X: pd.DataFrame, y: DataLike, **fit_params: Any  # noqa: N803
     ) -> "JuTransformedTargetModel":
         """Fit the model.
 
@@ -84,20 +84,21 @@ class JuTransformedTargetModel(JuBaseEstimator):
             The input data.
         y : DataLike
             The target.
-        fit_params : Any
+        **fit_params : dict
             Additional parameters to be passed to the model fit method.
 
         Returns
         -------
-        self : JuTransformedTargetModel
+        JuTransformedTargetModel
             The fitted model.
+
         """
         y = self.transformer.fit_transform(X, y)
         self.model_ = clone(self.model)
         self.model_.fit(X, y, **fit_params)  # type: ignore
         return self
 
-    def predict(self, X: pd.DataFrame) -> DataLike:
+    def predict(self, X: pd.DataFrame) -> DataLike:  # noqa: N803
         """Predict using the model.
 
         Parameters
@@ -109,6 +110,7 @@ class JuTransformedTargetModel(JuBaseEstimator):
         -------
         DataLike
             The predictions.
+
         """
         if not hasattr(self, "model_"):
             raise_error("Model not fitted yet.")
@@ -128,8 +130,22 @@ class JuTransformedTargetModel(JuBaseEstimator):
             )
         return y_pred
 
-    def score(self, X, y):
+    def score(self, X: pd.DataFrame, y: DataLike) -> float:  # noqa: N803
+        """Score the model.
 
+        Parameters
+        ----------
+        X : pd.DataFrame
+            The input data.
+        y : DataLike
+            The target.
+
+        Returns
+        -------
+        float
+            Score for the model.
+
+        """
         if not hasattr(self, "model_"):
             raise_error("Model not fitted yet.")
         self.model_ = typing.cast(ModelLike, self.model_)
@@ -137,7 +153,7 @@ class JuTransformedTargetModel(JuBaseEstimator):
         return self.model_.score(X, y_trans)
 
     @available_if(_wrapped_model_has("predict_proba"))
-    def predict_proba(self, X: pd.DataFrame) -> np.ndarray:
+    def predict_proba(self, X: pd.DataFrame) -> np.ndarray:  # noqa: N803
         """Compute probabilities of possible outcomes for samples in X.
 
         Parameters
@@ -158,7 +174,7 @@ class JuTransformedTargetModel(JuBaseEstimator):
         return self.model_.predict_proba(X)  # type: ignore
 
     @available_if(_wrapped_model_has("decision_function"))
-    def decision_function(self, X: pd.DataFrame) -> np.ndarray:
+    def decision_function(self, X: pd.DataFrame) -> np.ndarray:  # noqa: N803
         """Evaluate the decision function for the samples in X.
 
         Parameters
@@ -177,7 +193,24 @@ class JuTransformedTargetModel(JuBaseEstimator):
         self.model_ = typing.cast(ModelLike, self.model_)
         return self.model_.decision_function(X)  # type: ignore
 
-    def transform_target(self, X, y) -> np.ndarray:
+    def transform_target(
+        self, X: pd.DataFrame, y: DataLike  # noqa: N803
+    ) -> DataLike:
+        """Transform target.
+
+        Parameters
+        ----------
+        X : pd.DataFrame
+            The input data.
+        y : DataLike
+            The target.
+
+        Returns
+        -------
+        DataLike
+            The transformed target.
+
+        """
         return self.transformer.transform(X, y)
 
     @property

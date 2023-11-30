@@ -4,21 +4,22 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
+import warnings
+
 import numpy as np
 import pandas as pd
 import pytest
 from numpy.testing import assert_array_equal
 from sklearn.preprocessing import StandardScaler
-import warnings
 
+from julearn import run_cross_validation
+from julearn.pipeline import PipelineCreator, TargetPipelineCreator
 from julearn.pipeline.target_pipeline import JuTargetPipeline
 from julearn.transformers.target import JuTargetTransformer
-from julearn.pipeline import PipelineCreator, TargetPipelineCreator
-from julearn import run_cross_validation
 
 
 def test_target_pipeline_sklearn(
-    X_iris: pd.DataFrame, y_iris: pd.Series
+    X_iris: pd.DataFrame, y_iris: pd.Series  # noqa: N803
 ) -> None:
     """Test the target pipeline using a scikit-learn transformer.
 
@@ -44,7 +45,7 @@ def test_target_pipeline_sklearn(
 
 
 def test_target_pipeline_jutargettransformer(
-    X_iris: pd.DataFrame, y_iris: pd.Series
+    X_iris: pd.DataFrame, y_iris: pd.Series  # noqa: N803
 ) -> None:
     """Test the target pipeline using a JuTargetTransformer.
 
@@ -57,11 +58,15 @@ def test_target_pipeline_jutargettransformer(
     """
 
     class MedianSplitter(JuTargetTransformer):
-        def fit(self, X: pd.DataFrame, y: pd.Series) -> "MedianSplitter":
+        def fit(
+            self, X: pd.DataFrame, y: pd.Series  # noqa: N803
+        ) -> "MedianSplitter":
             self.median = np.median(y)
             return self
 
-        def transform(self, X: pd.DataFrame, y: pd.Series) -> pd.Series:
+        def transform(
+            self, X: pd.DataFrame, y: pd.Series  # noqa: N803
+        ) -> pd.Series:
             return (y > self.median).astype(int)
 
     steps = [("splitter", MedianSplitter())]
@@ -77,7 +82,7 @@ def test_target_pipeline_jutargettransformer(
 
 
 def test_target_pipeline_multiple_ju_sk(
-    X_iris: pd.DataFrame, y_iris: pd.Series
+    X_iris: pd.DataFrame, y_iris: pd.Series  # noqa: N803
 ) -> None:
     """Test the target pipeline using JuTargetTransformer and sklearn.
 
@@ -90,11 +95,15 @@ def test_target_pipeline_multiple_ju_sk(
     """
 
     class DeMeaner(JuTargetTransformer):
-        def fit(self, X: pd.DataFrame, y: pd.Series) -> "DeMeaner":
+        def fit(
+            self, X: pd.DataFrame, y: pd.Series  # noqa: N803
+        ) -> "DeMeaner":
             self.mean = np.mean(X.iloc[:, 0].values)  # type: ignore
             return self
 
-        def transform(self, X: pd.DataFrame, y: pd.Series) -> pd.Series:
+        def transform(
+            self, X: pd.DataFrame, y: pd.Series  # noqa: N803
+        ) -> pd.Series:
             return y - self.mean  # type: ignore
 
     steps = [("demeaner", DeMeaner()), ("scaler", StandardScaler())]
@@ -114,7 +123,7 @@ def test_target_pipeline_multiple_ju_sk(
 
 
 def test_target_pipeline_multiple_sk_ju(
-    X_iris: pd.DataFrame, y_iris: pd.Series
+    X_iris: pd.DataFrame, y_iris: pd.Series  # noqa: N803
 ) -> None:
     """Test the target pipeline using sklearn and JuTargetTransformer.
 
@@ -127,11 +136,15 @@ def test_target_pipeline_multiple_sk_ju(
     """
 
     class DeMeaner(JuTargetTransformer):
-        def fit(self, X: pd.DataFrame, y: pd.Series) -> "DeMeaner":
+        def fit(
+            self, X: pd.DataFrame, y: pd.Series  # noqa: N803
+        ) -> "DeMeaner":
             self.mean = np.mean(X.iloc[:, 0].values)  # type: ignore
             return self
 
-        def transform(self, X: pd.DataFrame, y: pd.Series) -> pd.Series:
+        def transform(
+            self, X: pd.DataFrame, y: pd.Series  # noqa: N803
+        ) -> pd.Series:
             return y - self.mean  # type: ignore
 
     steps = [("scaler", StandardScaler()), ("demeaner", DeMeaner())]
@@ -159,7 +172,9 @@ def test_target_pipeline_errors() -> None:
         JuTargetPipeline(steps)  # type: ignore
 
 
-def test_target_noninverse(df_iris, X_iris):
+def test_target_noninverse(df_iris, X_iris):  # noqa: N803
+    """Test the target non-inverse."""
+
     X = list(X_iris.columns)
     df_iris["species"] = X_iris["petal_width"]
     target_pipeline_creator = TargetPipelineCreator()
@@ -170,14 +185,18 @@ def test_target_noninverse(df_iris, X_iris):
     pipeline_creator.add(target_pipeline_creator, apply_to="target")
     pipeline_creator.add("linreg")
 
-    X_types = {"confounds": ["petal_width"],
-               "continuous": ['sepal_length', 'sepal_width', 'petal_length']
-               }
+    X_types = {
+        "confounds": ["petal_width"],
+        "continuous": ["sepal_length", "sepal_width", "petal_length"],
+    }
 
     with warnings.catch_warnings():
         warnings.simplefilter("error")
         run_cross_validation(
-            X=X, y="species", X_types=X_types,
-            model=pipeline_creator, data=df_iris,
-            scoring="r2"
+            X=X,
+            y="species",
+            X_types=X_types,
+            model=pipeline_creator,
+            data=df_iris,
+            scoring="r2",
         )

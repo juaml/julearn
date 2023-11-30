@@ -1,4 +1,4 @@
-"""Provide tests for inspecting preprocess module."""
+"""Provide tests for inspecting preprocessors."""
 
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
@@ -56,13 +56,13 @@ from julearn.utils.typing import TransformerLike
     ],
 )
 def test_preprocess_sklearn(
-    X_iris: pd.DataFrame,
+    X_iris: pd.DataFrame,  # noqa: N803
     y_iris: pd.Series,
     pipeline: Pipeline,
     transformers: List[TransformerLike],
     until: Optional[str],
 ) -> None:
-    """Test the preprocess_sklearn function.
+    """Test the preprocess function.
 
     Parameters
     ----------
@@ -74,8 +74,9 @@ def test_preprocess_sklearn(
         The pipeline to test.
     transformers : list of TransformerLike
         The transformers to test.
-    until : str, optional
+    until : str or None
         The transformer to stop at.
+
     """
     X = list(X_iris.columns)
     X = cast(List[str], X)
@@ -96,7 +97,7 @@ def test_preprocess_sklearn(
 
 
 def test_preprocess_sklearn_nodataframe(
-    X_iris: pd.DataFrame,
+    X_iris: pd.DataFrame,  # noqa: N803
     y_iris: pd.Series,
 ) -> None:
     """Test preprocess with non-dataframe output and column types removal.
@@ -120,21 +121,49 @@ def test_preprocess_sklearn_nodataframe(
         )
 
 
-def test_preprocess_no_step(X_iris, y_iris, df_iris):
+def test_preprocess_no_step(X_iris, y_iris, df_iris) -> None:  # noqa: N803
+    """Test error for preprocess with no step.
 
+    Parameters
+    ----------
+    X_iris : pd.DataFrame
+        The iris dataset features.
+    y_iris : pd.Series
+        The iris dataset target.
+    df_iris : pd.DataFrame
+        The iris dataset.
+
+    """
     pipeline = Pipeline([("scaler", StandardScaler()), ("svm", SVC())])
     pipeline.fit(X_iris, y=y_iris)
     with pytest.raises(ValueError, match="No step named"):
-        preprocess(pipeline, X=list(X_iris.columns),
-                   data=df_iris,
-                   until="non_existent")
+        preprocess(
+            pipeline,
+            X=list(X_iris.columns),
+            data=df_iris,
+            until="non_existent",
+        )
 
 
-def test_preprocess_with_column_types(df_iris):
+def test_preprocess_with_column_types(df_iris: pd.DataFrame) -> None:
+    """Test preprocess with column types.
+
+    Parameters
+    ----------
+    df_iris : pd.DataFrame
+        The iris dataset.
+
+    """
+
     X = list(df_iris.iloc[:, :-1].columns)
     y = "species"
     _, model = run_cross_validation(
-        X=X, y=y, data=df_iris, problem_type="classification",
-        model="rf", return_estimator="final")
+        X=X,
+        y=y,
+        data=df_iris,
+        problem_type="classification",
+        model="rf",
+        return_estimator="final",
+    )
     X_t = preprocess(model, X=X, data=df_iris, with_column_types=False)
-    assert (list(X_t.columns) == X)
+    assert list(X_t.columns) == X

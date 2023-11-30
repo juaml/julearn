@@ -10,9 +10,9 @@ from typing import Callable, Dict, List
 import pandas as pd
 import pytest
 from pytest_lazyfixture import lazy_fixture
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 from sklearn.preprocessing import RobustScaler, StandardScaler
-from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
 
 from julearn.base import ColumnTypesLike, WrapModel
@@ -84,7 +84,7 @@ def test_construction_working(
     ],
 )
 def test_fit_and_transform_no_error(
-    X_iris: pd.DataFrame,
+    X_iris: pd.DataFrame,  # noqa: N803
     y_iris: pd.Series,
     model: str,
     preprocess: List[str],
@@ -123,7 +123,7 @@ def test_fit_and_transform_no_error(
     ],
 )
 def test_hyperparameter_tuning(
-    X_types_iris: Dict[str, List[str]],
+    X_types_iris: Dict[str, List[str]],  # noqa: N803
     model: str,
     preprocess: List[str],
     problem_type: str,
@@ -144,6 +144,9 @@ def test_hyperparameter_tuning(
         The problem type to test.
     get_tuning_params : Callable
         A function that returns the tuning hyperparameters for a given step.
+    search_params : dict of str and list
+        The parameters for the search.
+
     """
     if isinstance(preprocess, str):
         preprocess = [preprocess]
@@ -153,7 +156,7 @@ def test_hyperparameter_tuning(
 
     used_types = (
         ["continuous"]
-        if X_types_iris in [None, dict()]
+        if X_types_iris in [None, {}]
         else list(X_types_iris.keys())
     )
     for step in preprocess:
@@ -199,7 +202,9 @@ def test_hyperparameter_tuning(
     ],
 )
 def test_X_types_to_pattern_warnings(
-    X_types: Dict[str, List[str]], apply_to: ColumnTypesLike, warns: bool
+    X_types: Dict[str, List[str]],  # noqa: N803
+    apply_to: ColumnTypesLike,
+    warns: bool,
 ) -> None:
     """Test that the X_types raises the expected warnings.
 
@@ -236,7 +241,9 @@ def test_X_types_to_pattern_warnings(
     ],
 )
 def test_X_types_to_pattern_errors(
-    X_types: Dict[str, List[str]], apply_to: ColumnTypesLike, error: bool
+    X_types: Dict[str, List[str]],  # noqa: N803
+    apply_to: ColumnTypesLike,
+    error: bool,
 ) -> None:
     """Test that the X_types raises the expected errors.
 
@@ -309,7 +316,9 @@ def test_added_model_target_transform() -> None:
     assert pipeline_creator._added_model
 
 
-def test_stacking(X_iris: pd.DataFrame, y_iris: pd.Series) -> None:
+def test_stacking(
+    X_iris: pd.DataFrame, y_iris: pd.Series  # noqa: N803
+) -> None:
     """Test that the stacking model works correctly."""
     # Define our feature types
     X_types = {
@@ -360,7 +369,7 @@ def test_added_repeated_transformers() -> None:
 #     )
 
 
-def test_target_pipe(X_iris, y_iris) -> None:
+def test_target_pipe(X_iris, y_iris) -> None:  # noqa: N803
     """Test that the target pipeline works correctly."""
     X_types = {
         "continuous": ["sepal_length", "sepal_width", "petal_length"],
@@ -375,7 +384,7 @@ def test_target_pipe(X_iris, y_iris) -> None:
         .add("svm", C=[1, 2])
     )
     pipe = pipeline_creator.to_pipeline(
-        X_types, search_params=dict(kind="random")
+        X_types, search_params={"kind": "random"}
     )
     pipe.fit(X_iris, y_iris)
 
@@ -438,7 +447,7 @@ def test_raise_pipe_wrong_searcher() -> None:
         match="The searcher no_search is not a valid julearn searcher",
     ):
         pipeline_creator.to_pipeline(
-            X_types, search_params=dict(kind="no_search")
+            X_types, search_params={"kind": "no_search"}
         )
 
 

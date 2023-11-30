@@ -4,8 +4,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import List, Optional, Union, Dict
-
+from typing import Dict, List, Optional, Union
 
 import numpy as np
 import pandas as pd
@@ -14,26 +13,26 @@ from sklearn.model_selection import check_cv, cross_validate
 from sklearn.model_selection._search import BaseSearchCV
 from sklearn.pipeline import Pipeline
 
+from .inspect import Inspector
 from .pipeline import PipelineCreator
 from .pipeline.merger import merge_pipelines
 from .prepare import check_consistency, prepare_input_data
 from .scoring import check_scoring
-from .utils import logger, raise_error, _compute_cvmdsum
-from .inspect import Inspector
+from .utils import _compute_cvmdsum, logger, raise_error
 
 
-def run_cross_validation(
-    X: List[str],
+def run_cross_validation(  # noqa: C901
+    X: List[str],  # noqa: N803
     y: str,
     model: Union[str, PipelineCreator, BaseEstimator, List[PipelineCreator]],
-    X_types: Optional[Dict] = None,
+    X_types: Optional[Dict] = None,  # noqa: N803
     data: Optional[pd.DataFrame] = None,
     problem_type: Optional[str] = None,
     preprocess: Union[None, str, List[str]] = None,
     return_estimator: Optional[str] = None,
     return_inspector: bool = False,
     return_train_score: bool = False,
-    cv: Union[None, int] = None,
+    cv: Optional[int] = None,
     groups: Optional[str] = None,
     scoring: Union[str, List[str], None] = None,
     pos_labels: Union[str, List[str], None] = None,
@@ -47,10 +46,10 @@ def run_cross_validation(
 
     Parameters
     ----------
-    X : str, list(str) or numpy.array
+    X : list of str
         The features to use.
         See :ref:`data_usage` for details.
-    y : str or numpy.array
+    y : str
         The targets to predict.
         See :ref:`data_usage` for details.
     model : str or scikit-learn compatible model.
@@ -106,7 +105,7 @@ def run_cross_validation(
         * CV Splitter (see scikit-learn documentation on CV)
         * An iterable yielding (train, test) splits as arrays of indices.
 
-    groups : str or numpy.array | None
+    groups : str | None
         The grouping labels in case a Group CV is used.
         See :ref:`data_usage` for details.
     scoring : ScorerLike, optional
@@ -145,11 +144,16 @@ def run_cross_validation(
     seed : int | None
         If not None, set the random seed before any operation. Useful for
         reproducibility.
+    n_jobs : int, optional
+        Number of jobs to run in parallel. Training the estimator and computing
+        the score are parallelized over the cross-validation splits.
+        ``None`` means 1 unless in a :obj:`joblib.parallel_backend` context.
+        ``-1`` means using all processors (default None).
     verbose: int
         Verbosity level of outer cross-validation.
         Follows scikit-learn/joblib converntions.
         0 means no additional information is printed.
-        Larger number genereally mean more information is printed.
+        Larger number generally mean more information is printed.
         Note: verbosity up to 50 will print into standard error,
         while larger than 50 will print in standrad output.
 
@@ -237,7 +241,7 @@ def run_cross_validation(
         else:
             model = [model]
 
-        problem_types = set([m.problem_type for m in model])
+        problem_types = {m.problem_type for m in model}
         if len(problem_types) > 1:
             raise_error(
                 "If model is a list of PipelineCreator, all elements must have"
@@ -345,9 +349,7 @@ def run_cross_validation(
     check_consistency(y, cv, groups, problem_type)
 
     cv_return_estimator = return_estimator in ["cv", "all"]
-    scoring = check_scoring(pipeline, scoring,
-                            wrap_score=wrap_score
-                            )
+    scoring = check_scoring(pipeline, scoring, wrap_score=wrap_score)
 
     cv_mdsum = _compute_cvmdsum(cv_outer)
     fit_params = {}

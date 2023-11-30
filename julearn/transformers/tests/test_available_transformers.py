@@ -31,7 +31,9 @@ class Fish(BaseEstimator, TransformerMixin):
     def __init__(self, can_it_fly: bool):
         self.can_it_fly = can_it_fly
 
-    def fit(self, X: DataLike, y: Optional[DataLike] = None) -> "Fish":
+    def fit(
+        self, X: DataLike, y: Optional[DataLike] = None  # noqa: N803
+    ) -> "Fish":
         """Fit the fish.
 
         Parameters
@@ -48,7 +50,7 @@ class Fish(BaseEstimator, TransformerMixin):
         """
         return self
 
-    def transform(self, X: DataLike) -> DataLike:
+    def transform(self, X: DataLike) -> DataLike:  # noqa: N803
         """Transform the data.
 
         Parameters

@@ -8,27 +8,26 @@ import panel as pn
 import param
 from bokeh.models import (
     ColumnDataSource,
-    FactorRange,
-    Whisker,
     DataTable,
+    FactorRange,
+    Label,
     ScientificFormatter,
     TableColumn,
-    Label,
+    Whisker,
 )
 from bokeh.palettes import Colorblind
 from bokeh.plotting import figure
 from bokeh.transform import factor_cmap, jitter
 
-from ..utils.checks import check_scores_df
 from ..stats import corrected_ttest
+from ..utils.checks import check_scores_df
 
 
 SCORE_PLOT_TOOLS = "hover,save,pan,box_zoom,reset,wheel_zoom"
 
 
 class _JulearnScoresViewer(param.Parameterized):
-    """
-    A class to visualize the scores for model comparison.
+    """A class to visualize the scores for model comparison.
 
     Parameters
     ----------
@@ -69,6 +68,7 @@ class _JulearnScoresViewer(param.Parameterized):
         scores : list of pd.DataFrame
             DataFrames containing the scores of the models. The DataFrames must
             be the output of `run_cross_validation`
+
         Returns
         -------
         self : _JulearnScoresViewer
@@ -145,7 +145,7 @@ class _JulearnScoresViewer(param.Parameterized):
                 "x", palette=Colorblind[3], factors=self.sets, start=1, end=3
             )
         else:
-            x = [m for m in self.models]
+            x = list(self.models)
             t_df = t_df[t_df["set"] == self.sets[0]]
             x_values = list(t_df["model"].values)
             if self.sets[0] == "test":
@@ -215,7 +215,7 @@ class _JulearnScoresViewer(param.Parameterized):
         upper = g.score.quantile(ci_upper)
         lower = g.score.quantile(ci_lower)
         source = ColumnDataSource(
-            data=dict(base=upper.index.values, upper=upper, lower=lower)
+            data={"base": upper.index.values, "upper": upper, "lower": lower}
         )
         error = Whisker(
             base="base",
@@ -232,11 +232,11 @@ class _JulearnScoresViewer(param.Parameterized):
         # Add whiskers for mean
         mean_score = g.score.mean()
         source = ColumnDataSource(
-            data=dict(
-                base=mean_score.index.values,
-                upper=mean_score,
-                lower=mean_score,
-            )
+            data={
+                "base": mean_score.index.values,
+                "upper": mean_score,
+                "lower": mean_score,
+            }
         )
         mean_bar = Whisker(
             base="base",
@@ -255,7 +255,7 @@ class _JulearnScoresViewer(param.Parameterized):
         if len(self.sets) > 1:
             grp_pad = p.x_range.group_padding
             span_x = [
-                tuple(list(t_x) + [1 + (grp_pad - 1.0) / 2.0])
+                (*list(t_x), 1 + (grp_pad - 1.0) / 2.0)
                 for t_x in x[1 : -1 : len(self.sets)]
             ]
         else:

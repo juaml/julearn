@@ -81,7 +81,7 @@ def test_joblib_args_lower_1(
         m.setattr(
             sklearn.utils.fixes,  # type: ignore[attr-defined]
             "_joblib_parallel_args",
-            lambda prefer: dict(backend="threads"),
+            lambda prefer: {"backend": "threads"},
             raising=False,
         )
         kwargs = _joblib_parallel_args(prefer="threads")

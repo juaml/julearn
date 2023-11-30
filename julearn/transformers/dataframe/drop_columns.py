@@ -33,19 +33,19 @@ class DropColumns(JuTransformer):
 
     def __init__(
         self,
-            apply_to: ColumnTypesLike,
-            row_select_col_type:  Optional[ColumnTypesLike] = None,
-            row_select_vals:  Optional[Union[str,
-                                             int, list, bool]] = None,
+        apply_to: ColumnTypesLike,
+        row_select_col_type: Optional[ColumnTypesLike] = None,
+        row_select_vals: Optional[Union[str, int, list, bool]] = None,
     ):
         super().__init__(
-            apply_to=apply_to, needed_types=None,
+            apply_to=apply_to,
+            needed_types=None,
             row_select_col_type=row_select_col_type,
-            row_select_vals=row_select_vals
+            row_select_vals=row_select_vals,
         )
 
     def _fit(
-        self, X: pd.DataFrame, y: Optional[DataLike] = None
+        self, X: pd.DataFrame, y: Optional[DataLike] = None  # noqa: N803
     ) -> "DropColumns":
         """Fit the transformer.
 
@@ -73,7 +73,7 @@ class DropColumns(JuTransformer):
         self.support_mask_ = self.support_mask_.values
         return self
 
-    def transform(self, X: pd.DataFrame) -> pd.DataFrame:
+    def transform(self, X: pd.DataFrame) -> pd.DataFrame:  # noqa: N803
         """Drop the columns.
 
         Parameters

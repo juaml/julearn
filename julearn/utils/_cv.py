@@ -5,11 +5,11 @@
 # License: AGPL
 
 
-import numpy as np
 import hashlib
 import inspect
 import json
 
+import numpy as np
 from sklearn.model_selection import (
     GroupKFold,
     KFold,
@@ -17,13 +17,14 @@ from sklearn.model_selection import (
     LeaveOneOut,
     RepeatedKFold,
     RepeatedStratifiedKFold,
-    StratifiedKFold,
     StratifiedGroupKFold,
+    StratifiedKFold,
 )
 from sklearn.model_selection._split import PredefinedSplit, _CVIterableWrapper
+
 from ..model_selection import (
-    RepeatedContinuousStratifiedGroupKFold,
     ContinuousStratifiedGroupKFold,
+    RepeatedContinuousStratifiedGroupKFold,
 )
 
 
@@ -39,7 +40,7 @@ def _recurse_to_list(a):
 
 def _compute_cvmdsum(cv):
     """Compute the sum of the CV generator."""
-    params = {k: v for k, v in vars(cv).items()}
+    params = dict(vars(cv).items())
     params["class"] = cv.__class__.__name__
 
     out = None

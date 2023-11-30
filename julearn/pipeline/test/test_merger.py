@@ -4,9 +4,10 @@
 # License: AGPL
 
 import pytest
-from sklearn.svm import SVC
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 from sklearn.pipeline import Pipeline
+from sklearn.svm import SVC
+
 from julearn.pipeline import PipelineCreator
 from julearn.pipeline.merger import merge_pipelines
 

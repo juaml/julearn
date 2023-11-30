@@ -38,22 +38,21 @@ class FilterColumns(JuTransformer):
     def __init__(
         self,
         keep: Optional[ColumnTypesLike] = None,
-        row_select_col_type:  Optional[ColumnTypesLike] = None,
-        row_select_vals:  Optional[Union[str,
-                                         int, list, bool]] = None,
+        row_select_col_type: Optional[ColumnTypesLike] = None,
+        row_select_vals: Optional[Union[str, int, list, bool]] = None,
     ):
         if keep is None:
             keep = "continuous"
         self.keep: ColumnTypes = ensure_column_types(keep)
         super().__init__(
-            apply_to="*", needed_types=keep,
+            apply_to="*",
+            needed_types=keep,
             row_select_col_type=row_select_col_type,
-            row_select_vals=row_select_vals
-
+            row_select_vals=row_select_vals,
         )
 
     def _fit(
-        self, X: pd.DataFrame, y: Optional[DataLike] = None
+        self, X: pd.DataFrame, y: Optional[DataLike] = None  # noqa: N803
     ) -> "FilterColumns":
         """Fit the transformer.
 
@@ -78,7 +77,7 @@ class FilterColumns(JuTransformer):
         self.filter_columns_.fit(X, y)
         return self
 
-    def transform(self, X: pd.DataFrame) -> pd.DataFrame:
+    def transform(self, X: pd.DataFrame) -> pd.DataFrame:  # noqa: N803
         """Transform the data.
 
         Parameters

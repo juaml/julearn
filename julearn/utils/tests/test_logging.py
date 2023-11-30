@@ -130,10 +130,10 @@ def test_log() -> None:
 def test_lib_logging() -> None:
     """Test logging versions."""
 
-    import numpy as np  # noqa
-    import pandas  # noqa
-    import scipy  # noqa
-    import sklearn  # noqa
+    import numpy as np  # noqa: F401
+    import pandas  # noqa: F401
+    import scipy  # noqa: F401
+    import sklearn  # noqa: F401
 
     with tempfile.TemporaryDirectory() as tmp:
         tmpdir = Path(tmp)

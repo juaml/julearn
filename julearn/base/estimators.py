@@ -49,7 +49,7 @@ def _wrapped_model_has(attr):
     return check
 
 
-def _ensure_dataframe(X: DataLike) -> pd.DataFrame:
+def _ensure_dataframe(X: DataLike) -> pd.DataFrame:  # noqa: N803
     """Ensure that the input is a pandas DataFrame.
 
     Parameters
@@ -101,6 +101,7 @@ class JuBaseEstimator(BaseEstimator):
         -------
         ColumnTypes
             The column types needed by the estimator.
+
         """
         needed_types = self.get_apply_to().copy()
         if self.needed_types is not None:
@@ -114,10 +115,11 @@ class JuBaseEstimator(BaseEstimator):
         -------
         ColumnTypes
             The column types the estimator applies to.
+
         """
         return ensure_column_types(self.apply_to)
 
-    def filter_columns(self, X: pd.DataFrame) -> pd.DataFrame:
+    def filter_columns(self, X: pd.DataFrame) -> pd.DataFrame:  # noqa: N803
         """Get the `apply_to` columns of a pandas DataFrame.
 
         Parameters
@@ -156,21 +158,41 @@ class JuTransformer(JuBaseEstimator, TransformerMixin):
         self,
         apply_to: ColumnTypesLike,
         needed_types: Optional[ColumnTypesLike] = None,
-        row_select_col_type:  Optional[ColumnTypesLike] = None,
-        row_select_vals:  Optional[Union[str, int, list, bool]] = None,
+        row_select_col_type: Optional[ColumnTypesLike] = None,
+        row_select_vals: Optional[Union[str, int, list, bool]] = None,
     ):
         self.apply_to = apply_to
         self.needed_types = needed_types
         self.row_select_col_type = row_select_col_type
         self.row_select_vals = row_select_vals
 
-    def fit(self, X, y=None, **fit_params):
+    def fit(self, X, y=None, **fit_params):  # noqa: N803
+        """Fit the model.
 
+        This method will fit the model using only the columns selected by
+        `apply_to`.
+
+        Parameters
+        ----------
+        X : pd.DataFrame
+            The data to fit the model on.
+        y : DataLike, optional
+            The target data (default is None).
+        **fit_params : Any
+            Additional parameters to pass to the model's fit method.
+
+        Returns
+        -------
+        JuTransformer
+            The fitted model.
+
+        """
         if self.row_select_col_type is None:
             return self._fit(X, y, **fit_params)
 
         self._col_to_select_rows = make_type_selector(
-            ColumnTypes(self.row_select_col_type)._to_pattern())(X)
+            ColumnTypes(self.row_select_col_type)._to_pattern()
+        )(X)
         if len(self._col_to_select_rows) != 1:
             raise_error(
                 "Only, one column can be selected for row_select_col_type."
@@ -182,7 +204,7 @@ class JuTransformer(JuBaseEstimator, TransformerMixin):
         return self._fit(**self._select_rows(X, y, **fit_params))
 
     def _add_backed_filtered(
-        self, X: pd.DataFrame, X_trans: pd.DataFrame
+        self, X: pd.DataFrame, X_trans: pd.DataFrame  # noqa: N803
     ) -> pd.DataFrame:
         """Add the left-out columns back to the transformed data.
 
@@ -205,7 +227,7 @@ class JuTransformer(JuBaseEstimator, TransformerMixin):
         ]
         return pd.concat((X.loc[:, non_filtered_columns], X_trans), axis=1)
 
-    def _select_rows(self, X, y, **fit_params):
+    def _select_rows(self, X, y, **fit_params):  # noqa: N803
         idx = X.query(
             f"`{self._col_to_select_rows}` in @self.row_select_vals"
         ).index.values
@@ -262,7 +284,10 @@ class WrapModel(JuBaseEstimator):
         super().__init__(apply_to=apply_to, needed_types=needed_types)
 
     def fit(
-        self, X: pd.DataFrame, y: Optional[DataLike] = None, **fit_params: Any
+        self,
+        X: pd.DataFrame,  # noqa: N803
+        y: Optional[DataLike] = None,
+        **fit_params: Any,
     ) -> "WrapModel":
         """Fit the model.
 
@@ -292,7 +317,7 @@ class WrapModel(JuBaseEstimator):
         self.model_.fit(Xt, y, **fit_params)
         return self
 
-    def predict(self, X: pd.DataFrame) -> DataLike:
+    def predict(self, X: pd.DataFrame) -> DataLike:  # noqa: N803
         """Predict using the model.
 
         Parameters
@@ -304,11 +329,12 @@ class WrapModel(JuBaseEstimator):
         -------
         DataLike
             The predictions.
+
         """
         Xt = self.filter_columns(X)
         return self.model_.predict(Xt)
 
-    def score(self, X: pd.DataFrame, y: DataLike) -> float:
+    def score(self, X: pd.DataFrame, y: DataLike) -> float:  # noqa: N803
         """Score the model.
 
         Parameters
@@ -327,7 +353,7 @@ class WrapModel(JuBaseEstimator):
         return self.model_.score(Xt, y)
 
     @available_if(_wrapped_model_has("predict_proba"))
-    def predict_proba(self, X: pd.DataFrame) -> np.ndarray:
+    def predict_proba(self, X: pd.DataFrame) -> np.ndarray:  # noqa: N803
         """Compute probabilities of possible outcomes for samples in X.
 
         Parameters
@@ -346,7 +372,7 @@ class WrapModel(JuBaseEstimator):
         return self.model_.predict_proba(Xt)  # type: ignore
 
     @available_if(_wrapped_model_has("decision_function"))
-    def decision_function(self, X: pd.DataFrame) -> np.ndarray:
+    def decision_function(self, X: pd.DataFrame) -> np.ndarray:  # noqa: N803
         """Evaluate the decision function for the samples in X.
 
         Parameters
@@ -364,7 +390,7 @@ class WrapModel(JuBaseEstimator):
         return self.model_.decision_function(Xt)  # type: ignore
 
     @available_if(_wrapped_model_has("predict_log_proba"))
-    def predict_log_proba(self, X: pd.DataFrame) -> np.ndarray:
+    def predict_log_proba(self, X: pd.DataFrame) -> np.ndarray:  # noqa: N803
         """Compute probabilities of possible outcomes for samples in X.
 
         Parameters
@@ -416,7 +442,7 @@ class WrapModel(JuBaseEstimator):
 
         Parameters
         ----------
-        **params : dict
+        **kwargs : dict
             Model parameters.
 
         Returns

@@ -34,22 +34,21 @@ class ChangeColumnTypes(JuTransformer):
 
     def __init__(
         self,
-        X_types_renamer: Dict[str, str],
+        X_types_renamer: Dict[str, str],  # noqa: N803
         apply_to: ColumnTypesLike,
-        row_select_col_type:  Optional[ColumnTypesLike] = None,
-        row_select_vals:  Optional[Union[
-            str, int, list, bool]] = None,
+        row_select_col_type: Optional[ColumnTypesLike] = None,
+        row_select_vals: Optional[Union[str, int, list, bool]] = None,
     ):
         self.X_types_renamer = X_types_renamer
         super().__init__(
-            apply_to=apply_to, needed_types=None,
+            apply_to=apply_to,
+            needed_types=None,
             row_select_col_type=row_select_col_type,
-            row_select_vals=row_select_vals
-
+            row_select_vals=row_select_vals,
         )
 
     def _fit(
-        self, X: pd.DataFrame, y: Optional[DataLike] = None
+        self, X: pd.DataFrame, y: Optional[DataLike] = None  # noqa: N803
     ) -> "ChangeColumnTypes":
         """Fit the transformer.
 
@@ -80,7 +79,7 @@ class ChangeColumnTypes(JuTransformer):
         self._renamer = to_rename
         return self
 
-    def transform(self, X: pd.DataFrame) -> pd.DataFrame:
+    def transform(self, X: pd.DataFrame) -> pd.DataFrame:  # noqa: N803
         """Change the column types.
 
         Parameters

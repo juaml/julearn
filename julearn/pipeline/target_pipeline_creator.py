@@ -76,6 +76,8 @@ class TargetPipelineCreator:
 
         Parameters
         ----------
+        name : str or None
+            The name of the step.
         step : EstimatorLike or str
             The step to get the name for.
 

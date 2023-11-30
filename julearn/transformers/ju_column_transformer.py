@@ -1,4 +1,4 @@
-"""Provide julearn speicif column transformer."""
+"""Provide julearn specific column transformer."""
 
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
@@ -17,10 +17,10 @@ from ..utils.typing import DataLike, EstimatorLike
 
 
 class JuColumnTransformer(JuTransformer):
-    """Column transformer that can be used in a Junifer pipeline.
+    """Column transformer that can be used in a julearn pipeline.
 
     This column transformer is a wrapper around the sklearn column transformer,
-    so it can be used directly with Junifer pipelines.
+    so it can be used directly with julearn pipelines.
 
     Parameters
     ----------
@@ -33,10 +33,13 @@ class JuColumnTransformer(JuTransformer):
     needed_types : ColumnTypesLike, optional
         Which feature types are needed for the transformer to work.
     row_select_col_type : str or list of str or set of str or ColumnTypes
-        The column types needed to select rows (default is None)
+        The column types needed to select rows (default is None).
     row_select_vals : str, int, bool or list of str, int, bool
         The value(s) which should be selected in the row_select_col_type
-        to select the rows used for training (default is None)
+        to select the rows used for training (default is None).
+    **params : dict
+        Extra keyword arguments for the transformer.
+
     """
 
     def __init__(
@@ -45,8 +48,8 @@ class JuColumnTransformer(JuTransformer):
         transformer: EstimatorLike,
         apply_to: ColumnTypesLike,
         needed_types: Optional[ColumnTypesLike] = None,
-        row_select_col_type:  Optional[ColumnTypesLike] = None,
-        row_select_vals:  Optional[Union[str, int, List, bool]] = None,
+        row_select_col_type: Optional[ColumnTypesLike] = None,
+        row_select_vals: Optional[Union[str, int, List, bool]] = None,
         **params: Any,
     ):
         self.name = name
@@ -58,7 +61,10 @@ class JuColumnTransformer(JuTransformer):
         self.set_params(**params)
 
     def _fit(
-        self, X: pd.DataFrame, y: Optional[DataLike] = None, **fit_params: Any
+        self,
+        X: pd.DataFrame,  # noqa: N803
+        y: Optional[DataLike] = None,
+        **fit_params: Any,
     ) -> "JuColumnTransformer":
         """Fit the transformer.
 
@@ -70,11 +76,14 @@ class JuColumnTransformer(JuTransformer):
             Input features.
         y : np.array
             Target.
+        **fit_params : dict
+            Parameters for fitting the transformer.
 
         Returns
         -------
-        self : JuColumnTransformer
+        JuColumnTransformer
             The fitted transformer.
+
         """
         verbose_feature_names_out = isinstance(
             self.transformer, ClassNamePrefixFeaturesOutMixin
@@ -89,7 +98,7 @@ class JuColumnTransformer(JuTransformer):
 
         return self
 
-    def transform(self, X: pd.DataFrame) -> DataLike:
+    def transform(self, X: pd.DataFrame) -> DataLike:  # noqa: N803
         """Apply the transformer.
 
         Parameters
@@ -99,8 +108,9 @@ class JuColumnTransformer(JuTransformer):
 
         Returns
         -------
-        out : pd.DataFrame
+        pd.DataFrame
             Transformed data.
+
         """
         check_is_fitted(self)
         return self.column_transformer_.transform(X)  # type: ignore
@@ -113,18 +123,21 @@ class JuColumnTransformer(JuTransformer):
         Parameters
         ----------
         input_features : array-like of str or None, default=None
+            Input features to use.
 
-            * If `input_features` is `None`, then `feature_names_in_` is
-              used as feature names in. If `feature_names_in_` is not defined,
-              then the following input feature names are generated:
-              `["x0", "x1", ..., "x(n_features_in_ - 1)"]`.
-            * If `input_features` is an array-like, then `input_features` must
-              match `feature_names_in_` if `feature_names_in_` is defined.
+            * If ``None``, then ``feature_names_in_`` is
+              used as input feature names if it's defined. If
+              ``feature_names_in_`` is undefined, then the following input
+              feature names are generated:
+              ``["x0", "x1", ..., "x(n_features_in_ - 1)"]``.
+            * If ``array-like``, then ``input_features`` must
+              match ``feature_names_in_`` if it's defined.
 
         Returns
         -------
-        list
+        list of str
             Names of features to be kept in the output pd.DataFrame.
+
         """
         out = None
         try:
@@ -158,8 +171,9 @@ class JuColumnTransformer(JuTransformer):
 
         Returns
         -------
-        params : dict
+        dict
             Parameter names mapped to their values.
+
         """
         return dict(
             **self.transformer.get_params(True),
@@ -181,13 +195,14 @@ class JuColumnTransformer(JuTransformer):
 
         Parameters
         ----------
-        **params : dict
+        **kwargs : dict
             Estimator parameters.
 
         Returns
         -------
-        self : estimator instance
-            Estimator instance.
+        JuColumnTransformer
+            JuColumnTransformer instance with params set.
+
         """
         transformer_params = list(self.transformer.get_params(True).keys())
 

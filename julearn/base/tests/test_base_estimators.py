@@ -75,7 +75,7 @@ def model(request):
     ],
 )
 def test_WrapModel(
-    X_iris: pd.DataFrame,
+    X_iris: pd.DataFrame,  # noqa: N803
     y_iris: pd.DataFrame,
     model: Type[ModelLike],
     apply_to: ColumnTypesLike,

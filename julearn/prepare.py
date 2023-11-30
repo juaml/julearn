@@ -21,16 +21,19 @@ from sklearn.model_selection import (
 )
 from sklearn.model_selection._split import _RepeatedSplits
 
+from .config import get_config
 from .model_selection import (
-    RepeatedContinuousStratifiedGroupKFold,
     ContinuousStratifiedGroupKFold,
+    RepeatedContinuousStratifiedGroupKFold,
 )
 from .utils import logger, raise_error, warn_with_log
-from .config import get_config
 
 
 def _validate_input_data_df(
-    X: Union[str, List[str]], y: str, df: pd.DataFrame, groups: Optional[str]
+    X: Union[str, List[str]],  # noqa: N803
+    y: str,
+    df: pd.DataFrame,
+    groups: Optional[str],
 ) -> None:
     """Validate the input data types for the pipeline.
 
@@ -70,7 +73,10 @@ def _validate_input_data_df(
 
 
 def _validate_input_data_df_ext(
-    X: Union[str, List[str]], y: str, df: pd.DataFrame, groups: Optional[str]
+    X: Union[str, List[str]],  # noqa: N803
+    y: str,
+    df: pd.DataFrame,
+    groups: Optional[str],
 ) -> None:
     """Validate the input dataframe for the pipeline.
 
@@ -193,7 +199,7 @@ def _pick_columns(
             )
         unmatched = []
         for exp in regexes:
-            if not any([re.fullmatch(exp, col) for col in columns]):
+            if not any(re.fullmatch(exp, col) for col in columns):
                 unmatched.append(exp)
         if len(unmatched) > 0:
             raise ValueError(
@@ -204,12 +210,12 @@ def _pick_columns(
 
 
 def prepare_input_data(
-    X: Union[str, List[str]],
+    X: Union[str, List[str]],  # noqa: N803
     y: str,
     df: pd.DataFrame,
     pos_labels: Union[str, int, float, List, None],
     groups: Optional[str],
-    X_types: Optional[Dict],
+    X_types: Optional[Dict],  # noqa: N803
 ) -> Tuple[pd.DataFrame, pd.Series, Union[pd.Series, None], Dict]:
     """Prepare the input data and variables for the pipeline.
 
@@ -232,6 +238,7 @@ def prepare_input_data(
     X_types : dict | None
         A dictionary containing keys with column type as a str and the
         columns of this column type as a list of str.
+
     Returns
     -------
     df_X : pandas.DataFrame
@@ -410,7 +417,9 @@ def check_consistency(
             )
 
 
-def _check_x_types(X_types: Optional[Dict], X: List[str]) -> Dict[str, List]:
+def _check_x_types(
+    X_types: Optional[Dict], X: List[str]  # noqa: N803
+) -> Dict[str, List]:
     """Check validity of X_types with respect to X.
 
     Parameters
@@ -464,12 +473,12 @@ def _check_x_types(X_types: Optional[Dict], X: List[str]) -> Dict[str, List]:
             t_columns = [
                 col
                 for col in X
-                if any([re.fullmatch(exp, col) for exp in columns])
+                if any(re.fullmatch(exp, col) for exp in columns)
             ]
             t_missing = [
                 exp
                 for exp in columns
-                if not any([re.fullmatch(exp, col) for col in X])
+                if not any(re.fullmatch(exp, col) for col in X)
             ]
             defined_columns.extend(t_columns)
             missing_columns.extend(t_missing)

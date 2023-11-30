@@ -52,7 +52,9 @@ class TargetConfoundRemover(JuTargetTransformer):
         """Get the needed column types."""
         return self.confounds
 
-    def fit(self, X: pd.DataFrame, y: pd.Series) -> "TargetConfoundRemover":
+    def fit(
+        self, X: pd.DataFrame, y: pd.Series  # noqa: N803
+    ) -> "TargetConfoundRemover":
         """Fit ConfoundRemover.
 
         Parameters
@@ -73,7 +75,9 @@ class TargetConfoundRemover(JuTargetTransformer):
         self.model_confounds_.fit(X_confounds.values, y)  # type: ignore
         return self
 
-    def transform(self, X: pd.DataFrame, y: pd.Series) -> pd.Series:
+    def transform(
+        self, X: pd.DataFrame, y: pd.Series  # noqa: N803
+    ) -> pd.Series:
         """Remove confounds from the target.
 
         Parameters

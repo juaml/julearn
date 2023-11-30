@@ -151,7 +151,7 @@ plt.tight_layout()
 ###############################################################################
 # While this plot allows us to see the mean performance values and compare
 # them, these samples are paired. In order to see if there is a systematic
-# difference, we need to check the distribution of differeces between the
+# difference, we need to check the distribution of differences between the
 # the models.
 #
 # First, we remove the column "confounds" from the index and make the difference

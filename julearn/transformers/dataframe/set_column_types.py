@@ -34,7 +34,7 @@ class SetColumnTypes(JuTransformer):
 
     def __init__(
         self,
-        X_types: Optional[Dict[str, List[str]]] = None,
+        X_types: Optional[Dict[str, List[str]]] = None,  # noqa: N803
         row_select_col_type: Optional[ColumnTypesLike] = None,
         row_select_vals: Optional[Union[str, int, list, bool]] = None,
     ):
@@ -57,7 +57,7 @@ class SetColumnTypes(JuTransformer):
         )
 
     def _fit(
-        self, X: pd.DataFrame, y: Optional[DataLike] = None
+        self, X: pd.DataFrame, y: Optional[DataLike] = None  # noqa: N803
     ) -> "SetColumnTypes":
         """Fit the transformer.
 
@@ -99,7 +99,7 @@ class SetColumnTypes(JuTransformer):
             t_columns = [
                 col
                 for col in X.columns
-                if any([re.fullmatch(exp, col) for exp in columns])
+                if any(re.fullmatch(exp, col) for exp in columns)
             ]
             column_mapper_.update(
                 {col: change_column_type(col, X_type) for col in t_columns}
@@ -109,7 +109,7 @@ class SetColumnTypes(JuTransformer):
         self.column_mapper_ = column_mapper_
         return self
 
-    def transform(self, X: pd.DataFrame) -> pd.DataFrame:
+    def transform(self, X: pd.DataFrame) -> pd.DataFrame:  # noqa: N803
         """Transform the data.
 
         Parameters

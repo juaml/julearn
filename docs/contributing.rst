@@ -165,7 +165,7 @@ Writing Examples
 The format used for text is reST. Check the `sphinx RST reference`_ for more
 details. The examples are run and displayed in HTML format using
 `sphinx gallery`_. To add an example, just create a ``.py`` file that starts
-either with ``plot_`` or ``run_``, dependending on whether the example generates
+either with ``plot_`` or ``run_``, depending on whether the example generates
 a figure or not.
 
 The first lines of the example should be a Python block comment with a title,

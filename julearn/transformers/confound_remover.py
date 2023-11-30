@@ -61,8 +61,8 @@ class ConfoundRemover(JuTransformer):
         confounds: ColumnTypesLike = "confound",
         threshold: Optional[float] = None,
         keep_confounds: bool = False,
-        row_select_col_type:  Optional[ColumnTypesLike] = None,
-        row_select_vals:  Optional[Union[str, int, List, bool]] = None,
+        row_select_col_type: Optional[ColumnTypesLike] = None,
+        row_select_vals: Optional[Union[str, int, List, bool]] = None,
     ):
         if model_confound is None:
             model_confound = LinearRegression()  # type: ignore
@@ -74,11 +74,11 @@ class ConfoundRemover(JuTransformer):
             apply_to=apply_to,
             needed_types=confounds,
             row_select_col_type=row_select_col_type,
-            row_select_vals=row_select_vals
+            row_select_vals=row_select_vals,
         )
 
     def _fit(
-        self, X: pd.DataFrame, y: Optional[DataLike] = None
+        self, X: pd.DataFrame, y: Optional[DataLike] = None  # noqa: N803
     ) -> "ConfoundRemover":
         """Fit ConfoundRemover.
 
@@ -104,7 +104,7 @@ class ConfoundRemover(JuTransformer):
             self.support_mask_[output_X.columns] = True
         self.support_mask_ = self.support_mask_.values
 
-        def fit_confound_models(X: Scalar) -> ModelLike:
+        def fit_confound_models(X: Scalar) -> ModelLike:  # noqa: N803
             _model = clone(self.model_confound)
             _model.fit(ser_confound.values, X)  # type: ignore
             return _model  # type: ignore
@@ -114,7 +114,7 @@ class ConfoundRemover(JuTransformer):
         )
         return self
 
-    def transform(self, X: pd.DataFrame) -> pd.DataFrame:
+    def transform(self, X: pd.DataFrame) -> pd.DataFrame:  # noqa: N803
         """Remove confounds from data.
 
         Parameters
@@ -197,7 +197,7 @@ class ConfoundRemover(JuTransformer):
         return out  # type: ignore
 
     def _split_into_X_confound(
-        self, X: pd.DataFrame
+        self, X: pd.DataFrame  # noqa: N803
     ) -> Tuple[pd.DataFrame, pd.DataFrame]:
         """Split the original X into the features (X) and confounds.
 

@@ -1,11 +1,16 @@
-from typing import List, Union, Optional
+"""Provide base classes and functions to inspect folds of cross-validation."""
 
+# Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
+#          Sami Hamdan <s.hamdan@fz-juelich.de>
+# License: AGPL
+
+from typing import List, Optional, Union
+
+import pandas as pd
 from sklearn.model_selection import BaseCrossValidator, check_cv
 from sklearn.utils.metaestimators import available_if
 
-import pandas as pd
-
-from ..utils import raise_error, _compute_cvmdsum, is_nonoverlapping_cv
+from ..utils import _compute_cvmdsum, is_nonoverlapping_cv, raise_error
 from ._pipeline import PipelineInspector
 
 
@@ -55,7 +60,7 @@ class FoldsInspector:
         self,
         scores: pd.DataFrame,
         cv: BaseCrossValidator,
-        X: Union[str, List[str]],
+        X: Union[str, List[str]],  # noqa: N803
         y: str,
         func: str = "predict",
         groups: Optional[str] = None,

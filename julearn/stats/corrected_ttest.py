@@ -1,3 +1,5 @@
+"""Provide functions for corrected t-test."""
+
 # Author: Authors of scikit-learn
 #         Martina G. Vilas <https://github.com/martinagvilas>
 #         Federico Raimondo <f.raimondo@fz-juelich.de>
@@ -11,8 +13,8 @@ import pandas as pd
 import scipy.special as special
 from statsmodels.stats.multitest import multipletests
 
-from ..utils.logging import raise_error, warn_with_log
 from ..utils.checks import check_scores_df
+from ..utils.logging import raise_error, warn_with_log
 
 
 def _corrected_std(
@@ -182,7 +184,9 @@ def corrected_ttest(
         to_skip = ["cv_mdsum", "n_train", "n_test", "model"]
 
         to_keep = [
-            x for x in i_scores.columns if x not in to_skip
+            x
+            for x in i_scores.columns
+            if x not in to_skip
             and (x.startswith("test_") or x.startswith("train_"))
         ]
         df1 = i_scores[to_keep]

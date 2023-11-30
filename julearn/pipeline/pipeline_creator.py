@@ -14,14 +14,13 @@ from sklearn.pipeline import Pipeline
 from ..base import ColumnTypes, ColumnTypesLike, JuTransformer, WrapModel
 from ..model_selection.available_searchers import get_searcher, list_searchers
 from ..models import get_model, list_models
+from ..prepare import prepare_search_params
 from ..transformers import (
     JuColumnTransformer,
     SetColumnTypes,
     get_transformer,
     list_transformers,
 )
-from ..prepare import prepare_search_params
-
 from ..transformers.target import JuTransformedTargetModel
 from ..utils import logger, raise_error, warn_with_log
 from ..utils.typing import (
@@ -35,7 +34,9 @@ from .target_pipeline_creator import TargetPipelineCreator
 
 
 def _params_to_pipeline(
-    param: Any, X_types: Dict[str, List], search_params: Optional[Dict]
+    param: Any,
+    X_types: Dict[str, List],  # noqa: N803
+    search_params: Optional[Dict],
 ):
     """Recursively convert params to pipelines.
 
@@ -230,8 +231,8 @@ class PipelineCreator:
         logger.info(f"Adding step {name} that applies to {apply_to}")
 
         # Find which parameters should be set and which should be tuned.
-        params_to_set = dict()
-        params_to_tune = dict()
+        params_to_set = {}
+        params_to_tune = {}
         for param, vals in params.items():
             # If we have more than 1 value, we will tune it.
             # If not, it will be set in the model.
@@ -360,7 +361,7 @@ class PipelineCreator:
             To what should the transformers be applied to if not specified in
             the `add` method (default is continuous).
 
-            Returns
+        Returns
         -------
         PipelineCreator
             The PipelineCreator with the steps added
@@ -437,7 +438,7 @@ class PipelineCreator:
 
     def to_pipeline(
         self,
-        X_types: Optional[Dict[str, List]] = None,
+        X_types: Optional[Dict[str, List]] = None,  # noqa: N803
         search_params: Optional[Dict[str, Any]] = None,
     ) -> Pipeline:
         """Create a pipeline from the PipelineCreator.
@@ -665,7 +666,7 @@ class PipelineCreator:
         Raises
         ------
         ValueError
-            If the step is not a valid step, if the tranformer is added after
+            If the step is not a valid step, if the transformer is added after
             adding a model, or if a transformer is added after a target
             transformer.
 
@@ -687,7 +688,7 @@ class PipelineCreator:
             raise_error(f"Cannot add a {step}. I don't know what it is.")
 
     def _check_X_types(
-        self, X_types: Optional[Dict] = None
+        self, X_types: Optional[Dict] = None  # noqa: N803
     ) -> Dict[str, List[str]]:
         """Check the X_types against the pipeline creator settings.
 
@@ -744,9 +745,7 @@ class PipelineCreator:
         # All available types are the ones in the X_types + wildcard types +
         # target + the ones that can be created by a transformer.
         # So far, we only know of transformers that output continuous
-        available_types = set(
-            [*all_X_types, "*", ".*", "target", "continuous"]
-        )
+        available_types = {*all_X_types, "*", ".*", "target", "continuous"}
         for needed_type in needed_types:
             if needed_type not in available_types:
                 warn_with_log(
@@ -755,7 +754,7 @@ class PipelineCreator:
                     "this type."
                 )
 
-        self.wrap = needed_types != set(["continuous"])
+        self.wrap = needed_types != {"continuous"}
         return X_types
 
     @staticmethod
@@ -790,6 +789,13 @@ class PipelineCreator:
             The step to wrap.
         column_types : ColumnTypesLike
             The types of the columns the step is applied to.
+        row_select_col_type : str or list of str or set of str or ColumnTypes
+            The column types needed to select rows (default None).
+        row_select_vals : str, int, bool or list of str, int, bool
+            The value(s) which should be selected in the
+            ``row_select_col_type`` to select the rows used for training
+            (default None).
+
         """
         return JuColumnTransformer(
             name,

@@ -102,9 +102,9 @@ def y_iris() -> pd.Series:
 @fixture(
     params=[
         None,
-        dict(),
-        dict(duck=["petal_length"]),
-        dict(duck=["petal_length"], confound=["petal_width"]),
+        {},
+        {"duck": ["petal_length"]},
+        {"duck": ["petal_length"], "confound": ["petal_width"]},
     ],
     scope="function",
 )
@@ -162,10 +162,10 @@ def all_problem_types(request: FixtureRequest) -> str:
 @fixture(
     params=[
         None,
-        dict(),
-        dict(kind="grid"),
-        dict(kind="random", n_iter=2),
-        dict(kind="random", n_iter=2, cv=3),
+        {},
+        {"kind": "grid"},
+        {"kind": "random", "n_iter": 2},
+        {"kind": "random", "n_iter": 2, "cv": 3},
     ],
     scope="function",
 )

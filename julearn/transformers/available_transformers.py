@@ -70,8 +70,9 @@ def list_transformers() -> List[str]:
 
     Returns
     -------
-    list o str
+    list of str
         A list will all the available transformer names.
+
     """
     return list(_available_transformers.keys())
 
@@ -82,12 +83,15 @@ def get_transformer(name: str, **params: Any) -> TransformerLike:
     Parameters
     ----------
     name : str
-        The transformer name
+        The transformer name.
+    **params : dict
+        Parameters to get transformer.
 
     Returns
     -------
-    out : scikit-learn compatible transformer
+    scikit-learn compatible transformer
         The transformer object.
+
     """
     out = None
     if name not in _available_transformers:

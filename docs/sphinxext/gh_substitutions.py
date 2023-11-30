@@ -1,7 +1,7 @@
-# -*- coding: utf-8 -*-
 
 from docutils.nodes import reference
 from docutils.parsers.rst.roles import set_classes
+
 
 # Taken from MNE-Python
 # adapted from

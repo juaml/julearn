@@ -84,7 +84,9 @@ class DynamicSelection(BaseEstimator):
         self.random_state_algorithm = random_state_algorithm
         self._ds_params = kwargs
 
-    def fit(self, X: DataLike, y: DataLike) -> "DynamicSelection":
+    def fit(
+        self, X: DataLike, y: DataLike  # noqa: N803
+    ) -> "DynamicSelection":
         """Fit the model.
 
         Parameters
@@ -113,7 +115,7 @@ class DynamicSelection(BaseEstimator):
                     f"You tried to use {n_splits} splits."
                 )
 
-            train, test = list(cv_split.split(X, y))[0]  # type: ignore
+            train, test = next(iter(cv_split.split(X, y)))  # type: ignore
             if isinstance(X, pd.DataFrame):
                 X_train = X.iloc[train, :]
                 X_dsel = X.iloc[test, :]
@@ -134,7 +136,7 @@ class DynamicSelection(BaseEstimator):
 
         return self
 
-    def predict(self, X: DataLike) -> DataLike:
+    def predict(self, X: DataLike) -> DataLike:  # noqa: N803
         """Predict using the model.
 
         Parameters
@@ -149,7 +151,7 @@ class DynamicSelection(BaseEstimator):
         """
         return self._dsmodel.predict(X)
 
-    def predict_proba(self, X: DataLike) -> np.ndarray:
+    def predict_proba(self, X: DataLike) -> np.ndarray:  # noqa: N803
         """Compute probabilities of possible outcomes for samples in X.
 
         Parameters
@@ -170,7 +172,7 @@ class DynamicSelection(BaseEstimator):
 
     def score(
         self,
-        X: DataLike,
+        X: DataLike,  # noqa: N803
         y: DataLike,
         sample_weight: Optional[DataLike] = None,
     ) -> float:
@@ -183,12 +185,13 @@ class DynamicSelection(BaseEstimator):
         y : DataLike
             The true target values.
         sample_weight : DataLike, optional
-            Sample weights to use when computing the score (default is None).
+            Sample weights to use when computing the score (default None).
 
         Returns
         -------
         float
             The score.
+
         """
         return self._dsmodel.score(X, y, sample_weight)
 

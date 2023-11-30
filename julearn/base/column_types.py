@@ -48,7 +48,7 @@ def get_column_type(column):
     return column.split("__:type:__")[1]
 
 
-def get_renamer(X_df):
+def get_renamer(X_df):  # noqa: N803
     """Get the dictionary that will rename the columns to add the type.
 
     Parameters
@@ -68,26 +68,28 @@ def get_renamer(X_df):
     }
 
 
-class make_type_selector(object):
+class make_type_selector:
+    """Make a type selector.
+
+    This type selector is to be used with
+    :class:`sklearn.compose.ColumnTransformer`
+
+    Parameters
+    ----------
+    pattern : str
+        The pattern to select the columns.
+
+    Returns
+    -------
+    function
+        The type selector.
+
+    """
+
     def __init__(self, pattern):
-        """Make a type selector.
-
-        This type selector is to be used with
-        :class:`sklearn.compose.ColumnTransformer`
-
-        Parameters
-        ----------
-        pattern : str
-            The pattern to select the columns.
-
-        Returns
-        -------
-        function
-            The type selector.
-        """
         self.pattern = pattern
 
-    def __call__(self, X_df):
+    def __call__(self, X_df):  # noqa: N803
         """Select the columns based on the pattern.
 
         Parameters
@@ -137,7 +139,7 @@ class ColumnTypes:
         if isinstance(column_types, ColumnTypes):
             _types = column_types._column_types.copy()
         elif isinstance(column_types, str):
-            _types = set([column_types])
+            _types = {column_types}
         elif not isinstance(column_types, Set):
             _types = set(column_types)
         elif isinstance(column_types, Set):

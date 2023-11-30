@@ -22,7 +22,9 @@ class JuTargetTransformer:
     are not dropped after the transformation.
     """
 
-    def fit_transform(self, X: pd.DataFrame, y: DataLike) -> DataLike:
+    def fit_transform(
+        self, X: pd.DataFrame, y: DataLike  # noqa: N803
+    ) -> DataLike:
         """Fit and transform the target.
 
         Parameters
@@ -34,13 +36,16 @@ class JuTargetTransformer:
 
         Returns
         -------
-        y : DataLike
+        DataLike
             The transformed target.
+
         """
         return self.fit(X, y).transform(X, y)
 
-    def fit(self, X: pd.DataFrame, y: DataLike) -> "JuTargetTransformer":
-        """Fit and transform the target.
+    def fit(
+        self, X: pd.DataFrame, y: DataLike  # noqa: N803
+    ) -> "JuTargetTransformer":
+        """Fit the target.
 
         Parameters
         ----------
@@ -51,12 +56,15 @@ class JuTargetTransformer:
 
         Returns
         -------
-        self : JuTargetTransformer
+        JuTargetTransformer
             The fitted transformer.
-        """
-        raise NotImplementedError("fit method not implemented")
 
-    def transform(self, X: pd.DataFrame, y: DataLike) -> DataLike:
+        """
+        raise NotImplementedError("fit() not implemented")
+
+    def transform(
+        self, X: pd.DataFrame, y: DataLike  # noqa: N803
+    ) -> DataLike:
         """Transform the target.
 
         Parameters
@@ -68,7 +76,8 @@ class JuTargetTransformer:
 
         Returns
         -------
-        y : DataLike
+        DataLike
             The transformed target.
+
         """
-        raise NotImplementedError("fitransform method not implemented")
+        raise NotImplementedError("transform() not implemented")

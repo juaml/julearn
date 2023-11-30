@@ -4,9 +4,11 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
+from pathlib import Path
+
+import joblib
 import numpy as np
 import pandas as pd
-import joblib
 import pytest
 from sklearn.base import clone
 from sklearn.datasets import make_regression
@@ -36,8 +38,8 @@ from sklearn.svm import SVC
 from julearn import run_cross_validation
 from julearn.api import _compute_cvmdsum
 from julearn.model_selection import (
-    RepeatedContinuousStratifiedGroupKFold,
     ContinuousStratifiedGroupKFold,
+    RepeatedContinuousStratifiedGroupKFold,
 )
 from julearn.pipeline import PipelineCreator
 from julearn.utils.testing import compare_models, do_scoring_test
@@ -186,7 +188,7 @@ def test_run_cv_simple_binary_groups(df_iris: pd.DataFrame) -> None:
 def test_run_cv_simple_binary_errors(
     df_binary: pd.DataFrame, df_iris: pd.DataFrame
 ) -> None:
-    """Test a simple classification problem errors
+    """Test a simple classification problem errors.
 
     Parameters
     ----------
@@ -431,10 +433,8 @@ def test_tune_hyperparam_gridsearch(df_iris: pd.DataFrame) -> None:
     assert len(actual.columns) == len(expected) + 5
     assert len(actual["test_accuracy"]) == len(expected["test_accuracy"])
     assert all(
-        [
-            a == b
-            for a, b in zip(actual["test_accuracy"], expected["test_accuracy"])
-        ]
+        a == b
+        for a, b in zip(actual["test_accuracy"], expected["test_accuracy"])
     )
 
     # Compare the models
@@ -511,10 +511,8 @@ def test_tune_hyperparam_gridsearch_groups(df_iris: pd.DataFrame) -> None:
     assert len(actual.columns) == len(expected) + 5
     assert len(actual["test_accuracy"]) == len(expected["test_accuracy"])
     assert all(
-        [
-            a == b
-            for a, b in zip(actual["test_accuracy"], expected["test_accuracy"])
-        ]
+        a == b
+        for a, b in zip(actual["test_accuracy"], expected["test_accuracy"])
     )
 
     # Compare the models
@@ -587,10 +585,8 @@ def test_tune_hyperparam_randomsearch(df_iris: pd.DataFrame) -> None:
     assert len(actual.columns) == len(expected) + 5
     assert len(actual["test_accuracy"]) == len(expected["test_accuracy"])
     assert all(
-        [
-            a == b
-            for a, b in zip(actual["test_accuracy"], expected["test_accuracy"])
-        ]
+        a == b
+        for a, b in zip(actual["test_accuracy"], expected["test_accuracy"])
     )
 
     # Compare the models
@@ -694,20 +690,12 @@ def test_tune_hyperparams_multiple_grid(df_iris: pd.DataFrame) -> None:
     assert len(actual1["test_accuracy"]) == len(expected["test_accuracy"])
     assert len(actual2["test_accuracy"]) == len(expected["test_accuracy"])
     assert all(
-        [
-            a == b
-            for a, b in zip(
-                actual1["test_accuracy"], expected["test_accuracy"]
-            )
-        ]
+        a == b
+        for a, b in zip(actual1["test_accuracy"], expected["test_accuracy"])
     )
     assert all(
-        [
-            a == b
-            for a, b in zip(
-                actual2["test_accuracy"], expected["test_accuracy"]
-            )
-        ]
+        a == b
+        for a, b in zip(actual2["test_accuracy"], expected["test_accuracy"])
     )
     # Compare the models
     clf1 = actual_estimator1.best_estimator_.steps[-1][1]
@@ -832,8 +820,8 @@ def test_return_train_scores(df_iris: pd.DataFrame) -> None:
     train_scores = [f"train_{s}" for s in scoring]
     test_scores = [f"test_{s}" for s in scoring]
 
-    assert all([s not in scores.columns for s in train_scores])
-    assert all([s in scores.columns for s in test_scores])
+    assert all(s not in scores.columns for s in train_scores)
+    assert all(s in scores.columns for s in test_scores)
 
     with pytest.warns(RuntimeWarning, match="treated as continuous"):
         scores = run_cross_validation(
@@ -850,8 +838,8 @@ def test_return_train_scores(df_iris: pd.DataFrame) -> None:
     train_scores = [f"train_{s}" for s in scoring]
     test_scores = [f"test_{s}" for s in scoring]
 
-    assert all([s in scores.columns for s in train_scores])
-    assert all([s in scores.columns for s in test_scores])
+    assert all(s in scores.columns for s in train_scores)
+    assert all(s in scores.columns for s in test_scores)
 
 
 @pytest.mark.parametrize(
@@ -1122,7 +1110,7 @@ def test__compute_cvmdsum(cv1, cv2, expected):
 
 
 def test_api_stacking_models() -> None:
-    """ "Test API of stacking models."""
+    """Test API of stacking models."""
     # prepare data
     X, y = make_regression(n_features=6, n_samples=50)
 
@@ -1171,7 +1159,15 @@ def test_api_stacking_models() -> None:
     assert isinstance(final.steps[1][1].model.estimators[0][1], GridSearchCV)
 
 
-def test_inspection_error(df_iris):
+def test_inspection_error(df_iris: pd.DataFrame) -> None:
+    """Test error for inspector.
+
+    Parameters
+    ----------
+    df_iris : pd.DataFrame
+        The iris dataset.
+
+    """
     X = ["sepal_length", "sepal_width", "petal_length"]
     y = "species"
     with pytest.raises(ValueError, match="return_inspector=True requires"):
@@ -1196,7 +1192,19 @@ def test_inspection_error(df_iris):
     assert len(res) == 3
 
 
-def test_final_estimator_picklable(tmp_path, df_iris) -> None:
+def test_final_estimator_picklable(
+    tmp_path: Path, df_iris: pd.DataFrame
+) -> None:
+    """Test if final estimator is picklable.
+
+    Parameters
+    ----------
+    tmp_path : pathlib.Path
+        The path to the test directory.
+    df_iris : pd.DataFrame
+        The iris dataset.
+
+    """
     X = ["sepal_length", "sepal_width", "petal_length"]
     y = "species"
     pickled_file = tmp_path / "final_estimator.joblib"
@@ -1213,7 +1221,17 @@ def test_final_estimator_picklable(tmp_path, df_iris) -> None:
     joblib.load(pickled_file)
 
 
-def test_inspector_picklable(tmp_path, df_iris) -> None:
+def test_inspector_picklable(tmp_path: Path, df_iris: pd.DataFrame) -> None:
+    """Test if inspector is picklable.
+
+    Parameters
+    ----------
+    tmp_path : pathlib.Path
+        The path to the test directory.
+    df_iris : pd.DataFrame
+        The iris dataset.
+
+    """
     X = ["sepal_length", "sepal_width", "petal_length"]
     y = "species"
     pickled_file = tmp_path / "inspector.joblib"

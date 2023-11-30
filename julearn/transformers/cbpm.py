@@ -1,6 +1,8 @@
+"""Provide scikit-learn-compatible transformer for CBPM."""
+
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
-#          Kaustubh, Patil <k.patil@fz-juelich.de>
+#          Kaustubh Patil <k.patil@fz-juelich.de>
 # License: AGPL
 
 from typing import Callable, Optional
@@ -9,27 +11,24 @@ import numpy as np
 from joblib import Parallel, delayed
 from scipy.stats import pearsonr
 from sklearn.base import BaseEstimator, TransformerMixin
-
 from sklearn.utils.validation import check_is_fitted
-from ..utils.versions import _joblib_parallel_args
+
 from ..utils import warn_with_log
+from ..utils.versions import _joblib_parallel_args
 
 
 class CBPM(BaseEstimator, TransformerMixin):
-    '''Transformer that aggregates together all features significantly
-    correlated to the target.
+    """Transformer for connectome-based predictive modeling.
 
-    Significant negative and positive correlations are aggregateed separately.
-    Non-significant ones are dropped.
+    It aggregates all features significantly correlated to the target.
+    The significant negative and positive correlations are aggregateed
+    separately and non-significant ones are dropped.
 
-    User can choose to use negative, positive or both correlations.
-
-    In case that there are no significant correlations the mean of the
+    The user can choose to use negative, positive or both correlations.
+    In case that there are no significant correlations and the mean of the
     target will be returned as the only feature.
 
-    This transformer implements the procedure described in :
-    Shen, X., Finn, E., Scheinost, D. et al. 2016
-    https://doi.org/10.1038/nprot.2016.178
+    This transformer implements the procedure described in [1]_.
 
     Parameters
     ----------
@@ -85,7 +84,16 @@ class CBPM(BaseEstimator, TransformerMixin):
     used_significant_mask_ : np.array of bools
         Array of bools showing which of the original features will be used
         by this transformer.
-   '''
+
+    References
+    ----------
+    .. [1] Shen, X., Finn, E., Scheinost, D. et al.
+           Using connectome-based predictive modeling to predict individual
+           behavior from brain connectivity.
+           Nat Protoc 12, 506-518 (2017).
+           https://doi.org/10.1038/nprot.2016.178
+
+    """
 
     def __init__(
         self,
@@ -108,7 +116,7 @@ class CBPM(BaseEstimator, TransformerMixin):
         self.n_jobs = n_jobs
         self.verbose = verbose
 
-    def fit(self, X: np.ndarray, y: np.ndarray) -> "CBPM":
+    def fit(self, X: np.ndarray, y: np.ndarray) -> "CBPM":  # noqa: N803
         """Fit the transformer.
 
         Compute the correlations of each feature to the target, threhsold and
@@ -148,7 +156,7 @@ class CBPM(BaseEstimator, TransformerMixin):
 
         return self
 
-    def transform(self, X: np.ndarray) -> np.ndarray:
+    def transform(self, X: np.ndarray) -> np.ndarray:  # noqa: N803
         """Transform the data.
 
         Replace each of the features that had a significant correlation on
@@ -172,25 +180,20 @@ class CBPM(BaseEstimator, TransformerMixin):
             out = np.ones(X.shape[0]) * self.y_mean_
             return out
 
-        elif self.used_corr_sign_ == 'posneg':
-            X_meaned_pos = self.aggregate(
-                X, mask=self.pos_significant_mask_
-            )
+        elif self.used_corr_sign_ == "posneg":
+            X_meaned_pos = self.aggregate(X, mask=self.pos_significant_mask_)
 
-            X_meaned_neg = self.aggregate(
-                X, mask=self.neg_significant_mask_
-            )
+            X_meaned_neg = self.aggregate(X, mask=self.neg_significant_mask_)
 
             X_meaned = np.concatenate(
-                [
-                    X_meaned_pos.reshape(-1, 1),
-                    X_meaned_neg.reshape(-1, 1)],
-                axis=1)
+                [X_meaned_pos.reshape(-1, 1), X_meaned_neg.reshape(-1, 1)],
+                axis=1,
+            )
 
-        elif self.used_corr_sign_ == 'pos':
+        elif self.used_corr_sign_ == "pos":
             X_meaned = self.aggregate(X, self.pos_significant_mask_)
 
-        elif self.used_corr_sign_ == 'neg':
+        elif self.used_corr_sign_ == "neg":
             X_meaned = self.aggregate(X, self.neg_significant_mask_)
 
         return X_meaned
@@ -269,13 +272,18 @@ class CBPM(BaseEstimator, TransformerMixin):
                 self.used_corr_sign_ = "posneg"
                 self.used_significant_mask_ = self.significant_mask_
 
-    def aggregate(self, X, mask):
+    def aggregate(self, X, mask):  # noqa: N803
+        """Aggregate."""
         return self.agg_method(X[:, mask], axis=1)
 
     def get_feature_names_out(self, input_features=None):
+        """Get output feature names."""
         check_is_fitted(self)
-        cols = (["positive"] if self.used_corr_sign_ == "pos" else
-                ["negative"] if self.used_corr_sign_ == "neg" else
-                ["positive", "negative"]
-                )
+        cols = (
+            ["positive"]
+            if self.used_corr_sign_ == "pos"
+            else ["negative"]
+            if self.used_corr_sign_ == "neg"
+            else ["positive", "negative"]
+        )
         return np.array(cols, dtype=object)

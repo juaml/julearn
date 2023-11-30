@@ -43,7 +43,7 @@ from julearn.base import ColumnTypes, ColumnTypesLike, make_type_selector
     ],
 )
 def test_make_column_selector(
-    X_iris: pd.DataFrame,
+    X_iris: pd.DataFrame,  # noqa: N803
     pattern: str,
     column_types: List[str],
     selection: slice,
@@ -158,7 +158,7 @@ def test_ColumnTypes_patterns(
     ],
 )
 def test_ColumnTypes_to_column_selector(
-    X_iris: pd.DataFrame,
+    X_iris: pd.DataFrame,  # noqa: N803
     selected_column_types: ColumnTypesLike,
     data_column_types: List[str],
     selection: slice,

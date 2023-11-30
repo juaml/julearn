@@ -91,7 +91,10 @@ class ContinuousStratifiedKFold(StratifiedKFold):
         )
 
     def split(
-        self, X: np.ndarray, y: np.ndarray, groups: Optional[np.ndarray] = None
+        self,
+        X: np.ndarray,  # noqa: N803
+        y: np.ndarray,
+        groups: Optional[np.ndarray] = None,
     ):
         """Generate indices to split data into training and test set.
 
@@ -231,7 +234,10 @@ class ContinuousStratifiedGroupKFold(StratifiedGroupKFold):
         )
 
     def split(
-        self, X: np.ndarray, y: np.ndarray, groups: Optional[np.ndarray] = None
+        self,
+        X: np.ndarray,  # noqa: N803
+        y: np.ndarray,
+        groups: Optional[np.ndarray] = None,
     ):
         """Generate indices to split data into training and test set.
 

@@ -55,7 +55,10 @@ class StratifiedBootstrap(BaseShuffleSplit):
         )
 
     def _iter_indices(
-        self, X: np.ndarray, y: np.ndarray, groups: Optional[np.ndarray] = None
+        self,
+        X: np.ndarray,  # noqa: N803
+        y: np.ndarray,
+        groups: Optional[np.ndarray] = None,
     ):
         """Generate (train, test) indices.
 
@@ -99,7 +102,10 @@ class StratifiedBootstrap(BaseShuffleSplit):
             yield train, test
 
     def split(
-        self, X: np.ndarray, y: np.ndarray, groups: Optional[np.ndarray] = None
+        self,
+        X: np.ndarray,  # noqa: N803
+        y: np.ndarray,
+        groups: Optional[np.ndarray] = None,
     ):
         """Generate indices to split data into training and test set.
 
