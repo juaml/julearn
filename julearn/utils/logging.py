@@ -6,12 +6,11 @@
 
 import logging
 import sys
+import warnings
 from distutils.version import LooseVersion
 from pathlib import Path
 from subprocess import PIPE, Popen, TimeoutExpired
 from typing import Dict, NoReturn, Optional, Type, Union
-import warnings
-
 
 logger = logging.getLogger("julearn")
 
