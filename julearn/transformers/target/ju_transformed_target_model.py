@@ -213,6 +213,17 @@ class JuTransformedTargetModel(JuBaseEstimator):
         """
         return self.transformer.transform(X, y)
 
+    def can_inverse_transform(self) -> bool:
+        """Check if the target can be inverse transformed.
+
+        Returns
+        -------
+        bool
+            True if the target can be inverse transformed, False otherwise.
+
+        """
+        return self.transformer.can_inverse_transform()
+
     @property
     def classes_(self) -> np.ndarray:
         """Get the classes of the model."""
