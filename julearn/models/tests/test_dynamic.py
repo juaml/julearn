@@ -48,6 +48,7 @@ _algorithm_objects = {
 # Ignore deprecation warnings from deslib
 pytestmark = pytest.mark.filterwarnings("ignore::DeprecationWarning")
 
+
 @fixture(
     params=[
         "METADES",
