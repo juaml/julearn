@@ -5,6 +5,7 @@
 # License: AGPL
 
 import tempfile
+import warnings
 from pathlib import Path
 
 import pytest
@@ -146,3 +147,23 @@ def test_lib_logging() -> None:
             assert any("sklearn" in line for line in lines)
             assert any("pandas" in line for line in lines)
             assert any("julearn" in line for line in lines)
+
+
+@pytest.mark.filterwarnings("ignore::DeprecationWarning")
+def test_log_file_warning_filter() -> None:
+    """Test filtering warning when logging to a file."""
+    with tempfile.TemporaryDirectory() as tmp:
+        tmpdir = Path(tmp)
+        configure_logging(fname=tmpdir / "test_filter.log")
+        warn_with_log("Warn message 1")
+        warnings.filterwarnings("ignore", category=ImportWarning)
+        warn_with_log("Warn message 2", RuntimeWarning)
+        warn_with_log("Warn message 3", ImportWarning)
+        warnings.resetwarnings()
+        warn_with_log("Warn message 4", ImportWarning)
+        with open(tmpdir / "test_filter.log") as f:
+            lines = f.readlines()
+            assert "Warn message 1" in lines[0]
+            assert "Warn message 2" in lines[1]
+            assert "Warn message 3" not in lines[1]
+            assert "Warn message 4" in lines[2]

@@ -7,7 +7,6 @@ from .continuous_stratified_kfold import (
     RepeatedContinuousStratifiedKFold,
     ContinuousStratifiedGroupKFold,
     RepeatedContinuousStratifiedGroupKFold,
-
 )
 from .stratified_bootstrap import StratifiedBootstrap
 from .available_searchers import (

@@ -6,11 +6,11 @@
 
 import logging
 import sys
+import warnings
 from distutils.version import LooseVersion
 from pathlib import Path
 from subprocess import PIPE, Popen, TimeoutExpired
 from typing import Dict, NoReturn, Optional, Type, Union
-from warnings import warn
 
 
 logger = logging.getLogger("julearn")
@@ -155,7 +155,7 @@ def configure_logging(
         if not isinstance(fname, Path):
             fname = Path(fname)
         if fname.exists() and overwrite is None:
-            warn(
+            warnings.warn(
                 f"File ({fname.absolute()!s}) exists. "
                 "Messages will be appended. Use overwrite=True to "
                 "overwrite or overwrite=False to avoid this message.",
@@ -235,8 +235,15 @@ def warn_with_log(
         The warning subclass (default RuntimeWarning).
 
     """
-    logger.warning(msg)
-    warn(msg, category=category, stacklevel=2)
+
+    # This is somehow nasty. If there is a filter active, then the warning
+    # will still be logged. So we need to check if any of the filters
+    # will ignore this warning. If this is the case, then do not log it.
+    this_filters = [x for x in warnings.filters if issubclass(x[2], category)]
+    skip_log = len(this_filters) > 0 and this_filters[0][0] == "ignore"
+    if not skip_log:
+        logger.warning(msg)
+    warnings.warn(msg, category=category, stacklevel=2)
 
 
 class WrapStdOut(logging.StreamHandler):

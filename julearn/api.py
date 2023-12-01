@@ -252,7 +252,7 @@ def run_cross_validation(  # noqa: C901
         for m in model:
             expanded_models.extend(m.split())
 
-        wrap_score = expanded_models[-1]._added_target_transformer
+        has_target_transformer = expanded_models[-1]._added_target_transformer
         all_pipelines = [
             model.to_pipeline(X_types=X_types, search_params=search_params)
             for model in expanded_models
@@ -265,6 +265,8 @@ def run_cross_validation(  # noqa: C901
         else:
             pipeline = all_pipelines[0]
 
+        if has_target_transformer and not pipeline[-1].can_inverse_transform():
+            wrap_score = True
         problem_type = model[0].problem_type
 
     elif not isinstance(model, (str, BaseEstimator)):
@@ -322,10 +324,13 @@ def run_cross_validation(  # noqa: C901
             raise_error(
                 "The following model_params are incorrect: " f"{unused_params}"
             )
-        wrap_score = pipeline_creator._added_target_transformer
+        has_target_transformer = pipeline_creator._added_target_transformer
         pipeline = pipeline_creator.to_pipeline(
             X_types=X_types, search_params=search_params
         )
+
+        if has_target_transformer and not pipeline[-1].can_inverse_transform():
+            wrap_score = True
 
     # Log some information
     logger.info("= Data Information =")

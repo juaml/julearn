@@ -27,9 +27,7 @@ def set_config(key: str, value: Any) -> None:
         The value to set.
     """
     if key not in _global_config:
-        raise_error(
-            f"Global config {key} does not exist"
-        )
+        raise_error(f"Global config {key} does not exist")
     logger.info(f"Setting global config {key} to {value}")
     _global_config[key] = value
 
