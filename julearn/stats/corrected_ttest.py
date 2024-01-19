@@ -195,7 +195,11 @@ def corrected_ttest(
         df2 = k_scores[to_keep]
         differences = df1 - df2
         t_stat, p_val = _compute_corrected_ttest(
-            differences, n_train=n_train, n_test=n_test, df=df
+            differences,
+            n_train=n_train,
+            n_test=n_test,
+            df=df,
+            alternative=alternative,
         )
         stat_df = t_stat.to_frame("t-stat")
         stat_df["p-val"] = p_val
