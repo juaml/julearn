@@ -256,6 +256,8 @@ class PipelineCreator:
             step = self._get_estimator_from(
                 step, self.problem_type, **params_to_set
             )
+        elif len(params_to_set) > 0:
+            step.set_params(**params_to_set)
 
         # JuEstimators accept the apply_to parameter and return needed types
         if isinstance(step, JuEstimatorLike):
