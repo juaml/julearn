@@ -8,6 +8,56 @@ What's new
 
 .. towncrier release notes start
 
+Julearn 0.3.1.dev105 (2024-01-23)
+---------------------------------
+
+Bugfixes
+^^^^^^^^
+
+- Add ``BaseEstimator`` to ``ConfoundRemoval`` for Target by `Sami Hamdan`_
+  (:gh:`151`)
+- Skip wrapping scorers when target transformers can inverse transform and
+  avoid logging filtered warnings by `Fede Raimondo`_ (:gh:`236`)
+- Fix `alternative` parameter not being used in the corrected t-test `Fede
+  Raimondo`_ (:gh:`245`)
+- Fix hyperparameter not being set in `PipelineCreator.add` when an object is
+  used as model, by `Fede Raimondo`_ (:gh:`247`)
+
+
+Improved Documentation
+^^^^^^^^^^^^^^^^^^^^^^
+
+- Fix cross-referencing links in documentation by `Synchon Mandal`_ (:gh:`168`)
+- Standardize ``Sphinx`` section and header ordering format by `Synchon
+  Mandal`_ (:gh:`234`)
+- Improve documentation language, fix typos and code snippets by `Synchon
+  Mandal`_ (:gh:`235`)
+
+
+Enhancements
+^^^^^^^^^^^^
+
+- Make CBPM use sum by default by `Sami Hamdan`_ (:gh:`170`)
+
+
+Features
+^^^^^^^^
+
+- Add support for multiple grids in hyperparameter tuning by `Fede Raimondo`_
+  (:gh:`47`)
+
+
+Misc
+^^^^
+
+- Adopt ``ruff`` as the only linter for the codebase by `Synchon Mandal`_
+  (:gh:`231`)
+- Improve ``codespell`` support and fix typos in documentation by `Synchon
+  Mandal`_ (:gh:`232`)
+- Adopt ``pre-commit`` for adding and managing git pre-commit hooks by `Synchon
+  Mandal`_ (:gh:`233`)
+
+
 Julearn 0.2.5 (2022-07-21)
 --------------------------
 
