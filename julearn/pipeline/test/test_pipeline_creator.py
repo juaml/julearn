@@ -10,11 +10,11 @@ from typing import Callable, Dict, List
 import pandas as pd
 import pytest
 from pytest_lazyfixture import lazy_fixture
+from sklearn.dummy import DummyClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 from sklearn.preprocessing import RobustScaler, StandardScaler
 from sklearn.svm import SVC
-from sklearn.dummy import DummyClassifier
 
 from julearn.base import ColumnTypesLike, WrapModel
 from julearn.models import get_model
@@ -584,7 +584,9 @@ def test_PipelineCreator_split() -> None:
 def test_PipelineCreator_set_hyperparameter() -> None:
     """Test the pipeline creator hyperparameter set through the add method."""
 
-    creator_default = PipelineCreator(problem_type="classification", apply_to="*")
+    creator_default = PipelineCreator(
+        problem_type="classification", apply_to="*"
+    )
     creator_default.add("dummy")
     model_default = creator_default.to_pipeline()
     assert model_default.steps[-1][1].get_params()["strategy"] != "uniform"
