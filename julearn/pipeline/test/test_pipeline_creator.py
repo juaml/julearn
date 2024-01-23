@@ -14,6 +14,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 from sklearn.preprocessing import RobustScaler, StandardScaler
 from sklearn.svm import SVC
+from sklearn.dummy import DummyClassifier
 
 from julearn.base import ColumnTypesLike, WrapModel
 from julearn.models import get_model
@@ -578,3 +579,33 @@ def test_PipelineCreator_split() -> None:
 
     assert isinstance(out4[3]._steps[0].estimator, RobustScaler)
     assert isinstance(out4[3]._steps[2].estimator, SVC)
+
+
+def test_PipelineCreator_set_hyperparameter() -> None:
+    """Test the pipeline creator hyperparameter set through the add method."""
+
+    creator_default = PipelineCreator(problem_type="classification", apply_to="*")
+    creator_default.add("dummy")
+    model_default = creator_default.to_pipeline()
+    assert model_default.steps[-1][1].get_params()["strategy"] != "uniform"
+
+    creator1 = PipelineCreator(problem_type="classification", apply_to="*")
+    creator1.add("dummy", strategy="uniform", name="dummy")
+
+    model1 = creator1.to_pipeline()
+
+    assert model1.steps[-1][1].get_params()["strategy"] == "uniform"
+
+    creator2 = PipelineCreator(problem_type="classification", apply_to="*")
+    creator2.add(DummyClassifier(strategy="uniform"), name="dummy")
+
+    model2 = creator2.to_pipeline()
+
+    assert model2.steps[-1][1].get_params()["strategy"] == "uniform"
+
+    creator3 = PipelineCreator(problem_type="classification", apply_to="*")
+    creator3.add(DummyClassifier(), strategy="uniform", name="dummy")
+
+    model3 = creator3.to_pipeline()
+
+    assert model3.steps[-1][1].get_params()["strategy"] == "uniform"
