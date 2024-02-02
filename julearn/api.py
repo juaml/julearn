@@ -265,8 +265,13 @@ def run_cross_validation(  # noqa: C901
         else:
             pipeline = all_pipelines[0]
 
-        if has_target_transformer and not pipeline[-1].can_inverse_transform():
-            wrap_score = True
+        if has_target_transformer:
+            if isinstance(pipeline, BaseSearchCV):
+                last_step = pipeline.estimator[-1]
+            else:
+                last_step = pipeline[-1]
+            if not last_step.can_inverse_transform():
+                wrap_score = True
         problem_type = model[0].problem_type
 
     elif not isinstance(model, (str, BaseEstimator)):
