@@ -42,6 +42,7 @@ def get_scorer(name: str) -> ScorerLike:
     scorer : ScorerLike
         Callable object that returns a scalar score; greater is better.
         Will be called using `(estimator, X, y)`.
+
     """
     scorer = _extra_available_scorers.get(name)
     if scorer is None:
@@ -63,6 +64,7 @@ def list_scorers() -> List[str]:
     -------
     list of str
         a list containing all available scorers.
+
     """
     scorers = list(get_scorer_names())
     scorers.extend(list(_extra_available_scorers.keys()))
@@ -99,6 +101,7 @@ def register_scorer(
     -----
     UserWarning
         if overwrite is set to None and the scorer already exists.
+
     """
     if scorer_name in list_scorers():
         if overwrite is None:
@@ -141,6 +144,7 @@ def check_scoring(
     wrap_score : bool
         Does the score needs to be wrapped
         to handle non_inverse transformable target pipelines.
+
     """
     if scoring is None:
         return scoring

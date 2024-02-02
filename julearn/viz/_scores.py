@@ -40,6 +40,7 @@ class _JulearnScoresViewer(param.Parameterized):
         The height of the plot (default is 600).
     ci : int
         The confidence interval to use for the error bars (default is 0.95).
+
     """
 
     metric = param.Selector([], default=None)
@@ -72,6 +73,7 @@ class _JulearnScoresViewer(param.Parameterized):
         Returns
         -------
         self : _JulearnScoresViewer
+
         """
 
         # Transform the data for plotting
@@ -365,6 +367,7 @@ def plot_scores(
         Height of the plot (default is 600)
     ci : float, optional
         Confidence interval to use for the plots (default is 0.95)
+
     """
     viewer = _JulearnScoresViewer(
         scores=[*scores], width=width, height=height, ci=ci

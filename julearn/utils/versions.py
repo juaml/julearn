@@ -34,6 +34,7 @@ def check_version(
     -------
     version_checked : bool
         if the version passes the checks
+
     """
 
     def get_check(check_func):
@@ -55,6 +56,7 @@ def _joblib_parallel_args(**kwargs: Any) -> Any:
     ----------
     **kwargs : dict
         keyword arguments to pass to joblib.Parallel
+
     """
     sklearn_version = sklearn.__version__
     higher_than_11 = check_version(

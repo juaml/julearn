@@ -20,6 +20,7 @@ def df_typed_iris() -> pd.DataFrame:
     -------
     df : pd.DataFrame
         The iris dataset with types.
+
     """
     df = load_dataset("iris")
     df = typing.cast(pd.DataFrame, df)
@@ -42,6 +43,7 @@ def df_iris() -> pd.DataFrame:
     -------
     df : pd.DataFrame
         The iris dataset with types.
+
     """
     df = load_dataset("iris")
     df = typing.cast(pd.DataFrame, df)
@@ -57,6 +59,7 @@ def df_binary() -> pd.DataFrame:
     -------
     df : pd.DataFrame
         The iris dataset with types.
+
     """
     df_iris = load_dataset("iris")
     df_iris = typing.cast(pd.DataFrame, df_iris)
@@ -75,6 +78,7 @@ def X_iris() -> pd.DataFrame:
     -------
     df : pd.DataFrame
         The iris dataset features.
+
     """
     df = load_dataset("iris")
     df = typing.cast(pd.DataFrame, df)
@@ -92,6 +96,7 @@ def y_iris() -> pd.Series:
     -------
     df : pd.Series
         The iris dataset target.
+
     """
     df = load_dataset("iris")
     df = typing.cast(pd.DataFrame, df)
@@ -120,6 +125,7 @@ def X_types_iris(request: FixtureRequest) -> Optional[Dict]:
     -------
     dict or None
         A dictionary with the types for the features.
+
     """
     return request.param
 
@@ -137,6 +143,7 @@ def models_all_problem_types(request: FixtureRequest) -> str:
     -------
     str
         The name of the model.
+
     """
     return request.param
 
@@ -154,6 +161,7 @@ def all_problem_types(request: FixtureRequest) -> str:
     -------
     str
         The problem type (one of {"regression", "classification"}).
+
     """
 
     return request.param
@@ -181,6 +189,7 @@ def search_params(request: FixtureRequest) -> Optional[Dict]:
     -------
     dict or None
         A dictionary with the search_params argument.
+
     """
     return request.param
 
@@ -203,6 +212,7 @@ def get_tuning_params() -> Callable:
     -------
     get : callable
         A function that returns the parameters to tune for a given step.
+
     """
 
     def get(step: str) -> Dict:
@@ -217,6 +227,7 @@ def get_tuning_params() -> Callable:
         -------
         dict
             The parameters to tune for the given step.
+
         """
         return copy(_tuning_params.get(step, {}))
 
@@ -246,5 +257,6 @@ def preprocessing(request: FixtureRequest) -> Union[str, List[str]]:
     -------
     str or list
         The preprocessing step(s).
+
     """
     return request.param

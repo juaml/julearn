@@ -83,6 +83,7 @@ def test_naive_bayes_estimators(
         Class of the model to test.
     model_params : dict
         Parameters to pass to the model.
+
     """
     df_binary = df_iris[df_iris["species"].isin(["setosa", "virginica"])]
 
@@ -209,6 +210,7 @@ def test_classificationestimators(
         Class of the model to test.
     model_params : dict
         Parameters to pass to the model.
+
     """
 
     decimal = 5 if model_name != "sgd" else -1
@@ -309,6 +311,7 @@ def test_regression_estimators(
         Class of the model to test.
     model_params : dict
         Parameters to pass to the model.
+
     """
     X = ["sepal_length", "sepal_width", "petal_length"]
     X_types = {"continuous": X}

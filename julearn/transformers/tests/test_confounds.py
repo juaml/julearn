@@ -34,6 +34,7 @@ def models_confound_remover(request: FixtureRequest) -> str:
     -------
     str
         The name of the model.
+
     """
     return request.param
 
@@ -46,6 +47,7 @@ def df_X_confounds() -> pd.DataFrame:
     -------
     pd.DataFrame
         A dataframe with confounds.
+
     """
     X = pd.DataFrame(
         {
@@ -68,6 +70,7 @@ def y_confounds() -> np.ndarray:
     -------
     np.ndarray
         The y variable for the df_X_confounds fixture.
+
     """
     y = np.arange(10)
     return y
@@ -114,6 +117,7 @@ def test_ConfoundRemover_confound_auto_find_conf(
         The confounds to use.
     models_confound_remover : str
         The model to use for the confound remover.
+
     """
     if drop is not None:
         df_X = df_X_confounds.drop(columns=drop)
@@ -195,6 +199,7 @@ def test_confound_set_confounds(
         The confounds to use.
     df_X_confounds : pd.DataFrame
         The dataframe with confounds.
+
     """
     features = df_X_confounds.drop(columns=confounds).columns
     confound_remover = ConfoundRemover(

@@ -224,6 +224,7 @@ def register_model(
     -----
     RuntimeWarning
         If `model_name` is already registered and `overwrite` is None.
+
     """
     problem_types = ["classification", "regression"]
     for cls, problem_type in zip(

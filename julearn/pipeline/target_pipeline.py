@@ -30,6 +30,7 @@ class JuTargetPipeline:
     ----------
     steps : List[Tuple[str, Union[JuTargetTransformer, TransformerLike]]]
         List of steps to be performed on the target.
+
     """
 
     def __init__(
@@ -56,6 +57,7 @@ class JuTargetPipeline:
         -------
         y : DataLike
             The transformed target.
+
         """
         return self.fit(X, y).transform(X, y)
 
@@ -75,6 +77,7 @@ class JuTargetPipeline:
         -------
         self : JuTargetPipeline
             The fitted pipeline.
+
         """
         if not isinstance(y, np.ndarray):
             y = np.array(y)
@@ -101,6 +104,7 @@ class JuTargetPipeline:
         -------
         y : DataLike
             The transformed target.
+
         """
         if not isinstance(y, np.ndarray):
             y = np.array(y)
@@ -127,6 +131,7 @@ class JuTargetPipeline:
         -------
         y : DataLike
             The inverse transformed target.
+
         """
         if not isinstance(y, np.ndarray):
             y = np.array(y)
@@ -144,6 +149,7 @@ class JuTargetPipeline:
         -------
         bool
             True if the pipeline can inverse transform.
+
         """
         for _, t_step in self.steps:
             if not hasattr(t_step, "inverse_transform"):
@@ -158,6 +164,7 @@ class JuTargetPipeline:
         -------
         needed_types : Set of str or None
             The needed types for the pipeline.
+
         """
         needed_types = []
         for _, t_step in self.steps:

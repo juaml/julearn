@@ -56,6 +56,7 @@ def test_run_cv_simple_binary(
         The iris dataset as a binary classification problem.
     df_iris : pd.DataFrame
         The iris dataset as a multiclass classification problem.
+
     """
     X = ["sepal_length", "sepal_width", "petal_length"]
     y = "species"
@@ -150,6 +151,7 @@ def test_run_cv_simple_binary_groups(df_iris: pd.DataFrame) -> None:
     ----------
     df_iris : pd.DataFrame
         The iris dataset as a multiclass classification problem.
+
     """
     # keep only two species
     df_iris = df_iris[df_iris["species"].isin(["versicolor", "virginica"])]
@@ -196,6 +198,7 @@ def test_run_cv_simple_binary_errors(
         The iris dataset as a binary classification problem.
     df_iris : pd.DataFrame
         The iris dataset as a multiclass classification problem.
+
     """
 
     # Test error when pos_labels are not provide (target-dependent scores)
@@ -223,6 +226,7 @@ def test_run_cv_errors(df_iris: pd.DataFrame) -> None:
     ----------
     df_iris : pd.DataFrame
         The iris dataset as a multiclass classification problem.
+
     """
     X = ["sepal_length", "sepal_width", "petal_length"]
     y = "species"
@@ -388,6 +392,7 @@ def test_tune_hyperparam_gridsearch(df_iris: pd.DataFrame) -> None:
     ----------
     df_iris : pd.DataFrame
         The iris dataset as a multiclass classification problem.
+
     """
     # keep only two species
     df_iris = df_iris[df_iris["species"].isin(["versicolor", "virginica"])]
@@ -450,6 +455,7 @@ def test_tune_hyperparam_gridsearch_groups(df_iris: pd.DataFrame) -> None:
     ----------
     df_iris : pd.DataFrame
         The iris dataset as a multiclass classification problem.
+
     """
     # keep only two species
     df_iris = df_iris[df_iris["species"].isin(["versicolor", "virginica"])]
@@ -532,6 +538,7 @@ def test_tune_hyperparam_randomsearch(df_iris: pd.DataFrame) -> None:
     ----------
     df_iris : pd.DataFrame
         The iris dataset as a multiclass classification problem.
+
     """
     # keep only two species
     df_iris = df_iris[df_iris["species"].isin(["versicolor", "virginica"])]
@@ -712,6 +719,7 @@ def test_return_estimators(df_iris: pd.DataFrame) -> None:
     ----------
     df_iris : pd.DataFrame
         The iris dataset as a multiclass classification problem.
+
     """
     df_iris = df_iris[df_iris["species"].isin(["versicolor", "virginica"])]
     X = ["sepal_length", "sepal_width", "petal_length"]
@@ -798,6 +806,7 @@ def test_return_train_scores(df_iris: pd.DataFrame) -> None:
     ----------
     df_iris : pd.DataFrame
         The iris dataset as a multiclass classification problem.
+
     """
     df_iris = df_iris[df_iris["species"].isin(["versicolor", "virginica"])]
     X = ["sepal_length", "sepal_width", "petal_length"]

@@ -48,6 +48,7 @@ def _wrapped_model_has(attr):
         bool
             True if first estimator in scores has the attribute,
             False otherwise.
+
         """
         model_ = self._scores["estimator"].iloc[0]
         return hasattr(model_, attr)

@@ -66,6 +66,7 @@ class DynamicSelection(BaseEstimator):
         (default is None).
     **kwargs : Any
         Any additional parameters to pass to the deslib algorithm.
+
     """
 
     def __init__(
@@ -100,6 +101,7 @@ class DynamicSelection(BaseEstimator):
         -------
         DynamicSelection
             The fitted model.
+
         """
         # create the splits to train ensemble and dynamic model
         if isinstance(self.ds_split, float):
@@ -148,6 +150,7 @@ class DynamicSelection(BaseEstimator):
         -------
         DataLike
             The predictions.
+
         """
         return self._dsmodel.predict(X)
 
@@ -165,6 +168,7 @@ class DynamicSelection(BaseEstimator):
             Returns the probability of the sample for each class in
             the model. The columns correspond to the classes in sorted
             order, as they appear in the attribute :term:`classes_`.
+
         """
         if isinstance(X, pd.DataFrame):
             X = X.values
@@ -202,6 +206,7 @@ class DynamicSelection(BaseEstimator):
         -------
         Any
             The deslib algorithm object.
+
         """
         try:
             import deslib  # type: ignore # noqa: F401

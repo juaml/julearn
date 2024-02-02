@@ -46,6 +46,7 @@ def _wrapped_model_has(attr):
         -------
         bool
             True if self.model_ has the attribute, False otherwise.
+
         """
         return hasattr(self.model, attr)
 
@@ -67,6 +68,7 @@ class JuTransformedTargetModel(JuBaseEstimator):
         The model to be wrapped. Can be a pipeline.
     transformer : JuTargetPipeline
         The transformer to be used to transform the target.
+
     """
 
     def __init__(self, model: ModelLike, transformer: "JuTargetPipeline"):
@@ -167,6 +169,7 @@ class JuTransformedTargetModel(JuBaseEstimator):
             Returns the probability of the sample for each class in
             the model. The columns correspond to the classes in sorted
             order, as they appear in the attribute :term:`classes_`.
+
         """
         if not hasattr(self, "model_"):
             raise_error("Model not fitted yet.")
@@ -187,6 +190,7 @@ class JuTransformedTargetModel(JuBaseEstimator):
         X : array-like of shape (n_samples, n_class * (n_class-1) / 2)
             Returns the decision function of the sample for each class
             in the model.
+
         """
         if not hasattr(self, "model_"):
             raise_error("Model not fitted yet.")

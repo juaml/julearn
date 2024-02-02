@@ -30,6 +30,7 @@ def merge_pipelines(  # noqa: C901
     -------
     merged : BaseSearchCV
         The merged pipeline as a searcher.
+
     """
 
     # Check that we only merge pipelines and searchers. And if there is a

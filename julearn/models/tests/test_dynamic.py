@@ -76,6 +76,7 @@ def all_deslib_algorithms(request: FixtureRequest) -> str:
     -------
     dict or None
         A dictionary with the types for the features.
+
     """
     return request.param
 
@@ -97,6 +98,7 @@ def test_algorithms(
         Iris dataset.
     algo_name : str
         Name of the algorithm.
+
     """
 
     df_iris = df_iris[df_iris["species"].isin(["versicolor", "virginica"])]
@@ -154,6 +156,7 @@ def test_wrong_algo(df_iris: pd.DataFrame) -> None:
     ----------
     df_iris : pd.DataFrame
         Iris dataset.
+
     """
     df_iris = df_iris[df_iris["species"].isin(["versicolor", "virginica"])]
     X = ["sepal_length", "sepal_width", "petal_length"]
@@ -186,6 +189,7 @@ def test_ds_split_parameter(ds_split: Any, df_iris: pd.DataFrame) -> None:
         ds_split parameter.
     df_iris : pd.DataFrame
         Iris dataset.
+
     """
     df_iris = df_iris[df_iris["species"].isin(["versicolor", "virginica"])]
     df_iris = df_iris.sample(n=len(df_iris))
@@ -212,6 +216,7 @@ def test_ds_split_error(ds_split: Any, df_iris: pd.DataFrame) -> None:
         ds_split parameter.
     df_iris : pd.DataFrame
         Iris dataset.
+
     """
     df_iris = df_iris[df_iris["species"].isin(["versicolor", "virginica"])]
     df_iris = df_iris.sample(n=len(df_iris))

@@ -25,6 +25,7 @@ def test_CBPM_posneg_correlated_features(
         The iris dataset features
     y_iris : pd.Series
         The iris dataset target
+
     """
 
     X_pos = ["sepal_length", "petal_length", "petal_width"]
@@ -52,6 +53,7 @@ def test_CBPM_pos_correlated_features(
         The iris dataset features
     y_iris : pd.Series
         The iris dataset target
+
     """
 
     X_pos = ["sepal_length", "petal_length", "petal_width"]
@@ -81,6 +83,7 @@ def test_CBPM_neg_correlated_features(
         The iris dataset features
     y_iris : pd.Series
         The iris dataset target
+
     """
 
     X_neg = ["sepal_width"]
@@ -110,6 +113,7 @@ def test_CBPM_warnings(
         The iris dataset features
     y_iris : pd.Series
         The iris dataset target
+
     """
     X_pos = ["sepal_length", "petal_length", "petal_width"]
     X_neg = ["sepal_width"]
@@ -183,6 +187,7 @@ def test_CBPM_lower_sign_threshhold(
         The iris dataset features
     y_iris : pd.Series
         The iris dataset target
+
     """
     trans_posneg = CBPM(
         corr_sign="pos", significance_threshold=1e-50, agg_method=np.mean
@@ -205,6 +210,7 @@ def test_CBPM_lower_sign_threshhold_no_sig(
         The iris dataset features
     y_iris : pd.Series
         The iris dataset target
+
     """
 
     # I have checked before there are no under 1e-100
@@ -231,6 +237,7 @@ def test_CBPM_spearman(
         The iris dataset features
     y_iris : pd.Series
         The iris dataset target
+
     """
 
     X_pos = ["sepal_length", "petal_length", "petal_width"]

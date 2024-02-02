@@ -35,6 +35,7 @@ def _corrected_std(
     -------
     corrected_std : float
         Variance-corrected standard deviation of the set of differences.
+
     """
     # kr = k times r, r times repeated k-fold crossvalidation,
     # kr equals the number of times the model was evaluated
@@ -83,6 +84,7 @@ def _compute_corrected_ttest(
         Variance-corrected t-statistic.
     p_val : float
         Variance-corrected p-value.
+
     """
     mean = differences.mean(axis=0)
     if df is None:

@@ -133,6 +133,7 @@ def register_transformer(transformer_name, transformer_cls, overwrite=None):
     -----
     RuntimeWarning
         If `transformer_name` is already registered and `overwrite` is None.
+
     """
     if _available_transformers.get(transformer_name) is not None:
         if overwrite is None:

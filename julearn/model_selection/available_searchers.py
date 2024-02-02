@@ -25,6 +25,7 @@ def list_searchers() -> List[str]:
     -------
     out : list(str)
         A list of all available searcher names.
+
     """
     return list(_available_searchers)
 
@@ -46,6 +47,7 @@ def get_searcher(name: str) -> object:
     ------
     ValueError
         If the specified searcher is not available.
+
     """
     if name not in _available_searchers:
         raise_error(
@@ -84,6 +86,7 @@ def register_searcher(
     ValueError
         If the specified searcher is already available and overwrite is set to
         False.
+
     """
     if searcher_name in list_searchers():
         if overwrite is None:

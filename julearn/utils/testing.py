@@ -71,6 +71,7 @@ def compare_models(  # noqa: C901, pragma: no cover
     ------
     AssertionError
         If the models are not equal.
+
     """
     if isinstance(clf1, WrapModel):
         clf1 = clf1.model
@@ -213,6 +214,7 @@ def do_scoring_test(
         The target values, by default None.
     decimal : int, optional
         The number of decimals to use for the comparison, by default 5.
+
     """
     sk_X = data[X].values
     if sk_y is None:
@@ -306,6 +308,7 @@ class PassThroughTransformer(TransformerMixin, BaseEstimator):
         -------
         DataLike
             The transformed data.
+
         """
         return X
 
@@ -334,6 +337,7 @@ class TargetPassThroughTransformer(PassThroughTransformer):
         -------
         DataLike or None
             The target.
+
         """
         return y
 
@@ -355,6 +359,7 @@ class TargetPassThroughTransformer(PassThroughTransformer):
         -------
         DataLike or None
             The target.
+
         """
         self.fit(X, y)  # type: ignore
         return self.transform(X, y)
@@ -372,6 +377,7 @@ def _get_coef_over_versions(clf: EstimatorLike) -> np.ndarray:
     -------
     np.ndarray
         The coefficients.
+
     """
     if isinstance(
         clf, (BernoulliNB, ComplementNB, MultinomialNB, CategoricalNB)

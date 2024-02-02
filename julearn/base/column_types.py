@@ -28,6 +28,7 @@ def change_column_type(column: str, new_type: str):
     -------
     str
         The new column name with the type changed.
+
     """
     return "__:type:__".join(column.split("__:type:__")[0:1] + [new_type])
 
@@ -44,6 +45,7 @@ def get_column_type(column):
     -------
     str
         The type of the column.
+
     """
     return column.split("__:type:__")[1]
 
@@ -133,6 +135,7 @@ class ColumnTypes:
     column_types : ColumnTypes or str or list of str or set of str
         One str representing on type if columns or a list of these.
         Instead of a str you can also provide a ColumnTypes itself.
+
     """
 
     def __init__(self, column_types: ColumnTypesLike):
@@ -185,6 +188,7 @@ class ColumnTypes:
         -------
         Callable
             The type selector.
+
         """
         return make_type_selector(self.pattern)
 
@@ -231,6 +235,7 @@ class ColumnTypes:
         -------
         bool
             True if the column_types are equal, False otherwise.
+
         """
         other = other if isinstance(other, ColumnTypes) else ColumnTypes(other)
         return self._column_types == other._column_types
@@ -253,6 +258,7 @@ class ColumnTypes:
         -------
         ColumnTypes
             The copy of the ColumnTypes.
+
         """
         return ColumnTypes(self)
 
@@ -269,5 +275,6 @@ def ensure_column_types(attr: ColumnTypesLike) -> ColumnTypes:
     -------
     ColumnTypes
         The attribute as a ColumnTypes.
+
     """
     return ColumnTypes(attr) if not isinstance(attr, ColumnTypes) else attr

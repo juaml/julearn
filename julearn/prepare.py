@@ -55,6 +55,7 @@ def _validate_input_data_df(
     ------
     ValueError
         If any of the input parameters is not of a valid type.
+
     """
     if not isinstance(X, (str, list)):
         raise_error("X must be a string or list of strings")
@@ -171,6 +172,7 @@ def _pick_columns(
     ------
     ValueError
         If one or more regexes do not match any element in columns
+
     """
     if not isinstance(regexes, list):
         regexes = [regexes]
@@ -258,6 +260,7 @@ def prepare_input_data(
     -----
     RuntimeWarning
         If the input data and parameters might have inconsistencies.
+
     """
     logger.info("==== Input Data ====")
 
@@ -359,6 +362,7 @@ def check_consistency(
     RuntimeWarning
         If there might be an inconsistency between the parameters and the data
         but the pipeline can still run.
+
     """
 
     # Check problem type and the target.
@@ -521,6 +525,7 @@ def prepare_search_params(
     -------
     search_params : dict
         The parameters for the search, ready to use.
+
     """
 
     if search_params is None:

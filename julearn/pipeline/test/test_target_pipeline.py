@@ -29,6 +29,7 @@ def test_target_pipeline_sklearn(
         The iris dataset features.
     y_iris : pd.Series
         The iris dataset target.
+
     """
 
     steps = [("scaler", StandardScaler())]
@@ -55,6 +56,7 @@ def test_target_pipeline_jutargettransformer(
         The iris dataset features.
     y_iris : pd.Series
         The iris dataset target.
+
     """
 
     class MedianSplitter(JuTargetTransformer):
@@ -92,6 +94,7 @@ def test_target_pipeline_multiple_ju_sk(
         The iris dataset features.
     y_iris : pd.Series
         The iris dataset target.
+
     """
 
     class DeMeaner(JuTargetTransformer):
@@ -133,6 +136,7 @@ def test_target_pipeline_multiple_sk_ju(
         The iris dataset features.
     y_iris : pd.Series
         The iris dataset target.
+
     """
 
     class DeMeaner(JuTargetTransformer):

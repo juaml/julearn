@@ -30,6 +30,7 @@ class ChangeColumnTypes(JuTransformer):
         The value(s) which should be selected in the row_select_col_type
         to select the rows used for training (default is None)
         Not really useful for this one, but here for compatibility.
+
     """
 
     def __init__(
@@ -66,6 +67,7 @@ class ChangeColumnTypes(JuTransformer):
         -------
         ChangeColumnTypes
             The fitted transformer.
+
         """
         self.feature_names_in_ = X.columns
         to_rename = {}
@@ -91,6 +93,7 @@ class ChangeColumnTypes(JuTransformer):
         -------
         pd.DataFrame
             The transformed data.
+
         """
         return X.rename(columns=self._renamer)
 
@@ -109,6 +112,7 @@ class ChangeColumnTypes(JuTransformer):
         -------
         list
             Names of features to be kept in the output pd.DataFrame.
+
         """
         out = self.feature_names_in_
         out = self.filter_columns(pd.DataFrame(columns=out)).columns

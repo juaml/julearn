@@ -133,6 +133,7 @@ class CBPM(BaseEstimator, TransformerMixin):
         -------
         self : CBPM
             The fitted transformer.
+
         """
         X, y = self._validate_data(X, y)  # type: ignore
 
@@ -172,6 +173,7 @@ class CBPM(BaseEstimator, TransformerMixin):
         -------
         np.array
             The transformed features.
+
         """
 
         X = self._validate_data(X)  # type: ignore

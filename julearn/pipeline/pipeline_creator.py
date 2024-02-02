@@ -53,6 +53,7 @@ def _params_to_pipeline(
     -------
     Any
         The converted parameter.
+
     """
     if isinstance(param, PipelineCreator):
         param = param.to_pipeline(X_types=X_types, search_params=search_params)
@@ -96,6 +97,7 @@ class Step:
         to select the rows used for training (default is None)
     params_to_tune : Optional[Dict], optional
         The parameters to tune for this step, by default None
+
     """
 
     name: str
@@ -131,6 +133,7 @@ class PipelineCreator:
     apply_to: ColumnTypesLike, optional
         To what should the transformers be applied to if not specified in
         the `add` method (default is continuous).
+
     """
 
     def __init__(
@@ -194,6 +197,7 @@ class PipelineCreator:
             If the step is not a valid step, if the problem_type is
             specified in the params or if the step is a
             TargetPipelineCreator and the apply_to is not "target".
+
         """
 
         if "problem_type" in params:
@@ -330,6 +334,7 @@ class PipelineCreator:
         -------
         PipelineCreator
             The copy of the PipelineCreator
+
         """
         other = PipelineCreator(
             problem_type=self.problem_type, apply_to=self.apply_to
@@ -367,6 +372,7 @@ class PipelineCreator:
         -------
         PipelineCreator
             The PipelineCreator with the steps added
+
         """
         creator = cls(problem_type=problem_type, apply_to=apply_to)
         if isinstance(transformers, str):
@@ -397,6 +403,7 @@ class PipelineCreator:
         -------
         List[PipelineCreator]
             A list of PipelineCreators, each one without repeated step names.
+
         """
 
         out = []
@@ -456,6 +463,7 @@ class PipelineCreator:
         -------
         sklearn.pipeline.Pipeline
             The pipeline created from the PipelineCreator
+
         """
         logger.debug("Creating pipeline")
         if not self.has_model():
@@ -584,6 +592,7 @@ class PipelineCreator:
         ------
         ValueError
             If the target transformer is not a JuTargetPipeline.
+
         """
         transformer = target_transformer_step.estimator
         if not isinstance(transformer, JuTargetPipeline):
@@ -613,6 +622,7 @@ class PipelineCreator:
         ------
         ValueError
             If the model parameters are not valid.
+
         """
         for param in model_params.keys():
             if "__" in param:
@@ -639,6 +649,7 @@ class PipelineCreator:
         -------
         name : str
             The name of the step.
+
         """
         out = name
         if name is None:
@@ -715,6 +726,7 @@ class PipelineCreator:
         RuntimeWarning
             If there are extra types in the pipeline that are not specified in
             the X_types.
+
         """
         if X_types is None:
             X_types = {}
@@ -878,6 +890,7 @@ def _prepare_hyperparameter_tuning(
     -------
     sklearn.pipeline.Pipeline
         The modified pipeline
+
     """
     logger.info("= Model Parameters =")
 

@@ -44,6 +44,7 @@ def test_construction_working(
         The preprocessing steps to test.
     problem_type : str
         The problem type to test.
+
     """
     creator = PipelineCreator(problem_type=problem_type)
     preprocess = preprocess if isinstance(preprocess, list) else [preprocess]
@@ -105,6 +106,7 @@ def test_fit_and_transform_no_error(
         The preprocessing steps to test.
     problem_type : str
         The problem type to test.
+
     """
     creator = PipelineCreator.from_list(
         preprocess, model_params={}, problem_type=problem_type
@@ -217,6 +219,7 @@ def test_X_types_to_pattern_warnings(
         The apply_to to test.
     warns : bool
         Whether the test should raise a warning.
+
     """
     pipeline_creator = PipelineCreator(problem_type="classification").add(
         "zscore", apply_to=apply_to
@@ -256,6 +259,7 @@ def test_X_types_to_pattern_errors(
         The apply_to to test.
     error : bool
         Whether the test should raise a warning.
+
     """
     pipeline_creator = PipelineCreator(problem_type="classification").add(
         "zscore", apply_to=apply_to

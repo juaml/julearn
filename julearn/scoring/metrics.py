@@ -25,6 +25,7 @@ def ensure_1d(y: ArrayLike) -> np.ndarray:
     ------
     ValueError
         If y cannot be converted to a 1d numpy array.
+
     """
     if not isinstance(y, np.ndarray):
         y = np.array(y)
@@ -50,6 +51,7 @@ def r2_corr(y_true: ArrayLike, y_pred: ArrayLike) -> float:
     -------
     float
         The squared Pearson product-moment correlation coefficient.
+
     """
     return np.corrcoef(ensure_1d(y_true), ensure_1d(y_pred))[0, 1] ** 2
 

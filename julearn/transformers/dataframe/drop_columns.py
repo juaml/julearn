@@ -29,6 +29,7 @@ class DropColumns(JuTransformer):
         The value(s) which should be selected in the row_select_col_type
         to select the rows used for training (default is None)
         Not really useful for this one, but here for compatibility.
+
     """
 
     def __init__(
@@ -62,6 +63,7 @@ class DropColumns(JuTransformer):
         -------
         DropColumns
             The fitted transformer.
+
         """
         self.support_mask_ = pd.Series(True, index=X.columns, dtype=bool)
 
@@ -85,6 +87,7 @@ class DropColumns(JuTransformer):
         -------
         pd.DataFrame
             Data with dropped columns.
+
         """
         logger.debug(f"Dropping columns: {self.drop_columns_}")
         return X.drop(columns=self.drop_columns_)
@@ -103,6 +106,7 @@ class DropColumns(JuTransformer):
         -------
         support_mask : numpy.array
             The support mask
+
         """
         if indices:
             return np.arange(len(self.support_mask_))[

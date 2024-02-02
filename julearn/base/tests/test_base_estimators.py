@@ -98,6 +98,7 @@ def test_WrapModel(
         The column types to set in X_iris.
     selection : slice
         The columns that the apply_to selector should select.
+
     """
     column_types = [col or "continuous" for col in column_types]
     to_rename = {
