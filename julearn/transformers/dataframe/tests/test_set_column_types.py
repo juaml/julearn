@@ -23,6 +23,7 @@ def test_SetColumnTypes(
         The iris dataset.
     X_types_iris : dict, optional
         The types to set in the iris dataset.
+
     """
     _X_types_iris = {} if X_types_iris is None else X_types_iris
     to_rename = {
@@ -73,6 +74,7 @@ def test_SetColumnTypes_array(
         The iris dataset.
     X_types_iris : dict, optional
         The types to set in the iris dataset.
+
     """
     _X_types_iris = {} if X_types_iris is None else X_types_iris
     to_rename = {

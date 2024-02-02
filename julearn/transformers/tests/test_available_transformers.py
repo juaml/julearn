@@ -47,6 +47,7 @@ class Fish(BaseEstimator, TransformerMixin):
         -------
         Fish
             The fitted fish.
+
         """
         return self
 
@@ -62,6 +63,7 @@ class Fish(BaseEstimator, TransformerMixin):
         -------
         DataLike
             The transformed data.
+
         """
         return X
 

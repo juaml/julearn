@@ -32,6 +32,7 @@ def check_scores_df(
     ValueError
         If the DataFrames are not the output of `run_cross_validation` or
         if they do not have the same CV scheme and `same_cv` is True.
+
     """
     if any("cv_mdsum" not in x for x in scores):
         raise_error(

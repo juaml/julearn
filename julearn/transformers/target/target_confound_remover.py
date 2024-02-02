@@ -33,6 +33,7 @@ class TargetConfoundRemover(JuTargetTransformer):
         All residual values after confound removal which fall under the
         threshold will be set to 0. None (default) means that no threshold
         will be applied.
+
     """
 
     def __init__(
@@ -68,6 +69,7 @@ class TargetConfoundRemover(JuTargetTransformer):
         -------
         TargetConfoundRemover
             The fitted target confound remover.
+
         """
         self.model_confounds_ = clone(self.model_confound)
         self.detected_confounds_ = self.confounds.to_type_selector()(X)
@@ -91,6 +93,7 @@ class TargetConfoundRemover(JuTargetTransformer):
         -------
         pd.Series
             The target with confounds removed.
+
         """
         X_confounds = X.loc[:, self.detected_confounds_]
         y_pred = self.model_confounds_.predict(  # type: ignore

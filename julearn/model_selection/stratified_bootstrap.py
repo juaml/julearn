@@ -38,6 +38,7 @@ class StratifiedBootstrap(BaseShuffleSplit):
     random_state : int or RandomState instance, default=None
         Controls the randomness of the training and testing indices produced.
         Pass an int for reproducible output across multiple function calls.
+
     """
 
     def __init__(
@@ -79,6 +80,7 @@ class StratifiedBootstrap(BaseShuffleSplit):
             The training set indices for that split.
         test : ndarray
             The testing set indices for that split.
+
         """
         y_labels = np.unique(y)
         y_inds = [np.where(y == t_y)[0] for t_y in y_labels]
@@ -136,5 +138,6 @@ class StratifiedBootstrap(BaseShuffleSplit):
         Randomized CV splitters may return different results for each call of
         split. You can make the results identical by setting `random_state`
         to an integer.
+
         """
         return super().split(X, y, groups)

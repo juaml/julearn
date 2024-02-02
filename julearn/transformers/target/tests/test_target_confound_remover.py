@@ -18,6 +18,7 @@ def test_TargetConfoundRemover(
         The iris dataset features.
     y_iris : pd.Series
         The iris dataset target.
+
     """
 
     to_rename = {

@@ -43,6 +43,7 @@ class TargetPipelineCreator:
         **params
             Parameters for the step. This will mostly include
             hyperparameters or any other parameter for initialization.
+
         """
         # If the user did not give a name, we will create one.
         if name is None:
@@ -66,6 +67,7 @@ class TargetPipelineCreator:
         -------
         out : JuTargetPipeline
             The pipeline object.
+
         """
         return JuTargetPipeline(self._steps)
 
@@ -85,6 +87,7 @@ class TargetPipelineCreator:
         -------
         name : str
             The name of the step.
+
         """
         if name is None:
             name = (

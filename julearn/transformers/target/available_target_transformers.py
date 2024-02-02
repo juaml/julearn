@@ -26,6 +26,7 @@ def list_target_transformers() -> List[str]:
     -------
     out : list of str
         A list will all the available transformer names.
+
     """
     return list(_available_target_transformers.keys())
 
@@ -49,6 +50,7 @@ def get_target_transformer(name: str, **params: Any) -> JuTargetTransformer:
     ------
     ValueError
         If the specified target transformer name is not available.
+
     """
     out = None
     if name not in _available_target_transformers:
@@ -91,6 +93,7 @@ def register_target_transformer(
     -----
     RuntimeWarning
         If `transformer_name` is already registered and `overwrite` is None.
+
     """
     if _available_target_transformers.get(transformer_name) is not None:
         if overwrite is None:

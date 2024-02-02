@@ -26,6 +26,7 @@ def test_stratified_bootstrap(n_classes: int, test_size: float) -> None:
         Number of classes.
     test_size : float
         Test size.
+
     """
     n_samples = 100
     X = np.random.rand(n_samples, 2)

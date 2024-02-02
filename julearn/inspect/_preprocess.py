@@ -39,6 +39,7 @@ def preprocess(
     -------
     pd.DataFrame
         The preprocessed data.
+
     """
     _X = data[X]
     if until is None:

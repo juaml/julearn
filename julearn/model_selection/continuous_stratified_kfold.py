@@ -70,6 +70,7 @@ class ContinuousStratifiedKFold(StratifiedKFold):
     Randomized CV splitters may return different results for each call of
     split. You can make the results identical by setting `random_state`
     to an integer.
+
     """
 
     def __init__(
@@ -126,6 +127,7 @@ class ContinuousStratifiedKFold(StratifiedKFold):
         Randomized CV splitters may return different results for each call of
         split. You can make the results identical by setting `random_state`
         to an integer.
+
         """
         discrete_y = _discretize_y(self.method, y, self.n_bins)
         return super().split(X, discrete_y, groups)
@@ -159,6 +161,7 @@ class RepeatedContinuousStratifiedKFold(_RepeatedSplits):
     Randomized CV splitters may return different results for each call of
     split. You can make the results identical by setting `random_state`
     to an intege
+
     """
 
     def __init__(
@@ -213,6 +216,7 @@ class ContinuousStratifiedGroupKFold(StratifiedGroupKFold):
     Randomized CV splitters may return different results for each call of
     split. You can make the results identical by setting `random_state`
     to an integer.
+
     """
 
     def __init__(
@@ -269,6 +273,7 @@ class ContinuousStratifiedGroupKFold(StratifiedGroupKFold):
         Randomized CV splitters may return different results for each call of
         split. You can make the results identical by setting `random_state`
         to an integer.
+
         """
         discrete_y = _discretize_y(self.method, y, self.n_bins)
         return super().split(X, discrete_y, groups)
@@ -303,6 +308,7 @@ class RepeatedContinuousStratifiedGroupKFold(_RepeatedSplits):
     Randomized CV splitters may return different results for each call of
     split. You can make the results identical by setting `random_state`
     to an intege
+
     """
 
     def __init__(

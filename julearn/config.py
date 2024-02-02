@@ -25,6 +25,7 @@ def set_config(key: str, value: Any) -> None:
         The key to set.
     value : Any
         The value to set.
+
     """
     if key not in _global_config:
         raise_error(f"Global config {key} does not exist")
@@ -44,5 +45,6 @@ def get_config(key: str) -> Any:
     -------
     Any
         The value of the key.
+
     """
     return _global_config.get(key, None)

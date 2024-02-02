@@ -43,6 +43,7 @@ def _wrapped_model_has(attr):
         -------
         bool
             True if self.model_ has the attribute, False otherwise.
+
         """
         return hasattr(self.model_, attr)
 
@@ -61,6 +62,7 @@ def _ensure_dataframe(X: DataLike) -> pd.DataFrame:  # noqa: N803
     -------
     pd.DataFrame
         The input as a pandas DataFrame.
+
     """
     return X if isinstance(X, pd.DataFrame) else pd.DataFrame(X)
 
@@ -84,6 +86,7 @@ class JuBaseEstimator(BaseEstimator):
     needed_types : str or list of str or set of str or ColumnTypes
         The column types needed by the estimator. If None, there are no
         needed types (default is None)
+
     """
 
     def __init__(
@@ -131,6 +134,7 @@ class JuBaseEstimator(BaseEstimator):
         -------
         pd.DataFrame
             The DataFrame with only the `apply_to` columns.
+
         """
         self._filter = self.get_apply_to().to_type_selector()
         columns = self._filter(X)
@@ -152,6 +156,7 @@ class JuTransformer(JuBaseEstimator, TransformerMixin):
     row_select_vals : str, int, bool or list of str, int, bool
         The value(s) which should be selected in the row_select_col_type
         to select the rows used for training (default is None)
+
     """
 
     def __init__(
@@ -244,6 +249,7 @@ class JuTransformer(JuBaseEstimator, TransformerMixin):
         -------
         ColumnTypes
             The column types needed by the estimator.
+
         """
         needed_types = super().get_needed_types()
         if self.row_select_col_type is not None:
@@ -266,6 +272,7 @@ class WrapModel(JuBaseEstimator):
         needed types (default is None)
     **params
         The parameters to set on the model.
+
     """
 
     def __init__(
@@ -307,6 +314,7 @@ class WrapModel(JuBaseEstimator):
         -------
         WrapModel
             The fitted model.
+
         """
         self.apply_to = ensure_column_types(self.apply_to)
         if self.needed_types is not None:
@@ -348,6 +356,7 @@ class WrapModel(JuBaseEstimator):
         -------
         float
             The score.
+
         """
         Xt = self.filter_columns(X)
         return self.model_.score(Xt, y)
@@ -367,6 +376,7 @@ class WrapModel(JuBaseEstimator):
             Returns the probability of the sample for each class in
             the model. The columns correspond to the classes in sorted
             order, as they appear in the attribute :term:`classes_`.
+
         """
         Xt = self.filter_columns(X)
         return self.model_.predict_proba(Xt)  # type: ignore
@@ -385,6 +395,7 @@ class WrapModel(JuBaseEstimator):
         X : array-like of shape (n_samples, n_class * (n_class-1) / 2)
             Returns the decision function of the sample for each class
             in the model.
+
         """
         Xt = self.filter_columns(X)
         return self.model_.decision_function(Xt)  # type: ignore
@@ -404,6 +415,7 @@ class WrapModel(JuBaseEstimator):
             Returns the probability of the sample for each class in
             the model. The columns correspond to the classes in sorted
             order, as they appear in the attribute :term:`classes_`.
+
         """
         Xt = self.filter_columns(X)
         return self.model_.predict_log_proba(Xt)  # type: ignore
@@ -426,6 +438,7 @@ class WrapModel(JuBaseEstimator):
         -------
         params : dict
             Parameter names mapped to their values.
+
         """
         params = super().get_params(deep=False)
         model_params = self.model.get_params(deep)
@@ -449,6 +462,7 @@ class WrapModel(JuBaseEstimator):
         -------
         WrapModel
             WrapModel instance.
+
         """
         model_params = list(self.model.get_params(True).keys())
         kwargs = cast(Dict[str, Any], kwargs)

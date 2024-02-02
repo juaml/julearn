@@ -30,6 +30,7 @@ class SetColumnTypes(JuTransformer):
         The value(s) which should be selected in the row_select_col_type
         to select the rows used for training (default is None)
         Not really useful for this one, but here for compatibility.
+
     """
 
     def __init__(
@@ -75,6 +76,7 @@ class SetColumnTypes(JuTransformer):
         -------
         SetColumnTypes
             The fitted transformer.
+
         """
         if not isinstance(X, (pd.DataFrame, pd.Series)):
             X = pd.DataFrame(X)
@@ -121,6 +123,7 @@ class SetColumnTypes(JuTransformer):
         -------
         pd.DataFrame
             The same dataframe.
+
         """
         return X
 
@@ -139,6 +142,7 @@ class SetColumnTypes(JuTransformer):
         -------
         list
             Names of features to be kept in the output pd.DataFrame.
+
         """
         out = self.feature_names_in_
         # Remove column types of input

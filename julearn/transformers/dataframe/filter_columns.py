@@ -33,6 +33,7 @@ class FilterColumns(JuTransformer):
         The value(s) which should be selected in the row_select_col_type
         to select the rows used for training (default is None)
         Not really useful for this one, but here for compatibility.
+
     """
 
     def __init__(
@@ -67,6 +68,7 @@ class FilterColumns(JuTransformer):
         -------
         FilterColumns
             The fitted transformer.
+
         """
         apply_to_selector = self.keep.to_type_selector()
         self.filter_columns_ = ColumnTransformer(
@@ -89,6 +91,7 @@ class FilterColumns(JuTransformer):
         -------
         DataLike
             The filtered data.
+
         """
         return self.filter_columns_.transform(X)  # type: ignore
 
@@ -107,6 +110,7 @@ class FilterColumns(JuTransformer):
         -------
         list
             Names of features to be kept in the output pd.DataFrame.
+
         """
         out = self.filter_columns_.get_feature_names_out(input_features)
         return out  # type: ignore

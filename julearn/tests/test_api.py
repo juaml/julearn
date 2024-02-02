@@ -41,7 +41,7 @@ from julearn.model_selection import (
     ContinuousStratifiedGroupKFold,
     RepeatedContinuousStratifiedGroupKFold,
 )
-from julearn.pipeline import PipelineCreator
+from julearn.pipeline import PipelineCreator, TargetPipelineCreator
 from julearn.utils.testing import compare_models, do_scoring_test
 
 
@@ -56,6 +56,7 @@ def test_run_cv_simple_binary(
         The iris dataset as a binary classification problem.
     df_iris : pd.DataFrame
         The iris dataset as a multiclass classification problem.
+
     """
     X = ["sepal_length", "sepal_width", "petal_length"]
     y = "species"
@@ -150,6 +151,7 @@ def test_run_cv_simple_binary_groups(df_iris: pd.DataFrame) -> None:
     ----------
     df_iris : pd.DataFrame
         The iris dataset as a multiclass classification problem.
+
     """
     # keep only two species
     df_iris = df_iris[df_iris["species"].isin(["versicolor", "virginica"])]
@@ -196,6 +198,7 @@ def test_run_cv_simple_binary_errors(
         The iris dataset as a binary classification problem.
     df_iris : pd.DataFrame
         The iris dataset as a multiclass classification problem.
+
     """
 
     # Test error when pos_labels are not provide (target-dependent scores)
@@ -223,6 +226,7 @@ def test_run_cv_errors(df_iris: pd.DataFrame) -> None:
     ----------
     df_iris : pd.DataFrame
         The iris dataset as a multiclass classification problem.
+
     """
     X = ["sepal_length", "sepal_width", "petal_length"]
     y = "species"
@@ -388,6 +392,7 @@ def test_tune_hyperparam_gridsearch(df_iris: pd.DataFrame) -> None:
     ----------
     df_iris : pd.DataFrame
         The iris dataset as a multiclass classification problem.
+
     """
     # keep only two species
     df_iris = df_iris[df_iris["species"].isin(["versicolor", "virginica"])]
@@ -450,6 +455,7 @@ def test_tune_hyperparam_gridsearch_groups(df_iris: pd.DataFrame) -> None:
     ----------
     df_iris : pd.DataFrame
         The iris dataset as a multiclass classification problem.
+
     """
     # keep only two species
     df_iris = df_iris[df_iris["species"].isin(["versicolor", "virginica"])]
@@ -532,6 +538,7 @@ def test_tune_hyperparam_randomsearch(df_iris: pd.DataFrame) -> None:
     ----------
     df_iris : pd.DataFrame
         The iris dataset as a multiclass classification problem.
+
     """
     # keep only two species
     df_iris = df_iris[df_iris["species"].isin(["versicolor", "virginica"])]
@@ -712,6 +719,7 @@ def test_return_estimators(df_iris: pd.DataFrame) -> None:
     ----------
     df_iris : pd.DataFrame
         The iris dataset as a multiclass classification problem.
+
     """
     df_iris = df_iris[df_iris["species"].isin(["versicolor", "virginica"])]
     X = ["sepal_length", "sepal_width", "petal_length"]
@@ -798,6 +806,7 @@ def test_return_train_scores(df_iris: pd.DataFrame) -> None:
     ----------
     df_iris : pd.DataFrame
         The iris dataset as a multiclass classification problem.
+
     """
     df_iris = df_iris[df_iris["species"].isin(["versicolor", "virginica"])]
     X = ["sepal_length", "sepal_width", "petal_length"]
@@ -1247,3 +1256,53 @@ def test_inspector_picklable(tmp_path: Path, df_iris: pd.DataFrame) -> None:
     joblib.dump(inspector, pickled_file)
     # test if object can be loaded as well
     joblib.load(pickled_file)
+
+
+def test_tune_hyperparam_target(df_iris: pd.DataFrame) -> None:
+    """Test run_cross_validation with hyperparameter tuning and target trans.
+
+    Parameters
+    ----------
+    df_iris : pd.DataFrame
+        The iris dataset as a multiclass classification problem.
+
+    """
+    # keep only two species
+    df_iris = df_iris[df_iris["species"].isin(["versicolor", "virginica"])]
+    df_iris["species"] = df_iris["species"].map(
+        {"versicolor": 0, "virginica": 1}
+    )
+    X = ["sepal_length", "sepal_width", "petal_length", "petal_width"]
+    y = "species"
+    X_types = {
+        "continuous": ["sepal_length", "sepal_width", "petal_length"],
+        "confounds": ["petal_width"],
+    }
+
+    target_pipeline = TargetPipelineCreator()
+    model = PipelineCreator(
+        problem_type="regression", apply_to="continuous"
+    )
+    target_pipeline.add("confound_removal", confounds="confounds")
+    model.add(target_pipeline, apply_to="target")
+    model.add("svm", C=[1, 2])
+
+    _ = run_cross_validation(
+        X=X,
+        y=y,
+        data=df_iris,
+        X_types=X_types,
+        model=model,
+        seed=6372,
+        n_jobs=1,
+        cv=10,
+        search_params={
+            "cv": 5,
+            "n_jobs": 1,
+            "verbose": 10,
+        },
+        verbose=10,
+        return_estimator="all",
+        return_inspector=True,
+    )
+    # TODO: add assertions

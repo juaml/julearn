@@ -60,6 +60,7 @@ def test_make_column_selector(
         The column types to set in X_iris.
     selection : slice
         The columns that the selector should select.
+
     """
     column_types = [col or "continuous" for col in column_types]
     to_rename = {
@@ -119,6 +120,7 @@ def test_ColumnTypes_patterns(
         The patterns that should match the column types.
     resulting_column_types : set of str
         The resulting column types.
+
     """
     ct = ColumnTypes(column_types)
     if not isinstance(pattern, list):
@@ -177,6 +179,7 @@ def test_ColumnTypes_to_column_selector(
         The resulting column types.
     selection : slice
         The columns that the selector should select.
+
     """
     _column_types = [col or "continuous" for col in data_column_types]
     to_rename = {
@@ -215,6 +218,7 @@ def test_ColumnTypes_equivalence(
         The right hand side of the comparison.
     equal : bool
         Whether the comparison should be equal.
+
     """
     assert (left == right) == equal
 
@@ -247,6 +251,7 @@ def test_ColumnTypes_add(
         The right hand side of the addition.
     result : ColumnTypes
         The expected result.
+
     """
     summed = ColumnTypes(left).add(right)
     assert summed == ColumnTypes(result)

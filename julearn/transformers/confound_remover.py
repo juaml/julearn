@@ -52,6 +52,7 @@ class ConfoundRemover(JuTransformer):
     row_select_vals : str, int, bool or list of str, int, bool
         The value(s) which should be selected in the row_select_col_type
         to select the rows used for training (default is None)
+
     """
 
     def __init__(
@@ -93,6 +94,7 @@ class ConfoundRemover(JuTransformer):
         -------
         ConfoundRemover:
             The fitted transformer.
+
         """
         df_X, ser_confound = self._split_into_X_confound(X)
         self.feature_names_in_ = list(X.columns)
@@ -126,6 +128,7 @@ class ConfoundRemover(JuTransformer):
         -------
         out : pd.DataFrame
             Deconfounded data.
+
         """
         df_X, df_confounds = self._split_into_X_confound(X)
         df_X_prediction = pd.DataFrame(
@@ -163,6 +166,7 @@ class ConfoundRemover(JuTransformer):
         -------
         support_mask : numpy.array
             The support mask
+
         """
         if indices:
             return np.arange(len(self.support_mask_))[
@@ -186,6 +190,7 @@ class ConfoundRemover(JuTransformer):
         -------
         list
             Names of features to be kept in the output pd.DataFrame.
+
         """
         out = self.feature_names_in_
         if self.keep_confounds is False:
@@ -212,6 +217,7 @@ class ConfoundRemover(JuTransformer):
             DataFrame containing only features.
         df_confounds : pd.DataFrame
             DataFrame containing only confounds.
+
         """
         if not isinstance(X, pd.DataFrame):
             raise_error("ConfoundRemover only supports DataFrames as X")
@@ -245,6 +251,7 @@ class ConfoundRemover(JuTransformer):
         pd.DataFrame
             DataFrame containing residuals after rounding down to 0 if they are
             below the threshold.
+
         """
         if self.threshold is not None:
             # Accounting for correlated rounding errors for very small
