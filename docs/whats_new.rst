@@ -8,8 +8,8 @@ What's new
 
 .. towncrier release notes start
 
-Julearn 0.3.1.dev105 (2024-01-23)
----------------------------------
+Julearn 0.3.1 (2024-01-23)
+--------------------------
 
 Bugfixes
 ^^^^^^^^
@@ -57,6 +57,14 @@ Misc
 - Adopt ``pre-commit`` for adding and managing git pre-commit hooks by `Synchon
   Mandal`_ (:gh:`233`)
 
+Julearn 0.3.0 (2023-07-19)
+--------------------------
+
+The general API and behavior of Julearn has been changed to make it easier to
+define and use pipelines. The documentation has been updated to reflect these
+changes. Basic functionality from the previous API is still 
+present. However, it might require setting a few more parameters in the
+:func:`run_cross_validation` function.
 
 Julearn 0.2.5 (2022-07-21)
 --------------------------
