@@ -64,7 +64,7 @@ The general API and behavior of Julearn has been changed to make it easier to
 define and use pipelines. The documentation has been updated to reflect these
 changes. Basic functionality from the previous API is still 
 present. However, it might require setting a few more parameters in the
-:func:`run_cross_validation` function.
+:func:`.run_cross_validation` function.
 
 Julearn 0.2.5 (2022-07-21)
 --------------------------
