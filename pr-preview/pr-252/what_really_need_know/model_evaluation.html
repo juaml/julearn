@@ -1,0 +1,985 @@
+<!doctype html>
+<html class="no-js" lang="en" data-content_root="../">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="5.5. Model Comparison" href="model_comparison.html" /><link rel="prev" title="5.3. Model Building" href="pipeline.html" />
+
+    <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
+        <title>5.4. Model Evaluation - julearn documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=36a5483c" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=38fa36eb" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f8f8f8;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">julearn  documentation</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand" href="../index.html">
+  
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../_static/julearn_logo_it.png" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">julearn  documentation</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-tree">
+  <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">1. Getting started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html#setup-suggestion">2. Setup suggestion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html#installing">3. Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html#optional-dependencies">4. Optional Dependencies</a></li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">5. What you really need to know</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of 5. What you really need to know</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="cross_validation.html">5.1. Why cross validation?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html">5.2. Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pipeline.html">5.3. Model Building</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">5.4. Model Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="model_comparison.html">5.5. Model Comparison</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../selected_deeper_topics/index.html">6. Selected deeper topics</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle navigation of 6. Selected deeper topics</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/target_transformers.html">6.1. Applying preprocessing to the target</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/confound_removal.html">6.2. Cross-validation consistent Confound Removal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/hyperparameter_tuning.html">6.3. Hyperparameter Tuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/model_inspect.html">6.4. Inspecting Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/cross_validation_splitter.html">6.5. Cross-validation splitters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/stacked_models.html">6.6. Stacking Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/CBPM.html">6.7. Connectome-based Predictive Modeling (CBPM)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../available_pipeline_steps.html">7. Overview of available Pipeline Steps</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../examples.html">8. Examples</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle navigation of 8. Examples</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../auto_examples/00_starting/index.html">8.1. Starting with <code class="docutils literal notranslate"><span class="pre">julearn</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle navigation of 8.1. Starting with julearn</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../auto_examples/00_starting/run_combine_pandas.html">Working with <code class="docutils literal notranslate"><span class="pre">pandas</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../auto_examples/00_starting/run_simple_binary_classification.html">Simple Binary Classification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../auto_examples/00_starting/run_grouped_cv.html">Grouped CV</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../auto_examples/00_starting/plot_cm_acc_multiclass.html">Multiclass Classification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../auto_examples/00_starting/plot_stratified_kfold_reg.html">Stratified K-fold CV for regression analysis</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../auto_examples/00_starting/plot_example_regression.html">Regression Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../auto_examples/01_model_comparison/index.html">8.2. Model Comparison</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle navigation of 8.2. Model Comparison</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../auto_examples/01_model_comparison/plot_simple_model_comparison.html">Simple Model Comparison</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../auto_examples/02_inspection/index.html">8.3. Inspection</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle navigation of 8.3. Inspection</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../auto_examples/02_inspection/run_binary_inspect_folds.html">Inspecting the fold-wise predictions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../auto_examples/02_inspection/plot_inspect_random_forest.html">Inspecting Random Forest models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../auto_examples/02_inspection/plot_groupcv_inspect_svm.html">Inspecting SVM models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../auto_examples/02_inspection/plot_preprocess.html">Preprocessing with variance threshold, zscore and PCA</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../auto_examples/03_complex_models/index.html">8.4. Complex Models</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of 8.4. Complex Models</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../auto_examples/03_complex_models/run_apply_to_target.html">Transforming target variable with z-score</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../auto_examples/03_complex_models/run_hyperparameter_multiple_grids.html">Tuning Multiple Hyperparameters Grids</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../auto_examples/03_complex_models/run_stacked_models.html">Stacking Classification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../auto_examples/03_complex_models/run_hyperparameter_tuning.html">Tuning Hyperparameters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../auto_examples/03_complex_models/run_example_pca_featsets.html">Regression Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../auto_examples/04_confounds/index.html">8.5. Confounds</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle navigation of 8.5. Confounds</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../auto_examples/04_confounds/run_return_confounds.html">Return Confounds in Confound Removal</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../auto_examples/04_confounds/plot_confound_removal_classification.html">Confound Removal (model comparison)</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../auto_examples/05_customization/index.html">8.6. Customization</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle navigation of 8.6. Customization</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../auto_examples/05_customization/run_custom_scorers_regression.html">Custom Scoring Function for Regression</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/index.html">9. API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of 9. API Reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/main.html">9.1. Main API</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of 9.1. Main API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.run_cross_validation.html">julearn.run_cross_validation</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/pipeline.html">9.2. Pipeline</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of 9.2. Pipeline</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.PipelineCreator.html">julearn.PipelineCreator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.TargetPipelineCreator.html">julearn.TargetPipelineCreator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.pipeline.JuTargetPipeline.html">julearn.pipeline.JuTargetPipeline</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.pipeline.pipeline_creator.Step.html">julearn.pipeline.pipeline_creator.Step</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/model_selection.html">9.3. Model Selection</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" role="switch" type="checkbox"/><label for="toctree-checkbox-13"><div class="visually-hidden">Toggle navigation of 9.3. Model Selection</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.model_selection.ContinuousStratifiedKFold.html">julearn.model_selection.ContinuousStratifiedKFold</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.model_selection.RepeatedContinuousStratifiedKFold.html">julearn.model_selection.RepeatedContinuousStratifiedKFold</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.model_selection.ContinuousStratifiedGroupKFold.html">julearn.model_selection.ContinuousStratifiedGroupKFold</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.model_selection.RepeatedContinuousStratifiedGroupKFold.html">julearn.model_selection.RepeatedContinuousStratifiedGroupKFold</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.model_selection.StratifiedBootstrap.html">julearn.model_selection.StratifiedBootstrap</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.model_selection.get_searcher.html">julearn.model_selection.get_searcher</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.model_selection.list_searchers.html">julearn.model_selection.list_searchers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.model_selection.register_searcher.html">julearn.model_selection.register_searcher</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.model_selection.reset_searcher_register.html">julearn.model_selection.reset_searcher_register</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/base.html">9.4. Base</a><input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" role="switch" type="checkbox"/><label for="toctree-checkbox-14"><div class="visually-hidden">Toggle navigation of 9.4. Base</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.base.JuBaseEstimator.html">julearn.base.JuBaseEstimator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.base.JuTransformer.html">julearn.base.JuTransformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.base.WrapModel.html">julearn.base.WrapModel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.base.ColumnTypes.html">julearn.base.ColumnTypes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.base.ColumnTypesLike.html">julearn.base.ColumnTypesLike</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.base.change_column_type.html">julearn.base.change_column_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.base.get_column_type.html">julearn.base.get_column_type</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.base.make_type_selector.html">julearn.base.make_type_selector</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.base.ensure_column_types.html">julearn.base.ensure_column_types</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/inspect.html">9.5. Inspect</a><input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><div class="visually-hidden">Toggle navigation of 9.5. Inspect</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.inspect.Inspector.html">julearn.inspect.Inspector</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.inspect.FoldsInspector.html">julearn.inspect.FoldsInspector</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.inspect.preprocess.html">julearn.inspect.preprocess</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/models.html">9.6. Models</a><input class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" role="switch" type="checkbox"/><label for="toctree-checkbox-16"><div class="visually-hidden">Toggle navigation of 9.6. Models</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.models.list_models.html">julearn.models.list_models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.models.get_model.html">julearn.models.get_model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.models.register_model.html">julearn.models.register_model</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.models.reset_model_register.html">julearn.models.reset_model_register</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/models.html#dynamic-selection-deslib">9.7. Dynamic Selection (DESLib)</a><input class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><div class="visually-hidden">Toggle navigation of 9.7. Dynamic Selection (DESLib)</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.models.dynamic.DynamicSelection.html">julearn.models.dynamic.DynamicSelection</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/scoring.html">9.8. Scoring</a><input class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" role="switch" type="checkbox"/><label for="toctree-checkbox-18"><div class="visually-hidden">Toggle navigation of 9.8. Scoring</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.scoring.get_scorer.html">julearn.scoring.get_scorer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.scoring.list_scorers.html">julearn.scoring.list_scorers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.scoring.register_scorer.html">julearn.scoring.register_scorer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.scoring.reset_scorer_register.html">julearn.scoring.reset_scorer_register</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.scoring.check_scoring.html">julearn.scoring.check_scoring</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/scoring.html#module-julearn.scoring.metrics">9.9. Scoring Metrics</a><input class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" role="switch" type="checkbox"/><label for="toctree-checkbox-19"><div class="visually-hidden">Toggle navigation of 9.9. Scoring Metrics</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.scoring.metrics.r_corr.html">julearn.scoring.metrics.r_corr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.scoring.metrics.r2_corr.html">julearn.scoring.metrics.r2_corr</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/transformers.html">9.10. Transformers</a><input class="toctree-checkbox" id="toctree-checkbox-20" name="toctree-checkbox-20" role="switch" type="checkbox"/><label for="toctree-checkbox-20"><div class="visually-hidden">Toggle navigation of 9.10. Transformers</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.transformers.DropColumns.html">julearn.transformers.DropColumns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.transformers.ChangeColumnTypes.html">julearn.transformers.ChangeColumnTypes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.transformers.SetColumnTypes.html">julearn.transformers.SetColumnTypes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.transformers.FilterColumns.html">julearn.transformers.FilterColumns</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.transformers.CBPM.html">julearn.transformers.CBPM</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.transformers.JuColumnTransformer.html">julearn.transformers.JuColumnTransformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.transformers.confound_remover.ConfoundRemover.html">julearn.transformers.confound_remover.ConfoundRemover</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.transformers.list_transformers.html">julearn.transformers.list_transformers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.transformers.get_transformer.html">julearn.transformers.get_transformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.transformers.register_transformer.html">julearn.transformers.register_transformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.transformers.reset_transformer_register.html">julearn.transformers.reset_transformer_register</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/transformers.html#module-julearn.transformers.target">9.11. Target Transformers</a><input class="toctree-checkbox" id="toctree-checkbox-21" name="toctree-checkbox-21" role="switch" type="checkbox"/><label for="toctree-checkbox-21"><div class="visually-hidden">Toggle navigation of 9.11. Target Transformers</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.transformers.target.JuTransformedTargetModel.html">julearn.transformers.target.JuTransformedTargetModel</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.transformers.target.JuTargetTransformer.html">julearn.transformers.target.JuTargetTransformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.transformers.target.TargetConfoundRemover.html">julearn.transformers.target.TargetConfoundRemover</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.transformers.target.TransformedTargetWarning.html">julearn.transformers.target.TransformedTargetWarning</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.transformers.target.get_target_transformer.html">julearn.transformers.target.get_target_transformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.transformers.target.list_target_transformers.html">julearn.transformers.target.list_target_transformers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.transformers.target.register_target_transformer.html">julearn.transformers.target.register_target_transformer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.transformers.target.reset_target_transformer_register.html">julearn.transformers.target.reset_target_transformer_register</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/utils.html">9.12. Utils</a><input class="toctree-checkbox" id="toctree-checkbox-22" name="toctree-checkbox-22" role="switch" type="checkbox"/><label for="toctree-checkbox-22"><div class="visually-hidden">Toggle navigation of 9.12. Utils</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.utils.logger.html">julearn.utils.logger</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.utils.configure_logging.html">julearn.utils.configure_logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.utils.raise_error.html">julearn.utils.raise_error</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.utils.warn_with_log.html">julearn.utils.warn_with_log</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/utils.html#module-julearn.utils.typing">9.13. Typing</a><input class="toctree-checkbox" id="toctree-checkbox-23" name="toctree-checkbox-23" role="switch" type="checkbox"/><label for="toctree-checkbox-23"><div class="visually-hidden">Toggle navigation of 9.13. Typing</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.utils.typing.JuEstimatorLike.html">julearn.utils.typing.JuEstimatorLike</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.utils.typing.EstimatorLike.html">julearn.utils.typing.EstimatorLike</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.utils.typing.EstimatorLikeFit1.html">julearn.utils.typing.EstimatorLikeFit1</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.utils.typing.EstimatorLikeFit2.html">julearn.utils.typing.EstimatorLikeFit2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.utils.typing.EstimatorLikeFity.html">julearn.utils.typing.EstimatorLikeFity</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/prepare.html">9.14. Prepare</a><input class="toctree-checkbox" id="toctree-checkbox-24" name="toctree-checkbox-24" role="switch" type="checkbox"/><label for="toctree-checkbox-24"><div class="visually-hidden">Toggle navigation of 9.14. Prepare</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.prepare.prepare_input_data.html">julearn.prepare.prepare_input_data</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.prepare.check_consistency.html">julearn.prepare.check_consistency</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/stats.html">9.15. Stats</a><input class="toctree-checkbox" id="toctree-checkbox-25" name="toctree-checkbox-25" role="switch" type="checkbox"/><label for="toctree-checkbox-25"><div class="visually-hidden">Toggle navigation of 9.15. Stats</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.stats.corrected_ttest.html">julearn.stats.corrected_ttest</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/viz.html">9.16. Visualization</a><input class="toctree-checkbox" id="toctree-checkbox-26" name="toctree-checkbox-26" role="switch" type="checkbox"/><label for="toctree-checkbox-26"><div class="visually-hidden">Toggle navigation of 9.16. Visualization</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.viz.plot_scores.html">julearn.viz.plot_scores</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../configuration.html">10. Configuring <code class="docutils literal notranslate"><span class="pre">julearn</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">11. Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../maintaining.html">12. Maintaining</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../faq.html">13. FAQs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../whats_new.html">14. What’s new</a></li>
+</ul>
+
+</div>
+</div>
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="model-evaluation">
+<span id="sphx-glr-auto-examples-99-docs-run-model-evaluation-docs-py"></span><span id="model-evaluation-usage"></span><h1><span class="section-number">5.4. </span>Model Evaluation<a class="headerlink" href="#model-evaluation" title="Link to this heading">#</a></h1>
+<section id="the-output-of-run-cross-validation">
+<h2>The output of <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a><a class="headerlink" href="#the-output-of-run-cross-validation" title="Link to this heading">#</a></h2>
+<p>So far, we saw how to run a cross-validation using the <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a>
+and <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>. But what do we get as output from such a
+pipeline?</p>
+<section id="cross-validation-scores">
+<h3>Cross-validation scores<a class="headerlink" href="#cross-validation-scores" title="Link to this heading">#</a></h3>
+<p>We consider the <code class="docutils literal notranslate"><span class="pre">iris</span></code> data example and one of the pipelines from the previous
+section (feature z-scoring and a <code class="docutils literal notranslate"><span class="pre">svm</span></code>).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">julearn</span> <span class="kn">import</span> <span class="n">run_cross_validation</span>
+<span class="kn">from</span> <span class="nn">julearn.pipeline</span> <span class="kn">import</span> <span class="n">PipelineCreator</span>
+
+<span class="kn">from</span> <span class="nn">seaborn</span> <span class="kn">import</span> <span class="n">load_dataset</span>
+
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;iris&quot;</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;sepal_length&quot;</span><span class="p">,</span> <span class="s2">&quot;sepal_width&quot;</span><span class="p">,</span> <span class="s2">&quot;petal_length&quot;</span><span class="p">,</span> <span class="s2">&quot;petal_width&quot;</span><span class="p">]</span>
+<span class="n">y</span> <span class="o">=</span> <span class="s2">&quot;species&quot;</span>
+<span class="n">X_types</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;continuous&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="s2">&quot;sepal_length&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;sepal_width&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;petal_length&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;petal_width&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+
+<span class="c1"># Create a pipeline</span>
+<span class="n">creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;classification&quot;</span><span class="p">)</span>
+<span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">)</span>
+<span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;svm&quot;</span><span class="p">)</span>
+
+<span class="c1"># Run cross-validation</span>
+<span class="n">scores</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+    <span class="n">X_types</span><span class="o">=</span><span class="n">X_types</span><span class="p">,</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">creator</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-02-05 13:03:23,178 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2024-02-05 13:03:23,179 - julearn - INFO - Step added
+2024-02-05 13:03:23,179 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2024-02-05 13:03:23,179 - julearn - INFO - Step added
+2024-02-05 13:03:23,179 - julearn - INFO - ==== Input Data ====
+2024-02-05 13:03:23,179 - julearn - INFO - Using dataframe as input
+2024-02-05 13:03:23,179 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2024-02-05 13:03:23,179 - julearn - INFO -      Target: species
+2024-02-05 13:03:23,179 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2024-02-05 13:03:23,179 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
+2024-02-05 13:03:23,180 - julearn - INFO - ====================
+2024-02-05 13:03:23,180 - julearn - INFO -
+2024-02-05 13:03:23,181 - julearn - INFO - = Model Parameters =
+2024-02-05 13:03:23,181 - julearn - INFO - ====================
+2024-02-05 13:03:23,181 - julearn - INFO -
+2024-02-05 13:03:23,181 - julearn - INFO - = Data Information =
+2024-02-05 13:03:23,181 - julearn - INFO -      Problem type: classification
+2024-02-05 13:03:23,181 - julearn - INFO -      Number of samples: 150
+2024-02-05 13:03:23,181 - julearn - INFO -      Number of features: 4
+2024-02-05 13:03:23,181 - julearn - INFO - ====================
+2024-02-05 13:03:23,181 - julearn - INFO -
+2024-02-05 13:03:23,181 - julearn - INFO -      Number of classes: 3
+2024-02-05 13:03:23,181 - julearn - INFO -      Target type: object
+2024-02-05 13:03:23,182 - julearn - INFO -      Class distributions: species
+setosa        50
+versicolor    50
+virginica     50
+Name: count, dtype: int64
+2024-02-05 13:03:23,182 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2024-02-05 13:03:23,182 - julearn - INFO - Multi-class classification problem detected #classes = 3.
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">scores</span></code> variable is a <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code> object which contains the
+cross-validated metrics for each fold as columns and rows respectively.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>   fit_time  score_time  ...  fold                          cv_mdsum
+0  0.004954    0.002413  ...     0  b10eef89b4192178d482d7a1587a248a
+1  0.004472    0.002337  ...     1  b10eef89b4192178d482d7a1587a248a
+2  0.004396    0.002333  ...     2  b10eef89b4192178d482d7a1587a248a
+3  0.004322    0.002306  ...     3  b10eef89b4192178d482d7a1587a248a
+4  0.004334    0.002296  ...     4  b10eef89b4192178d482d7a1587a248a
+
+[5 rows x 8 columns]
+</pre></div>
+</div>
+<p>We see that for example the <code class="docutils literal notranslate"><span class="pre">test_score</span></code> for the third fold is 0.933. This
+means that the model achieved a score of 0.933 on the validation set
+of this fold.</p>
+<p>We can also see more information, such as the number of samples used for
+training and testing.</p>
+<p>Cross-validation is particularly useful to inspect if a model is overfitting.
+For this purpose it is useful to not only see the test scores for each fold
+but also the training scores. This can be achieved by setting the
+<code class="docutils literal notranslate"><span class="pre">return_train_score</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">True</span></code> in
+<a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">scores</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+    <span class="n">X_types</span><span class="o">=</span><span class="n">X_types</span><span class="p">,</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">creator</span><span class="p">,</span>
+    <span class="n">return_train_score</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-02-05 13:03:23,227 - julearn - INFO - ==== Input Data ====
+2024-02-05 13:03:23,227 - julearn - INFO - Using dataframe as input
+2024-02-05 13:03:23,227 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2024-02-05 13:03:23,227 - julearn - INFO -      Target: species
+2024-02-05 13:03:23,227 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2024-02-05 13:03:23,227 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
+2024-02-05 13:03:23,228 - julearn - INFO - ====================
+2024-02-05 13:03:23,228 - julearn - INFO -
+2024-02-05 13:03:23,228 - julearn - INFO - = Model Parameters =
+2024-02-05 13:03:23,228 - julearn - INFO - ====================
+2024-02-05 13:03:23,229 - julearn - INFO -
+2024-02-05 13:03:23,229 - julearn - INFO - = Data Information =
+2024-02-05 13:03:23,229 - julearn - INFO -      Problem type: classification
+2024-02-05 13:03:23,229 - julearn - INFO -      Number of samples: 150
+2024-02-05 13:03:23,229 - julearn - INFO -      Number of features: 4
+2024-02-05 13:03:23,229 - julearn - INFO - ====================
+2024-02-05 13:03:23,229 - julearn - INFO -
+2024-02-05 13:03:23,229 - julearn - INFO -      Number of classes: 3
+2024-02-05 13:03:23,229 - julearn - INFO -      Target type: object
+2024-02-05 13:03:23,229 - julearn - INFO -      Class distributions: species
+setosa        50
+versicolor    50
+virginica     50
+Name: count, dtype: int64
+2024-02-05 13:03:23,230 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2024-02-05 13:03:23,230 - julearn - INFO - Multi-class classification problem detected #classes = 3.
+   fit_time  score_time  ...  fold                          cv_mdsum
+0  0.004489    0.002325  ...     0  b10eef89b4192178d482d7a1587a248a
+1  0.004306    0.002287  ...     1  b10eef89b4192178d482d7a1587a248a
+2  0.004278    0.002302  ...     2  b10eef89b4192178d482d7a1587a248a
+3  0.004393    0.002309  ...     3  b10eef89b4192178d482d7a1587a248a
+4  0.004277    0.002276  ...     4  b10eef89b4192178d482d7a1587a248a
+
+[5 rows x 9 columns]
+</pre></div>
+</div>
+<p>The additional column <code class="docutils literal notranslate"><span class="pre">train_score</span></code> indicates the score on the training
+set.</p>
+<p>For a model that is not overfitting, the training and test scores should be
+similar. In our example, the training and test scores are indeed similar.</p>
+<p>The column <code class="docutils literal notranslate"><span class="pre">cv_mdsum</span></code> on the first glance might appear a bit cryptic.
+This column is used in internal checks, to verify that the same CV was used
+when results are compared using <code class="docutils literal notranslate"><span class="pre">julearn</span></code>’s provided statistical tests.
+This is nothing you need to worry about at this point.</p>
+<section id="returning-a-model-estimator">
+<h4>Returning a model (estimator)<a class="headerlink" href="#returning-a-model-estimator" title="Link to this heading">#</a></h4>
+<p>Now that we saw that our model doesn’t seem to overfit, we might be
+interested in checking how our model parameters look like. By setting the
+parameter <code class="docutils literal notranslate"><span class="pre">return_estimator</span></code>, we can tell <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> to
+give us the models. It can have three different values:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;cv&quot;</span></code>: This option indicates that we want to get the model that was
+trained on the entire training data of each CV fold. This means that we
+get as many models as we have CV folds. They will be returned within the
+scores DataFrame.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;final&quot;</span></code>: With this setting, an additional model will be trained on the
+entire input dataset. This model will be returned as a separate variable.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;all&quot;</span></code>: In this scenario, all the estimators (<code class="docutils literal notranslate"><span class="pre">&quot;final&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;cv&quot;</span></code>)
+will be returned.</p></li>
+</ol>
+<p>For demonstration purposes we will have a closer look at the <code class="docutils literal notranslate"><span class="pre">&quot;final&quot;</span></code>
+estimator option.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">scores</span><span class="p">,</span> <span class="n">model</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+    <span class="n">X_types</span><span class="o">=</span><span class="n">X_types</span><span class="p">,</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">creator</span><span class="p">,</span>
+    <span class="n">return_train_score</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">return_estimator</span><span class="o">=</span><span class="s2">&quot;final&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-02-05 13:03:23,286 - julearn - INFO - ==== Input Data ====
+2024-02-05 13:03:23,286 - julearn - INFO - Using dataframe as input
+2024-02-05 13:03:23,286 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2024-02-05 13:03:23,286 - julearn - INFO -      Target: species
+2024-02-05 13:03:23,286 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2024-02-05 13:03:23,286 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
+2024-02-05 13:03:23,287 - julearn - INFO - ====================
+2024-02-05 13:03:23,287 - julearn - INFO -
+2024-02-05 13:03:23,287 - julearn - INFO - = Model Parameters =
+2024-02-05 13:03:23,287 - julearn - INFO - ====================
+2024-02-05 13:03:23,287 - julearn - INFO -
+2024-02-05 13:03:23,287 - julearn - INFO - = Data Information =
+2024-02-05 13:03:23,287 - julearn - INFO -      Problem type: classification
+2024-02-05 13:03:23,287 - julearn - INFO -      Number of samples: 150
+2024-02-05 13:03:23,288 - julearn - INFO -      Number of features: 4
+2024-02-05 13:03:23,288 - julearn - INFO - ====================
+2024-02-05 13:03:23,288 - julearn - INFO -
+2024-02-05 13:03:23,288 - julearn - INFO -      Number of classes: 3
+2024-02-05 13:03:23,288 - julearn - INFO -      Target type: object
+2024-02-05 13:03:23,288 - julearn - INFO -      Class distributions: species
+setosa        50
+versicolor    50
+virginica     50
+Name: count, dtype: int64
+2024-02-05 13:03:23,288 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2024-02-05 13:03:23,289 - julearn - INFO - Multi-class classification problem detected #classes = 3.
+   fit_time  score_time  ...  fold                          cv_mdsum
+0  0.004453    0.002299  ...     0  b10eef89b4192178d482d7a1587a248a
+1  0.004304    0.002311  ...     1  b10eef89b4192178d482d7a1587a248a
+2  0.004251    0.002284  ...     2  b10eef89b4192178d482d7a1587a248a
+3  0.004318    0.002398  ...     3  b10eef89b4192178d482d7a1587a248a
+4  0.004334    0.002313  ...     4  b10eef89b4192178d482d7a1587a248a
+
+[5 rows x 9 columns]
+</pre></div>
+</div>
+<p>As we see, the scores DataFrame is the same as before. However, we now have
+an additional variable <code class="docutils literal notranslate"><span class="pre">model</span></code>. This variable contains the final estimator
+that was trained on the entire training dataset.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span>
+</pre></div>
+</div>
+<div class="output_subarea output_html rendered_html output_result">
+<style>#sk-container-id-1 {color: black;}#sk-container-id-1 pre{padding: 0;}#sk-container-id-1 div.sk-toggleable {background-color: white;}#sk-container-id-1 label.sk-toggleable__label {cursor: pointer;display: block;width: 100%;margin-bottom: 0;padding: 0.3em;box-sizing: border-box;text-align: center;}#sk-container-id-1 label.sk-toggleable__label-arrow:before {content: "▸";float: left;margin-right: 0.25em;color: #696969;}#sk-container-id-1 label.sk-toggleable__label-arrow:hover:before {color: black;}#sk-container-id-1 div.sk-estimator:hover label.sk-toggleable__label-arrow:before {color: black;}#sk-container-id-1 div.sk-toggleable__content {max-height: 0;max-width: 0;overflow: hidden;text-align: left;background-color: #f0f8ff;}#sk-container-id-1 div.sk-toggleable__content pre {margin: 0.2em;color: black;border-radius: 0.25em;background-color: #f0f8ff;}#sk-container-id-1 input.sk-toggleable__control:checked~div.sk-toggleable__content {max-height: 200px;max-width: 100%;overflow: auto;}#sk-container-id-1 input.sk-toggleable__control:checked~label.sk-toggleable__label-arrow:before {content: "▾";}#sk-container-id-1 div.sk-estimator input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 div.sk-label input.sk-toggleable__control:checked~label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 input.sk-hidden--visually {border: 0;clip: rect(1px 1px 1px 1px);clip: rect(1px, 1px, 1px, 1px);height: 1px;margin: -1px;overflow: hidden;padding: 0;position: absolute;width: 1px;}#sk-container-id-1 div.sk-estimator {font-family: monospace;background-color: #f0f8ff;border: 1px dotted black;border-radius: 0.25em;box-sizing: border-box;margin-bottom: 0.5em;}#sk-container-id-1 div.sk-estimator:hover {background-color: #d4ebff;}#sk-container-id-1 div.sk-parallel-item::after {content: "";width: 100%;border-bottom: 1px solid gray;flex-grow: 1;}#sk-container-id-1 div.sk-label:hover label.sk-toggleable__label {background-color: #d4ebff;}#sk-container-id-1 div.sk-serial::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: 0;}#sk-container-id-1 div.sk-serial {display: flex;flex-direction: column;align-items: center;background-color: white;padding-right: 0.2em;padding-left: 0.2em;position: relative;}#sk-container-id-1 div.sk-item {position: relative;z-index: 1;}#sk-container-id-1 div.sk-parallel {display: flex;align-items: stretch;justify-content: center;background-color: white;position: relative;}#sk-container-id-1 div.sk-item::before, #sk-container-id-1 div.sk-parallel-item::before {content: "";position: absolute;border-left: 1px solid gray;box-sizing: border-box;top: 0;bottom: 0;left: 50%;z-index: -1;}#sk-container-id-1 div.sk-parallel-item {display: flex;flex-direction: column;z-index: 1;position: relative;background-color: white;}#sk-container-id-1 div.sk-parallel-item:first-child::after {align-self: flex-end;width: 50%;}#sk-container-id-1 div.sk-parallel-item:last-child::after {align-self: flex-start;width: 50%;}#sk-container-id-1 div.sk-parallel-item:only-child::after {width: 0;}#sk-container-id-1 div.sk-dashed-wrapped {border: 1px dashed gray;margin: 0 0.4em 0.5em 0.4em;box-sizing: border-box;padding-bottom: 0.4em;background-color: white;}#sk-container-id-1 div.sk-label label {font-family: monospace;font-weight: bold;display: inline-block;line-height: 1.2em;}#sk-container-id-1 div.sk-label-container {text-align: center;}#sk-container-id-1 div.sk-container {/* jupyter's `normalize.less` sets `[hidden] { display: none; }` but bootstrap.min.css set `[hidden] { display: none !important; }` so we also need the `!important` here to be able to override the default hidden behavior on the sphinx rendered scikit-learn.org. See: https://github.com/scikit-learn/scikit-learn/issues/21755 */display: inline-block !important;position: relative;}#sk-container-id-1 div.sk-text-repr-fallback {display: none;}</style><div id="sk-container-id-1" class="sk-top-container"><div class="sk-text-repr-fallback"><pre>Pipeline(steps=[(&#x27;set_column_types&#x27;,
+                 SetColumnTypes(X_types={&#x27;continuous&#x27;: [&#x27;sepal_length&#x27;,
+                                                        &#x27;sepal_width&#x27;,
+                                                        &#x27;petal_length&#x27;,
+                                                        &#x27;petal_width&#x27;]})),
+                (&#x27;zscore&#x27;, StandardScaler()), (&#x27;svm&#x27;, SVC())])</pre><b>In a Jupyter environment, please rerun this cell to show the HTML representation or trust the notebook. <br />On GitHub, the HTML representation is unable to render, please try loading this page with nbviewer.org.</b></div><div class="sk-container" hidden><div class="sk-item sk-dashed-wrapped"><div class="sk-label-container"><div class="sk-label sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-1" type="checkbox" ><label for="sk-estimator-id-1" class="sk-toggleable__label sk-toggleable__label-arrow">Pipeline</label><div class="sk-toggleable__content"><pre>Pipeline(steps=[(&#x27;set_column_types&#x27;,
+                 SetColumnTypes(X_types={&#x27;continuous&#x27;: [&#x27;sepal_length&#x27;,
+                                                        &#x27;sepal_width&#x27;,
+                                                        &#x27;petal_length&#x27;,
+                                                        &#x27;petal_width&#x27;]})),
+                (&#x27;zscore&#x27;, StandardScaler()), (&#x27;svm&#x27;, SVC())])</pre></div></div></div><div class="sk-serial"><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-2" type="checkbox" ><label for="sk-estimator-id-2" class="sk-toggleable__label sk-toggleable__label-arrow">SetColumnTypes</label><div class="sk-toggleable__content"><pre>SetColumnTypes(X_types={&#x27;continuous&#x27;: [&#x27;sepal_length&#x27;, &#x27;sepal_width&#x27;,
+                                       &#x27;petal_length&#x27;, &#x27;petal_width&#x27;]})</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-3" type="checkbox" ><label for="sk-estimator-id-3" class="sk-toggleable__label sk-toggleable__label-arrow">StandardScaler</label><div class="sk-toggleable__content"><pre>StandardScaler()</pre></div></div></div><div class="sk-item"><div class="sk-estimator sk-toggleable"><input class="sk-toggleable__control sk-hidden--visually" id="sk-estimator-id-4" type="checkbox" ><label for="sk-estimator-id-4" class="sk-toggleable__label sk-toggleable__label-arrow">SVC</label><div class="sk-toggleable__content"><pre>SVC()</pre></div></div></div></div></div></div></div>
+</div>
+<br />
+<br /><p>We can use this estimator object to for example inspect the coefficients of
+the model or make predictions on a hold out test set. To learn more about how
+to inspect models please have a look at <a class="reference internal" href="../selected_deeper_topics/model_inspect.html#model-inspection"><span class="std std-ref">Inspecting Models</span></a>.</p>
+</section>
+</section>
+</section>
+<section id="cross-validation-splitters">
+<h2>Cross-validation splitters<a class="headerlink" href="#cross-validation-splitters" title="Link to this heading">#</a></h2>
+<p>When performing a cross-validation, we need to split the data into training
+and validation sets. This is done by a <em>cross-validation splitter</em>, that
+defines how the data should be split, how many folds should be used and
+whether to repeat the process several times. For example, we might want to
+shuffle the data before splitting, stratify the splits so the distribution of
+targets are always represented in the individual folds, or consider certain
+grouping variables in the splitting process, so that samples from the same
+group are always in the same fold and not split across folds.</p>
+<p>So far, however, we didn’t specify anything in that regard and still the
+cross-validation was performed and we got five folds (see the five rows above
+in the scores dataframe). This is because the default behaviour in
+<a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> falls back to the <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code> defaults,
+which is a <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.StratifiedKFold.html#sklearn.model_selection.StratifiedKFold" title="(in scikit-learn v1.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.model_selection.StratifiedKFold</span></code></a> (with <code class="docutils literal notranslate"><span class="pre">k=5</span></code>)
+for classification and <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.KFold.html#sklearn.model_selection.KFold" title="(in scikit-learn v1.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.model_selection.KFold</span></code></a> (with <code class="docutils literal notranslate"><span class="pre">k=5</span></code>)
+for regression.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>These defaults will change when they are changed in <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code> as here
+<code class="docutils literal notranslate"><span class="pre">julearn</span></code> uses <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code>’s defaults.</p>
+</div>
+<p>We can define the cross-validation splitting strategy ourselves by passing an
+<code class="docutils literal notranslate"><span class="pre">int,</span> <span class="pre">str</span> <span class="pre">or</span> <span class="pre">cross-validation</span> <span class="pre">generator</span></code> to the <code class="docutils literal notranslate"><span class="pre">cv</span></code> parameter of
+<a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>. The default described above is <code class="docutils literal notranslate"><span class="pre">cv=None</span></code>.
+the second option is to pass only an integer to <code class="docutils literal notranslate"><span class="pre">cv</span></code>. In that case, the
+same default splitting strategies will be used
+(<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.StratifiedKFold.html#sklearn.model_selection.StratifiedKFold" title="(in scikit-learn v1.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.model_selection.StratifiedKFold</span></code></a> for classification,
+<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.KFold.html#sklearn.model_selection.KFold" title="(in scikit-learn v1.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.model_selection.KFold</span></code></a> for regression), but the number of
+folds will be changed to the value of the provided integer (e.g., <code class="docutils literal notranslate"><span class="pre">cv=10</span></code>).
+To define the entire splitting strategy, one can pass all <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code>
+compatible splitters <a class="reference external" href="https://scikit-learn.org/stable/modules/classes.html#module-sklearn.model_selection" title="(in scikit-learn v1.4)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sklearn.model_selection</span></code></a> to <code class="docutils literal notranslate"><span class="pre">cv</span></code>. However,
+<code class="docutils literal notranslate"><span class="pre">julearn</span></code> provides a built-in set of additional splitters that can be found
+under <a class="reference internal" href="../api/model_selection.html#module-julearn.model_selection" title="julearn.model_selection"><code class="xref py py-mod docutils literal notranslate"><span class="pre">model_selection</span></code></a> (see more about them in <a class="reference internal" href="../selected_deeper_topics/cross_validation_splitter.html#cv-splitter"><span class="std std-ref">Cross-validation splitters</span></a>).
+The fourth option is to pass an iterable that yields the train and test
+indices for each split.</p>
+<p>Using the same pipeline creator as above, we can define a cv-splitter and
+pass it to <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">RepeatedStratifiedKFold</span>
+
+<span class="n">cv_splitter</span> <span class="o">=</span> <span class="n">RepeatedStratifiedKFold</span><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">n_repeats</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+
+<span class="n">scores</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+    <span class="n">X_types</span><span class="o">=</span><span class="n">X_types</span><span class="p">,</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">creator</span><span class="p">,</span>
+    <span class="n">return_train_score</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">cv</span><span class="o">=</span><span class="n">cv_splitter</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-02-05 13:03:23,352 - julearn - INFO - ==== Input Data ====
+2024-02-05 13:03:23,352 - julearn - INFO - Using dataframe as input
+2024-02-05 13:03:23,352 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2024-02-05 13:03:23,352 - julearn - INFO -      Target: species
+2024-02-05 13:03:23,352 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2024-02-05 13:03:23,352 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
+2024-02-05 13:03:23,353 - julearn - INFO - ====================
+2024-02-05 13:03:23,353 - julearn - INFO -
+2024-02-05 13:03:23,354 - julearn - INFO - = Model Parameters =
+2024-02-05 13:03:23,354 - julearn - INFO - ====================
+2024-02-05 13:03:23,354 - julearn - INFO -
+2024-02-05 13:03:23,354 - julearn - INFO - = Data Information =
+2024-02-05 13:03:23,354 - julearn - INFO -      Problem type: classification
+2024-02-05 13:03:23,354 - julearn - INFO -      Number of samples: 150
+2024-02-05 13:03:23,354 - julearn - INFO -      Number of features: 4
+2024-02-05 13:03:23,354 - julearn - INFO - ====================
+2024-02-05 13:03:23,354 - julearn - INFO -
+2024-02-05 13:03:23,354 - julearn - INFO -      Number of classes: 3
+2024-02-05 13:03:23,354 - julearn - INFO -      Target type: object
+2024-02-05 13:03:23,354 - julearn - INFO -      Class distributions: species
+setosa        50
+versicolor    50
+virginica     50
+Name: count, dtype: int64
+2024-02-05 13:03:23,355 - julearn - INFO - Using outer CV scheme RepeatedStratifiedKFold(n_repeats=2, n_splits=5, random_state=42)
+2024-02-05 13:03:23,355 - julearn - INFO - Multi-class classification problem detected #classes = 3.
+</pre></div>
+</div>
+<p>This will repeat 2 times a 5-fold stratified cross-validation. So the
+returned <code class="docutils literal notranslate"><span class="pre">scores</span></code> DataFrame will have 10 rows. We set the <code class="docutils literal notranslate"><span class="pre">random_state</span></code>
+to an arbitrary integer to make the splitting of the data reproducible.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>   fit_time  score_time  ...  fold                          cv_mdsum
+0  0.004568    0.002278  ...     0  7449876d309382acfef94df9d102aa76
+1  0.004262    0.002302  ...     1  7449876d309382acfef94df9d102aa76
+2  0.004282    0.002288  ...     2  7449876d309382acfef94df9d102aa76
+3  0.004339    0.002340  ...     3  7449876d309382acfef94df9d102aa76
+4  0.004398    0.002317  ...     4  7449876d309382acfef94df9d102aa76
+5  0.004538    0.002304  ...     0  7449876d309382acfef94df9d102aa76
+6  0.004404    0.002318  ...     1  7449876d309382acfef94df9d102aa76
+7  0.004389    0.002349  ...     2  7449876d309382acfef94df9d102aa76
+8  0.004369    0.002286  ...     3  7449876d309382acfef94df9d102aa76
+9  0.004397    0.002362  ...     4  7449876d309382acfef94df9d102aa76
+
+[10 rows x 9 columns]
+</pre></div>
+</div>
+</section>
+<section id="scoring-metrics">
+<h2>Scoring metrics<a class="headerlink" href="#scoring-metrics" title="Link to this heading">#</a></h2>
+<p>Nice, we have a basic pipeline, with preprocessing of features and a model,
+we defined the splitting strategy for the cross-validation the way we want it
+and we had a look at our resulting train and test scores when performing
+the cross-validation. But what do these scores even mean?</p>
+<p>Same as for the kind of cv-splitter, <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> has a
+default assumption for the scorer to be used to evaluate the
+cross-validation, which is always the model’s default scorer. Remember, we
+used a support vector classifier with the <code class="docutils literal notranslate"><span class="pre">y</span></code> (target) variable being the
+species of the <code class="docutils literal notranslate"><span class="pre">iris</span></code> dataset (possible values: <code class="docutils literal notranslate"><span class="pre">'setosa'</span></code>,
+<code class="docutils literal notranslate"><span class="pre">'versicolor'</span></code> or <code class="docutils literal notranslate"><span class="pre">'virginica'</span></code>). Therefore we have a multi-class
+classification (not to be confused with a multi-label classification!).
+Checking <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code>’s documentation of a support vector classifier’s
+default scorer <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC.score" title="(in scikit-learn v1.4)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">sklearn.svm.SVC.score()</span></code></a>, we can see that this is the
+‘mean accuracy on the given test data and labels’.</p>
+<p>With the <code class="docutils literal notranslate"><span class="pre">scoring</span></code> parameter of <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>, one can
+define the scoring function to be used. On top of the available
+<code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code> <a class="reference external" href="https://scikit-learn.org/stable/modules/classes.html#module-sklearn.metrics" title="(in scikit-learn v1.4)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">sklearn.metrics</span></code></a>, <code class="docutils literal notranslate"><span class="pre">julearn</span></code> extends the functionality
+with more internal scorers and the possibility to define custom scorers. To see
+the available <code class="docutils literal notranslate"><span class="pre">julearn</span></code> scorers, one can use the <a class="reference internal" href="../api/generated/julearn.scoring.list_scorers.html#julearn.scoring.list_scorers" title="julearn.scoring.list_scorers"><code class="xref py py-func docutils literal notranslate"><span class="pre">list_scorers()</span></code></a>
+function:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">julearn</span> <span class="kn">import</span> <span class="n">scoring</span>
+<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>  <span class="c1"># for nice printing</span>
+
+<span class="n">pprint</span><span class="p">(</span><span class="n">scoring</span><span class="o">.</span><span class="n">list_scorers</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;accuracy&#39;,
+ &#39;adjusted_mutual_info_score&#39;,
+ &#39;adjusted_rand_score&#39;,
+ &#39;average_precision&#39;,
+ &#39;balanced_accuracy&#39;,
+ &#39;completeness_score&#39;,
+ &#39;explained_variance&#39;,
+ &#39;f1&#39;,
+ &#39;f1_macro&#39;,
+ &#39;f1_micro&#39;,
+ &#39;f1_samples&#39;,
+ &#39;f1_weighted&#39;,
+ &#39;fowlkes_mallows_score&#39;,
+ &#39;homogeneity_score&#39;,
+ &#39;jaccard&#39;,
+ &#39;jaccard_macro&#39;,
+ &#39;jaccard_micro&#39;,
+ &#39;jaccard_samples&#39;,
+ &#39;jaccard_weighted&#39;,
+ &#39;matthews_corrcoef&#39;,
+ &#39;max_error&#39;,
+ &#39;mutual_info_score&#39;,
+ &#39;neg_brier_score&#39;,
+ &#39;neg_log_loss&#39;,
+ &#39;neg_mean_absolute_error&#39;,
+ &#39;neg_mean_absolute_percentage_error&#39;,
+ &#39;neg_mean_gamma_deviance&#39;,
+ &#39;neg_mean_poisson_deviance&#39;,
+ &#39;neg_mean_squared_error&#39;,
+ &#39;neg_mean_squared_log_error&#39;,
+ &#39;neg_median_absolute_error&#39;,
+ &#39;neg_negative_likelihood_ratio&#39;,
+ &#39;neg_root_mean_squared_error&#39;,
+ &#39;normalized_mutual_info_score&#39;,
+ &#39;positive_likelihood_ratio&#39;,
+ &#39;precision&#39;,
+ &#39;precision_macro&#39;,
+ &#39;precision_micro&#39;,
+ &#39;precision_samples&#39;,
+ &#39;precision_weighted&#39;,
+ &#39;r2&#39;,
+ &#39;rand_score&#39;,
+ &#39;recall&#39;,
+ &#39;recall_macro&#39;,
+ &#39;recall_micro&#39;,
+ &#39;recall_samples&#39;,
+ &#39;recall_weighted&#39;,
+ &#39;roc_auc&#39;,
+ &#39;roc_auc_ovo&#39;,
+ &#39;roc_auc_ovo_weighted&#39;,
+ &#39;roc_auc_ovr&#39;,
+ &#39;roc_auc_ovr_weighted&#39;,
+ &#39;top_k_accuracy&#39;,
+ &#39;v_measure_score&#39;,
+ &#39;r2_corr&#39;,
+ &#39;r_corr&#39;,
+ &#39;pearsonr&#39;]
+</pre></div>
+</div>
+<p>To use a <code class="docutils literal notranslate"><span class="pre">julearn</span></code> scorer, one can pass the name of the scorer as a string
+to the <code class="docutils literal notranslate"><span class="pre">scoring</span></code> parameter of <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a>. If multiple
+different scorers need to be used, a list of strings can be passed. For
+example, if we were interested in the <code class="docutils literal notranslate"><span class="pre">accuracy</span></code> and the <code class="docutils literal notranslate"><span class="pre">f1</span></code> scores we
+could do the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">scoring</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;accuracy&quot;</span><span class="p">,</span> <span class="s2">&quot;f1_macro&quot;</span><span class="p">]</span>
+
+<span class="n">scores</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+    <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+    <span class="n">X_types</span><span class="o">=</span><span class="n">X_types</span><span class="p">,</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">model</span><span class="o">=</span><span class="n">creator</span><span class="p">,</span>
+    <span class="n">return_train_score</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">cv</span><span class="o">=</span><span class="n">cv_splitter</span><span class="p">,</span>
+    <span class="n">scoring</span><span class="o">=</span><span class="n">scoring</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-02-05 13:03:23,463 - julearn - INFO - ==== Input Data ====
+2024-02-05 13:03:23,464 - julearn - INFO - Using dataframe as input
+2024-02-05 13:03:23,464 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2024-02-05 13:03:23,464 - julearn - INFO -      Target: species
+2024-02-05 13:03:23,464 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2024-02-05 13:03:23,464 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
+2024-02-05 13:03:23,464 - julearn - INFO - ====================
+2024-02-05 13:03:23,464 - julearn - INFO -
+2024-02-05 13:03:23,465 - julearn - INFO - = Model Parameters =
+2024-02-05 13:03:23,465 - julearn - INFO - ====================
+2024-02-05 13:03:23,465 - julearn - INFO -
+2024-02-05 13:03:23,465 - julearn - INFO - = Data Information =
+2024-02-05 13:03:23,465 - julearn - INFO -      Problem type: classification
+2024-02-05 13:03:23,465 - julearn - INFO -      Number of samples: 150
+2024-02-05 13:03:23,465 - julearn - INFO -      Number of features: 4
+2024-02-05 13:03:23,465 - julearn - INFO - ====================
+2024-02-05 13:03:23,465 - julearn - INFO -
+2024-02-05 13:03:23,465 - julearn - INFO -      Number of classes: 3
+2024-02-05 13:03:23,466 - julearn - INFO -      Target type: object
+2024-02-05 13:03:23,466 - julearn - INFO -      Class distributions: species
+setosa        50
+versicolor    50
+virginica     50
+Name: count, dtype: int64
+2024-02-05 13:03:23,466 - julearn - INFO - Using outer CV scheme RepeatedStratifiedKFold(n_repeats=2, n_splits=5, random_state=42)
+2024-02-05 13:03:23,466 - julearn - INFO - Multi-class classification problem detected #classes = 3.
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">scores</span></code> DataFrame will now have train- and test-score columns for both
+scorers:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>   fit_time  score_time  ...  fold                          cv_mdsum
+0  0.004807    0.004140  ...     0  7449876d309382acfef94df9d102aa76
+1  0.004487    0.003887  ...     1  7449876d309382acfef94df9d102aa76
+2  0.004794    0.004009  ...     2  7449876d309382acfef94df9d102aa76
+3  0.004652    0.003843  ...     3  7449876d309382acfef94df9d102aa76
+4  0.004541    0.003831  ...     4  7449876d309382acfef94df9d102aa76
+5  0.004483    0.003803  ...     0  7449876d309382acfef94df9d102aa76
+6  0.004452    0.003772  ...     1  7449876d309382acfef94df9d102aa76
+7  0.004432    0.003752  ...     2  7449876d309382acfef94df9d102aa76
+8  0.004444    0.003865  ...     3  7449876d309382acfef94df9d102aa76
+9  0.004432    0.003763  ...     4  7449876d309382acfef94df9d102aa76
+
+[10 rows x 11 columns]
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.434 seconds)</p>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="model_comparison.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title"><span class="section-number">5.5. </span>Model Comparison</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="pipeline.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title"><span class="section-number">5.3. </span>Model Building</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2023, Authors of julearn
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">5.4. Model Evaluation</a><ul>
+<li><a class="reference internal" href="#the-output-of-run-cross-validation">The output of <code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a><ul>
+<li><a class="reference internal" href="#cross-validation-scores">Cross-validation scores</a><ul>
+<li><a class="reference internal" href="#returning-a-model-estimator">Returning a model (estimator)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#cross-validation-splitters">Cross-validation splitters</a></li>
+<li><a class="reference internal" href="#scoring-metrics">Scoring metrics</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=32e29ea5"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/js/custom.js?v=9868c0c7"></script>
+    </body>
+</html>
