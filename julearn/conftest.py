@@ -160,7 +160,7 @@ def problem_type(request: FixtureRequest) -> str:
     Returns
     -------
     str
-        The problem type (one of {"regression", "classification"}).
+        The problem type.
 
     """
 
