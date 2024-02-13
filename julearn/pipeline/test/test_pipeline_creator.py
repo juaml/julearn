@@ -5,7 +5,7 @@
 # License: AGPL
 
 import warnings
-from typing import Callable, Dict, List
+from typing import Callable, Dict, List, Union
 
 import pandas as pd
 import pytest
@@ -23,7 +23,7 @@ from julearn.transformers import get_transformer
 
 
 def test_construction_working(
-    model: str, preprocess: List[str], problem_type: str
+    model: str, preprocess: Union[str, List[str]], problem_type: str
 ) -> None:
     """Test that the pipeline constructions works as expected.
 
@@ -31,7 +31,7 @@ def test_construction_working(
     ----------
     model : str
         The model to test.
-    preprocess : List[str]
+    preprocess : str or list of str
         The preprocessing steps to test.
     problem_type : str
         The problem type to test.
@@ -72,7 +72,7 @@ def test_fit_and_transform_no_error(
     X_iris: pd.DataFrame,  # noqa: N803
     y_iris: pd.Series,
     model: str,
-    preprocess: List[str],
+    preprocess: Union[str, List[str]],
     problem_type: str,
 ) -> None:
     """Test that the pipeline fit and transform does not give an error.
@@ -85,7 +85,7 @@ def test_fit_and_transform_no_error(
         The iris dataset target variable.
     model : str
         The model to test.
-    preprocess : List[str]
+    preprocess : str or list of str
         The preprocessing steps to test.
     problem_type : str
         The problem type to test.
@@ -103,7 +103,7 @@ def test_fit_and_transform_no_error(
 def test_hyperparameter_tuning(
     X_types_iris: Dict[str, List[str]],  # noqa: N803
     model: str,
-    preprocess: List[str],
+    preprocess: Union[str, List[str]],
     problem_type: str,
     get_tuning_params: Callable,
     search_params: Dict[str, List],
@@ -112,11 +112,11 @@ def test_hyperparameter_tuning(
 
     Parameters
     ----------
-    X_types_iris : Dict[str, List[str]]
+    X_types_iris : dict
         The iris dataset features types.
     model : str
         The model to test.
-    preprocess : List[str]
+    preprocess : str or list of str
         The preprocessing steps to test.
     problem_type : str
         The problem type to test.
