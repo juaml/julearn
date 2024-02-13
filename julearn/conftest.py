@@ -131,7 +131,7 @@ def X_types_iris(request: FixtureRequest) -> Optional[Dict]:
 
 
 @fixture(params=["rf", "svm", "gauss", "ridge"], scope="function")
-def models_all_problem_types(request: FixtureRequest) -> str:
+def model(request: FixtureRequest) -> str:
     """Return different models that work with classification and regression.
 
     Parameters
@@ -149,7 +149,7 @@ def models_all_problem_types(request: FixtureRequest) -> str:
 
 
 @fixture(params=["regression", "classification"], scope="function")
-def all_problem_types(request: FixtureRequest) -> str:
+def problem_type(request: FixtureRequest) -> str:
     """Return different problem types.
 
     Parameters
@@ -245,7 +245,7 @@ def get_tuning_params() -> Callable:
     ],
     scope="function",
 )
-def preprocessing(request: FixtureRequest) -> Union[str, List[str]]:
+def preprocess(request: FixtureRequest) -> Union[str, List[str]]:
     """Return different preprocessing steps.
 
     Parameters
