@@ -12,7 +12,6 @@ import numpy as np
 import pandas as pd
 import pytest
 from pytest import FixtureRequest, fixture
-from pytest_lazyfixture import lazy_fixture
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import ShuffleSplit, train_test_split
 
@@ -64,7 +63,7 @@ pytestmark = pytest.mark.filterwarnings("ignore::DeprecationWarning")
     ],
     scope="module",
 )
-def all_deslib_algorithms(request: FixtureRequest) -> str:
+def algo_name(request: FixtureRequest) -> str:
     """Return different algorithms for the iris dataset features.
 
     Parameters
@@ -81,10 +80,6 @@ def all_deslib_algorithms(request: FixtureRequest) -> str:
     return request.param
 
 
-@pytest.mark.parametrize(
-    "algo_name",
-    [lazy_fixture("all_deslib_algorithms")],
-)
 @pytest.mark.skip("Deslib is not compatible with new python. Waiting for PR.")
 def test_algorithms(
     df_iris: pd.DataFrame,
