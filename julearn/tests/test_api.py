@@ -4,6 +4,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
+import platform
 from pathlib import Path
 
 import joblib
@@ -208,7 +209,15 @@ def test_run_cv_simple_binary_errors(
     api_params = {"model": "svm", "problem_type": "classification"}
     sklearn_model = SVC()
 
-    with pytest.warns(UserWarning, match="Target is multiclass but average"):
+    if (
+        platform.python_version_tuple()[0] == "3"
+        and int(platform.python_version_tuple()[1]) > 8
+    ):
+        user_warning_msg = "Scoring failed."
+    else:
+        user_warning_msg = "Target is multiclass but average"
+
+    with pytest.warns(UserWarning, match=user_warning_msg):
         do_scoring_test(
             X,
             y,
