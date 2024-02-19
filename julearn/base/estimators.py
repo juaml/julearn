@@ -10,7 +10,16 @@ import numpy as np
 import pandas as pd
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.utils.metaestimators import available_if
-from sklearn.utils.validation import _check_fit_params
+
+
+try:  # sklearn < 1.4.0
+    from sklearn.utils.validation import _check_fit_params
+
+    fit_params_checker = _check_fit_params
+except ImportError:  # sklearn >= 1.4.0
+    from sklearn.utils.validation import _check_method_params
+
+    fit_params_checker = _check_method_params
 
 from ..base.column_types import make_type_selector
 from ..utils import raise_error
@@ -238,7 +247,7 @@ class JuTransformer(JuBaseEstimator, TransformerMixin):
         ).index.values
         _X = X.loc[idx, :]
         _y = y if y is None else y.loc[idx]
-        fit_params = _check_fit_params(X, fit_params, indices=idx)
+        fit_params = fit_params_checker(X, fit_params, indices=idx)
 
         return dict(X=_X, y=_y, **fit_params)
 
