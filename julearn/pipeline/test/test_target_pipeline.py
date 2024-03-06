@@ -196,6 +196,7 @@ def test_target_noninverse(df_iris, X_iris):  # noqa: N803
 
     with warnings.catch_warnings():
         warnings.simplefilter("error")
+        warnings.simplefilter(action="ignore", category=FutureWarning)
         run_cross_validation(
             X=X,
             y="species",

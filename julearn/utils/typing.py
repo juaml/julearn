@@ -16,18 +16,26 @@ from typing import (
 
 import numpy as np
 import pandas as pd
-from sklearn.metrics._scorer import (
-    _PredictScorer,
-    _ProbaScorer,
-    _ThresholdScorer,
-)
+
+
+try:  # sklearn < 1.4.0
+    from sklearn.metrics._scorer import (
+        _PredictScorer,
+        _ProbaScorer,
+        _ThresholdScorer,
+    )
+
+    ScorerLike = Union[_ProbaScorer, _ThresholdScorer, _PredictScorer]
+except ImportError:  # sklearn >= 1.4.0
+    from sklearn.metrics._scorer import _Scorer
+
+    ScorerLike = _Scorer
+
 
 from ..base import ColumnTypes
 
 
 DataLike = Union[np.ndarray, pd.DataFrame, pd.Series]
-
-ScorerLike = Union[_ProbaScorer, _ThresholdScorer, _PredictScorer]
 
 
 @runtime_checkable
