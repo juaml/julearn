@@ -193,7 +193,7 @@ class _JulearnScoresViewer(param.Parameterized):
             )
             p.add_layout(labels)
             return p
-        p.circle(
+        p.scatter(
             x=jitter("x", width=0.7, range=p.x_range),
             y="score",
             alpha=0.5,
@@ -385,7 +385,6 @@ def plot_scores(
             widgets={
                 "metric": {
                     "type": pn.widgets.Select,
-                    "button_type": "primary",
                     "name": "",
                 }
             },
