@@ -439,13 +439,13 @@ cognitive control in context-dependent decision-making. Cerebral Cortex.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-03-11 10:30:27,049 - julearn - INFO - ===== Lib Versions =====
-2024-03-11 10:30:27,049 - julearn - INFO - numpy: 1.26.4
-2024-03-11 10:30:27,049 - julearn - INFO - scipy: 1.12.0
-2024-03-11 10:30:27,049 - julearn - INFO - sklearn: 1.4.1.post1
-2024-03-11 10:30:27,049 - julearn - INFO - pandas: 2.1.4
-2024-03-11 10:30:27,050 - julearn - INFO - julearn: 0.3.2.dev21
-2024-03-11 10:30:27,050 - julearn - INFO - ========================
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-04-04 14:44:03,901 - julearn - INFO - ===== Lib Versions =====
+2024-04-04 14:44:03,901 - julearn - INFO - numpy: 1.26.4
+2024-04-04 14:44:03,901 - julearn - INFO - scipy: 1.13.0
+2024-04-04 14:44:03,901 - julearn - INFO - sklearn: 1.4.1.post1
+2024-04-04 14:44:03,901 - julearn - INFO - pandas: 2.1.4
+2024-04-04 14:44:03,901 - julearn - INFO - julearn: 0.3.2.dev24
+2024-04-04 14:44:03,901 - julearn - INFO - ========================
 </pre></div>
 </div>
 <p>Set the random seed to always have the same example.</p>
@@ -453,7 +453,7 @@ cognitive control in context-dependent decision-making. Cerebral Cortex.</p>
 </pre></div>
 </div>
 <p>Load the dataset.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_fmri</span></a> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;fmri&quot;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_fmri</span></a> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;fmri&quot;</span><span class="p">)</span>
 <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.head.html#pandas.DataFrame.head" title="pandas.DataFrame.head" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method"><span class="n">df_fmri</span><span class="o">.</span><span class="n">head</span></a><span class="p">()</span>
 </pre></div>
 </div>
@@ -530,11 +530,11 @@ cognitive control in context-dependent decision-making. Cerebral Cortex.</p>
 </div>
 <br />
 <br /><p>Set the dataframe in the right format.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_fmri</span></a> <span class="o">=</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.pivot.html#pandas.DataFrame.pivot" title="pandas.DataFrame.pivot" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method"><span class="n">df_fmri</span><span class="o">.</span><span class="n">pivot</span></a><span class="p">(</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_fmri</span></a> <span class="o">=</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.pivot.html#pandas.DataFrame.pivot" title="pandas.DataFrame.pivot" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method"><span class="n">df_fmri</span><span class="o">.</span><span class="n">pivot</span></a><span class="p">(</span>
     <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;subject&quot;</span><span class="p">,</span> <span class="s2">&quot;timepoint&quot;</span><span class="p">,</span> <span class="s2">&quot;event&quot;</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="s2">&quot;region&quot;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s2">&quot;signal&quot;</span>
 <span class="p">)</span>
 
-<a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_fmri</span></a> <span class="o">=</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.reset_index.html#pandas.DataFrame.reset_index" title="pandas.DataFrame.reset_index" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method"><span class="n">df_fmri</span><span class="o">.</span><span class="n">reset_index</span></a><span class="p">()</span>
+<a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_fmri</span></a> <span class="o">=</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.reset_index.html#pandas.DataFrame.reset_index" title="pandas.DataFrame.reset_index" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method"><span class="n">df_fmri</span><span class="o">.</span><span class="n">reset_index</span></a><span class="p">()</span>
 <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.head.html#pandas.DataFrame.head" title="pandas.DataFrame.head" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method"><span class="n">df_fmri</span><span class="o">.</span><span class="n">head</span></a><span class="p">()</span>
 </pre></div>
 </div>
@@ -618,45 +618,45 @@ cognitive control in context-dependent decision-making. Cerebral Cortex.</p>
 <span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">)</span>
 <span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;svm&quot;</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">)</span>
 
-<a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span> <span class="n">data</span><span class="o">=</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_fmri</span></a><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">creator</span><span class="p">)</span>
+<a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span> <span class="n">data</span><span class="o">=</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_fmri</span></a><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">creator</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">[</span><span class="s2">&quot;test_score&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">[</span><span class="s2">&quot;test_score&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-03-11 10:30:27,059 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-03-11 10:30:27,059 - julearn - INFO - Step added
-2024-03-11 10:30:27,059 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-03-11 10:30:27,059 - julearn - INFO - Setting hyperparameter kernel = linear
-2024-03-11 10:30:27,059 - julearn - INFO - Step added
-2024-03-11 10:30:27,059 - julearn - INFO - ==== Input Data ====
-2024-03-11 10:30:27,059 - julearn - INFO - Using dataframe as input
-2024-03-11 10:30:27,059 - julearn - INFO -      Features: [&#39;frontal&#39;, &#39;parietal&#39;]
-2024-03-11 10:30:27,059 - julearn - INFO -      Target: event
-2024-03-11 10:30:27,059 - julearn - INFO -      Expanded features: [&#39;frontal&#39;, &#39;parietal&#39;]
-2024-03-11 10:30:27,060 - julearn - INFO -      X_types:{}
-2024-03-11 10:30:27,060 - julearn - WARNING - The following columns are not defined in X_types: [&#39;frontal&#39;, &#39;parietal&#39;]. They will be treated as continuous.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-04-04 14:44:03,910 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2024-04-04 14:44:03,910 - julearn - INFO - Step added
+2024-04-04 14:44:03,910 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2024-04-04 14:44:03,910 - julearn - INFO - Setting hyperparameter kernel = linear
+2024-04-04 14:44:03,910 - julearn - INFO - Step added
+2024-04-04 14:44:03,910 - julearn - INFO - ==== Input Data ====
+2024-04-04 14:44:03,910 - julearn - INFO - Using dataframe as input
+2024-04-04 14:44:03,911 - julearn - INFO -      Features: [&#39;frontal&#39;, &#39;parietal&#39;]
+2024-04-04 14:44:03,911 - julearn - INFO -      Target: event
+2024-04-04 14:44:03,911 - julearn - INFO -      Expanded features: [&#39;frontal&#39;, &#39;parietal&#39;]
+2024-04-04 14:44:03,911 - julearn - INFO -      X_types:{}
+2024-04-04 14:44:03,911 - julearn - WARNING - The following columns are not defined in X_types: [&#39;frontal&#39;, &#39;parietal&#39;]. They will be treated as continuous.
 /home/runner/work/julearn/julearn/julearn/prepare.py:507: RuntimeWarning: The following columns are not defined in X_types: [&#39;frontal&#39;, &#39;parietal&#39;]. They will be treated as continuous.
   warn_with_log(
-2024-03-11 10:30:27,060 - julearn - INFO - ====================
-2024-03-11 10:30:27,060 - julearn - INFO -
-2024-03-11 10:30:27,061 - julearn - INFO - = Model Parameters =
-2024-03-11 10:30:27,061 - julearn - INFO - ====================
-2024-03-11 10:30:27,061 - julearn - INFO -
-2024-03-11 10:30:27,061 - julearn - INFO - = Data Information =
-2024-03-11 10:30:27,061 - julearn - INFO -      Problem type: classification
-2024-03-11 10:30:27,061 - julearn - INFO -      Number of samples: 532
-2024-03-11 10:30:27,061 - julearn - INFO -      Number of features: 2
-2024-03-11 10:30:27,061 - julearn - INFO - ====================
-2024-03-11 10:30:27,061 - julearn - INFO -
-2024-03-11 10:30:27,061 - julearn - INFO -      Number of classes: 2
-2024-03-11 10:30:27,061 - julearn - INFO -      Target type: object
-2024-03-11 10:30:27,062 - julearn - INFO -      Class distributions: event
+2024-04-04 14:44:03,911 - julearn - INFO - ====================
+2024-04-04 14:44:03,912 - julearn - INFO -
+2024-04-04 14:44:03,912 - julearn - INFO - = Model Parameters =
+2024-04-04 14:44:03,912 - julearn - INFO - ====================
+2024-04-04 14:44:03,912 - julearn - INFO -
+2024-04-04 14:44:03,912 - julearn - INFO - = Data Information =
+2024-04-04 14:44:03,912 - julearn - INFO -      Problem type: classification
+2024-04-04 14:44:03,912 - julearn - INFO -      Number of samples: 532
+2024-04-04 14:44:03,912 - julearn - INFO -      Number of features: 2
+2024-04-04 14:44:03,912 - julearn - INFO - ====================
+2024-04-04 14:44:03,912 - julearn - INFO -
+2024-04-04 14:44:03,913 - julearn - INFO -      Number of classes: 2
+2024-04-04 14:44:03,913 - julearn - INFO -      Target type: object
+2024-04-04 14:44:03,913 - julearn - INFO -      Class distributions: event
 cue     266
 stim    266
 Name: count, dtype: int64
-2024-03-11 10:30:27,062 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2024-03-11 10:30:27,062 - julearn - INFO - Binary classification problem detected.
-/opt/hostedtoolcache/Python/3.10.13/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py:73: FutureWarning: `fit_params` is deprecated and will be removed in version 1.6. Pass parameters via `params` instead.
+2024-04-04 14:44:03,913 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2024-04-04 14:44:03,914 - julearn - INFO - Binary classification problem detected.
+/opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py:73: FutureWarning: `fit_params` is deprecated and will be removed in version 1.6. Pass parameters via `params` instead.
   warnings.warn(
 0.5939164168576971
 </pre></div>
@@ -673,59 +673,59 @@ We will use a grid search to find the best <code class="docutils literal notrans
     <span class="s2">&quot;cv&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>  <span class="c1"># to speed up the example</span>
 <span class="p">}</span>
 
-<a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">,</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html#sklearn.model_selection.GridSearchCV" title="sklearn.model_selection.GridSearchCV" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">estimator</span></a> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+<a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">,</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html#sklearn.model_selection.GridSearchCV" title="sklearn.model_selection.GridSearchCV" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">estimator</span></a> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
     <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span>
     <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span>
-    <span class="n">data</span><span class="o">=</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_fmri</span></a><span class="p">,</span>
+    <span class="n">data</span><span class="o">=</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_fmri</span></a><span class="p">,</span>
     <span class="n">model</span><span class="o">=</span><span class="n">creator</span><span class="p">,</span>
     <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">search_params</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">search_params</span></a><span class="p">,</span>
     <span class="n">return_estimator</span><span class="o">=</span><span class="s2">&quot;final&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">[</span><span class="s2">&quot;test_score&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">[</span><span class="s2">&quot;test_score&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-03-11 10:30:27,120 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-03-11 10:30:27,121 - julearn - INFO - Step added
-2024-03-11 10:30:27,121 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-03-11 10:30:27,121 - julearn - INFO - Setting hyperparameter kernel = linear
-2024-03-11 10:30:27,121 - julearn - INFO - Tuning hyperparameter C = [0.01, 0.1]
-2024-03-11 10:30:27,121 - julearn - INFO - Step added
-2024-03-11 10:30:27,121 - julearn - INFO - ==== Input Data ====
-2024-03-11 10:30:27,121 - julearn - INFO - Using dataframe as input
-2024-03-11 10:30:27,121 - julearn - INFO -      Features: [&#39;frontal&#39;, &#39;parietal&#39;]
-2024-03-11 10:30:27,121 - julearn - INFO -      Target: event
-2024-03-11 10:30:27,121 - julearn - INFO -      Expanded features: [&#39;frontal&#39;, &#39;parietal&#39;]
-2024-03-11 10:30:27,121 - julearn - INFO -      X_types:{}
-2024-03-11 10:30:27,121 - julearn - WARNING - The following columns are not defined in X_types: [&#39;frontal&#39;, &#39;parietal&#39;]. They will be treated as continuous.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-04-04 14:44:03,970 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2024-04-04 14:44:03,970 - julearn - INFO - Step added
+2024-04-04 14:44:03,970 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2024-04-04 14:44:03,970 - julearn - INFO - Setting hyperparameter kernel = linear
+2024-04-04 14:44:03,970 - julearn - INFO - Tuning hyperparameter C = [0.01, 0.1]
+2024-04-04 14:44:03,970 - julearn - INFO - Step added
+2024-04-04 14:44:03,970 - julearn - INFO - ==== Input Data ====
+2024-04-04 14:44:03,970 - julearn - INFO - Using dataframe as input
+2024-04-04 14:44:03,970 - julearn - INFO -      Features: [&#39;frontal&#39;, &#39;parietal&#39;]
+2024-04-04 14:44:03,970 - julearn - INFO -      Target: event
+2024-04-04 14:44:03,970 - julearn - INFO -      Expanded features: [&#39;frontal&#39;, &#39;parietal&#39;]
+2024-04-04 14:44:03,970 - julearn - INFO -      X_types:{}
+2024-04-04 14:44:03,970 - julearn - WARNING - The following columns are not defined in X_types: [&#39;frontal&#39;, &#39;parietal&#39;]. They will be treated as continuous.
 /home/runner/work/julearn/julearn/julearn/prepare.py:507: RuntimeWarning: The following columns are not defined in X_types: [&#39;frontal&#39;, &#39;parietal&#39;]. They will be treated as continuous.
   warn_with_log(
-2024-03-11 10:30:27,122 - julearn - INFO - ====================
-2024-03-11 10:30:27,122 - julearn - INFO -
-2024-03-11 10:30:27,122 - julearn - INFO - = Model Parameters =
-2024-03-11 10:30:27,123 - julearn - INFO - Tuning hyperparameters using grid
-2024-03-11 10:30:27,123 - julearn - INFO - Hyperparameters:
-2024-03-11 10:30:27,123 - julearn - INFO -      svm__C: [0.01, 0.1]
-2024-03-11 10:30:27,123 - julearn - INFO - Using inner CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
-2024-03-11 10:30:27,123 - julearn - INFO - Search Parameters:
-2024-03-11 10:30:27,123 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
-2024-03-11 10:30:27,123 - julearn - INFO - ====================
-2024-03-11 10:30:27,123 - julearn - INFO -
-2024-03-11 10:30:27,123 - julearn - INFO - = Data Information =
-2024-03-11 10:30:27,123 - julearn - INFO -      Problem type: classification
-2024-03-11 10:30:27,123 - julearn - INFO -      Number of samples: 532
-2024-03-11 10:30:27,123 - julearn - INFO -      Number of features: 2
-2024-03-11 10:30:27,123 - julearn - INFO - ====================
-2024-03-11 10:30:27,123 - julearn - INFO -
-2024-03-11 10:30:27,124 - julearn - INFO -      Number of classes: 2
-2024-03-11 10:30:27,124 - julearn - INFO -      Target type: object
-2024-03-11 10:30:27,124 - julearn - INFO -      Class distributions: event
+2024-04-04 14:44:03,971 - julearn - INFO - ====================
+2024-04-04 14:44:03,971 - julearn - INFO -
+2024-04-04 14:44:03,972 - julearn - INFO - = Model Parameters =
+2024-04-04 14:44:03,972 - julearn - INFO - Tuning hyperparameters using grid
+2024-04-04 14:44:03,972 - julearn - INFO - Hyperparameters:
+2024-04-04 14:44:03,972 - julearn - INFO -      svm__C: [0.01, 0.1]
+2024-04-04 14:44:03,972 - julearn - INFO - Using inner CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
+2024-04-04 14:44:03,972 - julearn - INFO - Search Parameters:
+2024-04-04 14:44:03,972 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
+2024-04-04 14:44:03,972 - julearn - INFO - ====================
+2024-04-04 14:44:03,972 - julearn - INFO -
+2024-04-04 14:44:03,972 - julearn - INFO - = Data Information =
+2024-04-04 14:44:03,972 - julearn - INFO -      Problem type: classification
+2024-04-04 14:44:03,972 - julearn - INFO -      Number of samples: 532
+2024-04-04 14:44:03,972 - julearn - INFO -      Number of features: 2
+2024-04-04 14:44:03,973 - julearn - INFO - ====================
+2024-04-04 14:44:03,973 - julearn - INFO -
+2024-04-04 14:44:03,973 - julearn - INFO -      Number of classes: 2
+2024-04-04 14:44:03,973 - julearn - INFO -      Target type: object
+2024-04-04 14:44:03,973 - julearn - INFO -      Class distributions: event
 cue     266
 stim    266
 Name: count, dtype: int64
-2024-03-11 10:30:27,124 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2024-03-11 10:30:27,125 - julearn - INFO - Binary classification problem detected.
-/opt/hostedtoolcache/Python/3.10.13/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py:73: FutureWarning: `fit_params` is deprecated and will be removed in version 1.6. Pass parameters via `params` instead.
+2024-04-04 14:44:03,974 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2024-04-04 14:44:03,974 - julearn - INFO - Binary classification problem detected.
+/opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py:73: FutureWarning: `fit_params` is deprecated and will be removed in version 1.6. Pass parameters via `params` instead.
   warnings.warn(
 0.588308940222183
 </pre></div>
@@ -735,60 +735,60 @@ Name: count, dtype: int64
 <span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">)</span>
 <span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;svm&quot;</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span> <span class="s2">&quot;rbf&quot;</span><span class="p">,</span> <span class="s2">&quot;poly&quot;</span><span class="p">],</span> <span class="n">C</span><span class="o">=</span><span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">])</span>
 
-<a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">,</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html#sklearn.model_selection.GridSearchCV" title="sklearn.model_selection.GridSearchCV" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">estimator</span></a> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+<a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">,</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html#sklearn.model_selection.GridSearchCV" title="sklearn.model_selection.GridSearchCV" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">estimator</span></a> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
     <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span>
     <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span>
-    <span class="n">data</span><span class="o">=</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_fmri</span></a><span class="p">,</span>
+    <span class="n">data</span><span class="o">=</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_fmri</span></a><span class="p">,</span>
     <span class="n">model</span><span class="o">=</span><span class="n">creator</span><span class="p">,</span>
     <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">search_params</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">search_params</span></a><span class="p">,</span>
     <span class="n">return_estimator</span><span class="o">=</span><span class="s2">&quot;final&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">[</span><span class="s2">&quot;test_score&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">[</span><span class="s2">&quot;test_score&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-03-11 10:30:27,412 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-03-11 10:30:27,413 - julearn - INFO - Step added
-2024-03-11 10:30:27,413 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-03-11 10:30:27,413 - julearn - INFO - Tuning hyperparameter kernel = [&#39;linear&#39;, &#39;rbf&#39;, &#39;poly&#39;]
-2024-03-11 10:30:27,413 - julearn - INFO - Tuning hyperparameter C = [0.01, 0.1]
-2024-03-11 10:30:27,413 - julearn - INFO - Step added
-2024-03-11 10:30:27,413 - julearn - INFO - ==== Input Data ====
-2024-03-11 10:30:27,413 - julearn - INFO - Using dataframe as input
-2024-03-11 10:30:27,413 - julearn - INFO -      Features: [&#39;frontal&#39;, &#39;parietal&#39;]
-2024-03-11 10:30:27,413 - julearn - INFO -      Target: event
-2024-03-11 10:30:27,413 - julearn - INFO -      Expanded features: [&#39;frontal&#39;, &#39;parietal&#39;]
-2024-03-11 10:30:27,413 - julearn - INFO -      X_types:{}
-2024-03-11 10:30:27,413 - julearn - WARNING - The following columns are not defined in X_types: [&#39;frontal&#39;, &#39;parietal&#39;]. They will be treated as continuous.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-04-04 14:44:04,255 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2024-04-04 14:44:04,255 - julearn - INFO - Step added
+2024-04-04 14:44:04,256 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2024-04-04 14:44:04,256 - julearn - INFO - Tuning hyperparameter kernel = [&#39;linear&#39;, &#39;rbf&#39;, &#39;poly&#39;]
+2024-04-04 14:44:04,256 - julearn - INFO - Tuning hyperparameter C = [0.01, 0.1]
+2024-04-04 14:44:04,256 - julearn - INFO - Step added
+2024-04-04 14:44:04,256 - julearn - INFO - ==== Input Data ====
+2024-04-04 14:44:04,256 - julearn - INFO - Using dataframe as input
+2024-04-04 14:44:04,256 - julearn - INFO -      Features: [&#39;frontal&#39;, &#39;parietal&#39;]
+2024-04-04 14:44:04,256 - julearn - INFO -      Target: event
+2024-04-04 14:44:04,256 - julearn - INFO -      Expanded features: [&#39;frontal&#39;, &#39;parietal&#39;]
+2024-04-04 14:44:04,256 - julearn - INFO -      X_types:{}
+2024-04-04 14:44:04,256 - julearn - WARNING - The following columns are not defined in X_types: [&#39;frontal&#39;, &#39;parietal&#39;]. They will be treated as continuous.
 /home/runner/work/julearn/julearn/julearn/prepare.py:507: RuntimeWarning: The following columns are not defined in X_types: [&#39;frontal&#39;, &#39;parietal&#39;]. They will be treated as continuous.
   warn_with_log(
-2024-03-11 10:30:27,414 - julearn - INFO - ====================
-2024-03-11 10:30:27,414 - julearn - INFO -
-2024-03-11 10:30:27,415 - julearn - INFO - = Model Parameters =
-2024-03-11 10:30:27,415 - julearn - INFO - Tuning hyperparameters using grid
-2024-03-11 10:30:27,415 - julearn - INFO - Hyperparameters:
-2024-03-11 10:30:27,415 - julearn - INFO -      svm__kernel: [&#39;linear&#39;, &#39;rbf&#39;, &#39;poly&#39;]
-2024-03-11 10:30:27,415 - julearn - INFO -      svm__C: [0.01, 0.1]
-2024-03-11 10:30:27,415 - julearn - INFO - Using inner CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
-2024-03-11 10:30:27,415 - julearn - INFO - Search Parameters:
-2024-03-11 10:30:27,415 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
-2024-03-11 10:30:27,415 - julearn - INFO - ====================
-2024-03-11 10:30:27,415 - julearn - INFO -
-2024-03-11 10:30:27,415 - julearn - INFO - = Data Information =
-2024-03-11 10:30:27,415 - julearn - INFO -      Problem type: classification
-2024-03-11 10:30:27,415 - julearn - INFO -      Number of samples: 532
-2024-03-11 10:30:27,415 - julearn - INFO -      Number of features: 2
-2024-03-11 10:30:27,415 - julearn - INFO - ====================
-2024-03-11 10:30:27,415 - julearn - INFO -
-2024-03-11 10:30:27,416 - julearn - INFO -      Number of classes: 2
-2024-03-11 10:30:27,416 - julearn - INFO -      Target type: object
-2024-03-11 10:30:27,416 - julearn - INFO -      Class distributions: event
+2024-04-04 14:44:04,257 - julearn - INFO - ====================
+2024-04-04 14:44:04,257 - julearn - INFO -
+2024-04-04 14:44:04,257 - julearn - INFO - = Model Parameters =
+2024-04-04 14:44:04,257 - julearn - INFO - Tuning hyperparameters using grid
+2024-04-04 14:44:04,257 - julearn - INFO - Hyperparameters:
+2024-04-04 14:44:04,257 - julearn - INFO -      svm__kernel: [&#39;linear&#39;, &#39;rbf&#39;, &#39;poly&#39;]
+2024-04-04 14:44:04,257 - julearn - INFO -      svm__C: [0.01, 0.1]
+2024-04-04 14:44:04,258 - julearn - INFO - Using inner CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
+2024-04-04 14:44:04,258 - julearn - INFO - Search Parameters:
+2024-04-04 14:44:04,258 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
+2024-04-04 14:44:04,258 - julearn - INFO - ====================
+2024-04-04 14:44:04,258 - julearn - INFO -
+2024-04-04 14:44:04,258 - julearn - INFO - = Data Information =
+2024-04-04 14:44:04,258 - julearn - INFO -      Problem type: classification
+2024-04-04 14:44:04,258 - julearn - INFO -      Number of samples: 532
+2024-04-04 14:44:04,258 - julearn - INFO -      Number of features: 2
+2024-04-04 14:44:04,258 - julearn - INFO - ====================
+2024-04-04 14:44:04,258 - julearn - INFO -
+2024-04-04 14:44:04,258 - julearn - INFO -      Number of classes: 2
+2024-04-04 14:44:04,258 - julearn - INFO -      Target type: object
+2024-04-04 14:44:04,259 - julearn - INFO -      Class distributions: event
 cue     266
 stim    266
 Name: count, dtype: int64
-2024-03-11 10:30:27,416 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2024-03-11 10:30:27,416 - julearn - INFO - Binary classification problem detected.
-/opt/hostedtoolcache/Python/3.10.13/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py:73: FutureWarning: `fit_params` is deprecated and will be removed in version 1.6. Pass parameters via `params` instead.
+2024-04-04 14:44:04,259 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2024-04-04 14:44:04,259 - julearn - INFO - Binary classification problem detected.
+/opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py:73: FutureWarning: `fit_params` is deprecated and will be removed in version 1.6. Pass parameters via `params` instead.
   warnings.warn(
 0.7087109857168048
 </pre></div>
@@ -806,62 +806,62 @@ parameters.</p>
 <span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">)</span>
 <span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;svm&quot;</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s2">&quot;rbf&quot;</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">],</span> <span class="n">gamma</span><span class="o">=</span><span class="p">[</span><span class="mf">1e-2</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">])</span>
 
-<a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">,</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html#sklearn.model_selection.GridSearchCV" title="sklearn.model_selection.GridSearchCV" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">estimator</span></a> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+<a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">,</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html#sklearn.model_selection.GridSearchCV" title="sklearn.model_selection.GridSearchCV" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">estimator</span></a> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
     <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span>
     <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span>
-    <span class="n">data</span><span class="o">=</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_fmri</span></a><span class="p">,</span>
+    <span class="n">data</span><span class="o">=</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_fmri</span></a><span class="p">,</span>
     <span class="n">model</span><span class="o">=</span><span class="n">creator</span><span class="p">,</span>
     <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">search_params</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">search_params</span></a><span class="p">,</span>
     <span class="n">return_estimator</span><span class="o">=</span><span class="s2">&quot;final&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">[</span><span class="s2">&quot;test_score&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">[</span><span class="s2">&quot;test_score&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">estimator</span><span class="o">.</span><span class="n">best_params_</span></a><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-03-11 10:30:28,235 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-03-11 10:30:28,235 - julearn - INFO - Step added
-2024-03-11 10:30:28,235 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-03-11 10:30:28,235 - julearn - INFO - Setting hyperparameter kernel = rbf
-2024-03-11 10:30:28,235 - julearn - INFO - Tuning hyperparameter C = [0.01, 0.1]
-2024-03-11 10:30:28,235 - julearn - INFO - Tuning hyperparameter gamma = [0.01, 0.001]
-2024-03-11 10:30:28,235 - julearn - INFO - Step added
-2024-03-11 10:30:28,235 - julearn - INFO - ==== Input Data ====
-2024-03-11 10:30:28,235 - julearn - INFO - Using dataframe as input
-2024-03-11 10:30:28,236 - julearn - INFO -      Features: [&#39;frontal&#39;, &#39;parietal&#39;]
-2024-03-11 10:30:28,236 - julearn - INFO -      Target: event
-2024-03-11 10:30:28,236 - julearn - INFO -      Expanded features: [&#39;frontal&#39;, &#39;parietal&#39;]
-2024-03-11 10:30:28,236 - julearn - INFO -      X_types:{}
-2024-03-11 10:30:28,236 - julearn - WARNING - The following columns are not defined in X_types: [&#39;frontal&#39;, &#39;parietal&#39;]. They will be treated as continuous.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-04-04 14:44:05,004 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2024-04-04 14:44:05,004 - julearn - INFO - Step added
+2024-04-04 14:44:05,004 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2024-04-04 14:44:05,004 - julearn - INFO - Setting hyperparameter kernel = rbf
+2024-04-04 14:44:05,004 - julearn - INFO - Tuning hyperparameter C = [0.01, 0.1]
+2024-04-04 14:44:05,004 - julearn - INFO - Tuning hyperparameter gamma = [0.01, 0.001]
+2024-04-04 14:44:05,004 - julearn - INFO - Step added
+2024-04-04 14:44:05,004 - julearn - INFO - ==== Input Data ====
+2024-04-04 14:44:05,004 - julearn - INFO - Using dataframe as input
+2024-04-04 14:44:05,004 - julearn - INFO -      Features: [&#39;frontal&#39;, &#39;parietal&#39;]
+2024-04-04 14:44:05,004 - julearn - INFO -      Target: event
+2024-04-04 14:44:05,004 - julearn - INFO -      Expanded features: [&#39;frontal&#39;, &#39;parietal&#39;]
+2024-04-04 14:44:05,005 - julearn - INFO -      X_types:{}
+2024-04-04 14:44:05,005 - julearn - WARNING - The following columns are not defined in X_types: [&#39;frontal&#39;, &#39;parietal&#39;]. They will be treated as continuous.
 /home/runner/work/julearn/julearn/julearn/prepare.py:507: RuntimeWarning: The following columns are not defined in X_types: [&#39;frontal&#39;, &#39;parietal&#39;]. They will be treated as continuous.
   warn_with_log(
-2024-03-11 10:30:28,236 - julearn - INFO - ====================
-2024-03-11 10:30:28,237 - julearn - INFO -
-2024-03-11 10:30:28,237 - julearn - INFO - = Model Parameters =
-2024-03-11 10:30:28,237 - julearn - INFO - Tuning hyperparameters using grid
-2024-03-11 10:30:28,237 - julearn - INFO - Hyperparameters:
-2024-03-11 10:30:28,237 - julearn - INFO -      svm__C: [0.01, 0.1]
-2024-03-11 10:30:28,237 - julearn - INFO -      svm__gamma: [0.01, 0.001]
-2024-03-11 10:30:28,237 - julearn - INFO - Using inner CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
-2024-03-11 10:30:28,237 - julearn - INFO - Search Parameters:
-2024-03-11 10:30:28,238 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
-2024-03-11 10:30:28,238 - julearn - INFO - ====================
-2024-03-11 10:30:28,238 - julearn - INFO -
-2024-03-11 10:30:28,238 - julearn - INFO - = Data Information =
-2024-03-11 10:30:28,238 - julearn - INFO -      Problem type: classification
-2024-03-11 10:30:28,238 - julearn - INFO -      Number of samples: 532
-2024-03-11 10:30:28,238 - julearn - INFO -      Number of features: 2
-2024-03-11 10:30:28,238 - julearn - INFO - ====================
-2024-03-11 10:30:28,238 - julearn - INFO -
-2024-03-11 10:30:28,238 - julearn - INFO -      Number of classes: 2
-2024-03-11 10:30:28,238 - julearn - INFO -      Target type: object
-2024-03-11 10:30:28,239 - julearn - INFO -      Class distributions: event
+2024-04-04 14:44:05,005 - julearn - INFO - ====================
+2024-04-04 14:44:05,005 - julearn - INFO -
+2024-04-04 14:44:05,006 - julearn - INFO - = Model Parameters =
+2024-04-04 14:44:05,006 - julearn - INFO - Tuning hyperparameters using grid
+2024-04-04 14:44:05,006 - julearn - INFO - Hyperparameters:
+2024-04-04 14:44:05,006 - julearn - INFO -      svm__C: [0.01, 0.1]
+2024-04-04 14:44:05,006 - julearn - INFO -      svm__gamma: [0.01, 0.001]
+2024-04-04 14:44:05,006 - julearn - INFO - Using inner CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
+2024-04-04 14:44:05,006 - julearn - INFO - Search Parameters:
+2024-04-04 14:44:05,006 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
+2024-04-04 14:44:05,006 - julearn - INFO - ====================
+2024-04-04 14:44:05,007 - julearn - INFO -
+2024-04-04 14:44:05,007 - julearn - INFO - = Data Information =
+2024-04-04 14:44:05,007 - julearn - INFO -      Problem type: classification
+2024-04-04 14:44:05,007 - julearn - INFO -      Number of samples: 532
+2024-04-04 14:44:05,007 - julearn - INFO -      Number of features: 2
+2024-04-04 14:44:05,007 - julearn - INFO - ====================
+2024-04-04 14:44:05,007 - julearn - INFO -
+2024-04-04 14:44:05,007 - julearn - INFO -      Number of classes: 2
+2024-04-04 14:44:05,007 - julearn - INFO -      Target type: object
+2024-04-04 14:44:05,008 - julearn - INFO -      Class distributions: event
 cue     266
 stim    266
 Name: count, dtype: int64
-2024-03-11 10:30:28,239 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2024-03-11 10:30:28,239 - julearn - INFO - Binary classification problem detected.
-/opt/hostedtoolcache/Python/3.10.13/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py:73: FutureWarning: `fit_params` is deprecated and will be removed in version 1.6. Pass parameters via `params` instead.
+2024-04-04 14:44:05,008 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2024-04-04 14:44:05,008 - julearn - INFO - Binary classification problem detected.
+/opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py:73: FutureWarning: `fit_params` is deprecated and will be removed in version 1.6. Pass parameters via `params` instead.
   warnings.warn(
 0.5188855581026275
 {&#39;svm__C&#39;: 0.01, &#39;svm__gamma&#39;: 0.001}
@@ -877,62 +877,62 @@ Let’s add the default value and see what happens.</p>
 
 <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">search_params</span></a> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;cv&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>
 
-<a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">,</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html#sklearn.model_selection.GridSearchCV" title="sklearn.model_selection.GridSearchCV" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">estimator</span></a> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
+<a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">,</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html#sklearn.model_selection.GridSearchCV" title="sklearn.model_selection.GridSearchCV" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">estimator</span></a> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
     <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span>
     <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span>
-    <span class="n">data</span><span class="o">=</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_fmri</span></a><span class="p">,</span>
+    <span class="n">data</span><span class="o">=</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_fmri</span></a><span class="p">,</span>
     <span class="n">model</span><span class="o">=</span><span class="n">creator</span><span class="p">,</span>
     <span class="n">return_estimator</span><span class="o">=</span><span class="s2">&quot;final&quot;</span><span class="p">,</span>
     <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">search_params</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">search_params</span></a><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="nb">print</span><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.core.frame.DataFrame" class="sphx-glr-backref-module-pandas-core-frame sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">[</span><span class="s2">&quot;test_score&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">[</span><span class="s2">&quot;test_score&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">estimator</span><span class="o">.</span><span class="n">best_params_</span></a><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-03-11 10:30:28,845 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-03-11 10:30:28,846 - julearn - INFO - Step added
-2024-03-11 10:30:28,846 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-03-11 10:30:28,846 - julearn - INFO - Setting hyperparameter kernel = rbf
-2024-03-11 10:30:28,846 - julearn - INFO - Tuning hyperparameter C = [0.01, 0.1]
-2024-03-11 10:30:28,846 - julearn - INFO - Tuning hyperparameter gamma = [0.01, 0.001, &#39;scale&#39;]
-2024-03-11 10:30:28,846 - julearn - INFO - Step added
-2024-03-11 10:30:28,846 - julearn - INFO - ==== Input Data ====
-2024-03-11 10:30:28,846 - julearn - INFO - Using dataframe as input
-2024-03-11 10:30:28,846 - julearn - INFO -      Features: [&#39;frontal&#39;, &#39;parietal&#39;]
-2024-03-11 10:30:28,846 - julearn - INFO -      Target: event
-2024-03-11 10:30:28,846 - julearn - INFO -      Expanded features: [&#39;frontal&#39;, &#39;parietal&#39;]
-2024-03-11 10:30:28,846 - julearn - INFO -      X_types:{}
-2024-03-11 10:30:28,846 - julearn - WARNING - The following columns are not defined in X_types: [&#39;frontal&#39;, &#39;parietal&#39;]. They will be treated as continuous.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-04-04 14:44:05,564 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2024-04-04 14:44:05,564 - julearn - INFO - Step added
+2024-04-04 14:44:05,564 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2024-04-04 14:44:05,564 - julearn - INFO - Setting hyperparameter kernel = rbf
+2024-04-04 14:44:05,564 - julearn - INFO - Tuning hyperparameter C = [0.01, 0.1]
+2024-04-04 14:44:05,564 - julearn - INFO - Tuning hyperparameter gamma = [0.01, 0.001, &#39;scale&#39;]
+2024-04-04 14:44:05,565 - julearn - INFO - Step added
+2024-04-04 14:44:05,565 - julearn - INFO - ==== Input Data ====
+2024-04-04 14:44:05,565 - julearn - INFO - Using dataframe as input
+2024-04-04 14:44:05,565 - julearn - INFO -      Features: [&#39;frontal&#39;, &#39;parietal&#39;]
+2024-04-04 14:44:05,565 - julearn - INFO -      Target: event
+2024-04-04 14:44:05,565 - julearn - INFO -      Expanded features: [&#39;frontal&#39;, &#39;parietal&#39;]
+2024-04-04 14:44:05,565 - julearn - INFO -      X_types:{}
+2024-04-04 14:44:05,565 - julearn - WARNING - The following columns are not defined in X_types: [&#39;frontal&#39;, &#39;parietal&#39;]. They will be treated as continuous.
 /home/runner/work/julearn/julearn/julearn/prepare.py:507: RuntimeWarning: The following columns are not defined in X_types: [&#39;frontal&#39;, &#39;parietal&#39;]. They will be treated as continuous.
   warn_with_log(
-2024-03-11 10:30:28,847 - julearn - INFO - ====================
-2024-03-11 10:30:28,847 - julearn - INFO -
-2024-03-11 10:30:28,847 - julearn - INFO - = Model Parameters =
-2024-03-11 10:30:28,847 - julearn - INFO - Tuning hyperparameters using grid
-2024-03-11 10:30:28,848 - julearn - INFO - Hyperparameters:
-2024-03-11 10:30:28,848 - julearn - INFO -      svm__C: [0.01, 0.1]
-2024-03-11 10:30:28,848 - julearn - INFO -      svm__gamma: [0.01, 0.001, &#39;scale&#39;]
-2024-03-11 10:30:28,848 - julearn - INFO - Using inner CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
-2024-03-11 10:30:28,848 - julearn - INFO - Search Parameters:
-2024-03-11 10:30:28,848 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
-2024-03-11 10:30:28,848 - julearn - INFO - ====================
-2024-03-11 10:30:28,848 - julearn - INFO -
-2024-03-11 10:30:28,848 - julearn - INFO - = Data Information =
-2024-03-11 10:30:28,848 - julearn - INFO -      Problem type: classification
-2024-03-11 10:30:28,848 - julearn - INFO -      Number of samples: 532
-2024-03-11 10:30:28,848 - julearn - INFO -      Number of features: 2
-2024-03-11 10:30:28,848 - julearn - INFO - ====================
-2024-03-11 10:30:28,848 - julearn - INFO -
-2024-03-11 10:30:28,848 - julearn - INFO -      Number of classes: 2
-2024-03-11 10:30:28,849 - julearn - INFO -      Target type: object
-2024-03-11 10:30:28,849 - julearn - INFO -      Class distributions: event
+2024-04-04 14:44:05,566 - julearn - INFO - ====================
+2024-04-04 14:44:05,566 - julearn - INFO -
+2024-04-04 14:44:05,566 - julearn - INFO - = Model Parameters =
+2024-04-04 14:44:05,566 - julearn - INFO - Tuning hyperparameters using grid
+2024-04-04 14:44:05,566 - julearn - INFO - Hyperparameters:
+2024-04-04 14:44:05,566 - julearn - INFO -      svm__C: [0.01, 0.1]
+2024-04-04 14:44:05,566 - julearn - INFO -      svm__gamma: [0.01, 0.001, &#39;scale&#39;]
+2024-04-04 14:44:05,567 - julearn - INFO - Using inner CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
+2024-04-04 14:44:05,567 - julearn - INFO - Search Parameters:
+2024-04-04 14:44:05,567 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
+2024-04-04 14:44:05,567 - julearn - INFO - ====================
+2024-04-04 14:44:05,567 - julearn - INFO -
+2024-04-04 14:44:05,567 - julearn - INFO - = Data Information =
+2024-04-04 14:44:05,567 - julearn - INFO -      Problem type: classification
+2024-04-04 14:44:05,567 - julearn - INFO -      Number of samples: 532
+2024-04-04 14:44:05,567 - julearn - INFO -      Number of features: 2
+2024-04-04 14:44:05,567 - julearn - INFO - ====================
+2024-04-04 14:44:05,567 - julearn - INFO -
+2024-04-04 14:44:05,567 - julearn - INFO -      Number of classes: 2
+2024-04-04 14:44:05,567 - julearn - INFO -      Target type: object
+2024-04-04 14:44:05,568 - julearn - INFO -      Class distributions: event
 cue     266
 stim    266
 Name: count, dtype: int64
-2024-03-11 10:30:28,849 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2024-03-11 10:30:28,849 - julearn - INFO - Binary classification problem detected.
-/opt/hostedtoolcache/Python/3.10.13/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py:73: FutureWarning: `fit_params` is deprecated and will be removed in version 1.6. Pass parameters via `params` instead.
+2024-04-04 14:44:05,568 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2024-04-04 14:44:05,568 - julearn - INFO - Binary classification problem detected.
+/opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py:73: FutureWarning: `fit_params` is deprecated and will be removed in version 1.6. Pass parameters via `params` instead.
   warnings.warn(
 0.7087109857168048
 {&#39;svm__C&#39;: 0.1, &#39;svm__gamma&#39;: &#39;scale&#39;}
@@ -944,7 +944,7 @@ Name: count, dtype: int64
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>0.5
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 2.601 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 2.457 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-03-complex-models-run-hyperparameter-tuning-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/ca0f48eb9cb2ca7b282830f39addaf1d/run_hyperparameter_tuning.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">run_hyperparameter_tuning.py</span></code></a></p>
