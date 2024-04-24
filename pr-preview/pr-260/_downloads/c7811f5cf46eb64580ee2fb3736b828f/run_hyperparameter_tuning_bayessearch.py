@@ -73,7 +73,7 @@ creator2.add(
 search_params = {
     "kind": "bayes",
     "cv": 2,  # to speed up the example
-    "n_iter": 10,  # 10 iterations of bayesian search to speed up exampel
+    "n_iter": 10,  # 10 iterations of bayesian search to speed up example
 }
 
 
