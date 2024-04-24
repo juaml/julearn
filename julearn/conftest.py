@@ -236,6 +236,46 @@ def get_tuning_params() -> Callable:
     return get
 
 
+_tuning_distributions = {
+    "zscore": {"with_mean": [True, False]},
+    "pca": {"n_components": (0.2, 0.7, "uniform")},
+    "select_univariate": {"mode": ["k_best", "percentile"]},
+    "rf": {"n_estimators": [2, 5]},
+    "svm": {"C": (1, 10, "log-uniform")},
+    "ridge": {"alpha": (1, 3, "uniform")},
+}
+
+
+@fixture(scope="function")
+def get_tuning_distributions() -> Callable:
+    """Return a function that returns the distributions to tune.
+
+    Returns
+    -------
+    get : callable
+        A function that returns the distributions to tune for a given step.
+
+    """
+
+    def get(step: str) -> Dict:
+        """Return the distributions to tune for a given step.
+
+        Parameters
+        ----------
+        step : str
+            The name of the step.
+
+        Returns
+        -------
+        dict
+            The distributions to tune for the given step.
+
+        """
+        return copy(_tuning_distributions.get(step, {}))
+
+    return get
+
+
 @fixture(
     params=[
         "zscore",

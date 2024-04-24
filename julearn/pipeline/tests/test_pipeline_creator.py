@@ -159,6 +159,7 @@ def test_hyperparameter_tuning(
     kind = "grid"
     if search_params is not None:
         kind = search_params.get("kind", "grid")
+
     if kind == "grid":
         assert isinstance(pipeline, GridSearchCV)
         assert pipeline.param_grid == param_grid
@@ -168,6 +169,101 @@ def test_hyperparameter_tuning(
     elif kind == "bayes":
         assert isinstance(pipeline, BayesSearchCV)
         assert pipeline.search_spaces == param_grid
+
+
+def _compare_param_grids(a, b):
+    """Compare two param grids.
+
+    Parameters
+    ----------
+    a : dict
+        The first param grid (processed).
+    b : dict
+        The second param grid (raw).
+
+    """
+    for key, val in a.items():
+        assert key in b
+        if hasattr(val, "rvs"):
+            assert val.args[0] == b[key][0]
+            assert val.args[1] == b[key][1]
+            if b[key][2] in ["log-uniform", "loguniform"]:
+                assert val.dist.name == "loguniform"
+            elif b[key][2] == "uniform":
+                assert val.dist.name == "uniform"
+            else:
+                raise ValueError(f"Unknown distribution {b[key][2]}")
+        else:
+            assert val == b[key]
+
+
+def test_hyperparameter_tuning_distributions(
+    X_types_iris: Dict[str, List[str]],  # noqa: N803
+    model: str,
+    preprocess: Union[str, List[str]],
+    problem_type: str,
+    get_tuning_distributions: Callable,
+    search_params: Dict[str, List],
+) -> None:
+    """Test that the pipeline hyperparameter tuning works as expected.
+
+    Parameters
+    ----------
+    X_types_iris : dict
+        The iris dataset features types.
+    model : str
+        The model to test.
+    preprocess : str or list of str
+        The preprocessing steps to test.
+    problem_type : str
+        The problem type to test.
+    get_tuning_distributions : Callable
+        A function that returns the tuning hyperparameters for a given step.
+    search_params : dict of str and list
+        The parameters for the search.
+
+    """
+    kind = "grid"
+    if search_params is not None:
+        kind = search_params.get("kind", "grid")
+
+    if kind == "grid":
+        return  # Does not make sense to test distributions for grid search
+    if isinstance(preprocess, str):
+        preprocess = [preprocess]
+
+    creator = PipelineCreator(problem_type=problem_type)
+    param_grid = {}
+
+    used_types = (
+        ["continuous"]
+        if X_types_iris in [None, {}]
+        else list(X_types_iris.keys())
+    )
+    for step in preprocess:
+        default_params = get_tuning_distributions(step)
+        creator.add(step, apply_to=used_types, **default_params)
+        params = {
+            f"{step}__{param}": val for param, val in default_params.items()
+        }
+        param_grid.update(params)
+
+    model_params = get_tuning_distributions(model)
+    creator.add(model, **model_params)
+
+    param_grid.update(
+        {f"{model}__{param}": val for param, val in model_params.items()}
+    )
+    pipeline = creator.to_pipeline(
+        X_types=X_types_iris, search_params=search_params
+    )
+
+    if kind == "random":
+        assert isinstance(pipeline, RandomizedSearchCV)
+        _compare_param_grids(pipeline.param_distributions, param_grid)
+    elif kind == "bayes":
+        assert isinstance(pipeline, BayesSearchCV)
+        _compare_param_grids(pipeline.search_spaces, param_grid)
 
 
 @pytest.mark.parametrize(
