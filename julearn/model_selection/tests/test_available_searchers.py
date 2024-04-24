@@ -5,7 +5,8 @@
 # License: AGPL
 
 import pytest
-from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
+from skopt import BayesSearchCV
 
 from julearn.model_selection import (
     get_searcher,
@@ -42,3 +43,15 @@ def test_reset_searcher() -> None:
     reset_searcher_register()
     with pytest.raises(ValueError, match="The specified searcher "):
         get_searcher("custom_grid")
+
+
+def test_get_searcher() -> None:
+    """Test getting a searcher."""
+    out = get_searcher("grid")
+    assert out == GridSearchCV
+
+    out = get_searcher("random")
+    assert out == RandomizedSearchCV
+
+    out = get_searcher("bayes")
+    assert out == BayesSearchCV

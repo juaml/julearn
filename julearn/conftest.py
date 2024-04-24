@@ -174,6 +174,8 @@ def problem_type(request: FixtureRequest) -> str:
         {"kind": "grid"},
         {"kind": "random", "n_iter": 2},
         {"kind": "random", "n_iter": 2, "cv": 3},
+        {"kind": "bayes", "n_iter": 2, "cv": 3},
+        {"kind": "bayes", "n_iter": 2},
     ],
     scope="function",
 )
