@@ -9,6 +9,7 @@ from typing import List, Optional
 
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 from skopt import BayesSearchCV
+
 from julearn.utils.logging import logger, raise_error, warn_with_log
 
 

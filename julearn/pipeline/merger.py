@@ -5,10 +5,9 @@
 
 from typing import Dict
 
-from sklearn.model_selection._search import BaseSearchCV
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
+from sklearn.model_selection._search import BaseSearchCV
 from sklearn.pipeline import Pipeline
-
 from skopt import BayesSearchCV
 
 from ..prepare import prepare_search_params
