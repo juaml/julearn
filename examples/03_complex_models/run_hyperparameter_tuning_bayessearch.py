@@ -21,12 +21,13 @@ import numpy as np
 from seaborn import load_dataset
 
 from julearn import run_cross_validation
-from julearn.utils import configure_logging
+from julearn.utils import configure_logging, logger
 from julearn.pipeline import PipelineCreator
+
 
 ###############################################################################
 # Set the logging level to info to see extra information.
-configure_logging(level="DEBUG")
+configure_logging(level="INFO")
 
 ###############################################################################
 # Set the random seed to always have the same example.
@@ -56,38 +57,32 @@ creator1 = PipelineCreator(problem_type="classification")
 creator1.add("zscore")
 creator1.add(
     "svm",
-    kernel=["linear"], 
-    # C=[1e-6, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1, 1e1, 1e2, 1e3],
-    C=(1e-6, 1e6, "log-uniform"),
+    kernel=["linear"],
+    C=(1e-6, 1e3, "log-uniform"),
 )
 
-# creator2 = PipelineCreator(problem_type="classification")
-# creator2.add("zscore")
-# creator2.add(
-#     "svm",
-#     kernel=["rbf", "poly"],
-#     C=(1e-6, 1e6, "log-uniform"),
-#     gamma=(1e-6, 1e1, "log-uniform"),
-# )
+creator2 = PipelineCreator(problem_type="classification")
+creator2.add("zscore")
+creator2.add(
+    "svm",
+    kernel=["rbf"],
+    C=(1e-6, 1e3, "log-uniform"),
+    gamma=(1e-6, 1e1, "log-uniform"),
+)
 
 search_params = {
     "kind": "bayes",
     "cv": 2,  # to speed up the example
-    "n_iter": 10,  # 10 iterations of bayesian search
+    "n_iter": 10,  # 10 iterations of bayesian search to speed up exampel
 }
 
-# search_params = {
-#     "kind": "grid",
-#     "cv": 2,  # to speed up the example
-#     # "n_iter": 10,  # 10 iterations of bayesian search
-# }
 
 scores, estimator = run_cross_validation(
     X=X,
     y=y,
     data=df_fmri,
-    # model=[creator1, creator2],
-    model=creator1,
+    model=[creator1, creator2],
+    cv=2,  # to speed up the example
     search_params=search_params,
     return_estimator="final",
 )
