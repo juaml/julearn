@@ -5,8 +5,11 @@
 
 from typing import Dict
 
+from sklearn.model_selection._search import BaseSearchCV
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 from sklearn.pipeline import Pipeline
+
+from skopt import BayesSearchCV
 
 from ..prepare import prepare_search_params
 from ..utils.logging import raise_error
@@ -39,7 +42,7 @@ def merge_pipelines(  # noqa: C901
     search_params = prepare_search_params(search_params)
 
     for p in pipelines:
-        if not isinstance(p, (Pipeline, GridSearchCV, RandomizedSearchCV)):
+        if not isinstance(p, (Pipeline, BaseSearchCV)):
             raise_error(
                 "Only pipelines and searchers are supported. "
                 f"Found {type(p)} instead."
@@ -58,16 +61,23 @@ def merge_pipelines(  # noqa: C901
                     "RandomizedSearchCV, but the search params do not specify "
                     "a random search. These pipelines cannot be merged."
                 )
+        elif isinstance(p, BayesSearchCV):
+            if search_params["kind"] != "bayes":
+                raise_error(
+                    "At least one of the pipelines to merge is a "
+                    "BayesSearchCV, but the search params do not specify a "
+                    "bayesian search. These pipelines cannot be merged."
+                )
 
     # Check that all estimators have the same named steps in their pipelines.
     reference_pipeline = pipelines[0]
-    if isinstance(reference_pipeline, (GridSearchCV, RandomizedSearchCV)):
+    if isinstance(reference_pipeline, BaseSearchCV):
         reference_pipeline = reference_pipeline.estimator
 
     step_names = reference_pipeline.named_steps.keys()
 
     for p in pipelines:
-        if isinstance(p, (GridSearchCV, RandomizedSearchCV)):
+        if isinstance(p, BaseSearchCV):
             p = p.estimator
             if not isinstance(p, Pipeline):
                 raise_error("All searchers must use a pipeline.")
@@ -90,7 +100,7 @@ def merge_pipelines(  # noqa: C901
         # Check that all searchers have the same transformer/model.
         # TODO: Fix this comparison, as it always returns False.
         for s in pipelines[1:]:
-            if isinstance(s, (GridSearchCV, RandomizedSearchCV)):
+            if isinstance(s, BaseSearchCV):
                 if s.estimator.named_steps[t_step_name] != t:
                     different_steps.append(t_step_name)
                     break
@@ -107,10 +117,12 @@ def merge_pipelines(  # noqa: C901
             t_grid = s.param_grid.copy()
         elif isinstance(s, RandomizedSearchCV):
             t_grid = s.param_distributions.copy()
+        elif isinstance(s, BayesSearchCV):
+            t_grid = s.search_spaces.copy()
         else:
             t_grid = {}
         for t_name in different_steps:
-            if isinstance(s, (GridSearchCV, RandomizedSearchCV)):
+            if isinstance(s, BaseSearchCV):
                 t_grid[t_name] = [s.estimator.named_steps[t_name]]
             else:
                 t_grid[t_name] = [s.named_steps[t_name]]

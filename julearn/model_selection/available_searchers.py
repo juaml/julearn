@@ -8,11 +8,15 @@ from copy import deepcopy
 from typing import List, Optional
 
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
-
+from skopt import BayesSearchCV
 from julearn.utils.logging import logger, raise_error, warn_with_log
 
 
-_available_searchers = {"grid": GridSearchCV, "random": RandomizedSearchCV}
+_available_searchers = {
+    "grid": GridSearchCV,
+    "random": RandomizedSearchCV,
+    "bayes": BayesSearchCV,
+}
 
 # Keep a copy for reset
 _available_searchers_reset = deepcopy(_available_searchers)

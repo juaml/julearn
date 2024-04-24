@@ -398,6 +398,7 @@ def run_cross_validation(  # noqa: C901
     scores_df = pd.DataFrame(scores)
     out = scores_df
     if return_estimator in ["final", "all"]:
+        logger.info("Fitting final model")
         pipeline.fit(df_X, y, **fit_params)
         out = scores_df, pipeline
 
