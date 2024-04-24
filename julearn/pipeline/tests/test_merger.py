@@ -104,3 +104,12 @@ def test_merger_errors() -> None:
         match="must have the same named steps.",
     ):
         merge_pipelines(pipe1, pipe4, search_params=None)
+
+    search_params = {"kind": "grid"}
+    pipe5 = creator2.to_pipeline(search_params={"kind": "bayes"})
+
+    with pytest.raises(
+        ValueError,
+        match="one of the pipelines to merge is a BayesSearchCV",
+    ):
+        merge_pipelines(pipe1, pipe5, search_params=search_params)
