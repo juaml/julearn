@@ -706,7 +706,8 @@ class PipelineCreator:
             raise_error(f"Cannot add a {step}. I don't know what it is.")
 
     def _check_X_types(
-        self, X_types: Optional[Dict] = None  # noqa: N803
+        self,
+        X_types: Optional[Dict] = None,  # noqa: N803
     ) -> Dict[str, List[str]]:
         """Check the X_types against the pipeline creator settings.
 
@@ -861,9 +862,9 @@ class PipelineCreator:
 
 
 def _prepare_hyperparameters_distributions(
-    params_to_tune: Dict[str, Any]
+    params_to_tune: Dict[str, Any],
 ) -> Dict[str, Any]:
-    """ Prepare hyperparameters distributions for RandomizedSearchCV.
+    """Prepare hyperparameters distributions for RandomizedSearchCV.
 
     This method replaces tuples with distributions for RandomizedSearchCV
     following the skopt convention. That is, if a parameter is a tuple
@@ -879,6 +880,7 @@ def _prepare_hyperparameters_distributions(
     -------
     dict
         The modified parameters to tune.
+
     """
     mod_params_to_tune = {}
     for k, v in params_to_tune.items():

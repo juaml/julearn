@@ -14,6 +14,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 from sklearn.preprocessing import RobustScaler, StandardScaler
 from sklearn.svm import SVC
+from skopt import BayesSearchCV
 
 from julearn.base import ColumnTypesLike, WrapModel
 from julearn.models import get_model
@@ -161,9 +162,12 @@ def test_hyperparameter_tuning(
     if kind == "grid":
         assert isinstance(pipeline, GridSearchCV)
         assert pipeline.param_grid == param_grid
-    else:
+    elif kind == "random":
         assert isinstance(pipeline, RandomizedSearchCV)
         assert pipeline.param_distributions == param_grid
+    elif kind == "bayes":
+        assert isinstance(pipeline, BayesSearchCV)
+        assert pipeline.search_spaces == param_grid
 
 
 @pytest.mark.parametrize(
