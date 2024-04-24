@@ -8,7 +8,8 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Tuple, Union
 
 import numpy as np
-from sklearn.model_selection import check_cv
+from scipy import stats
+from sklearn.model_selection import RandomizedSearchCV, check_cv
 from sklearn.pipeline import Pipeline
 
 from ..base import ColumnTypes, ColumnTypesLike, JuTransformer, WrapModel
@@ -251,6 +252,10 @@ class PipelineCreator:
                 else:
                     logger.info(f"Setting hyperparameter {param} = {vals[0]}")
                     params_to_set[param] = vals[0]
+            elif hasattr(vals, "rvs"):
+                # If it is a distribution, we will tune it.
+                logger.info(f"Tuning hyperparameter {param} = {vals}")
+                params_to_tune[param] = vals
             else:
                 logger.info(f"Setting hyperparameter {param} = {vals}")
                 params_to_set[param] = vals
@@ -855,6 +860,40 @@ class PipelineCreator:
         )
 
 
+def _prepare_hyperparameters_distributions(
+    params_to_tune: Dict[str, Any]
+) -> Dict[str, Any]:
+    """ Prepare hyperparameters distributions for RandomizedSearchCV.
+
+    This method replaces tuples with distributions for RandomizedSearchCV
+    following the skopt convention. That is, if a parameter is a tuple
+    with 3 elements, the first two elements are the bounds of the
+    distribution and the third element is the type of distribution.
+
+    Parameters
+    ----------
+    params_to_tune : dict
+        The parameters to tune.
+
+    Returns
+    -------
+    dict
+        The modified parameters to tune.
+    """
+    mod_params_to_tune = {}
+    for k, v in params_to_tune.items():
+        if isinstance(v, tuple) and len(v) == 3:
+            if v[2] == "uniform":
+                mod_params_to_tune[k] = stats.uniform(v[0], v[1])
+            elif v[2] in ("loguniform", "log-uniform"):
+                mod_params_to_tune[k] = stats.loguniform(v[0], v[1])
+            else:
+                mod_params_to_tune[k] = v
+        else:
+            mod_params_to_tune[k] = v
+    return mod_params_to_tune
+
+
 def _prepare_hyperparameter_tuning(
     params_to_tune: Union[Dict[str, Any], List[Dict[str, Any]]],
     search_params: Optional[Dict[str, Any]],
@@ -876,7 +915,8 @@ def _prepare_hyperparameter_tuning(
         The parameters for the search. The following keys are accepted:
 
         * 'kind': The kind of search algorithm to use e.g.:
-            'grid' or 'random'. All valid julearn searchers can be entered.
+            'grid', 'random' or 'bayes'. All valid julearn searchers can be
+            entered.
         * 'cv': If search is going to be used, the cross-validation
             splitting strategy to use. Defaults to same CV as for the model
             evaluation.
@@ -928,6 +968,20 @@ def _prepare_hyperparameter_tuning(
                 logger.info(f"\tSet {i_list}")
                 for k, v in t_params.items():
                     logger.info(f"\t\t{k}: {v}")
+
+        if search == RandomizedSearchCV:
+            # If we are using RandomizedSearchCV, we can adopt the
+            # skopt convention of using a 3-element tuple to define
+            # the distributions.
+            if isinstance(params_to_tune, dict):
+                params_to_tune = _prepare_hyperparameters_distributions(
+                    params_to_tune
+                )
+            else:
+                params_to_tune = [
+                    _prepare_hyperparameters_distributions(p)
+                    for p in params_to_tune
+                ]
 
         cv_inner = check_cv(cv_inner)  # type: ignore
         logger.info(f"Using inner CV scheme {cv_inner}")
