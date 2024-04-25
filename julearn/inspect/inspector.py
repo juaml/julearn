@@ -15,7 +15,7 @@ from ._pipeline import PipelineInspector
 
 
 if TYPE_CHECKING:
-    
+
     from sklearn.base import BaseEstimator
 
     from ..pipeline.pipeline_creator import PipelineCreator

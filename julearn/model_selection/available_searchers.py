@@ -115,7 +115,8 @@ def register_searcher(
     searcher : obj
         The searcher class by which the searcher can be initialized.
     params_attr : str
-        The name of the attribute that holds the hyperparameter space to search.
+        The name of the attribute that holds the hyperparameter space to
+        search.
     overwrite : bool | None, optional
         decides whether overwrite should be allowed, by default None.
         Options are:
@@ -177,7 +178,7 @@ def get_searcher_params_attr(searcher: Union[str, Type]) -> Optional[str]:
     if isinstance(searcher, str):
         out = _available_searchers[searcher]["params_attr"]
     else:
-        for k, v in _available_searchers.items():
+        for _, v in _available_searchers.items():
             if searcher == v["class"]:
                 out = v["params_attr"]
     return out
