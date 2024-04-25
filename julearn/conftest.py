@@ -8,8 +8,51 @@ from copy import copy
 from typing import Callable, Dict, List, Optional, Union
 
 import pandas as pd
-from pytest import FixtureRequest, fixture
+from pytest import FixtureRequest, fixture, mark
 from seaborn import load_dataset
+
+
+_filter_keys = {
+    "nodeps": "Test that runs without conditional dependencies only",
+}
+
+
+def pytest_configure(config):
+    """Add a new marker to pytest."""
+    # register your new marker to avoid warnings
+    for k, v in _filter_keys.items():
+        config.addinivalue_line(
+            "markers",
+            f"{k}: {v}"
+        )
+
+
+def pytest_addoption(parser):
+    """Add a new filter option to pytest."""
+    # add your new filter option (you can name it whatever you want)
+    parser.addoption(
+        "--filter",
+        action="store",
+        help="Select tests based on markers.",
+    )
+
+
+def pytest_collection_modifyitems(config, items):
+    """Filter tests based on the key marker."""
+    filter = config.getoption("--filter", None)
+    if filter is None:
+        for k in _filter_keys.keys():
+            skip_keys = mark.skip(
+                reason=f"Filter not specified for this test: {k}")
+            for item in items:
+                if k in item.keywords:
+                    item.add_marker(skip_keys)  # skip the test
+    else:
+        new_items = []
+        for item in items:
+            if filter in item.keywords:
+                new_items.append(item)
+        items[:] = new_items
 
 
 @fixture(scope="function")

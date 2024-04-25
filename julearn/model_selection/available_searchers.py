@@ -5,19 +5,52 @@
 # License: AGPL
 
 from copy import deepcopy
-from typing import List, Optional
+from typing import List, Optional, Type, Union
 
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
-from skopt import BayesSearchCV
 
 from julearn.utils.logging import logger, raise_error, warn_with_log
 
 
 _available_searchers = {
-    "grid": GridSearchCV,
-    "random": RandomizedSearchCV,
-    "bayes": BayesSearchCV,
+    "grid": {
+        "class": GridSearchCV,
+        "params_attr": "param_grid",
+    },
+    "random": {
+        "class": RandomizedSearchCV,
+        "params_attr": "param_distributions",
+    },
 }
+
+try:
+    from skopt import BayesSearchCV
+
+    _available_searchers["bayes"] = {
+        "class": BayesSearchCV,
+        "params_attr": "search_spaces",
+    }
+except ImportError:
+    from sklearn.model_selection._search import BaseSearchCV
+
+    class BayesSearchCV(BaseSearchCV):
+        """Dummy class for BayesSearchCV that raises ImportError.
+
+        This class is used to raise an ImportError when BayesSearchCV is
+        requested but scikit-optimize is not installed.
+
+        """
+
+        def __init__(*args, **kwargs):
+            raise ImportError(
+                "BayesSearchCV requires scikit-optimize to be installed."
+            )
+
+    _available_searchers["bayes"] = {
+        "class": BayesSearchCV,
+        "params_attr": "search_spaces",
+    }
+    pass
 
 # Keep a copy for reset
 _available_searchers_reset = deepcopy(_available_searchers)
@@ -59,12 +92,15 @@ def get_searcher(name: str) -> object:
             f"The specified searcher ({name}) is not available. "
             f"Valid options are: {list(_available_searchers.keys())}"
         )
-    out = _available_searchers[name]
+    out = _available_searchers[name]["class"]
     return out
 
 
 def register_searcher(
-    searcher_name: str, searcher: object, overwrite: Optional[bool] = None
+    searcher_name: str,
+    searcher: object,
+    params_attr: str,
+    overwrite: Optional[bool] = None,
 ) -> None:
     """Register searcher to julearn.
 
@@ -78,6 +114,8 @@ def register_searcher(
         Name by which the searcher will be referenced by.
     searcher : obj
         The searcher class by which the searcher can be initialized.
+    params_attr : str
+        The name of the attribute that holds the hyperparameter space to search.
     overwrite : bool | None, optional
         decides whether overwrite should be allowed, by default None.
         Options are:
@@ -109,10 +147,37 @@ def register_searcher(
                 "overwrite existing searchers."
             )
     logger.info(f"Registering new searcher: {searcher_name}")
-    _available_searchers[searcher_name] = searcher
+    _available_searchers[searcher_name] = {
+        "class": searcher,
+        "params_attr": params_attr,
+    }
 
 
 def reset_searcher_register() -> None:
     """Reset the searcher register to its initial state."""
     global _available_searchers
     _available_searchers = deepcopy(_available_searchers_reset)
+
+
+def get_searcher_params_attr(searcher: Union[str, Type]) -> Optional[str]:
+    """Get the name of the attribute that holds the search space.
+
+    Parameters
+    ----------
+    searcher:
+        The searcher class or name.
+
+    Returns
+    -------
+    str
+        The name of the attribute that holds the search space.
+
+    """
+    out = None
+    if isinstance(searcher, str):
+        out = _available_searchers[searcher]["params_attr"]
+    else:
+        for k, v in _available_searchers.items():
+            if searcher == v["class"]:
+                out = v["params_attr"]
+    return out

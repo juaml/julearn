@@ -21,7 +21,7 @@ if TYPE_CHECKING:
     import pandas as pd
 
 
-class TestEst(BaseEstimator):
+class MockTestEst(BaseEstimator):
     """Class for estimator tests.
 
     Parameters
@@ -42,7 +42,7 @@ class TestEst(BaseEstimator):
         X: List[str],  # noqa: N803
         y: Optional[str] = None,
         **fit_params: Any,
-    ) -> "TestEst":
+    ) -> "MockTestEst":
         """Fit the estimator.
 
         Parameters
@@ -56,7 +56,7 @@ class TestEst(BaseEstimator):
 
         Returns
         -------
-        TestEst
+        MockTestEst
             The fitted estimator.
 
         """
@@ -155,9 +155,9 @@ def test_steps(
 @pytest.mark.parametrize(
     "est,fitted_params",
     [
-        [TestEst(), {"param_0_": 0, "param_1_": 1}],
+        [MockTestEst(), {"param_0_": 0, "param_1_": 1}],
         [
-            JuColumnTransformer("test", TestEst(), "continuous"),
+            JuColumnTransformer("test", MockTestEst(), "continuous"),
             {"param_0_": 0, "param_1_": 1},
         ],
     ],
@@ -201,7 +201,7 @@ def test_inspect_pipeline(df_iris: "pd.DataFrame") -> None:
 
     pipe = (
         PipelineCreator(problem_type="classification")
-        .add(JuColumnTransformer("test", TestEst(), "continuous"))
+        .add(JuColumnTransformer("test", MockTestEst(), "continuous"))
         .add(SVC())
         .to_pipeline()
     )
@@ -230,7 +230,7 @@ def test_get_estimator(df_iris: "pd.DataFrame") -> None:
     """
     pipe = (
         PipelineCreator(problem_type="classification")
-        .add(JuColumnTransformer("test", TestEst(), "continuous"))
+        .add(JuColumnTransformer("test", MockTestEst(), "continuous"))
         .add(SVC())
         .to_pipeline()
     )

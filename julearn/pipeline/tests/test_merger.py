@@ -74,7 +74,7 @@ def test_merger_errors() -> None:
 
     with pytest.raises(
         ValueError,
-        match="At least one of the pipelines to merge is a GridSearchCV",
+        match="One of the pipelines to merge is a GridSearchCV",
     ):
         merge_pipelines(pipe1, pipe2, search_params=search_params)
 
@@ -83,7 +83,7 @@ def test_merger_errors() -> None:
 
     with pytest.raises(
         ValueError,
-        match="one of the pipelines to merge is a RandomizedSearchCV",
+        match="One of the pipelines to merge is a RandomizedSearchCV",
     ):
         merge_pipelines(pipe1, pipe2, search_params=search_params)
 
@@ -110,6 +110,6 @@ def test_merger_errors() -> None:
 
     with pytest.raises(
         ValueError,
-        match="one of the pipelines to merge is a BayesSearchCV",
+        match="One of the pipelines to merge is a BayesSearchCV",
     ):
         merge_pipelines(pipe1, pipe5, search_params=search_params)

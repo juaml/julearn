@@ -14,7 +14,6 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 from sklearn.preprocessing import RobustScaler, StandardScaler
 from sklearn.svm import SVC
-from skopt import BayesSearchCV
 
 from julearn.base import ColumnTypesLike, WrapModel
 from julearn.models import get_model
@@ -127,6 +126,8 @@ def test_hyperparameter_tuning(
         The parameters for the search.
 
     """
+    from skopt import BayesSearchCV
+
     if isinstance(preprocess, str):
         preprocess = [preprocess]
 
@@ -223,6 +224,8 @@ def test_hyperparameter_tuning_distributions(
         The parameters for the search.
 
     """
+    from skopt import BayesSearchCV
+
     kind = "grid"
     if search_params is not None:
         kind = search_params.get("kind", "grid")

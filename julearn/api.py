@@ -4,12 +4,16 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Dict, List, Optional, Union
+from typing import Dict, Iterable, List, Optional, Union
 
 import numpy as np
 import pandas as pd
 from sklearn.base import BaseEstimator
-from sklearn.model_selection import check_cv, cross_validate
+from sklearn.model_selection import (
+    BaseCrossValidator,
+    check_cv,
+    cross_validate,
+)
 from sklearn.model_selection._search import BaseSearchCV
 from sklearn.pipeline import Pipeline
 
@@ -32,7 +36,7 @@ def run_cross_validation(  # noqa: C901
     return_estimator: Optional[str] = None,
     return_inspector: bool = False,
     return_train_score: bool = False,
-    cv: Optional[int] = None,
+    cv: Optional[Union[int, BaseCrossValidator, Iterable]] = None,
     groups: Optional[str] = None,
     scoring: Union[str, List[str], None] = None,
     pos_labels: Union[str, List[str], None] = None,
@@ -195,8 +199,11 @@ def run_cross_validation(  # noqa: C901
         logger.info(f"Setting random seed to {seed}")
         np.random.seed(seed)
 
+    if data is None:
+        raise_error("The ``data`` parameter must be specified.")
+
     # Interpret the input data and prepare it to be used with the library
-    df_X, y, df_groups, X_types = prepare_input_data(
+    df_X, df_y, df_groups, X_types = prepare_input_data(
         X=X,
         y=y,
         df=data,
@@ -267,7 +274,7 @@ def run_cross_validation(  # noqa: C901
 
         if has_target_transformer:
             if isinstance(pipeline, BaseSearchCV):
-                last_step = pipeline.estimator[-1]
+                last_step = pipeline.estimator[-1]  # pyright: ignore
             else:
                 last_step = pipeline[-1]
             if not last_step.can_inverse_transform():
@@ -313,7 +320,7 @@ def run_cross_validation(  # noqa: C901
                     "Cannot use model_params with a model object. Use either "
                     "a string or a PipelineCreator"
                 )
-        pipeline_creator.add(step=model, **t_params)
+        pipeline_creator.add(step=model, **t_params)  # pyright: ignore
 
         # Check for extra model_params that are not used
         unused_params = []
@@ -346,17 +353,19 @@ def run_cross_validation(  # noqa: C901
     logger.info("")
 
     if problem_type == "classification":
-        logger.info(f"\tNumber of classes: {len(np.unique(y))}")
-        logger.info(f"\tTarget type: {y.dtype}")
-        logger.info(f"\tClass distributions: {y.value_counts()}")
+        logger.info(f"\tNumber of classes: {len(np.unique(df_y))}")
+        logger.info(f"\tTarget type: {df_y.dtype}")
+        logger.info(f"\tClass distributions: {df_y.value_counts()}")
     elif problem_type == "regression":
-        logger.info(f"\tTarget type: {y.dtype}")
+        logger.info(f"\tTarget type: {df_y.dtype}")
 
     # Prepare cross validation
-    cv_outer = check_cv(cv, classifier=problem_type == "classification")
+    cv_outer = check_cv(
+        cv, classifier=problem_type == "classification"  # pyright: ignore
+    )
     logger.info(f"Using outer CV scheme {cv_outer}")
 
-    check_consistency(y, cv, groups, problem_type)
+    check_consistency(df_y, cv, groups, problem_type)  # pyright: ignore
 
     cv_return_estimator = return_estimator in ["cv", "all"]
     scoring = check_scoring(pipeline, scoring, wrap_score=wrap_score)
@@ -369,14 +378,14 @@ def run_cross_validation(  # noqa: C901
     scores = cross_validate(
         pipeline,
         df_X,
-        y,
+        df_y,
         cv=cv_outer,
         scoring=scoring,
         groups=df_groups,
         return_estimator=cv_return_estimator,
         n_jobs=n_jobs,
         return_train_score=return_train_score,
-        verbose=verbose,
+        verbose=verbose,  # pyright: ignore
         fit_params=fit_params,
     )
 
@@ -387,7 +396,10 @@ def run_cross_validation(  # noqa: C901
     folds = np.tile(np.arange(n_folds), n_repeats)
 
     fold_sizes = np.array(
-        [list(map(len, x)) for x in cv_outer.split(df_X, y, groups=df_groups)]
+        [
+            list(map(len, x))
+            for x in cv_outer.split(df_X, df_y, groups=df_groups)
+        ]
     )
     scores["n_train"] = fold_sizes[:, 0]
     scores["n_test"] = fold_sizes[:, 1]
@@ -399,7 +411,7 @@ def run_cross_validation(  # noqa: C901
     out = scores_df
     if return_estimator in ["final", "all"]:
         logger.info("Fitting final model")
-        pipeline.fit(df_X, y, **fit_params)
+        pipeline.fit(df_X, df_y, **fit_params)
         out = scores_df, pipeline
 
     if return_inspector:
@@ -407,7 +419,7 @@ def run_cross_validation(  # noqa: C901
             scores=scores_df,
             model=pipeline,
             X=df_X,
-            y=y,
+            y=df_y,
             groups=df_groups,
             cv=cv_outer,
         )

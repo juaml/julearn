@@ -791,7 +791,9 @@ class PipelineCreator:
         """Check if a step is a model."""
         if step in list_models():
             return True
-        if hasattr(step, "fit") and hasattr(step, "predict"):
+        if hasattr(step, "fit") and (
+            hasattr(step, "predict") or hasattr(step, "score")
+        ):
             return True
         return False
 

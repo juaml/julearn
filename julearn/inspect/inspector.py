@@ -6,13 +6,16 @@
 
 from typing import TYPE_CHECKING, List, Optional, Union
 
+import pandas as pd
+from sklearn.model_selection import BaseCrossValidator
+
 from ..utils.logging import raise_error
 from ._cv import FoldsInspector
 from ._pipeline import PipelineInspector
 
 
 if TYPE_CHECKING:
-    import pandas as pd
+    
     from sklearn.base import BaseEstimator
 
     from ..pipeline.pipeline_creator import PipelineCreator
@@ -48,10 +51,10 @@ class Inspector:
             "BaseEstimator",
             None,
         ] = None,
-        X: Optional[List[str]] = None,  # noqa: N803
-        y: Optional[str] = None,
-        groups: Optional[str] = None,
-        cv: Optional[int] = None,
+        X: Optional[pd.DataFrame] = None,  # noqa: N803
+        y: Optional[pd.Series] = None,
+        groups: Optional[pd.Series] = None,
+        cv: Optional[Union[int, BaseCrossValidator]] = None,
     ) -> None:
         self._scores = scores
         self._model = model
