@@ -3,10 +3,8 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL
 
-from copy import deepcopy
+from .available_searchers import _recreate_reset_copy, register_searcher
 
-from .available_searchers import (_recreate_reset_copy,
-                                  register_searcher)
 
 try:
     from skopt import BayesSearchCV
