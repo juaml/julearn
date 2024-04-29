@@ -29,8 +29,8 @@ def run_cross_validation(  # noqa: C901
     X: List[str],  # noqa: N803
     y: str,
     model: Union[str, PipelineCreator, BaseEstimator, List[PipelineCreator]],
+    data: pd.DataFrame,
     X_types: Optional[Dict] = None,  # noqa: N803
-    data: Optional[pd.DataFrame] = None,
     problem_type: Optional[str] = None,
     preprocess: Union[None, str, List[str]] = None,
     return_estimator: Optional[str] = None,
@@ -58,12 +58,11 @@ def run_cross_validation(  # noqa: C901
         See :ref:`data_usage` for details.
     model : str or scikit-learn compatible model.
         If string, it will use one of the available models.
+    data : pandas.DataFrame
+        DataFrame with the data. See :ref:`data_usage` for details.
     X_types : dict[str, list of str]
         A dictionary containing keys with column type as a str and the
         columns of this column type as a list of str.
-    data : pandas.DataFrame | None
-        DataFrame with the data (optional).
-        See :ref:`data_usage` for details.
     problem_type : str
         The kind of problem to model.
 
@@ -199,9 +198,6 @@ def run_cross_validation(  # noqa: C901
         logger.info(f"Setting random seed to {seed}")
         np.random.seed(seed)
 
-    if data is None:
-        raise_error("The ``data`` parameter must be specified.")
-
     # Interpret the input data and prepare it to be used with the library
     df_X, df_y, df_groups, X_types = prepare_input_data(
         X=X,
@@ -274,7 +270,7 @@ def run_cross_validation(  # noqa: C901
 
         if has_target_transformer:
             if isinstance(pipeline, BaseSearchCV):
-                last_step = pipeline.estimator[-1]  # pyright: ignore
+                last_step = pipeline.estimator[-1]  # type: ignore
             else:
                 last_step = pipeline[-1]
             if not last_step.can_inverse_transform():

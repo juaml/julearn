@@ -25,11 +25,6 @@ _available_searchers = {
 
 try:
     from skopt import BayesSearchCV
-
-    _available_searchers["bayes"] = {
-        "class": BayesSearchCV,
-        "params_attr": "search_spaces",
-    }
 except ImportError:
     from sklearn.model_selection._search import BaseSearchCV
 
@@ -45,12 +40,12 @@ except ImportError:
             raise ImportError(
                 "BayesSearchCV requires scikit-optimize to be installed."
             )
-
+finally:
     _available_searchers["bayes"] = {
         "class": BayesSearchCV,
         "params_attr": "search_spaces",
     }
-    pass
+
 
 # Keep a copy for reset
 _available_searchers_reset = deepcopy(_available_searchers)
@@ -170,15 +165,26 @@ def get_searcher_params_attr(searcher: Union[str, Type]) -> Optional[str]:
 
     Returns
     -------
-    str
-        The name of the attribute that holds the search space.
+    str or None
+        The name of the attribute that holds the search space. If the searcher
+        did not register any search space attribute, None is returned.
 
+    Raises
+    ------
+    ValueError
+        If the specified searcher is not available.
     """
     out = None
     if isinstance(searcher, str):
+        if searcher not in _available_searchers:
+            raise_error(
+                f"The specified searcher ({searcher}) is not available. "
+                f"Valid options are: {list(_available_searchers.keys())}"
+            )
         out = _available_searchers[searcher]["params_attr"]
     else:
         for _, v in _available_searchers.items():
             if searcher == v["class"]:
                 out = v["params_attr"]
+    
     return out

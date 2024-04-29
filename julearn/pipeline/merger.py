@@ -110,8 +110,8 @@ def merge_pipelines(
                 raise_error(
                     f"Searcher {s.__class__.__name__} is not registered "
                     "in the searcher registry. Merging of this kinds of "
-                    "searchers is not supported. If you register the searcher,"
-                    " you can merge it."
+                    "searchers is not supported. If you register the "
+                    "searcher, you can merge it."
                 )
             t_grid = getattr(s, params_attr).copy()
         else:

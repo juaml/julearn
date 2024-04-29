@@ -243,36 +243,40 @@ pprint(model_tuned.best_params_)
 # tries to find the best combination of values for the hyperparameters using
 # cross-validation.
 #
-# By default, ``julearn`` uses a :class:`~sklearn.model_selection.GridSearchCV`.
-# This searcher, specified as "" is very simple. First, it construct the "grid" of
-# hyperparameters to try. As we see above, we have 3 hyperparameters to tune.
-# So it constructs a 3-dimentional grid with all the possible combinations of
-# the hyperparameters values. The second step is to perform cross-validation
-# on each of the possible combinations of hyperparameters values.
+# By default, ``julearn`` uses a
+# :class:`~sklearn.model_selection.GridSearchCV`.
+# This searcher, specified as `"grid"` is very simple. First, it constructs the
+# _grid_ of hyperparameters to try. As we see above, we have 3 hyperparameters
+# to tune. So it constructs a 3-dimentional grid with all the possible
+# combinations of the hyperparameters values. The second step is to perform
+# cross-validation on each of the possible combinations of hyperparameters
+# values.
 #
 # Another searchers that ``julearn`` provides are the
-# :class:`~sklearn.model_selection.RandomizedSearchCV` and 
-# :class:`~skopt.BayesSearchCV`. 
+# :class:`~sklearn.model_selection.RandomizedSearchCV` and
+# :class:`~skopt.BayesSearchCV`.
 #
-# The randomized searcher is similar to the
+# The randomized searcher
+# (:class:`~sklearn.model_selection.RandomizedSearchCV`) is similar to the
 # :class:`~sklearn.model_selection.GridSearchCV`, but instead
-# of trying all the possible combinations of hyperparameters values, it tries
+# of trying all the possible combinations of hyperparameter values, it tries
 # a random subset of them. This is useful when we have a lot of hyperparameters
-# to tune, since it can be very time consuming to try all the possible, as well
-# as continuous parameters that can be sampled out of a distribution. For
-# more information, see the
+# to tune, since it can be very time consuming to try all the possible
+# combinations, as well as continuous parameters that can be sampled out of a
+# distribution. For more information, see the
 # :class:`~sklearn.model_selection.RandomizedSearchCV` documentation.
 #
-# The Bayesian searcher is a bit more complex. It uses a Bayesian optimization
-# to find the best hyperparameter set. It is useful when we have a lot of
-# hyperparameters to tune, since it can be very time consuming to try all the
-# possible combinations. For more information, see the
+# The Bayesian searcher (:class:`~skopt.BayesSearchCV`) is a bit more
+# complex. It uses Bayesian optimization to find the best hyperparameter set.
+# As with the randomized search, it is useful when we have a many
+# hyperparameters to tune, and we don't want to try all the possible
+# combinations due to computational constraints. For more information, see the
 # :class:`~skopt.BayesSearchCV` documentation, including how to specify
 # the distributions of the hyperparameters.
 #
 # We can specify the kind of searcher and its parametrization, by setting the
 # ``search_params`` parameter in the :func:`.run_cross_validation` function.
-# For example, we can use the 
+# For example, we can use the
 # :class:`~sklearn.model_selection.RandomizedSearchCV` searcher with
 # 10 iterations of random search.
 
@@ -291,17 +295,19 @@ scores_tuned, model_tuned = run_cross_validation(
     search_params=search_params,
 )
 
-print("Scores with best hyperparameter using 10 iterations of "
-      f"randomized search: {scores_tuned['test_score'].mean()}")
+print(
+    "Scores with best hyperparameter using 10 iterations of "
+    f"randomized search: {scores_tuned['test_score'].mean()}"
+)
 pprint(model_tuned.best_params_)
 
 ###############################################################################
 # We can now see that the best hyperparameter might be different from the grid
 # search. This is because it tried only 10 combinations and not the whole grid.
-# Furthermore, the RandomizedSearchCV searcher can sample
-# hyperparameters from distributions, which can be useful when we have
-# continuous hyperparameters.
-# Lets set both C and gamma to be sampled from log-uniform distributions. We
+# Furthermore, the  :class:`~sklearn.model_selection.RandomizedSearchCV`
+# searcher can sample hyperparameters from distributions, which can be useful
+# when we have continuous hyperparameters.
+# Let's set both C and gamma to be sampled from log-uniform distributions. We
 # can do this by setting the hyperparameter values as a tuple with the
 # following format: ``(low, high, distribution)``. The distribution can be
 # either ``"log-uniform"`` or ``"uniform"``.
@@ -327,8 +333,10 @@ scores_tuned, model_tuned = run_cross_validation(
     search_params=search_params,
 )
 
-print("Scores with best hyperparameter using 10 iterations of "
-      f"randomized search: {scores_tuned['test_score'].mean()}")
+print(
+    "Scores with best hyperparameter using 10 iterations of "
+    f"randomized search: {scores_tuned['test_score'].mean()}"
+)
 pprint(model_tuned.best_params_)
 
 
@@ -355,8 +363,10 @@ scores_tuned, model_tuned = run_cross_validation(
     search_params=search_params,
 )
 
-print("Scores with best hyperparameter using 10 iterations of "
-      f"bayesian search and 3-fold CV: {scores_tuned['test_score'].mean()}")
+print(
+    "Scores with best hyperparameter using 10 iterations of "
+    f"bayesian search and 3-fold CV: {scores_tuned['test_score'].mean()}"
+)
 pprint(model_tuned.best_params_)
 
 

@@ -5,7 +5,7 @@
 # License: AGPL
 
 import warnings
-from typing import Callable, Dict, List, Union
+from typing import TYPE_CHECKING, Callable, Dict, List, Tuple, Union
 
 import pandas as pd
 import pytest
@@ -20,6 +20,9 @@ from julearn.models import get_model
 from julearn.pipeline import PipelineCreator, TargetPipelineCreator
 from julearn.pipeline.pipeline_creator import JuColumnTransformer
 from julearn.transformers import get_transformer
+
+if TYPE_CHECKING:
+    from sklearn.pipeline import Pipeline
 
 
 def test_construction_working(
@@ -100,14 +103,14 @@ def test_fit_and_transform_no_error(
     pipeline[:-1].transform(X_iris)
 
 
-def test_hyperparameter_tuning(
+def _hyperparam_tuning_base_test(
     X_types_iris: Dict[str, List[str]],  # noqa: N803
     model: str,
     preprocess: Union[str, List[str]],
     problem_type: str,
     get_tuning_params: Callable,
     search_params: Dict[str, List],
-) -> None:
+) -> Tuple["Pipeline", Dict]:
     """Test that the pipeline hyperparameter tuning works as expected.
 
     Parameters
@@ -125,9 +128,15 @@ def test_hyperparameter_tuning(
     search_params : dict of str and list
         The parameters for the search.
 
-    """
-    from skopt import BayesSearchCV
+    Returns
+    -------
+    pipeline : Pipeline
+        The pipeline created.
+    param_grid : dict
+        The parameter grid for the search, using scikit-learn's
+        convention.
 
+    """
     if isinstance(preprocess, str):
         preprocess = [preprocess]
 
@@ -157,6 +166,48 @@ def test_hyperparameter_tuning(
         X_types=X_types_iris, search_params=search_params
     )
 
+    return pipeline, param_grid
+
+
+def test_hyperparameter_tuning(
+    X_types_iris: Dict[str, List[str]],  # noqa: N803
+    model: str,
+    preprocess: Union[str, List[str]],
+    problem_type: str,
+    get_tuning_params: Callable,
+    search_params: Dict[str, List],
+) -> None:
+    """Test that the pipeline hyperparameter tuning works as expected.
+
+    Parameters
+    ----------
+    X_types_iris : dict
+        The iris dataset features types.
+    model : str
+        The model to test.
+    preprocess : str or list of str
+        The preprocessing steps to test.
+    problem_type : str
+        The problem type to test.
+    get_tuning_params : Callable
+        A function that returns the tuning hyperparameters for a given step.
+    search_params : dict of str and list
+        The parameters for the search.
+
+    Raises
+    ------
+    ValueError
+        If the kind is not supported.
+    """
+
+    pipeline, param_grid = _hyperparam_tuning_base_test(
+        X_types_iris,
+        model,
+        preprocess,
+        problem_type,
+        get_tuning_params,
+        search_params,
+    )
     kind = "grid"
     if search_params is not None:
         kind = search_params.get("kind", "grid")
@@ -167,12 +218,51 @@ def test_hyperparameter_tuning(
     elif kind == "random":
         assert isinstance(pipeline, RandomizedSearchCV)
         assert pipeline.param_distributions == param_grid
-    elif kind == "bayes":
-        assert isinstance(pipeline, BayesSearchCV)
-        assert pipeline.search_spaces == param_grid
+    else:
+        raise ValueError(f"Unknown kind {kind}")
 
 
-def _compare_param_grids(a, b):
+def test_hyperparameter_tuning_bayes(
+    X_types_iris: Dict[str, List[str]],  # noqa: N803
+    model: str,
+    preprocess: Union[str, List[str]],
+    problem_type: str,
+    get_tuning_params: Callable,
+    bayes_search_params: Dict[str, List],
+) -> None:
+    """Test that the pipeline hyperparameter tuning works as expected.
+
+    Parameters
+    ----------
+    X_types_iris : dict
+        The iris dataset features types.
+    model : str
+        The model to test.
+    preprocess : str or list of str
+        The preprocessing steps to test.
+    problem_type : str
+        The problem type to test.
+    get_tuning_params : Callable
+        A function that returns the tuning hyperparameters for a given step.
+    bayes_search_params : dict of str and list
+        The parameters for the search.
+
+    """
+    from skopt import BayesSearchCV
+
+    pipeline, param_grid = _hyperparam_tuning_base_test(
+        X_types_iris,
+        model,
+        preprocess,
+        problem_type,
+        get_tuning_params,
+        bayes_search_params,
+    )
+    assert isinstance(pipeline, BayesSearchCV)
+    assert pipeline.search_spaces == param_grid
+
+
+def _compare_param_grids(a: Dict, b: Dict) -> None:
     """Compare two param grids.
 
     Parameters
@@ -181,6 +271,11 @@ def _compare_param_grids(a, b):
         The first param grid (processed).
     b : dict
         The second param grid (raw).
+
+    Raises
+    ------
+    AssertionError
+        If the param grids are not equal.
 
     """
     for key, val in a.items():
@@ -206,7 +301,7 @@ def test_hyperparameter_tuning_distributions(
     get_tuning_distributions: Callable,
     search_params: Dict[str, List],
 ) -> None:
-    """Test that the pipeline hyperparameter tuning works as expected.
+    """Test hyperparameter tuning using distributions.
 
     Parameters
     ----------
@@ -224,49 +319,67 @@ def test_hyperparameter_tuning_distributions(
         The parameters for the search.
 
     """
-    from skopt import BayesSearchCV
-
     kind = "grid"
     if search_params is not None:
         kind = search_params.get("kind", "grid")
-
     if kind == "grid":
-        return  # Does not make sense to test distributions for grid search
-    if isinstance(preprocess, str):
-        preprocess = [preprocess]
+        return  # No sense to test distributions for grid search
 
-    creator = PipelineCreator(problem_type=problem_type)
-    param_grid = {}
-
-    used_types = (
-        ["continuous"]
-        if X_types_iris in [None, {}]
-        else list(X_types_iris.keys())
-    )
-    for step in preprocess:
-        default_params = get_tuning_distributions(step)
-        creator.add(step, apply_to=used_types, **default_params)
-        params = {
-            f"{step}__{param}": val for param, val in default_params.items()
-        }
-        param_grid.update(params)
-
-    model_params = get_tuning_distributions(model)
-    creator.add(model, **model_params)
-
-    param_grid.update(
-        {f"{model}__{param}": val for param, val in model_params.items()}
-    )
-    pipeline = creator.to_pipeline(
-        X_types=X_types_iris, search_params=search_params
+    pipeline, param_grid = _hyperparam_tuning_base_test(
+        X_types_iris,
+        model,
+        preprocess,
+        problem_type,
+        get_tuning_distributions,
+        search_params,
     )
 
     if kind == "random":
         assert isinstance(pipeline, RandomizedSearchCV)
         _compare_param_grids(pipeline.param_distributions, param_grid)
-    elif kind == "bayes":
-        assert isinstance(pipeline, BayesSearchCV)
-        _compare_param_grids(pipeline.search_spaces, param_grid)
+    else:
+        raise ValueError(f"Unknown kind {kind}")
+
+
+def test_hyperparameter_tuning_distributions_bayes(
+    X_types_iris: Dict[str, List[str]],  # noqa: N803
+    model: str,
+    preprocess: Union[str, List[str]],
+    problem_type: str,
+    get_tuning_distributions: Callable,
+    bayes_search_params: Dict[str, List],
+) -> None:
+    """Test BayesSearchCV hyperparameter tuning using distributions.
+
+    Parameters
+    ----------
+    X_types_iris : dict
+        The iris dataset features types.
+    model : str
+        The model to test.
+    preprocess : str or list of str
+        The preprocessing steps to test.
+    problem_type : str
+        The problem type to test.
+    get_tuning_distributions : Callable
+        A function that returns the tuning hyperparameters for a given step.
+    bayes_search_params : dict of str and list
+        The parameters for the search.
+
+    """
+    from skopt import BayesSearchCV
+
+    pipeline, param_grid = _hyperparam_tuning_base_test(
+        X_types_iris,
+        model,
+        preprocess,
+        problem_type,
+        get_tuning_distributions,
+        bayes_search_params,
+    )
+
+    assert isinstance(pipeline, BayesSearchCV)
+    _compare_param_grids(pipeline.search_spaces, param_grid)
 
 
 @pytest.mark.parametrize(

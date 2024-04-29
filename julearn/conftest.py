@@ -8,6 +8,7 @@ from copy import copy
 from typing import Callable, Dict, List, Optional, Union
 
 import pandas as pd
+import pytest
 from pytest import FixtureRequest, fixture, mark
 from seaborn import load_dataset
 
@@ -17,14 +18,18 @@ _filter_keys = {
 }
 
 
-def pytest_configure(config):
-    """Add a new marker to pytest."""
+def pytest_configure(config: pytest.Config):
+    """Add a new marker to pytest.
+
+    Parameters
+    ----------
+    config : pytest.Config
+        The pytest configuration object.
+
+    """
     # register your new marker to avoid warnings
     for k, v in _filter_keys.items():
-        config.addinivalue_line(
-            "markers",
-            f"{k}: {v}"
-        )
+        config.addinivalue_line("markers", f"{k}: {v}")
 
 
 def pytest_addoption(parser):
@@ -43,7 +48,8 @@ def pytest_collection_modifyitems(config, items):
     if filter is None:
         for k in _filter_keys.keys():
             skip_keys = mark.skip(
-                reason=f"Filter not specified for this test: {k}")
+                reason=f"Filter not specified for this test: {k}"
+            )
             for item in items:
                 if k in item.keywords:
                     item.add_marker(skip_keys)  # skip the test
@@ -217,8 +223,6 @@ def problem_type(request: FixtureRequest) -> str:
         {"kind": "grid"},
         {"kind": "random", "n_iter": 2},
         {"kind": "random", "n_iter": 2, "cv": 3},
-        {"kind": "bayes", "n_iter": 2, "cv": 3},
-        {"kind": "bayes", "n_iter": 2},
     ],
     scope="function",
 )
@@ -236,6 +240,32 @@ def search_params(request: FixtureRequest) -> Optional[Dict]:
         A dictionary with the search_params argument.
 
     """
+
+    return request.param
+
+
+@fixture(
+    params=[
+        {"kind": "bayes", "n_iter": 2, "cv": 3},
+        {"kind": "bayes", "n_iter": 2},
+    ],
+    scope="function",
+)
+def bayes_search_params(request: FixtureRequest) -> Optional[Dict]:
+    """Return different  search_params argument for BayesSearchCV.
+
+    Parameters
+    ----------
+    request : pytest.FixtureRequest
+        The request object.
+
+    Returns
+    -------
+    dict or None
+        A dictionary with the search_params argument.
+
+    """
+
     return request.param
 
 
