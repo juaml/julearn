@@ -256,7 +256,7 @@ def test_hyperparameter_tuning_bayes(
         bayes_search_params,
     )
     assert isinstance(pipeline, BayesSearchCV)
-    assert pipeline.search_spaces == param_grid
+    assert pipeline.search_spaces == param_grid  # type: ignore
 
 
 def _compare_param_grids(a: Dict, b: Dict) -> None:
@@ -512,8 +512,8 @@ def test_added_model_target_transform() -> None:
 
 
 def test_stacking(
-    X_iris: pd.DataFrame,
-    y_iris: pd.Series,  # noqa: N803
+    X_iris: pd.DataFrame,  # noqa: N803
+    y_iris: pd.Series,
 ) -> None:
     """Test that the stacking model works correctly."""
     # Define our feature types
