@@ -25,6 +25,7 @@ def pytest_configure(config: pytest.Config) -> None:
     ----------
     config : pytest.Config
         The pytest configuration object.
+
     """
     # register your new marker to avoid warnings
     for k, v in _filter_keys.items():
@@ -38,6 +39,7 @@ def pytest_addoption(parser: pytest.Parser) -> None:
     ----------
     parser : pytest.Parser
         The pytest parser object.
+
     """
     # add your new filter option (you can name it whatever you want)
     parser.addoption(
