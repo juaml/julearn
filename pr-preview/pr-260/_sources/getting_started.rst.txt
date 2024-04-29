@@ -87,7 +87,7 @@ The following optional dependencies are available:
 * ``viz``: Visualization tools for ``julearn``. This includes the
   :mod:`.viz` module.
 * ``deslib``: The :mod:`.dynamic` module requires the `deslib`_ package. This
-  module is not compatible with newer python versions and its unmaintained.
+  module is not compatible with newer Python versions and it is unmaintained.
 * ``skopt``: Using the ``"bayes"`` searcher (:class:`~skopt.BayesSearchCV`)
   requires the `scikit-optimize`_ package.
 * ``all``: Install all optional functional dependencies (except ``deslib``).
