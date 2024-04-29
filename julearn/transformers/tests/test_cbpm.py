@@ -278,7 +278,7 @@ def test_CBPM_set_output_posneg(
     trans_posneg = (
         CBPM(corr_method=spearmanr, agg_method=np.mean, corr_sign="posneg")
         .set_output(transform="pandas")
-        .fit_transform(X_iris, y_iris)
+        .fit_transform(X_iris, y_iris)  # type: ignore
     )
 
     trans_man_pos = X_iris[X_pos].values.mean(axis=1)
@@ -311,7 +311,7 @@ def test_CBPM_set_output_pos(
     trans_pos = (
         CBPM(corr_method=spearmanr, agg_method=np.mean, corr_sign="pos")
         .set_output(transform="pandas")
-        .fit_transform(X_iris, y_iris)
+        .fit_transform(X_iris, y_iris)  # type: ignore
     )
 
     trans_man_pos = X_iris[X_pos].values.mean(axis=1)
@@ -340,7 +340,7 @@ def test_CBPM_set_output_neg(
     trans_neg = (
         CBPM(corr_method=spearmanr, agg_method=np.mean, corr_sign="neg")
         .set_output(transform="pandas")
-        .fit_transform(X_iris, y_iris)
+        .fit_transform(X_iris, y_iris)  # type: ignore
     )
 
     trans_man_neg = X_iris[X_neg].values.mean(axis=1)

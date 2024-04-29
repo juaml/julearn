@@ -46,7 +46,7 @@ def list_searchers() -> List[str]:
     return list(_available_searchers)
 
 
-def get_searcher(name: str) -> object:
+def get_searcher(name: str) -> Type:
     """Get a searcher by name.
 
     Parameters
@@ -56,8 +56,8 @@ def get_searcher(name: str) -> object:
 
     Returns
     -------
-    obj
-        scikit-learn compatible searcher.
+    out
+        scikit-learn compatible searcher class.
 
     Raises
     ------

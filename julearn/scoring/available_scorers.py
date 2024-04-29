@@ -10,7 +10,7 @@ from copy import deepcopy
 from typing import Callable, Dict, List, Optional, Union
 
 from sklearn.metrics import _scorer, get_scorer_names, make_scorer
-from sklearn.metrics._scorer import _check_multimetric_scoring
+from sklearn.metrics._scorer import _check_multimetric_scoring  # type: ignore
 from sklearn.metrics._scorer import check_scoring as sklearn_check_scoring
 
 from ..transformers.target.ju_transformed_target_model import (
@@ -29,7 +29,7 @@ _extra_available_scorers = {
 _extra_available_scorers_reset = deepcopy(_extra_available_scorers)
 
 
-def get_scorer(name: str) -> ScorerLike:
+def get_scorer(name: str) -> ScorerLike:  # type: ignore TODO: deprecate sklearn < 1.4.0
     """Get available scorer by name.
 
     Parameters
@@ -72,7 +72,9 @@ def list_scorers() -> List[str]:
 
 
 def register_scorer(
-    scorer_name: str, scorer: ScorerLike, overwrite: Optional[bool] = None
+    scorer_name: str,
+    scorer: ScorerLike,  # type: ignore TODO: deprecate sklearn < 1.4.0
+    overwrite: Optional[bool] = None,
 ) -> None:
     """Register a scorer, so that it can be accessed by name.
 
@@ -130,9 +132,9 @@ def reset_scorer_register():
 
 def check_scoring(
     estimator: EstimatorLike,
-    scoring: Union[ScorerLike, str, Callable, List[str], None],
+    scoring: Union[ScorerLike, str, Callable, List[str], None],  # type: ignore
     wrap_score: bool,
-) -> Union[None, ScorerLike, Callable, Dict[str, ScorerLike]]:
+) -> Union[None, ScorerLike, Callable, Dict[str, ScorerLike]]:  # type: ignore
     """Check the scoring.
 
     Parameters
@@ -152,7 +154,11 @@ def check_scoring(
         scoring = _extend_scorer(get_scorer(scoring), wrap_score)
     if callable(scoring):
         return _extend_scorer(
-            sklearn_check_scoring(estimator, scoring=scoring), wrap_score
+            sklearn_check_scoring(
+                estimator,  # type: ignore
+                scoring=scoring,
+            ),
+            wrap_score,
         )
     if isinstance(scoring, list):
         scorer_names = typing.cast(List[str], scoring)

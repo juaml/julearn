@@ -79,7 +79,7 @@ def test_run_cv_simple_binary(
 
     # now let"s try target-dependent scores
     scorers = ["recall", "precision", "f1"]
-    sk_y = (df_iris[y].values == "virginica").astype(int)
+    sk_y = (df_iris[y].values == "virginica").astype(int)  # type: ignore
 
     model = PipelineCreator(apply_to="features", problem_type="classification")
     model.add("svm")
@@ -95,7 +95,7 @@ def test_run_cv_simple_binary(
         data=df_iris,
         api_params=api_params,
         X_types=X_types,
-        sklearn_model=sklearn_model,
+        sklearn_model=sklearn_model,  # type: ignore
         scorers=scorers,
         sk_y=sk_y,
     )
@@ -103,7 +103,7 @@ def test_run_cv_simple_binary(
     # now let"s try proba-dependent scores
     X = ["sepal_length", "petal_length"]
     scorers = ["accuracy", "roc_auc"]
-    sk_y = (df_iris[y].values == "virginica").astype(int)
+    sk_y = (df_iris[y].values == "virginica").astype(int)  # type: ignore
     with pytest.warns(RuntimeWarning, match="treated as continuous"):
         api_params = {
             "model": "svm",
@@ -126,7 +126,7 @@ def test_run_cv_simple_binary(
     # e.g. svm with probability=False
     X = ["sepal_length", "petal_length"]
     scorers = ["accuracy", "roc_auc"]
-    sk_y = (df_iris[y].values == "virginica").astype(int)
+    sk_y = (df_iris[y].values == "virginica").astype(int)  # type: ignore
     with pytest.warns(RuntimeWarning, match="treated as continuous"):
         api_params = {
             "model": "svm",
@@ -284,7 +284,7 @@ def test_run_cv_errors(df_iris: pd.DataFrame) -> None:
             y=y,
             data=df_iris,
             X_types=X_types,
-            model=model,
+            model=model,  # type: ignore
         )
 
     model = "svm"
@@ -305,7 +305,7 @@ def test_run_cv_errors(df_iris: pd.DataFrame) -> None:
             data=df_iris,
             X_types=X_types,
             model=model,
-            preprocess=2,
+            preprocess=2,  # type: ignore
             problem_type="classification",
         )
 
@@ -440,19 +440,35 @@ def test_tune_hyperparam_gridsearch(df_iris: pd.DataFrame) -> None:
     cv_inner = RepeatedKFold(n_splits=2, n_repeats=1)
 
     clf = make_pipeline(SVC())
-    gs = GridSearchCV(clf, {"svc__C": [0.01, 0.001]}, cv=cv_inner)
+    gs = GridSearchCV(
+        clf,
+        {"svc__C": [0.01, 0.001]},
+        cv=cv_inner,  # type: ignore
+    )
 
-    expected = cross_validate(gs, sk_X, sk_y, cv=cv_outer, scoring=[scoring])
+    expected = cross_validate(
+        gs,
+        sk_X,
+        sk_y,  # type: ignore
+        cv=cv_outer,  # type: ignore
+        scoring=[scoring],
+    )
 
-    assert len(actual.columns) == len(expected) + 5
-    assert len(actual["test_accuracy"]) == len(expected["test_accuracy"])
+    assert len(actual.columns) == len(expected) + 5  # type: ignore
+    assert (
+        len(actual["test_accuracy"])  # type: ignore
+        == len(expected["test_accuracy"])
+    )
     assert all(
         a == b
-        for a, b in zip(actual["test_accuracy"], expected["test_accuracy"])
+        for a, b in zip(
+            actual["test_accuracy"],  # type: ignore
+            expected["test_accuracy"],
+        )
     )
 
     # Compare the models
-    clf1 = actual_estimator.best_estimator_.steps[-1][1]
+    clf1 = actual_estimator.best_estimator_.steps[-1][1]  # type: ignore
     clf2 = clone(gs).fit(sk_X, sk_y).best_estimator_.steps[-1][1]
     compare_models(clf1, clf2)
 
@@ -516,22 +532,28 @@ def test_tune_hyperparam_gridsearch_groups(df_iris: pd.DataFrame) -> None:
     expected = cross_validate(
         gs,
         sk_X,
-        sk_y,
+        sk_y,  # type: ignore
         cv=cv_outer,
         scoring=[scoring],
-        groups=sk_groups,
+        groups=sk_groups,  # type: ignore
         fit_params={"groups": sk_groups},
     )
 
-    assert len(actual.columns) == len(expected) + 5
-    assert len(actual["test_accuracy"]) == len(expected["test_accuracy"])
+    assert len(actual.columns) == len(expected) + 5  # type: ignore
+    assert (
+        len(actual["test_accuracy"])  # type: ignore
+        == len(expected["test_accuracy"])
+    )
     assert all(
         a == b
-        for a, b in zip(actual["test_accuracy"], expected["test_accuracy"])
+        for a, b in zip(
+            actual["test_accuracy"],  # type: ignore
+            expected["test_accuracy"],
+        )
     )
 
     # Compare the models
-    clf1 = actual_estimator.best_estimator_.steps[-1][1]
+    clf1 = actual_estimator.best_estimator_.steps[-1][1]  # type: ignore
     clf2 = (
         clone(gs)
         .fit(sk_X, sk_y, groups=sk_groups)
@@ -593,20 +615,35 @@ def test_tune_hyperparam_randomsearch(df_iris: pd.DataFrame) -> None:
 
     clf = make_pipeline(SVC())
     gs = RandomizedSearchCV(
-        clf, {"svc__C": [0.01, 0.001]}, cv=cv_inner, n_iter=2
+        clf,
+        {"svc__C": [0.01, 0.001]},
+        cv=cv_inner,  # type: ignore
+        n_iter=2,
     )
 
-    expected = cross_validate(gs, sk_X, sk_y, cv=cv_outer, scoring=[scoring])
+    expected = cross_validate(
+        gs,
+        sk_X,
+        sk_y,  # type: ignore
+        cv=cv_outer,  # type: ignore
+        scoring=[scoring],
+    )
 
-    assert len(actual.columns) == len(expected) + 5
-    assert len(actual["test_accuracy"]) == len(expected["test_accuracy"])
+    assert len(actual.columns) == len(expected) + 5  # type: ignore
+    assert (
+        len(actual["test_accuracy"])  # type: ignore
+        == len(expected["test_accuracy"])
+    )
     assert all(
         a == b
-        for a, b in zip(actual["test_accuracy"], expected["test_accuracy"])
+        for a, b in zip(
+            actual["test_accuracy"],  # type: ignore
+            expected["test_accuracy"],
+        )
     )
 
     # Compare the models
-    clf1 = actual_estimator.best_estimator_.steps[-1][1]
+    clf1 = actual_estimator.best_estimator_.steps[-1][1]  # type: ignore
     clf2 = clone(gs).fit(sk_X, sk_y).best_estimator_.steps[-1][1]
     compare_models(clf1, clf2)
 
@@ -697,25 +734,43 @@ def test_tune_hyperparams_multiple_grid(df_iris: pd.DataFrame) -> None:
             "svc__C": [0.01, 0.1],
         },
     ]
-    gs = GridSearchCV(clf, grid, cv=cv_inner)
+    gs = GridSearchCV(clf, grid, cv=cv_inner)  # type: ignore
 
-    expected = cross_validate(gs, sk_X, sk_y, cv=cv_outer, scoring=[scoring])
+    expected = cross_validate(
+        gs,
+        sk_X,
+        sk_y,  # type: ignore
+        cv=cv_outer,  # type: ignore
+        scoring=[scoring],
+    )
 
-    assert len(actual1.columns) == len(expected) + 5
-    assert len(actual2.columns) == len(expected) + 5
-    assert len(actual1["test_accuracy"]) == len(expected["test_accuracy"])
-    assert len(actual2["test_accuracy"]) == len(expected["test_accuracy"])
-    assert all(
-        a == b
-        for a, b in zip(actual1["test_accuracy"], expected["test_accuracy"])
+    assert len(actual1.columns) == len(expected) + 5  # type: ignore
+    assert len(actual2.columns) == len(expected) + 5  # type: ignore
+    assert (
+        len(actual1["test_accuracy"])  # type: ignore
+        == len(expected["test_accuracy"])
+    )
+    assert (
+        len(actual2["test_accuracy"])  # type: ignore
+        == len(expected["test_accuracy"])
     )
     assert all(
         a == b
-        for a, b in zip(actual2["test_accuracy"], expected["test_accuracy"])
+        for a, b in zip(
+            actual1["test_accuracy"],  # type: ignore
+            expected["test_accuracy"],
+        )
+    )
+    assert all(
+        a == b
+        for a, b in zip(
+            actual2["test_accuracy"],  # type: ignore
+            expected["test_accuracy"],
+        )
     )
     # Compare the models
-    clf1 = actual_estimator1.best_estimator_.steps[-1][1]
-    clf2 = actual_estimator2.best_estimator_.steps[-1][1]
+    clf1 = actual_estimator1.best_estimator_.steps[-1][1]  # type: ignore
+    clf2 = actual_estimator2.best_estimator_.steps[-1][1]  # type: ignore
     clf3 = clone(gs).fit(sk_X, sk_y).best_estimator_.steps[-1][1]
     compare_models(clf1, clf2)
     compare_models(clf1, clf3)
@@ -746,7 +801,7 @@ def test_return_estimators(df_iris: pd.DataFrame) -> None:
             model="svm",
             problem_type="classification",
             cv=cv,
-            return_estimator=True,
+            return_estimator=True,  # type: ignore
         )
 
     scores = run_cross_validation(
@@ -776,7 +831,7 @@ def test_return_estimators(df_iris: pd.DataFrame) -> None:
 
     assert isinstance(scores, pd.DataFrame)
     assert "estimator" not in scores
-    assert isinstance(final["svm"], SVC)
+    assert isinstance(final["svm"], SVC)  # type: ignore
 
     scores = run_cross_validation(
         X=X,
@@ -805,7 +860,7 @@ def test_return_estimators(df_iris: pd.DataFrame) -> None:
 
     assert isinstance(scores, pd.DataFrame)
     assert "estimator" in scores
-    assert isinstance(final["svm"], SVC)
+    assert isinstance(final["svm"], SVC)  # type: ignore
 
 
 def test_return_train_scores(df_iris: pd.DataFrame) -> None:
@@ -838,8 +893,8 @@ def test_return_train_scores(df_iris: pd.DataFrame) -> None:
     train_scores = [f"train_{s}" for s in scoring]
     test_scores = [f"test_{s}" for s in scoring]
 
-    assert all(s not in scores.columns for s in train_scores)
-    assert all(s in scores.columns for s in test_scores)
+    assert all(s not in scores.columns for s in train_scores)  # type: ignore
+    assert all(s in scores.columns for s in test_scores)  # type: ignore
 
     with pytest.warns(RuntimeWarning, match="treated as continuous"):
         scores = run_cross_validation(
@@ -856,8 +911,8 @@ def test_return_train_scores(df_iris: pd.DataFrame) -> None:
     train_scores = [f"train_{s}" for s in scoring]
     test_scores = [f"test_{s}" for s in scoring]
 
-    assert all(s in scores.columns for s in train_scores)
-    assert all(s in scores.columns for s in test_scores)
+    assert all(s in scores.columns for s in train_scores)  # type: ignore
+    assert all(s in scores.columns for s in test_scores)  # type: ignore
 
 
 @pytest.mark.parametrize(
@@ -1174,7 +1229,10 @@ def test_api_stacking_models() -> None:
 
     # The final model should be a stacking model im which the first estimator
     # is a grid search
-    assert isinstance(final.steps[1][1].model.estimators[0][1], GridSearchCV)
+    assert isinstance(
+        final.steps[1][1].model.estimators[0][1],  # type: ignore
+        GridSearchCV,
+    )
 
 
 def test_inspection_error(df_iris: pd.DataFrame) -> None:
@@ -1253,10 +1311,12 @@ def test_inspector_picklable(tmp_path: Path, df_iris: pd.DataFrame) -> None:
     X = ["sepal_length", "sepal_width", "petal_length"]
     y = "species"
     pickled_file = tmp_path / "inspector.joblib"
+    X_types = {"continuous": X}
     _, _, inspector = run_cross_validation(
         X=X,
         y=y,
         data=df_iris,
+        X_types=X_types,
         model="rf",
         problem_type="classification",
         return_estimator="all",
@@ -1289,9 +1349,7 @@ def test_tune_hyperparam_target(df_iris: pd.DataFrame) -> None:
     }
 
     target_pipeline = TargetPipelineCreator()
-    model = PipelineCreator(
-        problem_type="regression", apply_to="continuous"
-    )
+    model = PipelineCreator(problem_type="regression", apply_to="continuous")
     target_pipeline.add("confound_removal", confounds="confounds")
     model.add(target_pipeline, apply_to="target")
     model.add("svm", C=[1, 2])

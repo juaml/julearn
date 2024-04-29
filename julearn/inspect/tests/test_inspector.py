@@ -18,28 +18,28 @@ if TYPE_CHECKING:
 
 def test_no_cv() -> None:
     """Test inspector with no cross-validation."""
-    inspector = Inspector({})
+    inspector = Inspector({})  # type: ignore
     with pytest.raises(ValueError, match="No cv"):
         _ = inspector.folds
 
 
 def test_no_X() -> None:
     """Test inspector with no features."""
-    inspector = Inspector({}, cv=5)
+    inspector = Inspector({}, cv=5)  # type: ignore
     with pytest.raises(ValueError, match="No X"):
         _ = inspector.folds
 
 
 def test_no_y() -> None:
     """Test inspector with no targets."""
-    inspector = Inspector({}, cv=5, X=[1, 2, 3])
+    inspector = Inspector({}, cv=5, X=[1, 2, 3])  # type: ignore
     with pytest.raises(ValueError, match="No y"):
         _ = inspector.folds
 
 
 def test_no_model() -> None:
     """Test inspector with no model."""
-    inspector = Inspector({})
+    inspector = Inspector({})  # type: ignore
     with pytest.raises(ValueError, match="No model"):
         _ = inspector.model
 
@@ -63,8 +63,11 @@ def test_normal_usage(df_iris: "pd.DataFrame") -> None:
         return_inspector=True,
         problem_type="classification",
     )
-    assert pipe == inspect.model._model
-    for (_, score), inspect_fold in zip(scores.iterrows(), inspect.folds):
+    assert pipe == inspect.model._model  # type: ignore
+    for (_, score), inspect_fold in zip(
+        scores.iterrows(),  # type: ignore
+        inspect.folds,  # type: ignore
+    ):
         assert score["estimator"] == inspect_fold.model._model
 
 
@@ -88,6 +91,6 @@ def test_normal_usage_with_search(df_iris: "pd.DataFrame") -> None:
         return_estimator="all",
         return_inspector=True,
     )
-    assert pipe == inspect.model._model
-    inspect.model.get_fitted_params()
-    inspect.model.get_params()
+    assert pipe == inspect.model._model  # type: ignore
+    inspect.model.get_fitted_params()  # type: ignore
+    inspect.model.get_params()  # type: ignore

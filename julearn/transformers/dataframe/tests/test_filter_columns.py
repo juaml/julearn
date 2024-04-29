@@ -30,7 +30,7 @@ def test_FilterColumns() -> None:
         "a__:type:__continuous",
         "b__:type:__continuous",
     ]
-    filter.set_output(transform="pandas").fit(X_with_types)
+    filter.set_output(transform="pandas").fit(X_with_types)  # type: ignore
     X_expected = X_with_types.copy()[kept_columns]
     X_trans = filter.transform(X_with_types)
     assert isinstance(X_expected, pd.DataFrame)

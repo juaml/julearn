@@ -3,7 +3,6 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
-
 import numpy as np
 import pandas as pd
 import pytest
@@ -70,7 +69,10 @@ def scores(df_typed_iris, n_iters=5, mock_model=None):
     if mock_model is None:
         mock_model = MockModelReturnsIndex
 
-    estimators = [WrapModel(mock_model()).fit(X, y) for _ in range(n_iters)]
+    estimators = [
+        WrapModel(mock_model()).fit(X, y)  # type: ignore
+        for _ in range(n_iters)
+    ]
 
     return pd.DataFrame(
         {

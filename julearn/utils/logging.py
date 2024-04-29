@@ -223,7 +223,7 @@ def raise_error(
 
 
 def warn_with_log(
-    msg: str, category: Optional[Type[Warning]] = RuntimeWarning
+    msg: str, category: Type[Warning] = RuntimeWarning
 ) -> None:
     """Warn, but first log it.
 

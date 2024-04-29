@@ -9,7 +9,9 @@ from typing import Optional, Union
 import numpy as np
 from numpy.random import RandomState
 from sklearn.model_selection import BaseShuffleSplit
-from sklearn.model_selection._split import _validate_shuffle_split
+from sklearn.model_selection._split import (
+    _validate_shuffle_split,  # type: ignore
+)
 
 
 class StratifiedBootstrap(BaseShuffleSplit):
@@ -87,13 +89,13 @@ class StratifiedBootstrap(BaseShuffleSplit):
         n_samples = [
             _validate_shuffle_split(
                 len(t_inds),
-                self.test_size,
-                self.train_size,
-                default_test_size=self._default_test_size,
+                self.test_size,  # type: ignore
+                self.train_size,  # type: ignore
+                default_test_size=self._default_test_size,  # type: ignore
             )
             for t_inds in y_inds
         ]
-        for _ in range(self.n_splits):
+        for _ in range(self.n_splits):  # type: ignore
             train = []
             test = []
             for t_inds, (n_train, _) in zip(y_inds, n_samples):

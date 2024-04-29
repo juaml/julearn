@@ -13,11 +13,11 @@ from sklearn.utils.metaestimators import available_if
 
 
 try:  # sklearn < 1.4.0
-    from sklearn.utils.validation import _check_fit_params
+    from sklearn.utils.validation import _check_fit_params  # type: ignore
 
     fit_params_checker = _check_fit_params
 except ImportError:  # sklearn >= 1.4.0
-    from sklearn.utils.validation import _check_method_params
+    from sklearn.utils.validation import _check_method_params  # type: ignore
 
     fit_params_checker = _check_method_params
 
@@ -180,7 +180,12 @@ class JuTransformer(JuBaseEstimator, TransformerMixin):
         self.row_select_col_type = row_select_col_type
         self.row_select_vals = row_select_vals
 
-    def fit(self, X, y=None, **fit_params):  # noqa: N803
+    def fit(
+        self,
+        X: pd.DataFrame,  # noqa: N803
+        y: Optional[pd.Series] = None,
+        **fit_params,
+    ):
         """Fit the model.
 
         This method will fit the model using only the columns selected by
@@ -217,8 +222,21 @@ class JuTransformer(JuBaseEstimator, TransformerMixin):
             self.row_select_vals = [self.row_select_vals]
         return self._fit(**self._select_rows(X, y, **fit_params))
 
+    def _fit(
+        self,
+        X: pd.DataFrame,  # noqa: N803,
+        y: Optional[pd.Series],
+        **kwargs,
+    ) -> None:
+        raise_error(
+            "This method should be implemented in the concrete class",
+            klass=NotImplementedError,
+        )
+
     def _add_backed_filtered(
-        self, X: pd.DataFrame, X_trans: pd.DataFrame  # noqa: N803
+        self,
+        X: pd.DataFrame,  # noqa: N803
+        X_trans: pd.DataFrame,  # noqa: N803
     ) -> pd.DataFrame:
         """Add the left-out columns back to the transformed data.
 
@@ -301,7 +319,7 @@ class WrapModel(JuBaseEstimator):
 
     def fit(
         self,
-        X: pd.DataFrame,  # noqa: N803
+        X: DataLike,  # noqa: N803
         y: Optional[DataLike] = None,
         **fit_params: Any,
     ) -> "WrapModel":
@@ -312,7 +330,7 @@ class WrapModel(JuBaseEstimator):
 
         Parameters
         ----------
-        X : pd.DataFrame
+        X : DataLike
             The data to fit the model on.
         y : DataLike, optional
             The target data (default is None).
@@ -329,9 +347,9 @@ class WrapModel(JuBaseEstimator):
         if self.needed_types is not None:
             self.needed_types = ensure_column_types(self.needed_types)
 
-        Xt = self.filter_columns(X)
+        Xt = self.filter_columns(X)  # type: ignore
         self.model_ = self.model
-        self.model_.fit(Xt, y, **fit_params)
+        self.model_.fit(Xt, y, **fit_params)  # type: ignore
         return self
 
     def predict(self, X: pd.DataFrame) -> DataLike:  # noqa: N803

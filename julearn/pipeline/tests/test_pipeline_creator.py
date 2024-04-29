@@ -378,7 +378,7 @@ def test_hyperparameter_tuning_distributions_bayes(
     )
 
     assert isinstance(pipeline, BayesSearchCV)
-    _compare_param_grids(pipeline.search_spaces, param_grid)
+    _compare_param_grids(pipeline.search_spaces, param_grid)  # type: ignore
 
 
 @pytest.mark.parametrize(

@@ -107,7 +107,7 @@ class ConfoundRemover(JuTransformer):
         self.support_mask_ = self.support_mask_.values
 
         def fit_confound_models(X: Scalar) -> ModelLike:  # noqa: N803
-            _model = clone(self.model_confound)
+            _model = clone(self.model_confound)  # type: ignore
             _model.fit(ser_confound.values, X)  # type: ignore
             return _model  # type: ignore
 
@@ -256,7 +256,7 @@ class ConfoundRemover(JuTransformer):
         if self.threshold is not None:
             # Accounting for correlated rounding errors for very small
             # residuals
-            residuals = residuals.applymap(
+            residuals = residuals.map(  # type: ignore
                 lambda x: 0 if abs(x) <= self.threshold else x
             )
         return residuals

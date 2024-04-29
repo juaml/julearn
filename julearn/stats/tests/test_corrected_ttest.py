@@ -21,27 +21,44 @@ def test__compute_corrected_ttest_alternatives():
     rvs1 = stats.norm.rvs(loc=0.5, scale=0.2, size=20, random_state=42)
     rvs2 = stats.norm.rvs(loc=0.51, scale=0.2, size=20, random_state=45)
     rvs3 = stats.norm.rvs(loc=0.9, scale=0.2, size=20, random_state=50)
-    _, p1 = _compute_corrected_ttest(rvs1 - rvs2, n_train=70, n_test=30)
+    _, p1 = _compute_corrected_ttest(
+        rvs1 - rvs2,  # type: ignore
+        n_train=70,
+        n_test=30,
+    )
 
     assert p1 > 0.7
 
-    _, p2 = _compute_corrected_ttest(rvs1 - rvs3, n_train=70, n_test=30)
+    _, p2 = _compute_corrected_ttest(
+        rvs1 - rvs3,  # type: ignore
+        n_train=70,
+        n_test=30,
+    )
 
     assert p2 < 0.1
 
     _, p3 = _compute_corrected_ttest(
-        rvs1 - rvs3, n_train=70, n_test=30, alternative="less"
+        rvs1 - rvs3,  # type: ignore
+        n_train=70,
+        n_test=30,
+        alternative="less",
     )
     assert p3 < 0.05  # rvs1 is less than rvs3
 
     _, p4 = _compute_corrected_ttest(
-        rvs1 - rvs3, n_train=70, n_test=30, alternative="greater"
+        rvs1 - rvs3,  # type: ignore
+        n_train=70,
+        n_test=30,
+        alternative="greater",
     )
     assert p4 > 0.90  # rvs1 is less than rvs3, so this should be high
 
     with pytest.raises(ValueError, match="Invalid alternative"):
         _compute_corrected_ttest(
-            rvs1 - rvs3, n_train=70, n_test=30, alternative="not_valid"
+            rvs1 - rvs3,  # type: ignore
+            n_train=70,
+            n_test=30,
+            alternative="not_valid",
         )
 
 

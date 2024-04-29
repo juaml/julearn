@@ -4,13 +4,13 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Dict, Iterable, List, Optional, Union
+from typing import Dict, List, Optional, Union
 
 import numpy as np
 import pandas as pd
+import sklearn
 from sklearn.base import BaseEstimator
 from sklearn.model_selection import (
-    BaseCrossValidator,
     check_cv,
     cross_validate,
 )
@@ -23,6 +23,7 @@ from .pipeline.merger import merge_pipelines
 from .prepare import check_consistency, prepare_input_data
 from .scoring import check_scoring
 from .utils import _compute_cvmdsum, logger, raise_error
+from .utils.typing import CVLike
 
 
 def run_cross_validation(  # noqa: C901
@@ -36,7 +37,7 @@ def run_cross_validation(  # noqa: C901
     return_estimator: Optional[str] = None,
     return_inspector: bool = False,
     return_train_score: bool = False,
-    cv: Optional[Union[int, BaseCrossValidator, Iterable]] = None,
+    cv: Optional[CVLike] = None,
     groups: Optional[str] = None,
     scoring: Union[str, List[str], None] = None,
     pos_labels: Union[str, List[str], None] = None,
@@ -357,20 +358,32 @@ def run_cross_validation(  # noqa: C901
 
     # Prepare cross validation
     cv_outer = check_cv(
-        cv, classifier=problem_type == "classification"  # type: ignore
+        cv,  # type: ignore
+        classifier=problem_type == "classification",
     )
     logger.info(f"Using outer CV scheme {cv_outer}")
 
     check_consistency(df_y, cv, groups, problem_type)  # type: ignore
 
     cv_return_estimator = return_estimator in ["cv", "all"]
-    scoring = check_scoring(pipeline, scoring, wrap_score=wrap_score)
+    scoring = check_scoring(
+        pipeline,  # type: ignore
+        scoring,
+        wrap_score=wrap_score,
+    )
 
     cv_mdsum = _compute_cvmdsum(cv_outer)
     fit_params = {}
     if df_groups is not None:
         if isinstance(pipeline, BaseSearchCV):
             fit_params["groups"] = df_groups.values
+
+    _sklearn_deprec_fit_params = {}
+    if sklearn.__version__ >= "1.4.0":
+        _sklearn_deprec_fit_params["params"] = fit_params
+    else:
+        _sklearn_deprec_fit_params["fit_params"] = fit_params
+
     scores = cross_validate(
         pipeline,
         df_X,
@@ -382,7 +395,7 @@ def run_cross_validation(  # noqa: C901
         n_jobs=n_jobs,
         return_train_score=return_train_score,
         verbose=verbose,  # type: ignore
-        fit_params=fit_params,
+        **_sklearn_deprec_fit_params,
     )
 
     n_repeats = getattr(cv_outer, "n_repeats", 1)

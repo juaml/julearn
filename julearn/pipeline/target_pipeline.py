@@ -169,6 +169,6 @@ class JuTargetPipeline:
         needed_types = []
         for _, t_step in self.steps:
             if getattr(t_step, "needed_types", None) is not None:
-                needed_types.extend(t_step.needed_types)
+                needed_types.extend(t_step.needed_types)  # type: ignore
         needed_types = set(needed_types)
         return needed_types if len(needed_types) > 0 else None

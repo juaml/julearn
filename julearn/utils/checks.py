@@ -2,6 +2,8 @@
 # Author: Federico Raimondo <f.raimondo@fz-juelich.de>
 # License: BSD 3 clause
 
+from typing import List
+
 import numpy as np
 import pandas as pd
 
@@ -10,7 +12,7 @@ from .logging import raise_error
 
 def check_scores_df(
     *scores: pd.DataFrame, same_cv: bool = False
-) -> pd.DataFrame:
+) -> List[pd.DataFrame]:
     """Check the output of `run_cross_validation`.
 
     Parameters

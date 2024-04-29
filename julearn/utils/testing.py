@@ -5,7 +5,7 @@
 # License: AGPL
 
 import warnings
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 import numpy as np
 import pandas as pd
@@ -38,7 +38,7 @@ from sklearn.linear_model import (
     SGDClassifier,
     SGDRegressor,
 )
-from sklearn.model_selection import KFold, cross_validate
+from sklearn.model_selection import BaseCrossValidator, KFold, cross_validate
 from sklearn.naive_bayes import (
     BernoulliNB,
     CategoricalNB,
@@ -51,7 +51,7 @@ from sklearn.svm import SVC, SVR
 
 from julearn import run_cross_validation
 from julearn.base import WrapModel
-from julearn.utils.typing import DataLike, EstimatorLike
+from julearn.utils.typing import DataLike, EstimatorLike, ModelLike
 
 
 def compare_models(  # noqa: C901, pragma: no cover
@@ -108,7 +108,8 @@ def compare_models(  # noqa: C901, pragma: no cover
             assert clf1.strategy == clf2.strategy  # type: ignore
         if hasattr(clf1, "class_prior_"):
             assert_array_equal(
-                clf1.class_prior_, clf2.class_prior_  # type: ignore
+                clf1.class_prior_,  # type: ignore
+                clf2.class_prior_,  # type: ignore
             )
         if hasattr(clf1, "constant_"):
             assert clf1.constant_ == clf2.constant_  # type: ignore
@@ -180,11 +181,11 @@ def do_scoring_test(
     y: str,
     data: pd.DataFrame,
     api_params: Dict[str, Any],
-    sklearn_model: EstimatorLike,
+    sklearn_model: Union[EstimatorLike, ModelLike, Any],  # TODO: fix
     scorers: List[str],
     groups: Optional[str] = None,
     X_types: Optional[Dict[str, List[str]]] = None,  # noqa: N803
-    cv: int = 5,
+    cv: Union[int, BaseCrossValidator]  = 5,
     sk_y: Optional[np.ndarray] = None,
     decimal: int = 5,
 ):
@@ -245,7 +246,12 @@ def do_scoring_test(
 
     np.random.seed(42)
     expected = cross_validate(
-        sklearn_model, sk_X, sk_y, cv=sk_cv, scoring=scorers, groups=sk_groups
+        sklearn_model,  # type: ignore
+        sk_X,
+        sk_y,
+        cv=sk_cv,
+        scoring=scorers,
+        groups=sk_groups,  # type: ignore
     )
 
     # Compare the models
@@ -257,8 +263,8 @@ def do_scoring_test(
     if isinstance(sklearn_model, Pipeline):
         clf2 = clone(sklearn_model).fit(sk_X, sk_y).steps[-1][1]
     else:
-        clf2 = clone(sklearn_model).fit(sk_X, sk_y)
-    compare_models(clf1, clf2)
+        clf2 = clone(sklearn_model).fit(sk_X, sk_y)  # type: ignore
+    compare_models(clf1, clf2)  # type: ignore
 
     if decimal > 0:
         for scoring in scorers:
@@ -266,7 +272,9 @@ def do_scoring_test(
             assert len(actual.columns) == len(expected) + 5  # type: ignore
             assert len(actual[s_key]) == len(expected[s_key])  # type: ignore
             assert_array_almost_equal(
-                actual[s_key], expected[s_key], decimal=decimal  # type: ignore
+                actual[s_key],  # type: ignore
+                expected[s_key],
+                decimal=decimal,  # type: ignore
             )
 
 
@@ -277,7 +285,9 @@ class PassThroughTransformer(TransformerMixin, BaseEstimator):
         pass
 
     def fit(
-        self, X: DataLike, y: Optional[DataLike] = None  # noqa: N803
+        self,
+        X: DataLike,  # noqa: N803
+        y: Optional[DataLike] = None,
     ) -> "PassThroughTransformer":
         """Fit the transformer.
 
