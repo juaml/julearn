@@ -23,33 +23,15 @@ _available_searchers = {
     },
 }
 
-try:
-    from skopt import BayesSearchCV
-except ImportError:
-    from sklearn.model_selection._search import BaseSearchCV
-
-    class BayesSearchCV(BaseSearchCV):
-        """Dummy class for BayesSearchCV that raises ImportError.
-
-        This class is used to raise an ImportError when BayesSearchCV is
-        requested but scikit-optimize is not installed.
-
-        """
-
-        def __init__(*args, **kwargs):
-            raise ImportError(
-                "BayesSearchCV requires scikit-optimize to be installed."
-            )
-
-finally:
-    _available_searchers["bayes"] = {
-        "class": BayesSearchCV,
-        "params_attr": "search_spaces",
-    }
-
 
 # Keep a copy for reset
 _available_searchers_reset = deepcopy(_available_searchers)
+
+
+def _recreate_reset_copy() -> None:
+    """Recreate the reset copy of available searchers."""
+    global _available_searchers_reset
+    _available_searchers_reset = deepcopy(_available_searchers)
 
 
 def list_searchers() -> List[str]:
