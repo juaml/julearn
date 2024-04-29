@@ -195,10 +195,6 @@ def test_hyperparameter_tuning(
     search_params : dict of str and list
         The parameters for the search.
 
-    Raises
-    ------
-    ValueError
-        If the kind is not supported.
 
     """
 
@@ -249,7 +245,7 @@ def test_hyperparameter_tuning_bayes(
         The parameters for the search.
 
     """
-    BayesSearchCV = pytest.importorskip('skopt.BayesSearchCV')
+    BayesSearchCV = pytest.importorskip("skopt.BayesSearchCV")
 
     pipeline, param_grid = _hyperparam_tuning_base_test(
         X_types_iris,
@@ -336,8 +332,10 @@ def test_hyperparameter_tuning_distributions(
     )
 
     assert isinstance(pipeline, RandomizedSearchCV)
-    _compare_param_grids(pipeline.param_distributions,  # type: ignore
-                         param_grid)
+    _compare_param_grids(
+        pipeline.param_distributions,  # type: ignore
+        param_grid,
+    )
 
 
 def test_hyperparameter_tuning_distributions_bayes(
@@ -366,7 +364,7 @@ def test_hyperparameter_tuning_distributions_bayes(
         The parameters for the search.
 
     """
-    BayesSearchCV = pytest.importorskip('skopt.BayesSearchCV')
+    BayesSearchCV = pytest.importorskip("skopt.BayesSearchCV")
 
     pipeline, param_grid = _hyperparam_tuning_base_test(
         X_types_iris,
@@ -512,7 +510,8 @@ def test_added_model_target_transform() -> None:
 
 
 def test_stacking(
-    X_iris: pd.DataFrame, y_iris: pd.Series  # noqa: N803
+    X_iris: pd.DataFrame,
+    y_iris: pd.Series,  # noqa: N803
 ) -> None:
     """Test that the stacking model works correctly."""
     # Define our feature types
@@ -793,16 +792,21 @@ def test_PipelineCreator_set_hyperparameter() -> None:
     assert model1.steps[-1][1].get_params()["strategy"] == "uniform"
 
     creator2 = PipelineCreator(problem_type="classification", apply_to="*")
-    creator2.add(DummyClassifier(strategy="uniform"),  # type: ignore
-                 name="dummy")
+    creator2.add(
+        DummyClassifier(strategy="uniform"),  # type: ignore
+        name="dummy",
+    )
 
     model2 = creator2.to_pipeline()
 
     assert model2.steps[-1][1].get_params()["strategy"] == "uniform"
 
     creator3 = PipelineCreator(problem_type="classification", apply_to="*")
-    creator3.add(DummyClassifier(),  # type: ignore
-                 strategy="uniform", name="dummy")
+    creator3.add(
+        DummyClassifier(),  # type: ignore
+        strategy="uniform",
+        name="dummy",
+    )
 
     model3 = creator3.to_pipeline()
 
