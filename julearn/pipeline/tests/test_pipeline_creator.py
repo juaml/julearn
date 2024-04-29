@@ -286,7 +286,8 @@ def _compare_param_grids(a: Dict, b: Dict) -> None:
                 assert val.dist.name == "uniform"
             else:
                 pytest.fail(
-                    f"Unknown distributions {val.dist.name} or {b[key][2]}")
+                    f"Unknown distributions {val.dist.name} or {b[key][2]}"
+                )
         else:
             assert val == b[key]
 
