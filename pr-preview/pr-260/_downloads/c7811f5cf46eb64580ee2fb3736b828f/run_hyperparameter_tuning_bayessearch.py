@@ -3,7 +3,7 @@ Tuning Hyperparameters using Bayesian Search
 ============================================
 
 This example uses the ``fmri`` dataset, performs simple binary classification
-using a Support Vector Machine classifier and analyze the model.
+using a Support Vector Machine classifier and analyzes the model.
 
 References
 ----------
