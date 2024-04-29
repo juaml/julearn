@@ -210,6 +210,7 @@
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../03_complex_models/index.html">8.4. Complex Models</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of 8.4. Complex Models</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../03_complex_models/run_apply_to_target.html">Transforming target variable with z-score</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../03_complex_models/run_hyperparameter_tuning_bayessearch.html">Tuning Hyperparameters using Bayesian Search</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../03_complex_models/run_hyperparameter_multiple_grids.html">Tuning Multiple Hyperparameters Grids</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../03_complex_models/run_stacked_models.html">Stacking Classification</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../03_complex_models/run_hyperparameter_tuning.html">Tuning Hyperparameters</a></li>
@@ -438,13 +439,13 @@ with and without confound removal using a Random Forest classifier.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-04-04 14:44:07,900 - julearn - INFO - ===== Lib Versions =====
-2024-04-04 14:44:07,900 - julearn - INFO - numpy: 1.26.4
-2024-04-04 14:44:07,900 - julearn - INFO - scipy: 1.13.0
-2024-04-04 14:44:07,900 - julearn - INFO - sklearn: 1.4.1.post1
-2024-04-04 14:44:07,900 - julearn - INFO - pandas: 2.1.4
-2024-04-04 14:44:07,900 - julearn - INFO - julearn: 0.3.2.dev24
-2024-04-04 14:44:07,900 - julearn - INFO - ========================
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-04-29 11:45:48,863 - julearn - INFO - ===== Lib Versions =====
+2024-04-29 11:45:48,863 - julearn - INFO - numpy: 1.26.4
+2024-04-29 11:45:48,863 - julearn - INFO - scipy: 1.13.0
+2024-04-29 11:45:48,863 - julearn - INFO - sklearn: 1.4.2
+2024-04-29 11:45:48,863 - julearn - INFO - pandas: 2.1.4
+2024-04-29 11:45:48,863 - julearn - INFO - julearn: 0.3.2.dev57
+2024-04-29 11:45:48,863 - julearn - INFO - ========================
 </pre></div>
 </div>
 <p>Load the iris data from seaborn.</p>
@@ -495,40 +496,40 @@ Note: confounds by default.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-04-04 14:44:07,903 - julearn - INFO - Setting random seed to 200
-2024-04-04 14:44:07,903 - julearn - INFO - ==== Input Data ====
-2024-04-04 14:44:07,903 - julearn - INFO - Using dataframe as input
-2024-04-04 14:44:07,903 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2024-04-04 14:44:07,903 - julearn - INFO -      Target: species
-2024-04-04 14:44:07,903 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2024-04-04 14:44:07,903 - julearn - INFO -      X_types:{}
-2024-04-04 14:44:07,903 - julearn - WARNING - The following columns are not defined in X_types: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]. They will be treated as continuous.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-04-29 11:45:48,866 - julearn - INFO - Setting random seed to 200
+2024-04-29 11:45:48,866 - julearn - INFO - ==== Input Data ====
+2024-04-29 11:45:48,866 - julearn - INFO - Using dataframe as input
+2024-04-29 11:45:48,866 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2024-04-29 11:45:48,866 - julearn - INFO -      Target: species
+2024-04-29 11:45:48,866 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2024-04-29 11:45:48,866 - julearn - INFO -      X_types:{}
+2024-04-29 11:45:48,867 - julearn - WARNING - The following columns are not defined in X_types: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]. They will be treated as continuous.
 /home/runner/work/julearn/julearn/julearn/prepare.py:507: RuntimeWarning: The following columns are not defined in X_types: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]. They will be treated as continuous.
   warn_with_log(
-2024-04-04 14:44:07,904 - julearn - INFO - ====================
-2024-04-04 14:44:07,904 - julearn - INFO -
-2024-04-04 14:44:07,904 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-04-04 14:44:07,904 - julearn - INFO - Step added
-2024-04-04 14:44:07,904 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-04-04 14:44:07,904 - julearn - INFO - Step added
-2024-04-04 14:44:07,905 - julearn - INFO - = Model Parameters =
-2024-04-04 14:44:07,905 - julearn - INFO - ====================
-2024-04-04 14:44:07,905 - julearn - INFO -
-2024-04-04 14:44:07,905 - julearn - INFO - = Data Information =
-2024-04-04 14:44:07,905 - julearn - INFO -      Problem type: classification
-2024-04-04 14:44:07,905 - julearn - INFO -      Number of samples: 100
-2024-04-04 14:44:07,905 - julearn - INFO -      Number of features: 3
-2024-04-04 14:44:07,905 - julearn - INFO - ====================
-2024-04-04 14:44:07,905 - julearn - INFO -
-2024-04-04 14:44:07,905 - julearn - INFO -      Number of classes: 2
-2024-04-04 14:44:07,905 - julearn - INFO -      Target type: object
-2024-04-04 14:44:07,906 - julearn - INFO -      Class distributions: species
+2024-04-29 11:45:48,867 - julearn - INFO - ====================
+2024-04-29 11:45:48,867 - julearn - INFO -
+2024-04-29 11:45:48,867 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2024-04-29 11:45:48,868 - julearn - INFO - Step added
+2024-04-29 11:45:48,868 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2024-04-29 11:45:48,868 - julearn - INFO - Step added
+2024-04-29 11:45:48,868 - julearn - INFO - = Model Parameters =
+2024-04-29 11:45:48,868 - julearn - INFO - ====================
+2024-04-29 11:45:48,868 - julearn - INFO -
+2024-04-29 11:45:48,869 - julearn - INFO - = Data Information =
+2024-04-29 11:45:48,869 - julearn - INFO -      Problem type: classification
+2024-04-29 11:45:48,869 - julearn - INFO -      Number of samples: 100
+2024-04-29 11:45:48,869 - julearn - INFO -      Number of features: 3
+2024-04-29 11:45:48,869 - julearn - INFO - ====================
+2024-04-29 11:45:48,869 - julearn - INFO -
+2024-04-29 11:45:48,869 - julearn - INFO -      Number of classes: 2
+2024-04-29 11:45:48,869 - julearn - INFO -      Target type: object
+2024-04-29 11:45:48,869 - julearn - INFO -      Class distributions: species
 versicolor    50
 virginica     50
 Name: count, dtype: int64
-2024-04-04 14:44:07,906 - julearn - INFO - Using outer CV scheme StratifiedBootstrap(n_splits=20, random_state=42, test_size=0.3,
+2024-04-29 11:45:48,870 - julearn - INFO - Using outer CV scheme StratifiedBootstrap(n_splits=20, random_state=42, test_size=0.3,
           train_size=None)
-2024-04-04 14:44:07,906 - julearn - INFO - Binary classification problem detected.
+2024-04-29 11:45:48,870 - julearn - INFO - Binary classification problem detected.
 /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py:73: FutureWarning: `fit_params` is deprecated and will be removed in version 1.6. Pass parameters via `params` instead.
   warnings.warn(
 </pre></div>
@@ -569,40 +570,40 @@ the random forest will only be trained using “features”.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-04-04 14:44:10,092 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;confound&#39;, &#39;features&#39;}; pattern=(?:__:type:__confound|__:type:__features)&gt;
-2024-04-04 14:44:10,093 - julearn - INFO - Step added
-2024-04-04 14:44:10,093 - julearn - INFO - Adding step confound_removal that applies to ColumnTypes&lt;types={&#39;features&#39;}; pattern=(?:__:type:__features)&gt;
-2024-04-04 14:44:10,093 - julearn - INFO - Setting hyperparameter confounds = confound
-2024-04-04 14:44:10,093 - julearn - INFO - Step added
-2024-04-04 14:44:10,093 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={&#39;features&#39;}; pattern=(?:__:type:__features)&gt;
-2024-04-04 14:44:10,093 - julearn - INFO - Step added
-2024-04-04 14:44:10,093 - julearn - INFO - Setting random seed to 200
-2024-04-04 14:44:10,093 - julearn - INFO - ==== Input Data ====
-2024-04-04 14:44:10,093 - julearn - INFO - Using dataframe as input
-2024-04-04 14:44:10,093 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2024-04-04 14:44:10,094 - julearn - INFO -      Target: species
-2024-04-04 14:44:10,094 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2024-04-04 14:44:10,094 - julearn - INFO -      X_types:{&#39;features&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;], &#39;confound&#39;: [&#39;petal_width&#39;]}
-2024-04-04 14:44:10,094 - julearn - INFO - ====================
-2024-04-04 14:44:10,094 - julearn - INFO -
-2024-04-04 14:44:10,096 - julearn - INFO - = Model Parameters =
-2024-04-04 14:44:10,096 - julearn - INFO - ====================
-2024-04-04 14:44:10,096 - julearn - INFO -
-2024-04-04 14:44:10,096 - julearn - INFO - = Data Information =
-2024-04-04 14:44:10,096 - julearn - INFO -      Problem type: classification
-2024-04-04 14:44:10,096 - julearn - INFO -      Number of samples: 100
-2024-04-04 14:44:10,096 - julearn - INFO -      Number of features: 4
-2024-04-04 14:44:10,096 - julearn - INFO - ====================
-2024-04-04 14:44:10,096 - julearn - INFO -
-2024-04-04 14:44:10,096 - julearn - INFO -      Number of classes: 2
-2024-04-04 14:44:10,096 - julearn - INFO -      Target type: object
-2024-04-04 14:44:10,097 - julearn - INFO -      Class distributions: species
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-04-29 11:45:50,990 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;features&#39;, &#39;confound&#39;}; pattern=(?:__:type:__features|__:type:__confound)&gt;
+2024-04-29 11:45:50,990 - julearn - INFO - Step added
+2024-04-29 11:45:50,990 - julearn - INFO - Adding step confound_removal that applies to ColumnTypes&lt;types={&#39;features&#39;}; pattern=(?:__:type:__features)&gt;
+2024-04-29 11:45:50,990 - julearn - INFO - Setting hyperparameter confounds = confound
+2024-04-29 11:45:50,990 - julearn - INFO - Step added
+2024-04-29 11:45:50,990 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={&#39;features&#39;}; pattern=(?:__:type:__features)&gt;
+2024-04-29 11:45:50,991 - julearn - INFO - Step added
+2024-04-29 11:45:50,991 - julearn - INFO - Setting random seed to 200
+2024-04-29 11:45:50,991 - julearn - INFO - ==== Input Data ====
+2024-04-29 11:45:50,991 - julearn - INFO - Using dataframe as input
+2024-04-29 11:45:50,991 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2024-04-29 11:45:50,991 - julearn - INFO -      Target: species
+2024-04-29 11:45:50,991 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2024-04-29 11:45:50,991 - julearn - INFO -      X_types:{&#39;features&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;], &#39;confound&#39;: [&#39;petal_width&#39;]}
+2024-04-29 11:45:50,992 - julearn - INFO - ====================
+2024-04-29 11:45:50,992 - julearn - INFO -
+2024-04-29 11:45:50,993 - julearn - INFO - = Model Parameters =
+2024-04-29 11:45:50,993 - julearn - INFO - ====================
+2024-04-29 11:45:50,993 - julearn - INFO -
+2024-04-29 11:45:50,993 - julearn - INFO - = Data Information =
+2024-04-29 11:45:50,993 - julearn - INFO -      Problem type: classification
+2024-04-29 11:45:50,993 - julearn - INFO -      Number of samples: 100
+2024-04-29 11:45:50,993 - julearn - INFO -      Number of features: 4
+2024-04-29 11:45:50,994 - julearn - INFO - ====================
+2024-04-29 11:45:50,994 - julearn - INFO -
+2024-04-29 11:45:50,994 - julearn - INFO -      Number of classes: 2
+2024-04-29 11:45:50,994 - julearn - INFO -      Target type: object
+2024-04-29 11:45:50,994 - julearn - INFO -      Class distributions: species
 versicolor    50
 virginica     50
 Name: count, dtype: int64
-2024-04-04 14:44:10,097 - julearn - INFO - Using outer CV scheme StratifiedBootstrap(n_splits=20, random_state=42, test_size=0.3,
+2024-04-29 11:45:50,994 - julearn - INFO - Using outer CV scheme StratifiedBootstrap(n_splits=20, random_state=42, test_size=0.3,
           train_size=None)
-2024-04-04 14:44:10,097 - julearn - INFO - Binary classification problem detected.
+2024-04-29 11:45:50,995 - julearn - INFO - Binary classification problem detected.
 /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py:73: FutureWarning: `fit_params` is deprecated and will be removed in version 1.6. Pass parameters via `params` instead.
   warnings.warn(
 </pre></div>
@@ -803,7 +804,7 @@ a difference in importances.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_confound_removal_classification_004.png" srcset="../../_images/sphx_glr_plot_confound_removal_classification_004.png" alt="plot confound removal classification" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 5.815 seconds)</p>
+<img src="../../_images/sphx_glr_plot_confound_removal_classification_004.png" srcset="../../_images/sphx_glr_plot_confound_removal_classification_004.png" alt="plot confound removal classification" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 5.682 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-04-confounds-plot-confound-removal-classification-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/431544dd8767c79de542561d3d866115/plot_confound_removal_classification.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_confound_removal_classification.py</span></code></a></p>

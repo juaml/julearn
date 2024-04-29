@@ -210,6 +210,7 @@
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../auto_examples/03_complex_models/index.html">8.4. Complex Models</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of 8.4. Complex Models</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../auto_examples/03_complex_models/run_apply_to_target.html">Transforming target variable with z-score</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../auto_examples/03_complex_models/run_hyperparameter_tuning_bayessearch.html">Tuning Hyperparameters using Bayesian Search</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../auto_examples/03_complex_models/run_hyperparameter_multiple_grids.html">Tuning Multiple Hyperparameters Grids</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../auto_examples/03_complex_models/run_stacked_models.html">Stacking Classification</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../auto_examples/03_complex_models/run_hyperparameter_tuning.html">Tuning Hyperparameters</a></li>
@@ -473,50 +474,51 @@ run a cross-validation as follows:</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-04-04 14:44:14,542 - julearn - INFO - Adding step cbpm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-04-04 14:44:14,542 - julearn - INFO - Step added
-2024-04-04 14:44:14,542 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-04-04 14:44:14,542 - julearn - INFO - Step added
-2024-04-04 14:44:14,543 - julearn - INFO - ==== Input Data ====
-2024-04-04 14:44:14,543 - julearn - INFO - Using dataframe as input
-2024-04-04 14:44:14,543 - julearn - INFO -      Features: [&#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;feature_20&#39;]
-2024-04-04 14:44:14,543 - julearn - INFO -      Target: target
-2024-04-04 14:44:14,544 - julearn - INFO -      Expanded features: [&#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;feature_20&#39;]
-2024-04-04 14:44:14,544 - julearn - INFO -      X_types:{}
-2024-04-04 14:44:14,544 - julearn - WARNING - The following columns are not defined in X_types: [&#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;feature_20&#39;]. They will be treated as continuous.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-04-29 11:45:55,360 - julearn - INFO - Adding step cbpm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2024-04-29 11:45:55,360 - julearn - INFO - Step added
+2024-04-29 11:45:55,360 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2024-04-29 11:45:55,360 - julearn - INFO - Step added
+2024-04-29 11:45:55,360 - julearn - INFO - ==== Input Data ====
+2024-04-29 11:45:55,360 - julearn - INFO - Using dataframe as input
+2024-04-29 11:45:55,360 - julearn - INFO -      Features: [&#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;feature_20&#39;]
+2024-04-29 11:45:55,360 - julearn - INFO -      Target: target
+2024-04-29 11:45:55,361 - julearn - INFO -      Expanded features: [&#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;feature_20&#39;]
+2024-04-29 11:45:55,361 - julearn - INFO -      X_types:{}
+2024-04-29 11:45:55,361 - julearn - WARNING - The following columns are not defined in X_types: [&#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;feature_20&#39;]. They will be treated as continuous.
 /home/runner/work/julearn/julearn/julearn/prepare.py:507: RuntimeWarning: The following columns are not defined in X_types: [&#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;feature_20&#39;]. They will be treated as continuous.
   warn_with_log(
-2024-04-04 14:44:14,545 - julearn - INFO - ====================
-2024-04-04 14:44:14,545 - julearn - INFO -
-2024-04-04 14:44:14,545 - julearn - INFO - = Model Parameters =
-2024-04-04 14:44:14,545 - julearn - INFO - ====================
-2024-04-04 14:44:14,545 - julearn - INFO -
-2024-04-04 14:44:14,545 - julearn - INFO - = Data Information =
-2024-04-04 14:44:14,545 - julearn - INFO -      Problem type: regression
-2024-04-04 14:44:14,545 - julearn - INFO -      Number of samples: 200
-2024-04-04 14:44:14,545 - julearn - INFO -      Number of features: 20
-2024-04-04 14:44:14,546 - julearn - INFO - ====================
-2024-04-04 14:44:14,546 - julearn - INFO -
-2024-04-04 14:44:14,546 - julearn - INFO -      Target type: float64
-2024-04-04 14:44:14,546 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2024-04-29 11:45:55,362 - julearn - INFO - ====================
+2024-04-29 11:45:55,362 - julearn - INFO -
+2024-04-29 11:45:55,363 - julearn - INFO - = Model Parameters =
+2024-04-29 11:45:55,363 - julearn - INFO - ====================
+2024-04-29 11:45:55,363 - julearn - INFO -
+2024-04-29 11:45:55,363 - julearn - INFO - = Data Information =
+2024-04-29 11:45:55,363 - julearn - INFO -      Problem type: regression
+2024-04-29 11:45:55,363 - julearn - INFO -      Number of samples: 200
+2024-04-29 11:45:55,363 - julearn - INFO -      Number of features: 20
+2024-04-29 11:45:55,363 - julearn - INFO - ====================
+2024-04-29 11:45:55,363 - julearn - INFO -
+2024-04-29 11:45:55,363 - julearn - INFO -      Target type: float64
+2024-04-29 11:45:55,363 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
 /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py:73: FutureWarning: `fit_params` is deprecated and will be removed in version 1.6. Pass parameters via `params` instead.
   warnings.warn(
-2024-04-04 14:44:14,563 - julearn - WARNING - No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
+2024-04-29 11:45:55,380 - julearn - WARNING - No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
 /home/runner/work/julearn/julearn/julearn/transformers/cbpm.py:267: RuntimeWarning: No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
   warn_with_log(
-2024-04-04 14:44:14,584 - julearn - WARNING - No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
+2024-04-29 11:45:55,401 - julearn - WARNING - No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
 /home/runner/work/julearn/julearn/julearn/transformers/cbpm.py:267: RuntimeWarning: No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
   warn_with_log(
-2024-04-04 14:44:14,605 - julearn - WARNING - No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
+2024-04-29 11:45:55,423 - julearn - WARNING - No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
 /home/runner/work/julearn/julearn/julearn/transformers/cbpm.py:267: RuntimeWarning: No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
   warn_with_log(
-2024-04-04 14:44:14,626 - julearn - WARNING - No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
+2024-04-29 11:45:55,443 - julearn - WARNING - No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
 /home/runner/work/julearn/julearn/julearn/transformers/cbpm.py:267: RuntimeWarning: No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
   warn_with_log(
-2024-04-04 14:44:14,647 - julearn - WARNING - No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
+2024-04-29 11:45:55,463 - julearn - WARNING - No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
 /home/runner/work/julearn/julearn/julearn/transformers/cbpm.py:267: RuntimeWarning: No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
   warn_with_log(
-2024-04-04 14:44:14,667 - julearn - WARNING - No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
+2024-04-29 11:45:55,468 - julearn - INFO - Fitting final model
+2024-04-29 11:45:55,483 - julearn - WARNING - No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
 /home/runner/work/julearn/julearn/julearn/transformers/cbpm.py:267: RuntimeWarning: No feature with significant negative correlations was present. Only features with positive correlations will be used. To get rid of this message, set `corr_sign = &#39;pos&#39;`.
   warn_with_log(
 </pre></div>
@@ -544,11 +546,11 @@ significance threshold during feature selection one may set the
 <span class="nb">print</span><span class="p">(</span><span class="n">cbpm_pipeline_creator</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-04-04 14:44:14,670 - julearn - INFO - Adding step cbpm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-04-04 14:44:14,670 - julearn - INFO - Setting hyperparameter significance_threshold = 0.05
-2024-04-04 14:44:14,670 - julearn - INFO - Step added
-2024-04-04 14:44:14,670 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-04-04 14:44:14,670 - julearn - INFO - Step added
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-04-29 11:45:55,486 - julearn - INFO - Adding step cbpm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2024-04-29 11:45:55,486 - julearn - INFO - Setting hyperparameter significance_threshold = 0.05
+2024-04-29 11:45:55,486 - julearn - INFO - Step added
+2024-04-29 11:45:55,486 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2024-04-29 11:45:55,486 - julearn - INFO - Step added
 PipelineCreator:
   Step 0: cbpm
     estimator:     CBPM()
@@ -572,11 +574,11 @@ cross-validation. Simply hand over an iterable of values:</p>
 <span class="nb">print</span><span class="p">(</span><span class="n">cbpm_pipeline_creator</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-04-04 14:44:14,671 - julearn - INFO - Adding step cbpm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-04-04 14:44:14,671 - julearn - INFO - Tuning hyperparameter significance_threshold = [0.01, 0.05]
-2024-04-04 14:44:14,671 - julearn - INFO - Step added
-2024-04-04 14:44:14,671 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-04-04 14:44:14,671 - julearn - INFO - Step added
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-04-29 11:45:55,487 - julearn - INFO - Adding step cbpm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2024-04-29 11:45:55,487 - julearn - INFO - Tuning hyperparameter significance_threshold = [0.01, 0.05]
+2024-04-29 11:45:55,487 - julearn - INFO - Step added
+2024-04-29 11:45:55,487 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2024-04-29 11:45:55,487 - julearn - INFO - Step added
 PipelineCreator:
   Step 0: cbpm
     estimator:     CBPM()
@@ -612,18 +614,18 @@ follows:</p>
 <span class="nb">print</span><span class="p">(</span><span class="n">cbpm_pipeline_creator</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-04-04 14:44:14,672 - julearn - INFO - Adding step cbpm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-04-04 14:44:14,672 - julearn - INFO - Setting hyperparameter significance_threshold = 0.05
-2024-04-04 14:44:14,672 - julearn - INFO - Setting hyperparameter corr_method = &lt;function spearmanr at 0x7fdad450d480&gt;
-2024-04-04 14:44:14,672 - julearn - INFO - Setting hyperparameter agg_method = &lt;function average at 0x7fdaf5f3ed40&gt;
-2024-04-04 14:44:14,672 - julearn - INFO - Setting hyperparameter corr_sign = pos
-2024-04-04 14:44:14,672 - julearn - INFO - Step added
-2024-04-04 14:44:14,672 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-04-04 14:44:14,673 - julearn - INFO - Step added
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-04-29 11:45:55,488 - julearn - INFO - Adding step cbpm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2024-04-29 11:45:55,488 - julearn - INFO - Setting hyperparameter significance_threshold = 0.05
+2024-04-29 11:45:55,488 - julearn - INFO - Setting hyperparameter corr_method = &lt;function spearmanr at 0x7fe30c0d8dc0&gt;
+2024-04-29 11:45:55,488 - julearn - INFO - Setting hyperparameter agg_method = &lt;function average at 0x7fe32db4ad40&gt;
+2024-04-29 11:45:55,488 - julearn - INFO - Setting hyperparameter corr_sign = pos
+2024-04-29 11:45:55,488 - julearn - INFO - Step added
+2024-04-29 11:45:55,488 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2024-04-29 11:45:55,488 - julearn - INFO - Step added
 PipelineCreator:
   Step 0: cbpm
-    estimator:     CBPM(agg_method=&lt;function average at 0x7fdaf5f50670&gt;,
-     corr_method=&lt;function spearmanr at 0x7fdad450d480&gt;, corr_sign=&#39;pos&#39;)
+    estimator:     CBPM(agg_method=&lt;function average at 0x7fe32db5c8f0&gt;,
+     corr_method=&lt;function spearmanr at 0x7fe30c0d8dc0&gt;, corr_sign=&#39;pos&#39;)
     apply to:      ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
     needed types:  ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
     tuning params: {}
@@ -658,7 +660,7 @@ Nov;18(11):1664-71.</p>
 </aside>
 </aside>
 </aside>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.133 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.131 seconds)</p>
 </section>
 </section>
 

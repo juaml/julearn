@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Tuning Multiple Hyperparameters Grids" href="run_hyperparameter_multiple_grids.html" /><link rel="prev" title="8.4. Complex Models" href="index.html" />
+<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Tuning Hyperparameters using Bayesian Search" href="run_hyperparameter_tuning_bayessearch.html" /><link rel="prev" title="8.4. Complex Models" href="index.html" />
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
         <title>Transforming target variable with z-score - julearn documentation</title>
@@ -210,6 +210,7 @@
 </li>
 <li class="toctree-l2 current has-children"><a class="reference internal" href="index.html">8.4. Complex Models</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle navigation of 8.4. Complex Models</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l3 current current-page"><a class="current reference internal" href="#">Transforming target variable with z-score</a></li>
+<li class="toctree-l3"><a class="reference internal" href="run_hyperparameter_tuning_bayessearch.html">Tuning Hyperparameters using Bayesian Search</a></li>
 <li class="toctree-l3"><a class="reference internal" href="run_hyperparameter_multiple_grids.html">Tuning Multiple Hyperparameters Grids</a></li>
 <li class="toctree-l3"><a class="reference internal" href="run_stacked_models.html">Stacking Classification</a></li>
 <li class="toctree-l3"><a class="reference internal" href="run_hyperparameter_tuning.html">Tuning Hyperparameters</a></li>
@@ -438,13 +439,13 @@ analysis using Ridge Regression model.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-04-04 14:43:58,249 - julearn - INFO - ===== Lib Versions =====
-2024-04-04 14:43:58,249 - julearn - INFO - numpy: 1.26.4
-2024-04-04 14:43:58,249 - julearn - INFO - scipy: 1.13.0
-2024-04-04 14:43:58,249 - julearn - INFO - sklearn: 1.4.1.post1
-2024-04-04 14:43:58,249 - julearn - INFO - pandas: 2.1.4
-2024-04-04 14:43:58,249 - julearn - INFO - julearn: 0.3.2.dev24
-2024-04-04 14:43:58,249 - julearn - INFO - ========================
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-04-29 11:45:34,757 - julearn - INFO - ===== Lib Versions =====
+2024-04-29 11:45:34,757 - julearn - INFO - numpy: 1.26.4
+2024-04-29 11:45:34,757 - julearn - INFO - scipy: 1.13.0
+2024-04-29 11:45:34,757 - julearn - INFO - sklearn: 1.4.2
+2024-04-29 11:45:34,757 - julearn - INFO - pandas: 2.1.4
+2024-04-29 11:45:34,757 - julearn - INFO - julearn: 0.3.2.dev57
+2024-04-29 11:45:34,757 - julearn - INFO - ========================
 </pre></div>
 </div>
 <p>Load the diabetes dataset from <code class="docutils literal notranslate"><span class="pre">sklearn</span></code> as a <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code>.</p>
@@ -498,7 +499,7 @@ we will first need to create a TargetPipelineCreator for this.</p>
 <span class="n">target_creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;julearn.pipeline.target_pipeline_creator.TargetPipelineCreator object at 0x7fdacd21c940&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;julearn.pipeline.target_pipeline_creator.TargetPipelineCreator object at 0x7fe306b0a740&gt;
 </pre></div>
 </div>
 <p>Now we can create the pipeline using a PipelineCreator.</p>
@@ -518,40 +519,41 @@ we will first need to create a TargetPipelineCreator for this.</p>
 <span class="nb">print</span><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.head.html#pandas.DataFrame.head" title="pandas.DataFrame.head" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method"><span class="n">scores</span><span class="o">.</span><span class="n">head</span></a><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-04-04 14:43:58,265 - julearn - INFO - Adding step jutargetpipeline that applies to ColumnTypes&lt;types={&#39;target&#39;}; pattern=(?:target)&gt;
-2024-04-04 14:43:58,265 - julearn - INFO - Step added
-2024-04-04 14:43:58,265 - julearn - INFO - Adding step ridge that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-04-04 14:43:58,265 - julearn - INFO - Step added
-2024-04-04 14:43:58,265 - julearn - INFO - ==== Input Data ====
-2024-04-04 14:43:58,265 - julearn - INFO - Using dataframe as input
-2024-04-04 14:43:58,265 - julearn - INFO -      Features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
-2024-04-04 14:43:58,265 - julearn - INFO -      Target: target
-2024-04-04 14:43:58,265 - julearn - INFO -      Expanded features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
-2024-04-04 14:43:58,265 - julearn - INFO -      X_types:{}
-2024-04-04 14:43:58,265 - julearn - WARNING - The following columns are not defined in X_types: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]. They will be treated as continuous.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-04-29 11:45:34,773 - julearn - INFO - Adding step jutargetpipeline that applies to ColumnTypes&lt;types={&#39;target&#39;}; pattern=(?:target)&gt;
+2024-04-29 11:45:34,773 - julearn - INFO - Step added
+2024-04-29 11:45:34,773 - julearn - INFO - Adding step ridge that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2024-04-29 11:45:34,773 - julearn - INFO - Step added
+2024-04-29 11:45:34,774 - julearn - INFO - ==== Input Data ====
+2024-04-29 11:45:34,774 - julearn - INFO - Using dataframe as input
+2024-04-29 11:45:34,774 - julearn - INFO -      Features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2024-04-29 11:45:34,774 - julearn - INFO -      Target: target
+2024-04-29 11:45:34,774 - julearn - INFO -      Expanded features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2024-04-29 11:45:34,774 - julearn - INFO -      X_types:{}
+2024-04-29 11:45:34,774 - julearn - WARNING - The following columns are not defined in X_types: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]. They will be treated as continuous.
 /home/runner/work/julearn/julearn/julearn/prepare.py:507: RuntimeWarning: The following columns are not defined in X_types: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]. They will be treated as continuous.
   warn_with_log(
-2024-04-04 14:43:58,266 - julearn - INFO - ====================
-2024-04-04 14:43:58,266 - julearn - INFO -
-2024-04-04 14:43:58,267 - julearn - INFO - = Model Parameters =
-2024-04-04 14:43:58,267 - julearn - INFO - ====================
-2024-04-04 14:43:58,267 - julearn - INFO -
-2024-04-04 14:43:58,267 - julearn - INFO - = Data Information =
-2024-04-04 14:43:58,267 - julearn - INFO -      Problem type: regression
-2024-04-04 14:43:58,267 - julearn - INFO -      Number of samples: 309
-2024-04-04 14:43:58,267 - julearn - INFO -      Number of features: 10
-2024-04-04 14:43:58,267 - julearn - INFO - ====================
-2024-04-04 14:43:58,267 - julearn - INFO -
-2024-04-04 14:43:58,267 - julearn - INFO -      Target type: float64
-2024-04-04 14:43:58,268 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2024-04-29 11:45:34,775 - julearn - INFO - ====================
+2024-04-29 11:45:34,775 - julearn - INFO -
+2024-04-29 11:45:34,775 - julearn - INFO - = Model Parameters =
+2024-04-29 11:45:34,776 - julearn - INFO - ====================
+2024-04-29 11:45:34,776 - julearn - INFO -
+2024-04-29 11:45:34,776 - julearn - INFO - = Data Information =
+2024-04-29 11:45:34,776 - julearn - INFO -      Problem type: regression
+2024-04-29 11:45:34,776 - julearn - INFO -      Number of samples: 309
+2024-04-29 11:45:34,776 - julearn - INFO -      Number of features: 10
+2024-04-29 11:45:34,776 - julearn - INFO - ====================
+2024-04-29 11:45:34,776 - julearn - INFO -
+2024-04-29 11:45:34,776 - julearn - INFO -      Target type: float64
+2024-04-29 11:45:34,776 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
 /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages/sklearn/model_selection/_validation.py:73: FutureWarning: `fit_params` is deprecated and will be removed in version 1.6. Pass parameters via `params` instead.
   warnings.warn(
+2024-04-29 11:45:34,812 - julearn - INFO - Fitting final model
    fit_time  score_time  ...  fold                          cv_mdsum
-0  0.004471    0.002309  ...     0  b10eef89b4192178d482d7a1587a248a
-1  0.004112    0.002261  ...     1  b10eef89b4192178d482d7a1587a248a
-2  0.004203    0.002223  ...     2  b10eef89b4192178d482d7a1587a248a
-3  0.004034    0.002241  ...     3  b10eef89b4192178d482d7a1587a248a
-4  0.003992    0.002236  ...     4  b10eef89b4192178d482d7a1587a248a
+0  0.004417    0.002245  ...     0  b10eef89b4192178d482d7a1587a248a
+1  0.004056    0.002215  ...     1  b10eef89b4192178d482d7a1587a248a
+2  0.004124    0.002175  ...     2  b10eef89b4192178d482d7a1587a248a
+3  0.003975    0.002162  ...     3  b10eef89b4192178d482d7a1587a248a
+4  0.003942    0.002188  ...     4  b10eef89b4192178d482d7a1587a248a
 
 [5 rows x 8 columns]
 </pre></div>
@@ -580,12 +582,12 @@ we will first need to create a TargetPipelineCreator for this.</p>
       <footer>
         
         <div class="related-pages">
-          <a class="next-page" href="run_hyperparameter_multiple_grids.html">
+          <a class="next-page" href="run_hyperparameter_tuning_bayessearch.html">
               <div class="page-info">
                 <div class="context">
                   <span>Next</span>
                 </div>
-                <div class="title">Tuning Multiple Hyperparameters Grids</div>
+                <div class="title">Tuning Hyperparameters using Bayesian Search</div>
               </div>
               <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
