@@ -245,14 +245,14 @@ pprint(model_tuned.best_params_)
 #
 # By default, ``julearn`` uses a
 # :class:`~sklearn.model_selection.GridSearchCV`.
-# This searcher, specified as `"grid"` is very simple. First, it constructs the
-# _grid_ of hyperparameters to try. As we see above, we have 3 hyperparameters
-# to tune. So it constructs a 3-dimentional grid with all the possible
-# combinations of the hyperparameters values. The second step is to perform
-# cross-validation on each of the possible combinations of hyperparameters
-# values.
+# This searcher, specified as ``"grid"`` is very simple. First, it constructs
+# the _grid_ of hyperparameters to try. As we see above, we have 3
+# hyperparameters to tune. So it constructs a 3-dimentional grid with all the
+# possible combinations of the hyperparameters values. The second step is to
+# perform cross-validation on each of the possible combinations of
+# hyperparameters values.
 #
-# Another searchers that ``julearn`` provides are the
+# Other searchers that ``julearn`` provides are the
 # :class:`~sklearn.model_selection.RandomizedSearchCV` and
 # :class:`~skopt.BayesSearchCV`.
 #
@@ -268,11 +268,11 @@ pprint(model_tuned.best_params_)
 #
 # The Bayesian searcher (:class:`~skopt.BayesSearchCV`) is a bit more
 # complex. It uses Bayesian optimization to find the best hyperparameter set.
-# As with the randomized search, it is useful when we have a many
+# As with the randomized search, it is useful when we have many
 # hyperparameters to tune, and we don't want to try all the possible
 # combinations due to computational constraints. For more information, see the
 # :class:`~skopt.BayesSearchCV` documentation, including how to specify
-# the distributions of the hyperparameters.
+# the prior distributions of the hyperparameters.
 #
 # We can specify the kind of searcher and its parametrization, by setting the
 # ``search_params`` parameter in the :func:`.run_cross_validation` function.
@@ -307,10 +307,10 @@ pprint(model_tuned.best_params_)
 # Furthermore, the  :class:`~sklearn.model_selection.RandomizedSearchCV`
 # searcher can sample hyperparameters from distributions, which can be useful
 # when we have continuous hyperparameters.
-# Let's set both C and gamma to be sampled from log-uniform distributions. We
-# can do this by setting the hyperparameter values as a tuple with the
-# following format: ``(low, high, distribution)``. The distribution can be
-# either ``"log-uniform"`` or ``"uniform"``.
+# Let's set both ``C`` and ``gamma`` to be sampled from log-uniform
+# distributions. We can do this by setting the hyperparameter values as a
+# tuple with the following format: ``(low, high, distribution)``. The
+# distribution can be either ``"log-uniform"`` or ``"uniform"``.
 
 creator = PipelineCreator(problem_type="classification")
 creator.add("zscore")

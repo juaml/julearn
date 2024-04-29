@@ -18,22 +18,27 @@ _filter_keys = {
 }
 
 
-def pytest_configure(config: pytest.Config):
+def pytest_configure(config: pytest.Config) -> None:
     """Add a new marker to pytest.
 
     Parameters
     ----------
     config : pytest.Config
         The pytest configuration object.
-
     """
     # register your new marker to avoid warnings
     for k, v in _filter_keys.items():
         config.addinivalue_line("markers", f"{k}: {v}")
 
 
-def pytest_addoption(parser):
-    """Add a new filter option to pytest."""
+def pytest_addoption(parser: pytest.Parser) -> None:
+    """Add a new filter option to pytest.
+
+    Parameters
+    ----------
+    parser : pytest.Parser
+        The pytest parser object.
+    """
     # add your new filter option (you can name it whatever you want)
     parser.addoption(
         "--filter",
@@ -42,9 +47,20 @@ def pytest_addoption(parser):
     )
 
 
-def pytest_collection_modifyitems(config, items):
-    """Filter tests based on the key marker."""
-    filter = config.getoption("--filter", None)
+def pytest_collection_modifyitems(
+    config: pytest.Config, items: List[pytest.Item]
+) -> None:
+    """Filter tests based on the key marker.
+
+    Parameters
+    ----------
+    config : pytest.Config
+        The pytest configuration object.
+    items : list
+        The list of items.
+
+    """
+    filter = config.getoption("--filter", None)  # type: ignore
     if filter is None:
         for k in _filter_keys.keys():
             skip_keys = mark.skip(

@@ -316,7 +316,7 @@ def run_cross_validation(  # noqa: C901
                     "Cannot use model_params with a model object. Use either "
                     "a string or a PipelineCreator"
                 )
-        pipeline_creator.add(step=model, **t_params)  # pyright: ignore
+        pipeline_creator.add(step=model, **t_params)  # type: ignore
 
         # Check for extra model_params that are not used
         unused_params = []
@@ -357,11 +357,11 @@ def run_cross_validation(  # noqa: C901
 
     # Prepare cross validation
     cv_outer = check_cv(
-        cv, classifier=problem_type == "classification"  # pyright: ignore
+        cv, classifier=problem_type == "classification"  # type: ignore
     )
     logger.info(f"Using outer CV scheme {cv_outer}")
 
-    check_consistency(df_y, cv, groups, problem_type)  # pyright: ignore
+    check_consistency(df_y, cv, groups, problem_type)  # type: ignore
 
     cv_return_estimator = return_estimator in ["cv", "all"]
     scoring = check_scoring(pipeline, scoring, wrap_score=wrap_score)
@@ -381,7 +381,7 @@ def run_cross_validation(  # noqa: C901
         return_estimator=cv_return_estimator,
         n_jobs=n_jobs,
         return_train_score=return_train_score,
-        verbose=verbose,  # pyright: ignore
+        verbose=verbose,  # type: ignore
         fit_params=fit_params,
     )
 

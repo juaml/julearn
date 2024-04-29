@@ -80,4 +80,4 @@ def test_get_searchers_noskopt() -> None:
     """Test getting a searcher without skopt."""
     out = get_searcher("bayes")
     with pytest.raises(ImportError, match="BayesSearchCV requires"):
-        out()  # pyright: ignore
+        out()  # type: ignore

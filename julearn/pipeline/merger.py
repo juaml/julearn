@@ -50,7 +50,7 @@ def merge_pipelines(
             )
 
         if isinstance(p, BaseSearchCV):
-            if not isinstance(p, t_searcher):  # pyright: ignore
+            if not isinstance(p, t_searcher):  # type: ignore
                 raise_error(
                     "One of the pipelines to merge is a "
                     f"{p.__class__.__name__}, but the search params specify a "
@@ -60,16 +60,16 @@ def merge_pipelines(
     # Check that all estimators have the same named steps in their pipelines.
     reference_pipeline = pipelines[0]
     if isinstance(reference_pipeline, BaseSearchCV):
-        reference_pipeline = reference_pipeline.estimator  # pyright: ignore
+        reference_pipeline = reference_pipeline.estimator  # type: ignore
 
-    step_names = reference_pipeline.named_steps.keys()  # pyright: ignore
+    step_names = reference_pipeline.named_steps.keys()  # type: ignore
 
     for p in pipelines:
         if isinstance(p, BaseSearchCV):
-            p = p.estimator  # pyright: ignore
+            p = p.estimator  # type: ignore
             if not isinstance(p, Pipeline):
                 raise_error("All searchers must use a pipeline.")
-        if step_names != p.named_steps.keys():  # pyright: ignore
+        if step_names != p.named_steps.keys():  # type: ignore
             raise_error("All pipelines must have the same named steps.")
 
     # The idea behind the merge is to create a list of parameter
@@ -83,20 +83,20 @@ def merge_pipelines(
     different_steps = []
     for t_step_name in step_names:
         # Get the transformer/model of the first element
-        t = reference_pipeline.named_steps[t_step_name]  # pyright: ignore
+        t = reference_pipeline.named_steps[t_step_name]  # type: ignore
 
         # Check that all searchers have the same transformer/model.
         # TODO: Fix this comparison, as it always returns False.
         for s in pipelines[1:]:
             if isinstance(s, BaseSearchCV):
                 if (
-                    s.estimator.named_steps[t_step_name]  # pyright: ignore
+                    s.estimator.named_steps[t_step_name]  # type: ignore
                     != t
                 ):
                     different_steps.append(t_step_name)
                     break
             else:
-                if s.named_steps[t_step_name] != t:  # pyright: ignore
+                if s.named_steps[t_step_name] != t:  # type: ignore
                     different_steps.append(t_step_name)
                     break
 
@@ -109,7 +109,7 @@ def merge_pipelines(
             if params_attr is None:
                 raise_error(
                     f"Searcher {s.__class__.__name__} is not registered "
-                    "in the searcher registry. Merging of this kinds of "
+                    "in the searcher registry. Merging of these kinds of "
                     "searchers is not supported. If you register the "
                     "searcher, you can merge it."
                 )
@@ -119,14 +119,14 @@ def merge_pipelines(
         for t_name in different_steps:
             if isinstance(s, BaseSearchCV):
                 t_grid[t_name] = [
-                    s.estimator.named_steps[t_name]  # pyright: ignore
+                    s.estimator.named_steps[t_name]  # type: ignore
                 ]
             else:
-                t_grid[t_name] = [s.named_steps[t_name]]  # pyright: ignore
+                t_grid[t_name] = [s.named_steps[t_name]]  # type: ignore
         all_grids.append(t_grid)
 
     # Finally, we will concatenate the grids and create a new searcher.
     new_searcher = _prepare_hyperparameter_tuning(
-        all_grids, search_params, reference_pipeline  # pyright: ignore
+        all_grids, search_params, reference_pipeline  # type: ignore
     )
     return new_searcher

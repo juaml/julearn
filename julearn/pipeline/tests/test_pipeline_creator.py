@@ -217,11 +217,10 @@ def test_hyperparameter_tuning(
     if kind == "grid":
         assert isinstance(pipeline, GridSearchCV)
         assert pipeline.param_grid == param_grid  # type: ignore
-    elif kind == "random":
+    else:
+        assert kind == "random"
         assert isinstance(pipeline, RandomizedSearchCV)
         assert pipeline.param_distributions == param_grid  # type: ignore
-    else:
-        raise ValueError(f"Unknown kind {kind}")
 
 
 def test_hyperparameter_tuning_bayes(
@@ -250,10 +249,7 @@ def test_hyperparameter_tuning_bayes(
         The parameters for the search.
 
     """
-    try:
-        from skopt import BayesSearchCV
-    except ImportError:
-        pytest.skip("skopt not installed")
+    BayesSearchCV = pytest.importorskip('skopt.BayesSearchCV')
 
     pipeline, param_grid = _hyperparam_tuning_base_test(
         X_types_iris,
@@ -327,8 +323,8 @@ def test_hyperparameter_tuning_distributions(
     kind = "grid"
     if search_params is not None:
         kind = search_params.get("kind", "grid")
-    if kind == "grid":
-        return  # No sense to test distributions for grid search
+    if kind != "random":
+        return  # No sense to test distributions for other than gridsearch
 
     pipeline, param_grid = _hyperparam_tuning_base_test(
         X_types_iris,
@@ -339,12 +335,9 @@ def test_hyperparameter_tuning_distributions(
         search_params,
     )
 
-    if kind == "random":
-        assert isinstance(pipeline, RandomizedSearchCV)
-        _compare_param_grids(pipeline.param_distributions,  # type: ignore
-                             param_grid)
-    else:
-        raise ValueError(f"Unknown kind {kind}")
+    assert isinstance(pipeline, RandomizedSearchCV)
+    _compare_param_grids(pipeline.param_distributions,  # type: ignore
+                         param_grid)
 
 
 def test_hyperparameter_tuning_distributions_bayes(
@@ -373,10 +366,7 @@ def test_hyperparameter_tuning_distributions_bayes(
         The parameters for the search.
 
     """
-    try:
-        from skopt import BayesSearchCV
-    except ImportError:
-        pytest.skip("skopt not installed")
+    BayesSearchCV = pytest.importorskip('skopt.BayesSearchCV')
 
     pipeline, param_grid = _hyperparam_tuning_base_test(
         X_types_iris,
