@@ -89,5 +89,5 @@ The following optional dependencies are available:
 * ``deslib``: The :mod:`.dynamic` module requires the `deslib`_ package. This
   module is not compatible with newer python versions and its unmaintained.
 * ``skopt``: Using the ``"bayes"`` searcher (:class:`~skopt.BayesSearchCV`)
-  requires the :mod:`skopt` package.
+  requires the `scikit-optimize`_ package.
 * ``all``: Install all optional functional dependencies (except ``deslib``).

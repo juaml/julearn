@@ -40,3 +40,4 @@
 
 
 .. _`DESlib`: https://github.com/scikit-learn-contrib/DESlib
+.. _`scikit-optimize`: https://scikit-optimize.readthedocs.io/en/stable/
