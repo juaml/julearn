@@ -21,6 +21,7 @@ from julearn.pipeline import PipelineCreator, TargetPipelineCreator
 from julearn.pipeline.pipeline_creator import JuColumnTransformer
 from julearn.transformers import get_transformer
 
+
 if TYPE_CHECKING:
     from sklearn.pipeline import Pipeline
 
@@ -198,6 +199,7 @@ def test_hyperparameter_tuning(
     ------
     ValueError
         If the kind is not supported.
+
     """
 
     pipeline, param_grid = _hyperparam_tuning_base_test(

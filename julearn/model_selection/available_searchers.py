@@ -40,6 +40,7 @@ except ImportError:
             raise ImportError(
                 "BayesSearchCV requires scikit-optimize to be installed."
             )
+
 finally:
     _available_searchers["bayes"] = {
         "class": BayesSearchCV,
@@ -173,6 +174,7 @@ def get_searcher_params_attr(searcher: Union[str, Type]) -> Optional[str]:
     ------
     ValueError
         If the specified searcher is not available.
+
     """
     out = None
     if isinstance(searcher, str):
@@ -186,5 +188,5 @@ def get_searcher_params_attr(searcher: Union[str, Type]) -> Optional[str]:
         for _, v in _available_searchers.items():
             if searcher == v["class"]:
                 out = v["params_attr"]
-    
+
     return out
