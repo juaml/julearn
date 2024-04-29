@@ -5,17 +5,33 @@
 # License: AGPL
 
 from copy import deepcopy
-from typing import List, Optional
+from typing import List, Optional, Type, Union
 
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 
 from julearn.utils.logging import logger, raise_error, warn_with_log
 
 
-_available_searchers = {"grid": GridSearchCV, "random": RandomizedSearchCV}
+_available_searchers = {
+    "grid": {
+        "class": GridSearchCV,
+        "params_attr": "param_grid",
+    },
+    "random": {
+        "class": RandomizedSearchCV,
+        "params_attr": "param_distributions",
+    },
+}
+
 
 # Keep a copy for reset
 _available_searchers_reset = deepcopy(_available_searchers)
+
+
+def _recreate_reset_copy() -> None:
+    """Recreate the reset copy of available searchers."""
+    global _available_searchers_reset
+    _available_searchers_reset = deepcopy(_available_searchers)
 
 
 def list_searchers() -> List[str]:
@@ -54,12 +70,15 @@ def get_searcher(name: str) -> object:
             f"The specified searcher ({name}) is not available. "
             f"Valid options are: {list(_available_searchers.keys())}"
         )
-    out = _available_searchers[name]
+    out = _available_searchers[name]["class"]
     return out
 
 
 def register_searcher(
-    searcher_name: str, searcher: object, overwrite: Optional[bool] = None
+    searcher_name: str,
+    searcher: object,
+    params_attr: str,
+    overwrite: Optional[bool] = None,
 ) -> None:
     """Register searcher to julearn.
 
@@ -73,6 +92,9 @@ def register_searcher(
         Name by which the searcher will be referenced by.
     searcher : obj
         The searcher class by which the searcher can be initialized.
+    params_attr : str
+        The name of the attribute that holds the hyperparameter space to
+        search.
     overwrite : bool | None, optional
         decides whether overwrite should be allowed, by default None.
         Options are:
@@ -104,10 +126,49 @@ def register_searcher(
                 "overwrite existing searchers."
             )
     logger.info(f"Registering new searcher: {searcher_name}")
-    _available_searchers[searcher_name] = searcher
+    _available_searchers[searcher_name] = {
+        "class": searcher,
+        "params_attr": params_attr,
+    }
 
 
 def reset_searcher_register() -> None:
     """Reset the searcher register to its initial state."""
     global _available_searchers
     _available_searchers = deepcopy(_available_searchers_reset)
+
+
+def get_searcher_params_attr(searcher: Union[str, Type]) -> Optional[str]:
+    """Get the name of the attribute that holds the search space.
+
+    Parameters
+    ----------
+    searcher:
+        The searcher class or name.
+
+    Returns
+    -------
+    str or None
+        The name of the attribute that holds the search space. If the searcher
+        did not register any search space attribute, None is returned.
+
+    Raises
+    ------
+    ValueError
+        If the specified searcher is not available.
+
+    """
+    out = None
+    if isinstance(searcher, str):
+        if searcher not in _available_searchers:
+            raise_error(
+                f"The specified searcher ({searcher}) is not available. "
+                f"Valid options are: {list(_available_searchers.keys())}"
+            )
+        out = _available_searchers[searcher]["params_attr"]
+    else:
+        for _, v in _available_searchers.items():
+            if searcher == v["class"]:
+                out = v["params_attr"]
+
+    return out

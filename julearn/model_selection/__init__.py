@@ -15,3 +15,7 @@ from .available_searchers import (
     register_searcher,
     reset_searcher_register,
 )
+
+from ._skopt_searcher import register_bayes_searcher
+register_bayes_searcher()
+

@@ -74,7 +74,7 @@ def test_merger_errors() -> None:
 
     with pytest.raises(
         ValueError,
-        match="At least one of the pipelines to merge is a GridSearchCV",
+        match="One of the pipelines to merge is a GridSearchCV",
     ):
         merge_pipelines(pipe1, pipe2, search_params=search_params)
 
@@ -83,7 +83,7 @@ def test_merger_errors() -> None:
 
     with pytest.raises(
         ValueError,
-        match="one of the pipelines to merge is a RandomizedSearchCV",
+        match="One of the pipelines to merge is a RandomizedSearchCV",
     ):
         merge_pipelines(pipe1, pipe2, search_params=search_params)
 
@@ -104,3 +104,12 @@ def test_merger_errors() -> None:
         match="must have the same named steps.",
     ):
         merge_pipelines(pipe1, pipe4, search_params=None)
+
+    search_params = {"kind": "grid"}
+    pipe5 = creator2.to_pipeline(search_params={"kind": "bayes"})
+
+    with pytest.raises(
+        ValueError,
+        match="One of the pipelines to merge is a BayesSearchCV",
+    ):
+        merge_pipelines(pipe1, pipe5, search_params=search_params)

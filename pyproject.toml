@@ -59,6 +59,7 @@ docs = [
     "sphinx_copybutton>=0.5.0,<0.6",
     "numpydoc>=1.5.0,<1.6",
     "towncrier<24",
+    "scikit-optimize>=0.10.0,<0.11",
 ]
 deslib = ["deslib>=0.3.5,<0.4"]
 viz = [
@@ -66,6 +67,12 @@ viz = [
     "bokeh>=3.0.0",
     "param>=2.0.0",
 ]
+
+skopt = ["scikit-optimize>=0.10.0,<0.11"]
+
+# Add all optional functional dependencies (skip deslib until its fixed)
+# This does not include dev/docs building dependencies
+all = ["julearn[viz,skopt]"]
 
 ################
 # Tool configs #
@@ -212,3 +219,7 @@ showcontent = true
 [tool.towncrier.fragment.change]
 name = "API Changes"
 showcontent = true
+
+## Configure pyright to ignore assigment types until scikit-learn stubs are updated
+[tool.pyright]
+reportAssignmentType = "none"

@@ -8,8 +8,75 @@ from copy import copy
 from typing import Callable, Dict, List, Optional, Union
 
 import pandas as pd
-from pytest import FixtureRequest, fixture
+import pytest
+from pytest import FixtureRequest, fixture, mark
 from seaborn import load_dataset
+
+
+_filter_keys = {
+    "nodeps": "Test that runs without conditional dependencies only",
+}
+
+
+def pytest_configure(config: pytest.Config) -> None:
+    """Add a new marker to pytest.
+
+    Parameters
+    ----------
+    config : pytest.Config
+        The pytest configuration object.
+
+    """
+    # register your new marker to avoid warnings
+    for k, v in _filter_keys.items():
+        config.addinivalue_line("markers", f"{k}: {v}")
+
+
+def pytest_addoption(parser: pytest.Parser) -> None:
+    """Add a new filter option to pytest.
+
+    Parameters
+    ----------
+    parser : pytest.Parser
+        The pytest parser object.
+
+    """
+    # add your new filter option (you can name it whatever you want)
+    parser.addoption(
+        "--filter",
+        action="store",
+        help="Select tests based on markers.",
+    )
+
+
+def pytest_collection_modifyitems(
+    config: pytest.Config, items: List[pytest.Item]
+) -> None:
+    """Filter tests based on the key marker.
+
+    Parameters
+    ----------
+    config : pytest.Config
+        The pytest configuration object.
+    items : list
+        The list of items.
+
+    """
+    filter = config.getoption("--filter", None)  # type: ignore
+    if filter is None:
+        for k in _filter_keys.keys():
+            skip_keys = mark.skip(
+                reason=f"Filter not specified for this test: {k}"
+            )
+            for item in items:
+                if k in item.keywords:
+                    item.add_marker(skip_keys)  # skip the test
+    else:
+        new_items = []
+        for item in items:
+            if filter in item.keywords:
+                new_items.append(item)
+        items[:] = new_items
 
 
 @fixture(scope="function")
@@ -191,6 +258,32 @@ def search_params(request: FixtureRequest) -> Optional[Dict]:
         A dictionary with the search_params argument.
 
     """
+
+    return request.param
+
+
+@fixture(
+    params=[
+        {"kind": "bayes", "n_iter": 2, "cv": 3},
+        {"kind": "bayes", "n_iter": 2},
+    ],
+    scope="function",
+)
+def bayes_search_params(request: FixtureRequest) -> Optional[Dict]:
+    """Return different  search_params argument for BayesSearchCV.
+
+    Parameters
+    ----------
+    request : pytest.FixtureRequest
+        The request object.
+
+    Returns
+    -------
+    dict or None
+        A dictionary with the search_params argument.
+
+    """
+
     return request.param
 
 
@@ -230,6 +323,46 @@ def get_tuning_params() -> Callable:
 
         """
         return copy(_tuning_params.get(step, {}))
+
+    return get
+
+
+_tuning_distributions = {
+    "zscore": {"with_mean": [True, False]},
+    "pca": {"n_components": (0.2, 0.7, "uniform")},
+    "select_univariate": {"mode": ["k_best", "percentile"]},
+    "rf": {"n_estimators": [2, 5]},
+    "svm": {"C": (1, 10, "log-uniform")},
+    "ridge": {"alpha": (1, 3, "uniform")},
+}
+
+
+@fixture(scope="function")
+def get_tuning_distributions() -> Callable:
+    """Return a function that returns the distributions to tune.
+
+    Returns
+    -------
+    get : callable
+        A function that returns the distributions to tune for a given step.
+
+    """
+
+    def get(step: str) -> Dict:
+        """Return the distributions to tune for a given step.
+
+        Parameters
+        ----------
+        step : str
+            The name of the step.
+
+        Returns
+        -------
+        dict
+            The distributions to tune for the given step.
+
+        """
+        return copy(_tuning_distributions.get(step, {}))
 
     return get
 
