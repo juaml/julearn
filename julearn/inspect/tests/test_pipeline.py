@@ -4,8 +4,9 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import TYPE_CHECKING, Any, Dict, List, Optional, Type
+from typing import Any, Dict, List, Optional, Type
 
+import pandas as pd
 import pytest
 from sklearn.base import BaseEstimator
 from sklearn.decomposition import PCA
@@ -15,10 +16,6 @@ from sklearn.svm import SVC
 from julearn.inspect import PipelineInspector, _EstimatorInspector
 from julearn.pipeline import PipelineCreator
 from julearn.transformers import JuColumnTransformer
-
-
-if TYPE_CHECKING:
-    import pandas as pd
 
 
 class MockTestEst(BaseEstimator):
@@ -39,8 +36,8 @@ class MockTestEst(BaseEstimator):
 
     def fit(
         self,
-        X: List[str],  # noqa: N803
-        y: Optional[str] = None,
+        X: pd.DataFrame,  # noqa: N803
+        y: Optional[pd.Series] = None,
         **fit_params: Any,
     ) -> "MockTestEst":
         """Fit the estimator.
@@ -64,7 +61,7 @@ class MockTestEst(BaseEstimator):
         self.param_1_ = 1
         return self
 
-    def transform(self, X: List[str]) -> List[str]:  # noqa: N803
+    def transform(self, X: pd.DataFrame) -> pd.DataFrame:  # noqa: N803
         """Transform the estimator.
 
         Parameters
@@ -90,7 +87,7 @@ class MockTestEst(BaseEstimator):
         ["zscore", "pca", "svm"],
     ],
 )
-def test_get_stepnames(steps: List[str], df_iris: "pd.DataFrame") -> None:
+def test_get_stepnames(steps: List[str], df_iris: pd.DataFrame) -> None:
     """Test step names fetch.
 
     Parameters
@@ -157,7 +154,11 @@ def test_steps(
     [
         [MockTestEst(), {"param_0_": 0, "param_1_": 1}],
         [
-            JuColumnTransformer("test", MockTestEst(), "continuous"),
+            JuColumnTransformer(
+                "test",
+                MockTestEst(),  # type: ignore
+                "continuous",
+            ),
             {"param_0_": 0, "param_1_": 1},
         ],
     ],
@@ -201,8 +202,14 @@ def test_inspect_pipeline(df_iris: "pd.DataFrame") -> None:
 
     pipe = (
         PipelineCreator(problem_type="classification")
-        .add(JuColumnTransformer("test", MockTestEst(), "continuous"))
-        .add(SVC())
+        .add(
+            JuColumnTransformer(
+                "test",
+                MockTestEst(),  # type: ignore
+                "continuous",
+            )
+        )
+        .add(SVC())  # type: ignore TODO: fix typing hints
         .to_pipeline()
     )
     pipe.fit(df_iris.iloc[:, :-1], df_iris.species)
@@ -230,8 +237,14 @@ def test_get_estimator(df_iris: "pd.DataFrame") -> None:
     """
     pipe = (
         PipelineCreator(problem_type="classification")
-        .add(JuColumnTransformer("test", MockTestEst(), "continuous"))
-        .add(SVC())
+        .add(
+            JuColumnTransformer(
+                "test",
+                MockTestEst(),  # type: ignore
+                "continuous",
+            )
+        )
+        .add(SVC())  # type: ignore TODO: fix typing hints
         .to_pipeline()
     )
     pipe.fit(df_iris.iloc[:, :-1], df_iris.species)

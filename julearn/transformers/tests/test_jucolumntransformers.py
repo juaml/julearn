@@ -123,7 +123,7 @@ def test_JuColumnTransformer_row_select():
 
     transformer_healthy = JuColumnTransformer(
         name="zscore",
-        transformer=StandardScaler(),
+        transformer=StandardScaler(),  # type: ignore
         apply_to="continuous",
         row_select_col_type=["healthy"],
         row_select_vals=1,
@@ -131,7 +131,7 @@ def test_JuColumnTransformer_row_select():
 
     transformer_unhealthy = JuColumnTransformer(
         name="zscore",
-        transformer=StandardScaler(),
+        transformer=StandardScaler(),  # type: ignore
         apply_to="continuous",
         row_select_col_type=["healthy"],
         row_select_vals=0,
@@ -139,24 +139,26 @@ def test_JuColumnTransformer_row_select():
 
     transformer_both = JuColumnTransformer(
         name="zscore",
-        transformer=StandardScaler(),
+        transformer=StandardScaler(),  # type: ignore
         apply_to="continuous",
         row_select_col_type=["healthy"],
         row_select_vals=[0, 1],
     )
     mean_healthy = (
         transformer_healthy.fit(X)
-        .column_transformer_.transformers_[0][1]
+        .column_transformer_.transformers_[0][1]  # type: ignore
         .mean_
     )
     mean_unhealthy = (
         transformer_unhealthy.fit(X)
-        .column_transformer_.transformers_[0][1]
+        .column_transformer_.transformers_[0][1]  # type: ignore
         .mean_
     )
 
     mean_both = (
-        transformer_both.fit(X).column_transformer_.transformers_[0][1].mean_
+        transformer_both.fit(
+            X
+        ).column_transformer_.transformers_[0][1].mean_  # type: ignore
     )
 
     assert_almost_equal(

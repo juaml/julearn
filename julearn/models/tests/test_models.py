@@ -113,7 +113,7 @@ def test_naive_bayes_estimators(
         "preprocess": None,
         "problem_type": "classification",
     }
-    clf = make_pipeline(clone(t_model))
+    clf = make_pipeline(clone(t_model))  # type: ignore
     do_scoring_test(
         X,
         y,
@@ -129,7 +129,7 @@ def test_naive_bayes_estimators(
         "preprocess": None,
         "problem_type": "classification",
     }
-    clf = make_pipeline(clone(t_model))
+    clf = make_pipeline(clone(t_model))  # type: ignore
     do_scoring_test(
         X,
         y,
@@ -150,7 +150,7 @@ def test_naive_bayes_estimators(
             "preprocess": None,
             "problem_type": "classification",
         }
-        clf = make_pipeline(clone(t_model))
+        clf = make_pipeline(clone(t_model))  # type: ignore
         do_scoring_test(
             X,
             y,
@@ -236,7 +236,7 @@ def test_classificationestimators(
         "problem_type": "classification",
         "preprocess": "zscore",
     }
-    clf = make_pipeline(StandardScaler(), clone(t_model))
+    clf = make_pipeline(StandardScaler(), clone(t_model))  # type: ignore
     do_scoring_test(
         X,
         y,
@@ -258,7 +258,7 @@ def test_classificationestimators(
             "problem_type": "classification",
             "preprocess": "zscore",
         }
-        clf = make_pipeline(StandardScaler(), clone(t_model))
+        clf = make_pipeline(StandardScaler(), clone(t_model))  # type: ignore
         do_scoring_test(
             X,
             y,
@@ -333,7 +333,7 @@ def test_regression_estimators(
         "preprocess": "zscore",
         "problem_type": "regression",
     }
-    clf = make_pipeline(StandardScaler(), clone(t_model))
+    clf = make_pipeline(StandardScaler(), clone(t_model))  # type: ignore
     do_scoring_test(
         X,
         y,

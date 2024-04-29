@@ -13,7 +13,8 @@ from julearn.transformers.dataframe import SetColumnTypes
 
 
 def test_SetColumnTypes(
-    X_iris: pd.DataFrame, X_types_iris: Optional[Dict]  # noqa: N803
+    X_iris: pd.DataFrame,  # noqa: N803
+    X_types_iris: Optional[Dict],  # noqa: N803
 ) -> None:
     """Test SetColumnTypes.
 
@@ -40,8 +41,8 @@ def test_SetColumnTypes(
         )
     )
     st = SetColumnTypes(X_types_iris).set_output(transform="pandas")
-    Xt = st.fit_transform(X_iris)
-    Xt_iris_with_types = st.fit_transform(X_iris_with_types)
+    Xt = st.fit_transform(X_iris)  # type: ignore
+    Xt_iris_with_types = st.fit_transform(X_iris_with_types)  # type: ignore
     assert_frame_equal(Xt, X_iris_with_types)
     assert_frame_equal(Xt_iris_with_types, X_iris_with_types)
 
@@ -64,7 +65,8 @@ def test_SetColumnTypes_input_validation(
 
 
 def test_SetColumnTypes_array(
-    X_iris: pd.DataFrame, X_types_iris: Optional[Dict]  # noqa:  N803
+    X_iris: pd.DataFrame,  # noqa: N803
+    X_types_iris: Optional[Dict],  # noqa:  N803
 ) -> None:
     """Test SetColumnTypes.
 
@@ -92,6 +94,8 @@ def test_SetColumnTypes_array(
     }
     X_iris_with_types.rename(columns=to_rename)
     st = SetColumnTypes(X_types_iris).set_output(transform="pandas")
-    Xt = st.fit_transform(X_iris.values)
-    Xt_iris_with_types = st.fit_transform(X_iris_with_types.values)
+    Xt = st.fit_transform(X_iris.values)  # type: ignore
+    Xt_iris_with_types = st.fit_transform(  # type: ignore
+        X_iris_with_types.values
+    )
     assert_frame_equal(Xt, Xt_iris_with_types)

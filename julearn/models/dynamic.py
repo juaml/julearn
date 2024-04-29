@@ -132,7 +132,7 @@ class DynamicSelection(BaseEstimator):
                 y_train = y[train]
                 y_dsel = y[test]
 
-        self.ensemble.fit(X_train, y_train)
+        self.ensemble.fit(X_train, y_train)  # type: ignore
         self._dsmodel = self._get_algorithm()
         self._dsmodel.fit(X_dsel, y_dsel)
 

@@ -11,15 +11,12 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import (
-    BaseCrossValidator,
-    BaseShuffleSplit,
     GroupKFold,
     GroupShuffleSplit,
     LeaveOneGroupOut,
     LeavePGroupsOut,
     StratifiedGroupKFold,
 )
-from sklearn.model_selection._split import _RepeatedSplits
 
 from .config import get_config
 from .model_selection import (
@@ -27,6 +24,7 @@ from .model_selection import (
     RepeatedContinuousStratifiedGroupKFold,
 )
 from .utils import logger, raise_error, warn_with_log
+from .utils.typing import CVLike
 
 
 def _validate_input_data_df(
@@ -335,7 +333,7 @@ def prepare_input_data(
 
 def check_consistency(
     y: pd.Series,
-    cv: Union[int, BaseCrossValidator, BaseShuffleSplit, _RepeatedSplits],
+    cv: CVLike,
     groups: Optional[pd.Series],
     problem_type: str,
 ) -> None:

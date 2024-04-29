@@ -71,7 +71,7 @@ class TargetConfoundRemover(JuTargetTransformer):
             The fitted target confound remover.
 
         """
-        self.model_confounds_ = clone(self.model_confound)
+        self.model_confounds_ = clone(self.model_confound)  # type: ignore
         self.detected_confounds_ = self.confounds.to_type_selector()(X)
         X_confounds = X.loc[:, self.detected_confounds_]
         self.model_confounds_.fit(X_confounds.values, y)  # type: ignore

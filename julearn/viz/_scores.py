@@ -2,6 +2,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 from pathlib import Path
+from typing import Sequence
 
 import pandas as pd
 import panel as pn
@@ -43,10 +44,10 @@ class _JulearnScoresViewer(param.Parameterized):
 
     """
 
-    metric = param.Selector([], default=None)
-    models = param.ListSelector(default=None, objects=[])
-    sets = param.ListSelector(default=None, objects=[])
-    show_stats = param.Boolean(False)
+    metric = param.Selector([], default=None)  # type: ignore
+    models: Sequence = param.ListSelector(default=None, objects=[])
+    sets: Sequence = param.ListSelector(default=None, objects=[])
+    show_stats: bool = param.Boolean(False)
     group_repeats = param.Selector(
         objects=["mean", "median", "no"], default="no"
     )

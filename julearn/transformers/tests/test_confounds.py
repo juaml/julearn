@@ -167,10 +167,14 @@ def test_ConfoundRemover_confound_auto_find_conf(
 
     # After confound removal the confound should be removed
     assert (
-        df_cofound_removed.columns == df_X.drop(columns=confounds).columns
+        df_cofound_removed.columns  # type: ignore
+        == df_X.drop(columns=confounds).columns
     ).all()
 
-    assert_frame_equal(df_cofound_removed, df_confound_removed_manual)
+    assert_frame_equal(
+        df_cofound_removed,  # type: ignore
+        df_confound_removed_manual,
+    )
 
 
 @pytest.mark.parametrize(
@@ -216,7 +220,8 @@ def test_confound_set_confounds(
     df_confounds = df_X_confounds.loc[:, conf_as_feat]  # type: ignore
     confound_regressions = [
         model_class().fit(
-            df_confounds, df_X_confounds.loc[:, feature]  # type: ignore
+            df_confounds,
+            df_X_confounds.loc[:, feature],  # type: ignore
         )
         for feature in features
     ]
@@ -244,11 +249,14 @@ def test_confound_set_confounds(
     )
     # After confound removal the confound should be removed
     assert (
-        df_cofound_removed.columns
+        df_cofound_removed.columns  # type: ignore
         == df_X_confounds.drop(columns=confounds).columns
     ).all()
 
-    assert_frame_equal(df_cofound_removed, df_confound_removed_manual)
+    assert_frame_equal(
+        df_cofound_removed,  # type: ignore
+        df_confound_removed_manual,
+    )
 
 
 def test_return_confound(df_X_confounds: pd.DataFrame) -> None:  # noqa: N803
@@ -264,7 +272,10 @@ def test_return_confound(df_X_confounds: pd.DataFrame) -> None:  # noqa: N803
         apply_to=["categorical", "continuous"], keep_confounds=True
     )
     X_trans = remover.fit_transform(df_X_confounds)
-    assert_array_equal(X_trans.columns, df_X_confounds.columns)
+    assert_array_equal(
+        X_trans.columns,  # type: ignore
+        df_X_confounds.columns,
+    )
 
 
 def test_no_confound_found() -> None:

@@ -4,6 +4,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
+import typing
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Tuple, Union
 
@@ -216,7 +217,7 @@ class PipelineCreator:
                     "TargetPipelineCreator can only be added to the target."
                 )
             step = step.to_pipeline()  # type: ignore
-
+            step = typing.cast(JuTargetPipeline, step)
         # Validate the step
         self._validate_step(step, apply_to)
 
@@ -266,7 +267,7 @@ class PipelineCreator:
                 step, self.problem_type, **params_to_set
             )
         elif len(params_to_set) > 0:
-            step.set_params(**params_to_set)
+            step.set_params(**params_to_set)  # type: ignore
 
         # JuEstimators accept the apply_to parameter and return needed types
         if isinstance(step, JuEstimatorLike):
@@ -301,7 +302,7 @@ class PipelineCreator:
         self._steps.append(
             Step(
                 name=name,
-                estimator=step,
+                estimator=step,  # type: ignore
                 apply_to=apply_to,
                 needed_types=needed_types,
                 params_to_tune=params_to_tune,
@@ -480,12 +481,12 @@ class PipelineCreator:
         X_types = self._check_X_types(X_types)
         model_step = self._steps[-1]
 
-        target_transformer_step = None
+        target_trans_step = None
         transformer_steps = []
 
         for _step in self._steps[:-1]:
             if "target" in _step.apply_to:
-                target_transformer_step = _step
+                target_trans_step = _step
             else:
                 transformer_steps.append(_step)
 
@@ -543,12 +544,12 @@ class PipelineCreator:
             target_model_step = self._wrap_target_model(
                 model_name,
                 model_estimator,  # type: ignore
-                target_transformer_step,  # type: ignore
+                target_trans_step,  # type: ignore
             )
             target_step_to_tune = {
                 f"{model_name}_target_transform__transformer__{param}": val
                 for param, val in (
-                    target_transformer_step.params_to_tune.items()
+                    target_trans_step.params_to_tune.items()  # type: ignore
                 )
             }
             step_params_to_tune = {
@@ -563,7 +564,7 @@ class PipelineCreator:
             params_to_tune.update(step_params_to_tune)
             pipeline_steps.append((model_name, model_estimator))
         pipeline = Pipeline(pipeline_steps).set_output(transform="pandas")
-
+        pipeline = typing.cast(Pipeline, pipeline)  # damn typing..
         # Deal with the Hyperparameter tuning
         out = _prepare_hyperparameter_tuning(
             params_to_tune, search_params, pipeline
@@ -573,7 +574,7 @@ class PipelineCreator:
 
     @staticmethod
     def _wrap_target_model(
-        model_name: str, model: ModelLike, target_transformer_step: Step
+        model_name: str, model: ModelLike, target_trans_step: Step
     ) -> Tuple[str, JuTransformedTargetModel]:
         """Wrap the model in a JuTransformedTargetModel.
 
@@ -583,7 +584,7 @@ class PipelineCreator:
             The name of the model
         model : ModelLike
             The model to wrap
-        target_transformer_step : Step
+        target_trans_step : Step
             The step with the target transformer.
 
         Returns
@@ -599,7 +600,7 @@ class PipelineCreator:
             If the target transformer is not a JuTargetPipeline.
 
         """
-        transformer = target_transformer_step.estimator
+        transformer = target_trans_step.estimator
         if not isinstance(transformer, JuTargetPipeline):
             raise_error(
                 "The target transformer should be a JuTargetPipeline. "
@@ -639,7 +640,9 @@ class PipelineCreator:
                     )
 
     def _get_step_name(
-        self, name: Optional[str], step: Union[EstimatorLike, str]
+        self,
+        name: Optional[str],
+        step: Union[EstimatorLike, str, TargetPipelineCreator],
     ) -> str:
         """Get the name of a step, with a count if it is repeated.
 
@@ -657,7 +660,7 @@ class PipelineCreator:
 
         """
         out = name
-        if name is None:
+        if out is None:
             name = (
                 step
                 if isinstance(step, str)
@@ -670,7 +673,9 @@ class PipelineCreator:
         return out
 
     def _validate_step(
-        self, step: Union[EstimatorLike, str], apply_to: ColumnTypesLike
+        self,
+        step: Union[EstimatorLike, str, TargetPipelineCreator],
+        apply_to: ColumnTypesLike,
     ) -> None:
         """Validate a step.
 
@@ -689,7 +694,7 @@ class PipelineCreator:
             transformer.
 
         """
-        if self._is_transfromer_step(step):
+        if self._is_transformer_step(step):
             if self._added_model:
                 raise_error("Cannot add a transformer after adding a model")
             if self._added_target_transformer and not self._is_model_step(
@@ -778,7 +783,9 @@ class PipelineCreator:
         return X_types
 
     @staticmethod
-    def _is_transfromer_step(step: Union[str, EstimatorLike]) -> bool:
+    def _is_transformer_step(
+        step: Union[str, EstimatorLike, TargetPipelineCreator]
+    ) -> bool:
         """Check if a step is a transformer."""
         if step in list_transformers():
             return True
@@ -787,7 +794,9 @@ class PipelineCreator:
         return False
 
     @staticmethod
-    def _is_model_step(step: Union[EstimatorLike, str]) -> bool:
+    def _is_model_step(
+        step: Union[EstimatorLike, str, TargetPipelineCreator]
+    ) -> bool:
         """Check if a step is a model."""
         if step in list_models():
             return True

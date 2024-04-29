@@ -157,13 +157,20 @@ def test_preprocess_with_column_types(df_iris: pd.DataFrame) -> None:
 
     X = list(df_iris.iloc[:, :-1].columns)
     y = "species"
+    X_types = {"continuous": X}
     _, model = run_cross_validation(
         X=X,
         y=y,
         data=df_iris,
+        X_types=X_types,
         problem_type="classification",
         model="rf",
         return_estimator="final",
     )
-    X_t = preprocess(model, X=X, data=df_iris, with_column_types=False)
+    X_t = preprocess(
+        model,  # type: ignore
+        X=X,
+        data=df_iris,
+        with_column_types=False,
+    )
     assert list(X_t.columns) == X

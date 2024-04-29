@@ -7,7 +7,7 @@
 from typing import (
     Any,
     Dict,
-    List,
+    Iterable,
     Optional,
     Protocol,
     Union,
@@ -16,9 +16,16 @@ from typing import (
 
 import numpy as np
 import pandas as pd
+from numpy.typing import ArrayLike
+from sklearn.model_selection import BaseCrossValidator, BaseShuffleSplit
+from sklearn.model_selection._split import _RepeatedSplits
 
 
-try:  # sklearn < 1.4.0
+try:  # sklearn >= 1.4.0
+    from sklearn.metrics._scorer import _Scorer  # type: ignore
+
+    ScorerLike = Union[_Scorer, _Scorer]
+except ImportError:  # sklearn < 1.4.0
     from sklearn.metrics._scorer import (
         _PredictScorer,
         _ProbaScorer,
@@ -26,10 +33,6 @@ try:  # sklearn < 1.4.0
     )
 
     ScorerLike = Union[_ProbaScorer, _ThresholdScorer, _PredictScorer]
-except ImportError:  # sklearn >= 1.4.0
-    from sklearn.metrics._scorer import _Scorer
-
-    ScorerLike = _Scorer
 
 
 from ..base import ColumnTypes
@@ -43,15 +46,18 @@ class EstimatorLikeFit1(Protocol):
     """Class for estimator-like fit 1."""
 
     def fit(
-        self, X: List[str], y: str, **kwargs: Any  # noqa: N803
+        self,
+        X: DataLike,  # noqa: N803
+        y: pd.Series,
+        **kwargs: Any,
     ) -> "EstimatorLikeFit1":
         """Fit estimator.
 
         Parameters
         ----------
-        X : list of str
+        X : DataLike
             The features to use.
-        y : str
+        y : pd.Series
             The target to use.
         **kwargs : dict
             Extra keyword arguments.
@@ -101,15 +107,22 @@ class EstimatorLikeFit1(Protocol):
 class EstimatorLikeFit2(Protocol):
     """Class for estimator-like fit 2."""
 
-    def fit(self, X: List[str], y: str) -> "EstimatorLikeFit2":  # noqa: N803
+    def fit(
+        self,
+        X: DataLike,  # noqa: N803
+        y: ArrayLike,
+        **kwargs: Any,
+    ) -> "EstimatorLikeFit2":
         """Fit estimator.
 
         Parameters
         ----------
-        X : list of str
+        X : DataLike
             The features to use.
-        y : str
+        y : DataLike
             The target to use.
+        **kwargs : dict
+            Extra keyword arguments.
 
         Returns
         -------
@@ -156,12 +169,12 @@ class EstimatorLikeFit2(Protocol):
 class EstimatorLikeFity(Protocol):
     """Class for estimator-like fit y."""
 
-    def fit(self, y: str) -> "EstimatorLikeFity":
+    def fit(self, y: DataLike) -> "EstimatorLikeFity":
         """Fit estimator.
 
         Parameters
         ----------
-        y : str
+        y : DataLike
             The target to use.
 
         Returns
@@ -214,17 +227,17 @@ class TransformerLike(EstimatorLikeFit1, Protocol):
 
     def fit(
         self,
-        X: List[str],  # noqa: N803
-        y: Optional[str] = None,
+        X: DataLike,  # noqa: N803
+        y: DataLike,
         **fit_params: Any,
     ) -> None:
         """Fit transformer.
 
         Parameters
         ----------
-        X : list of str
+        X : DataLike
             The features to use.
-        y : str, optional
+        y : DataLike
             The target to use (default None).
         **fit_params : dict
             Fit parameters.
@@ -249,7 +262,9 @@ class TransformerLike(EstimatorLikeFit1, Protocol):
         return X
 
     def fit_transform(
-        self, X: DataLike, y: Optional[DataLike] = None  # noqa: N803
+        self,
+        X: DataLike,  # noqa: N803
+        y: Optional[DataLike] = None,
     ) -> DataLike:
         """Fit and transform.
 
@@ -369,3 +384,8 @@ class JuModelLike(ModelLike, Protocol):
 
         """
         return ColumnTypes("placeholder")
+
+
+CVLike = Union[
+    int, BaseCrossValidator, _RepeatedSplits, BaseShuffleSplit, Iterable
+]

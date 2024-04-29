@@ -96,7 +96,7 @@ class JuTransformedTargetModel(JuBaseEstimator):
 
         """
         y = self.transformer.fit_transform(X, y)
-        self.model_ = clone(self.model)
+        self.model_ = clone(self.model)  # type: ignore
         self.model_.fit(X, y, **fit_params)  # type: ignore
         return self
 

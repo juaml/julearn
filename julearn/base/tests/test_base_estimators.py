@@ -110,7 +110,7 @@ def test_WrapModel(
 
     np.random.seed(42)
     lr = model()
-    lr.fit(X_iris_selected, y_iris)
+    lr.fit(X_iris_selected, y_iris)  # type: ignore
     pred_sk = lr.predict(X_iris_selected)
 
     np.random.seed(42)

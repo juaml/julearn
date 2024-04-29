@@ -38,7 +38,9 @@ def test_JuTransformedTargetModel(
     y_scaled = scaler_sk.fit_transform(y_iris.values[:, None])[:, 0]
     model_sk.fit(X_iris, y_scaled)
     y_pred_sk = model_sk.predict(X_iris)
-    y_inverse_sk = scaler_sk.inverse_transform(y_pred_sk[:, None])[:, 0]
+    y_inverse_sk = scaler_sk.inverse_transform(
+        y_pred_sk[:, None]  # type: ignore
+    )[:, 0]
     assert_array_equal(y_pred, y_inverse_sk)
 
 

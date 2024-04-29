@@ -53,7 +53,7 @@ def preprocess(
         else:
             raise_error(f"No step named {until} found.")
     df_out = pipeline[:i].transform(_X)
-
+    df_out = df_out.copy()
     if not isinstance(df_out, pd.DataFrame) and with_column_types is False:
         raise_error(
             "The output of the pipeline is not a DataFrame. Cannot remove "

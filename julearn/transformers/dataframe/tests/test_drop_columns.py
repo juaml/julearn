@@ -45,4 +45,4 @@ def test_DropColumns() -> None:
         ),
         X_trans,
     )
-    assert all(support == [1, 1, 0, 0, 1, 1])
+    assert all(support == [1, 1, 0, 0, 1, 1])  # type: ignore

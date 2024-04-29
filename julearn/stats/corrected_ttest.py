@@ -5,6 +5,7 @@
 #         Federico Raimondo <f.raimondo@fz-juelich.de>
 # License: BSD 3 clause
 
+import typing
 from itertools import combinations
 from typing import Optional, Tuple
 
@@ -18,7 +19,7 @@ from ..utils.logging import raise_error, warn_with_log
 
 
 def _corrected_std(
-    differences: np.ndarray, n_train: int, n_test: int
+    differences: pd.DataFrame, n_train: int, n_test: int
 ) -> float:
     """Corrects standard deviation using Nadeau and Bengio's approach.
 
@@ -48,12 +49,12 @@ def _corrected_std(
 
 
 def _compute_corrected_ttest(
-    differences: np.ndarray,
+    differences: pd.DataFrame,
     n_train: int,
     n_test: int,
     df: Optional[int] = None,
     alternative: str = "two-sided",
-) -> Tuple[float, float]:
+) -> Tuple[pd.Series, pd.Series]:
     """Compute paired t-test with corrected variance.
 
     Parameters
@@ -167,12 +168,15 @@ def corrected_ttest(
         n_train = i_scores["n_train"].values
         n_test = i_scores["n_test"].values
 
+        n_train = typing.cast(np.ndarray, n_train)
+        n_test = typing.cast(np.ndarray, n_test)
+
         if np.unique(n_train).size > 1:
             warn_with_log(
                 "The training set sizes are not the same. Will use a rounded "
                 "average."
             )
-            n_train = int(np.mean(n_train).round())
+            n_train = int(np.mean(n_train).round())  # type: ignore
         else:
             n_train = n_train[0]
 

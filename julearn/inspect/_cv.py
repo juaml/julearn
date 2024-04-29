@@ -4,13 +4,14 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 import pandas as pd
 from sklearn.model_selection import BaseCrossValidator, check_cv
 from sklearn.utils.metaestimators import available_if
 
 from ..utils import _compute_cvmdsum, is_nonoverlapping_cv, raise_error
+from ..utils.typing import DataLike
 from ._pipeline import PipelineInspector
 
 
@@ -60,14 +61,13 @@ class FoldsInspector:
     def __init__(
         self,
         scores: pd.DataFrame,
-        cv: BaseCrossValidator,
-        X: Union[str, List[str]],  # noqa: N803
-        y: str,
+        cv: Union[BaseCrossValidator, int],
+        X: DataLike,  # noqa: N803
+        y: pd.Series,
         func: str = "predict",
-        groups: Optional[str] = None,
+        groups: Optional[pd.Series] = None,
     ):
         self._scores = scores
-        self._cv = cv
         self._X = X
         self._y = y
         self._func = func
@@ -92,7 +92,7 @@ class FoldsInspector:
             )
 
         cv = check_cv(cv)
-
+        self._cv = cv
         t_cv_mdsum = _compute_cvmdsum(cv)
         if t_cv_mdsum != cv_mdsums[0]:
             raise_error(
@@ -120,10 +120,16 @@ class FoldsInspector:
 
         predictions = []
         for i_fold, (_, test) in enumerate(
-            self._cv.split(self._X, self._y, groups=self._groups)
+            self._cv.split(
+                self._X,  # type: ignore
+                self._y,
+                groups=self._groups,
+            )
         ):
             t_model = self._scores["estimator"][i_fold]
-            t_values = getattr(t_model, func)(self._X.iloc[test])
+            t_values = getattr(t_model, func)(
+                self._X.iloc[test]  # type: ignore
+            )
             if t_values.ndim == 1:
                 t_values = t_values[:, None]
             column_names = [f"p{i}" for i in range(t_values.shape[1])]
@@ -152,7 +158,7 @@ class FoldsInspector:
                 t_df.columns = [f"fold{i_fold}_{x}" for x in t_df.columns]
         predictions = pd.concat(predictions, axis=1)
         predictions = predictions.sort_index()
-        predictions["target"] = self._y.values
+        predictions["target"] = self._y.values  # type: ignore
         return predictions
 
     def __getitem__(self, key):
