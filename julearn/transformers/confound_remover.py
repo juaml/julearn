@@ -256,7 +256,7 @@ class ConfoundRemover(JuTransformer):
         if self.threshold is not None:
             # Accounting for correlated rounding errors for very small
             # residuals
-            residuals = residuals.map(  # type: ignore
+            residuals = residuals.applymap(  # type: ignore
                 lambda x: 0 if abs(x) <= self.threshold else x
             )
         return residuals
