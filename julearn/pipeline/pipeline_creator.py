@@ -14,10 +14,10 @@ from sklearn.model_selection import RandomizedSearchCV, check_cv
 from sklearn.pipeline import Pipeline
 
 from ..base import ColumnTypes, ColumnTypesLike, JuTransformer, WrapModel
-from ..model_selection.available_searchers import get_searcher, list_searchers
 from ..model_selection._optuna_searcher import (
-    _prepare_optuna_hyperparameters_distributions
+    _prepare_optuna_hyperparameters_distributions,
 )
+from ..model_selection.available_searchers import get_searcher, list_searchers
 from ..models import get_model, list_models
 from ..prepare import prepare_search_params
 from ..transformers import (

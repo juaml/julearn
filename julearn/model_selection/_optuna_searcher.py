@@ -8,8 +8,8 @@ from .available_searchers import _recreate_reset_copy, register_searcher
 
 
 try:
+    import optuna.distributions as optd
     from optuna_integration.sklearn import OptunaSearchCV
-    import optuna.distributions as od
 except ImportError:
     from sklearn.model_selection._search import BaseSearchCV
 
@@ -61,14 +61,14 @@ def _prepare_optuna_hyperparameters_distributions(
         if isinstance(v, tuple) and len(v) == 3:
             if v[2] == "uniform":
                 if isinstance(v[0], int) and isinstance(v[1], int):
-                    out[k] = od.IntDistribution(v[0], v[1], log=False)
+                    out[k] = optd.IntDistribution(v[0], v[1], log=False)
                 else:
-                    out[k] = od.FloatDistribution(v[0], v[1], log=False)
+                    out[k] = optd.FloatDistribution(v[0], v[1], log=False)
             elif v[2] in ("loguniform", "log-uniform"):
                 if isinstance(v[0], int) and isinstance(v[1], int):
-                    out[k] = od.IntDistribution(v[0], v[1], log=True)
+                    out[k] = optd.IntDistribution(v[0], v[1], log=True)
                 else:
-                    out[k] = od.FloatDistribution(v[0], v[1], log=True)
+                    out[k] = optd.FloatDistribution(v[0], v[1], log=True)
             else:
                 out[k] = v
         else:
