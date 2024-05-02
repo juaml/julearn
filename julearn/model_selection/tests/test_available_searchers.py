@@ -62,6 +62,9 @@ def test_get_searcher() -> None:
     out = get_searcher("bayes")
     assert out.__name__ == "BayesSearchCV"
 
+    out = get_searcher("optuna")
+    assert out.__name__ == "OptunaSearchCV"
+
 
 def test_get_searcher_params_attr() -> None:
     """Test getting the params attribute of a searcher."""
@@ -74,10 +77,20 @@ def test_get_searcher_params_attr() -> None:
     out = get_searcher_params_attr("bayes")
     assert out == "search_spaces"
 
+    out = get_searcher_params_attr("optuna")
+    assert out == "param_distributions"
+
 
 @pytest.mark.nodeps
 def test_get_searchers_noskopt() -> None:
     """Test getting a searcher without skopt."""
     out = get_searcher("bayes")
     with pytest.raises(ImportError, match="BayesSearchCV requires"):
+        out()  # type: ignore
+
+@pytest.mark.nodeps
+def test_get_searchers_nooptuna() -> None:
+    """Test getting a searcher without optuna."""
+    out = get_searcher("optuna")
+    with pytest.raises(ImportError, match="OptunaSearchCV requires"):
         out()  # type: ignore

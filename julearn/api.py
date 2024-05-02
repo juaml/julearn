@@ -136,8 +136,8 @@ def run_cross_validation(  # noqa: C901
         the following keys:
 
         * 'kind': The kind of search algorithm to use, e.g.:
-            'grid', 'random' or 'bayes'. Can be any valid julearn searcher name
-            or scikit-learn compatible searcher.
+            'grid', 'random', 'bayes' or 'optuna'. Can be any valid julearn
+            searcher name or scikit-learn compatible searcher.
         * 'cv': If a searcher is going to be used, the cross-validation
             splitting strategy to use. Defaults to same CV as for the model
             evaluation.

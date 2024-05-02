@@ -15,6 +15,9 @@ from sklearn.pipeline import Pipeline
 
 from ..base import ColumnTypes, ColumnTypesLike, JuTransformer, WrapModel
 from ..model_selection.available_searchers import get_searcher, list_searchers
+from ..model_selection._optuna_searcher import (
+    _prepare_optuna_hyperparameters_distributions
+)
 from ..models import get_model, list_models
 from ..prepare import prepare_search_params
 from ..transformers import (
@@ -928,8 +931,8 @@ def _prepare_hyperparameter_tuning(
         The parameters for the search. The following keys are accepted:
 
         * 'kind': The kind of search algorithm to use e.g.:
-            'grid', 'random' or 'bayes'. All valid julearn searchers can be
-            entered.
+            'grid', 'random', 'bayes' or 'optuna'. All valid julearn searchers
+            can be entered.
         * 'cv': If search is going to be used, the cross-validation
             splitting strategy to use. Defaults to same CV as for the model
             evaluation.
@@ -995,7 +998,17 @@ def _prepare_hyperparameter_tuning(
                     _prepare_hyperparameters_distributions(p)
                     for p in params_to_tune
                 ]
+        elif search.__name__ == "OptunaSearchCV":
 
+            if isinstance(params_to_tune, dict):
+                params_to_tune = _prepare_optuna_hyperparameters_distributions(
+                    params_to_tune
+                )
+            else:
+                params_to_tune = [
+                    _prepare_optuna_hyperparameters_distributions(p)
+                    for p in params_to_tune
+                ]
         cv_inner = check_cv(cv_inner)  # type: ignore
         logger.info(f"Using inner CV scheme {cv_inner}")
         search_params["cv"] = cv_inner
