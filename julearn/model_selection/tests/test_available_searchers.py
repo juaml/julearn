@@ -5,7 +5,7 @@
 # License: AGPL
 
 import pytest
-from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
+from sklearn.model_selection import GridSearchCV
 
 from julearn.model_selection import (
     get_searcher,
@@ -51,28 +51,52 @@ def test_reset_searcher() -> None:
         get_searcher("custom_grid")
 
 
-def test_get_searcher() -> None:
-    """Test getting a searcher."""
-    out = get_searcher("grid")
-    assert out == GridSearchCV
+@pytest.mark.parametrize(
+    "searcher,expected",
+    [
+        ("grid", "GridSearchCV"),
+        ("random", "RandomizedSearchCV"),
+        ("bayes", "BayesSearchCV"),
+        ("optuna", "OptunaSearchCV"),
+    ],
+)
+def test_get_searcher(searcher: str, expected: str) -> None:
+    """Test getting a searcher.
 
-    out = get_searcher("random")
-    assert out == RandomizedSearchCV
+    Parameters
+    ----------
+    searcher : str
+        The searcher name.
+    expected : str
+        The expected searcher class name.
 
-    out = get_searcher("bayes")
-    assert out.__name__ == "BayesSearchCV"
+    """
+    out = get_searcher(searcher)
+    assert out.__name__ == expected
 
 
-def test_get_searcher_params_attr() -> None:
-    """Test getting the params attribute of a searcher."""
-    out = get_searcher_params_attr("grid")
-    assert out == "param_grid"
+@pytest.mark.parametrize(
+    "searcher,expected",
+    [
+        ("grid", "param_grid"),
+        ("random", "param_distributions"),
+        ("bayes", "search_spaces"),
+        ("optuna", "param_distributions"),
+    ],
+)
+def test_get_searcher_params_attr(searcher: str, expected: str) -> None:
+    """Test getting the params attribute of a searcher.
 
-    out = get_searcher_params_attr("random")
-    assert out == "param_distributions"
+    Parameters
+    ----------
+    searcher : str
+        The searcher name.
+    expected : str
+        The expected attribute name.
 
-    out = get_searcher_params_attr("bayes")
-    assert out == "search_spaces"
+    """
+    out = get_searcher_params_attr(searcher)
+    assert out == expected
 
 
 @pytest.mark.nodeps
@@ -80,4 +104,12 @@ def test_get_searchers_noskopt() -> None:
     """Test getting a searcher without skopt."""
     out = get_searcher("bayes")
     with pytest.raises(ImportError, match="BayesSearchCV requires"):
+        out()  # type: ignore
+
+
+@pytest.mark.nodeps
+def test_get_searchers_nooptuna() -> None:
+    """Test getting a searcher without optuna."""
+    out = get_searcher("optuna")
+    with pytest.raises(ImportError, match="OptunaSearchCV requires"):
         out()  # type: ignore

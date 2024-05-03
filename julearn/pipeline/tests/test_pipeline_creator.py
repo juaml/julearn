@@ -227,7 +227,7 @@ def test_hyperparameter_tuning_bayes(
     get_tuning_params: Callable,
     bayes_search_params: Dict[str, List],
 ) -> None:
-    """Test that the pipeline hyperparameter tuning works as expected.
+    """Test that the pipeline hyperparameter tuning (bayes) works as expected.
 
     Parameters
     ----------
@@ -259,6 +259,47 @@ def test_hyperparameter_tuning_bayes(
     assert pipeline.search_spaces == param_grid  # type: ignore
 
 
+def test_hyperparameter_tuning_optuna(
+    X_types_iris: Dict[str, List[str]],  # noqa: N803
+    model: str,
+    preprocess: Union[str, List[str]],
+    problem_type: str,
+    get_tuning_params: Callable,
+    optuna_search_params: Dict[str, List],
+) -> None:
+    """Test that the pipeline hyperparameter tuning (optuna) works as expected.
+
+    Parameters
+    ----------
+    X_types_iris : dict
+        The iris dataset features types.
+    model : str
+        The model to test.
+    preprocess : str or list of str
+        The preprocessing steps to test.
+    problem_type : str
+        The problem type to test.
+    get_tuning_params : Callable
+        A function that returns the tuning hyperparameters for a given step.
+    optuna_search_params : dict of str and list
+        The parameters for the search.
+
+    """
+    optuna_integration = pytest.importorskip("optuna_integration")
+    OptunaSearchCV = optuna_integration.OptunaSearchCV
+
+    pipeline, param_grid = _hyperparam_tuning_base_test(
+        X_types_iris,
+        model,
+        preprocess,
+        problem_type,
+        get_tuning_params,
+        optuna_search_params,
+    )
+    assert isinstance(pipeline, OptunaSearchCV)
+    assert pipeline.param_distributions == param_grid  # type: ignore
+
+
 def _compare_param_grids(a: Dict, b: Dict) -> None:
     """Compare two param grids.
 
@@ -280,7 +321,7 @@ def _compare_param_grids(a: Dict, b: Dict) -> None:
         if hasattr(val, "rvs"):
             assert val.args[0] == b[key][0]
             assert val.args[1] == b[key][1]
-            if b[key][2] in ["log-uniform", "loguniform"]:
+            if b[key][2] == "log-uniform":
                 assert val.dist.name == "loguniform"
             elif b[key][2] == "uniform":
                 assert val.dist.name == "uniform"

@@ -270,7 +270,7 @@ def search_params(request: FixtureRequest) -> Optional[Dict]:
     scope="function",
 )
 def bayes_search_params(request: FixtureRequest) -> Optional[Dict]:
-    """Return different  search_params argument for BayesSearchCV.
+    """Return different search_params argument for BayesSearchCV.
 
     Parameters
     ----------
@@ -286,6 +286,29 @@ def bayes_search_params(request: FixtureRequest) -> Optional[Dict]:
 
     return request.param
 
+@fixture(
+    params=[
+        {"kind": "optuna", "n_trials": 10, "cv": 3},
+        {"kind": "optuna", "timeout": 20},
+    ],
+    scope="function",
+)
+def optuna_search_params(request: FixtureRequest) -> Optional[Dict]:
+    """Return different search_params argument for OptunaSearchCV.
+
+    Parameters
+    ----------
+    request : pytest.FixtureRequest
+        The request object.
+
+    Returns
+    -------
+    dict or None
+        A dictionary with the search_params argument.
+
+    """
+
+    return request.param
 
 _tuning_params = {
     "zscore": {"with_mean": [True, False]},

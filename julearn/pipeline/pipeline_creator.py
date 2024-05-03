@@ -14,6 +14,12 @@ from sklearn.model_selection import RandomizedSearchCV, check_cv
 from sklearn.pipeline import Pipeline
 
 from ..base import ColumnTypes, ColumnTypesLike, JuTransformer, WrapModel
+from ..model_selection._optuna_searcher import (
+    _prepare_optuna_hyperparameters_distributions,
+)
+from ..model_selection._skopt_searcher import (
+    _prepare_skopt_hyperparameters_distributions,
+)
 from ..model_selection.available_searchers import get_searcher, list_searchers
 from ..models import get_model, list_models
 from ..prepare import prepare_search_params
@@ -898,7 +904,7 @@ def _prepare_hyperparameters_distributions(
         if isinstance(v, tuple) and len(v) == 3:
             if v[2] == "uniform":
                 mod_params_to_tune[k] = stats.uniform(v[0], v[1])
-            elif v[2] in ("loguniform", "log-uniform"):
+            elif v[2] == "log-uniform":
                 mod_params_to_tune[k] = stats.loguniform(v[0], v[1])
             else:
                 mod_params_to_tune[k] = v
@@ -927,9 +933,18 @@ def _prepare_hyperparameter_tuning(
     search_params : dict
         The parameters for the search. The following keys are accepted:
 
-        * 'kind': The kind of search algorithm to use e.g.:
-            'grid', 'random' or 'bayes'. All valid julearn searchers can be
-            entered.
+        * 'kind': The kind of search algorithm to use. Valid options are:
+
+          * ``"grid"`` : :class:`~sklearn.model_selection.GridSearchCV`
+          * ``"random"`` :
+            :class:`~sklearn.model_selection.RandomizedSearchCV`
+          * ``"bayes"`` : :class:`~skopt.BayesSearchCV`
+          * ``"optuna"`` :
+            :class:`~optuna_integration.sklearn.OptunaSearchCV`
+          * user-registered searcher name : see
+            :func:`~julearn.model_selection.register_searcher`
+          * ``scikit-learn``-compatible searcher
+
         * 'cv': If search is going to be used, the cross-validation
             splitting strategy to use. Defaults to same CV as for the model
             evaluation.
@@ -995,7 +1010,26 @@ def _prepare_hyperparameter_tuning(
                     _prepare_hyperparameters_distributions(p)
                     for p in params_to_tune
                 ]
-
+        elif search.__name__ == "BayesSearchCV":
+            if isinstance(params_to_tune, dict):
+                params_to_tune = _prepare_skopt_hyperparameters_distributions(
+                    params_to_tune
+                )
+            else:
+                params_to_tune = [
+                    _prepare_skopt_hyperparameters_distributions(p)
+                    for p in params_to_tune
+                ]
+        elif search.__name__ == "OptunaSearchCV":
+            if isinstance(params_to_tune, dict):
+                params_to_tune = _prepare_optuna_hyperparameters_distributions(
+                    params_to_tune
+                )
+            else:
+                params_to_tune = [
+                    _prepare_optuna_hyperparameters_distributions(p)
+                    for p in params_to_tune
+                ]
         cv_inner = check_cv(cv_inner)  # type: ignore
         logger.info(f"Using inner CV scheme {cv_inner}")
         search_params["cv"] = cv_inner

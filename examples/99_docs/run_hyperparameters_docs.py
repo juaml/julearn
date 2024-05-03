@@ -253,8 +253,9 @@ pprint(model_tuned.best_params_)
 # hyperparameters values.
 #
 # Other searchers that ``julearn`` provides are the
-# :class:`~sklearn.model_selection.RandomizedSearchCV` and
-# :class:`~skopt.BayesSearchCV`.
+# :class:`~sklearn.model_selection.RandomizedSearchCV`, 
+# :class:`~skopt.BayesSearchCV` and
+# :class:`~optuna_integration.sklearn.OptunaSearchCV`.
 #
 # The randomized searcher
 # (:class:`~sklearn.model_selection.RandomizedSearchCV`) is similar to the
@@ -273,6 +274,12 @@ pprint(model_tuned.best_params_)
 # combinations due to computational constraints. For more information, see the
 # :class:`~skopt.BayesSearchCV` documentation, including how to specify
 # the prior distributions of the hyperparameters.
+#
+# The Optuna searcher (:class:`~optuna_integration.sklearn.OptunaSearchCV`)
+# uses the Optuna library to find the best hyperparameter set. Optuna is a
+# hyperparameter optimization framework that has several algorithms to find
+# the best hyperparameter set. For more information, see the
+# `Optuna`_ documentation.
 #
 # We can specify the kind of searcher and its parametrization, by setting the
 # ``search_params`` parameter in the :func:`.run_cross_validation` function.
@@ -368,6 +375,140 @@ print(
     f"bayesian search and 3-fold CV: {scores_tuned['test_score'].mean()}"
 )
 pprint(model_tuned.best_params_)
+
+###############################################################################
+# An example using optuna searcher is shown below. The searcher is specified
+# as ``"optuna"`` and the hyperparameters are specified as a dictionary with
+# the hyperparameters to tune and their distributions as for the bayesian
+# searcher. However, the optuna searcher behaviour is controlled by a
+# :class:`~optuna.study.Study` object. This object can be passed to the
+# searcher using the ``study`` parameter in the ``search_params`` dictionary.
+# 
+# .. important::
+#    The optuna searcher requires that all the hyperparameters are specified
+#    as distributions, even the categorical ones. 
+#
+# We first modify the pipeline creator so the ``select_k`` parameter is
+# specified as a distribution. We exemplarily use a categorical distribution
+# for the ``class_weight`` hyperparameter, trying the ``"balanced"`` and 
+# ``None`` values.
+
+creator = PipelineCreator(problem_type="classification")
+creator.add("zscore")
+creator.add("select_k", k=(2, 4, "uniform"))
+creator.add(
+    "svm",
+    C=(0.01, 10, "log-uniform"),
+    gamma=(1e-3, 1e-1, "log-uniform"),
+    class_weight=("balanced", None, "categorical")
+)
+print(creator)
+
+###############################################################################
+# We can now use the optuna searcher with 10 trials and 3-fold cross-validation.
+
+import optuna
+
+study = optuna.create_study(
+    direction="maximize",
+    study_name="optuna-concept",
+    load_if_exists=True,
+)
+
+search_params = {
+    "kind": "optuna",
+    "study": study,
+    "cv": 3,
+}
+scores_tuned, model_tuned = run_cross_validation(
+    X=X,
+    y=y,
+    data=df,
+    X_types=X_types,
+    model=creator,
+    return_estimator="all",
+    search_params=search_params,
+)
+
+print(
+    "Scores with best hyperparameter using 10 iterations of "
+    f"optuna and 3-fold CV: {scores_tuned['test_score'].mean()}"
+)
+pprint(model_tuned.best_params_)
+
+###############################################################################
+#
+# Specifying distributions
+# ~~~~~~~~~~~~~~~~~~~~~~~~
+#
+# The hyperparameters can be specified as distributions for the randomized
+# searcher, bayesian searcher and optuna searcher. The distributions are
+# either specified toolbox-specific method or  a tuple convention with the
+# following format: ``(low, high, distribution)`` where the distribution can
+# be either ``"log-uniform"`` or ``"uniform"`` or 
+# ``(a, b, c, d, ..., "categorical")`` where ``a``, ``b``, ``c``, ``d``, etc.
+# are the possible categorical values for the hyperparameter.
+#
+# For example, we can specify the ``C`` and ``gamma`` hyperparameters of the 
+# :class:`~sklearn.svm.SVC` as  log-uniform distributions, while keeping 
+# the ``with_mean`` parameter of the
+# :class:`~sklearn.preprocessing.StandardScaler` as a categorical parameter
+# with two options.
+
+
+creator = PipelineCreator(problem_type="classification")
+creator.add("zscore", with_mean=(True, False, "categorical"))
+creator.add(
+    "svm",
+    C=(0.01, 10, "log-uniform"),
+    gamma=(1e-3, 1e-1, "log-uniform"),
+)
+print(creator)
+
+###############################################################################
+# While this will work for any of the ``random``, ``bayes`` or ``optuna``
+# searcher options, it is important to note that both ``bayes`` and ``optuna``
+# searchers accept further parameters to specify distributions. For example,
+# the ``bayes`` searcher distributions are defined using the 
+# :class:`~skopt.space.space.Categorical`, :class:`~skopt.space.space.Integer`
+# and :class:`~skopt.space.space.Real`.
+#
+# For example, we can define a log-uniform distribution with base 2 for the
+# ``C`` hyperparameter of the :class:`~sklearn.svm.SVC` model:
+from skopt.space import Real
+creator = PipelineCreator(problem_type="classification")
+creator.add("zscore", with_mean=(True, False, "categorical"))
+creator.add(
+    "svm",
+    C=Real(0.01, 10, prior="log-uniform", base=2),
+    gamma=(1e-3, 1e-1, "log-uniform"),
+)
+print(creator)
+
+###############################################################################
+# For the optuna searcher, the distributions are defined using the
+# :class:`~optuna.distributions.CategoricalDistribution`,
+# :class:`~optuna.distributions.FloatDistribution` and
+# :class:`~optuna.distributions.IntDistribution`.
+#
+#
+# For example, we can define a uniform distribution from 0.5 to 0.9 with a 0.05
+# step for the ``n_components`` of a :class:`~sklearn.decomposition.PCA` 
+# transformer, while keeping a log-uniform distribution for the ``C`` and
+# ``gamma`` hyperparameters of the :class:`~sklearn.svm.SVC` model.
+from optuna.distributions import FloatDistribution
+creator = PipelineCreator(problem_type="classification")
+creator.add("zscore")
+creator.add(
+    "pca",
+    n_components=FloatDistribution(0.5, 0.9, step=0.05),
+)
+creator.add(
+    "svm",
+    C=FloatDistribution(0.01, 10, log=True),
+    gamma=(1e-3, 1e-1, "log-uniform"),
+)
+print(creator)
 
 
 ###############################################################################
