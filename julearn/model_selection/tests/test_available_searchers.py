@@ -5,7 +5,7 @@
 # License: AGPL
 
 import pytest
-from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
+from sklearn.model_selection import GridSearchCV
 
 from julearn.model_selection import (
     get_searcher,
