@@ -933,9 +933,18 @@ def _prepare_hyperparameter_tuning(
     search_params : dict
         The parameters for the search. The following keys are accepted:
 
-        * 'kind': The kind of search algorithm to use e.g.:
-            'grid', 'random', 'bayes' or 'optuna'. All valid julearn searchers
-            can be entered.
+        * 'kind': The kind of search algorithm to use. Valid options are:
+
+          * ``"grid"`` : :class:`~sklearn.model_selection.GridSearchCV`
+          * ``"random"`` :
+            :class:`~sklearn.model_selection.RandomizedSearchCV`
+          * ``"bayes"`` : :class:`~skopt.BayesSearchCV`
+          * ``"optuna"`` :
+            :class:`~optuna_integration.sklearn.OptunaSearchCV`
+          * user-registered searcher name : see
+            :func:`~julearn.model_selection.register_searcher`
+          * ``scikit-learn``-compatible searcher
+
         * 'cv': If search is going to be used, the cross-validation
             splitting strategy to use. Defaults to same CV as for the model
             evaluation.

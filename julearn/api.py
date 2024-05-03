@@ -135,9 +135,18 @@ def run_cross_validation(  # noqa: C901
         Additional parameters in case Hyperparameter Tuning is performed, with
         the following keys:
 
-        * 'kind': The kind of search algorithm to use, e.g.:
-            'grid', 'random', 'bayes' or 'optuna'. Can be any valid julearn
-            searcher name or scikit-learn compatible searcher.
+        * 'kind': The kind of search algorithm to use, Valid options are:
+
+          * ``"grid"`` : :class:`~sklearn.model_selection.GridSearchCV`
+          * ``"random"`` :
+            :class:`~sklearn.model_selection.RandomizedSearchCV`
+          * ``"bayes"`` : :class:`~skopt.BayesSearchCV`
+          * ``"optuna"`` :
+            :class:`~optuna_integration.sklearn.OptunaSearchCV`
+          * user-registered searcher name : see
+            :func:`~julearn.model_selection.register_searcher`
+          * ``scikit-learn``-compatible searcher
+
         * 'cv': If a searcher is going to be used, the cross-validation
             splitting strategy to use. Defaults to same CV as for the model
             evaluation.

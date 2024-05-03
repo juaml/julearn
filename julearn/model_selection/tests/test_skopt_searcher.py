@@ -2,7 +2,8 @@
 
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL
-from typing import Dict
+
+from typing import Any, Dict, Tuple
 
 import pytest
 
@@ -69,9 +70,9 @@ sksp = pytest.importorskip("skopt.space")
     ],
 )
 def test__prepare_skopt_hyperparameters_distributions(
-    params_to_tune: Dict[str, Dict[str, tuple]],
-    expected_types: tuple,
-    expected_dist: tuple,
+    params_to_tune: Dict[str, Dict[str, Any]],
+    expected_types: Tuple,
+    expected_dist: Tuple,
 ) -> None:
     """Test the _prepare_skopt_hyperparameters_distributions function.
 

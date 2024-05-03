@@ -2,6 +2,7 @@
 
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL
+
 from typing import Any, Dict
 
 from ..utils import logger
@@ -35,7 +36,6 @@ def register_bayes_searcher():
     _recreate_reset_copy()
 
 
-
 def _prepare_skopt_hyperparameters_distributions(
     params_to_tune: Dict[str, Any],
 ) -> Dict[str, Any]:
@@ -64,8 +64,10 @@ def _prepare_skopt_hyperparameters_distributions(
         if isinstance(v, tuple) and len(v) == 3:
             prior = v[2]
             if prior == "categorical":
-                logger.info(f"Hyperparameter {k} is categorical with 2 "
-                            f"options: [{v[0]} and {v[1]}]")
+                logger.info(
+                    f"Hyperparameter {k} is categorical with 2 "
+                    f"options: [{v[0]} and {v[1]}]"
+                )
                 out[k] = sksp.Categorical(v[:-1])
             elif isinstance(v[0], int) and isinstance(v[1], int):
                 logger.info(
@@ -75,8 +77,7 @@ def _prepare_skopt_hyperparameters_distributions(
                 out[k] = sksp.Integer(v[0], v[1], prior=prior)
             elif isinstance(v[0], float) and isinstance(v[1], float):
                 logger.info(
-                    f"Hyperparameter {k} is {prior} float "
-                    f"[{v[0]}, {v[1]}]"
+                    f"Hyperparameter {k} is {prior} float " f"[{v[0]}, {v[1]}]"
                 )
                 out[k] = sksp.Real(v[0], v[1], prior=prior)
             else:
