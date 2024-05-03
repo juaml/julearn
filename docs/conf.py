@@ -161,6 +161,7 @@ intersphinx_mapping = {
     "joblib": ("https://joblib.readthedocs.io/en/latest/", None),
     "scipy": ("https://docs.scipy.org/doc/scipy/", None),
     "skopt": ("https://scikit-optimize.readthedocs.io/en/latest", None),
+    "optuna": ("https://optuna.readthedocs.io/en/stable", None),
 }
 
 
