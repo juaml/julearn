@@ -501,11 +501,18 @@ performed.</p></li>
 <dt><strong>search_params</strong><span class="classifier">dict | None</span></dt><dd><p>Additional parameters in case Hyperparameter Tuning is performed, with
 the following keys:</p>
 <ul class="simple">
-<li><dl class="simple">
-<dt>‘kind’: The kind of search algorithm to use, e.g.:</dt><dd><p>‘grid’, ‘random’ or ‘bayes’. Can be any valid julearn searcher name
-or scikit-learn compatible searcher.</p>
-</dd>
-</dl>
+<li><p>‘kind’: The kind of search algorithm to use, Valid options are:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;grid&quot;</span></code> : <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html#sklearn.model_selection.GridSearchCV" title="(in scikit-learn v1.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">GridSearchCV</span></code></a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;random&quot;</span></code> :
+<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.RandomizedSearchCV.html#sklearn.model_selection.RandomizedSearchCV" title="(in scikit-learn v1.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">RandomizedSearchCV</span></code></a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;bayes&quot;</span></code> : <a class="reference external" href="https://scikit-optimize.readthedocs.io/en/latest/modules/generated/skopt.BayesSearchCV.html#skopt.BayesSearchCV" title="(in scikit-optimize v0.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BayesSearchCV</span></code></a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">&quot;optuna&quot;</span></code> :
+<a class="reference external" href="https://optuna-integration.readthedocs.io/en/stable/reference/generated/optuna_integration.OptunaSearchCV.html#optuna_integration.OptunaSearchCV" title="(in Optuna-Integration v3.6.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">OptunaSearchCV</span></code></a></p></li>
+<li><p>user-registered searcher name : see
+<a class="reference internal" href="julearn.model_selection.register_searcher.html#julearn.model_selection.register_searcher" title="julearn.model_selection.register_searcher"><code class="xref py py-func docutils literal notranslate"><span class="pre">register_searcher()</span></code></a></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code>-compatible searcher</p></li>
+</ul>
 </li>
 <li><dl class="simple">
 <dt>‘cv’: If a searcher is going to be used, the cross-validation</dt><dd><p>splitting strategy to use. Defaults to same CV as for the model
