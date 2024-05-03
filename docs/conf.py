@@ -162,6 +162,10 @@ intersphinx_mapping = {
     "scipy": ("https://docs.scipy.org/doc/scipy/", None),
     "skopt": ("https://scikit-optimize.readthedocs.io/en/latest", None),
     "optuna": ("https://optuna.readthedocs.io/en/stable", None),
+    "optuna_integration": (
+        "https://optuna-integration.readthedocs.io/en/stable",
+        None,
+    ),
 }
 
 
