@@ -5,12 +5,13 @@
 from typing import Dict
 
 import pytest
-import skopt.space as sksp
 
 from julearn.model_selection._skopt_searcher import (
     _prepare_skopt_hyperparameters_distributions,
 )
 
+
+sksp = pytest.importorskip("skopt.space")
 
 @pytest.mark.parametrize(
     "params_to_tune,expected_types, expected_dist",

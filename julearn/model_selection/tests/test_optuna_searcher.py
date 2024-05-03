@@ -4,13 +4,14 @@
 # License: AGPL
 from typing import Dict
 
-import optuna.distributions as optd
 import pytest
 
 from julearn.model_selection._optuna_searcher import (
     _prepare_optuna_hyperparameters_distributions,
 )
 
+
+optd = pytest.importorskip("optuna.distributions")
 
 @pytest.mark.parametrize(
     "params_to_tune,expected_types, expected_dist",
