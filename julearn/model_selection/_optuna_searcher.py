@@ -4,6 +4,7 @@
 # License: AGPL
 from typing import Any, Dict
 
+from ..utils import logger
 from .available_searchers import _recreate_reset_copy, register_searcher
 
 
@@ -38,12 +39,14 @@ def register_optuna_searcher():
 def _prepare_optuna_hyperparameters_distributions(
     params_to_tune: Dict[str, Any],
 ) -> Dict[str, Any]:
-    """Prepare hyperparameters distributions for RandomizedSearchCV.
+    """Prepare hyperparameters distributions for OptunaSearchCV.
 
-    This method replaces tuples with distributions for RandomizedSearchCV
+    This method replaces tuples with distributions for OptunaSearchCV
     following the skopt convention. That is, if a parameter is a tuple
     with 3 elements, the first two elements are the bounds of the
-    distribution and the third element is the type of distribution.
+    distribution and the third element is the type of distribution. In case
+    the last element is "categorical", the parameter is considered
+    categorical and all the previous elements are the choices.
 
     Parameters
     ----------
@@ -61,16 +64,43 @@ def _prepare_optuna_hyperparameters_distributions(
         if isinstance(v, tuple) and len(v) == 3:
             if v[2] == "uniform":
                 if isinstance(v[0], int) and isinstance(v[1], int):
+                    logger.info(
+                        f"Hyperparameter {k} is uniform integer "
+                        f"[{v[0]}, {v[1]}]"
+                    )
                     out[k] = optd.IntDistribution(v[0], v[1], log=False)
                 else:
+                    logger.info(
+                        f"Hyperparameter {k} is uniform float [{v[0]}, {v[1]}]"
+                    )
                     out[k] = optd.FloatDistribution(v[0], v[1], log=False)
-            elif v[2] in ("loguniform", "log-uniform"):
+            elif v[2] == "log-uniform":
                 if isinstance(v[0], int) and isinstance(v[1], int):
+                    logger.info(
+                        f"Hyperparameter {k} is log-uniform int "
+                        f"[{v[0]}, {v[1]}]"
+                    )
                     out[k] = optd.IntDistribution(v[0], v[1], log=True)
                 else:
+                    logger.info(
+                        f"Hyperparameter {k} is log-uniform float "
+                        f"[{v[0]}, {v[1]}]"
+                    )
                     out[k] = optd.FloatDistribution(v[0], v[1], log=True)
+            elif v[2] == "categorical":
+                logger.info(f"Hyperparameter {k} is categorical with 2 "
+                            f"options: [{v[0]} and {v[1]}]")
+                out[k] = optd.CategoricalDistribution((v[0], v[1]))
             else:
                 out[k] = v
+        elif (
+            isinstance(v, tuple)
+            and isinstance(v[-1], str)
+            and v[-1] == "categorical"
+        ):
+            logger.info(f"Hyperparameter {k} is categorical [{v[:-1]}]")
+            out[k] = optd.CategoricalDistribution(v[:-1])
         else:
+            logger.info(f"Hyperparameter {k} as is {v}")
             out[k] = v
     return out

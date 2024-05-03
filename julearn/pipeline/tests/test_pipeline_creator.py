@@ -321,7 +321,7 @@ def _compare_param_grids(a: Dict, b: Dict) -> None:
         if hasattr(val, "rvs"):
             assert val.args[0] == b[key][0]
             assert val.args[1] == b[key][1]
-            if b[key][2] in ["log-uniform", "loguniform"]:
+            if b[key][2] == "log-uniform":
                 assert val.dist.name == "loguniform"
             elif b[key][2] == "uniform":
                 assert val.dist.name == "uniform"

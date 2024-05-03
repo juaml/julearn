@@ -17,6 +17,9 @@ from ..base import ColumnTypes, ColumnTypesLike, JuTransformer, WrapModel
 from ..model_selection._optuna_searcher import (
     _prepare_optuna_hyperparameters_distributions,
 )
+from ..model_selection._skopt_searcher import (
+    _prepare_skopt_hyperparameters_distributions,
+)
 from ..model_selection.available_searchers import get_searcher, list_searchers
 from ..models import get_model, list_models
 from ..prepare import prepare_search_params
@@ -901,7 +904,7 @@ def _prepare_hyperparameters_distributions(
         if isinstance(v, tuple) and len(v) == 3:
             if v[2] == "uniform":
                 mod_params_to_tune[k] = stats.uniform(v[0], v[1])
-            elif v[2] in ("loguniform", "log-uniform"):
+            elif v[2] == "log-uniform":
                 mod_params_to_tune[k] = stats.loguniform(v[0], v[1])
             else:
                 mod_params_to_tune[k] = v
@@ -998,8 +1001,17 @@ def _prepare_hyperparameter_tuning(
                     _prepare_hyperparameters_distributions(p)
                     for p in params_to_tune
                 ]
+        elif search.__name__ == "BayesSearchCV":
+            if isinstance(params_to_tune, dict):
+                params_to_tune = _prepare_skopt_hyperparameters_distributions(
+                    params_to_tune
+                )
+            else:
+                params_to_tune = [
+                    _prepare_skopt_hyperparameters_distributions(p)
+                    for p in params_to_tune
+                ]
         elif search.__name__ == "OptunaSearchCV":
-
             if isinstance(params_to_tune, dict):
                 params_to_tune = _prepare_optuna_hyperparameters_distributions(
                     params_to_tune
