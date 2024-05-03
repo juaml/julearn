@@ -275,7 +275,7 @@ pprint(model_tuned.best_params_)
 # :class:`~skopt.BayesSearchCV` documentation, including how to specify
 # the prior distributions of the hyperparameters.
 #
-# The Optuna searcher (:class:`~optuna_integration.sklearn.OptunaSearchCV`)\
+# The Optuna searcher (:class:`~optuna_integration.sklearn.OptunaSearchCV`)
 # uses the Optuna library to find the best hyperparameter set. Optuna is a
 # hyperparameter optimization framework that has several algorithms to find
 # the best hyperparameter set. For more information, see the
@@ -402,6 +402,7 @@ creator.add(
     gamma=(1e-3, 1e-1, "log-uniform"),
     class_weight=("balanced", None, "categorical")
 )
+print(creator)
 
 ###############################################################################
 # We can now use the optuna searcher with 10 trials and 3-fold cross-validation.
@@ -462,6 +463,7 @@ creator.add(
     C=(0.01, 10, "log-uniform"),
     gamma=(1e-3, 1e-1, "log-uniform"),
 )
+print(creator)
 
 ###############################################################################
 # While this will work for any of the ``random``, ``bayes`` or ``optuna``
@@ -481,6 +483,7 @@ creator.add(
     C=Real(0.01, 10, prior="log-uniform", base=2),
     gamma=(1e-3, 1e-1, "log-uniform"),
 )
+print(creator)
 
 ###############################################################################
 # For the optuna searcher, the distributions are defined using the
@@ -505,7 +508,7 @@ creator.add(
     C=FloatDistribution(0.01, 10, log=True),
     gamma=(1e-3, 1e-1, "log-uniform"),
 )
-
+print(creator)
 
 
 ###############################################################################
