@@ -51,19 +51,28 @@ def test_reset_searcher() -> None:
         get_searcher("custom_grid")
 
 
-def test_get_searcher() -> None:
-    """Test getting a searcher."""
-    out = get_searcher("grid")
-    assert out == GridSearchCV
+@pytest.mark.parametrize(
+    "searcher,expected",
+    [
+        ("grid", "GridSearchCV"),
+        ("random", "RandomizedSearchCV"),
+        ("bayes", "BayesSearchCV"),
+        ("optuna", "OptunaSearchCV"),
+    ],
+)
+def test_get_searcher(searcher: str, expected: str) -> None:
+    """Test getting a searcher.
 
-    out = get_searcher("random")
-    assert out == RandomizedSearchCV
+    Parameters
+    ----------
+    searcher : str
+        The searcher name.
+    expected : str
+        The expected searcher class name.
 
-    out = get_searcher("bayes")
-    assert out.__name__ == "BayesSearchCV"
-
-    out = get_searcher("optuna")
-    assert out.__name__ == "OptunaSearchCV"
+    """
+    out = get_searcher(searcher)
+    assert out.__name__ == expected
 
 
 @pytest.mark.parametrize(

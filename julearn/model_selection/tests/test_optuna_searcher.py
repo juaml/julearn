@@ -72,7 +72,7 @@ optd = pytest.importorskip("optuna.distributions")
 def test__prepare_optuna_hyperparameters_distributions(
     params_to_tune: Dict[str, Dict[str, Any]],
     expected_types: Tuple,
-    expected_dist: tuple,
+    expected_dist: Tuple,
 ) -> None:
     """Test the _prepare_optuna_hyperparameters_distributions function.
 
