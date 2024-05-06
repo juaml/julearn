@@ -22,7 +22,7 @@ Running the examples require:
 * ``panel>=1.0.0b1``
 * ``param>=1.11.0``
 
-Depending on the installation method (e.g. the `pip install` option below),
+Depending on the installation method (e.g. the ``pip install`` option below),
 these packages might be installed automatically. It is nevertheless good to be
 aware of these dependencies as installing ``julearn`` might lead to changes in
 these packages.
@@ -47,16 +47,22 @@ Installing
     developer version until we release the next stable ``julearn`` version.
 
 
-Depending on your aimed usage of ``julearn`` you have two different options
+Depending on your aimed usage of ``julearn`` you have different options
 how to install ``julearn``:
 
 #. Install the *latest release*: Likely most suitable for most
    **end users**. This is done by installing the latest stable release from
-   PyPI.
+   PyPI:
 
    .. code-block:: bash
 
        pip install -U julearn
+
+   or via ``conda`` like so:
+
+   .. code-block:: bash
+
+     conda install -c conda-forge julearn
 
 #. Install the *latest pre-relase*: This version will have the
    **latest updates**. However, it is still under development and not yet
