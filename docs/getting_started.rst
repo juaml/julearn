@@ -12,15 +12,15 @@ packages:
 
 * ``numpy>=1.24,<1.27``
 * ``pandas>=1.5.0,<2.2``
-* ``scikit-learn>=1.2,<1.4``
+* ``scikit-learn>=1.2.0,<1.5.0``
 * ``statsmodels>=0.13,<0.15``
 
 Running the examples require:
 
 * ``seaborn>=0.12.2,<0.13``
 * ``bokeh>=3.0.0``
-* ``panel>=1.0.0b1``
-* ``param>=1.11.0``
+* ``panel>=1.3.0``
+* ``param>=2.0.0``
 
 Depending on the installation method (e.g. the ``pip install`` option below),
 these packages might be installed automatically. It is nevertheless good to be
@@ -96,4 +96,5 @@ The following optional dependencies are available:
   module is not compatible with newer Python versions and it is unmaintained.
 * ``skopt``: Using the ``"bayes"`` searcher (:class:`~skopt.BayesSearchCV`)
   requires the `scikit-optimize`_ package.
+* ``optuna``: Using the ``"optuna"`` searcher (:class:`~optuna_integration.sklearn.OptunaSearchCV`) requires the `optuna`_ and `optuna_integration`_ packages.
 * ``all``: Install all optional functional dependencies (except ``deslib``).
