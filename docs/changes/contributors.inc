@@ -4,3 +4,4 @@
 .. _Shammi More: https://www.fz-juelich.de/SharedDocs/Personen/INM/INM-7/EN/More_s.html?nn=654218
 .. _Leonard Sasse: https://github.com/LeSasse
 .. _Synchon Mandal: https://github.com/synchon
+.. _Dante Culaciati: https://github.com/Dante-010
