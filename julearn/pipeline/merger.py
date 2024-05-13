@@ -89,10 +89,7 @@ def merge_pipelines(
         # TODO: Fix this comparison, as it always returns False.
         for s in pipelines[1:]:
             if isinstance(s, BaseSearchCV):
-                if (
-                    s.estimator.named_steps[t_step_name]  # type: ignore
-                    != t
-                ):
+                if s.estimator.named_steps[t_step_name] != t:  # type: ignore
                     different_steps.append(t_step_name)
                     break
             else:

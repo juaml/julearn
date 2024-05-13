@@ -14,6 +14,7 @@ from julearn.model_selection._optuna_searcher import (
 
 optd = pytest.importorskip("optuna.distributions")
 
+
 @pytest.mark.parametrize(
     "params_to_tune,expected_types, expected_dist",
     [

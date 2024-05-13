@@ -89,8 +89,10 @@ def _prepare_optuna_hyperparameters_distributions(
                     )
                     out[k] = optd.FloatDistribution(v[0], v[1], log=True)
             elif v[2] == "categorical":
-                logger.info(f"Hyperparameter {k} is categorical with 2 "
-                            f"options: [{v[0]} and {v[1]}]")
+                logger.info(
+                    f"Hyperparameter {k} is categorical with 2 "
+                    f"options: [{v[0]} and {v[1]}]"
+                )
                 out[k] = optd.CategoricalDistribution((v[0], v[1]))
             else:
                 out[k] = v

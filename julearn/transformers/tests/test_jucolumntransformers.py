@@ -156,9 +156,9 @@ def test_JuColumnTransformer_row_select():
     )
 
     mean_both = (
-        transformer_both.fit(
-            X
-        ).column_transformer_.transformers_[0][1].mean_  # type: ignore
+        transformer_both.fit(X)
+        .column_transformer_.transformers_[0][1]
+        .mean_  # type: ignore
     )
 
     assert_almost_equal(

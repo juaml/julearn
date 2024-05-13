@@ -222,9 +222,7 @@ def raise_error(
         raise klass(msg)
 
 
-def warn_with_log(
-    msg: str, category: Type[Warning] = RuntimeWarning
-) -> None:
+def warn_with_log(msg: str, category: Type[Warning] = RuntimeWarning) -> None:
     """Warn, but first log it.
 
     Parameters
