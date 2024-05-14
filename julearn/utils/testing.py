@@ -185,7 +185,7 @@ def do_scoring_test(
     scorers: List[str],
     groups: Optional[str] = None,
     X_types: Optional[Dict[str, List[str]]] = None,  # noqa: N803
-    cv: Union[int, BaseCrossValidator]  = 5,
+    cv: Union[int, BaseCrossValidator] = 5,
     sk_y: Optional[np.ndarray] = None,
     decimal: int = 5,
 ):

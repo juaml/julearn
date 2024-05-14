@@ -284,8 +284,10 @@ class CBPM(BaseEstimator, TransformerMixin):
         cols = (
             ["positive"]
             if self.used_corr_sign_ == "pos"
-            else ["negative"]
-            if self.used_corr_sign_ == "neg"
-            else ["positive", "negative"]
+            else (
+                ["negative"]
+                if self.used_corr_sign_ == "neg"
+                else ["positive", "negative"]
+            )
         )
         return np.array(cols, dtype=object)

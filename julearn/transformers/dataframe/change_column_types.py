@@ -75,9 +75,9 @@ class ChangeColumnTypes(JuTransformer):
             if "__:type:__" in col:
                 name, old_type = col.split("__:type:__")
                 if old_type in self.X_types_renamer:
-                    to_rename[
-                        col
-                    ] = f"{name}__:type:__{self.X_types_renamer[old_type]}"
+                    to_rename[col] = (
+                        f"{name}__:type:__{self.X_types_renamer[old_type]}"
+                    )
         self._renamer = to_rename
         return self
 

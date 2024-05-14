@@ -286,6 +286,7 @@ def bayes_search_params(request: FixtureRequest) -> Optional[Dict]:
 
     return request.param
 
+
 @fixture(
     params=[
         {"kind": "optuna", "n_trials": 10, "cv": 3},
@@ -309,6 +310,7 @@ def optuna_search_params(request: FixtureRequest) -> Optional[Dict]:
     """
 
     return request.param
+
 
 _tuning_params = {
     "zscore": {"with_mean": [True, False]},

@@ -21,4 +21,3 @@ from ._optuna_searcher import register_optuna_searcher
 
 register_bayes_searcher()
 register_optuna_searcher()
-

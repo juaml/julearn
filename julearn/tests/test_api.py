@@ -455,9 +455,8 @@ def test_tune_hyperparam_gridsearch(df_iris: pd.DataFrame) -> None:
     )
 
     assert len(actual.columns) == len(expected) + 5  # type: ignore
-    assert (
-        len(actual["test_accuracy"])  # type: ignore
-        == len(expected["test_accuracy"])
+    assert len(actual["test_accuracy"]) == len(  # type: ignore
+        expected["test_accuracy"]
     )
     assert all(
         a == b
@@ -540,9 +539,8 @@ def test_tune_hyperparam_gridsearch_groups(df_iris: pd.DataFrame) -> None:
     )
 
     assert len(actual.columns) == len(expected) + 5  # type: ignore
-    assert (
-        len(actual["test_accuracy"])  # type: ignore
-        == len(expected["test_accuracy"])
+    assert len(actual["test_accuracy"]) == len(  # type: ignore
+        expected["test_accuracy"]
     )
     assert all(
         a == b
@@ -630,9 +628,8 @@ def test_tune_hyperparam_randomsearch(df_iris: pd.DataFrame) -> None:
     )
 
     assert len(actual.columns) == len(expected) + 5  # type: ignore
-    assert (
-        len(actual["test_accuracy"])  # type: ignore
-        == len(expected["test_accuracy"])
+    assert len(actual["test_accuracy"]) == len(  # type: ignore
+        expected["test_accuracy"]
     )
     assert all(
         a == b
@@ -746,13 +743,11 @@ def test_tune_hyperparams_multiple_grid(df_iris: pd.DataFrame) -> None:
 
     assert len(actual1.columns) == len(expected) + 5  # type: ignore
     assert len(actual2.columns) == len(expected) + 5  # type: ignore
-    assert (
-        len(actual1["test_accuracy"])  # type: ignore
-        == len(expected["test_accuracy"])
+    assert len(actual1["test_accuracy"]) == len(  # type: ignore
+        expected["test_accuracy"]
     )
-    assert (
-        len(actual2["test_accuracy"])  # type: ignore
-        == len(expected["test_accuracy"])
+    assert len(actual2["test_accuracy"]) == len(  # type: ignore
+        expected["test_accuracy"]
     )
     assert all(
         a == b

@@ -14,6 +14,7 @@ from julearn.model_selection._skopt_searcher import (
 
 sksp = pytest.importorskip("skopt.space")
 
+
 @pytest.mark.parametrize(
     "params_to_tune,expected_types, expected_dist",
     [

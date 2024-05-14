@@ -1,4 +1,5 @@
 """Implement various checks for the input of the functions."""
+
 # Author: Federico Raimondo <f.raimondo@fz-juelich.de>
 # License: BSD 3 clause
 

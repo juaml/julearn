@@ -253,7 +253,7 @@ pprint(model_tuned.best_params_)
 # hyperparameters values.
 #
 # Other searchers that ``julearn`` provides are the
-# :class:`~sklearn.model_selection.RandomizedSearchCV`, 
+# :class:`~sklearn.model_selection.RandomizedSearchCV`,
 # :class:`~skopt.BayesSearchCV` and
 # :class:`~optuna_integration.sklearn.OptunaSearchCV`.
 #
@@ -383,14 +383,14 @@ pprint(model_tuned.best_params_)
 # searcher. However, the optuna searcher behaviour is controlled by a
 # :class:`~optuna.study.Study` object. This object can be passed to the
 # searcher using the ``study`` parameter in the ``search_params`` dictionary.
-# 
+#
 # .. important::
 #    The optuna searcher requires that all the hyperparameters are specified
-#    as distributions, even the categorical ones. 
+#    as distributions, even the categorical ones.
 #
 # We first modify the pipeline creator so the ``select_k`` parameter is
 # specified as a distribution. We exemplarily use a categorical distribution
-# for the ``class_weight`` hyperparameter, trying the ``"balanced"`` and 
+# for the ``class_weight`` hyperparameter, trying the ``"balanced"`` and
 # ``None`` values.
 
 creator = PipelineCreator(problem_type="classification")
@@ -445,12 +445,12 @@ pprint(model_tuned.best_params_)
 # searcher, bayesian searcher and optuna searcher. The distributions are
 # either specified toolbox-specific method or  a tuple convention with the
 # following format: ``(low, high, distribution)`` where the distribution can
-# be either ``"log-uniform"`` or ``"uniform"`` or 
+# be either ``"log-uniform"`` or ``"uniform"`` or
 # ``(a, b, c, d, ..., "categorical")`` where ``a``, ``b``, ``c``, ``d``, etc.
 # are the possible categorical values for the hyperparameter.
 #
-# For example, we can specify the ``C`` and ``gamma`` hyperparameters of the 
-# :class:`~sklearn.svm.SVC` as  log-uniform distributions, while keeping 
+# For example, we can specify the ``C`` and ``gamma`` hyperparameters of the
+# :class:`~sklearn.svm.SVC` as  log-uniform distributions, while keeping
 # the ``with_mean`` parameter of the
 # :class:`~sklearn.preprocessing.StandardScaler` as a categorical parameter
 # with two options.
@@ -469,7 +469,7 @@ print(creator)
 # While this will work for any of the ``random``, ``bayes`` or ``optuna``
 # searcher options, it is important to note that both ``bayes`` and ``optuna``
 # searchers accept further parameters to specify distributions. For example,
-# the ``bayes`` searcher distributions are defined using the 
+# the ``bayes`` searcher distributions are defined using the
 # :class:`~skopt.space.space.Categorical`, :class:`~skopt.space.space.Integer`
 # and :class:`~skopt.space.space.Real`.
 #
@@ -493,7 +493,7 @@ print(creator)
 #
 #
 # For example, we can define a uniform distribution from 0.5 to 0.9 with a 0.05
-# step for the ``n_components`` of a :class:`~sklearn.decomposition.PCA` 
+# step for the ``n_components`` of a :class:`~sklearn.decomposition.PCA`
 # transformer, while keeping a log-uniform distribution for the ``C`` and
 # ``gamma`` hyperparameters of the :class:`~sklearn.svm.SVC` model.
 from optuna.distributions import FloatDistribution

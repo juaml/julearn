@@ -104,6 +104,13 @@ builtin = "clear,rare,informal,names,usage,code"
 
 [tool.ruff]
 line-length = 79
+extend-exclude = [
+    "__init__.py",
+    "docs",
+    "examples",
+]
+
+[tool.ruff.lint]
 select = [
     # flake8-bugbear
     "B",
@@ -136,11 +143,6 @@ select = [
     # flake8-2020
     "YTT",
 ]
-extend-exclude = [
-    "__init__.py",
-    "docs",
-    "examples",
-]
 extend-ignore = [
     # Use of `functools.lru_cache` or `functools.cache` on methods can lead to
     # memory leaks. The cache may retain instance references, preventing garbage
@@ -163,7 +165,7 @@ extend-ignore = [
     "PGH003",
 ]
 
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 lines-after-imports = 2
 known-first-party = ["julearn"]
 known-third-party =[
@@ -178,7 +180,7 @@ known-third-party =[
     "pytest",
 ]
 
-[tool.ruff.mccabe]
+[tool.ruff.lint.mccabe]
 max-complexity = 20
 
 [tool.towncrier]
