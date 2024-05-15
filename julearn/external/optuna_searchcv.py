@@ -396,7 +396,7 @@ class _Objective:
                 X_train, y_train, **partial_fit_params
             )
 
-        except Exception as e:  # noqa: BLE001
+        except Exception as e:
             if self.error_score == "raise":
                 raise e
 
