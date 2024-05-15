@@ -145,7 +145,7 @@ def _num_samples(x: ArrayLikeType) -> int:
         return len(x)  # type: ignore
     except TypeError:
         raise TypeError(
-            "Expected sequence or array-like, got %s." % type(x)
+            f"Expected sequence or array-like, got {type(x)}."
         ) from None
 
 
@@ -215,6 +215,7 @@ class _Objective:
 
     scoring:
         Scorer function.
+
     """
 
     def __init__(
@@ -597,6 +598,7 @@ class OptunaSearchCV(BaseEstimator):
         optimization is ``maximize``.
         See https://scikit-learn.org/stable/modules/model_evaluation.html.
         For the minimization problem, please multiply ``-1``.
+
     """
 
     _required_parameters = ["estimator", "param_distributions"]  # noqa: RUF012
@@ -916,22 +918,23 @@ class OptunaSearchCV(BaseEstimator):
 
         Args:
         ----
-            X:
-                Training data.
+        X:
+            Training data.
 
-            y:
-                Target variable.
+        y:
+            Target variable.
 
-            groups:
-                Group labels for the samples used while splitting the dataset
-                into train/validation set.
+        groups:
+            Group labels for the samples used while splitting the dataset
+            into train/validation set.
 
-            **fit_params:
-                Parameters passed to ``fit`` on the estimator.
+        **fit_params:
+            Parameters passed to ``fit`` on the estimator.
 
         Returns:
         -------
-            self.
+        self.
+
         """
 
         self._check_params()
@@ -1024,9 +1027,9 @@ class OptunaSearchCV(BaseEstimator):
         )
 
         _logger.info(
-            "Searching the best hyperparameters using {} " "samples...".format(
-                _num_samples(self.sample_indices_)
-            )
+            "Searching the best hyperparameters using "
+            f"{_num_samples(self.sample_indices_)} "
+            "samples..."
         )
 
         self.study_.optimize(
@@ -1064,6 +1067,7 @@ class OptunaSearchCV(BaseEstimator):
         Returns:
         -------
             Scaler score.
+
         """
 
         return self.scorer_(self.best_estimator_, X, y)
