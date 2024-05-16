@@ -8,6 +8,24 @@ What's new
 
 .. towncrier release notes start
 
+Julearn 0.3.3 (2024-05-16)
+--------------------------
+
+Bugfixes
+^^^^^^^^
+
+- Fix ``OptunaSearchCV`` issue
+  (https://github.com/optuna/optuna-integration/issues/118) with an internal
+  implementation until the issue is fixed in ``optuna-integration`` by `Fede
+  Raimondo`_ (:gh:`265`)
+
+
+Improved Documentation
+^^^^^^^^^^^^^^^^^^^^^^
+
+- Fixed a typo in cross validation by `Dante Culaciati`_ (:gh:`258`)
+
+
 Julearn 0.3.2 (2024-05-03)
 --------------------------
 
