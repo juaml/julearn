@@ -285,8 +285,12 @@ def test_hyperparameter_tuning_optuna(
         The parameters for the search.
 
     """
-    optuna_integration = pytest.importorskip("optuna_integration")
-    OptunaSearchCV = optuna_integration.OptunaSearchCV
+    # TODO: Wait till https://github.com/optuna/optuna-integration/issues/118
+    # is solved and go back to optuna_integration instead of our own
+    # implementation
+    # optuna_integration = pytest.importorskip("optuna_integration")
+    # OptunaSearchCV = optuna_integration.OptunaSearchCV
+    from julearn.external.optuna_searchcv import OptunaSearchCV
 
     pipeline, param_grid = _hyperparam_tuning_base_test(
         X_types_iris,

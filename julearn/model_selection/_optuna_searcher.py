@@ -11,7 +11,8 @@ from .available_searchers import _recreate_reset_copy, register_searcher
 
 try:
     import optuna.distributions as optd
-    from optuna_integration.sklearn import OptunaSearchCV
+
+    from ..external.optuna_searchcv import OptunaSearchCV
 except ImportError:
     from sklearn.model_selection._search import BaseSearchCV
 
