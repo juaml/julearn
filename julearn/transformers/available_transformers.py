@@ -8,6 +8,7 @@ from copy import deepcopy
 from typing import Any, List
 
 from sklearn.decomposition import PCA
+from sklearn.experimental import enable_iterative_imputer  # noqa: F401
 from sklearn.feature_selection import (
     GenericUnivariateSelect,
     SelectFdr,
@@ -16,6 +17,12 @@ from sklearn.feature_selection import (
     SelectKBest,
     SelectPercentile,
     VarianceThreshold,
+)
+from sklearn.impute import (
+    IterativeImputer,
+    KNNImputer,
+    MissingIndicator,
+    SimpleImputer,
 )
 from sklearn.preprocessing import (
     MaxAbsScaler,
@@ -60,6 +67,11 @@ _available_transformers = {
     "pca": PCA,
     # Custom
     "cbpm": CBPM,
+    # imputation
+    "imputer_simple": SimpleImputer,
+    "imputer_iterative": IterativeImputer,
+    "imputer_knn": KNNImputer,
+    "missing_indicator": MissingIndicator,
 }
 
 _available_transformers_reset = deepcopy(_available_transformers)

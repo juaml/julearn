@@ -95,7 +95,5 @@ def test_SetColumnTypes_array(
     X_iris_with_types.rename(columns=to_rename)
     st = SetColumnTypes(X_types_iris).set_output(transform="pandas")
     Xt = st.fit_transform(X_iris.values)  # type: ignore
-    Xt_iris_with_types = st.fit_transform(  # type: ignore
-        X_iris_with_types.values
-    )
+    Xt_iris_with_types = st.fit_transform(X_iris_with_types.values)  # type: ignore
     assert_frame_equal(Xt, Xt_iris_with_types)

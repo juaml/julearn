@@ -75,8 +75,12 @@ if not _imports.is_successful():
 
 ArrayLikeType = Union[List, np.ndarray, "pd.Series", "spmatrix"]
 OneDimArrayLikeType = Union[List[float], np.ndarray, "pd.Series"]
-TwoDimArrayLikeType = Union[List[List[float]], np.ndarray, "pd.DataFrame", "spmatrix"]
-IterableType = Union[List, "pd.DataFrame", np.ndarray, "pd.Series", "spmatrix", None]
+TwoDimArrayLikeType = Union[
+    List[List[float]], np.ndarray, "pd.DataFrame", "spmatrix"
+]
+IterableType = Union[
+    List, "pd.DataFrame", np.ndarray, "pd.Series", "spmatrix", None
+]
 IndexableType = Union[Iterable, None]
 
 _logger = logging.get_logger(__name__)
@@ -97,7 +101,9 @@ def _check_fit_params(
             fit_params_validated[key] = value
         else:
             fit_params_validated[key] = _make_indexable(value)
-            fit_params_validated[key] = _safe_indexing(fit_params_validated[key], indices)
+            fit_params_validated[key] = _safe_indexing(
+                fit_params_validated[key], indices
+            )
     return fit_params_validated
 
 
@@ -105,7 +111,9 @@ def _check_fit_params(
 # https://github.com/scikit-learn/scikit-learn/blob/ \
 # 8caa93889f85254fc3ca84caa0a24a1640eebdd1/sklearn/utils/validation.py#L131-L135
 def _is_arraylike(x: Any) -> bool:
-    return hasattr(x, "__len__") or hasattr(x, "shape") or hasattr(x, "__array__")
+    return (
+        hasattr(x, "__len__") or hasattr(x, "shape") or hasattr(x, "__array__")
+    )
 
 
 # NOTE Original implementation:
@@ -134,7 +142,9 @@ def _num_samples(x: ArrayLikeType) -> int:
     try:
         return len(x)
     except TypeError:
-        raise TypeError("Expected sequence or array-like, got %s." % type(x)) from None
+        raise TypeError(
+            "Expected sequence or array-like, got %s." % type(x)
+        ) from None
 
 
 def _safe_indexing(
@@ -273,7 +283,12 @@ class _Objective:
                 fit_time = np.array([np.nan] * n_splits)
                 score_time = np.array([np.nan] * n_splits)
                 test_score = np.array(
-                    [self.error_score if self.error_score is not None else np.nan] * n_splits
+                    [
+                        self.error_score
+                        if self.error_score is not None
+                        else np.nan
+                    ]
+                    * n_splits
                 )
 
                 scores = {
@@ -285,7 +300,11 @@ class _Objective:
         self._store_scores(trial, scores)
 
         test_scores = scores["test_score"]
-        scores_list = test_scores if isinstance(test_scores, list) else test_scores.tolist()
+        scores_list = (
+            test_scores
+            if isinstance(test_scores, list)
+            else test_scores.tolist()
+        )
         report_cross_validation_scores(trial, scores_list)
 
         return trial.user_attrs["mean_test_score"]
@@ -315,8 +334,12 @@ class _Objective:
             scores["train_score"] = np.empty(n_splits)
 
         for step in range(self.max_iter):
-            for i, (train, test) in enumerate(self.cv.split(self.X, self.y, groups=self.groups)):
-                out = self._partial_fit_and_score(estimators[i], train, test, partial_fit_params)
+            for i, (train, test) in enumerate(
+                self.cv.split(self.X, self.y, groups=self.groups)
+            ):
+                out = self._partial_fit_and_score(
+                    estimators[i], train, test, partial_fit_params
+                )
 
                 if self.return_train_score:
                     scores["train_score"][i] = out.pop(0)
@@ -332,7 +355,9 @@ class _Objective:
             if trial.should_prune():
                 self._store_scores(trial, scores)
 
-                raise TrialPruned("trial was pruned at iteration {}.".format(step))
+                raise TrialPruned(
+                    "trial was pruned at iteration {}.".format(step)
+                )
 
         return scores
 
@@ -350,7 +375,9 @@ class _Objective:
         partial_fit_params: dict[str, Any],
     ) -> list[Number]:
         X_train, y_train = _safe_split(estimator, self.X, self.y, train)
-        X_test, y_test = _safe_split(estimator, self.X, self.y, test, train_indices=train)
+        X_test, y_test = _safe_split(
+            estimator, self.X, self.y, test, train_indices=train
+        )
 
         start_time = time()
 
@@ -370,7 +397,9 @@ class _Objective:
                     train_score = self.error_score
 
             else:
-                raise ValueError("error_score must be 'raise' or numeric.") from e
+                raise ValueError(
+                    "error_score must be 'raise' or numeric."
+                ) from e
 
         else:
             fit_time = time() - start_time
@@ -391,7 +420,9 @@ class _Objective:
 
         return ret
 
-    def _store_scores(self, trial: Trial, scores: Mapping[str, OneDimArrayLikeType]) -> None:
+    def _store_scores(
+        self, trial: Trial, scores: Mapping[str, OneDimArrayLikeType]
+    ) -> None:
         for name, array in scores.items():
             if name in ["test_score", "train_score"]:
                 for i, score in enumerate(array):
@@ -597,7 +628,9 @@ class OptunaSearchCV(BaseEstimator):
     def cv_results_(self) -> dict[str, Any]:
         """A dictionary mapping a metric name to a list of Cross-Validation results of all trials."""  # NOQA: E501
 
-        cv_results_dict_in_list = [trial_.user_attrs for trial_ in self.trials_]
+        cv_results_dict_in_list = [
+            trial_.user_attrs for trial_ in self.trials_
+        ]
         if len(cv_results_dict_in_list) == 0:
             cv_results_list_in_dict = {}
         else:
@@ -630,7 +663,9 @@ class OptunaSearchCV(BaseEstimator):
         return self.study_.user_attrs
 
     @property
-    def decision_function(self) -> Callable[..., OneDimArrayLikeType | TwoDimArrayLikeType]:
+    def decision_function(
+        self,
+    ) -> Callable[..., OneDimArrayLikeType | TwoDimArrayLikeType]:
         """Call ``decision_function`` on the best estimator.
 
         This is available only if the underlying estimator supports
@@ -654,7 +689,9 @@ class OptunaSearchCV(BaseEstimator):
         return self.best_estimator_.inverse_transform
 
     @property
-    def predict(self) -> Callable[..., OneDimArrayLikeType | TwoDimArrayLikeType]:
+    def predict(
+        self,
+    ) -> Callable[..., OneDimArrayLikeType | TwoDimArrayLikeType]:
         """Call ``predict`` on the best estimator.
 
         This is available only if the underlying estimator supports ``predict``
@@ -748,7 +785,8 @@ class OptunaSearchCV(BaseEstimator):
         subsample: float | int = 1.0,
         timeout: float | None = None,
         verbose: int = 0,
-        callbacks: list[Callable[[study_module.Study, FrozenTrial], None]] | None = None,
+        callbacks: list[Callable[[study_module.Study, FrozenTrial], None]]
+        | None = None,
     ) -> None:
         _imports.check()
 
@@ -798,15 +836,22 @@ class OptunaSearchCV(BaseEstimator):
 
         for name, distribution in self.param_distributions.items():
             if not isinstance(distribution, distributions.BaseDistribution):
-                raise ValueError("Value of {} must be a optuna distribution.".format(name))
+                raise ValueError(
+                    "Value of {} must be a optuna distribution.".format(name)
+                )
 
         if self.enable_pruning and not hasattr(self.estimator, "partial_fit"):
             raise ValueError("estimator must support partial_fit.")
 
         if self.max_iter <= 0:
-            raise ValueError("max_iter must be > 0, got {}.".format(self.max_iter))
+            raise ValueError(
+                "max_iter must be > 0, got {}.".format(self.max_iter)
+            )
 
-        if self.study is not None and self.study.direction != StudyDirection.MAXIMIZE:
+        if (
+            self.study is not None
+            and self.study.direction != StudyDirection.MAXIMIZE
+        ):
             raise ValueError("direction of study must be 'maximize'.")
 
     def _more_tags(self) -> dict[str, bool]:
@@ -827,7 +872,9 @@ class OptunaSearchCV(BaseEstimator):
         except ValueError as e:
             _logger.exception(e)
 
-        _logger.info("Refitting the estimator using {} samples...".format(n_samples))
+        _logger.info(
+            "Refitting the estimator using {} samples...".format(n_samples)
+        )
 
         start_time = time()
 
@@ -835,7 +882,11 @@ class OptunaSearchCV(BaseEstimator):
 
         self.refit_time_ = time() - start_time
 
-        _logger.info("Finished refitting! (elapsed time: {:.3f} sec.)".format(self.refit_time_))
+        _logger.info(
+            "Finished refitting! (elapsed time: {:.3f} sec.)".format(
+                self.refit_time_
+            )
+        )
 
         return self
 
@@ -898,7 +949,9 @@ class OptunaSearchCV(BaseEstimator):
         fit_params_res = fit_params
 
         if fit_params_res is not None:
-            fit_params_res = _check_fit_params(X, fit_params, self.sample_indices_)
+            fit_params_res = _check_fit_params(
+                X, fit_params, self.sample_indices_
+            )
 
         classifier = is_classifier(self.estimator)
         cv = check_cv(self.cv, y_res, classifier=classifier)
@@ -910,13 +963,20 @@ class OptunaSearchCV(BaseEstimator):
             seed = random_state.randint(0, np.iinfo("int32").max)
             sampler = samplers.TPESampler(seed=seed)
 
-            self.study_ = study_module.create_study(direction="maximize", sampler=sampler)
+            self.study_ = study_module.create_study(
+                direction="maximize", sampler=sampler
+            )
 
         else:
             prefix_name = self.study.study_name
             i_fit = 0
             for t_study in self.study._storage.get_all_studies():
-                if re.fullmatch(f"{prefix_name}_fit[0-9]+", t_study.study_name) is not None:
+                if (
+                    re.fullmatch(
+                        f"{prefix_name}_fit[0-9]+", t_study.study_name
+                    )
+                    is not None
+                ):
                     i_fit += 1
 
             self.study_ = study_module.create_study(

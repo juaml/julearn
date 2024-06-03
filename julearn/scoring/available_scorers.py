@@ -166,9 +166,7 @@ def check_scoring(
             score: _extend_scorer(get_scorer(score), wrap_score)
             for score in scorer_names
         }
-        return _check_multimetric_scoring(  # type: ignore
-            estimator, scoring_dict
-        )
+        return _check_multimetric_scoring(estimator, scoring_dict)  # type: ignore
 
 
 def _extend_scorer(scorer, extend):
@@ -188,9 +186,9 @@ class _ExtendedScorer:
         X_trans = X
         for _, transform in estimator.steps[:-1]:
             X_trans = transform.transform(X_trans)
-        y_true = estimator.steps[-1][-1].transform_target(  # last est
+        y_true = estimator.steps[-1][-1].transform_target(
             X_trans, y
-        )
+        )  # last est
         with warnings.catch_warnings():
             warnings.filterwarnings(
                 action="ignore", category=TransformedTargetWarning
