@@ -284,9 +284,11 @@ class _Objective:
                 score_time = np.array([np.nan] * n_splits)
                 test_score = np.array(
                     [
-                        self.error_score
-                        if self.error_score is not None
-                        else np.nan
+                        (
+                            self.error_score
+                            if self.error_score is not None
+                            else np.nan
+                        )
                     ]
                     * n_splits
                 )
@@ -785,8 +787,9 @@ class OptunaSearchCV(BaseEstimator):
         subsample: float | int = 1.0,
         timeout: float | None = None,
         verbose: int = 0,
-        callbacks: list[Callable[[study_module.Study, FrozenTrial], None]]
-        | None = None,
+        callbacks: (
+            list[Callable[[study_module.Study, FrozenTrial], None]] | None
+        ) = None,
     ) -> None:
         _imports.check()
 
