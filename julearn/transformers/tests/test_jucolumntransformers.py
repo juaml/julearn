@@ -157,7 +157,7 @@ def test_JuColumnTransformer_row_select():
 
     mean_both = (
         transformer_both.fit(X)
-        .column_transformer_.transformers_[0][1]
+        .column_transformer_.transformers_[0][1]  # type: ignore
         .mean_  # type: ignore
     )
 
