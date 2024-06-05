@@ -115,9 +115,7 @@ def merge_pipelines(
             t_grid = {}
         for t_name in different_steps:
             if isinstance(s, BaseSearchCV):
-                t_grid[t_name] = [
-                    s.estimator.named_steps[t_name]  # type: ignore
-                ]
+                t_grid[t_name] = [s.estimator.named_steps[t_name]]  # type: ignore
             else:
                 t_grid[t_name] = [s.named_steps[t_name]]  # type: ignore
         all_grids.append(t_grid)

@@ -1038,9 +1038,7 @@ def _prepare_hyperparameter_tuning(
             logger.info(f"\t{k}: {v}")
 
         # TODO: missing searcher typing
-        pipeline = search(  # type: ignore
-            pipeline, params_to_tune, **search_params
-        )
+        pipeline = search(pipeline, params_to_tune, **search_params)  # type: ignore
 
     logger.info("====================")
     logger.info("")

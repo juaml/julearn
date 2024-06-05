@@ -70,8 +70,7 @@ def scores(df_typed_iris, n_iters=5, mock_model=None):
         mock_model = MockModelReturnsIndex
 
     estimators = [
-        WrapModel(mock_model()).fit(X, y)  # type: ignore
-        for _ in range(n_iters)
+        WrapModel(mock_model()).fit(X, y) for _ in range(n_iters)  # type: ignore
     ]
 
     return pd.DataFrame(

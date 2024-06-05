@@ -143,24 +143,20 @@ def test__prepare_optuna_hyperparameters_distributions(
             assert isinstance(v, optd.CategoricalDistribution)
             if isinstance(params_to_tune[k], tuple):
                 assert all(
-                    x in v.choices
-                    for x in params_to_tune[k][:-1]  # type: ignore
+                    x in v.choices for x in params_to_tune[k][:-1]  # type: ignore
                 )
                 assert all(
-                    x in params_to_tune[k][:-1]  # type: ignore
-                    for x in v.choices
+                    x in params_to_tune[k][:-1] for x in v.choices  # type: ignore
                 )
             else:
                 assert isinstance(
                     params_to_tune[k], optd.CategoricalDistribution
                 )
                 assert all(
-                    x in v.choices
-                    for x in params_to_tune[k].choices  # type: ignore
+                    x in v.choices for x in params_to_tune[k].choices  # type: ignore
                 )
                 assert all(
-                    x in params_to_tune[k].choices  # type: ignore
-                    for x in v.choices
+                    x in params_to_tune[k].choices for x in v.choices  # type: ignore
                 )
         else:
             pytest.fail("Invalid distribution type")

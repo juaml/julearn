@@ -115,12 +115,10 @@ def test__prepare_skopt_hyperparameters_distributions(
             assert isinstance(v, sksp.Categorical)
             if isinstance(params_to_tune[k], tuple):
                 assert all(
-                    x in v.categories
-                    for x in params_to_tune[k][:-1]  # type: ignore
+                    x in v.categories for x in params_to_tune[k][:-1]  # type: ignore
                 )
                 assert all(
-                    x in params_to_tune[k][:-1]  # type: ignore
-                    for x in v.categories
+                    x in params_to_tune[k][:-1] for x in v.categories  # type: ignore
                 )
             else:
                 assert isinstance(params_to_tune[k], sksp.Categorical)
