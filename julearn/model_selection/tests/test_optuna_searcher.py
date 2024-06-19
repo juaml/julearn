@@ -9,6 +9,7 @@ import pytest
 
 from julearn.model_selection._optuna_searcher import (
     _prepare_optuna_hyperparameters_distributions,
+    is_optuna_valid_distribution,
 )
 
 
@@ -164,3 +165,35 @@ def test__prepare_optuna_hyperparameters_distributions(
                 )
         else:
             pytest.fail("Invalid distribution type")
+
+
+@pytest.mark.parametrize(
+    "obj,expected",
+    [
+        (optd.IntDistribution(1, 20, log=False), True),
+        (optd.FloatDistribution(0.2, 0.7, log=False), True),
+        (optd.CategoricalDistribution([1, 2, 3]), True),
+        (optd.CategoricalDistribution(["a", "b", "c"]), True),
+        (optd.CategoricalDistribution(["a", "b", "c", "d"]), True),
+        ("uniform", False),
+        ("log-uniform", False),
+        ("categorical", False),
+        (1, False),
+        (1.0, False),
+        ([1, 2, 3], False),
+        (["a", "b", "c"], False),
+    ],
+)
+def test_optuna_valid_distributions(obj: Any, expected: bool) -> None:
+    """Test the optuna_valid_distributions function.
+
+    Parameters
+    ----------
+    obj : Any
+        The object to check.
+    expected : bool
+        The expected result.
+
+    """
+    out = is_optuna_valid_distribution(obj)
+    assert out == expected

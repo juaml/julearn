@@ -16,6 +16,7 @@ from sklearn.pipeline import Pipeline
 from ..base import ColumnTypes, ColumnTypesLike, JuTransformer, WrapModel
 from ..model_selection._optuna_searcher import (
     _prepare_optuna_hyperparameters_distributions,
+    is_optuna_valid_distribution,
 )
 from ..model_selection._skopt_searcher import (
     _prepare_skopt_hyperparameters_distributions,
@@ -261,6 +262,9 @@ class PipelineCreator:
                     params_to_set[param] = vals[0]
             elif hasattr(vals, "rvs"):
                 # If it is a distribution, we will tune it.
+                logger.info(f"Tuning hyperparameter {param} = {vals}")
+                params_to_tune[param] = vals
+            elif is_optuna_valid_distribution(vals):
                 logger.info(f"Tuning hyperparameter {param} = {vals}")
                 params_to_tune[param] = vals
             else:

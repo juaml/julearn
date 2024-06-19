@@ -51,7 +51,7 @@ def test_merger_pipelines() -> None:
     assert "scaler" == named_steps[1]
     assert "rf" == named_steps[2]
     assert len(merged.param_distributions) == 3  # type: ignore
-    assert merged.param_distributions[-1][
+    assert merged.param_distributions[-1][  # type: ignore
         "rf__max_features"
     ] == [  # type: ignore
         2,

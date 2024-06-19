@@ -38,6 +38,29 @@ def register_optuna_searcher():
     _recreate_reset_copy()
 
 
+def is_optuna_valid_distribution(obj: Any) -> bool:
+    """Check if an object is a valid Optuna distribution.
+
+    Parameters
+    ----------
+    obj : any
+        The object to check.
+
+    Returns
+    -------
+    bool
+        Whether the object is a valid Optuna distribution.
+
+    """
+    _valid_classes = [
+        "IntDistribution",
+        "FloatDistribution",
+        "CategoricalDistribution",
+    ]
+
+    return obj.__class__.__name__ in _valid_classes
+
+
 def _prepare_optuna_hyperparameters_distributions(
     params_to_tune: Dict[str, Any],
 ) -> Dict[str, Any]:
