@@ -31,7 +31,12 @@ from ..utils import logger, raise_error, warn_with_log
 from ..utils.typing import TransformerLike
 from .cbpm import CBPM
 from .confound_remover import ConfoundRemover
-from .dataframe import ChangeColumnTypes, DropColumns, FilterColumns
+from .dataframe import (
+    ChangeColumnTypes,
+    DropColumns,
+    FilterColumns,
+    PickColumns,
+)
 
 
 _available_transformers = {
@@ -56,10 +61,12 @@ _available_transformers = {
     "drop_columns": DropColumns,
     "change_column_types": ChangeColumnTypes,
     "filter_columns": FilterColumns,
+    "pick_columns": PickColumns,
     # Decomposition
     "pca": PCA,
     # Custom
     "cbpm": CBPM,
+
 }
 
 _available_transformers_reset = deepcopy(_available_transformers)

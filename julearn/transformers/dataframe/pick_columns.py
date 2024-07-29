@@ -1,7 +1,6 @@
-"""Implement transformer to change drop columns."""
+"""Implement transformer to pick columns by name."""
 
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
-#          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
 from typing import Optional, Union
@@ -11,18 +10,21 @@ import pandas as pd
 from numpy.typing import ArrayLike
 from sklearn.base import check_is_fitted
 
-from ...base import ColumnTypesLike, JuTransformer
+from ...base import (
+    ColumnTypesLike,
+    JuTransformer,
+)
 from ...utils import logger
 from ...utils.typing import DataLike
 
 
-class DropColumns(JuTransformer):
-    """Drop columns of a DataFrame.
+class PickColumns(JuTransformer):
+    """Pick columns of a DataFrame by name.
 
     Parameters
     ----------
-    apply_to : ColumnTypesLike
-        The feature types ('X_types') to drop.
+    keep : str
+        Which feature (names) to keep.
     row_select_col_type : str or list of str or set of str or ColumnTypes
         The column types needed to select rows (default is None)
         Not really useful for this one, but here for compatibility.
@@ -35,12 +37,13 @@ class DropColumns(JuTransformer):
 
     def __init__(
         self,
-        apply_to: ColumnTypesLike,
+        keep: str,
         row_select_col_type: Optional[ColumnTypesLike] = None,
         row_select_vals: Optional[Union[str, int, list, bool]] = None,
     ):
+        self.keep = keep
         super().__init__(
-            apply_to=apply_to,
+            apply_to="*",
             needed_types=None,
             row_select_col_type=row_select_col_type,
             row_select_vals=row_select_vals,
@@ -48,36 +51,41 @@ class DropColumns(JuTransformer):
 
     def _fit(
         self, X: pd.DataFrame, y: Optional[DataLike] = None  # noqa: N803
-    ) -> "DropColumns":
+    ) -> "PickColumns":
         """Fit the transformer.
-
-        The transformer will learn how to drop the columns of the input data.
 
         Parameters
         ----------
         X : pd.DataFrame
-            Data to drop columns.
-        y : Data-Like, optional
-            Target data. This data will not be used.
+            The data to fit the transformer on.
+        y : DataLike, optional
+            The target data. This data will not be used.
 
         Returns
         -------
-        DropColumns
+        FilterColumns
             The fitted transformer.
 
         """
-        self.support_mask_ = pd.Series(True, index=X.columns, dtype=bool)
+        self.support_mask_ = pd.Series(False, index=X.columns, dtype=bool)
 
         try:
-            self.drop_columns_ = self.filter_columns(X).columns
-            self.support_mask_[self.drop_columns_] = False
+            self.keep_columns_ = self.filter_columns(X).columns
+            to_keep = self.keep
+            if not isinstance(to_keep, list):
+                to_keep = [to_keep]
+            self.keep_columns_ = [
+                col for col in self.keep_columns_ if col in to_keep
+            ]
+            self.support_mask_[self.keep_columns_] = True
         except ValueError:
-            self.drop_columns_ = []
+            self.keep_columns_ = []
         self.support_mask_ = self.support_mask_.values
+        return self
         return self
 
     def transform(self, X: pd.DataFrame) -> pd.DataFrame:  # noqa: N803
-        """Drop the columns.
+        """Pick the columns.
 
         Parameters
         ----------
@@ -90,8 +98,8 @@ class DropColumns(JuTransformer):
             Data with dropped columns.
 
         """
-        logger.debug(f"Dropping columns: {self.drop_columns_}")
-        return X.drop(columns=self.drop_columns_)
+        logger.debug(f"Picking columns: {self.keep_columns_}")
+        return X[self.keep_columns_]
 
     def get_support(
         self, indices: bool = False

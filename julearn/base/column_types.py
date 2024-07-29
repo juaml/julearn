@@ -4,7 +4,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Callable, List, Set, Union
+from typing import Any, Callable, Dict, List, Set, Union
 
 from sklearn.compose import make_column_selector
 
@@ -250,6 +250,22 @@ class ColumnTypes:
         return (
             f"ColumnTypes<types={self._column_types}; pattern={self.pattern}>"
         )
+
+    def filter(self, X_types: Dict[str, Any]) -> Dict[str, Any]:
+        """Filter the X_types based on the column_types.
+
+        Parameters
+        ----------
+        X_types : dict
+            The types of the columns.
+
+        Returns
+        -------
+        dict:
+            The filtered X_types.
+
+        """
+        return {k: v for k, v in X_types.items() if k in self._column_types}
 
     def copy(self) -> "ColumnTypes":
         """Get a copy of the ColumnTypes.

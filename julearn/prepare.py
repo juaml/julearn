@@ -110,7 +110,7 @@ def _validate_input_data_df_ext(
                 f"The following are missing: {missing_columns}"
             )
 
-    if y not in df.columns:
+    if y != "__generated__" and y not in df.columns:
         raise_error(f"Target '{y}' (y) is not a valid column in the dataframe")
 
     if groups is not None:
@@ -295,7 +295,11 @@ def prepare_input_data(
         df_X = df_X.to_frame()
 
     # Get y
-    df_y = df.loc[:, y].copy()
+    if y == "__generated__":
+        logger.info("Target will be generated")
+        df_y = pd.Series(np.zeros(df_X.shape[0]))
+    else:
+        df_y = df.loc[:, y].copy()
 
     # Get groups
     if groups is not None:

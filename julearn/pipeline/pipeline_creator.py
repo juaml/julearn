@@ -30,7 +30,11 @@ from ..transformers import (
     get_transformer,
     list_transformers,
 )
-from ..transformers.target import JuTransformedTargetModel
+from ..transformers.dataframe import DropColumns
+from ..transformers.target import (
+    JuGeneratedTargetModel,
+    JuTransformedTargetModel,
+)
 from ..utils import logger, raise_error, warn_with_log
 from ..utils.typing import (
     EstimatorLike,
@@ -65,7 +69,10 @@ def _params_to_pipeline(
 
     """
     if isinstance(param, PipelineCreator):
-        param = param.to_pipeline(X_types=X_types, search_params=search_params)
+        param = param.to_pipeline(
+            X_types=X_types,
+            search_params=search_params,
+        )
     elif isinstance(param, list):
         param = [
             _params_to_pipeline(_v, X_types, search_params) for _v in param
@@ -137,7 +144,7 @@ class PipelineCreator:
 
     Parameters
     ----------
-    problem_type: {"classification", "regression"}
+    problem_type: {"classification", "regression", "transformer"}
         The problem type for which the pipeline should be created.
     apply_to: ColumnTypesLike, optional
         To what should the transformers be applied to if not specified in
@@ -148,16 +155,22 @@ class PipelineCreator:
     def __init__(
         self, problem_type: str, apply_to: ColumnTypesLike = "continuous"
     ):
-        if problem_type not in ["classification", "regression"]:
+        if problem_type not in ["classification", "regression", "transformer"]:
             raise_error(
-                "`problem_type` should be either 'classification' or "
-                "'regression'."
+                "`problem_type` should be either 'classification', "
+                "'regression' or 'transformer."
             )
         self._steps = []
         self._added_target_transformer = False
+        self._added_target_generator = False
         self._added_model = False
         self.apply_to = apply_to
         self.problem_type = problem_type
+
+    @property
+    def no_model_ok(self) -> bool:
+        """Whether the pipeline can be created without a model."""
+        return self.problem_type == "transformer"
 
     def add(
         self,
@@ -225,6 +238,15 @@ class PipelineCreator:
                 )
             step = step.to_pipeline()  # type: ignore
             step = typing.cast(JuTargetPipeline, step)
+
+        # The name "generate_target" is reserved for the target generator step
+        # TODO: Add CI TEST
+        if name == "generate_target" and step != "generate_target":
+            raise_error(
+                "The name 'generate_target' is reserved for the target "
+                "generator step. Please use another name."
+            )
+
         # Validate the step
         self._validate_step(step, apply_to)
 
@@ -273,9 +295,21 @@ class PipelineCreator:
 
         # Build the estimator for this step
         if isinstance(step, str):
-            step = self._get_estimator_from(
-                step, self.problem_type, **params_to_set
-            )
+            if step != "generate_target":
+                logger.debug(f"Getting estimator from string: {step}")
+                step = self._get_estimator_from(
+                    step, self.problem_type, **params_to_set
+                )
+            else:
+                logger.debug(f"Special step is {step}")
+                name = "generate_target"
+                if "transformer" not in params_to_set:
+                    # TODO: CI TEST
+                    raise_error(
+                        "The 'generate_target' step should have a "
+                        "transformer parameter."
+                    )
+                step = params_to_set["transformer"]
         elif len(params_to_set) > 0:
             step.set_params(**params_to_set)  # type: ignore
 
@@ -352,10 +386,14 @@ class PipelineCreator:
             The copy of the PipelineCreator
 
         """
+        logger.debug("Copying creator")
         other = PipelineCreator(
             problem_type=self.problem_type, apply_to=self.apply_to
         )
         other._steps = self._steps.copy()
+        other._added_target_transformer = self._added_target_transformer
+        other._added_target_generator = self._added_target_generator
+        other._added_model = self._added_model
         return other
 
     @classmethod
@@ -459,6 +497,7 @@ class PipelineCreator:
         for t_out in out:
             t_out._added_model = self._added_model
             t_out._added_target_transformer = self._added_target_transformer
+            t_out._added_target_generator = self._added_target_generator
         return out
 
     def to_pipeline(
@@ -482,21 +521,61 @@ class PipelineCreator:
 
         """
         logger.debug("Creating pipeline")
-        if not self.has_model():
+        if not self.has_model() and not self.no_model_ok:
             raise_error("Cannot create a pipeline without a model")
         pipeline_steps: List[Tuple[str, Any]] = [
             ("set_column_types", SetColumnTypes(X_types))
         ]
 
         X_types = self._check_X_types(X_types)
-        model_step = self._steps[-1]
+        if self.no_model_ok and not self.has_model():
+            model_step = None
+            logger.debug("Creating a pipeline with no model added")
+        else:
+            model_step = self._steps[-1]
 
         target_trans_step = None
         transformer_steps = []
 
-        for _step in self._steps[:-1]:
+        all_trans_steps = self._steps
+        if self.has_model():
+            all_trans_steps = all_trans_steps[:-1]
+        for _step in all_trans_steps:
             if "target" in _step.apply_to:
                 target_trans_step = _step
+            elif _step.name == "generate_target":
+                target_trans_step = _step
+                logger.debug("Ensuring target generator pipeline")
+                is_transformer = True
+                if isinstance(target_trans_step.estimator, PipelineCreator):
+                    if target_trans_step.estimator.has_model():
+                        is_transformer = False
+                elif self._is_model_step(_step):
+                    is_transformer = False
+                if not is_transformer:
+                    raise_error(
+                        "Target generator pipeline cannot have a model."
+                    )
+
+                target_trans_step.estimator = _params_to_pipeline(
+                    target_trans_step.estimator,
+                    X_types=target_trans_step.needed_types.filter(X_types),
+                    search_params=search_params,
+                )
+                logger.debug("Target generator pipeline created")
+                # logger.info("Dropping columns used to generate target")
+                # transformer_steps.append(
+                #     Step(
+                #         name=f"{_step.name}_drop_columns",
+                #         estimator=DropColumns(apply_to=_step.apply_to),
+                #         apply_to=_step.apply_to,
+                #         needed_types=_step.needed_types,
+                #         params_to_tune=None,
+                #         row_select_col_type=None,
+                #         row_select_vals=None,
+                #     )
+                # )
+
             else:
                 transformer_steps.append(_step)
 
@@ -527,52 +606,63 @@ class PipelineCreator:
             params_to_tune.update(step_params_to_tune)
 
         # Add final model
-        model_name = model_step.name
-        model_estimator = model_step.estimator
-        logger.debug(f"Adding model {model_name}")
+        if model_step is not None:
+            model_name = model_step.name
+            model_estimator = model_step.estimator
+            logger.debug(f"Adding model {model_name}")
 
-        model_params = model_estimator.get_params(deep=False)
-        model_params = {
-            k: _params_to_pipeline(
-                v, X_types=X_types, search_params=search_params
-            )
-            for k, v in model_params.items()
-        }
-        model_estimator.set_params(**model_params)
-        if self.wrap and not isinstance(model_estimator, JuModelLike):
-            logger.debug(f"Wrapping {model_name}")
-            model_estimator = WrapModel(model_estimator, model_step.apply_to)
-
-        step_params_to_tune = model_step.params_to_tune
-
-        logger.debug(f"\t Estimator: {model_estimator}")
-        logger.debug("\t Looking for nested pipeline creators")
-        logger.debug(f"\t Params to tune: {step_params_to_tune}")
-        if self._added_target_transformer:
-            # If we have a target transformer, we need to wrap the model
-            # in a the right "Targeted" transformer.
-            target_model_step = self._wrap_target_model(
-                model_name,
-                model_estimator,  # type: ignore
-                target_trans_step,  # type: ignore
-            )
-            target_step_to_tune = {
-                f"{model_name}_target_transform__transformer__{param}": val
-                for param, val in (
-                    target_trans_step.params_to_tune.items()  # type: ignore
+            model_params = model_estimator.get_params(deep=False)
+            model_params = {
+                k: _params_to_pipeline(
+                    v, X_types=X_types, search_params=search_params
                 )
+                for k, v in model_params.items()
             }
-            step_params_to_tune = {
-                f"{model_name}_target_transform__model__{param}": val
-                for param, val in step_params_to_tune.items()
-            }
-            pipeline_steps.append(target_model_step)
-            params_to_tune.update(step_params_to_tune)
-            params_to_tune.update(target_step_to_tune)
-        else:
-            # if not, just add a model as the last step
-            params_to_tune.update(step_params_to_tune)
-            pipeline_steps.append((model_name, model_estimator))
+            model_estimator.set_params(**model_params)
+            if self.wrap and not isinstance(model_estimator, JuModelLike):
+                logger.debug(f"Wrapping {model_name}")
+                model_estimator = WrapModel(
+                    model_estimator, model_step.apply_to
+                )
+
+            step_params_to_tune = model_step.params_to_tune
+
+            logger.debug(f"\t Estimator: {model_estimator}")
+            logger.debug("\t Looking for nested pipeline creators")
+            logger.debug(f"\t Params to tune: {step_params_to_tune}")
+            if self._added_target_transformer or self._added_target_generator:
+                # If we have a target transformer, we need to wrap the model
+                # in the right "Targeted" transformer.
+                kind = (
+                    "target_transform"
+                    if self._added_target_transformer
+                    else "target_generate"
+                )
+                logger.debug(f"Wrapping target model {model_name} as {kind}")
+
+                target_model_step = self._wrap_target_model(
+                    model_name,
+                    model_estimator,  # type: ignore
+                    target_trans_step,  # type: ignore
+                    kind,
+                )
+                target_step_to_tune = {
+                    f"{model_name}_{kind}__transformer__{param}": val
+                    for param, val in (
+                        target_trans_step.params_to_tune.items()  # type: ignore
+                    )
+                }
+                step_params_to_tune = {
+                    f"{model_name}_{kind}__model__{param}": val
+                    for param, val in step_params_to_tune.items()
+                }
+                pipeline_steps.append(target_model_step)
+                params_to_tune.update(step_params_to_tune)
+                params_to_tune.update(target_step_to_tune)
+            else:
+                # if not, just add a model as the last step
+                params_to_tune.update(step_params_to_tune)
+                pipeline_steps.append((model_name, model_estimator))
         pipeline = Pipeline(pipeline_steps).set_output(transform="pandas")
         pipeline = typing.cast(Pipeline, pipeline)  # damn typing..
         # Deal with the Hyperparameter tuning
@@ -584,8 +674,8 @@ class PipelineCreator:
 
     @staticmethod
     def _wrap_target_model(
-        model_name: str, model: ModelLike, target_trans_step: Step
-    ) -> Tuple[str, JuTransformedTargetModel]:
+        model_name: str, model: ModelLike, target_trans_step: Step, kind: str
+    ) -> Tuple[str, Union[JuTransformedTargetModel, JuGeneratedTargetModel]]:
         """Wrap the model in a JuTransformedTargetModel.
 
         Parameters
@@ -596,6 +686,9 @@ class PipelineCreator:
             The model to wrap
         target_trans_step : Step
             The step with the target transformer.
+        kind : {"target_transform", "target_generate"}
+            The kind of target transformer.
+
 
         Returns
         -------
@@ -611,16 +704,24 @@ class PipelineCreator:
 
         """
         transformer = target_trans_step.estimator
-        if not isinstance(transformer, JuTargetPipeline):
-            raise_error(
-                "The target transformer should be a JuTargetPipeline. "
-                f"Got {type(transformer)}"
+        if kind == "target_transform":
+            if not isinstance(transformer, JuTargetPipeline):
+                raise_error(
+                    "The target transformer should be a JuTargetPipeline. "
+                    f"Got {type(transformer)}"
+                )
+            target_model = JuTransformedTargetModel(
+                model=model,
+                transformer=transformer,
             )
-        target_model = JuTransformedTargetModel(
-            model=model,
-            transformer=transformer,
-        )
-        return (f"{model_name}_target_transform", target_model)
+        elif kind == "target_generate":
+            target_model = JuGeneratedTargetModel(
+                model=model,
+                transformer=transformer,
+            )
+        else:
+            raise_error(f"Unknown kind of target wrapper: {kind}")
+        return (f"{model_name}_{kind}", target_model)
 
     def _validate_model_params(
         self, model_name: str, model_params: Dict[str, Any]
@@ -706,10 +807,10 @@ class PipelineCreator:
         """
         if self._is_transformer_step(step):
             if self._added_model:
-                raise_error("Cannot add a transformer after adding a model")
-            if self._added_target_transformer and not self._is_model_step(
-                step
-            ):
+                raise_error("Cannot add a step after adding a model")
+            if (
+                self._added_target_transformer or self._added_target_generator
+            ) and not self._is_model_step(step):
                 raise_error(
                     "Only a model can be added after a target transformer."
                 )
@@ -717,6 +818,18 @@ class PipelineCreator:
                 self._added_target_transformer = True
         elif self._is_model_step(step):
             self._added_model = True
+        elif step == "generate_target":
+            if self._added_target_transformer:
+                raise_error(
+                    "Cannot add a target generator after a target transformer."
+                )
+            if self._added_target_generator:
+                raise_error("Cannot add two target generators.")
+            if apply_to == "target":
+                raise_error(
+                    "The target generator cannot be applied to the target."
+                )
+            self._added_target_generator = True
         else:
             raise_error(f"Cannot add a {step}. I don't know what it is.")
 
@@ -794,7 +907,7 @@ class PipelineCreator:
 
     @staticmethod
     def _is_transformer_step(
-        step: Union[str, EstimatorLike, TargetPipelineCreator]
+        step: Union[str, EstimatorLike, TargetPipelineCreator],
     ) -> bool:
         """Check if a step is a transformer."""
         if step in list_transformers():
@@ -805,7 +918,7 @@ class PipelineCreator:
 
     @staticmethod
     def _is_model_step(
-        step: Union[EstimatorLike, str, TargetPipelineCreator]
+        step: Union[EstimatorLike, str, TargetPipelineCreator],
     ) -> bool:
         """Check if a step is a model."""
         if step in list_models():
