@@ -4,7 +4,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Callable, Union
+from typing import Any, Callable, Union, dict
 
 from sklearn.compose import make_column_selector
 
@@ -12,6 +12,7 @@ from ..utils.logging import raise_error
 
 
 ColumnTypesLike = Union[list[str], set[str], str, "ColumnTypes"]
+ColumnTypesDict = dict[str, ColumnTypesLike]
 
 
 def change_column_type(column: str, new_type: str):
@@ -250,6 +251,22 @@ class ColumnTypes:
         return (
             f"ColumnTypes<types={self._column_types}; pattern={self.pattern}>"
         )
+
+    def filter(self, X_types: dict[str, Any]) -> dict[str, Any]:
+        """Filter the X_types based on the column_types.
+
+        Parameters
+        ----------
+        X_types : dict
+            The types of the columns.
+
+        Returns
+        -------
+        dict:
+            The filtered X_types.
+
+        """
+        return {k: v for k, v in X_types.items() if k in self._column_types}
 
     def copy(self) -> "ColumnTypes":
         """Get a copy of the ColumnTypes.
