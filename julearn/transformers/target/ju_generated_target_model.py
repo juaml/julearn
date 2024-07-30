@@ -18,7 +18,7 @@ from ...utils.typing import DataLike, EstimatorLike, JuEstimatorLike, ModelLike
 
 
 if TYPE_CHECKING:
-    from sklearn.pipeline import Pipeline
+    from sklearn.pipeline import Pipeline  # noqa: F401
 
 
 def _wrapped_model_has(attr):
@@ -81,9 +81,9 @@ class JuGeneratedTargetModel(JuBaseEstimator):
 
     def fit(
         self,
-        X: pd.DataFrame,
+        X: pd.DataFrame,  # noqa: N803
         y: DataLike,
-        **fit_params: Any,  # noqa: N803
+        **fit_params: Any,
     ) -> "JuGeneratedTargetModel":
         """Fit the model.
 
@@ -217,8 +217,8 @@ class JuGeneratedTargetModel(JuBaseEstimator):
 
     def generate_target(
         self,
-        X: pd.DataFrame,
-        y: DataLike,  # noqa: N803
+        X: pd.DataFrame,  # noqa: N803
+        y: DataLike,
     ) -> DataLike:
         """Generate the target.
 

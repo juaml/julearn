@@ -51,8 +51,8 @@ class PickColumns(JuTransformer):
 
     def _fit(
         self,
-        X: pd.DataFrame,
-        y: Optional[DataLike] = None,  # noqa: N803
+        X: pd.DataFrame,  # noqa: N803
+        y: Optional[DataLike] = None,
     ) -> "PickColumns":
         """Fit the transformer.
 
