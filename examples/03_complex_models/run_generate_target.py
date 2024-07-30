@@ -13,7 +13,6 @@ predict the generated target from the sepal features
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL
 
-# %%
 from seaborn import load_dataset
 from julearn import run_cross_validation
 from julearn.pipeline import PipelineCreator
@@ -35,27 +34,37 @@ X = ["sepal_length", "sepal_width", "petal_length", "petal_width"]
 y = "__generated__"  # to indicate to julearn that the target will be generated
 
 
-
 # Define our feature types
 X_types = {
     "sepal": ["sepal_length", "sepal_width"],
     "petal": ["petal_length", "petal_width"],
 }
 
-# %% reate the pipeline that will generate the features
+###############################################################################
+# We now use a Pipeline Creator to create the pipeline that will generate the
+# features. This special pipeline should be configured to be a "transformer"
+# and apply to the "petal" feature types.
+
 target_creator = PipelineCreator(problem_type="transformer", apply_to="petal")
 target_creator.add("pca", n_components=2)
+# Select only the first component
 target_creator.add("pick_columns", keep="pca__pca0")
 
 
-# %% Create the final pipeline
+###############################################################################
+# We now create the pipeline that will be used to predict the target. This
+# pipeline will be a regression pipeline. The step previous to the model should
+# be the the `generate_target`, applying to the "petal" features and using the
+# target_creator pipeline as the transformer.
 creator = PipelineCreator(problem_type="regression")
+creator.add("zscore")
 creator.add("generate_target", apply_to="petal", transformer=target_creator)
 creator.add(
     "linreg", apply_to="sepal",
 )
 
-# %%
+###############################################################################
+# We finally evaluate the model within the cross validation.
 scores, model = run_cross_validation(
     X=X,
     y=y,
@@ -68,5 +77,3 @@ scores, model = run_cross_validation(
 
 print(scores["test_score"])  # type: ignore
 
-# %%
-print(model)
