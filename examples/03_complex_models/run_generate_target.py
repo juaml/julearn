@@ -57,11 +57,9 @@ target_creator.add("pick_columns", keep="pca__pca0")
 # be the the `generate_target`, applying to the "petal" features and using the
 # target_creator pipeline as the transformer.
 creator = PipelineCreator(problem_type="regression")
-creator.add("zscore")
+creator.add("zscore", apply_to="*")
 creator.add("generate_target", apply_to="petal", transformer=target_creator)
-creator.add(
-    "linreg", apply_to="sepal",
-)
+creator.add("linreg", apply_to="sepal")
 
 ###############################################################################
 # We finally evaluate the model within the cross validation.
