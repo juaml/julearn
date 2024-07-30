@@ -50,7 +50,9 @@ class PickColumns(JuTransformer):
         )
 
     def _fit(
-        self, X: pd.DataFrame, y: Optional[DataLike] = None  # noqa: N803
+        self,
+        X: pd.DataFrame,
+        y: Optional[DataLike] = None,  # noqa: N803
     ) -> "PickColumns":
         """Fit the transformer.
 
@@ -82,9 +84,8 @@ class PickColumns(JuTransformer):
             self.keep_columns_ = []
         self.support_mask_ = self.support_mask_.values
         return self
-        return self
 
-    def transform(self, X: pd.DataFrame) -> pd.DataFrame:  # noqa: N803
+    def transform(self, X: pd.DataFrame) -> Union[pd.DataFrame, pd.Series]:  # noqa: N803
         """Pick the columns.
 
         Parameters
@@ -99,7 +100,11 @@ class PickColumns(JuTransformer):
 
         """
         logger.debug(f"Picking columns: {self.keep_columns_}")
-        return X[self.keep_columns_]
+        if len(self.keep_columns_) == 1:
+            out = X[self.keep_columns_[0]]
+        else:
+            out = X[self.keep_columns_]
+        return out
 
     def get_support(
         self, indices: bool = False
@@ -118,9 +123,7 @@ class PickColumns(JuTransformer):
 
         """
         if indices:
-            return np.arange(len(self.support_mask_))[
-                self.support_mask_
-            ]  # type: ignore
+            return np.arange(len(self.support_mask_))[self.support_mask_]  # type: ignore
         else:
             return self.support_mask_  # type: ignore
 

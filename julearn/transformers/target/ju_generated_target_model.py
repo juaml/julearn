@@ -237,7 +237,13 @@ class JuGeneratedTargetModel(JuBaseEstimator):
         """
         logger.debug("Generating target")
         gen_y = self.transformer.transform(X)  # type: ignore
-        logger.debug(f"Target generated: {gen_y.columns}")  # type: ignore
+
+        # If it's a pandas dataframe convert to series
+        if gen_y.shape[1] == 1:
+            gen_y = gen_y.iloc[:, 0]
+            logger.debug(f"Target generated: {gen_y.name}")
+        else:
+            logger.debug(f"Target generated: {gen_y.columns}")
         return gen_y
 
     @property
