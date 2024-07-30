@@ -30,7 +30,6 @@ from ..transformers import (
     get_transformer,
     list_transformers,
 )
-from ..transformers.dataframe import DropColumns
 from ..transformers.target import (
     JuGeneratedTargetModel,
     JuTransformedTargetModel,
@@ -172,7 +171,7 @@ class PipelineCreator:
         """Whether the pipeline can be created without a model."""
         return self.problem_type == "transformer"
 
-    def add(
+    def add(  # noqa: C901
         self,
         step: Union[EstimatorLike, str, TargetPipelineCreator],
         name: Optional[str] = None,

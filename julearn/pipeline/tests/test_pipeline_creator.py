@@ -12,7 +12,7 @@ import pytest
 from numpy.testing import assert_array_equal
 from sklearn.decomposition import PCA
 from sklearn.dummy import DummyClassifier
-from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 from sklearn.preprocessing import RobustScaler, StandardScaler

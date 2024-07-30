@@ -287,7 +287,7 @@ class ColumnTypes:
             f"ColumnTypes<types={self._column_types}; pattern={self.pattern}>"
         )
 
-    def filter(self, X_types: Dict[str, Any]) -> Dict[str, Any]:
+    def filter(self, X_types: Dict[str, Any]) -> Dict[str, Any]:  # noqa: N803
         """Filter the X_types based on the column_types.
 
         Parameters
