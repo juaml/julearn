@@ -887,7 +887,7 @@ def test_PipelineCreator_generated_target(
 ) -> None:
     """Test the pipeline creator with a generated target."""
 
-    # Create a transfomer that will apply to the petal features
+    # Create a transformer that will apply to the petal features
     tranformer_creator = PipelineCreator(
         problem_type="transformer", apply_to="petal"
     )
