@@ -228,6 +228,38 @@ class PipelineCreator:
                 " and only to the PipelineCreator like this"
                 " PipelineCreator(problem_type=problem_type)"
             )
+
+        if self._added_target_generator:
+            # If a target generator was added, we need to make sure that
+            # the apply_to parameter is set.
+            if apply_to is None:
+                raise_error(
+                    "A target generator was added. To prevent training on "
+                    "the features used to generate the target, you need to "
+                    "explicitly set the apply_to parameter."
+                )
+            else:
+                # and it should also be set to exclude what is used to
+                # generate the target.
+                apply_to = ColumnTypes(apply_to)
+                if len(apply_to & ColumnTypes("*")) > 0:
+                    raise_error(
+                        "A target generator was added. The apply_to parameter "
+                        "of subsequent steps cannot include the wildcard type "
+                        "'*'."
+                    )
+                else:
+
+                    target_gen_step = next(iter([
+                        x for x in self._steps if x.name == "generate_target"
+                    ]))
+                    if len(apply_to & target_gen_step.apply_to) > 0:
+                        raise_error(
+                            "A target generator was added. The apply_to "
+                            "parameter of subsequent steps should exclude the "
+                            "types used to generate the target."
+                        )
+
         apply_to = self.apply_to if apply_to is None else apply_to
         apply_to = ColumnTypes(apply_to)
 
@@ -240,7 +272,6 @@ class PipelineCreator:
             step = typing.cast(JuTargetPipeline, step)
 
         # The name "generate_target" is reserved for the target generator step
-        # TODO: Add CI TEST
         if name == "generate_target" and step != "generate_target":
             raise_error(
                 "The name 'generate_target' is reserved for the target "
@@ -303,13 +334,20 @@ class PipelineCreator:
             else:
                 logger.debug(f"Special step is {step}")
                 name = "generate_target"
+                if len(apply_to & ColumnTypes("*")) > 0:
+                    raise_error(
+                        "The 'generate_target' step cannot apply to all types."
+                    )
                 if "transformer" not in params_to_set:
-                    # TODO: CI TEST
                     raise_error(
                         "The 'generate_target' step should have a "
                         "transformer parameter."
                     )
                 step = params_to_set["transformer"]
+                if not isinstance(step, PipelineCreator):
+                    raise_error(
+                        "The transformer parameter in the generate_target "
+                        "step should be a PipelineCreator.")
         elif len(params_to_set) > 0:
             step.set_params(**params_to_set)  # type: ignore
 

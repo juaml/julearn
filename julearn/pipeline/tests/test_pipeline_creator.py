@@ -9,8 +9,11 @@ from typing import TYPE_CHECKING, Callable, Dict, List, Tuple, Union
 
 import pandas as pd
 import pytest
+from numpy.testing import assert_array_equal
+from sklearn.decomposition import PCA
 from sklearn.dummy import DummyClassifier
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
+from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 from sklearn.preprocessing import RobustScaler, StandardScaler
 from sklearn.svm import SVC
@@ -45,7 +48,8 @@ def test_construction_working(
     preprocess = preprocess if isinstance(preprocess, list) else [preprocess]
     for step in preprocess:
         creator.add(step, apply_to="categorical")
-    creator.add(model)
+    if problem_type in ["classification", "regression"]:
+        creator.add(model)
     X_types = {"categorical": ["A"]}
     pipeline = creator.to_pipeline(X_types=X_types)
 
@@ -60,16 +64,19 @@ def test_construction_working(
         )
 
     # check model step
-    model_name, model = pipeline.steps[-1]
-    assert isinstance(model, WrapModel)
-    assert isinstance(
-        model.model,
-        get_model(
-            model_name,
-            problem_type=problem_type,
-        ).__class__,
-    )
-    assert len(preprocess) + 2 == len(pipeline.steps)
+    if problem_type in ["classification", "regression"]:
+        model_name, model = pipeline.steps[-1]
+        assert isinstance(model, WrapModel)
+        assert isinstance(
+            model.model,
+            get_model(
+                model_name,
+                problem_type=problem_type,
+            ).__class__,
+        )
+        assert len(preprocess) + 2 == len(pipeline.steps)
+    else:
+        assert len(preprocess) + 1 == len(pipeline.steps)
 
 
 def test_fit_and_transform_no_error(
@@ -98,10 +105,14 @@ def test_fit_and_transform_no_error(
     creator = PipelineCreator.from_list(
         preprocess, model_params={}, problem_type=problem_type
     )
-    creator.add(model)
+    if problem_type in ["classification", "regression"]:
+        creator.add(model)
     pipeline = creator.to_pipeline({})
     pipeline.fit(X_iris, y_iris)
-    pipeline[:-1].transform(X_iris)
+    if problem_type in ["classification", "regression"]:
+        pipeline[:-1].transform(X_iris)
+    else:
+        pipeline.transform(X_iris)
 
 
 def _hyperparam_tuning_base_test(
@@ -138,6 +149,8 @@ def _hyperparam_tuning_base_test(
         convention.
 
     """
+    if problem_type == "transformer":
+        pytest.skip("Transformers can't be tuned")
     if isinstance(preprocess, str):
         preprocess = [preprocess]
 
@@ -197,7 +210,8 @@ def test_hyperparameter_tuning(
 
 
     """
-
+    if problem_type == "transformer":
+        pytest.skip("Transformers can't be tuned")
     pipeline, param_grid = _hyperparam_tuning_base_test(
         X_types_iris,
         model,
@@ -245,6 +259,8 @@ def test_hyperparameter_tuning_bayes(
         The parameters for the search.
 
     """
+    if problem_type == "transformer":
+        pytest.skip("Transformers can't be tuned")
     BayesSearchCV = pytest.importorskip("skopt.BayesSearchCV")
 
     pipeline, param_grid = _hyperparam_tuning_base_test(
@@ -292,6 +308,8 @@ def test_hyperparameter_tuning_optuna(
     # OptunaSearchCV = optuna_integration.OptunaSearchCV
     from julearn.external.optuna_searchcv import OptunaSearchCV
 
+    if problem_type == "transformer":
+        pytest.skip("Transformers can't be tuned")
     pipeline, param_grid = _hyperparam_tuning_base_test(
         X_types_iris,
         model,
@@ -363,6 +381,8 @@ def test_hyperparameter_tuning_distributions(
         The parameters for the search.
 
     """
+    if problem_type == "transformer":
+        pytest.skip("Transformers can't be tuned")
     kind = "grid"
     if search_params is not None:
         kind = search_params.get("kind", "grid")
@@ -411,6 +431,8 @@ def test_hyperparameter_tuning_distributions_bayes(
         The parameters for the search.
 
     """
+    if problem_type == "transformer":
+        pytest.skip("Transformers can't be tuned")
     BayesSearchCV = pytest.importorskip("skopt.BayesSearchCV")
 
     pipeline, param_grid = _hyperparam_tuning_base_test(
@@ -858,3 +880,88 @@ def test_PipelineCreator_set_hyperparameter() -> None:
     model3 = creator3.to_pipeline()
 
     assert model3.steps[-1][1].get_params()["strategy"] == "uniform"
+
+
+def test_PipelineCreator_generated_target(
+    X_iris: pd.DataFrame,  # noqa: N803
+) -> None:
+    """Test the pipeline creator with a generated target."""
+
+    # Create a transfomer that will apply to the petal features
+    tranformer_creator = PipelineCreator(
+        problem_type="transformer", apply_to="petal"
+    )
+    tranformer_creator.add("pca", n_components=2, random_state=42)
+    tranformer_creator.add("pick_columns", keep="pca__pca0")
+
+    # Create a model that uses the previous transformer to generate the target
+    creator = PipelineCreator(problem_type="regression", apply_to="*")
+    creator.add(
+        "generate_target", apply_to="petal", transformer=tranformer_creator
+    )
+    creator.add("linreg", apply_to="sepal")  # sepal only
+
+    X_types = {
+        "sepal": ["sepal_length", "sepal_width"],
+        "petal": ["petal_length", "petal_width"],
+    }
+    fake_y = pd.Series([0] * len(X_iris))
+
+    model = creator.to_pipeline(X_types)
+    assert len(model.steps) == 2
+    assert model.steps[0][0] == "set_column_types"
+    assert model.steps[1][0] == "linreg_target_generate"
+
+    model.fit(X_iris.copy(), fake_y)
+
+    # Get the in sample predictions
+    ju_pred = model.predict(X_iris.copy())
+
+    pca = PCA(n_components=2, random_state=42)
+    linreg = LinearRegression()
+
+    X_iris_petal_vals = X_iris[["petal_length", "petal_width"]].values
+    X_iris_sepal_vals = X_iris[["sepal_length", "sepal_width"]].values
+    y_gen = pca.fit(X_iris_petal_vals).transform(X_iris_petal_vals)[:, 0]
+
+    linreg.fit(X_iris_sepal_vals, y_gen)
+    sk_pred = linreg.predict(X_iris_sepal_vals)
+
+    assert_array_equal(ju_pred, sk_pred)
+
+
+def test_PipelineCreator_generated_target_errors() -> None:
+    """Test errors with the generated target."""
+    tranformer_creator = PipelineCreator(
+        problem_type="transformer", apply_to="petal"
+    )
+    tranformer_creator.add("pca")
+
+    # Create a model that uses the previous transformer to generate the target
+    with pytest.raises(ValueError, match="reserved for the target"):
+        creator = PipelineCreator(problem_type="regression", apply_to="*")
+        creator.add("pca", name="generate_target")
+    with pytest.raises(ValueError, match="have a transformer parameter"):
+        creator = PipelineCreator(problem_type="regression", apply_to="*")
+        creator.add("generate_target", apply_to="petal")
+    with pytest.raises(ValueError, match="should be a PipelineCreator"):
+        creator = PipelineCreator(problem_type="regression", apply_to="*")
+        creator.add("generate_target", apply_to="petal", transformer="pca")
+
+    with pytest.raises(ValueError, match="all types"):
+        creator = PipelineCreator(problem_type="regression", apply_to="*")
+        creator.add(
+            "generate_target", apply_to="*", transformer=tranformer_creator
+        )
+
+    creator = PipelineCreator(problem_type="regression", apply_to="*")
+    creator.add(
+        "generate_target", apply_to="petal", transformer=tranformer_creator
+    )
+    with pytest.raises(ValueError, match="explicitly set the apply_to"):
+        creator.add("linreg")
+    with pytest.raises(ValueError, match="exclude the types"):
+        creator.add("linreg", apply_to=["sepal", "petal"])
+    with pytest.raises(ValueError, match="wildcard"):
+        creator.add("linreg", apply_to="*")
+    creator.add("linreg", apply_to=["sepal"])
