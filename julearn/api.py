@@ -194,11 +194,11 @@ def run_cross_validation(  # noqa: C901
         )
     if return_inspector:
         if return_estimator is None:
-            logger.info("Inspector requested: setting return_estimator='all'")
             return_estimator = "all"
-        if return_estimator != "all":
+        if return_estimator not in ["all", "cv"]:
             raise_error(
-                "return_inspector=True requires return_estimator to be `all`."
+                "return_inspector=True requires return_estimator to be `all` "
+                "or `cv`"
             )
 
     X_types = {} if X_types is None else X_types
@@ -441,6 +441,9 @@ def run_cross_validation(  # noqa: C901
             groups=df_groups,
             cv=cv_outer,
         )
-        out = scores_df, pipeline, inspector
+        if isinstance(out, tuple):
+            out = (*out, inspector)
+        else:
+            out = out, inspector
 
     return out
