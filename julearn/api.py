@@ -233,6 +233,9 @@ def run_cross_validation(  # noqa: C901
 
     wrap_score = False
     if isinstance(model, (PipelineCreator, list)):
+        logger.debug(
+            "Generating pipeline from PipelineCreator or list of them"
+        )
         if preprocess is not None:
             raise_error(
                 "If model is a PipelineCreator (or list of), "
@@ -266,6 +269,7 @@ def run_cross_validation(  # noqa: C901
             expanded_models.extend(m.split())
 
         has_target_transformer = expanded_models[-1]._added_target_transformer
+        has_target_generator = expanded_models[-1]._added_target_generator
         all_pipelines = [
             model.to_pipeline(X_types=X_types, search_params=search_params)
             for model in expanded_models
@@ -279,12 +283,16 @@ def run_cross_validation(  # noqa: C901
             pipeline = all_pipelines[0]
 
         if has_target_transformer:
+            logger.debug("Pipeline has target transformer")
             if isinstance(pipeline, BaseSearchCV):
                 last_step = pipeline.estimator[-1]  # type: ignore
             else:
                 last_step = pipeline[-1]
             if not last_step.can_inverse_transform():
                 wrap_score = True
+        if has_target_generator:
+            logger.debug("Pipeline has target generator")
+            wrap_score = True
         problem_type = model[0].problem_type
 
     elif not isinstance(model, (str, BaseEstimator)):
@@ -343,11 +351,14 @@ def run_cross_validation(  # noqa: C901
                 "The following model_params are incorrect: " f"{unused_params}"
             )
         has_target_transformer = pipeline_creator._added_target_transformer
+        has_target_generator = pipeline_creator._added_target_generator
         pipeline = pipeline_creator.to_pipeline(
             X_types=X_types, search_params=search_params
         )
 
         if has_target_transformer and not pipeline[-1].can_inverse_transform():
+            wrap_score = True
+        if has_target_generator:
             wrap_score = True
 
     # Log some information
