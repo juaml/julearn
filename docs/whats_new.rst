@@ -56,7 +56,7 @@ Enhancements
 Features
 ^^^^^^^^
 
-- Add :class:`~optuna_integration.sklearn.OptunaSearchCV` to the list of
+- Add :class:`~optuna_integration.OptunaSearchCV` to the list of
   available searchers as ``optuna`` by `Fede Raimondo`_ (:gh:`262`)
 
 
