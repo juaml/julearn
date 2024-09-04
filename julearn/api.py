@@ -142,7 +142,7 @@ def run_cross_validation(  # noqa: C901
             :class:`~sklearn.model_selection.RandomizedSearchCV`
           * ``"bayes"`` : :class:`~skopt.BayesSearchCV`
           * ``"optuna"`` :
-            :class:`~optuna_integration.sklearn.OptunaSearchCV`
+            :class:`~optuna_integration.OptunaSearchCV`
           * user-registered searcher name : see
             :func:`~julearn.model_selection.register_searcher`
           * ``scikit-learn``-compatible searcher
