@@ -255,7 +255,7 @@ pprint(model_tuned.best_params_)
 # Other searchers that ``julearn`` provides are the
 # :class:`~sklearn.model_selection.RandomizedSearchCV`,
 # :class:`~skopt.BayesSearchCV` and
-# :class:`~optuna_integration.sklearn.OptunaSearchCV`.
+# :class:`~optuna_integration.OptunaSearchCV`.
 #
 # The randomized searcher
 # (:class:`~sklearn.model_selection.RandomizedSearchCV`) is similar to the
@@ -275,7 +275,7 @@ pprint(model_tuned.best_params_)
 # :class:`~skopt.BayesSearchCV` documentation, including how to specify
 # the prior distributions of the hyperparameters.
 #
-# The Optuna searcher (:class:`~optuna_integration.sklearn.OptunaSearchCV`)
+# The Optuna searcher (:class:`~optuna_integration.OptunaSearchCV`)
 # uses the Optuna library to find the best hyperparameter set. Optuna is a
 # hyperparameter optimization framework that has several algorithms to find
 # the best hyperparameter set. For more information, see the

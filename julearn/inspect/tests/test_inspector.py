@@ -54,7 +54,9 @@ def test_normal_usage(df_iris: "pd.DataFrame") -> None:
 
     """
     X = list(df_iris.iloc[:, :-1].columns)
-    scores, pipe, inspect = run_cross_validation(
+
+    # All estimators
+    out = run_cross_validation(
         X=X,
         y="species",
         data=df_iris,
@@ -63,7 +65,26 @@ def test_normal_usage(df_iris: "pd.DataFrame") -> None:
         return_inspector=True,
         problem_type="classification",
     )
+    scores, pipe, inspect = out
     assert pipe == inspect.model._model  # type: ignore
+    for (_, score), inspect_fold in zip(
+        scores.iterrows(),  # type: ignore
+        inspect.folds,  # type: ignore
+    ):
+        assert score["estimator"] == inspect_fold.model._model
+
+    del pipe
+    # only CV estimators
+    out = run_cross_validation(
+        X=X,
+        y="species",
+        data=df_iris,
+        model="svm",
+        return_estimator="cv",
+        return_inspector=True,
+        problem_type="classification",
+    )
+    scores, inspect = out
     for (_, score), inspect_fold in zip(
         scores.iterrows(),  # type: ignore
         inspect.folds,  # type: ignore

@@ -96,5 +96,5 @@ The following optional dependencies are available:
   module is not compatible with newer Python versions and it is unmaintained.
 * ``skopt``: Using the ``"bayes"`` searcher (:class:`~skopt.BayesSearchCV`)
   requires the `scikit-optimize`_ package.
-* ``optuna``: Using the ``"optuna"`` searcher (:class:`~optuna_integration.sklearn.OptunaSearchCV`) requires the `Optuna`_ and `optuna_integration`_ packages.
+* ``optuna``: Using the ``"optuna"`` searcher (:class:`~optuna_integration.OptunaSearchCV`) requires the `Optuna`_ and `optuna_integration`_ packages.
 * ``all``: Install all optional functional dependencies (except ``deslib``).
