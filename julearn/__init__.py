@@ -14,5 +14,5 @@ from . import utils
 from . import prepare
 from . import api
 from . import stats
-from .api import run_cross_validation
+from .api import run_cross_validation, run_fit
 from .pipeline import PipelineCreator, TargetPipelineCreator
