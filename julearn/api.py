@@ -4,7 +4,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Optional, Tuple, Union
 
 import numpy as np
 import pandas as pd
@@ -26,7 +26,7 @@ from .utils import _compute_cvmdsum, logger, raise_error
 from .utils.typing import CVLike
 
 
-def run_cross_validation(  # noqa: C901
+def _validata_api_params(  # noqa: C901
     X: List[str],  # noqa: N803
     y: str,
     model: Union[str, PipelineCreator, BaseEstimator, List[PipelineCreator]],
@@ -36,18 +36,22 @@ def run_cross_validation(  # noqa: C901
     preprocess: Union[None, str, List[str]] = None,
     return_estimator: Optional[str] = None,
     return_inspector: bool = False,
-    return_train_score: bool = False,
-    cv: Optional[CVLike] = None,
     groups: Optional[str] = None,
-    scoring: Union[str, List[str], None] = None,
     pos_labels: Union[str, List[str], None] = None,
     model_params: Optional[Dict] = None,
     search_params: Optional[Dict] = None,
     seed: Optional[int] = None,
-    n_jobs: Optional[int] = None,
-    verbose: Optional[int] = 0,
-):
-    """Run cross validation and score.
+) -> Tuple[
+    pd.DataFrame,
+    pd.Series,
+    Optional[pd.Series],
+    Union[Pipeline, BaseSearchCV],
+    Optional[str],
+    bool,
+    bool,
+    str,
+]:
+    """Validate the parameters passed to the API functions.
 
     Parameters
     ----------
@@ -95,28 +99,9 @@ def run_cross_validation(  # noqa: C901
 
     return_inspector : bool
         Whether to return the inspector object (default is False)
-
-    return_train_score : bool
-        Whether to return the training score with the test scores
-        (default is False).
-    cv : int, str or cross-validation generator | None
-        Cross-validation splitting strategy to use for model evaluation.
-
-        Options are:
-
-        * None: defaults to 5-fold
-        * int: the number of folds in a `(Stratified)KFold`
-        * CV Splitter (see scikit-learn documentation on CV)
-        * An iterable yielding (train, test) splits as arrays of indices.
-
     groups : str | None
         The grouping labels in case a Group CV is used.
         See :ref:`data_usage` for details.
-    scoring : ScorerLike, optional
-        The scoring metric to use.
-        See https://scikit-learn.org/stable/modules/model_evaluation.html for
-        a comprehensive list of options. If None, use the model's default
-        scorer.
     pos_labels : str, int, float or list | None
         The labels to interpret as positive. If not None, every element from y
         will be converted to 1 if is equal or in pos_labels and to 0 if not.
@@ -157,36 +142,27 @@ def run_cross_validation(  # noqa: C901
     seed : int | None
         If not None, set the random seed before any operation. Useful for
         reproducibility.
-    n_jobs : int, optional
-        Number of jobs to run in parallel. Training the estimator and computing
-        the score are parallelized over the cross-validation splits.
-        ``None`` means 1 unless in a :obj:`joblib.parallel_backend` context.
-        ``-1`` means using all processors (default None).
-    verbose: int
-        Verbosity level of outer cross-validation.
-        Follows scikit-learn/joblib converntions.
-        0 means no additional information is printed.
-        Larger number generally mean more information is printed.
-        Note: verbosity up to 50 will print into standard error,
-        while larger than 50 will print in standrad output.
 
     Returns
     -------
-    scores : pd.DataFrame
-        The resulting scores (one column for each score specified).
-        Additionally, a 'fit_time' column will be added.
-        And, if ``return_estimator='all'`` or
-        ``return_estimator='cv'``, an 'estimator' columns with the
-        corresponding estimators fitted for each CV split.
-    final_estimator : object
-        The final estimator, fitted on all the data (only if
-        ``return_estimator='all'`` or ``return_estimator='final'``)
-    inspector : Inspector | None
-        The inspector object (only if ``return_inspector=True``)
+    df_X : pd.DataFrame
+        The features DataFrame.
+    df_y : pd.Series
+        The target Series.
+    df_groups : pd.Series | None
+        The groups Series.
+    pipeline : Pipeline | BaseSearchCV
+        The pipeline to use.
+    return_estimator : str | None
+        The validated return_estimator parameter.
+    return_inspector : bool
+        The validated return_inspector parameter.
+    wrap_score : bool
+        Whether to wrap the score or not.
+    problem_type : str
+        The problem type.
 
     """
-
-    # Validate parameters
     if return_estimator not in [None, "final", "cv", "all"]:
         raise_error(
             f"return_estimator must be one of None, 'final', 'cv', 'all'. "
@@ -365,6 +341,206 @@ def run_cross_validation(  # noqa: C901
     elif problem_type == "regression":
         logger.info(f"\tTarget type: {df_y.dtype}")
 
+    out = (
+        df_X,
+        df_y,
+        df_groups,
+        pipeline,
+        return_estimator,
+        return_inspector,
+        wrap_score,
+        problem_type,
+    )
+    return out
+
+
+def run_cross_validation(
+    X: List[str],  # noqa: N803
+    y: str,
+    model: Union[str, PipelineCreator, BaseEstimator, List[PipelineCreator]],
+    data: pd.DataFrame,
+    X_types: Optional[Dict] = None,  # noqa: N803
+    problem_type: Optional[str] = None,
+    preprocess: Union[None, str, List[str]] = None,
+    return_estimator: Optional[str] = None,
+    return_inspector: bool = False,
+    return_train_score: bool = False,
+    cv: Optional[CVLike] = None,
+    groups: Optional[str] = None,
+    scoring: Union[str, List[str], None] = None,
+    pos_labels: Union[str, List[str], None] = None,
+    model_params: Optional[Dict] = None,
+    search_params: Optional[Dict] = None,
+    seed: Optional[int] = None,
+    n_jobs: Optional[int] = None,
+    verbose: Optional[int] = 0,
+):
+    """Run cross validation and score.
+
+    Parameters
+    ----------
+    X : list of str
+        The features to use.
+        See :ref:`data_usage` for details.
+    y : str
+        The targets to predict.
+        See :ref:`data_usage` for details.
+    model : str or scikit-learn compatible model.
+        If string, it will use one of the available models.
+    data : pandas.DataFrame
+        DataFrame with the data. See :ref:`data_usage` for details.
+    X_types : dict[str, list of str]
+        A dictionary containing keys with column type as a str and the
+        columns of this column type as a list of str.
+    problem_type : str
+        The kind of problem to model.
+
+        Options are:
+
+        * "classification": Perform a classification
+          in which the target (y) has categorical classes (default).
+          The parameter pos_labels can be used to convert a target with
+          multiple_classes into binary.
+        * "regression". Perform a regression. The target (y) has to be
+          ordinal at least.
+
+    preprocess : str, TransformerLike or list or PipelineCreator | None
+        Transformer to apply to the features. If string, use one of the
+        available transformers. If list, each element can be a string or
+        scikit-learn compatible transformer. If None (default), no
+        transformation is applied.
+
+        See documentation for details.
+
+    return_estimator : str | None
+        Return the fitted estimator(s).
+        Options are:
+
+        * 'final': Return the estimator fitted on all the data.
+        * 'cv': Return the all the estimator from each CV split, fitted on the
+          training data.
+        * 'all': Return all the estimators (final and cv).
+
+    return_inspector : bool
+        Whether to return the inspector object (default is False)
+
+    return_train_score : bool
+        Whether to return the training score with the test scores
+        (default is False).
+    cv : int, str or cross-validation generator | None
+        Cross-validation splitting strategy to use for model evaluation.
+
+        Options are:
+
+        * None: defaults to 5-fold
+        * int: the number of folds in a `(Stratified)KFold`
+        * CV Splitter (see scikit-learn documentation on CV)
+        * An iterable yielding (train, test) splits as arrays of indices.
+
+    groups : str | None
+        The grouping labels in case a Group CV is used.
+        See :ref:`data_usage` for details.
+    scoring : ScorerLike, optional
+        The scoring metric to use.
+        See https://scikit-learn.org/stable/modules/model_evaluation.html for
+        a comprehensive list of options. If None, use the model's default
+        scorer.
+    pos_labels : str, int, float or list | None
+        The labels to interpret as positive. If not None, every element from y
+        will be converted to 1 if is equal or in pos_labels and to 0 if not.
+    model_params : dict | None
+        If not None, this dictionary specifies the model parameters to use
+
+        The dictionary can define the following keys:
+
+        * 'STEP__PARAMETER': A value (or several) to be used as PARAMETER for
+          STEP in the pipeline. Example: 'svm__probability': True will set
+          the parameter 'probability' of the 'svm' model. If more than option
+          is provided for at least one hyperparameter, a search will be
+          performed.
+
+    search_params : dict | None
+        Additional parameters in case Hyperparameter Tuning is performed, with
+        the following keys:
+
+        * 'kind': The kind of search algorithm to use, Valid options are:
+
+          * ``"grid"`` : :class:`~sklearn.model_selection.GridSearchCV`
+          * ``"random"`` :
+            :class:`~sklearn.model_selection.RandomizedSearchCV`
+          * ``"bayes"`` : :class:`~skopt.BayesSearchCV`
+          * ``"optuna"`` :
+            :class:`~optuna_integration.OptunaSearchCV`
+          * user-registered searcher name : see
+            :func:`~julearn.model_selection.register_searcher`
+          * ``scikit-learn``-compatible searcher
+
+        * 'cv': If a searcher is going to be used, the cross-validation
+            splitting strategy to use. Defaults to same CV as for the model
+            evaluation.
+        * 'scoring': If a searcher is going to be used, the scoring metric to
+            evaluate the performance.
+
+        See :ref:`hp_tuning` for details.
+    seed : int | None
+        If not None, set the random seed before any operation. Useful for
+        reproducibility.
+    n_jobs : int, optional
+        Number of jobs to run in parallel. Training the estimator and computing
+        the score are parallelized over the cross-validation splits.
+        ``None`` means 1 unless in a :obj:`joblib.parallel_backend` context.
+        ``-1`` means using all processors (default None).
+    verbose: int
+        Verbosity level of outer cross-validation.
+        Follows scikit-learn/joblib converntions.
+        0 means no additional information is printed.
+        Larger number generally mean more information is printed.
+        Note: verbosity up to 50 will print into standard error,
+        while larger than 50 will print in standrad output.
+
+    Returns
+    -------
+    scores : pd.DataFrame
+        The resulting scores (one column for each score specified).
+        Additionally, a 'fit_time' column will be added.
+        And, if ``return_estimator='all'`` or
+        ``return_estimator='cv'``, an 'estimator' columns with the
+        corresponding estimators fitted for each CV split.
+    final_estimator : object
+        The final estimator, fitted on all the data (only if
+        ``return_estimator='all'`` or ``return_estimator='final'``)
+    inspector : Inspector | None
+        The inspector object (only if ``return_inspector=True``)
+
+    """
+
+    # Validate parameters
+    (
+        df_X,
+        df_y,
+        df_groups,
+        pipeline,
+        return_estimator,
+        return_inspector,
+        wrap_score,
+        problem_type,
+    ) = _validata_api_params(
+        X=X,
+        y=y,
+        model=model,
+        data=data,
+        X_types=X_types,
+        problem_type=problem_type,
+        preprocess=preprocess,
+        return_estimator=return_estimator,
+        return_inspector=return_inspector,
+        groups=groups,
+        pos_labels=pos_labels,
+        model_params=model_params,
+        search_params=search_params,
+        seed=seed,
+    )
+
     # Prepare cross validation
     cv_outer = check_cv(
         cv,  # type: ignore
@@ -447,3 +623,167 @@ def run_cross_validation(  # noqa: C901
             out = out, inspector
 
     return out
+
+
+def run_fit(
+    X: List[str],  # noqa: N803
+    y: str,
+    model: Union[str, PipelineCreator, BaseEstimator, List[PipelineCreator]],
+    data: pd.DataFrame,
+    X_types: Optional[Dict] = None,  # noqa: N803
+    problem_type: Optional[str] = None,
+    preprocess: Union[None, str, List[str]] = None,
+    groups: Optional[str] = None,
+    pos_labels: Union[str, List[str], None] = None,
+    model_params: Optional[Dict] = None,
+    search_params: Optional[Dict] = None,
+    seed: Optional[int] = None,
+    verbose: Optional[int] = 0,
+):
+    """Fit the model on all the data.
+
+    Parameters
+    ----------
+    X : list of str
+        The features to use.
+        See :ref:`data_usage` for details.
+    y : str
+        The targets to predict.
+        See :ref:`data_usage` for details.
+    model : str or scikit-learn compatible model.
+        If string, it will use one of the available models.
+    data : pandas.DataFrame
+        DataFrame with the data. See :ref:`data_usage` for details.
+    X_types : dict[str, list of str]
+        A dictionary containing keys with column type as a str and the
+        columns of this column type as a list of str.
+    problem_type : str
+        The kind of problem to model.
+
+        Options are:
+
+        * "classification": Perform a classification
+          in which the target (y) has categorical classes (default).
+          The parameter pos_labels can be used to convert a target with
+          multiple_classes into binary.
+        * "regression". Perform a regression. The target (y) has to be
+          ordinal at least.
+
+    preprocess : str, TransformerLike or list or PipelineCreator | None
+        Transformer to apply to the features. If string, use one of the
+        available transformers. If list, each element can be a string or
+        scikit-learn compatible transformer. If None (default), no
+        transformation is applied.
+
+        See documentation for details.
+
+    groups : str | None
+        The grouping labels in case a Group CV is used.
+        See :ref:`data_usage` for details.
+    pos_labels : str, int, float or list | None
+        The labels to interpret as positive. If not None, every element from y
+        will be converted to 1 if is equal or in pos_labels and to 0 if not.
+    model_params : dict | None
+        If not None, this dictionary specifies the model parameters to use
+
+        The dictionary can define the following keys:
+
+        * 'STEP__PARAMETER': A value (or several) to be used as PARAMETER for
+          STEP in the pipeline. Example: 'svm__probability': True will set
+          the parameter 'probability' of the 'svm' model. If more than option
+          is provided for at least one hyperparameter, a search will be
+          performed.
+
+    search_params : dict | None
+        Additional parameters in case Hyperparameter Tuning is performed, with
+        the following keys:
+
+        * 'kind': The kind of search algorithm to use, Valid options are:
+
+          * ``"grid"`` : :class:`~sklearn.model_selection.GridSearchCV`
+          * ``"random"`` :
+            :class:`~sklearn.model_selection.RandomizedSearchCV`
+          * ``"bayes"`` : :class:`~skopt.BayesSearchCV`
+          * ``"optuna"`` :
+            :class:`~optuna_integration.OptunaSearchCV`
+          * user-registered searcher name : see
+            :func:`~julearn.model_selection.register_searcher`
+          * ``scikit-learn``-compatible searcher
+
+        * 'cv': If a searcher is going to be used, the cross-validation
+            splitting strategy to use. Defaults to same CV as for the model
+            evaluation.
+        * 'scoring': If a searcher is going to be used, the scoring metric to
+            evaluate the performance.
+
+        See :ref:`hp_tuning` for details.
+
+    seed : int | None
+        If not None, set the random seed before any operation. Useful for
+        reproducibility.
+    verbose: int
+        Verbosity level of outer cross-validation.
+        Follows scikit-learn/joblib converntions.
+        0 means no additional information is printed.
+        Larger number generally mean more information is printed.
+        Note: verbosity up to 50 will print into standard error,
+        while larger than 50 will print in standrad output.
+
+    Returns
+    -------
+    scores : pd.DataFrame
+        The resulting scores (one column for each score specified).
+        Additionally, a 'fit_time' column will be added.
+        And, if ``return_estimator='all'`` or
+        ``return_estimator='cv'``, an 'estimator' columns with the
+        corresponding estimators fitted for each CV split.
+    final_estimator : object
+        The final estimator, fitted on all the data (only if
+        ``return_estimator='all'`` or ``return_estimator='final'``)
+    inspector : Inspector | None
+        The inspector object (only if ``return_inspector=True``)
+
+    """
+
+    # Validate parameters
+    (
+        df_X,
+        df_y,
+        df_groups,
+        pipeline,
+        _,
+        _,
+        _,
+        problem_type,
+    ) = _validata_api_params(
+        X=X,
+        y=y,
+        model=model,
+        data=data,
+        X_types=X_types,
+        problem_type=problem_type,
+        preprocess=preprocess,
+        return_estimator=None,
+        return_inspector=False,
+        groups=groups,
+        pos_labels=pos_labels,
+        model_params=model_params,
+        search_params=search_params,
+        seed=seed,
+    )
+
+    fit_params = {}
+    if df_groups is not None:
+        if isinstance(pipeline, BaseSearchCV):
+            fit_params["groups"] = df_groups.values
+
+    _sklearn_deprec_fit_params = {}
+    if sklearn.__version__ >= "1.4.0":
+        _sklearn_deprec_fit_params["params"] = fit_params
+    else:
+        _sklearn_deprec_fit_params["fit_params"] = fit_params
+
+    logger.info("Fitting final model")
+    pipeline.fit(df_X, df_y, **fit_params)
+
+    return pipeline

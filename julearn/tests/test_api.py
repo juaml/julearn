@@ -37,7 +37,7 @@ from sklearn.pipeline import make_pipeline
 from sklearn.svm import SVC
 
 from julearn import run_cross_validation
-from julearn.api import _compute_cvmdsum
+from julearn.api import _compute_cvmdsum, run_fit
 from julearn.model_selection import (
     ContinuousStratifiedGroupKFold,
     RepeatedContinuousStratifiedGroupKFold,
@@ -1368,3 +1368,50 @@ def test_tune_hyperparam_target(df_iris: pd.DataFrame) -> None:
         return_inspector=True,
     )
     # TODO: add assertions
+
+
+def test_run_cv_fit(df_binary: pd.DataFrame) -> None:
+    """Test a simple binary classification problem.
+
+    Parameters
+    ----------
+    df_binary : pd.DataFrame
+        The iris dataset as a binary classification problem.
+    df_iris : pd.DataFrame
+        The iris dataset as a multiclass classification problem.
+
+    """
+    X = ["sepal_length", "sepal_width", "petal_length"]
+    y = "species"
+    X_types = {"features": X}
+
+    scorers = ["accuracy", "balanced_accuracy"]
+
+    creator = PipelineCreator(
+        apply_to="features", problem_type="classification"
+    )
+    creator.add("zscore")
+    creator.add("svm")
+
+    _, model = run_cross_validation(
+        X=X,
+        y=y,
+        data=df_binary,
+        X_types=X_types,
+        scoring=scorers,
+        model=creator,
+        return_estimator="final",
+    )
+
+    # now let"s do the same with the fit method
+
+    model2 = run_fit(
+        X=X,
+        y=y,
+        data=df_binary,
+        X_types=X_types,
+        model=creator,
+    )
+
+    # compare the models
+    compare_models(model.steps[-1][1], model2.steps[-1][1])
