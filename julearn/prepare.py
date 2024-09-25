@@ -386,7 +386,7 @@ def check_consistency(
                 )
         else:
             logger.info("Binary classification problem detected.")
-    else:
+    elif problem_type == "regression":
         # Regression
         is_numeric = np.issubdtype(y.values.dtype, np.number)  # type: ignore
         if not is_numeric:
@@ -401,6 +401,10 @@ def check_consistency(
                     "A regression will be performed but only 2 "
                     "distinct values are defined in y."
                 )
+    else:
+        raise_error(
+            "The problem type must be either 'classification' or 'regression'."
+        )
     # Check groups and CV scheme
     if groups is not None:
         valid_instances = (
