@@ -231,6 +231,7 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../api/index.html">9. API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of 9. API Reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../api/main.html">9.1. Main API</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" role="switch" type="checkbox"/><label for="toctree-checkbox-11"><div class="visually-hidden">Toggle navigation of 9.1. Main API</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.run_cross_validation.html">julearn.run_cross_validation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.run_fit.html">julearn.run_fit</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../api/pipeline.html">9.2. Pipeline</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" role="switch" type="checkbox"/><label for="toctree-checkbox-12"><div class="visually-hidden">Toggle navigation of 9.2. Pipeline</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -438,13 +439,13 @@ classification using a Support Vector Machine classifier.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-09-04 11:13:06,642 - julearn - INFO - ===== Lib Versions =====
-2024-09-04 11:13:06,642 - julearn - INFO - numpy: 1.26.4
-2024-09-04 11:13:06,642 - julearn - INFO - scipy: 1.14.1
-2024-09-04 11:13:06,642 - julearn - INFO - sklearn: 1.4.2
-2024-09-04 11:13:06,642 - julearn - INFO - pandas: 2.1.4
-2024-09-04 11:13:06,642 - julearn - INFO - julearn: 0.3.4.dev11
-2024-09-04 11:13:06,642 - julearn - INFO - ========================
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-09-25 09:19:30,291 - julearn - INFO - ===== Lib Versions =====
+2024-09-25 09:19:30,291 - julearn - INFO - numpy: 1.26.4
+2024-09-25 09:19:30,291 - julearn - INFO - scipy: 1.14.1
+2024-09-25 09:19:30,291 - julearn - INFO - sklearn: 1.4.2
+2024-09-25 09:19:30,291 - julearn - INFO - pandas: 2.1.4
+2024-09-25 09:19:30,291 - julearn - INFO - julearn: 0.3.4.dev19
+2024-09-25 09:19:30,291 - julearn - INFO - ========================
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_iris</span></a> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;iris&quot;</span><span class="p">)</span>
@@ -480,60 +481,60 @@ We will try to predict the species.</p>
 <span class="nb">print</span><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-09-04 11:13:06,645 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-09-04 11:13:06,645 - julearn - INFO - Step added
-2024-09-04 11:13:06,645 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-09-04 11:13:06,645 - julearn - INFO - Step added
-2024-09-04 11:13:06,645 - julearn - INFO - ==== Input Data ====
-2024-09-04 11:13:06,645 - julearn - INFO - Using dataframe as input
-2024-09-04 11:13:06,645 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2024-09-04 11:13:06,645 - julearn - INFO -      Target: species
-2024-09-04 11:13:06,645 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2024-09-04 11:13:06,645 - julearn - INFO -      X_types:{}
-2024-09-04 11:13:06,646 - julearn - WARNING - The following columns are not defined in X_types: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]. They will be treated as continuous.
-/home/runner/work/julearn/julearn/julearn/prepare.py:505: RuntimeWarning: The following columns are not defined in X_types: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]. They will be treated as continuous.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-09-25 09:19:30,294 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2024-09-25 09:19:30,294 - julearn - INFO - Step added
+2024-09-25 09:19:30,294 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2024-09-25 09:19:30,294 - julearn - INFO - Step added
+2024-09-25 09:19:30,294 - julearn - INFO - ==== Input Data ====
+2024-09-25 09:19:30,294 - julearn - INFO - Using dataframe as input
+2024-09-25 09:19:30,294 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2024-09-25 09:19:30,294 - julearn - INFO -      Target: species
+2024-09-25 09:19:30,294 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2024-09-25 09:19:30,294 - julearn - INFO -      X_types:{}
+2024-09-25 09:19:30,295 - julearn - WARNING - The following columns are not defined in X_types: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]. They will be treated as continuous.
+/home/runner/work/julearn/julearn/julearn/prepare.py:509: RuntimeWarning: The following columns are not defined in X_types: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]. They will be treated as continuous.
   warn_with_log(
-2024-09-04 11:13:06,646 - julearn - INFO - ====================
-2024-09-04 11:13:06,646 - julearn - INFO -
-2024-09-04 11:13:06,647 - julearn - INFO - = Model Parameters =
-2024-09-04 11:13:06,647 - julearn - INFO - ====================
-2024-09-04 11:13:06,647 - julearn - INFO -
-2024-09-04 11:13:06,647 - julearn - INFO - = Data Information =
-2024-09-04 11:13:06,647 - julearn - INFO -      Problem type: classification
-2024-09-04 11:13:06,647 - julearn - INFO -      Number of samples: 100
-2024-09-04 11:13:06,647 - julearn - INFO -      Number of features: 3
-2024-09-04 11:13:06,647 - julearn - INFO - ====================
-2024-09-04 11:13:06,647 - julearn - INFO -
-2024-09-04 11:13:06,647 - julearn - INFO -      Number of classes: 2
-2024-09-04 11:13:06,647 - julearn - INFO -      Target type: object
-2024-09-04 11:13:06,648 - julearn - INFO -      Class distributions: species
+2024-09-25 09:19:30,295 - julearn - INFO - ====================
+2024-09-25 09:19:30,295 - julearn - INFO -
+2024-09-25 09:19:30,296 - julearn - INFO - = Model Parameters =
+2024-09-25 09:19:30,296 - julearn - INFO - ====================
+2024-09-25 09:19:30,296 - julearn - INFO -
+2024-09-25 09:19:30,296 - julearn - INFO - = Data Information =
+2024-09-25 09:19:30,296 - julearn - INFO -      Problem type: classification
+2024-09-25 09:19:30,296 - julearn - INFO -      Number of samples: 100
+2024-09-25 09:19:30,296 - julearn - INFO -      Number of features: 3
+2024-09-25 09:19:30,296 - julearn - INFO - ====================
+2024-09-25 09:19:30,296 - julearn - INFO -
+2024-09-25 09:19:30,296 - julearn - INFO -      Number of classes: 2
+2024-09-25 09:19:30,296 - julearn - INFO -      Target type: object
+2024-09-25 09:19:30,297 - julearn - INFO -      Class distributions: species
 versicolor    50
 virginica     50
 Name: count, dtype: int64
-2024-09-04 11:13:06,648 - julearn - INFO - Using outer CV scheme RepeatedStratifiedKFold(n_repeats=4, n_splits=5, random_state=200)
-2024-09-04 11:13:06,648 - julearn - INFO - Binary classification problem detected.
-2024-09-04 11:13:06,800 - julearn - INFO - Fitting final model
+2024-09-25 09:19:30,297 - julearn - INFO - Using outer CV scheme RepeatedStratifiedKFold(n_repeats=4, n_splits=5, random_state=200)
+2024-09-25 09:19:30,297 - julearn - INFO - Binary classification problem detected.
+2024-09-25 09:19:30,448 - julearn - INFO - Fitting final model
     fit_time  score_time  ... fold                          cv_mdsum
-0   0.004725    0.002430  ...    0  42489ff0163b2f12752440a6b7ef74c7
-1   0.004354    0.002416  ...    1  42489ff0163b2f12752440a6b7ef74c7
-2   0.004360    0.002427  ...    2  42489ff0163b2f12752440a6b7ef74c7
-3   0.004438    0.002431  ...    3  42489ff0163b2f12752440a6b7ef74c7
-4   0.004399    0.002402  ...    4  42489ff0163b2f12752440a6b7ef74c7
-5   0.004369    0.002442  ...    0  42489ff0163b2f12752440a6b7ef74c7
-6   0.004318    0.002408  ...    1  42489ff0163b2f12752440a6b7ef74c7
-7   0.004368    0.002427  ...    2  42489ff0163b2f12752440a6b7ef74c7
-8   0.004354    0.002426  ...    3  42489ff0163b2f12752440a6b7ef74c7
-9   0.004351    0.002391  ...    4  42489ff0163b2f12752440a6b7ef74c7
-10  0.004362    0.002484  ...    0  42489ff0163b2f12752440a6b7ef74c7
-11  0.005018    0.003102  ...    1  42489ff0163b2f12752440a6b7ef74c7
-12  0.005104    0.002439  ...    2  42489ff0163b2f12752440a6b7ef74c7
-13  0.004349    0.002394  ...    3  42489ff0163b2f12752440a6b7ef74c7
-14  0.004366    0.002490  ...    4  42489ff0163b2f12752440a6b7ef74c7
-15  0.004386    0.002432  ...    0  42489ff0163b2f12752440a6b7ef74c7
-16  0.004341    0.002420  ...    1  42489ff0163b2f12752440a6b7ef74c7
-17  0.004375    0.002427  ...    2  42489ff0163b2f12752440a6b7ef74c7
-18  0.004378    0.002383  ...    3  42489ff0163b2f12752440a6b7ef74c7
-19  0.004372    0.002407  ...    4  42489ff0163b2f12752440a6b7ef74c7
+0   0.004894    0.002502  ...    0  42489ff0163b2f12752440a6b7ef74c7
+1   0.004475    0.002501  ...    1  42489ff0163b2f12752440a6b7ef74c7
+2   0.004457    0.002458  ...    2  42489ff0163b2f12752440a6b7ef74c7
+3   0.004385    0.002456  ...    3  42489ff0163b2f12752440a6b7ef74c7
+4   0.004421    0.002479  ...    4  42489ff0163b2f12752440a6b7ef74c7
+5   0.004446    0.002478  ...    0  42489ff0163b2f12752440a6b7ef74c7
+6   0.004355    0.002460  ...    1  42489ff0163b2f12752440a6b7ef74c7
+7   0.004361    0.002514  ...    2  42489ff0163b2f12752440a6b7ef74c7
+8   0.004407    0.002463  ...    3  42489ff0163b2f12752440a6b7ef74c7
+9   0.004370    0.002419  ...    4  42489ff0163b2f12752440a6b7ef74c7
+10  0.004397    0.002470  ...    0  42489ff0163b2f12752440a6b7ef74c7
+11  0.004388    0.002441  ...    1  42489ff0163b2f12752440a6b7ef74c7
+12  0.004403    0.002428  ...    2  42489ff0163b2f12752440a6b7ef74c7
+13  0.004438    0.002426  ...    3  42489ff0163b2f12752440a6b7ef74c7
+14  0.004383    0.002441  ...    4  42489ff0163b2f12752440a6b7ef74c7
+15  0.004434    0.002497  ...    0  42489ff0163b2f12752440a6b7ef74c7
+16  0.004367    0.002411  ...    1  42489ff0163b2f12752440a6b7ef74c7
+17  0.004338    0.002440  ...    2  42489ff0163b2f12752440a6b7ef74c7
+18  0.004364    0.002438  ...    3  42489ff0163b2f12752440a6b7ef74c7
+19  0.004367    0.002429  ...    4  42489ff0163b2f12752440a6b7ef74c7
 
 [20 rows x 9 columns]
 </pre></div>
@@ -563,7 +564,7 @@ Name: count, dtype: int64
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">inspector</span><span class="o">.</span><span class="n">folds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model</span></a>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;julearn.inspect._pipeline.PipelineInspector object at 0x7f2f3702b580&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;julearn.inspect._pipeline.PipelineInspector object at 0x7f23b0ba6fe0&gt;
 </pre></div>
 </div>
 <p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.236 seconds)</p>

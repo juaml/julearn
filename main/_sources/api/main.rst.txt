@@ -15,3 +15,4 @@ Functions
    :template: function.rst
 
     run_cross_validation
+    run_fit
