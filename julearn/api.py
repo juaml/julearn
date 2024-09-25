@@ -640,7 +640,7 @@ def run_fit(
     seed: Optional[int] = None,
     verbose: Optional[int] = 0,
 ):
-    """Run cross validation and score.
+    """Fit the model on all the data.
 
     Parameters
     ----------
