@@ -26,6 +26,7 @@ from ..model_selection import (
     ContinuousStratifiedGroupKFold,
     RepeatedContinuousStratifiedGroupKFold,
 )
+from ..model_selection.final_model_cv import _JulearnFinalModelCV
 
 
 def _recurse_to_list(a):
@@ -40,6 +41,9 @@ def _recurse_to_list(a):
 
 def _compute_cvmdsum(cv):
     """Compute the sum of the CV generator."""
+    if isinstance(cv, _JulearnFinalModelCV):
+        return _compute_cvmdsum(cv.cv)
+
     params = dict(vars(cv).items())
     params["class"] = cv.__class__.__name__
 
@@ -58,6 +62,7 @@ def _compute_cvmdsum(cv):
     if isinstance(cv, PredefinedSplit):
         params["test_fold"] = params["test_fold"].tolist()
         params["unique_folds"] = params["unique_folds"].tolist()
+
 
     if "cv" in params:
         if inspect.isclass(params["cv"]):
