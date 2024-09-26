@@ -415,8 +415,8 @@ def test_tune_hyperparam_gridsearch(df_iris: pd.DataFrame) -> None:
     scoring = "accuracy"
 
     np.random.seed(42)
-    cv_outer = RepeatedKFold(n_splits=2, n_repeats=1)
-    cv_inner = RepeatedKFold(n_splits=2, n_repeats=1)
+    cv_outer = RepeatedKFold(n_splits=3, n_repeats=2)
+    cv_inner = RepeatedKFold(n_splits=3, n_repeats=2)
 
     model_params = {"svm__C": [0.01, 0.001]}
     search_params = {"cv": cv_inner}
@@ -434,10 +434,12 @@ def test_tune_hyperparam_gridsearch(df_iris: pd.DataFrame) -> None:
         problem_type="classification",
     )
 
+    assert len(actual["repeat"].unique()) == 2
+
     # Now do the same with scikit-learn
     np.random.seed(42)
-    cv_outer = RepeatedKFold(n_splits=2, n_repeats=1)
-    cv_inner = RepeatedKFold(n_splits=2, n_repeats=1)
+    cv_outer = RepeatedKFold(n_splits=3, n_repeats=2)
+    cv_inner = RepeatedKFold(n_splits=3, n_repeats=2)
 
     clf = make_pipeline(SVC())
     gs = GridSearchCV(

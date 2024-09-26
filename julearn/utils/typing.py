@@ -20,6 +20,8 @@ from numpy.typing import ArrayLike
 from sklearn.model_selection import BaseCrossValidator, BaseShuffleSplit
 from sklearn.model_selection._split import _RepeatedSplits
 
+from ..model_selection.final_model_cv import _JulearnFinalModelCV
+
 
 try:  # sklearn >= 1.4.0
     from sklearn.metrics._scorer import _Scorer  # type: ignore
@@ -387,5 +389,10 @@ class JuModelLike(ModelLike, Protocol):
 
 
 CVLike = Union[
-    int, BaseCrossValidator, _RepeatedSplits, BaseShuffleSplit, Iterable
+    int,
+    BaseCrossValidator,
+    _RepeatedSplits,
+    BaseShuffleSplit,
+    Iterable,
+    _JulearnFinalModelCV,
 ]

@@ -11,13 +11,13 @@ import pandas as pd
 import sklearn
 from sklearn.base import BaseEstimator
 from sklearn.model_selection import (
-    check_cv,
     cross_validate,
 )
 from sklearn.model_selection._search import BaseSearchCV
 from sklearn.pipeline import Pipeline
 
 from .inspect import Inspector
+from .model_selection.utils import check_cv
 from .pipeline import PipelineCreator
 from .pipeline.merger import merge_pipelines
 from .prepare import check_consistency, prepare_input_data
@@ -541,16 +541,19 @@ def run_cross_validation(
         seed=seed,
     )
 
+    include_final_model = return_estimator in ["final", "all"]
+    cv_return_estimator = return_estimator in ["cv", "all", "final"]
+
     # Prepare cross validation
     cv_outer = check_cv(
         cv,  # type: ignore
         classifier=problem_type == "classification",
+        include_final_model=include_final_model,
     )
     logger.info(f"Using outer CV scheme {cv_outer}")
 
     check_consistency(df_y, cv, groups, problem_type)  # type: ignore
 
-    cv_return_estimator = return_estimator in ["cv", "all"]
     scoring = check_scoring(
         pipeline,  # type: ignore
         scoring,
@@ -583,18 +586,28 @@ def run_cross_validation(
         **_sklearn_deprec_fit_params,
     )
 
-    n_repeats = getattr(cv_outer, "n_repeats", 1)
-    n_folds = len(scores["fit_time"]) // n_repeats
-
-    repeats = np.repeat(np.arange(n_repeats), n_folds)
-    folds = np.tile(np.arange(n_folds), n_repeats)
-
     fold_sizes = np.array(
         [
             list(map(len, x))
             for x in cv_outer.split(df_X, df_y, groups=df_groups)
         ]
     )
+
+    if include_final_model:
+        # If we include the final model, we need to remove the last item in
+        # the scores as this is the final model
+        pipeline = scores["estimator"][-1]
+        if return_estimator == "final":
+            scores.pop("estimator")
+        scores = {k: v[:-1] for k, v in scores.items()}
+        fold_sizes = fold_sizes[:-1]
+
+    n_repeats = getattr(cv_outer, "n_repeats", 1)
+    n_folds = len(scores["fit_time"]) // n_repeats
+
+    repeats = np.repeat(np.arange(n_repeats), n_folds)
+    folds = np.tile(np.arange(n_folds), n_repeats)
+
     scores["n_train"] = fold_sizes[:, 0]
     scores["n_test"] = fold_sizes[:, 1]
     scores["repeat"] = repeats
@@ -602,11 +615,10 @@ def run_cross_validation(
     scores["cv_mdsum"] = cv_mdsum
 
     scores_df = pd.DataFrame(scores)
+
     out = scores_df
-    if return_estimator in ["final", "all"]:
-        logger.info("Fitting final model")
-        pipeline.fit(df_X, df_y, **fit_params)
-        out = scores_df, pipeline
+    if include_final_model:
+        out = out, pipeline
 
     if return_inspector:
         inspector = Inspector(
@@ -615,7 +627,7 @@ def run_cross_validation(
             X=df_X,
             y=df_y,
             groups=df_groups,
-            cv=cv_outer,
+            cv=cv_outer.cv if include_final_model else cv_outer,
         )
         if isinstance(out, tuple):
             out = (*out, inspector)
