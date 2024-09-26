@@ -2,6 +2,7 @@
 
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL
+
 import numpy as np
 from numpy.testing import assert_array_equal
 from sklearn.model_selection import RepeatedStratifiedKFold

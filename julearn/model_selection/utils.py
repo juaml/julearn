@@ -3,12 +3,20 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL
 
+from typing import TYPE_CHECKING
+
 from sklearn.model_selection import check_cv as sk_check_cv
 
 from .final_model_cv import _JulearnFinalModelCV
 
 
-def check_cv(cv=5, classifier=False, include_final_model=False):
+if TYPE_CHECKING:
+    from ..utils.typing import CVLike
+
+
+def check_cv(
+    cv: CVLike, classifier: bool = False, include_final_model: bool = False
+) -> CVLike:
     """Check the CV instance and return the proper CV for julearn.
 
     Parameters
