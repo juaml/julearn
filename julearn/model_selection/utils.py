@@ -15,8 +15,8 @@ if TYPE_CHECKING:
 
 
 def check_cv(
-    cv: CVLike, classifier: bool = False, include_final_model: bool = False
-) -> CVLike:
+    cv: "CVLike", classifier: bool = False, include_final_model: bool = False
+) -> "CVLike":
     """Check the CV instance and return the proper CV for julearn.
 
     Parameters
