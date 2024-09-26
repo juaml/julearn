@@ -19,6 +19,7 @@ def test_final_model_cv() -> None:
     julearn_cv = _JulearnFinalModelCV(sklearn_cv)
 
     assert julearn_cv.get_n_splits() == 11
+    assert julearn_cv.n_repeats == 2
 
     n_features = 10
     n_samples = 123

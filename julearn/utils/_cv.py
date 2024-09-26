@@ -77,6 +77,8 @@ def _compute_cvmdsum(cv):
 
 
 def is_nonoverlapping_cv(cv) -> bool:
+    if isinstance(cv, _JulearnFinalModelCV):
+        return is_nonoverlapping_cv(cv.cv)
     _valid_instances = (
         KFold,
         GroupKFold,

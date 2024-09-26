@@ -2,6 +2,7 @@
 
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL
+
 from typing import TYPE_CHECKING, Generator, Optional, Tuple
 
 import numpy as np
@@ -25,6 +26,8 @@ class _JulearnFinalModelCV:
 
     def __init__(self, cv: "BaseCrossValidator") -> None:
         self.cv = cv
+        if hasattr(cv, "n_repeats"):
+            self.n_repeats = cv.n_repeats
 
     def split(
         self,
