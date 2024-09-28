@@ -511,14 +511,18 @@ class PipelineCreator:
             logger.debug(f"\t Params to tune: {step_params_to_tune}")
 
             # Wrap in a JuTransformer if needed
-            if self.wrap and not isinstance(estimator, JuTransformer):
-                estimator = self._wrap_step(
-                    name,
-                    estimator,
-                    step_dict.apply_to,
-                    row_select_col_type=step_dict.row_select_col_type,
-                    row_select_vals=step_dict.row_select_vals,
-                )
+            if self.wrap:
+                if step_dict.apply_to not in [
+                    {"*"},
+                    {".*"},
+                ] and not isinstance(estimator, JuTransformer):
+                    estimator = self._wrap_step(
+                        name,
+                        estimator,
+                        step_dict.apply_to,
+                        row_select_col_type=step_dict.row_select_col_type,
+                        row_select_vals=step_dict.row_select_vals,
+                    )
 
             # Check if a step with the same name was already added
             pipeline_steps.append((name, estimator))
@@ -794,7 +798,7 @@ class PipelineCreator:
 
     @staticmethod
     def _is_transformer_step(
-        step: Union[str, EstimatorLike, TargetPipelineCreator]
+        step: Union[str, EstimatorLike, TargetPipelineCreator],
     ) -> bool:
         """Check if a step is a transformer."""
         if step in list_transformers():
@@ -805,7 +809,7 @@ class PipelineCreator:
 
     @staticmethod
     def _is_model_step(
-        step: Union[EstimatorLike, str, TargetPipelineCreator]
+        step: Union[EstimatorLike, str, TargetPipelineCreator],
     ) -> bool:
         """Check if a step is a model."""
         if step in list_models():
