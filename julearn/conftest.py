@@ -215,7 +215,9 @@ def model(request: FixtureRequest) -> str:
     return request.param
 
 
-@fixture(params=["regression", "classification"], scope="function")
+@fixture(
+    params=["regression", "classification", "transformer"], scope="function"
+)
 def problem_type(request: FixtureRequest) -> str:
     """Return different problem types.
 
