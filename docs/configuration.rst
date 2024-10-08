@@ -47,3 +47,10 @@ Here you can find the comprehensive list of flags that can be set:
      - | Disable printing the list of expanded column names in ``X_types``.
        | If set to ``True``, the list of types of X will not be printed.
      - The user will not see the expanded ``X_types`` column names.
+   * - ``enable_parallel_column_transformers``
+     - | This flag enables parallel execution of column transformers by
+       | reverting to the default behaviour of scikit-learn
+       | (instead of using ``n_jobs=1``)
+       | If set to ``True``, the parameter will be set back to None.
+     - | Column transformers will be applied in parallel, using more resources.
+       | than expected.

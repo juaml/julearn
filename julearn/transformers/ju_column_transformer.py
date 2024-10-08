@@ -12,6 +12,7 @@ from sklearn.compose import ColumnTransformer
 from sklearn.utils.validation import check_is_fitted
 
 from ..base import ColumnTypesLike, JuTransformer, ensure_column_types
+from ..config import get_config
 from ..utils.logging import raise_error
 from ..utils.typing import DataLike, EstimatorLike
 
@@ -93,6 +94,9 @@ class JuColumnTransformer(JuTransformer):
             [(self.name, self.transformer, self.apply_to.to_type_selector())],
             verbose_feature_names_out=verbose_feature_names_out,
             remainder="passthrough",
+            n_jobs=None
+            if get_config("enable_parallel_column_transformers")
+            else 1,
         )
         self.column_transformer_.fit(X, y, **fit_params)
 

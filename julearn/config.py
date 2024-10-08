@@ -14,6 +14,7 @@ _global_config["disable_x_check"] = False
 _global_config["disable_xtypes_check"] = False
 _global_config["disable_x_verbose"] = False
 _global_config["disable_xtypes_verbose"] = False
+_global_config["enable_parallel_column_transformers"] = False
 
 
 def set_config(key: str, value: Any) -> None:
