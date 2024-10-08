@@ -26,10 +26,10 @@ if TYPE_CHECKING:
     from sklearn.pipeline import Pipeline
 
 
-def test_construction_working(
+def test_construction_working_wrapping(
     model: str, preprocess: Union[str, List[str]], problem_type: str
 ) -> None:
-    """Test that the pipeline constructions works as expected.
+    """Test that the pipeline constructions works as expected (wrapping).
 
     Parameters
     ----------
@@ -46,7 +46,7 @@ def test_construction_working(
     for step in preprocess:
         creator.add(step, apply_to="categorical")
     creator.add(model)
-    X_types = {"categorical": ["A"]}
+    X_types = {"categorical": ["A"], "continuous": ["B"]}
     pipeline = creator.to_pipeline(X_types=X_types)
 
     # check preprocessing steps
@@ -70,6 +70,53 @@ def test_construction_working(
         ).__class__,
     )
     assert len(preprocess) + 2 == len(pipeline.steps)
+
+
+def test_construction_working_nowrapping(
+    model: str, preprocess: Union[str, List[str]], problem_type: str
+) -> None:
+    """Test that the pipeline constructions works as expected (no wrapping).
+
+    Parameters
+    ----------
+    model : str
+        The model to test.
+    preprocess : str or list of str
+        The preprocessing steps to test.
+    problem_type : str
+        The problem type to test.
+
+    """
+    creator = PipelineCreator(problem_type=problem_type)
+    preprocess = preprocess if isinstance(preprocess, list) else [preprocess]
+    for step in preprocess:
+        creator.add(step, apply_to="*")
+    creator.add(model, apply_to=["categorical", "continuous"])
+    X_types = {"categorical": ["A"], "continuous": ["B"]}
+    pipeline = creator.to_pipeline(X_types=X_types)
+
+    # check preprocessing steps
+    # ignoring first step for types and last for model
+    for element in zip(preprocess, pipeline.steps[1:-1]):
+        _preprocess, (name, transformer) = element
+        assert name.startswith(f"{_preprocess}")
+        assert not isinstance(transformer, JuColumnTransformer)
+        assert isinstance(
+            transformer, get_transformer(_preprocess).__class__
+        )
+
+    # check model step
+    model_name, model = pipeline.steps[-1]
+    assert not isinstance(model, WrapModel)
+    assert isinstance(
+        model,
+        get_model(
+            model_name,
+            problem_type=problem_type,
+        ).__class__,
+    )
+    assert len(preprocess) + 2 == len(pipeline.steps)
+
 
 
 def test_fit_and_transform_no_error(

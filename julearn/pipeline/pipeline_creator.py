@@ -42,6 +42,37 @@ from .target_pipeline import JuTargetPipeline
 from .target_pipeline_creator import TargetPipelineCreator
 
 
+def _should_wrap_this_step(
+    X_types: Dict[str, List[str]],  # noqa: N803
+    apply_to: ColumnTypesLike,
+) -> bool:
+    """Check if we should wrap the step.
+
+    Parameters
+    ----------
+    X_types : Dict[str, List[str]]
+        The types of the columns in the data.
+    apply_to : ColumnTypesLike
+        The types to apply this step to.
+
+    Returns
+    -------
+    bool
+        Whether we should wrap the step.
+
+    """
+
+    # If we have a wildcard, we will not wrap the step
+    if any(x in ["*", ".*"] for x in apply_to):
+        return False
+
+    # If any of the X_types is not in the apply_to, we will wrap the step
+    if any(x not in apply_to for x in X_types.keys()):
+        return True
+
+    return False
+
+
 def _params_to_pipeline(
     param: Any,
     X_types: Dict[str, List],  # noqa: N803
@@ -511,18 +542,16 @@ class PipelineCreator:
             logger.debug(f"\t Params to tune: {step_params_to_tune}")
 
             # Wrap in a JuTransformer if needed
-            if self.wrap:
-                if step_dict.apply_to not in [
-                    {"*"},
-                    {".*"},
-                ] and not isinstance(estimator, JuTransformer):
-                    estimator = self._wrap_step(
-                        name,
-                        estimator,
-                        step_dict.apply_to,
-                        row_select_col_type=step_dict.row_select_col_type,
-                        row_select_vals=step_dict.row_select_vals,
-                    )
+            if _should_wrap_this_step(
+                X_types, step_dict.apply_to
+            ) and not isinstance(estimator, JuTransformer):
+                estimator = self._wrap_step(
+                    name,
+                    estimator,
+                    step_dict.apply_to,
+                    row_select_col_type=step_dict.row_select_col_type,
+                    row_select_vals=step_dict.row_select_vals,
+                )
 
             # Check if a step with the same name was already added
             pipeline_steps.append((name, estimator))
@@ -543,7 +572,9 @@ class PipelineCreator:
             for k, v in model_params.items()
         }
         model_estimator.set_params(**model_params)
-        if self.wrap and not isinstance(model_estimator, JuModelLike):
+        if _should_wrap_this_step(
+            X_types, model_step.apply_to
+        ) and not isinstance(model_estimator, JuModelLike):
             logger.debug(f"Wrapping {model_name}")
             model_estimator = WrapModel(model_estimator, model_step.apply_to)
 
@@ -793,7 +824,6 @@ class PipelineCreator:
                     "this type."
                 )
 
-        self.wrap = needed_types != {"continuous"}
         return X_types
 
     @staticmethod
