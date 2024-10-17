@@ -8,6 +8,31 @@ What's new
 
 .. towncrier release notes start
 
+Julearn 0.3.4 (2024-10-17)
+--------------------------
+
+Bugfixes
+^^^^^^^^
+
+- Fix usage of optuna distributions as hyperparameters in older versions of
+  scikit-learn by `Fede Raimondo`_. (:gh:`268`)
+
+
+Enhancements
+^^^^^^^^^^^^
+
+- Remove final model fit requirement for inspector to be returned by
+  :func:`.run_cross_validation` by `Fede Raimondo`_. (:gh:`270`)
+- Add :func:`.run_fit` that implements a model fitting procedure with the same
+  API as :func:`.run_cross_validation` by `Fede Raimondo`_. (:gh:`271`)
+- Optimise wrapping of steps and models in the pipeline only when a subset of
+  features is being used, by `Fede Raimondo`_ (:gh:`274`)
+- Place the final model CV split at the beginning instead of the end of the CV
+  iterator wrapper by `Fede Raimondo`_ (:gh:`275`)
+- Change the internal logic of :func:`.run_cross_validation` to optimise joblib
+  calls by `Fede Raimondo`_ (:gh:`293`)
+
+
 Julearn 0.3.3 (2024-05-16)
 --------------------------
 
