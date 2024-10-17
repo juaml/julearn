@@ -140,7 +140,7 @@ c_values = []
 for fold_inspector in inspector.folds:
     fold_model = fold_inspector.model
     c_values.append(
-        fold_model.get_fitted_params()["svm__model_"].get_params()["C"]
+        fold_model.get_fitted_params()["svm__C"]
     )
 
 ##############################################################################
