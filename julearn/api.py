@@ -594,13 +594,13 @@ def run_cross_validation(
     )
 
     if include_final_model:
-        # If we include the final model, we need to remove the last item in
+        # If we include the final model, we need to remove the first item in
         # the scores as this is the final model
-        pipeline = scores["estimator"][-1]
+        pipeline = scores["estimator"][0]
         if return_estimator == "final":
             scores.pop("estimator")
-        scores = {k: v[:-1] for k, v in scores.items()}
-        fold_sizes = fold_sizes[:-1]
+        scores = {k: v[1:] for k, v in scores.items()}
+        fold_sizes = fold_sizes[1:]
 
     n_repeats = getattr(cv_outer, "n_repeats", 1)
     n_folds = len(scores["fit_time"]) // n_repeats

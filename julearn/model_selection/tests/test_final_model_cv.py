@@ -31,13 +31,13 @@ def test_final_model_cv() -> None:
     all_sk = list(sklearn_cv.split(X, y))
 
     assert len(all_ju) == len(all_sk) + 1
-    for i in range(10):
-        assert_array_equal(all_ju[i][0], all_sk[i][0])
-        assert_array_equal( all_ju[i][1], all_sk[i][1])
+    for i in range(1, 11):
+        assert_array_equal(all_ju[i][0], all_sk[i-1][0])
+        assert_array_equal(all_ju[i][1], all_sk[i-1][1])
 
-    assert all_ju[-1][0].shape[0] == n_samples
-    assert all_ju[-1][1].shape[0] == 2
-    assert_array_equal(all_ju[-1][0], np.arange(n_samples))
+    assert all_ju[0][0].shape[0] == n_samples
+    assert all_ju[0][1].shape[0] == 2
+    assert_array_equal(all_ju[0][0], np.arange(n_samples))
 
 
 def test_final_model_cv_mdsum() -> None:
