@@ -152,14 +152,25 @@ def test_steps(
 @pytest.mark.parametrize(
     "est,fitted_params",
     [
-        [MockTestEst(), {"param_0_": 0, "param_1_": 1}],
+        [
+            MockTestEst(),
+            {"hype_0": 0, "hype_1": 1, "param_0_": 0, "param_1_": 1},
+        ],
         [
             JuColumnTransformer(
                 "test",
                 MockTestEst(),  # type: ignore
                 "continuous",
             ),
-            {"param_0_": 0, "param_1_": 1},
+            {
+                "hype_0": 0,
+                "hype_1": 1,
+                "param_0_": 0,
+                "param_1_": 1,
+                "needed_types": None,
+                "row_select_col_type": None,
+                "row_select_vals": None,
+            },
         ],
     ],
 )
@@ -183,6 +194,9 @@ def test_inspect_estimator(
     assert est.get_params() == inspector.get_params()
     inspect_params = inspector.get_fitted_params()
     inspect_params.pop("column_transformer_", None)
+    inspect_params.pop("apply_to", None)
+    inspect_params.pop("transformer", None)
+    inspect_params.pop("name", None)
     assert fitted_params == inspect_params
 
 
@@ -196,8 +210,14 @@ def test_inspect_pipeline(df_iris: "pd.DataFrame") -> None:
 
     """
     expected_fitted_params = {
+        "jucolumntransformer__hype_0": 0,
+        "jucolumntransformer__hype_1": 1,
         "jucolumntransformer__param_0_": 0,
         "jucolumntransformer__param_1_": 1,
+        "jucolumntransformer__needed_types": None,
+        "jucolumntransformer__row_select_col_type": None,
+        "jucolumntransformer__row_select_vals": None,
+        "jucolumntransformer__name": "test",
     }
 
     pipe = (
@@ -216,6 +236,8 @@ def test_inspect_pipeline(df_iris: "pd.DataFrame") -> None:
     inspector = PipelineInspector(pipe)
     inspect_params = inspector.get_fitted_params()
     inspect_params.pop("jucolumntransformer__column_transformer_", None)
+    inspect_params.pop("jucolumntransformer__transformer", None)
+    inspect_params.pop("jucolumntransformer__apply_to", None)
     inspect_params = {
         key: val
         for key, val in inspect_params.items()
