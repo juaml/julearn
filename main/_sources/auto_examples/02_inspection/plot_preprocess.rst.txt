@@ -70,13 +70,15 @@ Set the logging level to info to see extra information.
 
  .. code-block:: none
 
-    2024-09-26 13:46:42,075 - julearn - INFO - ===== Lib Versions =====
-    2024-09-26 13:46:42,075 - julearn - INFO - numpy: 1.26.4
-    2024-09-26 13:46:42,075 - julearn - INFO - scipy: 1.14.1
-    2024-09-26 13:46:42,075 - julearn - INFO - sklearn: 1.4.2
-    2024-09-26 13:46:42,075 - julearn - INFO - pandas: 2.1.4
-    2024-09-26 13:46:42,075 - julearn - INFO - julearn: 0.3.4.dev25
-    2024-09-26 13:46:42,075 - julearn - INFO - ========================
+    /home/runner/work/julearn/julearn/julearn/utils/logging.py:66: UserWarning: The '__version__' attribute is deprecated and will be removed in MarkupSafe 3.1. Use feature detection, or `importlib.metadata.version("markupsafe")`, instead.
+      vstring = str(getattr(module, "__version__", None))
+    2024-10-17 09:41:22,296 - julearn - INFO - ===== Lib Versions =====
+    2024-10-17 09:41:22,297 - julearn - INFO - numpy: 1.26.4
+    2024-10-17 09:41:22,297 - julearn - INFO - scipy: 1.14.1
+    2024-10-17 09:41:22,297 - julearn - INFO - sklearn: 1.4.2
+    2024-10-17 09:41:22,297 - julearn - INFO - pandas: 2.1.4
+    2024-10-17 09:41:22,297 - julearn - INFO - julearn: 0.3.4.dev34
+    2024-10-17 09:41:22,297 - julearn - INFO - ========================
 
 
 
@@ -223,7 +225,7 @@ to be used in the regression to the ``PipelineCreator``.
     fig, axes = plt.subplots(1, 2, figsize=(12, 6))
     sns.scatterplot(x=X[0], y=X[1], data=df, ax=axes[0])
     axes[0].set_title("Raw features")
-    sns.scatterplot(x="pca__pca0", y="pca__pca1", data=X_after_pca, ax=axes[1])
+    sns.scatterplot(x="pca0", y="pca1", data=X_after_pca, ax=axes[1])
     axes[1].set_title("PCA components")
 
 
@@ -239,70 +241,70 @@ to be used in the regression to the ``PipelineCreator``.
 
  .. code-block:: none
 
-    2024-09-26 13:46:42,090 - julearn - INFO - Adding step select_variance that applies to ColumnTypes<types={'*'}; pattern=.*>
-    2024-09-26 13:46:42,091 - julearn - INFO - Setting hyperparameter threshold = 0.15
-    2024-09-26 13:46:42,091 - julearn - INFO - Step added
-    2024-09-26 13:46:42,091 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'X_to_zscore'}; pattern=(?:__:type:__X_to_zscore)>
-    2024-09-26 13:46:42,091 - julearn - INFO - Step added
-    2024-09-26 13:46:42,091 - julearn - INFO - Adding step pca that applies to ColumnTypes<types={'*'}; pattern=.*>
-    2024-09-26 13:46:42,091 - julearn - INFO - Setting hyperparameter n_components = 2
-    2024-09-26 13:46:42,091 - julearn - INFO - Step added
-    2024-09-26 13:46:42,091 - julearn - INFO - Adding step rf that applies to ColumnTypes<types={'*'}; pattern=.*>
-    2024-09-26 13:46:42,091 - julearn - INFO - Setting hyperparameter n_estimators = 200
-    2024-09-26 13:46:42,091 - julearn - INFO - Step added
-    2024-09-26 13:46:42,091 - julearn - INFO - Setting random seed to 200
-    2024-09-26 13:46:42,092 - julearn - INFO - ==== Input Data ====
-    2024-09-26 13:46:42,092 - julearn - INFO - Using dataframe as input
-    2024-09-26 13:46:42,092 - julearn - INFO -      Features: ['Feature 1', 'Feature 2', 'Feature 3', 'Feature 4']
-    2024-09-26 13:46:42,092 - julearn - INFO -      Target: y
-    2024-09-26 13:46:42,092 - julearn - INFO -      Expanded features: ['Feature 1', 'Feature 2', 'Feature 3', 'Feature 4']
-    2024-09-26 13:46:42,092 - julearn - INFO -      X_types:{'X_to_zscore': ['Feature 1', 'Feature 2']}
-    2024-09-26 13:46:42,092 - julearn - WARNING - The following columns are not defined in X_types: ['Feature 3', 'Feature 4']. They will be treated as continuous.
+    2024-10-17 09:41:22,312 - julearn - INFO - Adding step select_variance that applies to ColumnTypes<types={'*'}; pattern=.*>
+    2024-10-17 09:41:22,312 - julearn - INFO - Setting hyperparameter threshold = 0.15
+    2024-10-17 09:41:22,312 - julearn - INFO - Step added
+    2024-10-17 09:41:22,312 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'X_to_zscore'}; pattern=(?:__:type:__X_to_zscore)>
+    2024-10-17 09:41:22,312 - julearn - INFO - Step added
+    2024-10-17 09:41:22,312 - julearn - INFO - Adding step pca that applies to ColumnTypes<types={'*'}; pattern=.*>
+    2024-10-17 09:41:22,312 - julearn - INFO - Setting hyperparameter n_components = 2
+    2024-10-17 09:41:22,312 - julearn - INFO - Step added
+    2024-10-17 09:41:22,312 - julearn - INFO - Adding step rf that applies to ColumnTypes<types={'*'}; pattern=.*>
+    2024-10-17 09:41:22,312 - julearn - INFO - Setting hyperparameter n_estimators = 200
+    2024-10-17 09:41:22,312 - julearn - INFO - Step added
+    2024-10-17 09:41:22,312 - julearn - INFO - Setting random seed to 200
+    2024-10-17 09:41:22,313 - julearn - INFO - ==== Input Data ====
+    2024-10-17 09:41:22,313 - julearn - INFO - Using dataframe as input
+    2024-10-17 09:41:22,313 - julearn - INFO -      Features: ['Feature 1', 'Feature 2', 'Feature 3', 'Feature 4']
+    2024-10-17 09:41:22,313 - julearn - INFO -      Target: y
+    2024-10-17 09:41:22,313 - julearn - INFO -      Expanded features: ['Feature 1', 'Feature 2', 'Feature 3', 'Feature 4']
+    2024-10-17 09:41:22,313 - julearn - INFO -      X_types:{'X_to_zscore': ['Feature 1', 'Feature 2']}
+    2024-10-17 09:41:22,313 - julearn - WARNING - The following columns are not defined in X_types: ['Feature 3', 'Feature 4']. They will be treated as continuous.
     /home/runner/work/julearn/julearn/julearn/prepare.py:509: RuntimeWarning: The following columns are not defined in X_types: ['Feature 3', 'Feature 4']. They will be treated as continuous.
       warn_with_log(
-    2024-09-26 13:46:42,093 - julearn - INFO - ====================
-    2024-09-26 13:46:42,093 - julearn - INFO - 
-    2024-09-26 13:46:42,095 - julearn - INFO - = Model Parameters =
-    2024-09-26 13:46:42,095 - julearn - INFO - ====================
-    2024-09-26 13:46:42,095 - julearn - INFO - 
-    2024-09-26 13:46:42,095 - julearn - INFO - = Data Information =
-    2024-09-26 13:46:42,095 - julearn - INFO -      Problem type: regression
-    2024-09-26 13:46:42,095 - julearn - INFO -      Number of samples: 100
-    2024-09-26 13:46:42,095 - julearn - INFO -      Number of features: 4
-    2024-09-26 13:46:42,095 - julearn - INFO - ====================
-    2024-09-26 13:46:42,095 - julearn - INFO - 
-    2024-09-26 13:46:42,095 - julearn - INFO -      Target type: float64
-    2024-09-26 13:46:42,095 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
+    2024-10-17 09:41:22,314 - julearn - INFO - ====================
+    2024-10-17 09:41:22,314 - julearn - INFO - 
+    2024-10-17 09:41:22,315 - julearn - INFO - = Model Parameters =
+    2024-10-17 09:41:22,315 - julearn - INFO - ====================
+    2024-10-17 09:41:22,315 - julearn - INFO - 
+    2024-10-17 09:41:22,315 - julearn - INFO - = Data Information =
+    2024-10-17 09:41:22,315 - julearn - INFO -      Problem type: regression
+    2024-10-17 09:41:22,315 - julearn - INFO -      Number of samples: 100
+    2024-10-17 09:41:22,315 - julearn - INFO -      Number of features: 4
+    2024-10-17 09:41:22,315 - julearn - INFO - ====================
+    2024-10-17 09:41:22,315 - julearn - INFO - 
+    2024-10-17 09:41:22,315 - julearn - INFO -      Target type: float64
+    2024-10-17 09:41:22,316 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
     X after PCA:
     ===============================================================================
-        pca__pca0  pca__pca1
-    0    1.725696  -1.582295
-    1    0.314458  -0.942935
-    2    0.977336   0.463217
-    3    0.525139  -0.219493
-    4   -1.618559   0.908592
-    ..        ...        ...
-    95  -0.395105   0.743192
-    96  -0.328111  -0.670912
-    97  -0.573900  -0.401304
-    98   0.918034   0.137435
-    99   0.894566   0.357729
+            pca0      pca1
+    0  -0.078319 -2.336101
+    1  -0.756861 -0.596518
+    2   1.191895 -0.451629
+    3  -0.750820 -0.958497
+    4   0.121426  1.599419
+    ..       ...       ...
+    95  0.175061  0.081051
+    96 -0.586593 -0.325382
+    97 -1.011121 -0.024891
+    98  0.478725 -0.788625
+    99  0.893666 -0.435353
 
     [100 rows x 2 columns]
     X after zscore:
     ===============================================================================
         Feature 1__:type:__X_to_zscore  ...  Feature 4__:type:__continuous
-    0                        -2.013728  ...                       0.426259
-    1                        -0.364686  ...                      -0.944446
-    2                         0.118838  ...                       0.931848
-    3                        -0.004437  ...                      -2.030684
-    4                         0.309092  ...                       0.523891
+    0                        -2.013728  ...                       0.666996
+    1                        -0.364686  ...                      -0.872214
+    2                         0.118838  ...                       1.234740
+    3                        -0.004437  ...                      -2.091986
+    4                         0.309092  ...                       0.776631
     ..                             ...  ...                            ...
-    95                       -0.206189  ...                      -0.157667
-    96                       -1.099154  ...                      -0.028182
-    97                       -0.335538  ...                      -1.252795
-    98                       -0.049139  ...                      -0.133702
-    99                        0.240085  ...                       0.443863
+    95                       -0.206189  ...                       0.011287
+    96                       -1.099154  ...                       0.156690
+    97                       -0.335538  ...                      -1.218469
+    98                       -0.049139  ...                       0.038198
+    99                        0.240085  ...                       0.686765
 
     [100 rows x 4 columns]
 
@@ -332,15 +334,15 @@ that the mean of all the features is zero and standard deviation is one.
  .. code-block:: none
 
     Summary Statistics of the zscored features : 
-               Feature 1     Feature 2   Feature 3   Feature 4
-    count  1.000000e+02  1.000000e+02  100.000000  100.000000
-    mean  -5.689893e-17  1.387779e-17    0.023682   -0.167718
-    std    1.005038e+00  1.005038e+00    1.087946    0.895011
-    min   -2.013728e+00 -3.010202e+00   -2.552990   -2.659172
-    25%   -6.576015e-01 -6.463286e-01   -0.759419   -0.688891
-    50%   -9.763131e-02  5.456486e-02   -0.028152   -0.174160
-    75%    5.488094e-01  6.018781e-01    0.772156    0.408321
-    max    2.113700e+00  2.184776e+00    2.383145    2.259309
+               Feature 1     Feature 2     Feature 3     Feature 4
+    count  1.000000e+02  1.000000e+02  1.000000e+02  1.000000e+02
+    mean  -5.689893e-17  1.387779e-17  4.440892e-18  3.330669e-18
+    std    1.005038e+00  1.005038e+00  1.005038e+00  1.005038e+00
+    min   -2.013728e+00 -3.010202e+00 -2.380315e+00 -2.797736e+00
+    25%   -6.576015e-01 -6.463286e-01 -7.234239e-01 -5.852417e-01
+    50%   -9.763131e-02  5.456486e-02 -4.788377e-02 -7.233997e-03
+    75%    5.488094e-01  6.018781e-01  6.914360e-01  6.468533e-01
+    max    2.113700e+00  2.184776e+00  2.179658e+00  2.725389e+00
 
 
 
@@ -348,7 +350,7 @@ that the mean of all the features is zero and standard deviation is one.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 1.355 seconds)
+   **Total running time of the script:** (0 minutes 1.232 seconds)
 
 
 .. _sphx_glr_download_auto_examples_02_inspection_plot_preprocess.py:
