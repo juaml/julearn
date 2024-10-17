@@ -1227,7 +1227,7 @@ def test_api_stacking_models() -> None:
     # The final model should be a stacking model im which the first estimator
     # is a grid search
     assert isinstance(
-        final.steps[1][1].model.estimators[0][1],  # type: ignore
+        final.steps[1][1].estimators[0][1],  # type: ignore
         GridSearchCV,
     )
 

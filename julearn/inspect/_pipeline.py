@@ -63,11 +63,14 @@ class _EstimatorInspector:
                 ),
             }
 
-        return {
+        private_params = {
             param: val
             for param, val in all_params.items()
             if re.match(r"^[a-zA-Z].*[a-zA-Z0-9]*_$", param)
         }
+        out = self.get_params()
+        out.update(private_params)
+        return out
 
     @property
     def estimator(self):

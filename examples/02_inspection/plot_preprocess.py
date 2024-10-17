@@ -121,7 +121,7 @@ X_after_zscore = preprocess(model, X=X, data=df, until="zscore")
 fig, axes = plt.subplots(1, 2, figsize=(12, 6))
 sns.scatterplot(x=X[0], y=X[1], data=df, ax=axes[0])
 axes[0].set_title("Raw features")
-sns.scatterplot(x="pca__pca0", y="pca__pca1", data=X_after_pca, ax=axes[1])
+sns.scatterplot(x="pca0", y="pca1", data=X_after_pca, ax=axes[1])
 axes[1].set_title("PCA components")
 
 ###############################################################################
