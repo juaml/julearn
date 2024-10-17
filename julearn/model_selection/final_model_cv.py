@@ -68,10 +68,11 @@ class _JulearnFinalModelCV:
         profitting for joblib calls.
 
         """
-        yield from self.cv.split(X, y, groups)
+        # For the first fold, train on all samples and return only 2 for test
         all_inds = np.arange(len(X))
-        # For the last fold, train on all samples and return only 2 for testing
         yield all_inds, all_inds[:2]
+
+        yield from self.cv.split(X, y, groups)
 
     def get_n_splits(self) -> int:
         """Get the number of splits.

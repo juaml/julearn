@@ -189,7 +189,7 @@ def test_naive_bayes_estimators(
                 "estimator": DecisionTreeClassifier(random_state=42),
             },
         ),
-        ("gradientboost", GradientBoostingClassifier, {}),
+        ("gradientboost", GradientBoostingClassifier, {"random_state": 42}),
     ],
 )
 def test_classificationestimators(

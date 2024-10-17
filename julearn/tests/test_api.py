@@ -415,8 +415,8 @@ def test_tune_hyperparam_gridsearch(df_iris: pd.DataFrame) -> None:
     scoring = "accuracy"
 
     np.random.seed(42)
-    cv_outer = RepeatedKFold(n_splits=3, n_repeats=2)
-    cv_inner = RepeatedKFold(n_splits=3, n_repeats=2)
+    cv_outer = RepeatedKFold(n_splits=3, n_repeats=2, random_state=9)
+    cv_inner = RepeatedKFold(n_splits=3, n_repeats=2, random_state=10)
 
     model_params = {"svm__C": [0.01, 0.001]}
     search_params = {"cv": cv_inner}
@@ -438,8 +438,8 @@ def test_tune_hyperparam_gridsearch(df_iris: pd.DataFrame) -> None:
 
     # Now do the same with scikit-learn
     np.random.seed(42)
-    cv_outer = RepeatedKFold(n_splits=3, n_repeats=2)
-    cv_inner = RepeatedKFold(n_splits=3, n_repeats=2)
+    cv_outer = RepeatedKFold(n_splits=3, n_repeats=2, random_state=9)
+    cv_inner = RepeatedKFold(n_splits=3, n_repeats=2, random_state=10)
 
     clf = make_pipeline(SVC())
     gs = GridSearchCV(
@@ -672,8 +672,8 @@ def test_tune_hyperparams_multiple_grid(df_iris: pd.DataFrame) -> None:
     scoring = "accuracy"
 
     np.random.seed(42)
-    cv_outer = RepeatedKFold(n_splits=2, n_repeats=1)
-    cv_inner = RepeatedKFold(n_splits=2, n_repeats=1)
+    cv_outer = RepeatedKFold(n_splits=2, n_repeats=1, random_state=9)
+    cv_inner = RepeatedKFold(n_splits=2, n_repeats=1, random_state=10)
 
     search_params = {"cv": cv_inner}
     actual1, actual_estimator1 = run_cross_validation(
@@ -701,8 +701,8 @@ def test_tune_hyperparams_multiple_grid(df_iris: pd.DataFrame) -> None:
     )
 
     np.random.seed(42)
-    cv_outer = RepeatedKFold(n_splits=2, n_repeats=1)
-    cv_inner = RepeatedKFold(n_splits=2, n_repeats=1)
+    cv_outer = RepeatedKFold(n_splits=2, n_repeats=1, random_state=9)
+    cv_inner = RepeatedKFold(n_splits=2, n_repeats=1, random_state=10)
     search_params = {"cv": cv_inner}
     actual2, actual_estimator2 = run_cross_validation(
         X=X,
@@ -718,8 +718,8 @@ def test_tune_hyperparams_multiple_grid(df_iris: pd.DataFrame) -> None:
 
     # Now do the same with scikit-learn
     np.random.seed(42)
-    cv_outer = RepeatedKFold(n_splits=2, n_repeats=1)
-    cv_inner = RepeatedKFold(n_splits=2, n_repeats=1)
+    cv_outer = RepeatedKFold(n_splits=2, n_repeats=1, random_state=9)
+    cv_inner = RepeatedKFold(n_splits=2, n_repeats=1, random_state=10)
 
     clf = make_pipeline(SVC())
     grid = [
