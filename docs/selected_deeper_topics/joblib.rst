@@ -14,4 +14,7 @@ computed in parallel.
 Without going into details about parallel and distributed computing, the idea
 is to split the computation into smaller tasks that can be executed
 independently from each other. This way, you can take advantage of multiple
-*processors* to do them in parallel.
+*processors* to do them in parallel. A very clear example of this situation is
+when you are estimating a model's performance using cross-validation. In this
+case, you can parallelize the computation of the different folds, as the
+training and testing of each fold are independent from each other.
