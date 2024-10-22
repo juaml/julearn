@@ -97,7 +97,7 @@ As an example, assuming a model that takes 1 hour to fit, a 5 times 5-fold
 cross-validation takes 25 hours of computation. If you add a grid search to
 find the best hyperparameter using another 5-fold CV, and this grid has 
 10 hyperparameters sets to test, this adds another 1250 hours of computation. 
-This is a total of 1275 hours. In techinical terms, this are 1275 core-hours, 
+This is a total of 1275 hours. In technical terms, this are 1275 core-hours, 
 which is a unit of processing time in a single core. With 4 processors, this is
 318 hours, which is almost 13 days of computation.
 If the model takes 10 hours to fit, this goes to 12750 core-hours, which is 
@@ -172,7 +172,7 @@ Data Transfer
 When submitting jobs to a cluster, we need to take into account that the data
 needs to be transferred between workers. The `joblib-htcondor`_ backend uses
 filesystem-based data transfer, which means that the data will be stored in
-a file that must be accesible by all the workers. The location of the shared
+a file that must be accessible by all the workers. The location of the shared
 directory can be specified with the ``shared_data_dir`` parameter.
 
 For example, at the INM-7, we can have a shared directory at
@@ -397,13 +397,13 @@ still not that evident.
 
 Most importantly, the default is always ``n_jobs=-1``. This means that it will
 use joblib for everything. In combination with `joblib-htcondor`_, this can
-be a big issue. Thus, the recomendation is to always set the ``n_jobs``
+be a big issue. Thus, the recommendation is to always set the ``n_jobs``
 parameter to ``1`` for every learning algorithm that you use, unless is an
 ensemble in which every estimator takes hours to fit.
 
 A clear example on when *NOT* to use ``n_jobs=-1`` is when using a
 :external:class:`~sklearn.ensemble.RandomForestClassifier`. If left as default,
-this will queue one job for each decission tree, resulting in hundreds of
+this will queue one job for each decision tree, resulting in hundreds of
 relatively small jobs which will take a lot of time to complete, given the
 overhead.
 

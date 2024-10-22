@@ -478,7 +478,7 @@ As an example, assuming a model that takes 1 hour to fit, a 5 times 5-fold
 cross-validation takes 25 hours of computation. If you add a grid search to
 find the best hyperparameter using another 5-fold CV, and this grid has
 10 hyperparameters sets to test, this adds another 1250 hours of computation.
-This is a total of 1275 hours. In techinical terms, this are 1275 core-hours,
+This is a total of 1275 hours. In technical terms, this are 1275 core-hours,
 which is a unit of processing time in a single core. With 4 processors, this is
 318 hours, which is almost 13 days of computation.
 If the model takes 10 hours to fit, this goes to 12750 core-hours, which is
@@ -567,7 +567,7 @@ into account other factors.</p>
 <p>When submitting jobs to a cluster, we need to take into account that the data
 needs to be transferred between workers. The <a class="reference external" href="https://github.com/juaml/joblib-htcondor">joblib-htcondor</a> backend uses
 filesystem-based data transfer, which means that the data will be stored in
-a file that must be accesible by all the workers. The location of the shared
+a file that must be accessible by all the workers. The location of the shared
 directory can be specified with the <code class="docutils literal notranslate"><span class="pre">shared_data_dir</span></code> parameter.</p>
 <p>For example, at the INM-7, we can have a shared directory at
 <code class="docutils literal notranslate"><span class="pre">/data/project/supercool_research</span></code>. Our example then becomes:</p>
@@ -769,12 +769,12 @@ currently working on documenting how this is done for each algorithm, this is
 still not that evident.</p>
 <p>Most importantly, the default is always <code class="docutils literal notranslate"><span class="pre">n_jobs=-1</span></code>. This means that it will
 use joblib for everything. In combination with <a class="reference external" href="https://github.com/juaml/joblib-htcondor">joblib-htcondor</a>, this can
-be a big issue. Thus, the recomendation is to always set the <code class="docutils literal notranslate"><span class="pre">n_jobs</span></code>
+be a big issue. Thus, the recommendation is to always set the <code class="docutils literal notranslate"><span class="pre">n_jobs</span></code>
 parameter to <code class="docutils literal notranslate"><span class="pre">1</span></code> for every learning algorithm that you use, unless is an
 ensemble in which every estimator takes hours to fit.</p>
 <p>A clear example on when <em>NOT</em> to use <code class="docutils literal notranslate"><span class="pre">n_jobs=-1</span></code> is when using a
 <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html#sklearn.ensemble.RandomForestClassifier" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">RandomForestClassifier</span></code></a>. If left as default,
-this will queue one job for each decission tree, resulting in hundreds of
+this will queue one job for each decision tree, resulting in hundreds of
 relatively small jobs which will take a lot of time to complete, given the
 overhead.</p>
 <p>The following is a non-exahustive list of scikit-learn’s algorithms that might
