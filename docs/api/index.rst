@@ -18,3 +18,4 @@ API Reference
    prepare.rst
    stats.rst
    viz.rst
+   config.rst

@@ -15,6 +15,7 @@ from ...base import (
     JuTransformer,
     ensure_column_types,
 )
+from ...config import get_config
 from ...utils.typing import DataLike
 
 
@@ -53,7 +54,9 @@ class FilterColumns(JuTransformer):
         )
 
     def _fit(
-        self, X: pd.DataFrame, y: Optional[DataLike] = None  # noqa: N803
+        self,
+        X: pd.DataFrame,  # noqa: N803
+        y: Optional[DataLike] = None,
     ) -> "FilterColumns":
         """Fit the transformer.
 
@@ -75,6 +78,9 @@ class FilterColumns(JuTransformer):
             transformers=[("keep", "passthrough", apply_to_selector)],
             remainder="drop",
             verbose_feature_names_out=False,
+            n_jobs=None
+            if get_config("enable_parallel_column_transformers")
+            else 1,
         )
         self.filter_columns_.fit(X, y)
         return self
