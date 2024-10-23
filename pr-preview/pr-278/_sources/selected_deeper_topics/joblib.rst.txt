@@ -9,7 +9,7 @@ Parallelizing julearn with Joblib
 .. warning:: 
     Make sure you are using the latest version of ``julearn``, as we are
     actively developing and fine-tuning these packages to improve performance.
-    Older versions of julearn might have a huge computational impact when used
+    Older versions of ``julearn`` might have a huge computational impact when used
     with joblib.
 
 As with `scikit-learn`_, ``julearn`` allows you to parallelize your code using
@@ -28,7 +28,7 @@ training and testing of each fold are independent from the other folds.
 Mostly all modern computers have multiple processors or *cores*, which allows
 to run multiple tasks at the same time.  If you are familiar, you might 
 have noticed that scikit-learn already has a parallelization mechanism using
-the ``n_jobs`` parameter. Julearn is actually using scikit-learn, so it is
+the ``n_jobs`` parameter. ``julearn`` is actually using scikit-learn, so it is
 possible to use the ``n_jobs`` parameter. If you want to read more about how
 scikit-learn parallelizes its code, you can check the section
 :external+sklearn:ref:`parallelism` on scikit-learn's documentation.
@@ -63,7 +63,7 @@ with 4 processors.
 
 
 Importantly, this sets the number of parallel processes that joblib dispatches
-but does not set the number of threads (i.e. another low-level parallelisation
+but does not set the number of threads (i.e. another low-level parallelization
 mechanism) that each process uses. The ``"loky"`` backend is quite intelligent,
 but can't always determine the optimal number of threads to use if you don't
 want to use 100% of the resources. You can set the number of threads per
@@ -89,8 +89,8 @@ process uses only 1 thread, you can do the following:
             problem_type="classification",
         )
 
-Massively parallelizing julearn with Joblib and HTcondor
---------------------------------------------------------
+Massively parallelizing ``julearn`` with Joblib and HTcondor
+------------------------------------------------------------
 
 Sometimes even with multiple processors, the computation can take a long time.
 As an example, assuming a model that takes 1 hour to fit, a 5 times 5-fold
@@ -108,7 +108,7 @@ hundreds of processors to obtain results within reasonable time spans.
 
 .. csv-table::
     :align: center
-    :header: "Total core-hours" , "Number of processors", "Time (approx)"
+    :header: "Total core-hours", "Number of processors", "Time (approx.)"
 
     "1250", "1", "52 days"
     "1250", "4", "13 days"
@@ -125,7 +125,7 @@ allows joblib to submit each task as a job in an HTCondor queue, allowing to
 massively parallelize computation.
 
 By simply calling ``register_htcondor`` from the ``joblib_htcondor`` package
-and configuring the backend, we can easily parallelise the computations as in
+and configuring the backend, we can easily parallelize the computations as in
 the following example:
 
 
@@ -134,7 +134,7 @@ the following example:
     from joblib import parallel_config
     from joblib_htcondor import register_htcondor
 
-    register_htcondor("INFO")
+    register_htcondor("INFO")  # Set logging level to INFO
 
     creator = PipelineCreator(problem_type="classification")
     creator.add("zscore")
@@ -161,6 +161,15 @@ This will submit each task to the HTCondor queue, and the computation will be
 done in parallel. The ``request_cpus`` parameter specifies the number of CPUs
 to request for each job, and the ``request_mem`` parameter specifies the
 amount of memory to request.
+
+
+.. note::
+    Note that the ``register_htcondor`` function sets the logging level to
+    ``"INFO"``, which means that you will see information regarding the HTCondor
+    backend. If you want to see less information, you can set the logging level to
+    ``"WARNING"``. If you believe that there might be an issue with the backend,
+    you can set the logging level to ``"DEBUG"`` to see more information that
+    can be later shared with the developers.
 
 Nevertheless, as it is, it will submit as many jobs as outer folds in the
 cross-validation, and it will rarely work for large projects as we need to take
@@ -212,12 +221,12 @@ Pool
 ~~~~
 
 As in any computational cluster, most probably you will be required to submit
-a job to a queue, which will then run the `run_cross_validation` function that
-will then submit more jobs to the queue. This is not a problem, but it needs to
-be possible to submit jobs from within a job. Check with your cluster's admin
-team and ask for furtther instructions. Most probably you'll need to also
-specify to which `pool` the jobs will be submitted. This can be done with the
-``pool`` parameter. For us, this is ``head2.htc.inm7.de``:
+a job to a queue, which will then run the :func:`.run_cross_validation` 
+function that will then submit more jobs to the queue. This is not a problem,
+but it needs to be possible to submit jobs from within a job. Check with your
+cluster's admin team and ask for further instructions. Most probably you'll 
+also need to specify to which `pool` the jobs will be submitted. This can be
+done with the ``pool`` parameter. For us, this is ``head2.htc.inm7.de``:
 
 
 .. code-block:: python
@@ -311,7 +320,7 @@ by setting the ``max_recursion_level`` parameter to ``1``:
     detail.
 
 
-But beware!, this will submit 254 (5 times 49) jobs for each outer fold. For a
+But beware! This will submit 245 (5 times 49) jobs for each outer fold. For a
 5 times 5-fold CV, this means 6125 jobs. This can be a lot of jobs, but not 
 for HTCondor. It is though an issue with the data transfer. If each job requires
 500 MB of data, this means 3.1 TB of data transfer, which requires 3.1 TB of
@@ -325,7 +334,7 @@ Indeed, even if we queue all of the previous 6125 jobs at once, we are also
 limited by the number of slots in the cluster. We can *throttle* the number of
 jobs that are submitted at once by setting the ``throttle`` parameter. This
 parameter specifies the number of jobs that can be either running or queued at
-the same time, thus also liminting the number of files in the shared directory.
+the same time, thus also limiting the number of files in the shared directory.
 
 `joblib-htcondor`_ will submit jobs until the throttle is reached, and then it
 will wait until a job finishes to submit a new one. The complicated part is
@@ -384,14 +393,15 @@ The overhead of submitting jobs to a cluster is not negligible. Each job
 submission requires some time, and the data transfer also requires some time.
 This overhead can be quite significant, and it is important to take it into
 account when parallelizing your code. The `joblib-htcondor`_ backend is
-intended to be used for large computations, where the overhead is negligible.
+intended to be used for large computations, where the overhead is negligible
+with respect to the computation.
 
 Scikit-learn parallelization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The rule is quite simple, if it has an ``n_jobs`` parameter, it can be
 parallelized using joblib. This is the case for most of the scikit-learn's
-algorithms. While the devevelopers of scikit-learn are doing a great job and
+algorithms. While the developers of scikit-learn are doing a great job and
 currently working on documenting how this is done for each algorithm, this is 
 still not that evident.
 
@@ -408,7 +418,7 @@ relatively small jobs which will take a lot of time to complete, given the
 overhead.
 
 
-The following is a non-exahustive list of scikit-learn's algorithms that might
+The following is a non-exhaustive list of scikit-learn's algorithms that might
 make sense to set the ``n_jobs`` parameter to ``-1`` or leave as default:
 
 * :external:class:`~sklearn.ensemble.StackingClassifier` and 
@@ -423,12 +433,12 @@ make sense to set the ``n_jobs`` parameter to ``-1`` or leave as default:
 
   Similar to the stacking models.
 
-* Hyperparameter searchers:
-
-    Most of the hyperparameter searchers in scikit-learn will parallelize the
-    search for the best hyperparameters. Either at the internal CV level or at
-    both the hyperparameter search space and the internal CV level, depending
-    on the searcher.
+* Hyperparameter searchers
+  
+  Most of the hyperparameter searchers in scikit-learn will parallelize the
+  search for the best hyperparameters. Either at the internal CV level or at
+  both the hyperparameter search space and the internal CV level, depending
+  on the searcher.
 
 
 Visualizing Progress
