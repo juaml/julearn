@@ -43,3 +43,5 @@
 .. _`scikit-optimize`: https://scikit-optimize.readthedocs.io/en/stable/
 .. _`Optuna`: https://optuna.org
 .. _`optuna_integration`: https://github.com/optuna/optuna-integration
+.. _`Joblib`: https://joblib.readthedocs.io/en/stable/
+.. _`joblib-htcondor`: https://github.com/juaml/joblib-htcondor
