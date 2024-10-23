@@ -108,7 +108,7 @@ hundreds of processors to obtain results within reasonable time spans.
 
 .. csv-table::
     :align: center
-    :header: "Total core-hours" , "Number of processors", "Time (approx.)"
+    :header: "Total core-hours", "Number of processors", "Time (approx.)"
 
     "1250", "1", "52 days"
     "1250", "4", "13 days"
