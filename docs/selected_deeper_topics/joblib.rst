@@ -221,7 +221,7 @@ Pool
 ~~~~
 
 As in any computational cluster, most probably you will be required to submit
-a job to a queue, which will then run the :func:`run_cross_validation` 
+a job to a queue, which will then run the :func:`.run_cross_validation` 
 function that will then submit more jobs to the queue. This is not a problem,
 but it needs to be possible to submit jobs from within a job. Check with your
 cluster's admin team and ask for further instructions. Most probably you'll 
