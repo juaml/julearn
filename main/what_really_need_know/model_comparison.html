@@ -184,6 +184,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/cross_validation_splitter.html">6.5. Cross-validation splitters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/stacked_models.html">6.6. Stacking Models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/CBPM.html">6.7. Connectome-based Predictive Modeling (CBPM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/joblib.html">6.8. Parallelizing julearn with Joblib</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../available_pipeline_steps.html">7. Overview of available Pipeline Steps</a></li>
@@ -348,6 +349,11 @@
 <li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.viz.plot_scores.html">julearn.viz.plot_scores</a></li>
 </ul>
 </li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/config.html">9.17. Config</a><input class="toctree-checkbox" id="toctree-checkbox-27" name="toctree-checkbox-27" role="switch" type="checkbox"/><label for="toctree-checkbox-27"><div class="visually-hidden">Toggle navigation of 9.17. Config</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.config.set_config.html">julearn.config.set_config</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.config.get_config.html">julearn.config.get_config</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration.html">10. Configuring <code class="docutils literal notranslate"><span class="pre">julearn</span></code></a></li>
@@ -376,6 +382,7 @@
       <dd><a href="../../v0.3.1/what_really_need_know/model_comparison.html">v0.3.1</a></dd>
       <dd><a href="../../v0.3.2/what_really_need_know/model_comparison.html">v0.3.2</a></dd>
       <dd><a href="../../v0.3.3/what_really_need_know/model_comparison.html">v0.3.3</a></dd>
+      <dd><a href="../../v0.3.4/what_really_need_know/model_comparison.html">v0.3.4</a></dd>
     </dl>
     <dl>
       <dt>Branches</dt>
@@ -574,35 +581,35 @@ We will use the default hyperparameters for each of them.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-17 13:39:19,629 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-17 13:39:19,629 - julearn - INFO - Step added
-2024-10-17 13:39:19,629 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-17 13:39:19,630 - julearn - INFO - Step added
-2024-10-17 13:39:19,630 - julearn - INFO - ==== Input Data ====
-2024-10-17 13:39:19,630 - julearn - INFO - Using dataframe as input
-2024-10-17 13:39:19,630 - julearn - INFO -      Features: [&#39;mean radius&#39;, &#39;mean texture&#39;, &#39;mean perimeter&#39;, &#39;mean area&#39;, &#39;mean smoothness&#39;, &#39;mean compactness&#39;, &#39;mean concavity&#39;, &#39;mean concave points&#39;, &#39;mean symmetry&#39;, &#39;mean fractal dimension&#39;, &#39;radius error&#39;, &#39;texture error&#39;, &#39;perimeter error&#39;, &#39;area error&#39;, &#39;smoothness error&#39;, &#39;compactness error&#39;, &#39;concavity error&#39;, &#39;concave points error&#39;, &#39;symmetry error&#39;, &#39;fractal dimension error&#39;, &#39;worst radius&#39;, &#39;worst texture&#39;, &#39;worst perimeter&#39;, &#39;worst area&#39;, &#39;worst smoothness&#39;, &#39;worst compactness&#39;, &#39;worst concavity&#39;, &#39;worst concave points&#39;, &#39;worst symmetry&#39;, &#39;worst fractal dimension&#39;]
-2024-10-17 13:39:19,630 - julearn - INFO -      Target: target
-2024-10-17 13:39:19,631 - julearn - INFO -      Expanded features: [&#39;mean radius&#39;, &#39;mean texture&#39;, &#39;mean perimeter&#39;, &#39;mean area&#39;, &#39;mean smoothness&#39;, &#39;mean compactness&#39;, &#39;mean concavity&#39;, &#39;mean concave points&#39;, &#39;mean symmetry&#39;, &#39;mean fractal dimension&#39;, &#39;radius error&#39;, &#39;texture error&#39;, &#39;perimeter error&#39;, &#39;area error&#39;, &#39;smoothness error&#39;, &#39;compactness error&#39;, &#39;concavity error&#39;, &#39;concave points error&#39;, &#39;symmetry error&#39;, &#39;fractal dimension error&#39;, &#39;worst radius&#39;, &#39;worst texture&#39;, &#39;worst perimeter&#39;, &#39;worst area&#39;, &#39;worst smoothness&#39;, &#39;worst compactness&#39;, &#39;worst concavity&#39;, &#39;worst concave points&#39;, &#39;worst symmetry&#39;, &#39;worst fractal dimension&#39;]
-2024-10-17 13:39:19,632 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;.*&#39;]}
-2024-10-17 13:39:19,632 - julearn - INFO - ====================
-2024-10-17 13:39:19,632 - julearn - INFO -
-2024-10-17 13:39:19,633 - julearn - INFO - = Model Parameters =
-2024-10-17 13:39:19,633 - julearn - INFO - ====================
-2024-10-17 13:39:19,633 - julearn - INFO -
-2024-10-17 13:39:19,633 - julearn - INFO - = Data Information =
-2024-10-17 13:39:19,633 - julearn - INFO -      Problem type: classification
-2024-10-17 13:39:19,633 - julearn - INFO -      Number of samples: 569
-2024-10-17 13:39:19,633 - julearn - INFO -      Number of features: 30
-2024-10-17 13:39:19,633 - julearn - INFO - ====================
-2024-10-17 13:39:19,633 - julearn - INFO -
-2024-10-17 13:39:19,633 - julearn - INFO -      Number of classes: 2
-2024-10-17 13:39:19,633 - julearn - INFO -      Target type: int64
-2024-10-17 13:39:19,634 - julearn - INFO -      Class distributions: target
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-23 11:29:49,481 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2024-10-23 11:29:49,481 - julearn - INFO - Step added
+2024-10-23 11:29:49,482 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2024-10-23 11:29:49,482 - julearn - INFO - Step added
+2024-10-23 11:29:49,482 - julearn - INFO - ==== Input Data ====
+2024-10-23 11:29:49,482 - julearn - INFO - Using dataframe as input
+2024-10-23 11:29:49,482 - julearn - INFO -      Features: [&#39;mean radius&#39;, &#39;mean texture&#39;, &#39;mean perimeter&#39;, &#39;mean area&#39;, &#39;mean smoothness&#39;, &#39;mean compactness&#39;, &#39;mean concavity&#39;, &#39;mean concave points&#39;, &#39;mean symmetry&#39;, &#39;mean fractal dimension&#39;, &#39;radius error&#39;, &#39;texture error&#39;, &#39;perimeter error&#39;, &#39;area error&#39;, &#39;smoothness error&#39;, &#39;compactness error&#39;, &#39;concavity error&#39;, &#39;concave points error&#39;, &#39;symmetry error&#39;, &#39;fractal dimension error&#39;, &#39;worst radius&#39;, &#39;worst texture&#39;, &#39;worst perimeter&#39;, &#39;worst area&#39;, &#39;worst smoothness&#39;, &#39;worst compactness&#39;, &#39;worst concavity&#39;, &#39;worst concave points&#39;, &#39;worst symmetry&#39;, &#39;worst fractal dimension&#39;]
+2024-10-23 11:29:49,482 - julearn - INFO -      Target: target
+2024-10-23 11:29:49,483 - julearn - INFO -      Expanded features: [&#39;mean radius&#39;, &#39;mean texture&#39;, &#39;mean perimeter&#39;, &#39;mean area&#39;, &#39;mean smoothness&#39;, &#39;mean compactness&#39;, &#39;mean concavity&#39;, &#39;mean concave points&#39;, &#39;mean symmetry&#39;, &#39;mean fractal dimension&#39;, &#39;radius error&#39;, &#39;texture error&#39;, &#39;perimeter error&#39;, &#39;area error&#39;, &#39;smoothness error&#39;, &#39;compactness error&#39;, &#39;concavity error&#39;, &#39;concave points error&#39;, &#39;symmetry error&#39;, &#39;fractal dimension error&#39;, &#39;worst radius&#39;, &#39;worst texture&#39;, &#39;worst perimeter&#39;, &#39;worst area&#39;, &#39;worst smoothness&#39;, &#39;worst compactness&#39;, &#39;worst concavity&#39;, &#39;worst concave points&#39;, &#39;worst symmetry&#39;, &#39;worst fractal dimension&#39;]
+2024-10-23 11:29:49,484 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;.*&#39;]}
+2024-10-23 11:29:49,484 - julearn - INFO - ====================
+2024-10-23 11:29:49,484 - julearn - INFO -
+2024-10-23 11:29:49,485 - julearn - INFO - = Model Parameters =
+2024-10-23 11:29:49,485 - julearn - INFO - ====================
+2024-10-23 11:29:49,485 - julearn - INFO -
+2024-10-23 11:29:49,485 - julearn - INFO - = Data Information =
+2024-10-23 11:29:49,485 - julearn - INFO -      Problem type: classification
+2024-10-23 11:29:49,485 - julearn - INFO -      Number of samples: 569
+2024-10-23 11:29:49,485 - julearn - INFO -      Number of features: 30
+2024-10-23 11:29:49,485 - julearn - INFO - ====================
+2024-10-23 11:29:49,485 - julearn - INFO -
+2024-10-23 11:29:49,485 - julearn - INFO -      Number of classes: 2
+2024-10-23 11:29:49,485 - julearn - INFO -      Target type: int64
+2024-10-23 11:29:49,486 - julearn - INFO -      Class distributions: target
 1    357
 0    212
 Name: count, dtype: int64
-2024-10-17 13:39:19,634 - julearn - INFO - Using outer CV scheme RepeatedStratifiedKFold(n_repeats=2, n_splits=5, random_state=42)
-2024-10-17 13:39:19,634 - julearn - INFO - Binary classification problem detected.
+2024-10-23 11:29:49,486 - julearn - INFO - Using outer CV scheme RepeatedStratifiedKFold(n_repeats=2, n_splits=5, random_state=42)
+2024-10-23 11:29:49,486 - julearn - INFO - Binary classification problem detected.
 </pre></div>
 </div>
 <p><strong>Model 2</strong>: default Random Forest.</p>
@@ -623,35 +630,35 @@ use a random forest.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-17 13:39:19,789 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-17 13:39:19,789 - julearn - INFO - Step added
-2024-10-17 13:39:19,790 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-17 13:39:19,790 - julearn - INFO - Step added
-2024-10-17 13:39:19,790 - julearn - INFO - ==== Input Data ====
-2024-10-17 13:39:19,790 - julearn - INFO - Using dataframe as input
-2024-10-17 13:39:19,790 - julearn - INFO -      Features: [&#39;mean radius&#39;, &#39;mean texture&#39;, &#39;mean perimeter&#39;, &#39;mean area&#39;, &#39;mean smoothness&#39;, &#39;mean compactness&#39;, &#39;mean concavity&#39;, &#39;mean concave points&#39;, &#39;mean symmetry&#39;, &#39;mean fractal dimension&#39;, &#39;radius error&#39;, &#39;texture error&#39;, &#39;perimeter error&#39;, &#39;area error&#39;, &#39;smoothness error&#39;, &#39;compactness error&#39;, &#39;concavity error&#39;, &#39;concave points error&#39;, &#39;symmetry error&#39;, &#39;fractal dimension error&#39;, &#39;worst radius&#39;, &#39;worst texture&#39;, &#39;worst perimeter&#39;, &#39;worst area&#39;, &#39;worst smoothness&#39;, &#39;worst compactness&#39;, &#39;worst concavity&#39;, &#39;worst concave points&#39;, &#39;worst symmetry&#39;, &#39;worst fractal dimension&#39;]
-2024-10-17 13:39:19,790 - julearn - INFO -      Target: target
-2024-10-17 13:39:19,790 - julearn - INFO -      Expanded features: [&#39;mean radius&#39;, &#39;mean texture&#39;, &#39;mean perimeter&#39;, &#39;mean area&#39;, &#39;mean smoothness&#39;, &#39;mean compactness&#39;, &#39;mean concavity&#39;, &#39;mean concave points&#39;, &#39;mean symmetry&#39;, &#39;mean fractal dimension&#39;, &#39;radius error&#39;, &#39;texture error&#39;, &#39;perimeter error&#39;, &#39;area error&#39;, &#39;smoothness error&#39;, &#39;compactness error&#39;, &#39;concavity error&#39;, &#39;concave points error&#39;, &#39;symmetry error&#39;, &#39;fractal dimension error&#39;, &#39;worst radius&#39;, &#39;worst texture&#39;, &#39;worst perimeter&#39;, &#39;worst area&#39;, &#39;worst smoothness&#39;, &#39;worst compactness&#39;, &#39;worst concavity&#39;, &#39;worst concave points&#39;, &#39;worst symmetry&#39;, &#39;worst fractal dimension&#39;]
-2024-10-17 13:39:19,790 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;.*&#39;]}
-2024-10-17 13:39:19,791 - julearn - INFO - ====================
-2024-10-17 13:39:19,791 - julearn - INFO -
-2024-10-17 13:39:19,792 - julearn - INFO - = Model Parameters =
-2024-10-17 13:39:19,792 - julearn - INFO - ====================
-2024-10-17 13:39:19,792 - julearn - INFO -
-2024-10-17 13:39:19,792 - julearn - INFO - = Data Information =
-2024-10-17 13:39:19,792 - julearn - INFO -      Problem type: classification
-2024-10-17 13:39:19,792 - julearn - INFO -      Number of samples: 569
-2024-10-17 13:39:19,792 - julearn - INFO -      Number of features: 30
-2024-10-17 13:39:19,792 - julearn - INFO - ====================
-2024-10-17 13:39:19,792 - julearn - INFO -
-2024-10-17 13:39:19,792 - julearn - INFO -      Number of classes: 2
-2024-10-17 13:39:19,792 - julearn - INFO -      Target type: int64
-2024-10-17 13:39:19,793 - julearn - INFO -      Class distributions: target
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-23 11:29:49,640 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2024-10-23 11:29:49,640 - julearn - INFO - Step added
+2024-10-23 11:29:49,640 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2024-10-23 11:29:49,640 - julearn - INFO - Step added
+2024-10-23 11:29:49,640 - julearn - INFO - ==== Input Data ====
+2024-10-23 11:29:49,640 - julearn - INFO - Using dataframe as input
+2024-10-23 11:29:49,640 - julearn - INFO -      Features: [&#39;mean radius&#39;, &#39;mean texture&#39;, &#39;mean perimeter&#39;, &#39;mean area&#39;, &#39;mean smoothness&#39;, &#39;mean compactness&#39;, &#39;mean concavity&#39;, &#39;mean concave points&#39;, &#39;mean symmetry&#39;, &#39;mean fractal dimension&#39;, &#39;radius error&#39;, &#39;texture error&#39;, &#39;perimeter error&#39;, &#39;area error&#39;, &#39;smoothness error&#39;, &#39;compactness error&#39;, &#39;concavity error&#39;, &#39;concave points error&#39;, &#39;symmetry error&#39;, &#39;fractal dimension error&#39;, &#39;worst radius&#39;, &#39;worst texture&#39;, &#39;worst perimeter&#39;, &#39;worst area&#39;, &#39;worst smoothness&#39;, &#39;worst compactness&#39;, &#39;worst concavity&#39;, &#39;worst concave points&#39;, &#39;worst symmetry&#39;, &#39;worst fractal dimension&#39;]
+2024-10-23 11:29:49,640 - julearn - INFO -      Target: target
+2024-10-23 11:29:49,641 - julearn - INFO -      Expanded features: [&#39;mean radius&#39;, &#39;mean texture&#39;, &#39;mean perimeter&#39;, &#39;mean area&#39;, &#39;mean smoothness&#39;, &#39;mean compactness&#39;, &#39;mean concavity&#39;, &#39;mean concave points&#39;, &#39;mean symmetry&#39;, &#39;mean fractal dimension&#39;, &#39;radius error&#39;, &#39;texture error&#39;, &#39;perimeter error&#39;, &#39;area error&#39;, &#39;smoothness error&#39;, &#39;compactness error&#39;, &#39;concavity error&#39;, &#39;concave points error&#39;, &#39;symmetry error&#39;, &#39;fractal dimension error&#39;, &#39;worst radius&#39;, &#39;worst texture&#39;, &#39;worst perimeter&#39;, &#39;worst area&#39;, &#39;worst smoothness&#39;, &#39;worst compactness&#39;, &#39;worst concavity&#39;, &#39;worst concave points&#39;, &#39;worst symmetry&#39;, &#39;worst fractal dimension&#39;]
+2024-10-23 11:29:49,641 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;.*&#39;]}
+2024-10-23 11:29:49,642 - julearn - INFO - ====================
+2024-10-23 11:29:49,642 - julearn - INFO -
+2024-10-23 11:29:49,642 - julearn - INFO - = Model Parameters =
+2024-10-23 11:29:49,642 - julearn - INFO - ====================
+2024-10-23 11:29:49,642 - julearn - INFO -
+2024-10-23 11:29:49,642 - julearn - INFO - = Data Information =
+2024-10-23 11:29:49,642 - julearn - INFO -      Problem type: classification
+2024-10-23 11:29:49,642 - julearn - INFO -      Number of samples: 569
+2024-10-23 11:29:49,642 - julearn - INFO -      Number of features: 30
+2024-10-23 11:29:49,642 - julearn - INFO - ====================
+2024-10-23 11:29:49,643 - julearn - INFO -
+2024-10-23 11:29:49,643 - julearn - INFO -      Number of classes: 2
+2024-10-23 11:29:49,643 - julearn - INFO -      Target type: int64
+2024-10-23 11:29:49,643 - julearn - INFO -      Class distributions: target
 1    357
 0    212
 Name: count, dtype: int64
-2024-10-17 13:39:19,793 - julearn - INFO - Using outer CV scheme RepeatedStratifiedKFold(n_repeats=2, n_splits=5, random_state=42)
-2024-10-17 13:39:19,793 - julearn - INFO - Binary classification problem detected.
+2024-10-23 11:29:49,643 - julearn - INFO - Using outer CV scheme RepeatedStratifiedKFold(n_repeats=2, n_splits=5, random_state=42)
+2024-10-23 11:29:49,643 - julearn - INFO - Binary classification problem detected.
 </pre></div>
 </div>
 <p><strong>Model 3</strong>: default Logistic Regression.</p>
@@ -670,35 +677,35 @@ Name: count, dtype: int64
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-17 13:39:21,484 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-17 13:39:21,484 - julearn - INFO - Step added
-2024-10-17 13:39:21,484 - julearn - INFO - Adding step logit that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-17 13:39:21,484 - julearn - INFO - Step added
-2024-10-17 13:39:21,484 - julearn - INFO - ==== Input Data ====
-2024-10-17 13:39:21,484 - julearn - INFO - Using dataframe as input
-2024-10-17 13:39:21,484 - julearn - INFO -      Features: [&#39;mean radius&#39;, &#39;mean texture&#39;, &#39;mean perimeter&#39;, &#39;mean area&#39;, &#39;mean smoothness&#39;, &#39;mean compactness&#39;, &#39;mean concavity&#39;, &#39;mean concave points&#39;, &#39;mean symmetry&#39;, &#39;mean fractal dimension&#39;, &#39;radius error&#39;, &#39;texture error&#39;, &#39;perimeter error&#39;, &#39;area error&#39;, &#39;smoothness error&#39;, &#39;compactness error&#39;, &#39;concavity error&#39;, &#39;concave points error&#39;, &#39;symmetry error&#39;, &#39;fractal dimension error&#39;, &#39;worst radius&#39;, &#39;worst texture&#39;, &#39;worst perimeter&#39;, &#39;worst area&#39;, &#39;worst smoothness&#39;, &#39;worst compactness&#39;, &#39;worst concavity&#39;, &#39;worst concave points&#39;, &#39;worst symmetry&#39;, &#39;worst fractal dimension&#39;]
-2024-10-17 13:39:21,484 - julearn - INFO -      Target: target
-2024-10-17 13:39:21,485 - julearn - INFO -      Expanded features: [&#39;mean radius&#39;, &#39;mean texture&#39;, &#39;mean perimeter&#39;, &#39;mean area&#39;, &#39;mean smoothness&#39;, &#39;mean compactness&#39;, &#39;mean concavity&#39;, &#39;mean concave points&#39;, &#39;mean symmetry&#39;, &#39;mean fractal dimension&#39;, &#39;radius error&#39;, &#39;texture error&#39;, &#39;perimeter error&#39;, &#39;area error&#39;, &#39;smoothness error&#39;, &#39;compactness error&#39;, &#39;concavity error&#39;, &#39;concave points error&#39;, &#39;symmetry error&#39;, &#39;fractal dimension error&#39;, &#39;worst radius&#39;, &#39;worst texture&#39;, &#39;worst perimeter&#39;, &#39;worst area&#39;, &#39;worst smoothness&#39;, &#39;worst compactness&#39;, &#39;worst concavity&#39;, &#39;worst concave points&#39;, &#39;worst symmetry&#39;, &#39;worst fractal dimension&#39;]
-2024-10-17 13:39:21,485 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;.*&#39;]}
-2024-10-17 13:39:21,486 - julearn - INFO - ====================
-2024-10-17 13:39:21,486 - julearn - INFO -
-2024-10-17 13:39:21,486 - julearn - INFO - = Model Parameters =
-2024-10-17 13:39:21,486 - julearn - INFO - ====================
-2024-10-17 13:39:21,486 - julearn - INFO -
-2024-10-17 13:39:21,486 - julearn - INFO - = Data Information =
-2024-10-17 13:39:21,486 - julearn - INFO -      Problem type: classification
-2024-10-17 13:39:21,487 - julearn - INFO -      Number of samples: 569
-2024-10-17 13:39:21,487 - julearn - INFO -      Number of features: 30
-2024-10-17 13:39:21,487 - julearn - INFO - ====================
-2024-10-17 13:39:21,487 - julearn - INFO -
-2024-10-17 13:39:21,487 - julearn - INFO -      Number of classes: 2
-2024-10-17 13:39:21,487 - julearn - INFO -      Target type: int64
-2024-10-17 13:39:21,487 - julearn - INFO -      Class distributions: target
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-23 11:29:51,328 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2024-10-23 11:29:51,328 - julearn - INFO - Step added
+2024-10-23 11:29:51,328 - julearn - INFO - Adding step logit that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2024-10-23 11:29:51,329 - julearn - INFO - Step added
+2024-10-23 11:29:51,329 - julearn - INFO - ==== Input Data ====
+2024-10-23 11:29:51,329 - julearn - INFO - Using dataframe as input
+2024-10-23 11:29:51,329 - julearn - INFO -      Features: [&#39;mean radius&#39;, &#39;mean texture&#39;, &#39;mean perimeter&#39;, &#39;mean area&#39;, &#39;mean smoothness&#39;, &#39;mean compactness&#39;, &#39;mean concavity&#39;, &#39;mean concave points&#39;, &#39;mean symmetry&#39;, &#39;mean fractal dimension&#39;, &#39;radius error&#39;, &#39;texture error&#39;, &#39;perimeter error&#39;, &#39;area error&#39;, &#39;smoothness error&#39;, &#39;compactness error&#39;, &#39;concavity error&#39;, &#39;concave points error&#39;, &#39;symmetry error&#39;, &#39;fractal dimension error&#39;, &#39;worst radius&#39;, &#39;worst texture&#39;, &#39;worst perimeter&#39;, &#39;worst area&#39;, &#39;worst smoothness&#39;, &#39;worst compactness&#39;, &#39;worst concavity&#39;, &#39;worst concave points&#39;, &#39;worst symmetry&#39;, &#39;worst fractal dimension&#39;]
+2024-10-23 11:29:51,329 - julearn - INFO -      Target: target
+2024-10-23 11:29:51,329 - julearn - INFO -      Expanded features: [&#39;mean radius&#39;, &#39;mean texture&#39;, &#39;mean perimeter&#39;, &#39;mean area&#39;, &#39;mean smoothness&#39;, &#39;mean compactness&#39;, &#39;mean concavity&#39;, &#39;mean concave points&#39;, &#39;mean symmetry&#39;, &#39;mean fractal dimension&#39;, &#39;radius error&#39;, &#39;texture error&#39;, &#39;perimeter error&#39;, &#39;area error&#39;, &#39;smoothness error&#39;, &#39;compactness error&#39;, &#39;concavity error&#39;, &#39;concave points error&#39;, &#39;symmetry error&#39;, &#39;fractal dimension error&#39;, &#39;worst radius&#39;, &#39;worst texture&#39;, &#39;worst perimeter&#39;, &#39;worst area&#39;, &#39;worst smoothness&#39;, &#39;worst compactness&#39;, &#39;worst concavity&#39;, &#39;worst concave points&#39;, &#39;worst symmetry&#39;, &#39;worst fractal dimension&#39;]
+2024-10-23 11:29:51,329 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;.*&#39;]}
+2024-10-23 11:29:51,330 - julearn - INFO - ====================
+2024-10-23 11:29:51,330 - julearn - INFO -
+2024-10-23 11:29:51,330 - julearn - INFO - = Model Parameters =
+2024-10-23 11:29:51,331 - julearn - INFO - ====================
+2024-10-23 11:29:51,331 - julearn - INFO -
+2024-10-23 11:29:51,331 - julearn - INFO - = Data Information =
+2024-10-23 11:29:51,331 - julearn - INFO -      Problem type: classification
+2024-10-23 11:29:51,331 - julearn - INFO -      Number of samples: 569
+2024-10-23 11:29:51,331 - julearn - INFO -      Number of features: 30
+2024-10-23 11:29:51,331 - julearn - INFO - ====================
+2024-10-23 11:29:51,331 - julearn - INFO -
+2024-10-23 11:29:51,331 - julearn - INFO -      Number of classes: 2
+2024-10-23 11:29:51,331 - julearn - INFO -      Target type: int64
+2024-10-23 11:29:51,331 - julearn - INFO -      Class distributions: target
 1    357
 0    212
 Name: count, dtype: int64
-2024-10-17 13:39:21,488 - julearn - INFO - Using outer CV scheme RepeatedStratifiedKFold(n_repeats=2, n_splits=5, random_state=42)
-2024-10-17 13:39:21,488 - julearn - INFO - Binary classification problem detected.
+2024-10-23 11:29:51,332 - julearn - INFO - Using outer CV scheme RepeatedStratifiedKFold(n_repeats=2, n_splits=5, random_state=42)
+2024-10-23 11:29:51,332 - julearn - INFO - Binary classification problem detected.
 </pre></div>
 </div>
 <p>We will add a column to each scores DataFrames to be able to use names to
@@ -717,22 +724,22 @@ the following one-liner:</p>
 <span class="n">stats_df</span> <span class="o">=</span> <span class="n">corrected_ttest</span><span class="p">(</span><span class="n">scores1</span><span class="p">,</span> <span class="n">scores2</span><span class="p">,</span> <span class="n">scores3</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-17 13:39:21,682 - julearn - WARNING - The training set sizes are not the same. Will use a rounded average.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-23 11:29:51,525 - julearn - WARNING - The training set sizes are not the same. Will use a rounded average.
 /home/runner/work/julearn/julearn/julearn/stats/corrected_ttest.py:175: RuntimeWarning: The training set sizes are not the same. Will use a rounded average.
   warn_with_log(
-2024-10-17 13:39:21,682 - julearn - WARNING - The testing set sizes are not the same. Will use a rounded average.
+2024-10-23 11:29:51,525 - julearn - WARNING - The testing set sizes are not the same. Will use a rounded average.
 /home/runner/work/julearn/julearn/julearn/stats/corrected_ttest.py:184: RuntimeWarning: The testing set sizes are not the same. Will use a rounded average.
   warn_with_log(
-2024-10-17 13:39:21,686 - julearn - WARNING - The training set sizes are not the same. Will use a rounded average.
+2024-10-23 11:29:51,528 - julearn - WARNING - The training set sizes are not the same. Will use a rounded average.
 /home/runner/work/julearn/julearn/julearn/stats/corrected_ttest.py:175: RuntimeWarning: The training set sizes are not the same. Will use a rounded average.
   warn_with_log(
-2024-10-17 13:39:21,686 - julearn - WARNING - The testing set sizes are not the same. Will use a rounded average.
+2024-10-23 11:29:51,529 - julearn - WARNING - The testing set sizes are not the same. Will use a rounded average.
 /home/runner/work/julearn/julearn/julearn/stats/corrected_ttest.py:184: RuntimeWarning: The testing set sizes are not the same. Will use a rounded average.
   warn_with_log(
-2024-10-17 13:39:21,689 - julearn - WARNING - The training set sizes are not the same. Will use a rounded average.
+2024-10-23 11:29:51,532 - julearn - WARNING - The training set sizes are not the same. Will use a rounded average.
 /home/runner/work/julearn/julearn/julearn/stats/corrected_ttest.py:175: RuntimeWarning: The training set sizes are not the same. Will use a rounded average.
   warn_with_log(
-2024-10-17 13:39:21,689 - julearn - WARNING - The testing set sizes are not the same. Will use a rounded average.
+2024-10-23 11:29:51,532 - julearn - WARNING - The testing set sizes are not the same. Will use a rounded average.
 /home/runner/work/julearn/julearn/julearn/stats/corrected_ttest.py:184: RuntimeWarning: The testing set sizes are not the same. Will use a rounded average.
   warn_with_log(
 </pre></div>
@@ -778,11 +785,11 @@ choose the models to be displayed and the scorer to be plotted.</p>
 <p>The plot is interactive. You can zoom in and out, and hover over.
 However, buttons will not work in this documentation.</p>
 </div>
-<script src="bokeh-content-b9693c1f0d4c46b48c1abd8d08edb7b9-what_really_need_know-model_comparison.js" id="afabc3e9-983d-4d60-a549-b944d8dd46b2"></script><p>Well done, you made it until here and are now ready to dive into
+<script src="bokeh-content-7e052bcb0cf240629a70a26809e6e0cc-what_really_need_know-model_comparison.js" id="ddf573cf-1155-466b-aa84-a9f7f56e3695"></script><p>Well done, you made it until here and are now ready to dive into
 <a class="reference internal" href="../selected_deeper_topics/index.html#selected-deeper-topics"><span class="std std-ref">Selected deeper topics</span></a>!
 Maybe you are curious to learn <a class="reference internal" href="../selected_deeper_topics/confound_removal.html#confound-removal"><span class="std std-ref">Cross-validation consistent Confound Removal</span></a> or want to learn more
 about <a class="reference internal" href="../selected_deeper_topics/model_inspect.html#model-inspection"><span class="std std-ref">Inspecting Models</span></a>.</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 2.180 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 2.169 seconds)</p>
 </section>
 </section>
 

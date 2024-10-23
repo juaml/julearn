@@ -184,6 +184,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/cross_validation_splitter.html">6.5. Cross-validation splitters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/stacked_models.html">6.6. Stacking Models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/CBPM.html">6.7. Connectome-based Predictive Modeling (CBPM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../selected_deeper_topics/joblib.html">6.8. Parallelizing julearn with Joblib</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../available_pipeline_steps.html">7. Overview of available Pipeline Steps</a></li>
@@ -348,6 +349,11 @@
 <li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.viz.plot_scores.html">julearn.viz.plot_scores</a></li>
 </ul>
 </li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/config.html">9.17. Config</a><input class="toctree-checkbox" id="toctree-checkbox-27" name="toctree-checkbox-27" role="switch" type="checkbox"/><label for="toctree-checkbox-27"><div class="visually-hidden">Toggle navigation of 9.17. Config</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.config.set_config.html">julearn.config.set_config</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.config.get_config.html">julearn.config.get_config</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../configuration.html">10. Configuring <code class="docutils literal notranslate"><span class="pre">julearn</span></code></a></li>
@@ -376,6 +382,7 @@
       <dd><a href="../../../v0.3.1/index.html">v0.3.1</a></dd>
       <dd><a href="../../../v0.3.2/index.html">v0.3.2</a></dd>
       <dd><a href="../../../v0.3.3/index.html">v0.3.3</a></dd>
+      <dd><a href="../../../v0.3.4/index.html">v0.3.4</a></dd>
     </dl>
     <dl>
       <dt>Branches</dt>
@@ -444,13 +451,13 @@ perform stratified Kfold CV for a regression problem,</p>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/work/julearn/julearn/julearn/utils/logging.py:66: UserWarning: The &#39;__version__&#39; attribute is deprecated and will be removed in MarkupSafe 3.1. Use feature detection, or `importlib.metadata.version(&quot;markupsafe&quot;)`, instead.
   vstring = str(getattr(module, &quot;__version__&quot;, None))
-2024-10-17 13:38:37,282 - julearn - INFO - ===== Lib Versions =====
-2024-10-17 13:38:37,282 - julearn - INFO - numpy: 1.26.4
-2024-10-17 13:38:37,282 - julearn - INFO - scipy: 1.14.1
-2024-10-17 13:38:37,282 - julearn - INFO - sklearn: 1.5.2
-2024-10-17 13:38:37,283 - julearn - INFO - pandas: 2.2.3
-2024-10-17 13:38:37,283 - julearn - INFO - julearn: 0.3.4.dev35
-2024-10-17 13:38:37,283 - julearn - INFO - ========================
+2024-10-23 11:29:08,945 - julearn - INFO - ===== Lib Versions =====
+2024-10-23 11:29:08,945 - julearn - INFO - numpy: 1.26.4
+2024-10-23 11:29:08,945 - julearn - INFO - scipy: 1.14.1
+2024-10-23 11:29:08,945 - julearn - INFO - sklearn: 1.5.2
+2024-10-23 11:29:08,945 - julearn - INFO - pandas: 2.2.3
+2024-10-23 11:29:08,945 - julearn - INFO - julearn: 0.3.5.dev16
+2024-10-23 11:29:08,945 - julearn - INFO - ========================
 </pre></div>
 </div>
 <p>Load the diabetes data from <code class="docutils literal notranslate"><span class="pre">sklearn</span></code> as a <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code>.</p>
@@ -502,7 +509,7 @@ stratification.</p>
 <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a> <span class="o">=</span> <span class="s2">&quot;target&quot;</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/tmp/tmpz398dnzi/d0fcf3109b387f314e22bc383d589e136281406a/examples/00_starting/plot_stratified_kfold_reg.py:51: SettingWithCopyWarning:
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/tmp/tmpzr1kgyil/8793197ec026b4383bac97a652498220f455059c/examples/00_starting/plot_stratified_kfold_reg.py:51: SettingWithCopyWarning:
 A value is trying to be set on a copy of a slice from a DataFrame.
 Try using .loc[row_indexer,col_indexer] = value instead
 
@@ -534,7 +541,7 @@ Let’s see a couple of histrograms with different number of bins.</p>
 /opt/hostedtoolcache/Python/3.10.15/x64/lib/python3.10/site-packages/seaborn/_oldcore.py:1119: FutureWarning: use_inf_as_na option is deprecated and will be removed in a future version. Convert inf values to NaN before operating instead.
   with pd.option_context(&#39;mode.use_inf_as_na&#39;, True):
 
-&lt;seaborn.axisgrid.FacetGrid object at 0x7fc5cb24a890&gt;
+&lt;seaborn.axisgrid.FacetGrid object at 0x7f90adc9fd30&gt;
 </pre></div>
 </div>
 <p>From the histogram above, we can see that the data is not uniformly
@@ -560,32 +567,32 @@ granularity.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-17 13:38:37,870 - julearn - INFO - ==== Input Data ====
-2024-10-17 13:38:37,871 - julearn - INFO - Using dataframe as input
-2024-10-17 13:38:37,871 - julearn - INFO -      Features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
-2024-10-17 13:38:37,871 - julearn - INFO -      Target: target
-2024-10-17 13:38:37,871 - julearn - INFO -      Expanded features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
-2024-10-17 13:38:37,871 - julearn - INFO -      X_types:{}
-2024-10-17 13:38:37,871 - julearn - WARNING - The following columns are not defined in X_types: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]. They will be treated as continuous.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-23 11:29:09,523 - julearn - INFO - ==== Input Data ====
+2024-10-23 11:29:09,523 - julearn - INFO - Using dataframe as input
+2024-10-23 11:29:09,523 - julearn - INFO -      Features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2024-10-23 11:29:09,523 - julearn - INFO -      Target: target
+2024-10-23 11:29:09,524 - julearn - INFO -      Expanded features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2024-10-23 11:29:09,524 - julearn - INFO -      X_types:{}
+2024-10-23 11:29:09,524 - julearn - WARNING - The following columns are not defined in X_types: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]. They will be treated as continuous.
 /home/runner/work/julearn/julearn/julearn/prepare.py:509: RuntimeWarning: The following columns are not defined in X_types: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]. They will be treated as continuous.
   warn_with_log(
-2024-10-17 13:38:37,872 - julearn - INFO - ====================
-2024-10-17 13:38:37,872 - julearn - INFO -
-2024-10-17 13:38:37,872 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-17 13:38:37,872 - julearn - INFO - Step added
-2024-10-17 13:38:37,872 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-17 13:38:37,873 - julearn - INFO - Step added
-2024-10-17 13:38:37,873 - julearn - INFO - = Model Parameters =
-2024-10-17 13:38:37,873 - julearn - INFO - ====================
-2024-10-17 13:38:37,873 - julearn - INFO -
-2024-10-17 13:38:37,873 - julearn - INFO - = Data Information =
-2024-10-17 13:38:37,873 - julearn - INFO -      Problem type: regression
-2024-10-17 13:38:37,873 - julearn - INFO -      Number of samples: 449
-2024-10-17 13:38:37,873 - julearn - INFO -      Number of features: 10
-2024-10-17 13:38:37,873 - julearn - INFO - ====================
-2024-10-17 13:38:37,873 - julearn - INFO -
-2024-10-17 13:38:37,873 - julearn - INFO -      Target type: float64
-2024-10-17 13:38:37,874 - julearn - INFO - Using outer CV scheme ContinuousStratifiedKFold(method=&#39;binning&#39;, n_bins=40, n_splits=5,
+2024-10-23 11:29:09,524 - julearn - INFO - ====================
+2024-10-23 11:29:09,524 - julearn - INFO -
+2024-10-23 11:29:09,525 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2024-10-23 11:29:09,525 - julearn - INFO - Step added
+2024-10-23 11:29:09,525 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2024-10-23 11:29:09,525 - julearn - INFO - Step added
+2024-10-23 11:29:09,525 - julearn - INFO - = Model Parameters =
+2024-10-23 11:29:09,525 - julearn - INFO - ====================
+2024-10-23 11:29:09,525 - julearn - INFO -
+2024-10-23 11:29:09,525 - julearn - INFO - = Data Information =
+2024-10-23 11:29:09,525 - julearn - INFO -      Problem type: regression
+2024-10-23 11:29:09,526 - julearn - INFO -      Number of samples: 449
+2024-10-23 11:29:09,526 - julearn - INFO -      Number of features: 10
+2024-10-23 11:29:09,526 - julearn - INFO - ====================
+2024-10-23 11:29:09,526 - julearn - INFO -
+2024-10-23 11:29:09,526 - julearn - INFO -      Target type: float64
+2024-10-23 11:29:09,526 - julearn - INFO - Using outer CV scheme ContinuousStratifiedKFold(method=&#39;binning&#39;, n_bins=40, n_splits=5,
              random_state=None, shuffle=False) (incl. final model)
 /opt/hostedtoolcache/Python/3.10.15/x64/lib/python3.10/site-packages/sklearn/model_selection/_split.py:776: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=5.
   warnings.warn(
@@ -608,32 +615,32 @@ granularity.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-17 13:38:37,921 - julearn - INFO - ==== Input Data ====
-2024-10-17 13:38:37,921 - julearn - INFO - Using dataframe as input
-2024-10-17 13:38:37,921 - julearn - INFO -      Features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
-2024-10-17 13:38:37,921 - julearn - INFO -      Target: target
-2024-10-17 13:38:37,921 - julearn - INFO -      Expanded features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
-2024-10-17 13:38:37,921 - julearn - INFO -      X_types:{}
-2024-10-17 13:38:37,921 - julearn - WARNING - The following columns are not defined in X_types: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]. They will be treated as continuous.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-23 11:29:09,572 - julearn - INFO - ==== Input Data ====
+2024-10-23 11:29:09,572 - julearn - INFO - Using dataframe as input
+2024-10-23 11:29:09,572 - julearn - INFO -      Features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2024-10-23 11:29:09,572 - julearn - INFO -      Target: target
+2024-10-23 11:29:09,572 - julearn - INFO -      Expanded features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2024-10-23 11:29:09,572 - julearn - INFO -      X_types:{}
+2024-10-23 11:29:09,572 - julearn - WARNING - The following columns are not defined in X_types: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]. They will be treated as continuous.
 /home/runner/work/julearn/julearn/julearn/prepare.py:509: RuntimeWarning: The following columns are not defined in X_types: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]. They will be treated as continuous.
   warn_with_log(
-2024-10-17 13:38:37,922 - julearn - INFO - ====================
-2024-10-17 13:38:37,922 - julearn - INFO -
-2024-10-17 13:38:37,922 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-17 13:38:37,922 - julearn - INFO - Step added
-2024-10-17 13:38:37,922 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-17 13:38:37,922 - julearn - INFO - Step added
-2024-10-17 13:38:37,923 - julearn - INFO - = Model Parameters =
-2024-10-17 13:38:37,923 - julearn - INFO - ====================
-2024-10-17 13:38:37,923 - julearn - INFO -
-2024-10-17 13:38:37,923 - julearn - INFO - = Data Information =
-2024-10-17 13:38:37,923 - julearn - INFO -      Problem type: regression
-2024-10-17 13:38:37,923 - julearn - INFO -      Number of samples: 449
-2024-10-17 13:38:37,923 - julearn - INFO -      Number of features: 10
-2024-10-17 13:38:37,923 - julearn - INFO - ====================
-2024-10-17 13:38:37,923 - julearn - INFO -
-2024-10-17 13:38:37,923 - julearn - INFO -      Target type: float64
-2024-10-17 13:38:37,923 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
+2024-10-23 11:29:09,573 - julearn - INFO - ====================
+2024-10-23 11:29:09,573 - julearn - INFO -
+2024-10-23 11:29:09,573 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2024-10-23 11:29:09,573 - julearn - INFO - Step added
+2024-10-23 11:29:09,573 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2024-10-23 11:29:09,573 - julearn - INFO - Step added
+2024-10-23 11:29:09,574 - julearn - INFO - = Model Parameters =
+2024-10-23 11:29:09,574 - julearn - INFO - ====================
+2024-10-23 11:29:09,574 - julearn - INFO -
+2024-10-23 11:29:09,574 - julearn - INFO - = Data Information =
+2024-10-23 11:29:09,574 - julearn - INFO -      Problem type: regression
+2024-10-23 11:29:09,574 - julearn - INFO -      Number of samples: 449
+2024-10-23 11:29:09,574 - julearn - INFO -      Number of features: 10
+2024-10-23 11:29:09,574 - julearn - INFO - ====================
+2024-10-23 11:29:09,574 - julearn - INFO -
+2024-10-23 11:29:09,574 - julearn - INFO -      Target type: float64
+2024-10-23 11:29:09,574 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
 </pre></div>
 </div>
 <p>Now we can compare the test score for model trained with and without
@@ -660,7 +667,7 @@ the test score is higher when CV splits were not stratified.</p>
   data_subset = grouped_data.get_group(pd_key)
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.853 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.835 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-00-starting-plot-stratified-kfold-reg-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/e19d16e33ffa29cdb1e56852178d5909/plot_stratified_kfold_reg.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_stratified_kfold_reg.py</span></code></a></p>

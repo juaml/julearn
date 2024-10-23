@@ -184,6 +184,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/cross_validation_splitter.html">6.5. Cross-validation splitters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/stacked_models.html">6.6. Stacking Models</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/CBPM.html">6.7. Connectome-based Predictive Modeling (CBPM)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../selected_deeper_topics/joblib.html">6.8. Parallelizing julearn with Joblib</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../available_pipeline_steps.html">7. Overview of available Pipeline Steps</a></li>
@@ -348,6 +349,11 @@
 <li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.viz.plot_scores.html">julearn.viz.plot_scores</a></li>
 </ul>
 </li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../api/config.html">9.17. Config</a><input class="toctree-checkbox" id="toctree-checkbox-27" name="toctree-checkbox-27" role="switch" type="checkbox"/><label for="toctree-checkbox-27"><div class="visually-hidden">Toggle navigation of 9.17. Config</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.config.set_config.html">julearn.config.set_config</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.config.get_config.html">julearn.config.get_config</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../configuration.html">10. Configuring <code class="docutils literal notranslate"><span class="pre">julearn</span></code></a></li>
@@ -376,6 +382,7 @@
       <dd><a href="../../v0.3.1/what_really_need_know/model_evaluation.html">v0.3.1</a></dd>
       <dd><a href="../../v0.3.2/what_really_need_know/model_evaluation.html">v0.3.2</a></dd>
       <dd><a href="../../v0.3.3/what_really_need_know/model_evaluation.html">v0.3.3</a></dd>
+      <dd><a href="../../v0.3.4/what_really_need_know/model_evaluation.html">v0.3.4</a></dd>
     </dl>
     <dl>
       <dt>Branches</dt>
@@ -457,36 +464,36 @@ section (feature z-scoring and a <code class="docutils literal notranslate"><spa
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-17 13:39:18,574 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-17 13:39:18,574 - julearn - INFO - Step added
-2024-10-17 13:39:18,574 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-17 13:39:18,574 - julearn - INFO - Step added
-2024-10-17 13:39:18,574 - julearn - INFO - ==== Input Data ====
-2024-10-17 13:39:18,574 - julearn - INFO - Using dataframe as input
-2024-10-17 13:39:18,574 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2024-10-17 13:39:18,574 - julearn - INFO -      Target: species
-2024-10-17 13:39:18,574 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2024-10-17 13:39:18,574 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
-2024-10-17 13:39:18,575 - julearn - INFO - ====================
-2024-10-17 13:39:18,575 - julearn - INFO -
-2024-10-17 13:39:18,576 - julearn - INFO - = Model Parameters =
-2024-10-17 13:39:18,576 - julearn - INFO - ====================
-2024-10-17 13:39:18,576 - julearn - INFO -
-2024-10-17 13:39:18,576 - julearn - INFO - = Data Information =
-2024-10-17 13:39:18,576 - julearn - INFO -      Problem type: classification
-2024-10-17 13:39:18,576 - julearn - INFO -      Number of samples: 150
-2024-10-17 13:39:18,576 - julearn - INFO -      Number of features: 4
-2024-10-17 13:39:18,576 - julearn - INFO - ====================
-2024-10-17 13:39:18,576 - julearn - INFO -
-2024-10-17 13:39:18,576 - julearn - INFO -      Number of classes: 3
-2024-10-17 13:39:18,576 - julearn - INFO -      Target type: object
-2024-10-17 13:39:18,577 - julearn - INFO -      Class distributions: species
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-23 11:29:48,460 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2024-10-23 11:29:48,460 - julearn - INFO - Step added
+2024-10-23 11:29:48,460 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2024-10-23 11:29:48,460 - julearn - INFO - Step added
+2024-10-23 11:29:48,460 - julearn - INFO - ==== Input Data ====
+2024-10-23 11:29:48,460 - julearn - INFO - Using dataframe as input
+2024-10-23 11:29:48,460 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2024-10-23 11:29:48,460 - julearn - INFO -      Target: species
+2024-10-23 11:29:48,461 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2024-10-23 11:29:48,461 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
+2024-10-23 11:29:48,461 - julearn - INFO - ====================
+2024-10-23 11:29:48,461 - julearn - INFO -
+2024-10-23 11:29:48,462 - julearn - INFO - = Model Parameters =
+2024-10-23 11:29:48,462 - julearn - INFO - ====================
+2024-10-23 11:29:48,462 - julearn - INFO -
+2024-10-23 11:29:48,462 - julearn - INFO - = Data Information =
+2024-10-23 11:29:48,462 - julearn - INFO -      Problem type: classification
+2024-10-23 11:29:48,462 - julearn - INFO -      Number of samples: 150
+2024-10-23 11:29:48,462 - julearn - INFO -      Number of features: 4
+2024-10-23 11:29:48,462 - julearn - INFO - ====================
+2024-10-23 11:29:48,462 - julearn - INFO -
+2024-10-23 11:29:48,462 - julearn - INFO -      Number of classes: 3
+2024-10-23 11:29:48,462 - julearn - INFO -      Target type: object
+2024-10-23 11:29:48,463 - julearn - INFO -      Class distributions: species
 setosa        50
 versicolor    50
 virginica     50
 Name: count, dtype: int64
-2024-10-17 13:39:18,577 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-17 13:39:18,577 - julearn - INFO - Multi-class classification problem detected #classes = 3.
+2024-10-23 11:29:48,463 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2024-10-23 11:29:48,463 - julearn - INFO - Multi-class classification problem detected #classes = 3.
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">scores</span></code> variable is a <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code> object which contains the
@@ -495,11 +502,11 @@ cross-validated metrics for each fold as columns and rows respectively.</p>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>   fit_time  score_time  ...  fold                          cv_mdsum
-0  0.004963    0.002492  ...     0  b10eef89b4192178d482d7a1587a248a
-1  0.004584    0.002410  ...     1  b10eef89b4192178d482d7a1587a248a
-2  0.004461    0.002381  ...     2  b10eef89b4192178d482d7a1587a248a
-3  0.004511    0.002422  ...     3  b10eef89b4192178d482d7a1587a248a
-4  0.004453    0.002433  ...     4  b10eef89b4192178d482d7a1587a248a
+0  0.004978    0.002486  ...     0  b10eef89b4192178d482d7a1587a248a
+1  0.004508    0.002463  ...     1  b10eef89b4192178d482d7a1587a248a
+2  0.004412    0.002458  ...     2  b10eef89b4192178d482d7a1587a248a
+3  0.004407    0.002437  ...     3  b10eef89b4192178d482d7a1587a248a
+4  0.004410    0.002441  ...     4  b10eef89b4192178d482d7a1587a248a
 
 [5 rows x 8 columns]
 </pre></div>
@@ -526,38 +533,38 @@ but also the training scores. This can be achieved by setting the
 <span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-17 13:39:18,623 - julearn - INFO - ==== Input Data ====
-2024-10-17 13:39:18,623 - julearn - INFO - Using dataframe as input
-2024-10-17 13:39:18,623 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2024-10-17 13:39:18,623 - julearn - INFO -      Target: species
-2024-10-17 13:39:18,623 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2024-10-17 13:39:18,623 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
-2024-10-17 13:39:18,624 - julearn - INFO - ====================
-2024-10-17 13:39:18,624 - julearn - INFO -
-2024-10-17 13:39:18,624 - julearn - INFO - = Model Parameters =
-2024-10-17 13:39:18,624 - julearn - INFO - ====================
-2024-10-17 13:39:18,624 - julearn - INFO -
-2024-10-17 13:39:18,624 - julearn - INFO - = Data Information =
-2024-10-17 13:39:18,624 - julearn - INFO -      Problem type: classification
-2024-10-17 13:39:18,624 - julearn - INFO -      Number of samples: 150
-2024-10-17 13:39:18,625 - julearn - INFO -      Number of features: 4
-2024-10-17 13:39:18,625 - julearn - INFO - ====================
-2024-10-17 13:39:18,625 - julearn - INFO -
-2024-10-17 13:39:18,625 - julearn - INFO -      Number of classes: 3
-2024-10-17 13:39:18,625 - julearn - INFO -      Target type: object
-2024-10-17 13:39:18,625 - julearn - INFO -      Class distributions: species
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-23 11:29:48,509 - julearn - INFO - ==== Input Data ====
+2024-10-23 11:29:48,509 - julearn - INFO - Using dataframe as input
+2024-10-23 11:29:48,509 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2024-10-23 11:29:48,509 - julearn - INFO -      Target: species
+2024-10-23 11:29:48,509 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2024-10-23 11:29:48,509 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
+2024-10-23 11:29:48,510 - julearn - INFO - ====================
+2024-10-23 11:29:48,510 - julearn - INFO -
+2024-10-23 11:29:48,510 - julearn - INFO - = Model Parameters =
+2024-10-23 11:29:48,510 - julearn - INFO - ====================
+2024-10-23 11:29:48,510 - julearn - INFO -
+2024-10-23 11:29:48,510 - julearn - INFO - = Data Information =
+2024-10-23 11:29:48,510 - julearn - INFO -      Problem type: classification
+2024-10-23 11:29:48,511 - julearn - INFO -      Number of samples: 150
+2024-10-23 11:29:48,511 - julearn - INFO -      Number of features: 4
+2024-10-23 11:29:48,511 - julearn - INFO - ====================
+2024-10-23 11:29:48,511 - julearn - INFO -
+2024-10-23 11:29:48,511 - julearn - INFO -      Number of classes: 3
+2024-10-23 11:29:48,511 - julearn - INFO -      Target type: object
+2024-10-23 11:29:48,511 - julearn - INFO -      Class distributions: species
 setosa        50
 versicolor    50
 virginica     50
 Name: count, dtype: int64
-2024-10-17 13:39:18,625 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-17 13:39:18,626 - julearn - INFO - Multi-class classification problem detected #classes = 3.
+2024-10-23 11:29:48,512 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2024-10-23 11:29:48,512 - julearn - INFO - Multi-class classification problem detected #classes = 3.
    fit_time  score_time  ...  fold                          cv_mdsum
-0  0.004708    0.002474  ...     0  b10eef89b4192178d482d7a1587a248a
-1  0.004568    0.002428  ...     1  b10eef89b4192178d482d7a1587a248a
-2  0.004456    0.002434  ...     2  b10eef89b4192178d482d7a1587a248a
-3  0.004444    0.002460  ...     3  b10eef89b4192178d482d7a1587a248a
-4  0.004490    0.002529  ...     4  b10eef89b4192178d482d7a1587a248a
+0  0.004683    0.002466  ...     0  b10eef89b4192178d482d7a1587a248a
+1  0.004503    0.002459  ...     1  b10eef89b4192178d482d7a1587a248a
+2  0.004442    0.002428  ...     2  b10eef89b4192178d482d7a1587a248a
+3  0.004441    0.002452  ...     3  b10eef89b4192178d482d7a1587a248a
+4  0.004433    0.002435  ...     4  b10eef89b4192178d482d7a1587a248a
 
 [5 rows x 9 columns]
 </pre></div>
@@ -601,38 +608,38 @@ estimator option.</p>
 <span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-17 13:39:18,684 - julearn - INFO - ==== Input Data ====
-2024-10-17 13:39:18,684 - julearn - INFO - Using dataframe as input
-2024-10-17 13:39:18,684 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2024-10-17 13:39:18,684 - julearn - INFO -      Target: species
-2024-10-17 13:39:18,684 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2024-10-17 13:39:18,685 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
-2024-10-17 13:39:18,685 - julearn - INFO - ====================
-2024-10-17 13:39:18,685 - julearn - INFO -
-2024-10-17 13:39:18,686 - julearn - INFO - = Model Parameters =
-2024-10-17 13:39:18,686 - julearn - INFO - ====================
-2024-10-17 13:39:18,686 - julearn - INFO -
-2024-10-17 13:39:18,686 - julearn - INFO - = Data Information =
-2024-10-17 13:39:18,686 - julearn - INFO -      Problem type: classification
-2024-10-17 13:39:18,686 - julearn - INFO -      Number of samples: 150
-2024-10-17 13:39:18,686 - julearn - INFO -      Number of features: 4
-2024-10-17 13:39:18,686 - julearn - INFO - ====================
-2024-10-17 13:39:18,686 - julearn - INFO -
-2024-10-17 13:39:18,686 - julearn - INFO -      Number of classes: 3
-2024-10-17 13:39:18,686 - julearn - INFO -      Target type: object
-2024-10-17 13:39:18,687 - julearn - INFO -      Class distributions: species
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-23 11:29:48,570 - julearn - INFO - ==== Input Data ====
+2024-10-23 11:29:48,570 - julearn - INFO - Using dataframe as input
+2024-10-23 11:29:48,570 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2024-10-23 11:29:48,570 - julearn - INFO -      Target: species
+2024-10-23 11:29:48,570 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2024-10-23 11:29:48,570 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
+2024-10-23 11:29:48,570 - julearn - INFO - ====================
+2024-10-23 11:29:48,570 - julearn - INFO -
+2024-10-23 11:29:48,571 - julearn - INFO - = Model Parameters =
+2024-10-23 11:29:48,571 - julearn - INFO - ====================
+2024-10-23 11:29:48,571 - julearn - INFO -
+2024-10-23 11:29:48,571 - julearn - INFO - = Data Information =
+2024-10-23 11:29:48,571 - julearn - INFO -      Problem type: classification
+2024-10-23 11:29:48,571 - julearn - INFO -      Number of samples: 150
+2024-10-23 11:29:48,571 - julearn - INFO -      Number of features: 4
+2024-10-23 11:29:48,571 - julearn - INFO - ====================
+2024-10-23 11:29:48,571 - julearn - INFO -
+2024-10-23 11:29:48,571 - julearn - INFO -      Number of classes: 3
+2024-10-23 11:29:48,571 - julearn - INFO -      Target type: object
+2024-10-23 11:29:48,572 - julearn - INFO -      Class distributions: species
 setosa        50
 versicolor    50
 virginica     50
 Name: count, dtype: int64
-2024-10-17 13:39:18,687 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
-2024-10-17 13:39:18,687 - julearn - INFO - Multi-class classification problem detected #classes = 3.
+2024-10-23 11:29:48,572 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
+2024-10-23 11:29:48,572 - julearn - INFO - Multi-class classification problem detected #classes = 3.
    fit_time  score_time  ...  fold                          cv_mdsum
-0  0.004697    0.002481  ...     0  b10eef89b4192178d482d7a1587a248a
-1  0.004468    0.002445  ...     1  b10eef89b4192178d482d7a1587a248a
-2  0.004435    0.002453  ...     2  b10eef89b4192178d482d7a1587a248a
-3  0.004436    0.002432  ...     3  b10eef89b4192178d482d7a1587a248a
-4  0.004463    0.002501  ...     4  b10eef89b4192178d482d7a1587a248a
+0  0.004473    0.002443  ...     0  b10eef89b4192178d482d7a1587a248a
+1  0.004491    0.002417  ...     1  b10eef89b4192178d482d7a1587a248a
+2  0.004433    0.002461  ...     2  b10eef89b4192178d482d7a1587a248a
+3  0.004456    0.002424  ...     3  b10eef89b4192178d482d7a1587a248a
+4  0.004458    0.002441  ...     4  b10eef89b4192178d482d7a1587a248a
 
 [5 rows x 9 columns]
 </pre></div>
@@ -1121,32 +1128,32 @@ pass it to <a class="reference internal" href="../api/generated/julearn.run_cros
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-17 13:39:18,759 - julearn - INFO - ==== Input Data ====
-2024-10-17 13:39:18,759 - julearn - INFO - Using dataframe as input
-2024-10-17 13:39:18,759 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2024-10-17 13:39:18,759 - julearn - INFO -      Target: species
-2024-10-17 13:39:18,760 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2024-10-17 13:39:18,760 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
-2024-10-17 13:39:18,760 - julearn - INFO - ====================
-2024-10-17 13:39:18,760 - julearn - INFO -
-2024-10-17 13:39:18,761 - julearn - INFO - = Model Parameters =
-2024-10-17 13:39:18,761 - julearn - INFO - ====================
-2024-10-17 13:39:18,761 - julearn - INFO -
-2024-10-17 13:39:18,761 - julearn - INFO - = Data Information =
-2024-10-17 13:39:18,761 - julearn - INFO -      Problem type: classification
-2024-10-17 13:39:18,761 - julearn - INFO -      Number of samples: 150
-2024-10-17 13:39:18,761 - julearn - INFO -      Number of features: 4
-2024-10-17 13:39:18,761 - julearn - INFO - ====================
-2024-10-17 13:39:18,761 - julearn - INFO -
-2024-10-17 13:39:18,761 - julearn - INFO -      Number of classes: 3
-2024-10-17 13:39:18,761 - julearn - INFO -      Target type: object
-2024-10-17 13:39:18,762 - julearn - INFO -      Class distributions: species
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-23 11:29:48,643 - julearn - INFO - ==== Input Data ====
+2024-10-23 11:29:48,644 - julearn - INFO - Using dataframe as input
+2024-10-23 11:29:48,644 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2024-10-23 11:29:48,644 - julearn - INFO -      Target: species
+2024-10-23 11:29:48,644 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2024-10-23 11:29:48,644 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
+2024-10-23 11:29:48,644 - julearn - INFO - ====================
+2024-10-23 11:29:48,644 - julearn - INFO -
+2024-10-23 11:29:48,645 - julearn - INFO - = Model Parameters =
+2024-10-23 11:29:48,645 - julearn - INFO - ====================
+2024-10-23 11:29:48,645 - julearn - INFO -
+2024-10-23 11:29:48,645 - julearn - INFO - = Data Information =
+2024-10-23 11:29:48,645 - julearn - INFO -      Problem type: classification
+2024-10-23 11:29:48,645 - julearn - INFO -      Number of samples: 150
+2024-10-23 11:29:48,645 - julearn - INFO -      Number of features: 4
+2024-10-23 11:29:48,645 - julearn - INFO - ====================
+2024-10-23 11:29:48,645 - julearn - INFO -
+2024-10-23 11:29:48,645 - julearn - INFO -      Number of classes: 3
+2024-10-23 11:29:48,645 - julearn - INFO -      Target type: object
+2024-10-23 11:29:48,646 - julearn - INFO -      Class distributions: species
 setosa        50
 versicolor    50
 virginica     50
 Name: count, dtype: int64
-2024-10-17 13:39:18,762 - julearn - INFO - Using outer CV scheme RepeatedStratifiedKFold(n_repeats=2, n_splits=5, random_state=42)
-2024-10-17 13:39:18,762 - julearn - INFO - Multi-class classification problem detected #classes = 3.
+2024-10-23 11:29:48,646 - julearn - INFO - Using outer CV scheme RepeatedStratifiedKFold(n_repeats=2, n_splits=5, random_state=42)
+2024-10-23 11:29:48,646 - julearn - INFO - Multi-class classification problem detected #classes = 3.
 </pre></div>
 </div>
 <p>This will repeat 2 times a 5-fold stratified cross-validation. So the
@@ -1156,16 +1163,16 @@ to an arbitrary integer to make the splitting of the data reproducible.</p>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>   fit_time  score_time  ...  fold                          cv_mdsum
-0  0.004711    0.002457  ...     0  7449876d309382acfef94df9d102aa76
-1  0.004563    0.002438  ...     1  7449876d309382acfef94df9d102aa76
-2  0.004578    0.002497  ...     2  7449876d309382acfef94df9d102aa76
-3  0.004534    0.002430  ...     3  7449876d309382acfef94df9d102aa76
-4  0.004521    0.002486  ...     4  7449876d309382acfef94df9d102aa76
-5  0.004540    0.002502  ...     0  7449876d309382acfef94df9d102aa76
-6  0.004522    0.002454  ...     1  7449876d309382acfef94df9d102aa76
-7  0.004608    0.002531  ...     2  7449876d309382acfef94df9d102aa76
-8  0.004534    0.002592  ...     3  7449876d309382acfef94df9d102aa76
-9  0.004507    0.002465  ...     4  7449876d309382acfef94df9d102aa76
+0  0.004609    0.002465  ...     0  7449876d309382acfef94df9d102aa76
+1  0.004455    0.002430  ...     1  7449876d309382acfef94df9d102aa76
+2  0.004477    0.002444  ...     2  7449876d309382acfef94df9d102aa76
+3  0.004494    0.002411  ...     3  7449876d309382acfef94df9d102aa76
+4  0.004428    0.002428  ...     4  7449876d309382acfef94df9d102aa76
+5  0.004477    0.002418  ...     0  7449876d309382acfef94df9d102aa76
+6  0.004454    0.002446  ...     1  7449876d309382acfef94df9d102aa76
+7  0.004468    0.002396  ...     2  7449876d309382acfef94df9d102aa76
+8  0.004456    0.002435  ...     3  7449876d309382acfef94df9d102aa76
+9  0.004613    0.002438  ...     4  7449876d309382acfef94df9d102aa76
 
 [10 rows x 9 columns]
 </pre></div>
@@ -1279,32 +1286,32 @@ could do the following:</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-17 13:39:18,875 - julearn - INFO - ==== Input Data ====
-2024-10-17 13:39:18,875 - julearn - INFO - Using dataframe as input
-2024-10-17 13:39:18,876 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2024-10-17 13:39:18,876 - julearn - INFO -      Target: species
-2024-10-17 13:39:18,876 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2024-10-17 13:39:18,876 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
-2024-10-17 13:39:18,876 - julearn - INFO - ====================
-2024-10-17 13:39:18,876 - julearn - INFO -
-2024-10-17 13:39:18,877 - julearn - INFO - = Model Parameters =
-2024-10-17 13:39:18,877 - julearn - INFO - ====================
-2024-10-17 13:39:18,877 - julearn - INFO -
-2024-10-17 13:39:18,877 - julearn - INFO - = Data Information =
-2024-10-17 13:39:18,877 - julearn - INFO -      Problem type: classification
-2024-10-17 13:39:18,877 - julearn - INFO -      Number of samples: 150
-2024-10-17 13:39:18,877 - julearn - INFO -      Number of features: 4
-2024-10-17 13:39:18,877 - julearn - INFO - ====================
-2024-10-17 13:39:18,877 - julearn - INFO -
-2024-10-17 13:39:18,877 - julearn - INFO -      Number of classes: 3
-2024-10-17 13:39:18,877 - julearn - INFO -      Target type: object
-2024-10-17 13:39:18,878 - julearn - INFO -      Class distributions: species
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-23 11:29:48,757 - julearn - INFO - ==== Input Data ====
+2024-10-23 11:29:48,757 - julearn - INFO - Using dataframe as input
+2024-10-23 11:29:48,757 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2024-10-23 11:29:48,758 - julearn - INFO -      Target: species
+2024-10-23 11:29:48,758 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2024-10-23 11:29:48,758 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
+2024-10-23 11:29:48,758 - julearn - INFO - ====================
+2024-10-23 11:29:48,758 - julearn - INFO -
+2024-10-23 11:29:48,759 - julearn - INFO - = Model Parameters =
+2024-10-23 11:29:48,759 - julearn - INFO - ====================
+2024-10-23 11:29:48,759 - julearn - INFO -
+2024-10-23 11:29:48,759 - julearn - INFO - = Data Information =
+2024-10-23 11:29:48,759 - julearn - INFO -      Problem type: classification
+2024-10-23 11:29:48,759 - julearn - INFO -      Number of samples: 150
+2024-10-23 11:29:48,759 - julearn - INFO -      Number of features: 4
+2024-10-23 11:29:48,759 - julearn - INFO - ====================
+2024-10-23 11:29:48,759 - julearn - INFO -
+2024-10-23 11:29:48,759 - julearn - INFO -      Number of classes: 3
+2024-10-23 11:29:48,759 - julearn - INFO -      Target type: object
+2024-10-23 11:29:48,760 - julearn - INFO -      Class distributions: species
 setosa        50
 versicolor    50
 virginica     50
 Name: count, dtype: int64
-2024-10-17 13:39:18,878 - julearn - INFO - Using outer CV scheme RepeatedStratifiedKFold(n_repeats=2, n_splits=5, random_state=42)
-2024-10-17 13:39:18,878 - julearn - INFO - Multi-class classification problem detected #classes = 3.
+2024-10-23 11:29:48,760 - julearn - INFO - Using outer CV scheme RepeatedStratifiedKFold(n_repeats=2, n_splits=5, random_state=42)
+2024-10-23 11:29:48,760 - julearn - INFO - Multi-class classification problem detected #classes = 3.
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">scores</span></code> DataFrame will now have train- and test-score columns for both
@@ -1313,21 +1320,21 @@ scorers:</p>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>   fit_time  score_time  ...  fold                          cv_mdsum
-0  0.004776    0.004169  ...     0  7449876d309382acfef94df9d102aa76
-1  0.004557    0.004091  ...     1  7449876d309382acfef94df9d102aa76
-2  0.004536    0.004175  ...     2  7449876d309382acfef94df9d102aa76
-3  0.004633    0.004093  ...     3  7449876d309382acfef94df9d102aa76
-4  0.004527    0.004065  ...     4  7449876d309382acfef94df9d102aa76
-5  0.004569    0.004098  ...     0  7449876d309382acfef94df9d102aa76
-6  0.004551    0.004122  ...     1  7449876d309382acfef94df9d102aa76
-7  0.004584    0.004127  ...     2  7449876d309382acfef94df9d102aa76
-8  0.004602    0.004102  ...     3  7449876d309382acfef94df9d102aa76
-9  0.004574    0.004101  ...     4  7449876d309382acfef94df9d102aa76
+0  0.004683    0.004071  ...     0  7449876d309382acfef94df9d102aa76
+1  0.004456    0.004000  ...     1  7449876d309382acfef94df9d102aa76
+2  0.004496    0.004016  ...     2  7449876d309382acfef94df9d102aa76
+3  0.004474    0.003989  ...     3  7449876d309382acfef94df9d102aa76
+4  0.004437    0.004002  ...     4  7449876d309382acfef94df9d102aa76
+5  0.004469    0.004025  ...     0  7449876d309382acfef94df9d102aa76
+6  0.004531    0.004039  ...     1  7449876d309382acfef94df9d102aa76
+7  0.004494    0.004072  ...     2  7449876d309382acfef94df9d102aa76
+8  0.004529    0.004043  ...     3  7449876d309382acfef94df9d102aa76
+9  0.004501    0.004004  ...     4  7449876d309382acfef94df9d102aa76
 
 [10 rows x 11 columns]
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.455 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.447 seconds)</p>
 </section>
 </section>
 
