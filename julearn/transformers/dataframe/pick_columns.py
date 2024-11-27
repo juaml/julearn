@@ -14,7 +14,7 @@ from ...base import (
     ColumnTypesLike,
     JuTransformer,
 )
-from ...utils import logger
+from ...utils import logger, raise_error
 from ...utils.typing import DataLike
 
 
@@ -71,17 +71,19 @@ class PickColumns(JuTransformer):
         """
         self.support_mask_ = pd.Series(False, index=X.columns, dtype=bool)
 
-        try:
-            self.keep_columns_ = self.filter_columns(X).columns
-            to_keep = self.keep
-            if not isinstance(to_keep, list):
-                to_keep = [to_keep]
-            self.keep_columns_ = [
-                col for col in self.keep_columns_ if col in to_keep
-            ]
-            self.support_mask_[self.keep_columns_] = True
-        except ValueError:
-            self.keep_columns_ = []
+        self.keep_columns_ = self.filter_columns(X).columns
+        to_keep = self.keep
+        if not isinstance(to_keep, list):
+            to_keep = [to_keep]
+        self.keep_columns_ = [
+            col for col in self.keep_columns_ if col in to_keep
+        ]
+        if len(self.keep_columns_) != len(to_keep):
+            raise_error(
+                f"Kept columns do not match. Selected: ({self.keep}). "
+                f"Options are: {X.columns}"
+            )
+        self.support_mask_[self.keep_columns_] = True
         self.support_mask_ = self.support_mask_.values
         return self
 
