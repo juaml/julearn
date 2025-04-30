@@ -433,13 +433,13 @@ cognitive control in context-dependent decision-making. Cerebral Cortex.</p>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/work/julearn/julearn/julearn/utils/logging.py:66: UserWarning: The &#39;__version__&#39; attribute is deprecated and will be removed in MarkupSafe 3.1. Use feature detection, or `importlib.metadata.version(&quot;markupsafe&quot;)`, instead.
   vstring = str(getattr(module, &quot;__version__&quot;, None))
-2025-04-30 09:23:40,125 - julearn - INFO - ===== Lib Versions =====
-2025-04-30 09:23:40,125 - julearn - INFO - numpy: 1.26.4
-2025-04-30 09:23:40,125 - julearn - INFO - scipy: 1.15.2
-2025-04-30 09:23:40,125 - julearn - INFO - sklearn: 1.5.2
-2025-04-30 09:23:40,125 - julearn - INFO - pandas: 2.2.3
-2025-04-30 09:23:40,125 - julearn - INFO - julearn: 0.3.5.dev20
-2025-04-30 09:23:40,125 - julearn - INFO - ========================
+2025-04-30 09:32:39,167 - julearn - INFO - ===== Lib Versions =====
+2025-04-30 09:32:39,167 - julearn - INFO - numpy: 1.26.4
+2025-04-30 09:32:39,167 - julearn - INFO - scipy: 1.15.2
+2025-04-30 09:32:39,167 - julearn - INFO - sklearn: 1.5.2
+2025-04-30 09:32:39,167 - julearn - INFO - pandas: 2.2.3
+2025-04-30 09:32:39,167 - julearn - INFO - julearn: 0.3.5.dev21
+2025-04-30 09:32:39,167 - julearn - INFO - ========================
 </pre></div>
 </div>
 </section>
@@ -448,7 +448,7 @@ cognitive control in context-dependent decision-making. Cerebral Cortex.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_fmri</span></a> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;fmri&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>First, lets get some information on what the dataset has:</p>
+<p>First, let’s get some information on what the dataset has:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.head.html#pandas.DataFrame.head" title="pandas.DataFrame.head" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method"><span class="n">df_fmri</span><span class="o">.</span><span class="n">head</span></a><span class="p">())</span>
 </pre></div>
 </div>
@@ -463,7 +463,7 @@ cognitive control in context-dependent decision-making. Cerebral Cortex.</p>
 <p>From this information, we can infer that it is an fMRI study in which there
 were several subjects, timepoints, events and signal extracted from several
 brain regions.</p>
-<p>Lets check how many kinds of each we have.</p>
+<p>Let’s check how many kinds of each we have.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_fmri</span></a><span class="p">[</span><span class="s2">&quot;event&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_fmri</span></a><span class="p">[</span><span class="s2">&quot;region&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_fmri</span></a><span class="p">[</span><span class="s2">&quot;timepoint&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()))</span>
@@ -478,7 +478,7 @@ brain regions.</p>
 </div>
 <p>We have data from parietal and frontal regions during 2 types of events
 (<em>cue</em> and <em>stim</em>) during 18 timepoints and for 14 subjects.
-Lets see how many samples we have for each condition</p>
+Let’s see how many samples we have for each condition</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.groupby.html#pandas.DataFrame.groupby" title="pandas.DataFrame.groupby" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method"><span class="n">df_fmri</span><span class="o">.</span><span class="n">groupby</span></a><span class="p">([</span><span class="s2">&quot;subject&quot;</span><span class="p">,</span> <span class="s2">&quot;timepoint&quot;</span><span class="p">,</span> <span class="s2">&quot;event&quot;</span><span class="p">,</span> <span class="s2">&quot;region&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">count</span><span class="p">())</span>
 <span class="nb">print</span><span class="p">(</span>
     <a href="https://numpy.org/doc/stable/reference/generated/numpy.unique.html#numpy.unique" title="numpy.unique" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">unique</span></a><span class="p">(</span>
@@ -508,7 +508,7 @@ s9      17        stim  parietal       1
 </pre></div>
 </div>
 <p>We have exactly one value per condition.</p>
-<p>Lets try to build a model, that uses parietal and frontal signal to predicts
+<p>Let’s try to build a model, that uses parietal and frontal signal to predicts
 whether the event was a <em>cue</em> or a <em>stim</em>.</p>
 <p>First we define our X and y variables.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;parietal&quot;</span><span class="p">,</span> <span class="s2">&quot;frontal&quot;</span><span class="p">]</span>
@@ -540,38 +540,38 @@ Machine classifier.</p>
 <span class="nb">print</span><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">[</span><span class="s2">&quot;test_score&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-04-30 09:23:40,145 - julearn - INFO - ==== Input Data ====
-2025-04-30 09:23:40,145 - julearn - INFO - Using dataframe as input
-2025-04-30 09:23:40,145 - julearn - INFO -      Features: [&#39;parietal&#39;, &#39;frontal&#39;]
-2025-04-30 09:23:40,145 - julearn - INFO -      Target: event
-2025-04-30 09:23:40,145 - julearn - INFO -      Expanded features: [&#39;parietal&#39;, &#39;frontal&#39;]
-2025-04-30 09:23:40,145 - julearn - INFO -      X_types:{}
-2025-04-30 09:23:40,145 - julearn - WARNING - The following columns are not defined in X_types: [&#39;parietal&#39;, &#39;frontal&#39;]. They will be treated as continuous.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-04-30 09:32:39,187 - julearn - INFO - ==== Input Data ====
+2025-04-30 09:32:39,187 - julearn - INFO - Using dataframe as input
+2025-04-30 09:32:39,187 - julearn - INFO -      Features: [&#39;parietal&#39;, &#39;frontal&#39;]
+2025-04-30 09:32:39,187 - julearn - INFO -      Target: event
+2025-04-30 09:32:39,187 - julearn - INFO -      Expanded features: [&#39;parietal&#39;, &#39;frontal&#39;]
+2025-04-30 09:32:39,188 - julearn - INFO -      X_types:{}
+2025-04-30 09:32:39,188 - julearn - WARNING - The following columns are not defined in X_types: [&#39;parietal&#39;, &#39;frontal&#39;]. They will be treated as continuous.
 /home/runner/work/julearn/julearn/julearn/prepare.py:509: RuntimeWarning: The following columns are not defined in X_types: [&#39;parietal&#39;, &#39;frontal&#39;]. They will be treated as continuous.
   warn_with_log(
-2025-04-30 09:23:40,146 - julearn - INFO - ====================
-2025-04-30 09:23:40,146 - julearn - INFO -
-2025-04-30 09:23:40,146 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2025-04-30 09:23:40,146 - julearn - INFO - Step added
-2025-04-30 09:23:40,146 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2025-04-30 09:23:40,146 - julearn - INFO - Step added
-2025-04-30 09:23:40,147 - julearn - INFO - = Model Parameters =
-2025-04-30 09:23:40,147 - julearn - INFO - ====================
-2025-04-30 09:23:40,147 - julearn - INFO -
-2025-04-30 09:23:40,147 - julearn - INFO - = Data Information =
-2025-04-30 09:23:40,147 - julearn - INFO -      Problem type: classification
-2025-04-30 09:23:40,147 - julearn - INFO -      Number of samples: 532
-2025-04-30 09:23:40,147 - julearn - INFO -      Number of features: 2
-2025-04-30 09:23:40,147 - julearn - INFO - ====================
-2025-04-30 09:23:40,147 - julearn - INFO -
-2025-04-30 09:23:40,147 - julearn - INFO -      Number of classes: 2
-2025-04-30 09:23:40,147 - julearn - INFO -      Target type: object
-2025-04-30 09:23:40,148 - julearn - INFO -      Class distributions: event
+2025-04-30 09:32:39,188 - julearn - INFO - ====================
+2025-04-30 09:32:39,188 - julearn - INFO -
+2025-04-30 09:32:39,188 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-04-30 09:32:39,189 - julearn - INFO - Step added
+2025-04-30 09:32:39,189 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-04-30 09:32:39,189 - julearn - INFO - Step added
+2025-04-30 09:32:39,189 - julearn - INFO - = Model Parameters =
+2025-04-30 09:32:39,189 - julearn - INFO - ====================
+2025-04-30 09:32:39,189 - julearn - INFO -
+2025-04-30 09:32:39,189 - julearn - INFO - = Data Information =
+2025-04-30 09:32:39,189 - julearn - INFO -      Problem type: classification
+2025-04-30 09:32:39,190 - julearn - INFO -      Number of samples: 532
+2025-04-30 09:32:39,190 - julearn - INFO -      Number of features: 2
+2025-04-30 09:32:39,190 - julearn - INFO - ====================
+2025-04-30 09:32:39,190 - julearn - INFO -
+2025-04-30 09:32:39,190 - julearn - INFO -      Number of classes: 2
+2025-04-30 09:32:39,190 - julearn - INFO -      Target type: object
+2025-04-30 09:32:39,190 - julearn - INFO -      Class distributions: event
 cue     266
 stim    266
 Name: count, dtype: int64
-2025-04-30 09:23:40,148 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2025-04-30 09:23:40,148 - julearn - INFO - Binary classification problem detected.
+2025-04-30 09:32:39,191 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2025-04-30 09:32:39,191 - julearn - INFO - Binary classification problem detected.
 0.7218303650149884
 </pre></div>
 </div>
@@ -610,39 +610,39 @@ later to do some analyses.</p>
 <span class="nb">print</span><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">[</span><span class="s2">&quot;test_score&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-04-30 09:23:40,207 - julearn - INFO - ==== Input Data ====
-2025-04-30 09:23:40,207 - julearn - INFO - Using dataframe as input
-2025-04-30 09:23:40,207 - julearn - INFO -      Features: [&#39;parietal&#39;, &#39;frontal&#39;]
-2025-04-30 09:23:40,207 - julearn - INFO -      Target: event
-2025-04-30 09:23:40,207 - julearn - INFO -      Expanded features: [&#39;parietal&#39;, &#39;frontal&#39;]
-2025-04-30 09:23:40,207 - julearn - INFO -      X_types:{}
-2025-04-30 09:23:40,207 - julearn - WARNING - The following columns are not defined in X_types: [&#39;parietal&#39;, &#39;frontal&#39;]. They will be treated as continuous.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-04-30 09:32:39,250 - julearn - INFO - ==== Input Data ====
+2025-04-30 09:32:39,250 - julearn - INFO - Using dataframe as input
+2025-04-30 09:32:39,250 - julearn - INFO -      Features: [&#39;parietal&#39;, &#39;frontal&#39;]
+2025-04-30 09:32:39,250 - julearn - INFO -      Target: event
+2025-04-30 09:32:39,250 - julearn - INFO -      Expanded features: [&#39;parietal&#39;, &#39;frontal&#39;]
+2025-04-30 09:32:39,250 - julearn - INFO -      X_types:{}
+2025-04-30 09:32:39,250 - julearn - WARNING - The following columns are not defined in X_types: [&#39;parietal&#39;, &#39;frontal&#39;]. They will be treated as continuous.
 /home/runner/work/julearn/julearn/julearn/prepare.py:509: RuntimeWarning: The following columns are not defined in X_types: [&#39;parietal&#39;, &#39;frontal&#39;]. They will be treated as continuous.
   warn_with_log(
-2025-04-30 09:23:40,208 - julearn - INFO - Using subject as groups
-2025-04-30 09:23:40,208 - julearn - INFO - ====================
-2025-04-30 09:23:40,208 - julearn - INFO -
-2025-04-30 09:23:40,208 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2025-04-30 09:23:40,209 - julearn - INFO - Step added
-2025-04-30 09:23:40,209 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2025-04-30 09:23:40,209 - julearn - INFO - Step added
-2025-04-30 09:23:40,209 - julearn - INFO - = Model Parameters =
-2025-04-30 09:23:40,209 - julearn - INFO - ====================
-2025-04-30 09:23:40,209 - julearn - INFO -
-2025-04-30 09:23:40,209 - julearn - INFO - = Data Information =
-2025-04-30 09:23:40,209 - julearn - INFO -      Problem type: classification
-2025-04-30 09:23:40,210 - julearn - INFO -      Number of samples: 532
-2025-04-30 09:23:40,210 - julearn - INFO -      Number of features: 2
-2025-04-30 09:23:40,210 - julearn - INFO - ====================
-2025-04-30 09:23:40,210 - julearn - INFO -
-2025-04-30 09:23:40,210 - julearn - INFO -      Number of classes: 2
-2025-04-30 09:23:40,210 - julearn - INFO -      Target type: object
-2025-04-30 09:23:40,210 - julearn - INFO -      Class distributions: event
+2025-04-30 09:32:39,251 - julearn - INFO - Using subject as groups
+2025-04-30 09:32:39,251 - julearn - INFO - ====================
+2025-04-30 09:32:39,251 - julearn - INFO -
+2025-04-30 09:32:39,251 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-04-30 09:32:39,251 - julearn - INFO - Step added
+2025-04-30 09:32:39,251 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-04-30 09:32:39,251 - julearn - INFO - Step added
+2025-04-30 09:32:39,252 - julearn - INFO - = Model Parameters =
+2025-04-30 09:32:39,252 - julearn - INFO - ====================
+2025-04-30 09:32:39,252 - julearn - INFO -
+2025-04-30 09:32:39,252 - julearn - INFO - = Data Information =
+2025-04-30 09:32:39,252 - julearn - INFO -      Problem type: classification
+2025-04-30 09:32:39,252 - julearn - INFO -      Number of samples: 532
+2025-04-30 09:32:39,252 - julearn - INFO -      Number of features: 2
+2025-04-30 09:32:39,252 - julearn - INFO - ====================
+2025-04-30 09:32:39,252 - julearn - INFO -
+2025-04-30 09:32:39,252 - julearn - INFO -      Number of classes: 2
+2025-04-30 09:32:39,252 - julearn - INFO -      Target type: object
+2025-04-30 09:32:39,253 - julearn - INFO -      Class distributions: event
 cue     266
 stim    266
 Name: count, dtype: int64
-2025-04-30 09:23:40,211 - julearn - INFO - Using outer CV scheme GroupShuffleSplit(n_splits=5, random_state=42, test_size=0.5, train_size=None) (incl. final model)
-2025-04-30 09:23:40,211 - julearn - INFO - Binary classification problem detected.
+2025-04-30 09:32:39,253 - julearn - INFO - Using outer CV scheme GroupShuffleSplit(n_splits=5, random_state=42, test_size=0.5, train_size=None) (incl. final model)
+2025-04-30 09:32:39,253 - julearn - INFO - Binary classification problem detected.
 0.7210526315789474
 </pre></div>
 </div>
@@ -717,7 +717,7 @@ how the SVM does this complex task.</p>
 <img src="../../_images/sphx_glr_plot_groupcv_inspect_svm_002.png" srcset="../../_images/sphx_glr_plot_groupcv_inspect_svm_002.png" alt="Preprocessed data with SVM decision function boundaries" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Preprocessed data with SVM decision function boundaries&#39;)
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.460 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.515 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-02-inspection-plot-groupcv-inspect-svm-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/49cd72af4c3c448b24084500a1dde058/plot_groupcv_inspect_svm.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_groupcv_inspect_svm.py</span></code></a></p>

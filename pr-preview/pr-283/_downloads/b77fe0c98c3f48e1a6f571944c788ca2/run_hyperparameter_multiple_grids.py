@@ -47,7 +47,7 @@ df_fmri = df_fmri.reset_index()
 df_fmri.head()
 
 ###############################################################################
-# Lets do a first attempt and use a linear SVM with the default parameters.
+# Let's do a first attempt and use a linear SVM with the default parameters.
 
 X = ["frontal", "parietal"]
 y = "event"

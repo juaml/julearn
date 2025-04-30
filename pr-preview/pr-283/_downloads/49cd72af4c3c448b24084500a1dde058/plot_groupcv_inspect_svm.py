@@ -42,7 +42,7 @@ configure_logging(level="INFO")
 df_fmri = load_dataset("fmri")
 
 ###############################################################################
-# First, lets get some information on what the dataset has:
+# First, let's get some information on what the dataset has:
 
 print(df_fmri.head())
 
@@ -51,7 +51,7 @@ print(df_fmri.head())
 # were several subjects, timepoints, events and signal extracted from several
 # brain regions.
 #
-# Lets check how many kinds of each we have.
+# Let's check how many kinds of each we have.
 
 print(df_fmri["event"].unique())
 print(df_fmri["region"].unique())
@@ -61,7 +61,7 @@ print(df_fmri["subject"].unique())
 ###############################################################################
 # We have data from parietal and frontal regions during 2 types of events
 # (*cue* and *stim*) during 18 timepoints and for 14 subjects.
-# Lets see how many samples we have for each condition
+# Let's see how many samples we have for each condition
 
 print(df_fmri.groupby(["subject", "timepoint", "event", "region"]).count())
 print(
@@ -75,7 +75,7 @@ print(
 ###############################################################################
 # We have exactly one value per condition.
 #
-# Lets try to build a model, that uses parietal and frontal signal to predicts
+# Let's try to build a model, that uses parietal and frontal signal to predicts
 # whether the event was a *cue* or a *stim*.
 #
 # First we define our X and y variables.
