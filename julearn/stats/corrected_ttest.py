@@ -168,8 +168,8 @@ def corrected_ttest(
         n_train = i_scores["n_train"].values
         n_test = i_scores["n_test"].values
 
-        n_train = typing.cast(np.ndarray, n_train)
-        n_test = typing.cast(np.ndarray, n_test)
+        n_train = typing.cast("np.ndarray", n_train)
+        n_test = typing.cast("np.ndarray", n_test)
 
         if np.unique(n_train).size > 1:
             warn_with_log(

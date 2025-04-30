@@ -255,7 +255,7 @@ class PipelineCreator:
                     "TargetPipelineCreator can only be added to the target."
                 )
             step = step.to_pipeline()  # type: ignore
-            step = typing.cast(JuTargetPipeline, step)
+            step = typing.cast("JuTargetPipeline", step)
         # Validate the step
         self._validate_step(step, apply_to)
 
@@ -609,7 +609,7 @@ class PipelineCreator:
             params_to_tune.update(step_params_to_tune)
             pipeline_steps.append((model_name, model_estimator))
         pipeline = Pipeline(pipeline_steps).set_output(transform="pandas")
-        pipeline = typing.cast(Pipeline, pipeline)  # damn typing..
+        pipeline = typing.cast("Pipeline", pipeline)  # damn typing..
         # Deal with the Hyperparameter tuning
         out = _prepare_hyperparameter_tuning(
             params_to_tune, search_params, pipeline

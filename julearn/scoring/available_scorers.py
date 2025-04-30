@@ -161,7 +161,7 @@ def check_scoring(
             wrap_score,
         )
     if isinstance(scoring, list):
-        scorer_names = typing.cast(List[str], scoring)
+        scorer_names = typing.cast("List[str]", scoring)
         scoring_dict = {
             score: _extend_scorer(get_scorer(score), wrap_score)
             for score in scorer_names

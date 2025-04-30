@@ -99,7 +99,7 @@ class TargetConfoundRemover(JuTargetTransformer):
         y_pred = self.model_confounds_.predict(  # type: ignore
             X_confounds.values
         )
-        y_pred = typing.cast(pd.Series, y_pred)
+        y_pred = typing.cast("pd.Series", y_pred)
         residuals = y - y_pred
         if self.threshold is not None:
             residuals[np.abs(residuals) < self.threshold] = 0
