@@ -90,7 +90,7 @@ def df_typed_iris() -> pd.DataFrame:
 
     """
     df = load_dataset("iris")
-    df = typing.cast(pd.DataFrame, df)
+    df = typing.cast("pd.DataFrame", df)
 
     rename = {
         "sepal_length": "sepal_length__:type:__continuous",
@@ -113,7 +113,7 @@ def df_iris() -> pd.DataFrame:
 
     """
     df = load_dataset("iris")
-    df = typing.cast(pd.DataFrame, df)
+    df = typing.cast("pd.DataFrame", df)
 
     return df.copy()
 
@@ -129,7 +129,7 @@ def df_binary() -> pd.DataFrame:
 
     """
     df_iris = load_dataset("iris")
-    df_iris = typing.cast(pd.DataFrame, df_iris)
+    df_iris = typing.cast("pd.DataFrame", df_iris)
     df_binary = df_iris[df_iris["species"].isin(["setosa", "virginica"])]
 
     return df_binary
@@ -148,7 +148,7 @@ def X_iris() -> pd.DataFrame:
 
     """
     df = load_dataset("iris")
-    df = typing.cast(pd.DataFrame, df)
+    df = typing.cast("pd.DataFrame", df)
     features = ["sepal_length", "sepal_width", "petal_length", "petal_width"]
     return df.loc[:, features]
 
@@ -166,7 +166,7 @@ def y_iris() -> pd.Series:
 
     """
     df = load_dataset("iris")
-    df = typing.cast(pd.DataFrame, df)
+    df = typing.cast("pd.DataFrame", df)
 
     return df.loc[:, "species"].astype("category").cat.codes
 

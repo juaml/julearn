@@ -116,7 +116,7 @@ class JuTransformedTargetModel(JuBaseEstimator):
         """
         if not hasattr(self, "model_"):
             raise_error("Model not fitted yet.")
-        self.model_ = typing.cast(ModelLike, self.model_)
+        self.model_ = typing.cast("ModelLike", self.model_)
         # TODO: Check if we can inverse the y transformations
         # Raise warning if not possible
         y_pred = self.model_.predict(X)
@@ -150,7 +150,7 @@ class JuTransformedTargetModel(JuBaseEstimator):
         """
         if not hasattr(self, "model_"):
             raise_error("Model not fitted yet.")
-        self.model_ = typing.cast(ModelLike, self.model_)
+        self.model_ = typing.cast("ModelLike", self.model_)
         y_trans = self.transform_target(X, y)
         return self.model_.score(X, y_trans)
 
@@ -173,7 +173,7 @@ class JuTransformedTargetModel(JuBaseEstimator):
         """
         if not hasattr(self, "model_"):
             raise_error("Model not fitted yet.")
-        self.model_ = typing.cast(ModelLike, self.model_)
+        self.model_ = typing.cast("ModelLike", self.model_)
         return self.model_.predict_proba(X)  # type: ignore
 
     @available_if(_wrapped_model_has("decision_function"))
@@ -194,7 +194,7 @@ class JuTransformedTargetModel(JuBaseEstimator):
         """
         if not hasattr(self, "model_"):
             raise_error("Model not fitted yet.")
-        self.model_ = typing.cast(ModelLike, self.model_)
+        self.model_ = typing.cast("ModelLike", self.model_)
         return self.model_.decision_function(X)  # type: ignore
 
     def transform_target(
@@ -233,5 +233,5 @@ class JuTransformedTargetModel(JuBaseEstimator):
         """Get the classes of the model."""
         if not hasattr(self, "model_"):
             raise_error("Model not fitted yet.")
-        self.model_ = typing.cast(ModelLike, self.model_)
+        self.model_ = typing.cast("ModelLike", self.model_)
         return self.model_.classes_

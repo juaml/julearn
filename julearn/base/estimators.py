@@ -492,7 +492,7 @@ class WrapModel(JuBaseEstimator):
 
         """
         model_params = list(self.model.get_params(True).keys())
-        kwargs = cast(Dict[str, Any], kwargs)
+        kwargs = cast("Dict[str, Any]", kwargs)
         for param, val in kwargs.items():
             if param in model_params:
                 self.model.set_params(**{param: val})
