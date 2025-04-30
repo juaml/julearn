@@ -182,7 +182,7 @@ fig.suptitle(
 )
 
 ###############################################################################
-# Now lets see how K-fold would have split this data.
+# Now let's see how K-fold would have split this data.
 cv = KFold(n_splits=3, shuffle=True, random_state=42)
 
 fig, axis = plt.subplots(1, 2, figsize=(20, 4))
