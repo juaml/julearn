@@ -7,7 +7,7 @@
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
         <title>Simple Model Comparison - julearn documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=61a4c737" />
@@ -434,11 +434,11 @@ whether the difference in performance is significant.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Authors: Federico Raimondo &lt;f.raimondo@fz-juelich.de&gt;</span>
 <span class="c1"># License: AGPL</span>
 
-<span class="kn">from</span> <span class="nn">seaborn</span> <span class="kn">import</span> <span class="n">load_dataset</span>
-<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.RepeatedStratifiedKFold.html#sklearn.model_selection.RepeatedStratifiedKFold" title="sklearn.model_selection.RepeatedStratifiedKFold" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class"><span class="n">RepeatedStratifiedKFold</span></a>
-<span class="kn">from</span> <span class="nn">julearn</span> <span class="kn">import</span> <span class="n">run_cross_validation</span>
-<span class="kn">from</span> <span class="nn">julearn.utils</span> <span class="kn">import</span> <span class="n">configure_logging</span>
-<span class="kn">from</span> <span class="nn">julearn.stats.corrected_ttest</span> <span class="kn">import</span> <span class="n">corrected_ttest</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dataset</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.RepeatedStratifiedKFold.html#sklearn.model_selection.RepeatedStratifiedKFold" title="sklearn.model_selection.RepeatedStratifiedKFold" class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class"><span class="n">RepeatedStratifiedKFold</span></a>
+<span class="kn">from</span><span class="w"> </span><span class="nn">julearn</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_cross_validation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">julearn.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">configure_logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">julearn.stats.corrected_ttest</span><span class="w"> </span><span class="kn">import</span> <span class="n">corrected_ttest</span>
 </pre></div>
 </div>
 <p>Set the logging level to info to see extra information.</p>
@@ -447,13 +447,13 @@ whether the difference in performance is significant.</p>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/work/julearn/julearn/julearn/utils/logging.py:66: UserWarning: The &#39;__version__&#39; attribute is deprecated and will be removed in MarkupSafe 3.1. Use feature detection, or `importlib.metadata.version(&quot;markupsafe&quot;)`, instead.
   vstring = str(getattr(module, &quot;__version__&quot;, None))
-2024-10-23 11:29:10,714 - julearn - INFO - ===== Lib Versions =====
-2024-10-23 11:29:10,714 - julearn - INFO - numpy: 1.26.4
-2024-10-23 11:29:10,714 - julearn - INFO - scipy: 1.14.1
-2024-10-23 11:29:10,714 - julearn - INFO - sklearn: 1.5.2
-2024-10-23 11:29:10,714 - julearn - INFO - pandas: 2.2.3
-2024-10-23 11:29:10,714 - julearn - INFO - julearn: 0.3.5.dev16
-2024-10-23 11:29:10,714 - julearn - INFO - ========================
+2025-07-07 11:52:57,096 - julearn - INFO - ===== Lib Versions =====
+2025-07-07 11:52:57,097 - julearn - INFO - numpy: 1.26.4
+2025-07-07 11:52:57,097 - julearn - INFO - scipy: 1.15.3
+2025-07-07 11:52:57,097 - julearn - INFO - sklearn: 1.5.2
+2025-07-07 11:52:57,097 - julearn - INFO - pandas: 2.2.3
+2025-07-07 11:52:57,097 - julearn - INFO - julearn: 0.3.5.dev28
+2025-07-07 11:52:57,097 - julearn - INFO - ========================
 </pre></div>
 </div>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_iris</span></a> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;iris&quot;</span><span class="p">)</span>
@@ -480,38 +480,38 @@ We will try to predict the species.</p>
 <span class="nb">print</span><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">[</span><span class="s2">&quot;test_score&quot;</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-23 11:29:10,716 - julearn - INFO - ==== Input Data ====
-2024-10-23 11:29:10,717 - julearn - INFO - Using dataframe as input
-2024-10-23 11:29:10,717 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2024-10-23 11:29:10,717 - julearn - INFO -      Target: species
-2024-10-23 11:29:10,717 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2024-10-23 11:29:10,717 - julearn - INFO -      X_types:{}
-2024-10-23 11:29:10,717 - julearn - WARNING - The following columns are not defined in X_types: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]. They will be treated as continuous.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-07-07 11:52:57,099 - julearn - INFO - ==== Input Data ====
+2025-07-07 11:52:57,099 - julearn - INFO - Using dataframe as input
+2025-07-07 11:52:57,099 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2025-07-07 11:52:57,100 - julearn - INFO -      Target: species
+2025-07-07 11:52:57,100 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2025-07-07 11:52:57,100 - julearn - INFO -      X_types:{}
+2025-07-07 11:52:57,100 - julearn - WARNING - The following columns are not defined in X_types: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]. They will be treated as continuous.
 /home/runner/work/julearn/julearn/julearn/prepare.py:509: RuntimeWarning: The following columns are not defined in X_types: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]. They will be treated as continuous.
   warn_with_log(
-2024-10-23 11:29:10,718 - julearn - INFO - ====================
-2024-10-23 11:29:10,718 - julearn - INFO -
-2024-10-23 11:29:10,718 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:29:10,718 - julearn - INFO - Step added
-2024-10-23 11:29:10,718 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:29:10,718 - julearn - INFO - Step added
-2024-10-23 11:29:10,719 - julearn - INFO - = Model Parameters =
-2024-10-23 11:29:10,719 - julearn - INFO - ====================
-2024-10-23 11:29:10,719 - julearn - INFO -
-2024-10-23 11:29:10,719 - julearn - INFO - = Data Information =
-2024-10-23 11:29:10,719 - julearn - INFO -      Problem type: classification
-2024-10-23 11:29:10,719 - julearn - INFO -      Number of samples: 100
-2024-10-23 11:29:10,719 - julearn - INFO -      Number of features: 3
-2024-10-23 11:29:10,719 - julearn - INFO - ====================
-2024-10-23 11:29:10,719 - julearn - INFO -
-2024-10-23 11:29:10,719 - julearn - INFO -      Number of classes: 2
-2024-10-23 11:29:10,719 - julearn - INFO -      Target type: object
-2024-10-23 11:29:10,720 - julearn - INFO -      Class distributions: species
+2025-07-07 11:52:57,100 - julearn - INFO - ====================
+2025-07-07 11:52:57,100 - julearn - INFO -
+2025-07-07 11:52:57,101 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:52:57,101 - julearn - INFO - Step added
+2025-07-07 11:52:57,101 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:52:57,101 - julearn - INFO - Step added
+2025-07-07 11:52:57,101 - julearn - INFO - = Model Parameters =
+2025-07-07 11:52:57,101 - julearn - INFO - ====================
+2025-07-07 11:52:57,102 - julearn - INFO -
+2025-07-07 11:52:57,102 - julearn - INFO - = Data Information =
+2025-07-07 11:52:57,102 - julearn - INFO -      Problem type: classification
+2025-07-07 11:52:57,102 - julearn - INFO -      Number of samples: 100
+2025-07-07 11:52:57,102 - julearn - INFO -      Number of features: 3
+2025-07-07 11:52:57,102 - julearn - INFO - ====================
+2025-07-07 11:52:57,102 - julearn - INFO -
+2025-07-07 11:52:57,102 - julearn - INFO -      Number of classes: 2
+2025-07-07 11:52:57,102 - julearn - INFO -      Target type: object
+2025-07-07 11:52:57,103 - julearn - INFO -      Class distributions: species
 versicolor    50
 virginica     50
 Name: count, dtype: int64
-2024-10-23 11:29:10,720 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-23 11:29:10,720 - julearn - INFO - Binary classification problem detected.
+2025-07-07 11:52:57,103 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2025-07-07 11:52:57,103 - julearn - INFO - Binary classification problem detected.
 0    0.90
 1    0.75
 2    0.95
@@ -557,38 +557,38 @@ to use the same random seed to split the data in the same way.</p>
 <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores1</span></a><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;svm&quot;</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-23 11:29:10,760 - julearn - INFO - ==== Input Data ====
-2024-10-23 11:29:10,760 - julearn - INFO - Using dataframe as input
-2024-10-23 11:29:10,760 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2024-10-23 11:29:10,760 - julearn - INFO -      Target: species
-2024-10-23 11:29:10,760 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2024-10-23 11:29:10,760 - julearn - INFO -      X_types:{}
-2024-10-23 11:29:10,760 - julearn - WARNING - The following columns are not defined in X_types: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]. They will be treated as continuous.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-07-07 11:52:57,144 - julearn - INFO - ==== Input Data ====
+2025-07-07 11:52:57,144 - julearn - INFO - Using dataframe as input
+2025-07-07 11:52:57,145 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2025-07-07 11:52:57,145 - julearn - INFO -      Target: species
+2025-07-07 11:52:57,145 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2025-07-07 11:52:57,145 - julearn - INFO -      X_types:{}
+2025-07-07 11:52:57,145 - julearn - WARNING - The following columns are not defined in X_types: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]. They will be treated as continuous.
 /home/runner/work/julearn/julearn/julearn/prepare.py:509: RuntimeWarning: The following columns are not defined in X_types: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]. They will be treated as continuous.
   warn_with_log(
-2024-10-23 11:29:10,761 - julearn - INFO - ====================
-2024-10-23 11:29:10,761 - julearn - INFO -
-2024-10-23 11:29:10,761 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:29:10,761 - julearn - INFO - Step added
-2024-10-23 11:29:10,761 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:29:10,761 - julearn - INFO - Step added
-2024-10-23 11:29:10,762 - julearn - INFO - = Model Parameters =
-2024-10-23 11:29:10,762 - julearn - INFO - ====================
-2024-10-23 11:29:10,762 - julearn - INFO -
-2024-10-23 11:29:10,762 - julearn - INFO - = Data Information =
-2024-10-23 11:29:10,762 - julearn - INFO -      Problem type: classification
-2024-10-23 11:29:10,762 - julearn - INFO -      Number of samples: 80
-2024-10-23 11:29:10,762 - julearn - INFO -      Number of features: 3
-2024-10-23 11:29:10,762 - julearn - INFO - ====================
-2024-10-23 11:29:10,762 - julearn - INFO -
-2024-10-23 11:29:10,762 - julearn - INFO -      Number of classes: 2
-2024-10-23 11:29:10,762 - julearn - INFO -      Target type: object
-2024-10-23 11:29:10,763 - julearn - INFO -      Class distributions: species
+2025-07-07 11:52:57,145 - julearn - INFO - ====================
+2025-07-07 11:52:57,145 - julearn - INFO -
+2025-07-07 11:52:57,145 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:52:57,146 - julearn - INFO - Step added
+2025-07-07 11:52:57,146 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:52:57,146 - julearn - INFO - Step added
+2025-07-07 11:52:57,146 - julearn - INFO - = Model Parameters =
+2025-07-07 11:52:57,146 - julearn - INFO - ====================
+2025-07-07 11:52:57,146 - julearn - INFO -
+2025-07-07 11:52:57,146 - julearn - INFO - = Data Information =
+2025-07-07 11:52:57,146 - julearn - INFO -      Problem type: classification
+2025-07-07 11:52:57,146 - julearn - INFO -      Number of samples: 80
+2025-07-07 11:52:57,147 - julearn - INFO -      Number of features: 3
+2025-07-07 11:52:57,147 - julearn - INFO - ====================
+2025-07-07 11:52:57,147 - julearn - INFO -
+2025-07-07 11:52:57,147 - julearn - INFO -      Number of classes: 2
+2025-07-07 11:52:57,147 - julearn - INFO -      Target type: object
+2025-07-07 11:52:57,147 - julearn - INFO -      Class distributions: species
 virginica     50
 versicolor    30
 Name: count, dtype: int64
-2024-10-23 11:29:10,763 - julearn - INFO - Using outer CV scheme RepeatedStratifiedKFold(n_repeats=5, n_splits=5, random_state=42)
-2024-10-23 11:29:10,763 - julearn - INFO - Binary classification problem detected.
+2025-07-07 11:52:57,147 - julearn - INFO - Using outer CV scheme RepeatedStratifiedKFold(n_repeats=5, n_splits=5, random_state=42)
+2025-07-07 11:52:57,148 - julearn - INFO - Binary classification problem detected.
 </pre></div>
 </div>
 <p>Second we will use a default Random Forest model.</p>
@@ -606,38 +606,38 @@ Name: count, dtype: int64
 <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores2</span></a><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;rf&quot;</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-23 11:29:11,044 - julearn - INFO - ==== Input Data ====
-2024-10-23 11:29:11,044 - julearn - INFO - Using dataframe as input
-2024-10-23 11:29:11,044 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2024-10-23 11:29:11,044 - julearn - INFO -      Target: species
-2024-10-23 11:29:11,044 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2024-10-23 11:29:11,044 - julearn - INFO -      X_types:{}
-2024-10-23 11:29:11,044 - julearn - WARNING - The following columns are not defined in X_types: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]. They will be treated as continuous.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-07-07 11:52:57,441 - julearn - INFO - ==== Input Data ====
+2025-07-07 11:52:57,442 - julearn - INFO - Using dataframe as input
+2025-07-07 11:52:57,442 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2025-07-07 11:52:57,442 - julearn - INFO -      Target: species
+2025-07-07 11:52:57,442 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2025-07-07 11:52:57,442 - julearn - INFO -      X_types:{}
+2025-07-07 11:52:57,442 - julearn - WARNING - The following columns are not defined in X_types: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]. They will be treated as continuous.
 /home/runner/work/julearn/julearn/julearn/prepare.py:509: RuntimeWarning: The following columns are not defined in X_types: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]. They will be treated as continuous.
   warn_with_log(
-2024-10-23 11:29:11,045 - julearn - INFO - ====================
-2024-10-23 11:29:11,045 - julearn - INFO -
-2024-10-23 11:29:11,045 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:29:11,045 - julearn - INFO - Step added
-2024-10-23 11:29:11,045 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:29:11,045 - julearn - INFO - Step added
-2024-10-23 11:29:11,046 - julearn - INFO - = Model Parameters =
-2024-10-23 11:29:11,046 - julearn - INFO - ====================
-2024-10-23 11:29:11,046 - julearn - INFO -
-2024-10-23 11:29:11,046 - julearn - INFO - = Data Information =
-2024-10-23 11:29:11,046 - julearn - INFO -      Problem type: classification
-2024-10-23 11:29:11,046 - julearn - INFO -      Number of samples: 80
-2024-10-23 11:29:11,046 - julearn - INFO -      Number of features: 3
-2024-10-23 11:29:11,046 - julearn - INFO - ====================
-2024-10-23 11:29:11,046 - julearn - INFO -
-2024-10-23 11:29:11,046 - julearn - INFO -      Number of classes: 2
-2024-10-23 11:29:11,046 - julearn - INFO -      Target type: object
-2024-10-23 11:29:11,047 - julearn - INFO -      Class distributions: species
+2025-07-07 11:52:57,442 - julearn - INFO - ====================
+2025-07-07 11:52:57,443 - julearn - INFO -
+2025-07-07 11:52:57,443 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:52:57,443 - julearn - INFO - Step added
+2025-07-07 11:52:57,443 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:52:57,443 - julearn - INFO - Step added
+2025-07-07 11:52:57,443 - julearn - INFO - = Model Parameters =
+2025-07-07 11:52:57,444 - julearn - INFO - ====================
+2025-07-07 11:52:57,444 - julearn - INFO -
+2025-07-07 11:52:57,444 - julearn - INFO - = Data Information =
+2025-07-07 11:52:57,444 - julearn - INFO -      Problem type: classification
+2025-07-07 11:52:57,444 - julearn - INFO -      Number of samples: 80
+2025-07-07 11:52:57,444 - julearn - INFO -      Number of features: 3
+2025-07-07 11:52:57,444 - julearn - INFO - ====================
+2025-07-07 11:52:57,444 - julearn - INFO -
+2025-07-07 11:52:57,444 - julearn - INFO -      Number of classes: 2
+2025-07-07 11:52:57,444 - julearn - INFO -      Target type: object
+2025-07-07 11:52:57,445 - julearn - INFO -      Class distributions: species
 virginica     50
 versicolor    30
 Name: count, dtype: int64
-2024-10-23 11:29:11,047 - julearn - INFO - Using outer CV scheme RepeatedStratifiedKFold(n_repeats=5, n_splits=5, random_state=42)
-2024-10-23 11:29:11,047 - julearn - INFO - Binary classification problem detected.
+2025-07-07 11:52:57,445 - julearn - INFO - Using outer CV scheme RepeatedStratifiedKFold(n_repeats=5, n_splits=5, random_state=42)
+2025-07-07 11:52:57,445 - julearn - INFO - Binary classification problem detected.
 </pre></div>
 </div>
 <p>The third model will be a SVM with a linear kernel.</p>
@@ -656,39 +656,39 @@ Name: count, dtype: int64
 <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores3</span></a><span class="p">[</span><span class="s2">&quot;model&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;svm_linear&quot;</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-23 11:29:13,637 - julearn - INFO - ==== Input Data ====
-2024-10-23 11:29:13,637 - julearn - INFO - Using dataframe as input
-2024-10-23 11:29:13,637 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2024-10-23 11:29:13,637 - julearn - INFO -      Target: species
-2024-10-23 11:29:13,637 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2024-10-23 11:29:13,637 - julearn - INFO -      X_types:{}
-2024-10-23 11:29:13,637 - julearn - WARNING - The following columns are not defined in X_types: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]. They will be treated as continuous.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-07-07 11:53:00,383 - julearn - INFO - ==== Input Data ====
+2025-07-07 11:53:00,383 - julearn - INFO - Using dataframe as input
+2025-07-07 11:53:00,383 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2025-07-07 11:53:00,383 - julearn - INFO -      Target: species
+2025-07-07 11:53:00,383 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2025-07-07 11:53:00,383 - julearn - INFO -      X_types:{}
+2025-07-07 11:53:00,383 - julearn - WARNING - The following columns are not defined in X_types: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]. They will be treated as continuous.
 /home/runner/work/julearn/julearn/julearn/prepare.py:509: RuntimeWarning: The following columns are not defined in X_types: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]. They will be treated as continuous.
   warn_with_log(
-2024-10-23 11:29:13,638 - julearn - INFO - ====================
-2024-10-23 11:29:13,638 - julearn - INFO -
-2024-10-23 11:29:13,638 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:29:13,638 - julearn - INFO - Step added
-2024-10-23 11:29:13,638 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:29:13,638 - julearn - INFO - Setting hyperparameter kernel = linear
-2024-10-23 11:29:13,638 - julearn - INFO - Step added
-2024-10-23 11:29:13,639 - julearn - INFO - = Model Parameters =
-2024-10-23 11:29:13,639 - julearn - INFO - ====================
-2024-10-23 11:29:13,639 - julearn - INFO -
-2024-10-23 11:29:13,639 - julearn - INFO - = Data Information =
-2024-10-23 11:29:13,639 - julearn - INFO -      Problem type: classification
-2024-10-23 11:29:13,639 - julearn - INFO -      Number of samples: 80
-2024-10-23 11:29:13,639 - julearn - INFO -      Number of features: 3
-2024-10-23 11:29:13,639 - julearn - INFO - ====================
-2024-10-23 11:29:13,639 - julearn - INFO -
-2024-10-23 11:29:13,639 - julearn - INFO -      Number of classes: 2
-2024-10-23 11:29:13,639 - julearn - INFO -      Target type: object
-2024-10-23 11:29:13,640 - julearn - INFO -      Class distributions: species
+2025-07-07 11:53:00,384 - julearn - INFO - ====================
+2025-07-07 11:53:00,384 - julearn - INFO -
+2025-07-07 11:53:00,384 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:53:00,384 - julearn - INFO - Step added
+2025-07-07 11:53:00,384 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:53:00,384 - julearn - INFO - Setting hyperparameter kernel = linear
+2025-07-07 11:53:00,384 - julearn - INFO - Step added
+2025-07-07 11:53:00,385 - julearn - INFO - = Model Parameters =
+2025-07-07 11:53:00,385 - julearn - INFO - ====================
+2025-07-07 11:53:00,385 - julearn - INFO -
+2025-07-07 11:53:00,385 - julearn - INFO - = Data Information =
+2025-07-07 11:53:00,385 - julearn - INFO -      Problem type: classification
+2025-07-07 11:53:00,385 - julearn - INFO -      Number of samples: 80
+2025-07-07 11:53:00,385 - julearn - INFO -      Number of features: 3
+2025-07-07 11:53:00,385 - julearn - INFO - ====================
+2025-07-07 11:53:00,385 - julearn - INFO -
+2025-07-07 11:53:00,385 - julearn - INFO -      Number of classes: 2
+2025-07-07 11:53:00,385 - julearn - INFO -      Target type: object
+2025-07-07 11:53:00,386 - julearn - INFO -      Class distributions: species
 virginica     50
 versicolor    30
 Name: count, dtype: int64
-2024-10-23 11:29:13,640 - julearn - INFO - Using outer CV scheme RepeatedStratifiedKFold(n_repeats=5, n_splits=5, random_state=42)
-2024-10-23 11:29:13,640 - julearn - INFO - Binary classification problem detected.
+2025-07-07 11:53:00,386 - julearn - INFO - Using outer CV scheme RepeatedStratifiedKFold(n_repeats=5, n_splits=5, random_state=42)
+2025-07-07 11:53:00,386 - julearn - INFO - Binary classification problem detected.
 </pre></div>
 </div>
 <p>We can now compare the performance of the models using corrected statistics.</p>
@@ -712,7 +712,7 @@ Name: count, dtype: int64
 </div>
 <p>We can also plot the performance of the models using the <code class="docutils literal notranslate"><span class="pre">julearn</span></code> Score
 Viewer.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">julearn.viz</span> <span class="kn">import</span> <span class="n">plot_scores</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">julearn.viz</span><span class="w"> </span><span class="kn">import</span> <span class="n">plot_scores</span>
 
 <span class="n">panel</span> <span class="o">=</span> <span class="n">plot_scores</span><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores1</span></a><span class="p">,</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores2</span></a><span class="p">,</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores3</span></a><span class="p">)</span>
 <span class="c1"># panel.show()</span>
@@ -727,7 +727,7 @@ Viewer.</p>
 <p>The plot is interactive. You can zoom in and out, and hover over.
 However, buttons will not work in this documentation.</p>
 </div>
-<script src="bokeh-content-6e318383878b4068b3b16683cf1ccc42-auto_examples-01_model_comparison-plot_simple_model_comparison.js" id="a61e63fd-7d90-4532-9d3b-6ba165e35f0b"></script><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 3.329 seconds)</p>
+<script src="bokeh-content-d3f5d04f375e43618ba6b2f057184fb8-auto_examples-01_model_comparison-plot_simple_model_comparison.js" id="b5803a47-cadb-4246-baca-8fbcb614d40c"></script><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 3.736 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-01-model-comparison-plot-simple-model-comparison-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/3a8f305bb604c66843027e302d9f6752/plot_simple_model_comparison.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_simple_model_comparison.py</span></code></a></p>

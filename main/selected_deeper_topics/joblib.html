@@ -7,7 +7,7 @@
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
         <title>6.8. Parallelizing julearn with Joblib - julearn documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=61a4c737" />
@@ -446,16 +446,16 @@ have noticed that scikit-learn already has a parallelization mechanism using
 the <code class="docutils literal notranslate"><span class="pre">n_jobs</span></code> parameter. <code class="docutils literal notranslate"><span class="pre">julearn</span></code> is actually using scikit-learn, so it is
 possible to use the <code class="docutils literal notranslate"><span class="pre">n_jobs</span></code> parameter. If you want to read more about how
 scikit-learn parallelizes its code, you can check the section
-<a class="reference external" href="https://scikit-learn.org/stable/computing/parallelism.html#parallelism" title="(in scikit-learn v1.5)"><span>Parallelism</span></a> on scikit-learn’s documentation.</p>
+<a class="reference external" href="https://scikit-learn.org/stable/computing/parallelism.html#parallelism" title="(in scikit-learn v1.7)"><span>Parallelism</span></a> on scikit-learn’s documentation.</p>
 <p>In short, the <code class="docutils literal notranslate"><span class="pre">n_jobs</span></code> parameter in scikit-learn allows you to specify the
 number of jobs to run in parallel. If you set it to <code class="docutils literal notranslate"><span class="pre">-1</span></code>, it will use all the
 processors available, which is usually the best option for most cases.</p>
 <p>One of the explicit ways to control parallelization in scikit-learn and
 <code class="docutils literal notranslate"><span class="pre">julearn</span></code> is to use a joblib’s
-<a class="reference external" href="https://joblib.readthedocs.io/en/latest/generated/joblib.parallel_config.html#joblib.parallel_config" title="(in joblib v1.5.dev0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">parallel_config</span></code></a> context manager. The following
+<a class="reference external" href="https://joblib.readthedocs.io/en/latest/generated/joblib.parallel_config.html#joblib.parallel_config" title="(in joblib v1.6.dev0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">parallel_config</span></code></a> context manager. The following
 snippet will run the code in parallel using the <code class="docutils literal notranslate"><span class="pre">&quot;loky&quot;</span></code> backend
 with 4 processors.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">parallel_config</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">joblib</span><span class="w"> </span><span class="kn">import</span> <span class="n">parallel_config</span>
 
 <span class="n">creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;classification&quot;</span><span class="p">)</span>
 <span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">)</span>
@@ -480,7 +480,7 @@ want to use 100% of the resources. You can set the number of threads per
 process by setting the <code class="docutils literal notranslate"><span class="pre">inner_max_num_threads</span></code> parameter in the context
 manager. For example, to make sure that only 4 processors are used and each
 process uses only 1 thread, you can do the following:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">parallel_config</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">joblib</span><span class="w"> </span><span class="kn">import</span> <span class="n">parallel_config</span>
 
 <span class="n">creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;classification&quot;</span><span class="p">)</span>
 <span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">)</span>
@@ -555,8 +555,8 @@ massively parallelize computation.</p>
 <p>By simply calling <code class="docutils literal notranslate"><span class="pre">register_htcondor</span></code> from the <code class="docutils literal notranslate"><span class="pre">joblib_htcondor</span></code> package
 and configuring the backend, we can easily parallelize the computations as in
 the following example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">parallel_config</span>
-<span class="kn">from</span> <span class="nn">joblib_htcondor</span> <span class="kn">import</span> <span class="n">register_htcondor</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">joblib</span><span class="w"> </span><span class="kn">import</span> <span class="n">parallel_config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">joblib_htcondor</span><span class="w"> </span><span class="kn">import</span> <span class="n">register_htcondor</span>
 
 <span class="n">register_htcondor</span><span class="p">(</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>  <span class="c1"># Set logging level to INFO</span>
 
@@ -568,7 +568,7 @@ the following example:</p>
     <span class="n">backend</span><span class="o">=</span><span class="s2">&quot;htcondor&quot;</span><span class="p">,</span>
     <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">request_cpus</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-    <span class="n">request_mem</span><span class="o">=</span><span class="s2">&quot;4Gb&quot;</span><span class="p">,</span>
+    <span class="n">request_memory</span><span class="o">=</span><span class="s2">&quot;4Gb&quot;</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="n">scores</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
         <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
@@ -583,7 +583,7 @@ the following example:</p>
 </div>
 <p>This will submit each task to the HTCondor queue, and the computation will be
 done in parallel. The <code class="docutils literal notranslate"><span class="pre">request_cpus</span></code> parameter specifies the number of CPUs
-to request for each job, and the <code class="docutils literal notranslate"><span class="pre">request_mem</span></code> parameter specifies the
+to request for each job, and the <code class="docutils literal notranslate"><span class="pre">request_memory</span></code> parameter specifies the
 amount of memory to request.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -606,8 +606,8 @@ a file that must be accessible by all the workers. The location of the shared
 directory can be specified with the <code class="docutils literal notranslate"><span class="pre">shared_data_dir</span></code> parameter.</p>
 <p>For example, at the INM-7, we can have a shared directory at
 <code class="docutils literal notranslate"><span class="pre">/data/project/supercool_research</span></code>. Our example then becomes:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">parallel_config</span>
-<span class="kn">from</span> <span class="nn">joblib_htcondor</span> <span class="kn">import</span> <span class="n">register_htcondor</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">joblib</span><span class="w"> </span><span class="kn">import</span> <span class="n">parallel_config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">joblib_htcondor</span><span class="w"> </span><span class="kn">import</span> <span class="n">register_htcondor</span>
 
 <span class="n">register_htcondor</span><span class="p">(</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
 
@@ -619,7 +619,7 @@ directory can be specified with the <code class="docutils literal notranslate"><
     <span class="n">backend</span><span class="o">=</span><span class="s2">&quot;htcondor&quot;</span><span class="p">,</span>
     <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">request_cpus</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-    <span class="n">request_mem</span><span class="o">=</span><span class="s2">&quot;4Gb&quot;</span><span class="p">,</span>
+    <span class="n">request_memory</span><span class="o">=</span><span class="s2">&quot;4Gb&quot;</span><span class="p">,</span>
     <span class="n">shared_data_dir</span><span class="o">=</span><span class="s2">&quot;/data/project/supercool_research&quot;</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="n">scores</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
@@ -641,10 +641,10 @@ a job to a queue, which will then run the <a class="reference internal" href="..
 function that will then submit more jobs to the queue. This is not a problem,
 but it needs to be possible to submit jobs from within a job. Check with your
 cluster’s admin team and ask for further instructions. Most probably you’ll
-also need to specify to which <cite>pool</cite> the jobs will be submitted. This can be
+also need to specify to which <code class="docutils literal notranslate"><span class="pre">pool</span></code> the jobs will be submitted. This can be
 done with the <code class="docutils literal notranslate"><span class="pre">pool</span></code> parameter. For us, this is <code class="docutils literal notranslate"><span class="pre">head2.htc.inm7.de</span></code>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">parallel_config</span>
-<span class="kn">from</span> <span class="nn">joblib_htcondor</span> <span class="kn">import</span> <span class="n">register_htcondor</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">joblib</span><span class="w"> </span><span class="kn">import</span> <span class="n">parallel_config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">joblib_htcondor</span><span class="w"> </span><span class="kn">import</span> <span class="n">register_htcondor</span>
 
 <span class="n">register_htcondor</span><span class="p">(</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
 
@@ -656,7 +656,7 @@ done with the <code class="docutils literal notranslate"><span class="pre">pool<
     <span class="n">backend</span><span class="o">=</span><span class="s2">&quot;htcondor&quot;</span><span class="p">,</span>
     <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">request_cpus</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-    <span class="n">request_mem</span><span class="o">=</span><span class="s2">&quot;4Gb&quot;</span><span class="p">,</span>
+    <span class="n">request_memory</span><span class="o">=</span><span class="s2">&quot;4Gb&quot;</span><span class="p">,</span>
     <span class="n">shared_data_dir</span><span class="o">=</span><span class="s2">&quot;/data/project/supercool_research&quot;</span><span class="p">,</span>
     <span class="n">pool</span><span class="o">=</span><span class="s2">&quot;head2.htc.inm7.de&quot;</span><span class="p">,</span>
 <span class="p">):</span>
@@ -692,8 +692,8 @@ example, each task could also benefit from parallelism, by submitting each
 inner fold of each hyperparameter combination as a separate job. This is
 called recursive parallelization and we can instruct the backend to allow this
 by setting the <code class="docutils literal notranslate"><span class="pre">max_recursion_level</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">1</span></code>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">parallel_config</span>
-<span class="kn">from</span> <span class="nn">joblib_htcondor</span> <span class="kn">import</span> <span class="n">register_htcondor</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">joblib</span><span class="w"> </span><span class="kn">import</span> <span class="n">parallel_config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">joblib_htcondor</span><span class="w"> </span><span class="kn">import</span> <span class="n">register_htcondor</span>
 
 <span class="n">register_htcondor</span><span class="p">(</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
 
@@ -705,7 +705,7 @@ by setting the <code class="docutils literal notranslate"><span class="pre">max_
     <span class="n">backend</span><span class="o">=</span><span class="s2">&quot;htcondor&quot;</span><span class="p">,</span>
     <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">request_cpus</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-    <span class="n">request_mem</span><span class="o">=</span><span class="s2">&quot;4Gb&quot;</span><span class="p">,</span>
+    <span class="n">request_memory</span><span class="o">=</span><span class="s2">&quot;4Gb&quot;</span><span class="p">,</span>
     <span class="n">shared_data_dir</span><span class="o">=</span><span class="s2">&quot;/data/project/supercool_research&quot;</span><span class="p">,</span>
     <span class="n">pool</span><span class="o">=</span><span class="s2">&quot;head2.htc.inm7.de&quot;</span><span class="p">,</span>
     <span class="n">max_recursion_level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
@@ -753,8 +753,8 @@ throttle is applied to the inner folds independently.</p>
 <p>We can also set the throttle parameter by level, by specifying a list of
 throttles. For example, to throttle at 25 for the outer folds and at 50 for
 the inner folds, we can do the following:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">parallel_config</span>
-<span class="kn">from</span> <span class="nn">joblib_htcondor</span> <span class="kn">import</span> <span class="n">register_htcondor</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">joblib</span><span class="w"> </span><span class="kn">import</span> <span class="n">parallel_config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">joblib_htcondor</span><span class="w"> </span><span class="kn">import</span> <span class="n">register_htcondor</span>
 
 <span class="n">register_htcondor</span><span class="p">(</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
 
@@ -766,7 +766,7 @@ the inner folds, we can do the following:</p>
     <span class="n">backend</span><span class="o">=</span><span class="s2">&quot;htcondor&quot;</span><span class="p">,</span>
     <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">request_cpus</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-    <span class="n">request_mem</span><span class="o">=</span><span class="s2">&quot;4Gb&quot;</span><span class="p">,</span>
+    <span class="n">request_memory</span><span class="o">=</span><span class="s2">&quot;4Gb&quot;</span><span class="p">,</span>
     <span class="n">shared_data_dir</span><span class="o">=</span><span class="s2">&quot;/data/project/supercool_research&quot;</span><span class="p">,</span>
     <span class="n">pool</span><span class="o">=</span><span class="s2">&quot;head2.htc.inm7.de&quot;</span><span class="p">,</span>
     <span class="n">max_recursion_level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
@@ -809,21 +809,21 @@ be a big issue. Thus, the recommendation is to always set the <code class="docut
 parameter to <code class="docutils literal notranslate"><span class="pre">1</span></code> for every learning algorithm that you use, unless is an
 ensemble in which every estimator takes hours to fit.</p>
 <p>A clear example on when <em>NOT</em> to use <code class="docutils literal notranslate"><span class="pre">n_jobs=-1</span></code> is when using a
-<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html#sklearn.ensemble.RandomForestClassifier" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">RandomForestClassifier</span></code></a>. If left as default,
+<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html#sklearn.ensemble.RandomForestClassifier" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">RandomForestClassifier</span></code></a>. If left as default,
 this will queue one job for each decision tree, resulting in hundreds of
 relatively small jobs which will take a lot of time to complete, given the
 overhead.</p>
 <p>The following is a non-exhaustive list of scikit-learn’s algorithms that might
 make sense to set the <code class="docutils literal notranslate"><span class="pre">n_jobs</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">-1</span></code> or leave as default:</p>
 <ul>
-<li><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.StackingClassifier.html#sklearn.ensemble.StackingClassifier" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">StackingClassifier</span></code></a> and
-<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.StackingRegressor.html#sklearn.ensemble.StackingRegressor" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">StackingRegressor</span></code></a></p>
+<li><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.StackingClassifier.html#sklearn.ensemble.StackingClassifier" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">StackingClassifier</span></code></a> and
+<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.StackingRegressor.html#sklearn.ensemble.StackingRegressor" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">StackingRegressor</span></code></a></p>
 <p>This model will first fit the base estimators in parallel for the whole data.
 Then it will fit and score the base estimators in parallel for each of the
 internal CV folds, to generate the meta-features.</p>
 </li>
-<li><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.VotingClassifier.html#sklearn.ensemble.VotingClassifier" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">VotingClassifier</span></code></a> and
-<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.VotingRegressor.html#sklearn.ensemble.VotingRegressor" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">VotingRegressor</span></code></a></p>
+<li><p><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.VotingClassifier.html#sklearn.ensemble.VotingClassifier" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">VotingClassifier</span></code></a> and
+<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.VotingRegressor.html#sklearn.ensemble.VotingRegressor" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">VotingRegressor</span></code></a></p>
 <p>Similar to the stacking models.</p>
 </li>
 <li><p>Hyperparameter searchers</p>
@@ -843,8 +843,8 @@ when submitting several recursive parallel jobs.</p>
 <p>First, we need to set the <code class="docutils literal notranslate"><span class="pre">export_metadata</span></code> parameter to <code class="docutils literal notranslate"><span class="pre">True</span></code> in the
 <code class="docutils literal notranslate"><span class="pre">parallel_config</span></code> context manager. This will create medatada files that
 will be used by the UI.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">joblib</span> <span class="kn">import</span> <span class="n">parallel_config</span>
-<span class="kn">from</span> <span class="nn">joblib_htcondor</span> <span class="kn">import</span> <span class="n">register_htcondor</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">joblib</span><span class="w"> </span><span class="kn">import</span> <span class="n">parallel_config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">joblib_htcondor</span><span class="w"> </span><span class="kn">import</span> <span class="n">register_htcondor</span>
 
 <span class="n">register_htcondor</span><span class="p">(</span><span class="s2">&quot;INFO&quot;</span><span class="p">)</span>
 
@@ -856,7 +856,7 @@ will be used by the UI.</p>
     <span class="n">backend</span><span class="o">=</span><span class="s2">&quot;htcondor&quot;</span><span class="p">,</span>
     <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">request_cpus</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-    <span class="n">request_mem</span><span class="o">=</span><span class="s2">&quot;4Gb&quot;</span><span class="p">,</span>
+    <span class="n">request_memory</span><span class="o">=</span><span class="s2">&quot;4Gb&quot;</span><span class="p">,</span>
     <span class="n">shared_data_dir</span><span class="o">=</span><span class="s2">&quot;/data/project/supercool_research&quot;</span><span class="p">,</span>
     <span class="n">pool</span><span class="o">=</span><span class="s2">&quot;head2.htc.inm7.de&quot;</span><span class="p">,</span>
     <span class="n">max_recursion_level</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
@@ -877,7 +877,7 @@ will be used by the UI.</p>
 <p>Once the jobs are submitted and running, we will see something like this with
 the <code class="docutils literal notranslate"><span class="pre">condor_q</span></code> command:</p>
 <img alt="condor_q" src="../_images/condor_q.png" />
-<p>The first row is the original job that is running <cite>run_cross_validation</cite>. The
+<p>The first row is the original job that is running <code class="docutils literal notranslate"><span class="pre">run_cross_validation</span></code>. The
 rest are joblib-htcondor jobs.</p>
 <p>Now this is difficult to understand, so we can use the <a class="reference external" href="https://github.com/juaml/joblib-htcondor">joblib-htcondor</a> UI,
 pointing to the shared directory:</p>
@@ -924,7 +924,7 @@ we are using 10% of the 1.3 Tb of shared disk space.</p>
 </pre></div>
 </div>
 <p>As you can see, even the
-<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html#sklearn.linear_model.LogisticRegression" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">LogisticRegression</span></code></a> model has an
+<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html#sklearn.linear_model.LogisticRegression" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">LogisticRegression</span></code></a> model has an
 <code class="docutils literal notranslate"><span class="pre">n_jobs</span></code> parameter that must be set to <code class="docutils literal notranslate"><span class="pre">1</span></code>!</p>
 </section>
 </section>

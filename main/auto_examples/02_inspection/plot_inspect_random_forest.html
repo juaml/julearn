@@ -7,7 +7,7 @@
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
         <title>Inspecting Random Forest models - julearn documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=61a4c737" />
@@ -432,14 +432,14 @@ using a Random Forest classifier and analyse the model.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Authors: Federico Raimondo &lt;f.raimondo@fz-juelich.de&gt;</span>
 <span class="c1"># License: AGPL</span>
 
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-<span class="kn">from</span> <span class="nn">seaborn</span> <span class="kn">import</span> <span class="n">load_dataset</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dataset</span>
 
-<span class="kn">from</span> <span class="nn">julearn</span> <span class="kn">import</span> <span class="n">run_cross_validation</span>
-<span class="kn">from</span> <span class="nn">julearn.utils</span> <span class="kn">import</span> <span class="n">configure_logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">julearn</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_cross_validation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">julearn.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">configure_logging</span>
 </pre></div>
 </div>
 <p>Set the logging level to info to see extra information.</p>
@@ -448,13 +448,13 @@ using a Random Forest classifier and analyse the model.</p>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/work/julearn/julearn/julearn/utils/logging.py:66: UserWarning: The &#39;__version__&#39; attribute is deprecated and will be removed in MarkupSafe 3.1. Use feature detection, or `importlib.metadata.version(&quot;markupsafe&quot;)`, instead.
   vstring = str(getattr(module, &quot;__version__&quot;, None))
-2024-10-23 11:29:14,506 - julearn - INFO - ===== Lib Versions =====
-2024-10-23 11:29:14,506 - julearn - INFO - numpy: 1.26.4
-2024-10-23 11:29:14,506 - julearn - INFO - scipy: 1.14.1
-2024-10-23 11:29:14,506 - julearn - INFO - sklearn: 1.5.2
-2024-10-23 11:29:14,506 - julearn - INFO - pandas: 2.2.3
-2024-10-23 11:29:14,506 - julearn - INFO - julearn: 0.3.5.dev16
-2024-10-23 11:29:14,506 - julearn - INFO - ========================
+2025-07-07 11:53:01,343 - julearn - INFO - ===== Lib Versions =====
+2025-07-07 11:53:01,343 - julearn - INFO - numpy: 1.26.4
+2025-07-07 11:53:01,343 - julearn - INFO - scipy: 1.15.3
+2025-07-07 11:53:01,343 - julearn - INFO - sklearn: 1.5.2
+2025-07-07 11:53:01,343 - julearn - INFO - pandas: 2.2.3
+2025-07-07 11:53:01,343 - julearn - INFO - julearn: 0.3.5.dev28
+2025-07-07 11:53:01,343 - julearn - INFO - ========================
 </pre></div>
 </div>
 <section id="random-forest-variable-importance">
@@ -484,50 +484,50 @@ returns the estimator fitted with all the data.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-23 11:29:14,509 - julearn - INFO - ==== Input Data ====
-2024-10-23 11:29:14,509 - julearn - INFO - Using dataframe as input
-2024-10-23 11:29:14,509 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2024-10-23 11:29:14,509 - julearn - INFO -      Target: species
-2024-10-23 11:29:14,509 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2024-10-23 11:29:14,509 - julearn - INFO -      X_types:{}
-2024-10-23 11:29:14,509 - julearn - WARNING - The following columns are not defined in X_types: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]. They will be treated as continuous.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-07-07 11:53:01,346 - julearn - INFO - ==== Input Data ====
+2025-07-07 11:53:01,346 - julearn - INFO - Using dataframe as input
+2025-07-07 11:53:01,346 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2025-07-07 11:53:01,346 - julearn - INFO -      Target: species
+2025-07-07 11:53:01,346 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2025-07-07 11:53:01,346 - julearn - INFO -      X_types:{}
+2025-07-07 11:53:01,346 - julearn - WARNING - The following columns are not defined in X_types: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]. They will be treated as continuous.
 /home/runner/work/julearn/julearn/julearn/prepare.py:509: RuntimeWarning: The following columns are not defined in X_types: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]. They will be treated as continuous.
   warn_with_log(
-2024-10-23 11:29:14,510 - julearn - INFO - ====================
-2024-10-23 11:29:14,510 - julearn - INFO -
-2024-10-23 11:29:14,510 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:29:14,510 - julearn - INFO - Step added
-2024-10-23 11:29:14,510 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:29:14,510 - julearn - INFO - Step added
-2024-10-23 11:29:14,511 - julearn - INFO - = Model Parameters =
-2024-10-23 11:29:14,511 - julearn - INFO - ====================
-2024-10-23 11:29:14,511 - julearn - INFO -
-2024-10-23 11:29:14,511 - julearn - INFO - = Data Information =
-2024-10-23 11:29:14,511 - julearn - INFO -      Problem type: classification
-2024-10-23 11:29:14,511 - julearn - INFO -      Number of samples: 100
-2024-10-23 11:29:14,511 - julearn - INFO -      Number of features: 3
-2024-10-23 11:29:14,511 - julearn - INFO - ====================
-2024-10-23 11:29:14,511 - julearn - INFO -
-2024-10-23 11:29:14,511 - julearn - INFO -      Number of classes: 2
-2024-10-23 11:29:14,511 - julearn - INFO -      Target type: object
-2024-10-23 11:29:14,512 - julearn - INFO -      Class distributions: species
+2025-07-07 11:53:01,347 - julearn - INFO - ====================
+2025-07-07 11:53:01,347 - julearn - INFO -
+2025-07-07 11:53:01,347 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:53:01,347 - julearn - INFO - Step added
+2025-07-07 11:53:01,347 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:53:01,347 - julearn - INFO - Step added
+2025-07-07 11:53:01,348 - julearn - INFO - = Model Parameters =
+2025-07-07 11:53:01,348 - julearn - INFO - ====================
+2025-07-07 11:53:01,348 - julearn - INFO -
+2025-07-07 11:53:01,348 - julearn - INFO - = Data Information =
+2025-07-07 11:53:01,348 - julearn - INFO -      Problem type: classification
+2025-07-07 11:53:01,348 - julearn - INFO -      Number of samples: 100
+2025-07-07 11:53:01,348 - julearn - INFO -      Number of features: 3
+2025-07-07 11:53:01,348 - julearn - INFO - ====================
+2025-07-07 11:53:01,348 - julearn - INFO -
+2025-07-07 11:53:01,348 - julearn - INFO -      Number of classes: 2
+2025-07-07 11:53:01,348 - julearn - INFO -      Target type: object
+2025-07-07 11:53:01,349 - julearn - INFO -      Class distributions: species
 versicolor    50
 virginica     50
 Name: count, dtype: int64
-2024-10-23 11:29:14,512 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
-2024-10-23 11:29:14,512 - julearn - INFO - Binary classification problem detected.
+2025-07-07 11:53:01,349 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
+2025-07-07 11:53:01,349 - julearn - INFO - Binary classification problem detected.
 </pre></div>
 </div>
 <p>This type of classifier has an internal variable that can inform us on how
 <em>important</em> is each of the features. Caution: read the proper <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code>
-documentation <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html#sklearn.ensemble.RandomForestClassifier" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">RandomForestClassifier</span></code></a> to understand
+documentation <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html#sklearn.ensemble.RandomForestClassifier" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">RandomForestClassifier</span></code></a> to understand
 how this learning algorithm works.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html#sklearn.ensemble.RandomForestClassifier" title="sklearn.ensemble.RandomForestClassifier" class="sphx-glr-backref-module-sklearn-ensemble sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">rf</span></a> <span class="o">=</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline" class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model_iris</span></a><span class="p">[</span><span class="s2">&quot;rf&quot;</span><span class="p">]</span>
 
 <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">to_plot</span></a> <span class="o">=</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class"><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span></a><span class="p">(</span>
     <span class="p">{</span>
         <span class="s2">&quot;variable&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">],</span>
-        <span class="s2">&quot;importance&quot;</span><span class="p">:</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html#sklearn.ensemble.RandomForestClassifier.feature_importances_" title="sklearn.ensemble.RandomForestClassifier.feature_importances_" class="sphx-glr-backref-module-sklearn-ensemble sphx-glr-backref-type-py-property"><span class="n">rf</span><span class="o">.</span><span class="n">feature_importances_</span></a><span class="p">,</span>
+        <span class="s2">&quot;importance&quot;</span><span class="p">:</span> <a href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html#sklearn.ensemble.RandomForestClassifier" title="sklearn.ensemble.RandomForestClassifier" class="sphx-glr-backref-module-sklearn-ensemble sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">rf</span></a><span class="o">.</span><span class="n">feature_importances_</span><span class="p">,</span>
     <span class="p">}</span>
 <span class="p">)</span>
 
@@ -554,38 +554,38 @@ estimator.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-23 11:29:15,180 - julearn - INFO - ==== Input Data ====
-2024-10-23 11:29:15,180 - julearn - INFO - Using dataframe as input
-2024-10-23 11:29:15,180 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2024-10-23 11:29:15,180 - julearn - INFO -      Target: species
-2024-10-23 11:29:15,180 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
-2024-10-23 11:29:15,180 - julearn - INFO -      X_types:{}
-2024-10-23 11:29:15,180 - julearn - WARNING - The following columns are not defined in X_types: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]. They will be treated as continuous.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-07-07 11:53:02,073 - julearn - INFO - ==== Input Data ====
+2025-07-07 11:53:02,073 - julearn - INFO - Using dataframe as input
+2025-07-07 11:53:02,073 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2025-07-07 11:53:02,073 - julearn - INFO -      Target: species
+2025-07-07 11:53:02,073 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]
+2025-07-07 11:53:02,073 - julearn - INFO -      X_types:{}
+2025-07-07 11:53:02,074 - julearn - WARNING - The following columns are not defined in X_types: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]. They will be treated as continuous.
 /home/runner/work/julearn/julearn/julearn/prepare.py:509: RuntimeWarning: The following columns are not defined in X_types: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;]. They will be treated as continuous.
   warn_with_log(
-2024-10-23 11:29:15,181 - julearn - INFO - ====================
-2024-10-23 11:29:15,181 - julearn - INFO -
-2024-10-23 11:29:15,181 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:29:15,181 - julearn - INFO - Step added
-2024-10-23 11:29:15,181 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:29:15,181 - julearn - INFO - Step added
-2024-10-23 11:29:15,182 - julearn - INFO - = Model Parameters =
-2024-10-23 11:29:15,182 - julearn - INFO - ====================
-2024-10-23 11:29:15,182 - julearn - INFO -
-2024-10-23 11:29:15,182 - julearn - INFO - = Data Information =
-2024-10-23 11:29:15,182 - julearn - INFO -      Problem type: classification
-2024-10-23 11:29:15,182 - julearn - INFO -      Number of samples: 100
-2024-10-23 11:29:15,182 - julearn - INFO -      Number of features: 3
-2024-10-23 11:29:15,182 - julearn - INFO - ====================
-2024-10-23 11:29:15,182 - julearn - INFO -
-2024-10-23 11:29:15,182 - julearn - INFO -      Number of classes: 2
-2024-10-23 11:29:15,183 - julearn - INFO -      Target type: object
-2024-10-23 11:29:15,183 - julearn - INFO -      Class distributions: species
+2025-07-07 11:53:02,074 - julearn - INFO - ====================
+2025-07-07 11:53:02,074 - julearn - INFO -
+2025-07-07 11:53:02,075 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:53:02,075 - julearn - INFO - Step added
+2025-07-07 11:53:02,075 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:53:02,075 - julearn - INFO - Step added
+2025-07-07 11:53:02,076 - julearn - INFO - = Model Parameters =
+2025-07-07 11:53:02,076 - julearn - INFO - ====================
+2025-07-07 11:53:02,076 - julearn - INFO -
+2025-07-07 11:53:02,076 - julearn - INFO - = Data Information =
+2025-07-07 11:53:02,076 - julearn - INFO -      Problem type: classification
+2025-07-07 11:53:02,076 - julearn - INFO -      Number of samples: 100
+2025-07-07 11:53:02,076 - julearn - INFO -      Number of features: 3
+2025-07-07 11:53:02,076 - julearn - INFO - ====================
+2025-07-07 11:53:02,076 - julearn - INFO -
+2025-07-07 11:53:02,076 - julearn - INFO -      Number of classes: 2
+2025-07-07 11:53:02,076 - julearn - INFO -      Target type: object
+2025-07-07 11:53:02,077 - julearn - INFO -      Class distributions: species
 versicolor    50
 virginica     50
 Name: count, dtype: int64
-2024-10-23 11:29:15,183 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-23 11:29:15,183 - julearn - INFO - Binary classification problem detected.
+2025-07-07 11:53:02,077 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2025-07-07 11:53:02,078 - julearn - INFO - Binary classification problem detected.
 </pre></div>
 </div>
 <p>Now we can obtain the feature importance for each estimator (CV fold).</p>
@@ -613,15 +613,15 @@ Name: count, dtype: int64
 <span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_inspect_random_forest_002.png" srcset="../../_images/sphx_glr_plot_inspect_random_forest_002.png" alt="Distribution of variable Importances for Random Forest Classifier across folds" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.10.15/x64/lib/python3.10/site-packages/seaborn/_oldcore.py:1119: FutureWarning: use_inf_as_na option is deprecated and will be removed in a future version. Convert inf values to NaN before operating instead.
+<img src="../../_images/sphx_glr_plot_inspect_random_forest_002.png" srcset="../../_images/sphx_glr_plot_inspect_random_forest_002.png" alt="Distribution of variable Importances for Random Forest Classifier across folds" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/seaborn/_oldcore.py:1119: FutureWarning: use_inf_as_na option is deprecated and will be removed in a future version. Convert inf values to NaN before operating instead.
   with pd.option_context(&#39;mode.use_inf_as_na&#39;, True):
-/opt/hostedtoolcache/Python/3.10.15/x64/lib/python3.10/site-packages/seaborn/_oldcore.py:1119: FutureWarning: use_inf_as_na option is deprecated and will be removed in a future version. Convert inf values to NaN before operating instead.
+/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/seaborn/_oldcore.py:1119: FutureWarning: use_inf_as_na option is deprecated and will be removed in a future version. Convert inf values to NaN before operating instead.
   with pd.option_context(&#39;mode.use_inf_as_na&#39;, True):
-/opt/hostedtoolcache/Python/3.10.15/x64/lib/python3.10/site-packages/seaborn/_oldcore.py:1075: FutureWarning: When grouping with a length-1 list-like, you will need to pass a length-1 tuple to get_group in a future version of pandas. Pass `(name,)` instead of `name` to silence this warning.
+/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/seaborn/_oldcore.py:1075: FutureWarning: When grouping with a length-1 list-like, you will need to pass a length-1 tuple to get_group in a future version of pandas. Pass `(name,)` instead of `name` to silence this warning.
   data_subset = grouped_data.get_group(pd_key)
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 1.318 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 1.465 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-02-inspection-plot-inspect-random-forest-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/bd5abb8fbda27a3ede92c46be10d52d3/plot_inspect_random_forest.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_inspect_random_forest.py</span></code></a></p>

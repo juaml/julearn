@@ -7,7 +7,7 @@
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
         <title>6.3. Hyperparameter Tuning - julearn documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=61a4c737" />
@@ -429,16 +429,16 @@ For example, the weights of a linear regression model are parameters. The
 parameters of a model are learned during training and are not set by the user.</p>
 <p>Hyperparameters are the values that define the model, but are not learned from
 the data. For example, the regularization parameter <code class="docutils literal notranslate"><span class="pre">C</span></code> of a Support Vector
-Machine (<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SVC</span></code></a>) model is a hyperparameter. The
+Machine (<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SVC</span></code></a>) model is a hyperparameter. The
 hyperparameters of a model are set by the user before training and are not
 learned during training.</p>
-<p>Let’s see an example of a <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SVC</span></code></a> model with a regularization
+<p>Let’s see an example of a <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SVC</span></code></a> model with a regularization
 parameter <code class="docutils literal notranslate"><span class="pre">C</span></code>. We will use the <code class="docutils literal notranslate"><span class="pre">iris</span></code> dataset, which is a dataset of
 measurements of flowers.</p>
 <p>We start by loading the dataset and setting the features and target
 variables.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">seaborn</span> <span class="kn">import</span> <span class="n">load_dataset</span>
-<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>  <span class="c1"># To print in a pretty way</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dataset</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pprint</span><span class="w"> </span><span class="kn">import</span> <span class="n">pprint</span>  <span class="c1"># To print in a pretty way</span>
 
 <span class="n">df</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;iris&quot;</span><span class="p">)</span>
 <span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
@@ -451,10 +451,10 @@ variables.</p>
 </pre></div>
 </div>
 <p>We can now use the <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> to create a pipeline with a
-<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.RobustScaler.html#sklearn.preprocessing.RobustScaler" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">RobustScaler</span></code></a> and a
-<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SVC</span></code></a>, with a regularization parameter <code class="docutils literal notranslate"><span class="pre">C</span></code> set to
+<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.RobustScaler.html#sklearn.preprocessing.RobustScaler" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">RobustScaler</span></code></a> and a
+<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SVC</span></code></a>, with a regularization parameter <code class="docutils literal notranslate"><span class="pre">C</span></code> set to
 <code class="docutils literal notranslate"><span class="pre">0.1</span></code>.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">julearn.pipeline</span> <span class="kn">import</span> <span class="n">PipelineCreator</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">julearn.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">PipelineCreator</span>
 
 <span class="n">creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;classification&quot;</span><span class="p">)</span>
 <span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">)</span>
@@ -463,11 +463,11 @@ variables.</p>
 <span class="nb">print</span><span class="p">(</span><span class="n">creator</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-23 11:33:19,230 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:33:19,230 - julearn - INFO - Step added
-2024-10-23 11:33:19,230 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:33:19,230 - julearn - INFO - Setting hyperparameter C = 0.1
-2024-10-23 11:33:19,230 - julearn - INFO - Step added
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-07-07 11:57:15,683 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:57:15,683 - julearn - INFO - Step added
+2025-07-07 11:57:15,683 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:57:15,683 - julearn - INFO - Setting hyperparameter C = 0.1
+2025-07-07 11:57:15,683 - julearn - INFO - Step added
 PipelineCreator:
   Step 0: zscore
     estimator:     StandardScaler()
@@ -491,8 +491,8 @@ tuning</em>.</p>
 <p>Basically, hyperparameter tuning refers to testing several hyperparameter
 values and choosing the one that works best.</p>
 <p>For example, we can try different values for the regularization parameter
-<code class="docutils literal notranslate"><span class="pre">C</span></code> of the <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SVC</span></code></a> model and see which one works best.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">julearn</span> <span class="kn">import</span> <span class="n">run_cross_validation</span>
+<code class="docutils literal notranslate"><span class="pre">C</span></code> of the <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SVC</span></code></a> model and see which one works best.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">julearn</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_cross_validation</span>
 
 <span class="n">scores1</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
     <span class="n">X</span><span class="o">=</span><span class="n">X</span><span class="p">,</span>
@@ -519,62 +519,62 @@ values and choosing the one that works best.</p>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Score with C=0.01: </span><span class="si">{</span><span class="n">scores2</span><span class="p">[</span><span class="s1">&#39;test_score&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-23 11:33:19,231 - julearn - INFO - ==== Input Data ====
-2024-10-23 11:33:19,231 - julearn - INFO - Using dataframe as input
-2024-10-23 11:33:19,231 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2024-10-23 11:33:19,231 - julearn - INFO -      Target: species
-2024-10-23 11:33:19,231 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2024-10-23 11:33:19,231 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
-2024-10-23 11:33:19,232 - julearn - INFO - ====================
-2024-10-23 11:33:19,232 - julearn - INFO -
-2024-10-23 11:33:19,233 - julearn - INFO - = Model Parameters =
-2024-10-23 11:33:19,233 - julearn - INFO - ====================
-2024-10-23 11:33:19,233 - julearn - INFO -
-2024-10-23 11:33:19,233 - julearn - INFO - = Data Information =
-2024-10-23 11:33:19,233 - julearn - INFO -      Problem type: classification
-2024-10-23 11:33:19,233 - julearn - INFO -      Number of samples: 100
-2024-10-23 11:33:19,233 - julearn - INFO -      Number of features: 4
-2024-10-23 11:33:19,233 - julearn - INFO - ====================
-2024-10-23 11:33:19,233 - julearn - INFO -
-2024-10-23 11:33:19,233 - julearn - INFO -      Number of classes: 2
-2024-10-23 11:33:19,233 - julearn - INFO -      Target type: object
-2024-10-23 11:33:19,234 - julearn - INFO -      Class distributions: species
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-07-07 11:57:15,684 - julearn - INFO - ==== Input Data ====
+2025-07-07 11:57:15,684 - julearn - INFO - Using dataframe as input
+2025-07-07 11:57:15,685 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2025-07-07 11:57:15,685 - julearn - INFO -      Target: species
+2025-07-07 11:57:15,685 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2025-07-07 11:57:15,685 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
+2025-07-07 11:57:15,685 - julearn - INFO - ====================
+2025-07-07 11:57:15,685 - julearn - INFO -
+2025-07-07 11:57:15,686 - julearn - INFO - = Model Parameters =
+2025-07-07 11:57:15,686 - julearn - INFO - ====================
+2025-07-07 11:57:15,686 - julearn - INFO -
+2025-07-07 11:57:15,686 - julearn - INFO - = Data Information =
+2025-07-07 11:57:15,686 - julearn - INFO -      Problem type: classification
+2025-07-07 11:57:15,686 - julearn - INFO -      Number of samples: 100
+2025-07-07 11:57:15,686 - julearn - INFO -      Number of features: 4
+2025-07-07 11:57:15,686 - julearn - INFO - ====================
+2025-07-07 11:57:15,686 - julearn - INFO -
+2025-07-07 11:57:15,686 - julearn - INFO -      Number of classes: 2
+2025-07-07 11:57:15,687 - julearn - INFO -      Target type: object
+2025-07-07 11:57:15,687 - julearn - INFO -      Class distributions: species
 versicolor    50
 virginica     50
 Name: count, dtype: int64
-2024-10-23 11:33:19,234 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-23 11:33:19,234 - julearn - INFO - Binary classification problem detected.
+2025-07-07 11:57:15,687 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2025-07-07 11:57:15,687 - julearn - INFO - Binary classification problem detected.
 Score with C=0.1: 0.8099999999999999
-2024-10-23 11:33:19,274 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:33:19,274 - julearn - INFO - Step added
-2024-10-23 11:33:19,274 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:33:19,274 - julearn - INFO - Setting hyperparameter C = 0.01
-2024-10-23 11:33:19,274 - julearn - INFO - Step added
-2024-10-23 11:33:19,274 - julearn - INFO - ==== Input Data ====
-2024-10-23 11:33:19,274 - julearn - INFO - Using dataframe as input
-2024-10-23 11:33:19,274 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2024-10-23 11:33:19,274 - julearn - INFO -      Target: species
-2024-10-23 11:33:19,274 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2024-10-23 11:33:19,274 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
-2024-10-23 11:33:19,275 - julearn - INFO - ====================
-2024-10-23 11:33:19,275 - julearn - INFO -
-2024-10-23 11:33:19,275 - julearn - INFO - = Model Parameters =
-2024-10-23 11:33:19,275 - julearn - INFO - ====================
-2024-10-23 11:33:19,275 - julearn - INFO -
-2024-10-23 11:33:19,275 - julearn - INFO - = Data Information =
-2024-10-23 11:33:19,276 - julearn - INFO -      Problem type: classification
-2024-10-23 11:33:19,276 - julearn - INFO -      Number of samples: 100
-2024-10-23 11:33:19,276 - julearn - INFO -      Number of features: 4
-2024-10-23 11:33:19,276 - julearn - INFO - ====================
-2024-10-23 11:33:19,276 - julearn - INFO -
-2024-10-23 11:33:19,276 - julearn - INFO -      Number of classes: 2
-2024-10-23 11:33:19,276 - julearn - INFO -      Target type: object
-2024-10-23 11:33:19,276 - julearn - INFO -      Class distributions: species
+2025-07-07 11:57:15,727 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:57:15,727 - julearn - INFO - Step added
+2025-07-07 11:57:15,727 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:57:15,727 - julearn - INFO - Setting hyperparameter C = 0.01
+2025-07-07 11:57:15,727 - julearn - INFO - Step added
+2025-07-07 11:57:15,727 - julearn - INFO - ==== Input Data ====
+2025-07-07 11:57:15,727 - julearn - INFO - Using dataframe as input
+2025-07-07 11:57:15,727 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2025-07-07 11:57:15,727 - julearn - INFO -      Target: species
+2025-07-07 11:57:15,727 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2025-07-07 11:57:15,727 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
+2025-07-07 11:57:15,728 - julearn - INFO - ====================
+2025-07-07 11:57:15,728 - julearn - INFO -
+2025-07-07 11:57:15,728 - julearn - INFO - = Model Parameters =
+2025-07-07 11:57:15,729 - julearn - INFO - ====================
+2025-07-07 11:57:15,729 - julearn - INFO -
+2025-07-07 11:57:15,729 - julearn - INFO - = Data Information =
+2025-07-07 11:57:15,729 - julearn - INFO -      Problem type: classification
+2025-07-07 11:57:15,729 - julearn - INFO -      Number of samples: 100
+2025-07-07 11:57:15,729 - julearn - INFO -      Number of features: 4
+2025-07-07 11:57:15,729 - julearn - INFO - ====================
+2025-07-07 11:57:15,729 - julearn - INFO -
+2025-07-07 11:57:15,729 - julearn - INFO -      Number of classes: 2
+2025-07-07 11:57:15,729 - julearn - INFO -      Target type: object
+2025-07-07 11:57:15,730 - julearn - INFO -      Class distributions: species
 versicolor    50
 virginica     50
 Name: count, dtype: int64
-2024-10-23 11:33:19,277 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-23 11:33:19,277 - julearn - INFO - Binary classification problem detected.
+2025-07-07 11:57:15,730 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2025-07-07 11:57:15,730 - julearn - INFO - Binary classification problem detected.
 Score with C=0.01: 0.19
 </pre></div>
 </div>
@@ -597,7 +597,7 @@ hyperparameters (inner loop).</p>
 validation. When we use a <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> to create a pipeline,
 we can set the hyperparameters we want to tune and the values we want to try.</p>
 <p>For example, we can try different values for the regularization parameter
-<code class="docutils literal notranslate"><span class="pre">C</span></code> of the <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SVC</span></code></a> model:</p>
+<code class="docutils literal notranslate"><span class="pre">C</span></code> of the <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SVC</span></code></a> model:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;classification&quot;</span><span class="p">)</span>
 <span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">)</span>
 <span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;svm&quot;</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">])</span>
@@ -605,11 +605,11 @@ we can set the hyperparameters we want to tune and the values we want to try.</p
 <span class="nb">print</span><span class="p">(</span><span class="n">creator</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-23 11:33:19,315 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:33:19,315 - julearn - INFO - Step added
-2024-10-23 11:33:19,315 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:33:19,315 - julearn - INFO - Tuning hyperparameter C = [0.01, 0.1, 1, 10]
-2024-10-23 11:33:19,316 - julearn - INFO - Step added
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-07-07 11:57:15,769 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:57:15,769 - julearn - INFO - Step added
+2025-07-07 11:57:15,769 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:57:15,769 - julearn - INFO - Tuning hyperparameter C = [0.01, 0.1, 1, 10]
+2025-07-07 11:57:15,769 - julearn - INFO - Step added
 PipelineCreator:
   Step 0: zscore
     estimator:     StandardScaler()
@@ -639,37 +639,37 @@ best hyperparameters set.</p>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Scores with best hyperparameter: </span><span class="si">{</span><span class="n">scores_tuned</span><span class="p">[</span><span class="s1">&#39;test_score&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-23 11:33:19,316 - julearn - INFO - ==== Input Data ====
-2024-10-23 11:33:19,316 - julearn - INFO - Using dataframe as input
-2024-10-23 11:33:19,316 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2024-10-23 11:33:19,317 - julearn - INFO -      Target: species
-2024-10-23 11:33:19,317 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2024-10-23 11:33:19,317 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
-2024-10-23 11:33:19,317 - julearn - INFO - ====================
-2024-10-23 11:33:19,317 - julearn - INFO -
-2024-10-23 11:33:19,318 - julearn - INFO - = Model Parameters =
-2024-10-23 11:33:19,318 - julearn - INFO - Tuning hyperparameters using grid
-2024-10-23 11:33:19,318 - julearn - INFO - Hyperparameters:
-2024-10-23 11:33:19,318 - julearn - INFO -      svm__C: [0.01, 0.1, 1, 10]
-2024-10-23 11:33:19,318 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-23 11:33:19,318 - julearn - INFO - Search Parameters:
-2024-10-23 11:33:19,318 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-23 11:33:19,318 - julearn - INFO - ====================
-2024-10-23 11:33:19,318 - julearn - INFO -
-2024-10-23 11:33:19,318 - julearn - INFO - = Data Information =
-2024-10-23 11:33:19,318 - julearn - INFO -      Problem type: classification
-2024-10-23 11:33:19,318 - julearn - INFO -      Number of samples: 100
-2024-10-23 11:33:19,318 - julearn - INFO -      Number of features: 4
-2024-10-23 11:33:19,319 - julearn - INFO - ====================
-2024-10-23 11:33:19,319 - julearn - INFO -
-2024-10-23 11:33:19,319 - julearn - INFO -      Number of classes: 2
-2024-10-23 11:33:19,319 - julearn - INFO -      Target type: object
-2024-10-23 11:33:19,319 - julearn - INFO -      Class distributions: species
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-07-07 11:57:15,770 - julearn - INFO - ==== Input Data ====
+2025-07-07 11:57:15,770 - julearn - INFO - Using dataframe as input
+2025-07-07 11:57:15,770 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2025-07-07 11:57:15,770 - julearn - INFO -      Target: species
+2025-07-07 11:57:15,770 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2025-07-07 11:57:15,770 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
+2025-07-07 11:57:15,771 - julearn - INFO - ====================
+2025-07-07 11:57:15,771 - julearn - INFO -
+2025-07-07 11:57:15,771 - julearn - INFO - = Model Parameters =
+2025-07-07 11:57:15,771 - julearn - INFO - Tuning hyperparameters using grid
+2025-07-07 11:57:15,771 - julearn - INFO - Hyperparameters:
+2025-07-07 11:57:15,771 - julearn - INFO -      svm__C: [0.01, 0.1, 1, 10]
+2025-07-07 11:57:15,771 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2025-07-07 11:57:15,772 - julearn - INFO - Search Parameters:
+2025-07-07 11:57:15,772 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
+2025-07-07 11:57:15,772 - julearn - INFO - ====================
+2025-07-07 11:57:15,772 - julearn - INFO -
+2025-07-07 11:57:15,772 - julearn - INFO - = Data Information =
+2025-07-07 11:57:15,772 - julearn - INFO -      Problem type: classification
+2025-07-07 11:57:15,772 - julearn - INFO -      Number of samples: 100
+2025-07-07 11:57:15,772 - julearn - INFO -      Number of features: 4
+2025-07-07 11:57:15,772 - julearn - INFO - ====================
+2025-07-07 11:57:15,772 - julearn - INFO -
+2025-07-07 11:57:15,772 - julearn - INFO -      Number of classes: 2
+2025-07-07 11:57:15,772 - julearn - INFO -      Target type: object
+2025-07-07 11:57:15,773 - julearn - INFO -      Class distributions: species
 versicolor    50
 virginica     50
 Name: count, dtype: int64
-2024-10-23 11:33:19,319 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
-2024-10-23 11:33:19,319 - julearn - INFO - Binary classification problem detected.
+2025-07-07 11:57:15,773 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
+2025-07-07 11:57:15,773 - julearn - INFO - Binary classification problem detected.
 Scores with best hyperparameter: 0.9100000000000001
 </pre></div>
 </div>
@@ -685,7 +685,7 @@ see it by printing the <code class="docutils literal notranslate"><span class="p
 <p>We can see that the best hyperparameter set is <code class="docutils literal notranslate"><span class="pre">C=1</span></code>. Since this
 hyperparameter was not on the boundary of the values we tried, we can
 conclude that our search for the best <code class="docutils literal notranslate"><span class="pre">C</span></code> value was successful.</p>
-<p>However, by checking the <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SVC</span></code></a> documentation, we can
+<p>However, by checking the <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SVC</span></code></a> documentation, we can
 see that there are more hyperparameters that we can tune. For example, for
 the default <code class="docutils literal notranslate"><span class="pre">rbf</span></code> kernel, we can tune the <code class="docutils literal notranslate"><span class="pre">gamma</span></code> hyperparameter:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;classification&quot;</span><span class="p">)</span>
@@ -707,12 +707,12 @@ the default <code class="docutils literal notranslate"><span class="pre">rbf</sp
 <span class="n">pprint</span><span class="p">(</span><span class="n">model_tuned</span><span class="o">.</span><span class="n">best_params_</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-23 11:33:20,256 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:33:20,256 - julearn - INFO - Step added
-2024-10-23 11:33:20,256 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:33:20,256 - julearn - INFO - Tuning hyperparameter C = [0.01, 0.1, 1, 10]
-2024-10-23 11:33:20,256 - julearn - INFO - Tuning hyperparameter gamma = [0.01, 0.1, 1, 10]
-2024-10-23 11:33:20,256 - julearn - INFO - Step added
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-07-07 11:57:16,733 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:57:16,733 - julearn - INFO - Step added
+2025-07-07 11:57:16,733 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:57:16,733 - julearn - INFO - Tuning hyperparameter C = [0.01, 0.1, 1, 10]
+2025-07-07 11:57:16,733 - julearn - INFO - Tuning hyperparameter gamma = [0.01, 0.1, 1, 10]
+2025-07-07 11:57:16,733 - julearn - INFO - Step added
 PipelineCreator:
   Step 0: zscore
     estimator:     StandardScaler()
@@ -725,38 +725,38 @@ PipelineCreator:
     needed types:  ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
     tuning params: {&#39;svm__C&#39;: [0.01, 0.1, 1, 10], &#39;svm__gamma&#39;: [0.01, 0.1, 1, 10]}
 
-2024-10-23 11:33:20,256 - julearn - INFO - ==== Input Data ====
-2024-10-23 11:33:20,257 - julearn - INFO - Using dataframe as input
-2024-10-23 11:33:20,257 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2024-10-23 11:33:20,257 - julearn - INFO -      Target: species
-2024-10-23 11:33:20,257 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2024-10-23 11:33:20,257 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
-2024-10-23 11:33:20,257 - julearn - INFO - ====================
-2024-10-23 11:33:20,257 - julearn - INFO -
-2024-10-23 11:33:20,258 - julearn - INFO - = Model Parameters =
-2024-10-23 11:33:20,258 - julearn - INFO - Tuning hyperparameters using grid
-2024-10-23 11:33:20,258 - julearn - INFO - Hyperparameters:
-2024-10-23 11:33:20,258 - julearn - INFO -      svm__C: [0.01, 0.1, 1, 10]
-2024-10-23 11:33:20,258 - julearn - INFO -      svm__gamma: [0.01, 0.1, 1, 10]
-2024-10-23 11:33:20,258 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-23 11:33:20,258 - julearn - INFO - Search Parameters:
-2024-10-23 11:33:20,258 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-23 11:33:20,258 - julearn - INFO - ====================
-2024-10-23 11:33:20,258 - julearn - INFO -
-2024-10-23 11:33:20,258 - julearn - INFO - = Data Information =
-2024-10-23 11:33:20,259 - julearn - INFO -      Problem type: classification
-2024-10-23 11:33:20,259 - julearn - INFO -      Number of samples: 100
-2024-10-23 11:33:20,259 - julearn - INFO -      Number of features: 4
-2024-10-23 11:33:20,259 - julearn - INFO - ====================
-2024-10-23 11:33:20,259 - julearn - INFO -
-2024-10-23 11:33:20,259 - julearn - INFO -      Number of classes: 2
-2024-10-23 11:33:20,259 - julearn - INFO -      Target type: object
-2024-10-23 11:33:20,259 - julearn - INFO -      Class distributions: species
+2025-07-07 11:57:16,734 - julearn - INFO - ==== Input Data ====
+2025-07-07 11:57:16,734 - julearn - INFO - Using dataframe as input
+2025-07-07 11:57:16,734 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2025-07-07 11:57:16,734 - julearn - INFO -      Target: species
+2025-07-07 11:57:16,734 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2025-07-07 11:57:16,734 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
+2025-07-07 11:57:16,734 - julearn - INFO - ====================
+2025-07-07 11:57:16,734 - julearn - INFO -
+2025-07-07 11:57:16,735 - julearn - INFO - = Model Parameters =
+2025-07-07 11:57:16,735 - julearn - INFO - Tuning hyperparameters using grid
+2025-07-07 11:57:16,735 - julearn - INFO - Hyperparameters:
+2025-07-07 11:57:16,735 - julearn - INFO -      svm__C: [0.01, 0.1, 1, 10]
+2025-07-07 11:57:16,735 - julearn - INFO -      svm__gamma: [0.01, 0.1, 1, 10]
+2025-07-07 11:57:16,735 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2025-07-07 11:57:16,735 - julearn - INFO - Search Parameters:
+2025-07-07 11:57:16,735 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
+2025-07-07 11:57:16,736 - julearn - INFO - ====================
+2025-07-07 11:57:16,736 - julearn - INFO -
+2025-07-07 11:57:16,736 - julearn - INFO - = Data Information =
+2025-07-07 11:57:16,736 - julearn - INFO -      Problem type: classification
+2025-07-07 11:57:16,736 - julearn - INFO -      Number of samples: 100
+2025-07-07 11:57:16,736 - julearn - INFO -      Number of features: 4
+2025-07-07 11:57:16,736 - julearn - INFO - ====================
+2025-07-07 11:57:16,736 - julearn - INFO -
+2025-07-07 11:57:16,736 - julearn - INFO -      Number of classes: 2
+2025-07-07 11:57:16,736 - julearn - INFO -      Target type: object
+2025-07-07 11:57:16,737 - julearn - INFO -      Class distributions: species
 versicolor    50
 virginica     50
 Name: count, dtype: int64
-2024-10-23 11:33:20,260 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
-2024-10-23 11:33:20,260 - julearn - INFO - Binary classification problem detected.
+2025-07-07 11:57:16,737 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
+2025-07-07 11:57:16,737 - julearn - INFO - Binary classification problem detected.
 Scores with best hyperparameter: 0.9100000000000001
 {&#39;svm__C&#39;: 10, &#39;svm__gamma&#39;: 0.01}
 </pre></div>
@@ -789,12 +789,12 @@ try more values to be sure that we are using the best hyperparameter set.</p>
 <span class="n">pprint</span><span class="p">(</span><span class="n">model_tuned</span><span class="o">.</span><span class="n">best_params_</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-23 11:33:23,835 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:33:23,835 - julearn - INFO - Step added
-2024-10-23 11:33:23,836 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:33:23,836 - julearn - INFO - Tuning hyperparameter C = [0.01, 0.1, 1, 10]
-2024-10-23 11:33:23,836 - julearn - INFO - Tuning hyperparameter gamma = [1e-05, 0.0001, 0.001, 0.01, &#39;scale&#39;, &#39;auto&#39;]
-2024-10-23 11:33:23,836 - julearn - INFO - Step added
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-07-07 11:57:20,390 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:57:20,390 - julearn - INFO - Step added
+2025-07-07 11:57:20,390 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:57:20,390 - julearn - INFO - Tuning hyperparameter C = [0.01, 0.1, 1, 10]
+2025-07-07 11:57:20,390 - julearn - INFO - Tuning hyperparameter gamma = [1e-05, 0.0001, 0.001, 0.01, &#39;scale&#39;, &#39;auto&#39;]
+2025-07-07 11:57:20,390 - julearn - INFO - Step added
 PipelineCreator:
   Step 0: zscore
     estimator:     StandardScaler()
@@ -807,44 +807,44 @@ PipelineCreator:
     needed types:  ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
     tuning params: {&#39;svm__C&#39;: [0.01, 0.1, 1, 10], &#39;svm__gamma&#39;: [1e-05, 0.0001, 0.001, 0.01, &#39;scale&#39;, &#39;auto&#39;]}
 
-2024-10-23 11:33:23,836 - julearn - INFO - ==== Input Data ====
-2024-10-23 11:33:23,836 - julearn - INFO - Using dataframe as input
-2024-10-23 11:33:23,836 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2024-10-23 11:33:23,836 - julearn - INFO -      Target: species
-2024-10-23 11:33:23,837 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2024-10-23 11:33:23,837 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
-2024-10-23 11:33:23,837 - julearn - INFO - ====================
-2024-10-23 11:33:23,837 - julearn - INFO -
-2024-10-23 11:33:23,838 - julearn - INFO - = Model Parameters =
-2024-10-23 11:33:23,838 - julearn - INFO - Tuning hyperparameters using grid
-2024-10-23 11:33:23,838 - julearn - INFO - Hyperparameters:
-2024-10-23 11:33:23,838 - julearn - INFO -      svm__C: [0.01, 0.1, 1, 10]
-2024-10-23 11:33:23,838 - julearn - INFO -      svm__gamma: [1e-05, 0.0001, 0.001, 0.01, &#39;scale&#39;, &#39;auto&#39;]
-2024-10-23 11:33:23,838 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-23 11:33:23,838 - julearn - INFO - Search Parameters:
-2024-10-23 11:33:23,838 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-23 11:33:23,838 - julearn - INFO - ====================
-2024-10-23 11:33:23,838 - julearn - INFO -
-2024-10-23 11:33:23,838 - julearn - INFO - = Data Information =
-2024-10-23 11:33:23,838 - julearn - INFO -      Problem type: classification
-2024-10-23 11:33:23,838 - julearn - INFO -      Number of samples: 100
-2024-10-23 11:33:23,838 - julearn - INFO -      Number of features: 4
-2024-10-23 11:33:23,838 - julearn - INFO - ====================
-2024-10-23 11:33:23,839 - julearn - INFO -
-2024-10-23 11:33:23,839 - julearn - INFO -      Number of classes: 2
-2024-10-23 11:33:23,839 - julearn - INFO -      Target type: object
-2024-10-23 11:33:23,839 - julearn - INFO -      Class distributions: species
+2025-07-07 11:57:20,391 - julearn - INFO - ==== Input Data ====
+2025-07-07 11:57:20,391 - julearn - INFO - Using dataframe as input
+2025-07-07 11:57:20,391 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2025-07-07 11:57:20,391 - julearn - INFO -      Target: species
+2025-07-07 11:57:20,391 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2025-07-07 11:57:20,391 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
+2025-07-07 11:57:20,392 - julearn - INFO - ====================
+2025-07-07 11:57:20,392 - julearn - INFO -
+2025-07-07 11:57:20,392 - julearn - INFO - = Model Parameters =
+2025-07-07 11:57:20,392 - julearn - INFO - Tuning hyperparameters using grid
+2025-07-07 11:57:20,392 - julearn - INFO - Hyperparameters:
+2025-07-07 11:57:20,392 - julearn - INFO -      svm__C: [0.01, 0.1, 1, 10]
+2025-07-07 11:57:20,392 - julearn - INFO -      svm__gamma: [1e-05, 0.0001, 0.001, 0.01, &#39;scale&#39;, &#39;auto&#39;]
+2025-07-07 11:57:20,392 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2025-07-07 11:57:20,393 - julearn - INFO - Search Parameters:
+2025-07-07 11:57:20,393 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
+2025-07-07 11:57:20,393 - julearn - INFO - ====================
+2025-07-07 11:57:20,393 - julearn - INFO -
+2025-07-07 11:57:20,393 - julearn - INFO - = Data Information =
+2025-07-07 11:57:20,393 - julearn - INFO -      Problem type: classification
+2025-07-07 11:57:20,393 - julearn - INFO -      Number of samples: 100
+2025-07-07 11:57:20,393 - julearn - INFO -      Number of features: 4
+2025-07-07 11:57:20,393 - julearn - INFO - ====================
+2025-07-07 11:57:20,393 - julearn - INFO -
+2025-07-07 11:57:20,393 - julearn - INFO -      Number of classes: 2
+2025-07-07 11:57:20,393 - julearn - INFO -      Target type: object
+2025-07-07 11:57:20,394 - julearn - INFO -      Class distributions: species
 versicolor    50
 virginica     50
 Name: count, dtype: int64
-2024-10-23 11:33:23,839 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
-2024-10-23 11:33:23,840 - julearn - INFO - Binary classification problem detected.
+2025-07-07 11:57:20,394 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
+2025-07-07 11:57:20,394 - julearn - INFO - Binary classification problem detected.
 Scores with best hyperparameter: 0.9100000000000001
 {&#39;svm__C&#39;: 10, &#39;svm__gamma&#39;: 0.01}
 </pre></div>
 </div>
 <p>We can even tune hyperparameters from different steps of the pipeline. Let’s
-add a <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectKBest.html#sklearn.feature_selection.SelectKBest" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SelectKBest</span></code></a> step to the pipeline
+add a <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectKBest.html#sklearn.feature_selection.SelectKBest" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SelectKBest</span></code></a> step to the pipeline
 and tune its <code class="docutils literal notranslate"><span class="pre">k</span></code> hyperparameter:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;classification&quot;</span><span class="p">)</span>
 <span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">)</span>
@@ -870,15 +870,15 @@ and tune its <code class="docutils literal notranslate"><span class="pre">k</spa
 <span class="n">pprint</span><span class="p">(</span><span class="n">model_tuned</span><span class="o">.</span><span class="n">best_params_</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-23 11:33:29,197 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:33:29,198 - julearn - INFO - Step added
-2024-10-23 11:33:29,198 - julearn - INFO - Adding step select_k that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:33:29,198 - julearn - INFO - Tuning hyperparameter k = [2, 3, 4]
-2024-10-23 11:33:29,198 - julearn - INFO - Step added
-2024-10-23 11:33:29,198 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:33:29,198 - julearn - INFO - Tuning hyperparameter C = [0.01, 0.1, 1, 10]
-2024-10-23 11:33:29,198 - julearn - INFO - Tuning hyperparameter gamma = [0.001, 0.01, 0.1, &#39;scale&#39;, &#39;auto&#39;]
-2024-10-23 11:33:29,198 - julearn - INFO - Step added
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-07-07 11:57:25,858 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:57:25,858 - julearn - INFO - Step added
+2025-07-07 11:57:25,858 - julearn - INFO - Adding step select_k that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:57:25,858 - julearn - INFO - Tuning hyperparameter k = [2, 3, 4]
+2025-07-07 11:57:25,858 - julearn - INFO - Step added
+2025-07-07 11:57:25,858 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:57:25,858 - julearn - INFO - Tuning hyperparameter C = [0.01, 0.1, 1, 10]
+2025-07-07 11:57:25,858 - julearn - INFO - Tuning hyperparameter gamma = [0.001, 0.01, 0.1, &#39;scale&#39;, &#39;auto&#39;]
+2025-07-07 11:57:25,858 - julearn - INFO - Step added
 PipelineCreator:
   Step 0: zscore
     estimator:     StandardScaler()
@@ -896,39 +896,39 @@ PipelineCreator:
     needed types:  ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
     tuning params: {&#39;svm__C&#39;: [0.01, 0.1, 1, 10], &#39;svm__gamma&#39;: [0.001, 0.01, 0.1, &#39;scale&#39;, &#39;auto&#39;]}
 
-2024-10-23 11:33:29,199 - julearn - INFO - ==== Input Data ====
-2024-10-23 11:33:29,199 - julearn - INFO - Using dataframe as input
-2024-10-23 11:33:29,199 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2024-10-23 11:33:29,199 - julearn - INFO -      Target: species
-2024-10-23 11:33:29,199 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2024-10-23 11:33:29,199 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
-2024-10-23 11:33:29,200 - julearn - INFO - ====================
-2024-10-23 11:33:29,200 - julearn - INFO -
-2024-10-23 11:33:29,200 - julearn - INFO - = Model Parameters =
-2024-10-23 11:33:29,200 - julearn - INFO - Tuning hyperparameters using grid
-2024-10-23 11:33:29,200 - julearn - INFO - Hyperparameters:
-2024-10-23 11:33:29,200 - julearn - INFO -      select_k__k: [2, 3, 4]
-2024-10-23 11:33:29,200 - julearn - INFO -      svm__C: [0.01, 0.1, 1, 10]
-2024-10-23 11:33:29,201 - julearn - INFO -      svm__gamma: [0.001, 0.01, 0.1, &#39;scale&#39;, &#39;auto&#39;]
-2024-10-23 11:33:29,201 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-23 11:33:29,201 - julearn - INFO - Search Parameters:
-2024-10-23 11:33:29,201 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-23 11:33:29,201 - julearn - INFO - ====================
-2024-10-23 11:33:29,201 - julearn - INFO -
-2024-10-23 11:33:29,201 - julearn - INFO - = Data Information =
-2024-10-23 11:33:29,201 - julearn - INFO -      Problem type: classification
-2024-10-23 11:33:29,201 - julearn - INFO -      Number of samples: 100
-2024-10-23 11:33:29,201 - julearn - INFO -      Number of features: 4
-2024-10-23 11:33:29,201 - julearn - INFO - ====================
-2024-10-23 11:33:29,201 - julearn - INFO -
-2024-10-23 11:33:29,201 - julearn - INFO -      Number of classes: 2
-2024-10-23 11:33:29,201 - julearn - INFO -      Target type: object
-2024-10-23 11:33:29,202 - julearn - INFO -      Class distributions: species
+2025-07-07 11:57:25,859 - julearn - INFO - ==== Input Data ====
+2025-07-07 11:57:25,859 - julearn - INFO - Using dataframe as input
+2025-07-07 11:57:25,859 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2025-07-07 11:57:25,859 - julearn - INFO -      Target: species
+2025-07-07 11:57:25,859 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2025-07-07 11:57:25,859 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
+2025-07-07 11:57:25,860 - julearn - INFO - ====================
+2025-07-07 11:57:25,860 - julearn - INFO -
+2025-07-07 11:57:25,860 - julearn - INFO - = Model Parameters =
+2025-07-07 11:57:25,861 - julearn - INFO - Tuning hyperparameters using grid
+2025-07-07 11:57:25,861 - julearn - INFO - Hyperparameters:
+2025-07-07 11:57:25,861 - julearn - INFO -      select_k__k: [2, 3, 4]
+2025-07-07 11:57:25,861 - julearn - INFO -      svm__C: [0.01, 0.1, 1, 10]
+2025-07-07 11:57:25,861 - julearn - INFO -      svm__gamma: [0.001, 0.01, 0.1, &#39;scale&#39;, &#39;auto&#39;]
+2025-07-07 11:57:25,861 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2025-07-07 11:57:25,861 - julearn - INFO - Search Parameters:
+2025-07-07 11:57:25,861 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
+2025-07-07 11:57:25,861 - julearn - INFO - ====================
+2025-07-07 11:57:25,861 - julearn - INFO -
+2025-07-07 11:57:25,861 - julearn - INFO - = Data Information =
+2025-07-07 11:57:25,861 - julearn - INFO -      Problem type: classification
+2025-07-07 11:57:25,861 - julearn - INFO -      Number of samples: 100
+2025-07-07 11:57:25,861 - julearn - INFO -      Number of features: 4
+2025-07-07 11:57:25,861 - julearn - INFO - ====================
+2025-07-07 11:57:25,861 - julearn - INFO -
+2025-07-07 11:57:25,862 - julearn - INFO -      Number of classes: 2
+2025-07-07 11:57:25,862 - julearn - INFO -      Target type: object
+2025-07-07 11:57:25,862 - julearn - INFO -      Class distributions: species
 versicolor    50
 virginica     50
 Name: count, dtype: int64
-2024-10-23 11:33:29,202 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
-2024-10-23 11:33:29,202 - julearn - INFO - Binary classification problem detected.
+2025-07-07 11:57:25,862 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
+2025-07-07 11:57:25,862 - julearn - INFO - Binary classification problem detected.
 Scores with best hyperparameter: 0.9100000000000001
 {&#39;select_k__k&#39;: 4, &#39;svm__C&#39;: 10, &#39;svm__gamma&#39;: 0.01}
 </pre></div>
@@ -943,7 +943,7 @@ object that receives a set of hyperparameters and their values, and then
 tries to find the best combination of values for the hyperparameters using
 cross-validation.</p>
 <p>By default, <code class="docutils literal notranslate"><span class="pre">julearn</span></code> uses a
-<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html#sklearn.model_selection.GridSearchCV" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">GridSearchCV</span></code></a>.
+<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html#sklearn.model_selection.GridSearchCV" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">GridSearchCV</span></code></a>.
 This searcher, specified as <code class="docutils literal notranslate"><span class="pre">&quot;grid&quot;</span></code> is very simple. First, it constructs
 the _grid_ of hyperparameters to try. As we see above, we have 3
 hyperparameters to tune. So it constructs a 3-dimentional grid with all the
@@ -951,18 +951,18 @@ possible combinations of the hyperparameters values. The second step is to
 perform cross-validation on each of the possible combinations of
 hyperparameters values.</p>
 <p>Other searchers that <code class="docutils literal notranslate"><span class="pre">julearn</span></code> provides are the
-<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.RandomizedSearchCV.html#sklearn.model_selection.RandomizedSearchCV" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">RandomizedSearchCV</span></code></a>,
+<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.RandomizedSearchCV.html#sklearn.model_selection.RandomizedSearchCV" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">RandomizedSearchCV</span></code></a>,
 <a class="reference external" href="https://scikit-optimize.readthedocs.io/en/latest/modules/generated/skopt.BayesSearchCV.html#skopt.BayesSearchCV" title="(in scikit-optimize v0.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BayesSearchCV</span></code></a> and
-<a class="reference external" href="https://optuna-integration.readthedocs.io/en/stable/reference/generated/optuna_integration.OptunaSearchCV.html#optuna_integration.OptunaSearchCV" title="(in Optuna-Integration v4.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">OptunaSearchCV</span></code></a>.</p>
+<a class="reference external" href="https://optuna-integration.readthedocs.io/en/stable/reference/generated/optuna_integration.OptunaSearchCV.html#optuna_integration.OptunaSearchCV" title="(in Optuna-Integration v4.4.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">OptunaSearchCV</span></code></a>.</p>
 <p>The randomized searcher
-(<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.RandomizedSearchCV.html#sklearn.model_selection.RandomizedSearchCV" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">RandomizedSearchCV</span></code></a>) is similar to the
-<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html#sklearn.model_selection.GridSearchCV" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">GridSearchCV</span></code></a>, but instead
+(<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.RandomizedSearchCV.html#sklearn.model_selection.RandomizedSearchCV" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">RandomizedSearchCV</span></code></a>) is similar to the
+<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html#sklearn.model_selection.GridSearchCV" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">GridSearchCV</span></code></a>, but instead
 of trying all the possible combinations of hyperparameter values, it tries
 a random subset of them. This is useful when we have a lot of hyperparameters
 to tune, since it can be very time consuming to try all the possible
 combinations, as well as continuous parameters that can be sampled out of a
 distribution. For more information, see the
-<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.RandomizedSearchCV.html#sklearn.model_selection.RandomizedSearchCV" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">RandomizedSearchCV</span></code></a> documentation.</p>
+<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.RandomizedSearchCV.html#sklearn.model_selection.RandomizedSearchCV" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">RandomizedSearchCV</span></code></a> documentation.</p>
 <p>The Bayesian searcher (<a class="reference external" href="https://scikit-optimize.readthedocs.io/en/latest/modules/generated/skopt.BayesSearchCV.html#skopt.BayesSearchCV" title="(in scikit-optimize v0.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BayesSearchCV</span></code></a>) is a bit more
 complex. It uses Bayesian optimization to find the best hyperparameter set.
 As with the randomized search, it is useful when we have many
@@ -970,7 +970,7 @@ hyperparameters to tune, and we don’t want to try all the possible
 combinations due to computational constraints. For more information, see the
 <a class="reference external" href="https://scikit-optimize.readthedocs.io/en/latest/modules/generated/skopt.BayesSearchCV.html#skopt.BayesSearchCV" title="(in scikit-optimize v0.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">BayesSearchCV</span></code></a> documentation, including how to specify
 the prior distributions of the hyperparameters.</p>
-<p>The Optuna searcher (<a class="reference external" href="https://optuna-integration.readthedocs.io/en/stable/reference/generated/optuna_integration.OptunaSearchCV.html#optuna_integration.OptunaSearchCV" title="(in Optuna-Integration v4.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">OptunaSearchCV</span></code></a>)
+<p>The Optuna searcher (<a class="reference external" href="https://optuna-integration.readthedocs.io/en/stable/reference/generated/optuna_integration.OptunaSearchCV.html#optuna_integration.OptunaSearchCV" title="(in Optuna-Integration v4.4.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">OptunaSearchCV</span></code></a>)
 uses the Optuna library to find the best hyperparameter set. Optuna is a
 hyperparameter optimization framework that has several algorithms to find
 the best hyperparameter set. For more information, see the
@@ -978,7 +978,7 @@ the best hyperparameter set. For more information, see the
 <p>We can specify the kind of searcher and its parametrization, by setting the
 <code class="docutils literal notranslate"><span class="pre">search_params</span></code> parameter in the <a class="reference internal" href="../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> function.
 For example, we can use the
-<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.RandomizedSearchCV.html#sklearn.model_selection.RandomizedSearchCV" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">RandomizedSearchCV</span></code></a> searcher with
+<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.RandomizedSearchCV.html#sklearn.model_selection.RandomizedSearchCV" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">RandomizedSearchCV</span></code></a> searcher with
 10 iterations of random search.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">search_params</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;kind&quot;</span><span class="p">:</span> <span class="s2">&quot;random&quot;</span><span class="p">,</span>
@@ -1002,47 +1002,47 @@ For example, we can use the
 <span class="n">pprint</span><span class="p">(</span><span class="n">model_tuned</span><span class="o">.</span><span class="n">best_params_</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-23 11:33:46,315 - julearn - INFO - ==== Input Data ====
-2024-10-23 11:33:46,315 - julearn - INFO - Using dataframe as input
-2024-10-23 11:33:46,315 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2024-10-23 11:33:46,315 - julearn - INFO -      Target: species
-2024-10-23 11:33:46,315 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2024-10-23 11:33:46,315 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
-2024-10-23 11:33:46,316 - julearn - INFO - ====================
-2024-10-23 11:33:46,316 - julearn - INFO -
-2024-10-23 11:33:46,316 - julearn - INFO - = Model Parameters =
-2024-10-23 11:33:46,316 - julearn - INFO - Tuning hyperparameters using random
-2024-10-23 11:33:46,317 - julearn - INFO - Hyperparameters:
-2024-10-23 11:33:46,317 - julearn - INFO -      select_k__k: [2, 3, 4]
-2024-10-23 11:33:46,317 - julearn - INFO -      svm__C: [0.01, 0.1, 1, 10]
-2024-10-23 11:33:46,317 - julearn - INFO -      svm__gamma: [0.001, 0.01, 0.1, &#39;scale&#39;, &#39;auto&#39;]
-2024-10-23 11:33:46,317 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-23 11:33:46,317 - julearn - INFO - Search Parameters:
-2024-10-23 11:33:46,317 - julearn - INFO -      n_iter: 10
-2024-10-23 11:33:46,317 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-23 11:33:46,317 - julearn - INFO - ====================
-2024-10-23 11:33:46,317 - julearn - INFO -
-2024-10-23 11:33:46,317 - julearn - INFO - = Data Information =
-2024-10-23 11:33:46,317 - julearn - INFO -      Problem type: classification
-2024-10-23 11:33:46,317 - julearn - INFO -      Number of samples: 100
-2024-10-23 11:33:46,317 - julearn - INFO -      Number of features: 4
-2024-10-23 11:33:46,317 - julearn - INFO - ====================
-2024-10-23 11:33:46,317 - julearn - INFO -
-2024-10-23 11:33:46,318 - julearn - INFO -      Number of classes: 2
-2024-10-23 11:33:46,318 - julearn - INFO -      Target type: object
-2024-10-23 11:33:46,318 - julearn - INFO -      Class distributions: species
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-07-07 11:57:43,182 - julearn - INFO - ==== Input Data ====
+2025-07-07 11:57:43,183 - julearn - INFO - Using dataframe as input
+2025-07-07 11:57:43,183 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2025-07-07 11:57:43,183 - julearn - INFO -      Target: species
+2025-07-07 11:57:43,183 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2025-07-07 11:57:43,183 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
+2025-07-07 11:57:43,183 - julearn - INFO - ====================
+2025-07-07 11:57:43,183 - julearn - INFO -
+2025-07-07 11:57:43,184 - julearn - INFO - = Model Parameters =
+2025-07-07 11:57:43,184 - julearn - INFO - Tuning hyperparameters using random
+2025-07-07 11:57:43,184 - julearn - INFO - Hyperparameters:
+2025-07-07 11:57:43,184 - julearn - INFO -      select_k__k: [2, 3, 4]
+2025-07-07 11:57:43,184 - julearn - INFO -      svm__C: [0.01, 0.1, 1, 10]
+2025-07-07 11:57:43,184 - julearn - INFO -      svm__gamma: [0.001, 0.01, 0.1, &#39;scale&#39;, &#39;auto&#39;]
+2025-07-07 11:57:43,184 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2025-07-07 11:57:43,184 - julearn - INFO - Search Parameters:
+2025-07-07 11:57:43,185 - julearn - INFO -      n_iter: 10
+2025-07-07 11:57:43,185 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
+2025-07-07 11:57:43,185 - julearn - INFO - ====================
+2025-07-07 11:57:43,185 - julearn - INFO -
+2025-07-07 11:57:43,185 - julearn - INFO - = Data Information =
+2025-07-07 11:57:43,185 - julearn - INFO -      Problem type: classification
+2025-07-07 11:57:43,185 - julearn - INFO -      Number of samples: 100
+2025-07-07 11:57:43,185 - julearn - INFO -      Number of features: 4
+2025-07-07 11:57:43,185 - julearn - INFO - ====================
+2025-07-07 11:57:43,185 - julearn - INFO -
+2025-07-07 11:57:43,185 - julearn - INFO -      Number of classes: 2
+2025-07-07 11:57:43,185 - julearn - INFO -      Target type: object
+2025-07-07 11:57:43,186 - julearn - INFO -      Class distributions: species
 versicolor    50
 virginica     50
 Name: count, dtype: int64
-2024-10-23 11:33:46,318 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
-2024-10-23 11:33:46,318 - julearn - INFO - Binary classification problem detected.
+2025-07-07 11:57:43,186 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
+2025-07-07 11:57:43,186 - julearn - INFO - Binary classification problem detected.
 Scores with best hyperparameter using 10 iterations of randomized search: 0.9099999999999999
 {&#39;select_k__k&#39;: 3, &#39;svm__C&#39;: 1, &#39;svm__gamma&#39;: &#39;scale&#39;}
 </pre></div>
 </div>
 <p>We can now see that the best hyperparameter might be different from the grid
 search. This is because it tried only 10 combinations and not the whole grid.
-Furthermore, the  <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.RandomizedSearchCV.html#sklearn.model_selection.RandomizedSearchCV" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">RandomizedSearchCV</span></code></a>
+Furthermore, the  <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.RandomizedSearchCV.html#sklearn.model_selection.RandomizedSearchCV" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">RandomizedSearchCV</span></code></a>
 searcher can sample hyperparameters from distributions, which can be useful
 when we have continuous hyperparameters.
 Let’s set both <code class="docutils literal notranslate"><span class="pre">C</span></code> and <code class="docutils literal notranslate"><span class="pre">gamma</span></code> to be sampled from log-uniform
@@ -1077,15 +1077,15 @@ distribution can be either <code class="docutils literal notranslate"><span clas
 <span class="n">pprint</span><span class="p">(</span><span class="n">model_tuned</span><span class="o">.</span><span class="n">best_params_</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-23 11:33:49,240 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:33:49,241 - julearn - INFO - Step added
-2024-10-23 11:33:49,241 - julearn - INFO - Adding step select_k that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:33:49,241 - julearn - INFO - Tuning hyperparameter k = [2, 3, 4]
-2024-10-23 11:33:49,241 - julearn - INFO - Step added
-2024-10-23 11:33:49,241 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:33:49,241 - julearn - INFO - Tuning hyperparameter C = (0.01, 10, &#39;log-uniform&#39;)
-2024-10-23 11:33:49,241 - julearn - INFO - Tuning hyperparameter gamma = (0.001, 0.1, &#39;log-uniform&#39;)
-2024-10-23 11:33:49,241 - julearn - INFO - Step added
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-07-07 11:57:46,122 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:57:46,123 - julearn - INFO - Step added
+2025-07-07 11:57:46,123 - julearn - INFO - Adding step select_k that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:57:46,123 - julearn - INFO - Tuning hyperparameter k = [2, 3, 4]
+2025-07-07 11:57:46,123 - julearn - INFO - Step added
+2025-07-07 11:57:46,123 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:57:46,123 - julearn - INFO - Tuning hyperparameter C = (0.01, 10, &#39;log-uniform&#39;)
+2025-07-07 11:57:46,123 - julearn - INFO - Tuning hyperparameter gamma = (0.001, 0.1, &#39;log-uniform&#39;)
+2025-07-07 11:57:46,123 - julearn - INFO - Step added
 PipelineCreator:
   Step 0: zscore
     estimator:     StandardScaler()
@@ -1103,40 +1103,40 @@ PipelineCreator:
     needed types:  ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
     tuning params: {&#39;svm__C&#39;: (0.01, 10, &#39;log-uniform&#39;), &#39;svm__gamma&#39;: (0.001, 0.1, &#39;log-uniform&#39;)}
 
-2024-10-23 11:33:49,242 - julearn - INFO - ==== Input Data ====
-2024-10-23 11:33:49,242 - julearn - INFO - Using dataframe as input
-2024-10-23 11:33:49,242 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2024-10-23 11:33:49,242 - julearn - INFO -      Target: species
-2024-10-23 11:33:49,242 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2024-10-23 11:33:49,242 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
-2024-10-23 11:33:49,243 - julearn - INFO - ====================
-2024-10-23 11:33:49,243 - julearn - INFO -
-2024-10-23 11:33:49,243 - julearn - INFO - = Model Parameters =
-2024-10-23 11:33:49,243 - julearn - INFO - Tuning hyperparameters using random
-2024-10-23 11:33:49,243 - julearn - INFO - Hyperparameters:
-2024-10-23 11:33:49,243 - julearn - INFO -      select_k__k: [2, 3, 4]
-2024-10-23 11:33:49,243 - julearn - INFO -      svm__C: (0.01, 10, &#39;log-uniform&#39;)
-2024-10-23 11:33:49,244 - julearn - INFO -      svm__gamma: (0.001, 0.1, &#39;log-uniform&#39;)
-2024-10-23 11:33:49,245 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-23 11:33:49,245 - julearn - INFO - Search Parameters:
-2024-10-23 11:33:49,245 - julearn - INFO -      n_iter: 10
-2024-10-23 11:33:49,245 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-23 11:33:49,245 - julearn - INFO - ====================
-2024-10-23 11:33:49,245 - julearn - INFO -
-2024-10-23 11:33:49,245 - julearn - INFO - = Data Information =
-2024-10-23 11:33:49,245 - julearn - INFO -      Problem type: classification
-2024-10-23 11:33:49,245 - julearn - INFO -      Number of samples: 100
-2024-10-23 11:33:49,245 - julearn - INFO -      Number of features: 4
-2024-10-23 11:33:49,245 - julearn - INFO - ====================
-2024-10-23 11:33:49,245 - julearn - INFO -
-2024-10-23 11:33:49,245 - julearn - INFO -      Number of classes: 2
-2024-10-23 11:33:49,245 - julearn - INFO -      Target type: object
-2024-10-23 11:33:49,246 - julearn - INFO -      Class distributions: species
+2025-07-07 11:57:46,124 - julearn - INFO - ==== Input Data ====
+2025-07-07 11:57:46,124 - julearn - INFO - Using dataframe as input
+2025-07-07 11:57:46,124 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2025-07-07 11:57:46,124 - julearn - INFO -      Target: species
+2025-07-07 11:57:46,124 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2025-07-07 11:57:46,124 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
+2025-07-07 11:57:46,125 - julearn - INFO - ====================
+2025-07-07 11:57:46,125 - julearn - INFO -
+2025-07-07 11:57:46,125 - julearn - INFO - = Model Parameters =
+2025-07-07 11:57:46,125 - julearn - INFO - Tuning hyperparameters using random
+2025-07-07 11:57:46,125 - julearn - INFO - Hyperparameters:
+2025-07-07 11:57:46,125 - julearn - INFO -      select_k__k: [2, 3, 4]
+2025-07-07 11:57:46,126 - julearn - INFO -      svm__C: (0.01, 10, &#39;log-uniform&#39;)
+2025-07-07 11:57:46,126 - julearn - INFO -      svm__gamma: (0.001, 0.1, &#39;log-uniform&#39;)
+2025-07-07 11:57:46,127 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2025-07-07 11:57:46,127 - julearn - INFO - Search Parameters:
+2025-07-07 11:57:46,127 - julearn - INFO -      n_iter: 10
+2025-07-07 11:57:46,127 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
+2025-07-07 11:57:46,127 - julearn - INFO - ====================
+2025-07-07 11:57:46,127 - julearn - INFO -
+2025-07-07 11:57:46,127 - julearn - INFO - = Data Information =
+2025-07-07 11:57:46,127 - julearn - INFO -      Problem type: classification
+2025-07-07 11:57:46,127 - julearn - INFO -      Number of samples: 100
+2025-07-07 11:57:46,127 - julearn - INFO -      Number of features: 4
+2025-07-07 11:57:46,127 - julearn - INFO - ====================
+2025-07-07 11:57:46,127 - julearn - INFO -
+2025-07-07 11:57:46,128 - julearn - INFO -      Number of classes: 2
+2025-07-07 11:57:46,128 - julearn - INFO -      Target type: object
+2025-07-07 11:57:46,128 - julearn - INFO -      Class distributions: species
 versicolor    50
 virginica     50
 Name: count, dtype: int64
-2024-10-23 11:33:49,246 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
-2024-10-23 11:33:49,246 - julearn - INFO - Binary classification problem detected.
+2025-07-07 11:57:46,128 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
+2025-07-07 11:57:46,128 - julearn - INFO - Binary classification problem detected.
 Scores with best hyperparameter using 10 iterations of randomized search: 0.9400000000000001
 {&#39;select_k__k&#39;: 4,
  &#39;svm__C&#39;: 6.459261223720629,
@@ -1171,43 +1171,43 @@ hyperparameters.</p>
 <span class="n">pprint</span><span class="p">(</span><span class="n">model_tuned</span><span class="o">.</span><span class="n">best_params_</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-23 11:33:52,169 - julearn - INFO - ==== Input Data ====
-2024-10-23 11:33:52,169 - julearn - INFO - Using dataframe as input
-2024-10-23 11:33:52,169 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2024-10-23 11:33:52,169 - julearn - INFO -      Target: species
-2024-10-23 11:33:52,169 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2024-10-23 11:33:52,169 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
-2024-10-23 11:33:52,170 - julearn - INFO - ====================
-2024-10-23 11:33:52,170 - julearn - INFO -
-2024-10-23 11:33:52,171 - julearn - INFO - = Model Parameters =
-2024-10-23 11:33:52,171 - julearn - INFO - Tuning hyperparameters using bayes
-2024-10-23 11:33:52,171 - julearn - INFO - Hyperparameters:
-2024-10-23 11:33:52,171 - julearn - INFO -      select_k__k: [2, 3, 4]
-2024-10-23 11:33:52,171 - julearn - INFO -      svm__C: (0.01, 10, &#39;log-uniform&#39;)
-2024-10-23 11:33:52,171 - julearn - INFO -      svm__gamma: (0.001, 0.1, &#39;log-uniform&#39;)
-2024-10-23 11:33:52,171 - julearn - INFO - Hyperparameter select_k__k as is [2, 3, 4]
-2024-10-23 11:33:52,171 - julearn - INFO - Hyperparameter svm__C as is (0.01, 10, &#39;log-uniform&#39;)
-2024-10-23 11:33:52,171 - julearn - INFO - Hyperparameter svm__gamma is log-uniform float [0.001, 0.1]
-2024-10-23 11:33:52,172 - julearn - INFO - Using inner CV scheme KFold(n_splits=3, random_state=None, shuffle=False)
-2024-10-23 11:33:52,172 - julearn - INFO - Search Parameters:
-2024-10-23 11:33:52,172 - julearn - INFO -      n_iter: 10
-2024-10-23 11:33:52,172 - julearn - INFO -      cv: KFold(n_splits=3, random_state=None, shuffle=False)
-2024-10-23 11:33:52,175 - julearn - INFO - ====================
-2024-10-23 11:33:52,175 - julearn - INFO -
-2024-10-23 11:33:52,175 - julearn - INFO - = Data Information =
-2024-10-23 11:33:52,175 - julearn - INFO -      Problem type: classification
-2024-10-23 11:33:52,175 - julearn - INFO -      Number of samples: 100
-2024-10-23 11:33:52,175 - julearn - INFO -      Number of features: 4
-2024-10-23 11:33:52,175 - julearn - INFO - ====================
-2024-10-23 11:33:52,175 - julearn - INFO -
-2024-10-23 11:33:52,175 - julearn - INFO -      Number of classes: 2
-2024-10-23 11:33:52,175 - julearn - INFO -      Target type: object
-2024-10-23 11:33:52,176 - julearn - INFO -      Class distributions: species
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-07-07 11:57:49,093 - julearn - INFO - ==== Input Data ====
+2025-07-07 11:57:49,093 - julearn - INFO - Using dataframe as input
+2025-07-07 11:57:49,094 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2025-07-07 11:57:49,094 - julearn - INFO -      Target: species
+2025-07-07 11:57:49,094 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2025-07-07 11:57:49,094 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
+2025-07-07 11:57:49,094 - julearn - INFO - ====================
+2025-07-07 11:57:49,094 - julearn - INFO -
+2025-07-07 11:57:49,095 - julearn - INFO - = Model Parameters =
+2025-07-07 11:57:49,095 - julearn - INFO - Tuning hyperparameters using bayes
+2025-07-07 11:57:49,095 - julearn - INFO - Hyperparameters:
+2025-07-07 11:57:49,095 - julearn - INFO -      select_k__k: [2, 3, 4]
+2025-07-07 11:57:49,095 - julearn - INFO -      svm__C: (0.01, 10, &#39;log-uniform&#39;)
+2025-07-07 11:57:49,095 - julearn - INFO -      svm__gamma: (0.001, 0.1, &#39;log-uniform&#39;)
+2025-07-07 11:57:49,095 - julearn - INFO - Hyperparameter select_k__k as is [2, 3, 4]
+2025-07-07 11:57:49,095 - julearn - INFO - Hyperparameter svm__C as is (0.01, 10, &#39;log-uniform&#39;)
+2025-07-07 11:57:49,095 - julearn - INFO - Hyperparameter svm__gamma is log-uniform float [0.001, 0.1]
+2025-07-07 11:57:49,096 - julearn - INFO - Using inner CV scheme KFold(n_splits=3, random_state=None, shuffle=False)
+2025-07-07 11:57:49,096 - julearn - INFO - Search Parameters:
+2025-07-07 11:57:49,096 - julearn - INFO -      n_iter: 10
+2025-07-07 11:57:49,096 - julearn - INFO -      cv: KFold(n_splits=3, random_state=None, shuffle=False)
+2025-07-07 11:57:49,099 - julearn - INFO - ====================
+2025-07-07 11:57:49,099 - julearn - INFO -
+2025-07-07 11:57:49,099 - julearn - INFO - = Data Information =
+2025-07-07 11:57:49,099 - julearn - INFO -      Problem type: classification
+2025-07-07 11:57:49,099 - julearn - INFO -      Number of samples: 100
+2025-07-07 11:57:49,100 - julearn - INFO -      Number of features: 4
+2025-07-07 11:57:49,100 - julearn - INFO - ====================
+2025-07-07 11:57:49,100 - julearn - INFO -
+2025-07-07 11:57:49,100 - julearn - INFO -      Number of classes: 2
+2025-07-07 11:57:49,100 - julearn - INFO -      Target type: object
+2025-07-07 11:57:49,100 - julearn - INFO -      Class distributions: species
 versicolor    50
 virginica     50
 Name: count, dtype: int64
-2024-10-23 11:33:52,176 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
-2024-10-23 11:33:52,176 - julearn - INFO - Binary classification problem detected.
+2025-07-07 11:57:49,101 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
+2025-07-07 11:57:49,101 - julearn - INFO - Binary classification problem detected.
 Scores with best hyperparameter using 10 iterations of bayesian search and 3-fold CV: 0.9
 OrderedDict([(&#39;select_k__k&#39;, 4),
              (&#39;svm__C&#39;, 3.182640993861633),
@@ -1218,7 +1218,7 @@ OrderedDict([(&#39;select_k__k&#39;, 4),
 as <code class="docutils literal notranslate"><span class="pre">&quot;optuna&quot;</span></code> and the hyperparameters are specified as a dictionary with
 the hyperparameters to tune and their distributions as for the bayesian
 searcher. However, the optuna searcher behaviour is controlled by a
-<a class="reference external" href="https://optuna.readthedocs.io/en/stable/reference/generated/optuna.study.Study.html#optuna.study.Study" title="(in Optuna v4.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Study</span></code></a> object. This object can be passed to the
+<a class="reference external" href="https://optuna.readthedocs.io/en/stable/reference/generated/optuna.study.Study.html#optuna.study.Study" title="(in Optuna v4.4.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Study</span></code></a> object. This object can be passed to the
 searcher using the <code class="docutils literal notranslate"><span class="pre">study</span></code> parameter in the <code class="docutils literal notranslate"><span class="pre">search_params</span></code> dictionary.</p>
 <div class="admonition important">
 <p class="admonition-title">Important</p>
@@ -1241,16 +1241,16 @@ for the <code class="docutils literal notranslate"><span class="pre">class_weigh
 <span class="nb">print</span><span class="p">(</span><span class="n">creator</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-23 11:33:57,719 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:33:57,719 - julearn - INFO - Step added
-2024-10-23 11:33:57,719 - julearn - INFO - Adding step select_k that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:33:57,719 - julearn - INFO - Tuning hyperparameter k = (2, 4, &#39;uniform&#39;)
-2024-10-23 11:33:57,719 - julearn - INFO - Step added
-2024-10-23 11:33:57,719 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:33:57,720 - julearn - INFO - Tuning hyperparameter C = (0.01, 10, &#39;log-uniform&#39;)
-2024-10-23 11:33:57,720 - julearn - INFO - Tuning hyperparameter gamma = (0.001, 0.1, &#39;log-uniform&#39;)
-2024-10-23 11:33:57,720 - julearn - INFO - Tuning hyperparameter class_weight = (&#39;balanced&#39;, None, &#39;categorical&#39;)
-2024-10-23 11:33:57,720 - julearn - INFO - Step added
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-07-07 11:57:56,856 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:57:56,857 - julearn - INFO - Step added
+2025-07-07 11:57:56,857 - julearn - INFO - Adding step select_k that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:57:56,857 - julearn - INFO - Tuning hyperparameter k = (2, 4, &#39;uniform&#39;)
+2025-07-07 11:57:56,857 - julearn - INFO - Step added
+2025-07-07 11:57:56,857 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:57:56,857 - julearn - INFO - Tuning hyperparameter C = (0.01, 10, &#39;log-uniform&#39;)
+2025-07-07 11:57:56,857 - julearn - INFO - Tuning hyperparameter gamma = (0.001, 0.1, &#39;log-uniform&#39;)
+2025-07-07 11:57:56,857 - julearn - INFO - Tuning hyperparameter class_weight = (&#39;balanced&#39;, None, &#39;categorical&#39;)
+2025-07-07 11:57:56,857 - julearn - INFO - Step added
 PipelineCreator:
   Step 0: zscore
     estimator:     StandardScaler()
@@ -1270,7 +1270,7 @@ PipelineCreator:
 </pre></div>
 </div>
 <p>We can now use the optuna searcher with 10 trials and 3-fold cross-validation.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">optuna</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">optuna</span>
 
 <span class="n">study</span> <span class="o">=</span> <span class="n">optuna</span><span class="o">.</span><span class="n">create_study</span><span class="p">(</span>
     <span class="n">direction</span><span class="o">=</span><span class="s2">&quot;maximize&quot;</span><span class="p">,</span>
@@ -1300,64 +1300,64 @@ PipelineCreator:
 <span class="n">pprint</span><span class="p">(</span><span class="n">model_tuned</span><span class="o">.</span><span class="n">best_params_</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-23 11:33:57,722 - julearn - INFO - ==== Input Data ====
-2024-10-23 11:33:57,722 - julearn - INFO - Using dataframe as input
-2024-10-23 11:33:57,722 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2024-10-23 11:33:57,722 - julearn - INFO -      Target: species
-2024-10-23 11:33:57,723 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2024-10-23 11:33:57,723 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
-2024-10-23 11:33:57,723 - julearn - INFO - ====================
-2024-10-23 11:33:57,723 - julearn - INFO -
-2024-10-23 11:33:57,724 - julearn - INFO - = Model Parameters =
-2024-10-23 11:33:57,724 - julearn - INFO - Tuning hyperparameters using optuna
-2024-10-23 11:33:57,724 - julearn - INFO - Hyperparameters:
-2024-10-23 11:33:57,724 - julearn - INFO -      select_k__k: (2, 4, &#39;uniform&#39;)
-2024-10-23 11:33:57,724 - julearn - INFO -      svm__C: (0.01, 10, &#39;log-uniform&#39;)
-2024-10-23 11:33:57,724 - julearn - INFO -      svm__gamma: (0.001, 0.1, &#39;log-uniform&#39;)
-2024-10-23 11:33:57,725 - julearn - INFO -      svm__class_weight: (&#39;balanced&#39;, None, &#39;categorical&#39;)
-2024-10-23 11:33:57,725 - julearn - INFO - Hyperparameter select_k__k is uniform integer [2, 4]
-2024-10-23 11:33:57,725 - julearn - INFO - Hyperparameter svm__C is log-uniform float [0.01, 10]
-2024-10-23 11:33:57,725 - julearn - INFO - Hyperparameter svm__gamma is log-uniform float [0.001, 0.1]
-2024-10-23 11:33:57,725 - julearn - INFO - Hyperparameter svm__class_weight is categorical with 2 options: [balanced and None]
-2024-10-23 11:33:57,725 - julearn - INFO - Using inner CV scheme KFold(n_splits=3, random_state=None, shuffle=False)
-2024-10-23 11:33:57,725 - julearn - INFO - Search Parameters:
-2024-10-23 11:33:57,725 - julearn - INFO -      study: &lt;optuna.study.study.Study object at 0x7f90ad9a96f0&gt;
-2024-10-23 11:33:57,725 - julearn - INFO -      cv: KFold(n_splits=3, random_state=None, shuffle=False)
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-07-07 11:57:56,859 - julearn - INFO - ==== Input Data ====
+2025-07-07 11:57:56,859 - julearn - INFO - Using dataframe as input
+2025-07-07 11:57:56,859 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2025-07-07 11:57:56,859 - julearn - INFO -      Target: species
+2025-07-07 11:57:56,859 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2025-07-07 11:57:56,859 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
+2025-07-07 11:57:56,860 - julearn - INFO - ====================
+2025-07-07 11:57:56,860 - julearn - INFO -
+2025-07-07 11:57:56,861 - julearn - INFO - = Model Parameters =
+2025-07-07 11:57:56,861 - julearn - INFO - Tuning hyperparameters using optuna
+2025-07-07 11:57:56,861 - julearn - INFO - Hyperparameters:
+2025-07-07 11:57:56,861 - julearn - INFO -      select_k__k: (2, 4, &#39;uniform&#39;)
+2025-07-07 11:57:56,861 - julearn - INFO -      svm__C: (0.01, 10, &#39;log-uniform&#39;)
+2025-07-07 11:57:56,861 - julearn - INFO -      svm__gamma: (0.001, 0.1, &#39;log-uniform&#39;)
+2025-07-07 11:57:56,861 - julearn - INFO -      svm__class_weight: (&#39;balanced&#39;, None, &#39;categorical&#39;)
+2025-07-07 11:57:56,861 - julearn - INFO - Hyperparameter select_k__k is uniform integer [2, 4]
+2025-07-07 11:57:56,861 - julearn - INFO - Hyperparameter svm__C is log-uniform float [0.01, 10]
+2025-07-07 11:57:56,861 - julearn - INFO - Hyperparameter svm__gamma is log-uniform float [0.001, 0.1]
+2025-07-07 11:57:56,861 - julearn - INFO - Hyperparameter svm__class_weight is categorical with 2 options: [balanced and None]
+2025-07-07 11:57:56,862 - julearn - INFO - Using inner CV scheme KFold(n_splits=3, random_state=None, shuffle=False)
+2025-07-07 11:57:56,862 - julearn - INFO - Search Parameters:
+2025-07-07 11:57:56,862 - julearn - INFO -      study: &lt;optuna.study.study.Study object at 0x7f86fe4067a0&gt;
+2025-07-07 11:57:56,862 - julearn - INFO -      cv: KFold(n_splits=3, random_state=None, shuffle=False)
 /home/runner/work/julearn/julearn/julearn/pipeline/pipeline_creator.py:1079: ExperimentalWarning: OptunaSearchCV is experimental (supported from v0.17.0). The interface can change in the future.
   pipeline = search(  # type: ignore
-2024-10-23 11:33:57,726 - julearn - INFO - ====================
-2024-10-23 11:33:57,726 - julearn - INFO -
-2024-10-23 11:33:57,726 - julearn - INFO - = Data Information =
-2024-10-23 11:33:57,726 - julearn - INFO -      Problem type: classification
-2024-10-23 11:33:57,726 - julearn - INFO -      Number of samples: 100
-2024-10-23 11:33:57,726 - julearn - INFO -      Number of features: 4
-2024-10-23 11:33:57,726 - julearn - INFO - ====================
-2024-10-23 11:33:57,726 - julearn - INFO -
-2024-10-23 11:33:57,726 - julearn - INFO -      Number of classes: 2
-2024-10-23 11:33:57,726 - julearn - INFO -      Target type: object
-2024-10-23 11:33:57,727 - julearn - INFO -      Class distributions: species
+2025-07-07 11:57:56,862 - julearn - INFO - ====================
+2025-07-07 11:57:56,862 - julearn - INFO -
+2025-07-07 11:57:56,863 - julearn - INFO - = Data Information =
+2025-07-07 11:57:56,863 - julearn - INFO -      Problem type: classification
+2025-07-07 11:57:56,863 - julearn - INFO -      Number of samples: 100
+2025-07-07 11:57:56,863 - julearn - INFO -      Number of features: 4
+2025-07-07 11:57:56,863 - julearn - INFO - ====================
+2025-07-07 11:57:56,863 - julearn - INFO -
+2025-07-07 11:57:56,863 - julearn - INFO -      Number of classes: 2
+2025-07-07 11:57:56,863 - julearn - INFO -      Target type: object
+2025-07-07 11:57:56,864 - julearn - INFO -      Class distributions: species
 versicolor    50
 virginica     50
 Name: count, dtype: int64
-2024-10-23 11:33:57,727 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
-2024-10-23 11:33:57,728 - julearn - INFO - Binary classification problem detected.
-/opt/hostedtoolcache/Python/3.10.15/x64/lib/python3.10/site-packages/sklearn/base.py:125: ExperimentalWarning: OptunaSearchCV is experimental (supported from v0.17.0). The interface can change in the future.
+2025-07-07 11:57:56,864 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
+2025-07-07 11:57:56,864 - julearn - INFO - Binary classification problem detected.
+/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/sklearn/base.py:125: ExperimentalWarning: OptunaSearchCV is experimental (supported from v0.17.0). The interface can change in the future.
   new_object = klass(**new_object_params)
-/opt/hostedtoolcache/Python/3.10.15/x64/lib/python3.10/site-packages/sklearn/base.py:125: ExperimentalWarning: OptunaSearchCV is experimental (supported from v0.17.0). The interface can change in the future.
+/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/sklearn/base.py:125: ExperimentalWarning: OptunaSearchCV is experimental (supported from v0.17.0). The interface can change in the future.
   new_object = klass(**new_object_params)
-/opt/hostedtoolcache/Python/3.10.15/x64/lib/python3.10/site-packages/sklearn/base.py:125: ExperimentalWarning: OptunaSearchCV is experimental (supported from v0.17.0). The interface can change in the future.
+/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/sklearn/base.py:125: ExperimentalWarning: OptunaSearchCV is experimental (supported from v0.17.0). The interface can change in the future.
   new_object = klass(**new_object_params)
-/opt/hostedtoolcache/Python/3.10.15/x64/lib/python3.10/site-packages/sklearn/base.py:125: ExperimentalWarning: OptunaSearchCV is experimental (supported from v0.17.0). The interface can change in the future.
+/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/sklearn/base.py:125: ExperimentalWarning: OptunaSearchCV is experimental (supported from v0.17.0). The interface can change in the future.
   new_object = klass(**new_object_params)
-/opt/hostedtoolcache/Python/3.10.15/x64/lib/python3.10/site-packages/sklearn/base.py:125: ExperimentalWarning: OptunaSearchCV is experimental (supported from v0.17.0). The interface can change in the future.
+/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/sklearn/base.py:125: ExperimentalWarning: OptunaSearchCV is experimental (supported from v0.17.0). The interface can change in the future.
   new_object = klass(**new_object_params)
-/opt/hostedtoolcache/Python/3.10.15/x64/lib/python3.10/site-packages/sklearn/base.py:125: ExperimentalWarning: OptunaSearchCV is experimental (supported from v0.17.0). The interface can change in the future.
+/opt/hostedtoolcache/Python/3.10.18/x64/lib/python3.10/site-packages/sklearn/base.py:125: ExperimentalWarning: OptunaSearchCV is experimental (supported from v0.17.0). The interface can change in the future.
   new_object = klass(**new_object_params)
-Scores with best hyperparameter using 10 iterations of optuna and 3-fold CV: 0.9299999999999999
-{&#39;select_k__k&#39;: 2,
- &#39;svm__C&#39;: 6.030895066498132,
- &#39;svm__class_weight&#39;: None,
- &#39;svm__gamma&#39;: 0.03884091431597502}
+Scores with best hyperparameter using 10 iterations of optuna and 3-fold CV: 0.93
+{&#39;select_k__k&#39;: 4,
+ &#39;svm__C&#39;: 2.5890632166866823,
+ &#39;svm__class_weight&#39;: &#39;balanced&#39;,
+ &#39;svm__gamma&#39;: 0.01873586818366937}
 </pre></div>
 </div>
 <section id="specifying-distributions">
@@ -1370,9 +1370,9 @@ be either <code class="docutils literal notranslate"><span class="pre">&quot;log
 <code class="docutils literal notranslate"><span class="pre">(a,</span> <span class="pre">b,</span> <span class="pre">c,</span> <span class="pre">d,</span> <span class="pre">...,</span> <span class="pre">&quot;categorical&quot;)</span></code> where <code class="docutils literal notranslate"><span class="pre">a</span></code>, <code class="docutils literal notranslate"><span class="pre">b</span></code>, <code class="docutils literal notranslate"><span class="pre">c</span></code>, <code class="docutils literal notranslate"><span class="pre">d</span></code>, etc.
 are the possible categorical values for the hyperparameter.</p>
 <p>For example, we can specify the <code class="docutils literal notranslate"><span class="pre">C</span></code> and <code class="docutils literal notranslate"><span class="pre">gamma</span></code> hyperparameters of the
-<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SVC</span></code></a> as  log-uniform distributions, while keeping
+<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SVC</span></code></a> as  log-uniform distributions, while keeping
 the <code class="docutils literal notranslate"><span class="pre">with_mean</span></code> parameter of the
-<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html#sklearn.preprocessing.StandardScaler" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">StandardScaler</span></code></a> as a categorical parameter
+<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html#sklearn.preprocessing.StandardScaler" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">StandardScaler</span></code></a> as a categorical parameter
 with two options.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;classification&quot;</span><span class="p">)</span>
 <span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">,</span> <span class="n">with_mean</span><span class="o">=</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;categorical&quot;</span><span class="p">))</span>
@@ -1384,13 +1384,13 @@ with two options.</p>
 <span class="nb">print</span><span class="p">(</span><span class="n">creator</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-23 11:33:59,621 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:33:59,621 - julearn - INFO - Tuning hyperparameter with_mean = (True, False, &#39;categorical&#39;)
-2024-10-23 11:33:59,621 - julearn - INFO - Step added
-2024-10-23 11:33:59,621 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:33:59,621 - julearn - INFO - Tuning hyperparameter C = (0.01, 10, &#39;log-uniform&#39;)
-2024-10-23 11:33:59,621 - julearn - INFO - Tuning hyperparameter gamma = (0.001, 0.1, &#39;log-uniform&#39;)
-2024-10-23 11:33:59,621 - julearn - INFO - Step added
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-07-07 11:57:58,792 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:57:58,792 - julearn - INFO - Tuning hyperparameter with_mean = (True, False, &#39;categorical&#39;)
+2025-07-07 11:57:58,793 - julearn - INFO - Step added
+2025-07-07 11:57:58,793 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:57:58,793 - julearn - INFO - Tuning hyperparameter C = (0.01, 10, &#39;log-uniform&#39;)
+2025-07-07 11:57:58,793 - julearn - INFO - Tuning hyperparameter gamma = (0.001, 0.1, &#39;log-uniform&#39;)
+2025-07-07 11:57:58,793 - julearn - INFO - Step added
 PipelineCreator:
   Step 0: zscore
     estimator:     StandardScaler()
@@ -1411,8 +1411,8 @@ the <code class="docutils literal notranslate"><span class="pre">bayes</span></c
 <a class="reference external" href="https://scikit-optimize.readthedocs.io/en/latest/modules/generated/skopt.space.space.Categorical.html#skopt.space.space.Categorical" title="(in scikit-optimize v0.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Categorical</span></code></a>, <a class="reference external" href="https://scikit-optimize.readthedocs.io/en/latest/modules/generated/skopt.space.space.Integer.html#skopt.space.space.Integer" title="(in scikit-optimize v0.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Integer</span></code></a>
 and <a class="reference external" href="https://scikit-optimize.readthedocs.io/en/latest/modules/generated/skopt.space.space.Real.html#skopt.space.space.Real" title="(in scikit-optimize v0.10)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Real</span></code></a>.</p>
 <p>For example, we can define a log-uniform distribution with base 2 for the
-<code class="docutils literal notranslate"><span class="pre">C</span></code> hyperparameter of the <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SVC</span></code></a> model:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">skopt.space</span> <span class="kn">import</span> <span class="n">Real</span>
+<code class="docutils literal notranslate"><span class="pre">C</span></code> hyperparameter of the <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SVC</span></code></a> model:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">skopt.space</span><span class="w"> </span><span class="kn">import</span> <span class="n">Real</span>
 <span class="n">creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;classification&quot;</span><span class="p">)</span>
 <span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">,</span> <span class="n">with_mean</span><span class="o">=</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;categorical&quot;</span><span class="p">))</span>
 <span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
@@ -1423,13 +1423,13 @@ and <a class="reference external" href="https://scikit-optimize.readthedocs.io/e
 <span class="nb">print</span><span class="p">(</span><span class="n">creator</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-23 11:33:59,622 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:33:59,622 - julearn - INFO - Tuning hyperparameter with_mean = (True, False, &#39;categorical&#39;)
-2024-10-23 11:33:59,623 - julearn - INFO - Step added
-2024-10-23 11:33:59,623 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:33:59,623 - julearn - INFO - Tuning hyperparameter C = Real(low=0.01, high=10, prior=&#39;log-uniform&#39;, transform=&#39;identity&#39;)
-2024-10-23 11:33:59,623 - julearn - INFO - Tuning hyperparameter gamma = (0.001, 0.1, &#39;log-uniform&#39;)
-2024-10-23 11:33:59,623 - julearn - INFO - Step added
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-07-07 11:57:58,794 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:57:58,794 - julearn - INFO - Tuning hyperparameter with_mean = (True, False, &#39;categorical&#39;)
+2025-07-07 11:57:58,794 - julearn - INFO - Step added
+2025-07-07 11:57:58,795 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:57:58,795 - julearn - INFO - Tuning hyperparameter C = Real(low=0.01, high=10, prior=&#39;log-uniform&#39;, transform=&#39;identity&#39;)
+2025-07-07 11:57:58,795 - julearn - INFO - Tuning hyperparameter gamma = (0.001, 0.1, &#39;log-uniform&#39;)
+2025-07-07 11:57:58,795 - julearn - INFO - Step added
 PipelineCreator:
   Step 0: zscore
     estimator:     StandardScaler()
@@ -1444,14 +1444,14 @@ PipelineCreator:
 </pre></div>
 </div>
 <p>For the optuna searcher, the distributions are defined using the
-<a class="reference external" href="https://optuna.readthedocs.io/en/stable/reference/generated/optuna.distributions.CategoricalDistribution.html#optuna.distributions.CategoricalDistribution" title="(in Optuna v4.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">CategoricalDistribution</span></code></a>,
-<a class="reference external" href="https://optuna.readthedocs.io/en/stable/reference/generated/optuna.distributions.FloatDistribution.html#optuna.distributions.FloatDistribution" title="(in Optuna v4.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">FloatDistribution</span></code></a> and
-<a class="reference external" href="https://optuna.readthedocs.io/en/stable/reference/generated/optuna.distributions.IntDistribution.html#optuna.distributions.IntDistribution" title="(in Optuna v4.0.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IntDistribution</span></code></a>.</p>
+<a class="reference external" href="https://optuna.readthedocs.io/en/stable/reference/generated/optuna.distributions.CategoricalDistribution.html#optuna.distributions.CategoricalDistribution" title="(in Optuna v4.4.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">CategoricalDistribution</span></code></a>,
+<a class="reference external" href="https://optuna.readthedocs.io/en/stable/reference/generated/optuna.distributions.FloatDistribution.html#optuna.distributions.FloatDistribution" title="(in Optuna v4.4.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">FloatDistribution</span></code></a> and
+<a class="reference external" href="https://optuna.readthedocs.io/en/stable/reference/generated/optuna.distributions.IntDistribution.html#optuna.distributions.IntDistribution" title="(in Optuna v4.4.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IntDistribution</span></code></a>.</p>
 <p>For example, we can define a uniform distribution from 0.5 to 0.9 with a 0.05
-step for the <code class="docutils literal notranslate"><span class="pre">n_components</span></code> of a <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html#sklearn.decomposition.PCA" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PCA</span></code></a>
+step for the <code class="docutils literal notranslate"><span class="pre">n_components</span></code> of a <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.decomposition.PCA.html#sklearn.decomposition.PCA" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PCA</span></code></a>
 transformer, while keeping a log-uniform distribution for the <code class="docutils literal notranslate"><span class="pre">C</span></code> and
-<code class="docutils literal notranslate"><span class="pre">gamma</span></code> hyperparameters of the <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SVC</span></code></a> model.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">optuna.distributions</span> <span class="kn">import</span> <span class="n">FloatDistribution</span>
+<code class="docutils literal notranslate"><span class="pre">gamma</span></code> hyperparameters of the <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SVC</span></code></a> model.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">optuna.distributions</span><span class="w"> </span><span class="kn">import</span> <span class="n">FloatDistribution</span>
 <span class="n">creator</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;classification&quot;</span><span class="p">)</span>
 <span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">)</span>
 <span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
@@ -1466,15 +1466,15 @@ transformer, while keeping a log-uniform distribution for the <code class="docut
 <span class="nb">print</span><span class="p">(</span><span class="n">creator</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-23 11:33:59,624 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:33:59,624 - julearn - INFO - Step added
-2024-10-23 11:33:59,625 - julearn - INFO - Adding step pca that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:33:59,625 - julearn - INFO - Tuning hyperparameter n_components = FloatDistribution(high=0.9, log=False, low=0.5, step=0.05)
-2024-10-23 11:33:59,625 - julearn - INFO - Step added
-2024-10-23 11:33:59,625 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:33:59,625 - julearn - INFO - Tuning hyperparameter C = FloatDistribution(high=10.0, log=True, low=0.01, step=None)
-2024-10-23 11:33:59,625 - julearn - INFO - Tuning hyperparameter gamma = (0.001, 0.1, &#39;log-uniform&#39;)
-2024-10-23 11:33:59,625 - julearn - INFO - Step added
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-07-07 11:57:58,796 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:57:58,796 - julearn - INFO - Step added
+2025-07-07 11:57:58,796 - julearn - INFO - Adding step pca that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:57:58,796 - julearn - INFO - Tuning hyperparameter n_components = FloatDistribution(high=0.9, log=False, low=0.5, step=0.05)
+2025-07-07 11:57:58,796 - julearn - INFO - Step added
+2025-07-07 11:57:58,796 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:57:58,796 - julearn - INFO - Tuning hyperparameter C = FloatDistribution(high=10.0, log=True, low=0.01, step=None)
+2025-07-07 11:57:58,796 - julearn - INFO - Tuning hyperparameter gamma = (0.001, 0.1, &#39;log-uniform&#39;)
+2025-07-07 11:57:58,796 - julearn - INFO - Step added
 PipelineCreator:
   Step 0: zscore
     estimator:     StandardScaler()
@@ -1497,7 +1497,7 @@ PipelineCreator:
 </section>
 <section id="tuning-more-than-one-grid">
 <h2>Tuning more than one <em>grid</em><a class="headerlink" href="#tuning-more-than-one-grid" title="Link to this heading">#</a></h2>
-<p>Following our tuning of the <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SVC</span></code></a> hyperparameters, we
+<p>Following our tuning of the <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SVC</span></code></a> hyperparameters, we
 can also see that we can tune the <code class="docutils literal notranslate"><span class="pre">kernel</span></code> hyperparameter. This
 hyperparameter can also be “linear”. Let’s see how our <em>grid</em> of
 hyperparameters would look like if we add this hyperparameter:</p>
@@ -1512,13 +1512,13 @@ hyperparameters would look like if we add this hyperparameter:</p>
 <span class="nb">print</span><span class="p">(</span><span class="n">creator</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-23 11:33:59,626 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:33:59,626 - julearn - INFO - Step added
-2024-10-23 11:33:59,626 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:33:59,626 - julearn - INFO - Tuning hyperparameter C = [0.01, 0.1, 1, 10]
-2024-10-23 11:33:59,626 - julearn - INFO - Tuning hyperparameter gamma = [0.001, 0.01, &#39;scale&#39;, &#39;auto&#39;]
-2024-10-23 11:33:59,626 - julearn - INFO - Tuning hyperparameter kernel = [&#39;linear&#39;, &#39;rbf&#39;]
-2024-10-23 11:33:59,627 - julearn - INFO - Step added
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-07-07 11:57:58,798 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:57:58,798 - julearn - INFO - Step added
+2025-07-07 11:57:58,798 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:57:58,798 - julearn - INFO - Tuning hyperparameter C = [0.01, 0.1, 1, 10]
+2025-07-07 11:57:58,798 - julearn - INFO - Tuning hyperparameter gamma = [0.001, 0.01, &#39;scale&#39;, &#39;auto&#39;]
+2025-07-07 11:57:58,798 - julearn - INFO - Tuning hyperparameter kernel = [&#39;linear&#39;, &#39;rbf&#39;]
+2025-07-07 11:57:58,798 - julearn - INFO - Step added
 PipelineCreator:
   Step 0: zscore
     estimator:     StandardScaler()
@@ -1574,17 +1574,17 @@ kernel and one grid for the <code class="docutils literal notranslate"><span cla
 <span class="n">pprint</span><span class="p">(</span><span class="n">model1</span><span class="o">.</span><span class="n">best_params_</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-23 11:33:59,628 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:33:59,628 - julearn - INFO - Step added
-2024-10-23 11:33:59,628 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:33:59,628 - julearn - INFO - Tuning hyperparameter C = [0.01, 0.1, 1, 10]
-2024-10-23 11:33:59,628 - julearn - INFO - Tuning hyperparameter gamma = [0.001, 0.01, &#39;scale&#39;, &#39;auto&#39;]
-2024-10-23 11:33:59,628 - julearn - INFO - Setting hyperparameter kernel = rbf
-2024-10-23 11:33:59,628 - julearn - INFO - Step added
-2024-10-23 11:33:59,628 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:33:59,628 - julearn - INFO - Tuning hyperparameter C = [0.01, 0.1, 1, 10]
-2024-10-23 11:33:59,628 - julearn - INFO - Setting hyperparameter kernel = linear
-2024-10-23 11:33:59,628 - julearn - INFO - Step added
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-07-07 11:57:58,799 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:57:58,799 - julearn - INFO - Step added
+2025-07-07 11:57:58,799 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:57:58,799 - julearn - INFO - Tuning hyperparameter C = [0.01, 0.1, 1, 10]
+2025-07-07 11:57:58,799 - julearn - INFO - Tuning hyperparameter gamma = [0.001, 0.01, &#39;scale&#39;, &#39;auto&#39;]
+2025-07-07 11:57:58,799 - julearn - INFO - Setting hyperparameter kernel = rbf
+2025-07-07 11:57:58,800 - julearn - INFO - Step added
+2025-07-07 11:57:58,800 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:57:58,800 - julearn - INFO - Tuning hyperparameter C = [0.01, 0.1, 1, 10]
+2025-07-07 11:57:58,800 - julearn - INFO - Setting hyperparameter kernel = linear
+2025-07-07 11:57:58,800 - julearn - INFO - Step added
 PipelineCreator:
   Step 0: zscore
     estimator:     StandardScaler()
@@ -1602,66 +1602,66 @@ PipelineCreator:
     needed types:  ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
     tuning params: {&#39;svm__C&#39;: [0.01, 0.1, 1, 10]}
 
-2024-10-23 11:33:59,629 - julearn - INFO - ==== Input Data ====
-2024-10-23 11:33:59,629 - julearn - INFO - Using dataframe as input
-2024-10-23 11:33:59,629 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2024-10-23 11:33:59,629 - julearn - INFO -      Target: species
-2024-10-23 11:33:59,629 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2024-10-23 11:33:59,629 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
-2024-10-23 11:33:59,630 - julearn - INFO - ====================
-2024-10-23 11:33:59,630 - julearn - INFO -
-2024-10-23 11:33:59,630 - julearn - INFO - = Model Parameters =
-2024-10-23 11:33:59,630 - julearn - INFO - Tuning hyperparameters using grid
-2024-10-23 11:33:59,630 - julearn - INFO - Hyperparameters:
-2024-10-23 11:33:59,630 - julearn - INFO -      svm__C: [0.01, 0.1, 1, 10]
-2024-10-23 11:33:59,631 - julearn - INFO -      svm__gamma: [0.001, 0.01, &#39;scale&#39;, &#39;auto&#39;]
-2024-10-23 11:33:59,631 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-23 11:33:59,631 - julearn - INFO - Search Parameters:
-2024-10-23 11:33:59,631 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-23 11:33:59,631 - julearn - INFO - ====================
-2024-10-23 11:33:59,631 - julearn - INFO -
-2024-10-23 11:33:59,631 - julearn - INFO - = Model Parameters =
-2024-10-23 11:33:59,631 - julearn - INFO - Tuning hyperparameters using grid
-2024-10-23 11:33:59,631 - julearn - INFO - Hyperparameters:
-2024-10-23 11:33:59,632 - julearn - INFO -      svm__C: [0.01, 0.1, 1, 10]
-2024-10-23 11:33:59,632 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-23 11:33:59,632 - julearn - INFO - Search Parameters:
-2024-10-23 11:33:59,632 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-23 11:33:59,632 - julearn - INFO - ====================
-2024-10-23 11:33:59,632 - julearn - INFO -
-2024-10-23 11:33:59,632 - julearn - INFO - = Model Parameters =
-2024-10-23 11:33:59,632 - julearn - INFO - Tuning hyperparameters using grid
-2024-10-23 11:33:59,632 - julearn - INFO - Hyperparameters list:
-2024-10-23 11:33:59,632 - julearn - INFO -      Set 0
-2024-10-23 11:33:59,632 - julearn - INFO -              svm__C: [0.01, 0.1, 1, 10]
-2024-10-23 11:33:59,632 - julearn - INFO -              svm__gamma: [0.001, 0.01, &#39;scale&#39;, &#39;auto&#39;]
-2024-10-23 11:33:59,632 - julearn - INFO -              set_column_types: [SetColumnTypes(X_types={&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;,
+2025-07-07 11:57:58,800 - julearn - INFO - ==== Input Data ====
+2025-07-07 11:57:58,800 - julearn - INFO - Using dataframe as input
+2025-07-07 11:57:58,801 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2025-07-07 11:57:58,801 - julearn - INFO -      Target: species
+2025-07-07 11:57:58,801 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2025-07-07 11:57:58,801 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
+2025-07-07 11:57:58,801 - julearn - INFO - ====================
+2025-07-07 11:57:58,801 - julearn - INFO -
+2025-07-07 11:57:58,802 - julearn - INFO - = Model Parameters =
+2025-07-07 11:57:58,802 - julearn - INFO - Tuning hyperparameters using grid
+2025-07-07 11:57:58,802 - julearn - INFO - Hyperparameters:
+2025-07-07 11:57:58,802 - julearn - INFO -      svm__C: [0.01, 0.1, 1, 10]
+2025-07-07 11:57:58,802 - julearn - INFO -      svm__gamma: [0.001, 0.01, &#39;scale&#39;, &#39;auto&#39;]
+2025-07-07 11:57:58,802 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2025-07-07 11:57:58,802 - julearn - INFO - Search Parameters:
+2025-07-07 11:57:58,802 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
+2025-07-07 11:57:58,802 - julearn - INFO - ====================
+2025-07-07 11:57:58,802 - julearn - INFO -
+2025-07-07 11:57:58,803 - julearn - INFO - = Model Parameters =
+2025-07-07 11:57:58,803 - julearn - INFO - Tuning hyperparameters using grid
+2025-07-07 11:57:58,803 - julearn - INFO - Hyperparameters:
+2025-07-07 11:57:58,803 - julearn - INFO -      svm__C: [0.01, 0.1, 1, 10]
+2025-07-07 11:57:58,803 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2025-07-07 11:57:58,803 - julearn - INFO - Search Parameters:
+2025-07-07 11:57:58,803 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
+2025-07-07 11:57:58,803 - julearn - INFO - ====================
+2025-07-07 11:57:58,803 - julearn - INFO -
+2025-07-07 11:57:58,804 - julearn - INFO - = Model Parameters =
+2025-07-07 11:57:58,804 - julearn - INFO - Tuning hyperparameters using grid
+2025-07-07 11:57:58,804 - julearn - INFO - Hyperparameters list:
+2025-07-07 11:57:58,804 - julearn - INFO -      Set 0
+2025-07-07 11:57:58,804 - julearn - INFO -              svm__C: [0.01, 0.1, 1, 10]
+2025-07-07 11:57:58,804 - julearn - INFO -              svm__gamma: [0.001, 0.01, &#39;scale&#39;, &#39;auto&#39;]
+2025-07-07 11:57:58,804 - julearn - INFO -              set_column_types: [SetColumnTypes(X_types={&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;,
                                        &#39;petal_length&#39;, &#39;petal_width&#39;]})]
-2024-10-23 11:33:59,633 - julearn - INFO -              svm: [SVC()]
-2024-10-23 11:33:59,633 - julearn - INFO -      Set 1
-2024-10-23 11:33:59,633 - julearn - INFO -              svm__C: [0.01, 0.1, 1, 10]
-2024-10-23 11:33:59,633 - julearn - INFO -              set_column_types: [SetColumnTypes(X_types={&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;,
+2025-07-07 11:57:58,804 - julearn - INFO -              svm: [SVC()]
+2025-07-07 11:57:58,804 - julearn - INFO -      Set 1
+2025-07-07 11:57:58,804 - julearn - INFO -              svm__C: [0.01, 0.1, 1, 10]
+2025-07-07 11:57:58,805 - julearn - INFO -              set_column_types: [SetColumnTypes(X_types={&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;,
                                        &#39;petal_length&#39;, &#39;petal_width&#39;]})]
-2024-10-23 11:33:59,633 - julearn - INFO -              svm: [SVC(kernel=&#39;linear&#39;)]
-2024-10-23 11:33:59,633 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-23 11:33:59,633 - julearn - INFO - Search Parameters:
-2024-10-23 11:33:59,634 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-23 11:33:59,634 - julearn - INFO - ====================
-2024-10-23 11:33:59,634 - julearn - INFO -
-2024-10-23 11:33:59,634 - julearn - INFO - = Data Information =
-2024-10-23 11:33:59,634 - julearn - INFO -      Problem type: classification
-2024-10-23 11:33:59,634 - julearn - INFO -      Number of samples: 100
-2024-10-23 11:33:59,634 - julearn - INFO -      Number of features: 4
-2024-10-23 11:33:59,634 - julearn - INFO - ====================
-2024-10-23 11:33:59,634 - julearn - INFO -
-2024-10-23 11:33:59,634 - julearn - INFO -      Number of classes: 2
-2024-10-23 11:33:59,634 - julearn - INFO -      Target type: object
-2024-10-23 11:33:59,635 - julearn - INFO -      Class distributions: species
+2025-07-07 11:57:58,805 - julearn - INFO -              svm: [SVC(kernel=&#39;linear&#39;)]
+2025-07-07 11:57:58,805 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2025-07-07 11:57:58,805 - julearn - INFO - Search Parameters:
+2025-07-07 11:57:58,805 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
+2025-07-07 11:57:58,805 - julearn - INFO - ====================
+2025-07-07 11:57:58,805 - julearn - INFO -
+2025-07-07 11:57:58,805 - julearn - INFO - = Data Information =
+2025-07-07 11:57:58,805 - julearn - INFO -      Problem type: classification
+2025-07-07 11:57:58,805 - julearn - INFO -      Number of samples: 100
+2025-07-07 11:57:58,805 - julearn - INFO -      Number of features: 4
+2025-07-07 11:57:58,805 - julearn - INFO - ====================
+2025-07-07 11:57:58,805 - julearn - INFO -
+2025-07-07 11:57:58,806 - julearn - INFO -      Number of classes: 2
+2025-07-07 11:57:58,806 - julearn - INFO -      Target type: object
+2025-07-07 11:57:58,806 - julearn - INFO -      Class distributions: species
 versicolor    50
 virginica     50
 Name: count, dtype: int64
-2024-10-23 11:33:59,635 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
-2024-10-23 11:33:59,635 - julearn - INFO - Binary classification problem detected.
+2025-07-07 11:57:58,806 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
+2025-07-07 11:57:58,806 - julearn - INFO - Binary classification problem detected.
 Scores with best hyperparameter: 0.93
 {&#39;set_column_types&#39;: SetColumnTypes(X_types={&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;,
                                        &#39;petal_length&#39;, &#39;petal_width&#39;]}),
@@ -1711,81 +1711,81 @@ names is to do so explicitly.</p>
 <span class="n">pprint</span><span class="p">(</span><span class="n">model2</span><span class="o">.</span><span class="n">best_params_</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-23 11:34:04,225 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:34:04,225 - julearn - INFO - Step added
-2024-10-23 11:34:04,225 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:34:04,225 - julearn - INFO - Tuning hyperparameter C = [0.01, 0.1, 1, 10]
-2024-10-23 11:34:04,225 - julearn - INFO - Tuning hyperparameter gamma = [0.001, 0.01, &#39;scale&#39;, &#39;auto&#39;]
-2024-10-23 11:34:04,225 - julearn - INFO - Setting hyperparameter kernel = rbf
-2024-10-23 11:34:04,225 - julearn - INFO - Step added
-2024-10-23 11:34:04,225 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:34:04,226 - julearn - INFO - Step added
-2024-10-23 11:34:04,226 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:34:04,226 - julearn - INFO - Tuning hyperparameter C = [0.01, 0.1, 1, 10]
-2024-10-23 11:34:04,226 - julearn - INFO - Setting hyperparameter kernel = linear
-2024-10-23 11:34:04,226 - julearn - INFO - Step added
-2024-10-23 11:34:04,226 - julearn - INFO - ==== Input Data ====
-2024-10-23 11:34:04,226 - julearn - INFO - Using dataframe as input
-2024-10-23 11:34:04,226 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2024-10-23 11:34:04,226 - julearn - INFO -      Target: species
-2024-10-23 11:34:04,226 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2024-10-23 11:34:04,226 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
-2024-10-23 11:34:04,227 - julearn - INFO - ====================
-2024-10-23 11:34:04,227 - julearn - INFO -
-2024-10-23 11:34:04,227 - julearn - INFO - = Model Parameters =
-2024-10-23 11:34:04,227 - julearn - INFO - Tuning hyperparameters using grid
-2024-10-23 11:34:04,227 - julearn - INFO - Hyperparameters:
-2024-10-23 11:34:04,227 - julearn - INFO -      svm__C: [0.01, 0.1, 1, 10]
-2024-10-23 11:34:04,227 - julearn - INFO -      svm__gamma: [0.001, 0.01, &#39;scale&#39;, &#39;auto&#39;]
-2024-10-23 11:34:04,228 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-23 11:34:04,228 - julearn - INFO - Search Parameters:
-2024-10-23 11:34:04,228 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-23 11:34:04,228 - julearn - INFO - ====================
-2024-10-23 11:34:04,228 - julearn - INFO -
-2024-10-23 11:34:04,228 - julearn - INFO - = Model Parameters =
-2024-10-23 11:34:04,228 - julearn - INFO - Tuning hyperparameters using grid
-2024-10-23 11:34:04,228 - julearn - INFO - Hyperparameters:
-2024-10-23 11:34:04,228 - julearn - INFO -      svm__C: [0.01, 0.1, 1, 10]
-2024-10-23 11:34:04,229 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-23 11:34:04,229 - julearn - INFO - Search Parameters:
-2024-10-23 11:34:04,229 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-23 11:34:04,229 - julearn - INFO - ====================
-2024-10-23 11:34:04,229 - julearn - INFO -
-2024-10-23 11:34:04,229 - julearn - INFO - = Model Parameters =
-2024-10-23 11:34:04,229 - julearn - INFO - Tuning hyperparameters using grid
-2024-10-23 11:34:04,229 - julearn - INFO - Hyperparameters list:
-2024-10-23 11:34:04,229 - julearn - INFO -      Set 0
-2024-10-23 11:34:04,229 - julearn - INFO -              svm__C: [0.01, 0.1, 1, 10]
-2024-10-23 11:34:04,229 - julearn - INFO -              svm__gamma: [0.001, 0.01, &#39;scale&#39;, &#39;auto&#39;]
-2024-10-23 11:34:04,229 - julearn - INFO -              set_column_types: [SetColumnTypes(X_types={&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;,
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-07-07 11:58:03,456 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:58:03,456 - julearn - INFO - Step added
+2025-07-07 11:58:03,456 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:58:03,457 - julearn - INFO - Tuning hyperparameter C = [0.01, 0.1, 1, 10]
+2025-07-07 11:58:03,457 - julearn - INFO - Tuning hyperparameter gamma = [0.001, 0.01, &#39;scale&#39;, &#39;auto&#39;]
+2025-07-07 11:58:03,457 - julearn - INFO - Setting hyperparameter kernel = rbf
+2025-07-07 11:58:03,457 - julearn - INFO - Step added
+2025-07-07 11:58:03,457 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:58:03,457 - julearn - INFO - Step added
+2025-07-07 11:58:03,457 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:58:03,457 - julearn - INFO - Tuning hyperparameter C = [0.01, 0.1, 1, 10]
+2025-07-07 11:58:03,457 - julearn - INFO - Setting hyperparameter kernel = linear
+2025-07-07 11:58:03,457 - julearn - INFO - Step added
+2025-07-07 11:58:03,457 - julearn - INFO - ==== Input Data ====
+2025-07-07 11:58:03,457 - julearn - INFO - Using dataframe as input
+2025-07-07 11:58:03,457 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2025-07-07 11:58:03,457 - julearn - INFO -      Target: species
+2025-07-07 11:58:03,457 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2025-07-07 11:58:03,457 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
+2025-07-07 11:58:03,458 - julearn - INFO - ====================
+2025-07-07 11:58:03,458 - julearn - INFO -
+2025-07-07 11:58:03,459 - julearn - INFO - = Model Parameters =
+2025-07-07 11:58:03,459 - julearn - INFO - Tuning hyperparameters using grid
+2025-07-07 11:58:03,459 - julearn - INFO - Hyperparameters:
+2025-07-07 11:58:03,459 - julearn - INFO -      svm__C: [0.01, 0.1, 1, 10]
+2025-07-07 11:58:03,459 - julearn - INFO -      svm__gamma: [0.001, 0.01, &#39;scale&#39;, &#39;auto&#39;]
+2025-07-07 11:58:03,459 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2025-07-07 11:58:03,459 - julearn - INFO - Search Parameters:
+2025-07-07 11:58:03,459 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
+2025-07-07 11:58:03,459 - julearn - INFO - ====================
+2025-07-07 11:58:03,459 - julearn - INFO -
+2025-07-07 11:58:03,460 - julearn - INFO - = Model Parameters =
+2025-07-07 11:58:03,460 - julearn - INFO - Tuning hyperparameters using grid
+2025-07-07 11:58:03,460 - julearn - INFO - Hyperparameters:
+2025-07-07 11:58:03,460 - julearn - INFO -      svm__C: [0.01, 0.1, 1, 10]
+2025-07-07 11:58:03,460 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2025-07-07 11:58:03,460 - julearn - INFO - Search Parameters:
+2025-07-07 11:58:03,460 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
+2025-07-07 11:58:03,460 - julearn - INFO - ====================
+2025-07-07 11:58:03,460 - julearn - INFO -
+2025-07-07 11:58:03,460 - julearn - INFO - = Model Parameters =
+2025-07-07 11:58:03,460 - julearn - INFO - Tuning hyperparameters using grid
+2025-07-07 11:58:03,460 - julearn - INFO - Hyperparameters list:
+2025-07-07 11:58:03,461 - julearn - INFO -      Set 0
+2025-07-07 11:58:03,461 - julearn - INFO -              svm__C: [0.01, 0.1, 1, 10]
+2025-07-07 11:58:03,461 - julearn - INFO -              svm__gamma: [0.001, 0.01, &#39;scale&#39;, &#39;auto&#39;]
+2025-07-07 11:58:03,461 - julearn - INFO -              set_column_types: [SetColumnTypes(X_types={&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;,
                                        &#39;petal_length&#39;, &#39;petal_width&#39;]})]
-2024-10-23 11:34:04,230 - julearn - INFO -              zscore: [StandardScaler()]
-2024-10-23 11:34:04,230 - julearn - INFO -              svm: [SVC()]
-2024-10-23 11:34:04,230 - julearn - INFO -      Set 1
-2024-10-23 11:34:04,230 - julearn - INFO -              svm__C: [0.01, 0.1, 1, 10]
-2024-10-23 11:34:04,230 - julearn - INFO -              set_column_types: [SetColumnTypes(X_types={&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;,
+2025-07-07 11:58:03,461 - julearn - INFO -              zscore: [StandardScaler()]
+2025-07-07 11:58:03,461 - julearn - INFO -              svm: [SVC()]
+2025-07-07 11:58:03,461 - julearn - INFO -      Set 1
+2025-07-07 11:58:03,461 - julearn - INFO -              svm__C: [0.01, 0.1, 1, 10]
+2025-07-07 11:58:03,462 - julearn - INFO -              set_column_types: [SetColumnTypes(X_types={&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;,
                                        &#39;petal_length&#39;, &#39;petal_width&#39;]})]
-2024-10-23 11:34:04,230 - julearn - INFO -              zscore: [StandardScaler()]
-2024-10-23 11:34:04,230 - julearn - INFO -              svm: [SVC(kernel=&#39;linear&#39;)]
-2024-10-23 11:34:04,231 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-23 11:34:04,231 - julearn - INFO - Search Parameters:
-2024-10-23 11:34:04,231 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-23 11:34:04,231 - julearn - INFO - ====================
-2024-10-23 11:34:04,231 - julearn - INFO -
-2024-10-23 11:34:04,231 - julearn - INFO - = Data Information =
-2024-10-23 11:34:04,231 - julearn - INFO -      Problem type: classification
-2024-10-23 11:34:04,231 - julearn - INFO -      Number of samples: 100
-2024-10-23 11:34:04,231 - julearn - INFO -      Number of features: 4
-2024-10-23 11:34:04,231 - julearn - INFO - ====================
-2024-10-23 11:34:04,231 - julearn - INFO -
-2024-10-23 11:34:04,231 - julearn - INFO -      Number of classes: 2
-2024-10-23 11:34:04,231 - julearn - INFO -      Target type: object
-2024-10-23 11:34:04,232 - julearn - INFO -      Class distributions: species
+2025-07-07 11:58:03,462 - julearn - INFO -              zscore: [StandardScaler()]
+2025-07-07 11:58:03,462 - julearn - INFO -              svm: [SVC(kernel=&#39;linear&#39;)]
+2025-07-07 11:58:03,462 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2025-07-07 11:58:03,462 - julearn - INFO - Search Parameters:
+2025-07-07 11:58:03,462 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
+2025-07-07 11:58:03,462 - julearn - INFO - ====================
+2025-07-07 11:58:03,462 - julearn - INFO -
+2025-07-07 11:58:03,462 - julearn - INFO - = Data Information =
+2025-07-07 11:58:03,462 - julearn - INFO -      Problem type: classification
+2025-07-07 11:58:03,462 - julearn - INFO -      Number of samples: 100
+2025-07-07 11:58:03,463 - julearn - INFO -      Number of features: 4
+2025-07-07 11:58:03,463 - julearn - INFO - ====================
+2025-07-07 11:58:03,463 - julearn - INFO -
+2025-07-07 11:58:03,463 - julearn - INFO -      Number of classes: 2
+2025-07-07 11:58:03,463 - julearn - INFO -      Target type: object
+2025-07-07 11:58:03,463 - julearn - INFO -      Class distributions: species
 versicolor    50
 virginica     50
 Name: count, dtype: int64
-2024-10-23 11:34:04,232 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
-2024-10-23 11:34:04,232 - julearn - INFO - Binary classification problem detected.
+2025-07-07 11:58:03,464 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
+2025-07-07 11:58:03,464 - julearn - INFO - Binary classification problem detected.
 Scores with best hyperparameter: 0.93
 {&#39;set_column_types&#39;: SetColumnTypes(X_types={&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;,
                                        &#39;petal_length&#39;, &#39;petal_width&#39;]}),
@@ -1833,8 +1833,8 @@ They both produce the same <em>grid</em> of hyperparameters:</p>
 <h2>Models as hyperparameters<a class="headerlink" href="#models-as-hyperparameters" title="Link to this heading">#</a></h2>
 <p>But why stop there? Models can also be considered as hyperparameters. For
 example, we can try different models for the classification task. Let’s
-try the <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html#sklearn.ensemble.RandomForestClassifier" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">RandomForestClassifier</span></code></a> and the
-<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html#sklearn.linear_model.LogisticRegression" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">LogisticRegression</span></code></a> too:</p>
+try the <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html#sklearn.ensemble.RandomForestClassifier" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">RandomForestClassifier</span></code></a> and the
+<a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LogisticRegression.html#sklearn.linear_model.LogisticRegression" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">LogisticRegression</span></code></a> too:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">creator1</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">&quot;classification&quot;</span><span class="p">)</span>
 <span class="n">creator1</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;zscore&quot;</span><span class="p">)</span>
 <span class="n">creator1</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
@@ -1886,123 +1886,123 @@ try the <a class="reference external" href="https://scikit-learn.org/stable/modu
 <span class="n">pprint</span><span class="p">(</span><span class="n">model3</span><span class="o">.</span><span class="n">best_params_</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-23 11:34:08,852 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:34:08,852 - julearn - INFO - Step added
-2024-10-23 11:34:08,852 - julearn - INFO - Adding step model that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:34:08,852 - julearn - INFO - Tuning hyperparameter C = [0.01, 0.1, 1, 10]
-2024-10-23 11:34:08,852 - julearn - INFO - Tuning hyperparameter gamma = [0.001, 0.01, &#39;scale&#39;, &#39;auto&#39;]
-2024-10-23 11:34:08,852 - julearn - INFO - Setting hyperparameter kernel = rbf
-2024-10-23 11:34:08,853 - julearn - INFO - Step added
-2024-10-23 11:34:08,853 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:34:08,853 - julearn - INFO - Step added
-2024-10-23 11:34:08,853 - julearn - INFO - Adding step model that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:34:08,853 - julearn - INFO - Tuning hyperparameter C = [0.01, 0.1, 1, 10]
-2024-10-23 11:34:08,853 - julearn - INFO - Setting hyperparameter kernel = linear
-2024-10-23 11:34:08,853 - julearn - INFO - Step added
-2024-10-23 11:34:08,853 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:34:08,853 - julearn - INFO - Step added
-2024-10-23 11:34:08,853 - julearn - INFO - Adding step model that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:34:08,853 - julearn - INFO - Tuning hyperparameter max_depth = [2, 3, 4]
-2024-10-23 11:34:08,853 - julearn - INFO - Step added
-2024-10-23 11:34:08,853 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:34:08,853 - julearn - INFO - Step added
-2024-10-23 11:34:08,853 - julearn - INFO - Adding step model that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2024-10-23 11:34:08,854 - julearn - INFO - Tuning hyperparameter penalty = [&#39;l2&#39;, &#39;l1&#39;]
-2024-10-23 11:34:08,854 - julearn - INFO - Setting hyperparameter dual = False
-2024-10-23 11:34:08,854 - julearn - INFO - Setting hyperparameter solver = liblinear
-2024-10-23 11:34:08,854 - julearn - INFO - Step added
-2024-10-23 11:34:08,854 - julearn - INFO - ==== Input Data ====
-2024-10-23 11:34:08,854 - julearn - INFO - Using dataframe as input
-2024-10-23 11:34:08,854 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2024-10-23 11:34:08,854 - julearn - INFO -      Target: species
-2024-10-23 11:34:08,854 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2024-10-23 11:34:08,854 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
-2024-10-23 11:34:08,855 - julearn - INFO - ====================
-2024-10-23 11:34:08,855 - julearn - INFO -
-2024-10-23 11:34:08,855 - julearn - INFO - = Model Parameters =
-2024-10-23 11:34:08,855 - julearn - INFO - Tuning hyperparameters using grid
-2024-10-23 11:34:08,855 - julearn - INFO - Hyperparameters:
-2024-10-23 11:34:08,855 - julearn - INFO -      model__C: [0.01, 0.1, 1, 10]
-2024-10-23 11:34:08,855 - julearn - INFO -      model__gamma: [0.001, 0.01, &#39;scale&#39;, &#39;auto&#39;]
-2024-10-23 11:34:08,855 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-23 11:34:08,855 - julearn - INFO - Search Parameters:
-2024-10-23 11:34:08,856 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-23 11:34:08,856 - julearn - INFO - ====================
-2024-10-23 11:34:08,856 - julearn - INFO -
-2024-10-23 11:34:08,856 - julearn - INFO - = Model Parameters =
-2024-10-23 11:34:08,856 - julearn - INFO - Tuning hyperparameters using grid
-2024-10-23 11:34:08,856 - julearn - INFO - Hyperparameters:
-2024-10-23 11:34:08,856 - julearn - INFO -      model__C: [0.01, 0.1, 1, 10]
-2024-10-23 11:34:08,856 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-23 11:34:08,856 - julearn - INFO - Search Parameters:
-2024-10-23 11:34:08,857 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-23 11:34:08,857 - julearn - INFO - ====================
-2024-10-23 11:34:08,857 - julearn - INFO -
-2024-10-23 11:34:08,857 - julearn - INFO - = Model Parameters =
-2024-10-23 11:34:08,857 - julearn - INFO - Tuning hyperparameters using grid
-2024-10-23 11:34:08,857 - julearn - INFO - Hyperparameters:
-2024-10-23 11:34:08,857 - julearn - INFO -      model__max_depth: [2, 3, 4]
-2024-10-23 11:34:08,857 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-23 11:34:08,857 - julearn - INFO - Search Parameters:
-2024-10-23 11:34:08,858 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-23 11:34:08,858 - julearn - INFO - ====================
-2024-10-23 11:34:08,858 - julearn - INFO -
-2024-10-23 11:34:08,858 - julearn - INFO - = Model Parameters =
-2024-10-23 11:34:08,858 - julearn - INFO - Tuning hyperparameters using grid
-2024-10-23 11:34:08,858 - julearn - INFO - Hyperparameters:
-2024-10-23 11:34:08,858 - julearn - INFO -      model__penalty: [&#39;l2&#39;, &#39;l1&#39;]
-2024-10-23 11:34:08,858 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-23 11:34:08,858 - julearn - INFO - Search Parameters:
-2024-10-23 11:34:08,859 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-23 11:34:08,859 - julearn - INFO - ====================
-2024-10-23 11:34:08,859 - julearn - INFO -
-2024-10-23 11:34:08,859 - julearn - INFO - = Model Parameters =
-2024-10-23 11:34:08,859 - julearn - INFO - Tuning hyperparameters using grid
-2024-10-23 11:34:08,859 - julearn - INFO - Hyperparameters list:
-2024-10-23 11:34:08,859 - julearn - INFO -      Set 0
-2024-10-23 11:34:08,859 - julearn - INFO -              model__C: [0.01, 0.1, 1, 10]
-2024-10-23 11:34:08,859 - julearn - INFO -              model__gamma: [0.001, 0.01, &#39;scale&#39;, &#39;auto&#39;]
-2024-10-23 11:34:08,859 - julearn - INFO -              set_column_types: [SetColumnTypes(X_types={&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;,
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-07-07 11:58:08,147 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:58:08,147 - julearn - INFO - Step added
+2025-07-07 11:58:08,147 - julearn - INFO - Adding step model that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:58:08,147 - julearn - INFO - Tuning hyperparameter C = [0.01, 0.1, 1, 10]
+2025-07-07 11:58:08,147 - julearn - INFO - Tuning hyperparameter gamma = [0.001, 0.01, &#39;scale&#39;, &#39;auto&#39;]
+2025-07-07 11:58:08,148 - julearn - INFO - Setting hyperparameter kernel = rbf
+2025-07-07 11:58:08,148 - julearn - INFO - Step added
+2025-07-07 11:58:08,148 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:58:08,148 - julearn - INFO - Step added
+2025-07-07 11:58:08,148 - julearn - INFO - Adding step model that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:58:08,148 - julearn - INFO - Tuning hyperparameter C = [0.01, 0.1, 1, 10]
+2025-07-07 11:58:08,148 - julearn - INFO - Setting hyperparameter kernel = linear
+2025-07-07 11:58:08,148 - julearn - INFO - Step added
+2025-07-07 11:58:08,148 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:58:08,148 - julearn - INFO - Step added
+2025-07-07 11:58:08,148 - julearn - INFO - Adding step model that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:58:08,148 - julearn - INFO - Tuning hyperparameter max_depth = [2, 3, 4]
+2025-07-07 11:58:08,148 - julearn - INFO - Step added
+2025-07-07 11:58:08,148 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:58:08,149 - julearn - INFO - Step added
+2025-07-07 11:58:08,149 - julearn - INFO - Adding step model that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-07-07 11:58:08,149 - julearn - INFO - Tuning hyperparameter penalty = [&#39;l2&#39;, &#39;l1&#39;]
+2025-07-07 11:58:08,149 - julearn - INFO - Setting hyperparameter dual = False
+2025-07-07 11:58:08,149 - julearn - INFO - Setting hyperparameter solver = liblinear
+2025-07-07 11:58:08,149 - julearn - INFO - Step added
+2025-07-07 11:58:08,149 - julearn - INFO - ==== Input Data ====
+2025-07-07 11:58:08,149 - julearn - INFO - Using dataframe as input
+2025-07-07 11:58:08,149 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2025-07-07 11:58:08,149 - julearn - INFO -      Target: species
+2025-07-07 11:58:08,149 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2025-07-07 11:58:08,149 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]}
+2025-07-07 11:58:08,150 - julearn - INFO - ====================
+2025-07-07 11:58:08,150 - julearn - INFO -
+2025-07-07 11:58:08,150 - julearn - INFO - = Model Parameters =
+2025-07-07 11:58:08,150 - julearn - INFO - Tuning hyperparameters using grid
+2025-07-07 11:58:08,150 - julearn - INFO - Hyperparameters:
+2025-07-07 11:58:08,150 - julearn - INFO -      model__C: [0.01, 0.1, 1, 10]
+2025-07-07 11:58:08,150 - julearn - INFO -      model__gamma: [0.001, 0.01, &#39;scale&#39;, &#39;auto&#39;]
+2025-07-07 11:58:08,151 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2025-07-07 11:58:08,151 - julearn - INFO - Search Parameters:
+2025-07-07 11:58:08,151 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
+2025-07-07 11:58:08,151 - julearn - INFO - ====================
+2025-07-07 11:58:08,151 - julearn - INFO -
+2025-07-07 11:58:08,151 - julearn - INFO - = Model Parameters =
+2025-07-07 11:58:08,151 - julearn - INFO - Tuning hyperparameters using grid
+2025-07-07 11:58:08,151 - julearn - INFO - Hyperparameters:
+2025-07-07 11:58:08,151 - julearn - INFO -      model__C: [0.01, 0.1, 1, 10]
+2025-07-07 11:58:08,152 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2025-07-07 11:58:08,152 - julearn - INFO - Search Parameters:
+2025-07-07 11:58:08,152 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
+2025-07-07 11:58:08,152 - julearn - INFO - ====================
+2025-07-07 11:58:08,152 - julearn - INFO -
+2025-07-07 11:58:08,152 - julearn - INFO - = Model Parameters =
+2025-07-07 11:58:08,152 - julearn - INFO - Tuning hyperparameters using grid
+2025-07-07 11:58:08,152 - julearn - INFO - Hyperparameters:
+2025-07-07 11:58:08,152 - julearn - INFO -      model__max_depth: [2, 3, 4]
+2025-07-07 11:58:08,153 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2025-07-07 11:58:08,153 - julearn - INFO - Search Parameters:
+2025-07-07 11:58:08,153 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
+2025-07-07 11:58:08,153 - julearn - INFO - ====================
+2025-07-07 11:58:08,153 - julearn - INFO -
+2025-07-07 11:58:08,153 - julearn - INFO - = Model Parameters =
+2025-07-07 11:58:08,153 - julearn - INFO - Tuning hyperparameters using grid
+2025-07-07 11:58:08,153 - julearn - INFO - Hyperparameters:
+2025-07-07 11:58:08,153 - julearn - INFO -      model__penalty: [&#39;l2&#39;, &#39;l1&#39;]
+2025-07-07 11:58:08,154 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2025-07-07 11:58:08,154 - julearn - INFO - Search Parameters:
+2025-07-07 11:58:08,154 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
+2025-07-07 11:58:08,154 - julearn - INFO - ====================
+2025-07-07 11:58:08,154 - julearn - INFO -
+2025-07-07 11:58:08,154 - julearn - INFO - = Model Parameters =
+2025-07-07 11:58:08,154 - julearn - INFO - Tuning hyperparameters using grid
+2025-07-07 11:58:08,154 - julearn - INFO - Hyperparameters list:
+2025-07-07 11:58:08,154 - julearn - INFO -      Set 0
+2025-07-07 11:58:08,154 - julearn - INFO -              model__C: [0.01, 0.1, 1, 10]
+2025-07-07 11:58:08,154 - julearn - INFO -              model__gamma: [0.001, 0.01, &#39;scale&#39;, &#39;auto&#39;]
+2025-07-07 11:58:08,154 - julearn - INFO -              set_column_types: [SetColumnTypes(X_types={&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;,
                                        &#39;petal_length&#39;, &#39;petal_width&#39;]})]
-2024-10-23 11:34:08,859 - julearn - INFO -              zscore: [StandardScaler()]
-2024-10-23 11:34:08,860 - julearn - INFO -              model: [SVC()]
-2024-10-23 11:34:08,860 - julearn - INFO -      Set 1
-2024-10-23 11:34:08,860 - julearn - INFO -              model__C: [0.01, 0.1, 1, 10]
-2024-10-23 11:34:08,860 - julearn - INFO -              set_column_types: [SetColumnTypes(X_types={&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;,
+2025-07-07 11:58:08,155 - julearn - INFO -              zscore: [StandardScaler()]
+2025-07-07 11:58:08,155 - julearn - INFO -              model: [SVC()]
+2025-07-07 11:58:08,155 - julearn - INFO -      Set 1
+2025-07-07 11:58:08,155 - julearn - INFO -              model__C: [0.01, 0.1, 1, 10]
+2025-07-07 11:58:08,155 - julearn - INFO -              set_column_types: [SetColumnTypes(X_types={&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;,
                                        &#39;petal_length&#39;, &#39;petal_width&#39;]})]
-2024-10-23 11:34:08,860 - julearn - INFO -              zscore: [StandardScaler()]
-2024-10-23 11:34:08,860 - julearn - INFO -              model: [SVC(kernel=&#39;linear&#39;)]
-2024-10-23 11:34:08,860 - julearn - INFO -      Set 2
-2024-10-23 11:34:08,860 - julearn - INFO -              model__max_depth: [2, 3, 4]
-2024-10-23 11:34:08,861 - julearn - INFO -              set_column_types: [SetColumnTypes(X_types={&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;,
+2025-07-07 11:58:08,155 - julearn - INFO -              zscore: [StandardScaler()]
+2025-07-07 11:58:08,155 - julearn - INFO -              model: [SVC(kernel=&#39;linear&#39;)]
+2025-07-07 11:58:08,155 - julearn - INFO -      Set 2
+2025-07-07 11:58:08,156 - julearn - INFO -              model__max_depth: [2, 3, 4]
+2025-07-07 11:58:08,156 - julearn - INFO -              set_column_types: [SetColumnTypes(X_types={&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;,
                                        &#39;petal_length&#39;, &#39;petal_width&#39;]})]
-2024-10-23 11:34:08,861 - julearn - INFO -              zscore: [StandardScaler()]
-2024-10-23 11:34:08,861 - julearn - INFO -              model: [RandomForestClassifier()]
-2024-10-23 11:34:08,861 - julearn - INFO -      Set 3
-2024-10-23 11:34:08,861 - julearn - INFO -              model__penalty: [&#39;l2&#39;, &#39;l1&#39;]
-2024-10-23 11:34:08,861 - julearn - INFO -              set_column_types: [SetColumnTypes(X_types={&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;,
+2025-07-07 11:58:08,156 - julearn - INFO -              zscore: [StandardScaler()]
+2025-07-07 11:58:08,156 - julearn - INFO -              model: [RandomForestClassifier()]
+2025-07-07 11:58:08,156 - julearn - INFO -      Set 3
+2025-07-07 11:58:08,156 - julearn - INFO -              model__penalty: [&#39;l2&#39;, &#39;l1&#39;]
+2025-07-07 11:58:08,156 - julearn - INFO -              set_column_types: [SetColumnTypes(X_types={&#39;continuous&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;,
                                        &#39;petal_length&#39;, &#39;petal_width&#39;]})]
-2024-10-23 11:34:08,861 - julearn - INFO -              zscore: [StandardScaler()]
-2024-10-23 11:34:08,862 - julearn - INFO -              model: [LogisticRegression(solver=&#39;liblinear&#39;)]
-2024-10-23 11:34:08,862 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-23 11:34:08,862 - julearn - INFO - Search Parameters:
-2024-10-23 11:34:08,862 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-23 11:34:08,862 - julearn - INFO - ====================
-2024-10-23 11:34:08,862 - julearn - INFO -
-2024-10-23 11:34:08,862 - julearn - INFO - = Data Information =
-2024-10-23 11:34:08,862 - julearn - INFO -      Problem type: classification
-2024-10-23 11:34:08,862 - julearn - INFO -      Number of samples: 100
-2024-10-23 11:34:08,862 - julearn - INFO -      Number of features: 4
-2024-10-23 11:34:08,862 - julearn - INFO - ====================
-2024-10-23 11:34:08,862 - julearn - INFO -
-2024-10-23 11:34:08,862 - julearn - INFO -      Number of classes: 2
-2024-10-23 11:34:08,862 - julearn - INFO -      Target type: object
-2024-10-23 11:34:08,863 - julearn - INFO -      Class distributions: species
+2025-07-07 11:58:08,157 - julearn - INFO -              zscore: [StandardScaler()]
+2025-07-07 11:58:08,157 - julearn - INFO -              model: [LogisticRegression(solver=&#39;liblinear&#39;)]
+2025-07-07 11:58:08,157 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2025-07-07 11:58:08,157 - julearn - INFO - Search Parameters:
+2025-07-07 11:58:08,157 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
+2025-07-07 11:58:08,157 - julearn - INFO - ====================
+2025-07-07 11:58:08,157 - julearn - INFO -
+2025-07-07 11:58:08,157 - julearn - INFO - = Data Information =
+2025-07-07 11:58:08,157 - julearn - INFO -      Problem type: classification
+2025-07-07 11:58:08,157 - julearn - INFO -      Number of samples: 100
+2025-07-07 11:58:08,157 - julearn - INFO -      Number of features: 4
+2025-07-07 11:58:08,157 - julearn - INFO - ====================
+2025-07-07 11:58:08,157 - julearn - INFO -
+2025-07-07 11:58:08,158 - julearn - INFO -      Number of classes: 2
+2025-07-07 11:58:08,158 - julearn - INFO -      Target type: object
+2025-07-07 11:58:08,158 - julearn - INFO -      Class distributions: species
 versicolor    50
 virginica     50
 Name: count, dtype: int64
-2024-10-23 11:34:08,863 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
-2024-10-23 11:34:08,863 - julearn - INFO - Binary classification problem detected.
+2025-07-07 11:58:08,158 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
+2025-07-07 11:58:08,158 - julearn - INFO - Binary classification problem detected.
 Scores with best hyperparameter: 0.9200000000000002
 {&#39;model&#39;: SVC(),
  &#39;model__C&#39;: 10,
@@ -2012,9 +2012,9 @@ Scores with best hyperparameter: 0.9200000000000002
  &#39;zscore&#39;: StandardScaler()}
 </pre></div>
 </div>
-<p>Well, it seems that nothing can beat the <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC" title="(in scikit-learn v1.5)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SVC</span></code></a> with
+<p>Well, it seems that nothing can beat the <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SVC</span></code></a> with
 <code class="docutils literal notranslate"><span class="pre">kernel=&quot;rbf&quot;</span></code> for our classification example.</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (1 minutes 3.413 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (1 minutes 6.663 seconds)</p>
 </section>
 </section>
 

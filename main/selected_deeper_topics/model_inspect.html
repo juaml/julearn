@@ -7,7 +7,7 @@
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
         <title>6.4. Inspecting Models - julearn documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=61a4c737" />
@@ -441,15 +441,15 @@ understanding of how the model works and identify any patterns or anomalies that
 could affect its performance. This knowledge can help us deploy models more
 effectively and interpret their outputs with greater confidence.</p>
 <p>Let’s start by importing some useful utilities:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pprint</span><span class="w"> </span><span class="kn">import</span> <span class="n">pprint</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">RepeatedKFold</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <span class="n">RepeatedKFold</span>
 
-<span class="kn">from</span> <span class="nn">julearn</span> <span class="kn">import</span> <span class="n">run_cross_validation</span>
-<span class="kn">from</span> <span class="nn">julearn.pipeline</span> <span class="kn">import</span> <span class="n">PipelineCreator</span>
-<span class="kn">from</span> <span class="nn">julearn.utils</span> <span class="kn">import</span> <span class="n">configure_logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">julearn</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_cross_validation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">julearn.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">PipelineCreator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">julearn.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">configure_logging</span>
 </pre></div>
 </div>
 <p>Now, let’s configure <code class="docutils literal notranslate"><span class="pre">julearn</span></code>’s logger to get some output as the pipeline
@@ -470,14 +470,14 @@ continuous measures in the dataset.</p>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/work/julearn/julearn/julearn/utils/logging.py:66: UserWarning: The &#39;__version__&#39; attribute is deprecated and will be removed in MarkupSafe 3.1. Use feature detection, or `importlib.metadata.version(&quot;markupsafe&quot;)`, instead.
   vstring = str(getattr(module, &quot;__version__&quot;, None))
-2024-10-23 11:29:38,040 - julearn - INFO - ===== Lib Versions =====
-2024-10-23 11:29:38,040 - julearn - INFO - numpy: 1.26.4
-2024-10-23 11:29:38,040 - julearn - INFO - scipy: 1.14.1
-2024-10-23 11:29:38,040 - julearn - INFO - sklearn: 1.5.2
-2024-10-23 11:29:38,040 - julearn - INFO - pandas: 2.2.3
-2024-10-23 11:29:38,040 - julearn - INFO - julearn: 0.3.5.dev16
-2024-10-23 11:29:38,040 - julearn - INFO - ========================
-/tmp/tmpzr1kgyil/8793197ec026b4383bac97a652498220f455059c/examples/99_docs/run_model_inspection_docs.py:56: FutureWarning: Downcasting behavior in `replace` is deprecated and will be removed in a future version. To retain the old behavior, explicitly call `result.infer_objects(copy=False)`. To opt-in to the future behavior, set `pd.set_option(&#39;future.no_silent_downcasting&#39;, True)`
+2025-07-07 11:53:26,903 - julearn - INFO - ===== Lib Versions =====
+2025-07-07 11:53:26,903 - julearn - INFO - numpy: 1.26.4
+2025-07-07 11:53:26,903 - julearn - INFO - scipy: 1.15.3
+2025-07-07 11:53:26,903 - julearn - INFO - sklearn: 1.5.2
+2025-07-07 11:53:26,903 - julearn - INFO - pandas: 2.2.3
+2025-07-07 11:53:26,903 - julearn - INFO - julearn: 0.3.5.dev28
+2025-07-07 11:53:26,903 - julearn - INFO - ========================
+/tmp/tmp3q9rmqjd/733af85652432de70b93a906c9e4e15f11c132fb/examples/99_docs/run_model_inspection_docs.py:56: FutureWarning: Downcasting behavior in `replace` is deprecated and will be removed in a future version. To retain the old behavior, explicitly call `result.infer_objects(copy=False)`. To opt-in to the future behavior, set `pd.set_option(&#39;future.no_silent_downcasting&#39;, True)`
   penguins_df[&quot;species&quot;] = penguins_df[&quot;species&quot;].replace(
 </pre></div>
 </div>
@@ -490,12 +490,12 @@ features and then apply a support vector classifier to classify species.</p>
 <span class="nb">print</span><span class="p">(</span><span class="n">pipeline_creator</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-23 11:29:38,416 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
-2024-10-23 11:29:38,416 - julearn - INFO - Step added
-2024-10-23 11:29:38,417 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
-2024-10-23 11:29:38,417 - julearn - INFO - Setting hyperparameter kernel = linear
-2024-10-23 11:29:38,417 - julearn - INFO - Tuning hyperparameter C = [1.e-02 1.e-01 1.e+00 1.e+01 1.e+02]
-2024-10-23 11:29:38,417 - julearn - INFO - Step added
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-07-07 11:53:27,245 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
+2025-07-07 11:53:27,245 - julearn - INFO - Step added
+2025-07-07 11:53:27,245 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
+2025-07-07 11:53:27,245 - julearn - INFO - Setting hyperparameter kernel = linear
+2025-07-07 11:53:27,245 - julearn - INFO - Tuning hyperparameter C = [1.e-02 1.e-01 1.e+00 1.e+01 1.e+02]
+2025-07-07 11:53:27,245 - julearn - INFO - Step added
 PipelineCreator:
   Step 0: zscore
     estimator:     StandardScaler()
@@ -528,41 +528,41 @@ example:</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-23 11:29:38,418 - julearn - INFO - Setting random seed to 200
-2024-10-23 11:29:38,418 - julearn - INFO - ==== Input Data ====
-2024-10-23 11:29:38,418 - julearn - INFO - Using dataframe as input
-2024-10-23 11:29:38,418 - julearn - INFO -      Features: [&#39;bill_length_mm&#39;, &#39;bill_depth_mm&#39;, &#39;flipper_length_mm&#39;, &#39;body_mass_g&#39;]
-2024-10-23 11:29:38,418 - julearn - INFO -      Target: species
-2024-10-23 11:29:38,419 - julearn - INFO -      Expanded features: [&#39;bill_length_mm&#39;, &#39;bill_depth_mm&#39;, &#39;flipper_length_mm&#39;, &#39;body_mass_g&#39;]
-2024-10-23 11:29:38,419 - julearn - INFO -      X_types:{}
-2024-10-23 11:29:38,419 - julearn - WARNING - The following columns are not defined in X_types: [&#39;bill_length_mm&#39;, &#39;bill_depth_mm&#39;, &#39;flipper_length_mm&#39;, &#39;body_mass_g&#39;]. They will be treated as continuous.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-07-07 11:53:27,246 - julearn - INFO - Setting random seed to 200
+2025-07-07 11:53:27,247 - julearn - INFO - ==== Input Data ====
+2025-07-07 11:53:27,247 - julearn - INFO - Using dataframe as input
+2025-07-07 11:53:27,247 - julearn - INFO -      Features: [&#39;bill_length_mm&#39;, &#39;bill_depth_mm&#39;, &#39;flipper_length_mm&#39;, &#39;body_mass_g&#39;]
+2025-07-07 11:53:27,247 - julearn - INFO -      Target: species
+2025-07-07 11:53:27,247 - julearn - INFO -      Expanded features: [&#39;bill_length_mm&#39;, &#39;bill_depth_mm&#39;, &#39;flipper_length_mm&#39;, &#39;body_mass_g&#39;]
+2025-07-07 11:53:27,247 - julearn - INFO -      X_types:{}
+2025-07-07 11:53:27,247 - julearn - WARNING - The following columns are not defined in X_types: [&#39;bill_length_mm&#39;, &#39;bill_depth_mm&#39;, &#39;flipper_length_mm&#39;, &#39;body_mass_g&#39;]. They will be treated as continuous.
 /home/runner/work/julearn/julearn/julearn/prepare.py:509: RuntimeWarning: The following columns are not defined in X_types: [&#39;bill_length_mm&#39;, &#39;bill_depth_mm&#39;, &#39;flipper_length_mm&#39;, &#39;body_mass_g&#39;]. They will be treated as continuous.
   warn_with_log(
-2024-10-23 11:29:38,419 - julearn - INFO - ====================
-2024-10-23 11:29:38,419 - julearn - INFO -
-2024-10-23 11:29:38,420 - julearn - INFO - = Model Parameters =
-2024-10-23 11:29:38,420 - julearn - INFO - Tuning hyperparameters using grid
-2024-10-23 11:29:38,420 - julearn - INFO - Hyperparameters:
-2024-10-23 11:29:38,420 - julearn - INFO -      svm__C: [1.e-02 1.e-01 1.e+00 1.e+01 1.e+02]
-2024-10-23 11:29:38,420 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-23 11:29:38,420 - julearn - INFO - Search Parameters:
-2024-10-23 11:29:38,421 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
-2024-10-23 11:29:38,421 - julearn - INFO - ====================
-2024-10-23 11:29:38,421 - julearn - INFO -
-2024-10-23 11:29:38,421 - julearn - INFO - = Data Information =
-2024-10-23 11:29:38,421 - julearn - INFO -      Problem type: classification
-2024-10-23 11:29:38,421 - julearn - INFO -      Number of samples: 274
-2024-10-23 11:29:38,421 - julearn - INFO -      Number of features: 4
-2024-10-23 11:29:38,421 - julearn - INFO - ====================
-2024-10-23 11:29:38,421 - julearn - INFO -
-2024-10-23 11:29:38,421 - julearn - INFO -      Number of classes: 2
-2024-10-23 11:29:38,421 - julearn - INFO -      Target type: int64
-2024-10-23 11:29:38,422 - julearn - INFO -      Class distributions: species
+2025-07-07 11:53:27,248 - julearn - INFO - ====================
+2025-07-07 11:53:27,248 - julearn - INFO -
+2025-07-07 11:53:27,248 - julearn - INFO - = Model Parameters =
+2025-07-07 11:53:27,249 - julearn - INFO - Tuning hyperparameters using grid
+2025-07-07 11:53:27,249 - julearn - INFO - Hyperparameters:
+2025-07-07 11:53:27,249 - julearn - INFO -      svm__C: [1.e-02 1.e-01 1.e+00 1.e+01 1.e+02]
+2025-07-07 11:53:27,249 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2025-07-07 11:53:27,249 - julearn - INFO - Search Parameters:
+2025-07-07 11:53:27,249 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
+2025-07-07 11:53:27,249 - julearn - INFO - ====================
+2025-07-07 11:53:27,249 - julearn - INFO -
+2025-07-07 11:53:27,249 - julearn - INFO - = Data Information =
+2025-07-07 11:53:27,249 - julearn - INFO -      Problem type: classification
+2025-07-07 11:53:27,249 - julearn - INFO -      Number of samples: 274
+2025-07-07 11:53:27,249 - julearn - INFO -      Number of features: 4
+2025-07-07 11:53:27,249 - julearn - INFO - ====================
+2025-07-07 11:53:27,249 - julearn - INFO -
+2025-07-07 11:53:27,249 - julearn - INFO -      Number of classes: 2
+2025-07-07 11:53:27,250 - julearn - INFO -      Target type: int64
+2025-07-07 11:53:27,250 - julearn - INFO -      Class distributions: species
 0    151
 1    123
 Name: count, dtype: int64
-2024-10-23 11:29:38,422 - julearn - INFO - Using outer CV scheme RepeatedKFold(n_repeats=10, n_splits=5, random_state=200) (incl. final model)
-2024-10-23 11:29:38,422 - julearn - INFO - Binary classification problem detected.
+2025-07-07 11:53:27,250 - julearn - INFO - Using outer CV scheme RepeatedKFold(n_repeats=10, n_splits=5, random_state=200) (incl. final model)
+2025-07-07 11:53:27,250 - julearn - INFO - Binary classification problem detected.
 </pre></div>
 </div>
 <p>After this is done, we can now use the inspector to look at final model
@@ -904,7 +904,7 @@ interpretability, and reliable decision-making. With <code class="docutils liter
 inspection capabilities, you can confidently navigate the complexities of
 machine learning models and harness their full potential in real-world
 applications.</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 10.297 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 10.790 seconds)</p>
 </section>
 
         </article>

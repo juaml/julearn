@@ -7,7 +7,7 @@
 
     <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
         <title>6.1. Applying preprocessing to the target - julearn documentation</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=61a4c737" />
@@ -430,10 +430,10 @@ predict the z-scored target.
 This can be achieved by using a <a class="reference internal" href="../api/generated/julearn.TargetPipelineCreator.html#julearn.TargetPipelineCreator" title="julearn.TargetPipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">TargetPipelineCreator</span></code></a>
 as a step in the general pipeline.</p>
 <p>Let’s start by loading the data and importing the required modules:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">julearn</span> <span class="kn">import</span> <span class="n">run_cross_validation</span>
-<span class="kn">from</span> <span class="nn">julearn.pipeline</span> <span class="kn">import</span> <span class="n">PipelineCreator</span><span class="p">,</span> <span class="n">TargetPipelineCreator</span>
-<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_diabetes</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">julearn</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_cross_validation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">julearn.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">PipelineCreator</span><span class="p">,</span> <span class="n">TargetPipelineCreator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_diabetes</span>
 </pre></div>
 </div>
 <p>Load the diabetes dataset from <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code> as a <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></p>
@@ -498,20 +498,20 @@ to only apply it to <code class="docutils literal notranslate"><span class="pre"
 <span class="nb">print</span><span class="p">(</span><span class="n">creator</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-23 11:29:37,589 - julearn - INFO - Adding step jutargetpipeline that applies to ColumnTypes&lt;types={&#39;target&#39;}; pattern=(?:target)&gt;
-2024-10-23 11:29:37,590 - julearn - INFO - Step added
-2024-10-23 11:29:37,590 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;categorical&#39;, &#39;continuous&#39;}; pattern=(?:__:type:__categorical|__:type:__continuous)&gt;
-2024-10-23 11:29:37,590 - julearn - INFO - Step added
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-07-07 11:53:26,481 - julearn - INFO - Adding step jutargetpipeline that applies to ColumnTypes&lt;types={&#39;target&#39;}; pattern=(?:target)&gt;
+2025-07-07 11:53:26,481 - julearn - INFO - Step added
+2025-07-07 11:53:26,481 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;continuous&#39;, &#39;categorical&#39;}; pattern=(?:__:type:__continuous|__:type:__categorical)&gt;
+2025-07-07 11:53:26,482 - julearn - INFO - Step added
 PipelineCreator:
   Step 0: target_jutargetpipeline
-    estimator:     &lt;julearn.pipeline.target_pipeline.JuTargetPipeline object at 0x7f90ae00e200&gt;
+    estimator:     &lt;julearn.pipeline.target_pipeline.JuTargetPipeline object at 0x7f86fe049de0&gt;
     apply to:      ColumnTypes&lt;types={&#39;target&#39;}; pattern=(?:target)&gt;
     needed types:  ColumnTypes&lt;types={&#39;target&#39;}; pattern=(?:target)&gt;
     tuning params: {}
   Step 1: svm
     estimator:     SVR()
-    apply to:      ColumnTypes&lt;types={&#39;categorical&#39;, &#39;continuous&#39;}; pattern=(?:__:type:__categorical|__:type:__continuous)&gt;
-    needed types:  ColumnTypes&lt;types={&#39;categorical&#39;, &#39;continuous&#39;}; pattern=(?:__:type:__categorical|__:type:__continuous)&gt;
+    apply to:      ColumnTypes&lt;types={&#39;continuous&#39;, &#39;categorical&#39;}; pattern=(?:__:type:__continuous|__:type:__categorical)&gt;
+    needed types:  ColumnTypes&lt;types={&#39;continuous&#39;, &#39;categorical&#39;}; pattern=(?:__:type:__continuous|__:type:__categorical)&gt;
     tuning params: {}
 </pre></div>
 </div>
@@ -523,31 +523,31 @@ PipelineCreator:
 <span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2024-10-23 11:29:37,590 - julearn - INFO - ==== Input Data ====
-2024-10-23 11:29:37,591 - julearn - INFO - Using dataframe as input
-2024-10-23 11:29:37,591 - julearn - INFO -      Features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
-2024-10-23 11:29:37,591 - julearn - INFO -      Target: target
-2024-10-23 11:29:37,591 - julearn - INFO -      Expanded features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
-2024-10-23 11:29:37,591 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;], &#39;categorical&#39;: [&#39;sex&#39;]}
-2024-10-23 11:29:37,591 - julearn - INFO - ====================
-2024-10-23 11:29:37,592 - julearn - INFO -
-2024-10-23 11:29:37,592 - julearn - INFO - = Model Parameters =
-2024-10-23 11:29:37,592 - julearn - INFO - ====================
-2024-10-23 11:29:37,592 - julearn - INFO -
-2024-10-23 11:29:37,592 - julearn - INFO - = Data Information =
-2024-10-23 11:29:37,592 - julearn - INFO -      Problem type: regression
-2024-10-23 11:29:37,592 - julearn - INFO -      Number of samples: 442
-2024-10-23 11:29:37,592 - julearn - INFO -      Number of features: 10
-2024-10-23 11:29:37,592 - julearn - INFO - ====================
-2024-10-23 11:29:37,592 - julearn - INFO -
-2024-10-23 11:29:37,592 - julearn - INFO -      Target type: float64
-2024-10-23 11:29:37,592 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-07-07 11:53:26,482 - julearn - INFO - ==== Input Data ====
+2025-07-07 11:53:26,482 - julearn - INFO - Using dataframe as input
+2025-07-07 11:53:26,482 - julearn - INFO -      Features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2025-07-07 11:53:26,482 - julearn - INFO -      Target: target
+2025-07-07 11:53:26,483 - julearn - INFO -      Expanded features: [&#39;age&#39;, &#39;sex&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;]
+2025-07-07 11:53:26,483 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;], &#39;categorical&#39;: [&#39;sex&#39;]}
+2025-07-07 11:53:26,483 - julearn - INFO - ====================
+2025-07-07 11:53:26,483 - julearn - INFO -
+2025-07-07 11:53:26,484 - julearn - INFO - = Model Parameters =
+2025-07-07 11:53:26,484 - julearn - INFO - ====================
+2025-07-07 11:53:26,484 - julearn - INFO -
+2025-07-07 11:53:26,484 - julearn - INFO - = Data Information =
+2025-07-07 11:53:26,484 - julearn - INFO -      Problem type: regression
+2025-07-07 11:53:26,484 - julearn - INFO -      Number of samples: 442
+2025-07-07 11:53:26,484 - julearn - INFO -      Number of features: 10
+2025-07-07 11:53:26,484 - julearn - INFO - ====================
+2025-07-07 11:53:26,484 - julearn - INFO -
+2025-07-07 11:53:26,484 - julearn - INFO -      Target type: float64
+2025-07-07 11:53:26,484 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
    fit_time  score_time  ...  fold                          cv_mdsum
-0  0.008642    0.002675  ...     0  b10eef89b4192178d482d7a1587a248a
-1  0.007428    0.002647  ...     1  b10eef89b4192178d482d7a1587a248a
-2  0.007945    0.002622  ...     2  b10eef89b4192178d482d7a1587a248a
-3  0.007731    0.002601  ...     3  b10eef89b4192178d482d7a1587a248a
-4  0.007759    0.002573  ...     4  b10eef89b4192178d482d7a1587a248a
+0  0.008818    0.002821  ...     0  b10eef89b4192178d482d7a1587a248a
+1  0.007586    0.002761  ...     1  b10eef89b4192178d482d7a1587a248a
+2  0.008044    0.002762  ...     2  b10eef89b4192178d482d7a1587a248a
+3  0.007849    0.002783  ...     3  b10eef89b4192178d482d7a1587a248a
+4  0.007938    0.002769  ...     4  b10eef89b4192178d482d7a1587a248a
 
 [5 rows x 8 columns]
 </pre></div>
@@ -558,7 +558,7 @@ directly specified as step in the <a class="reference internal" href="../api/gen
 transformations have to be specified using the
 <a class="reference internal" href="../api/generated/julearn.TargetPipelineCreator.html#julearn.TargetPipelineCreator" title="julearn.TargetPipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">TargetPipelineCreator</span></code></a>, which is then passed to the overall
 <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> as an extra step.</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.081 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.083 seconds)</p>
 </section>
 
         </article>
