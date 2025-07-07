@@ -240,7 +240,7 @@ def test_prepare_input_data_erors() -> None:
         )
 
     # Missing column in dataframe
-    X = columns[:5] + ["wrong"]
+    X = [*columns[:5], "wrong"]
     y = columns[6]
     groups = columns[7]
     with pytest.raises(ValueError, match=r"missing: \['wrong'\]"):
