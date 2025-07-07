@@ -55,6 +55,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 If you use julearn in a scientific publication, please use the following reference
 
-> Hamdan, Sami, Shammi More, Leonard Sasse, Vera Komeyer, Kaustubh R. Patil, and Federico Raimondo. ‘Julearn: An Easy-to-Use Library for Leakage-Free Evaluation and Inspection of ML Models’. arXiv, 19 October 2023. https://doi.org/10.48550/arXiv.2310.12568.
+> Sami Hamdan,Shammi More,Leonard Sasse,Vera Komeyer,Kaustubh R. Patil,Federico Raimondo,for the Alzheimer’s Disease Neuroimaging Initiative,Julearn: an easy-to-use library for leakage-free evaluation and inspection of ML models,Gigabyte,2024 https://doi.org/10.46471/gigabyte.113
 
 Since julearn is also heavily reliant on scikit-learn, please also cite them: https://scikit-learn.org/stable/about.html#citing-scikit-learn
