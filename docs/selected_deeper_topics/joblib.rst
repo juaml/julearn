@@ -6,7 +6,7 @@
 Parallelizing julearn with Joblib
 =================================
 
-.. warning:: 
+.. warning::
     Make sure you are using the latest version of ``julearn``, as we are
     actively developing and fine-tuning these packages to improve performance.
     Older versions of ``julearn`` might have a huge computational impact when used
@@ -26,7 +26,7 @@ case, you can parallelize the computation of the different folds, as the
 training and testing of each fold are independent from the other folds.
 
 Mostly all modern computers have multiple processors or *cores*, which allows
-to run multiple tasks at the same time.  If you are familiar, you might 
+to run multiple tasks at the same time.  If you are familiar, you might
 have noticed that scikit-learn already has a parallelization mechanism using
 the ``n_jobs`` parameter. ``julearn`` is actually using scikit-learn, so it is
 possible to use the ``n_jobs`` parameter. If you want to read more about how
@@ -38,9 +38,9 @@ number of jobs to run in parallel. If you set it to ``-1``, it will use all the
 processors available, which is usually the best option for most cases.
 
 One of the explicit ways to control parallelization in scikit-learn and
-``julearn`` is to use a joblib's 
+``julearn`` is to use a joblib's
 :external+joblib:class:`~joblib.parallel_config` context manager. The following
-snippet will run the code in parallel using the ``"loky"`` backend 
+snippet will run the code in parallel using the ``"loky"`` backend
 with 4 processors.
 
 .. code-block:: python
@@ -95,12 +95,12 @@ Massively parallelizing ``julearn`` with Joblib and HTcondor
 Sometimes even with multiple processors, the computation can take a long time.
 As an example, assuming a model that takes 1 hour to fit, a 5 times 5-fold
 cross-validation takes 25 hours of computation. If you add a grid search to
-find the best hyperparameter using another 5-fold CV, and this grid has 
-10 hyperparameters sets to test, this adds another 1250 hours of computation. 
-This is a total of 1275 hours. In technical terms, this are 1275 core-hours, 
+find the best hyperparameter using another 5-fold CV, and this grid has
+10 hyperparameters sets to test, this adds another 1250 hours of computation.
+This is a total of 1275 hours. In technical terms, this are 1275 core-hours,
 which is a unit of processing time in a single core. With 4 processors, this is
 318 hours, which is almost 13 days of computation.
-If the model takes 10 hours to fit, this goes to 12750 core-hours, which is 
+If the model takes 10 hours to fit, this goes to 12750 core-hours, which is
 almost 4.5 months with 4 processors.
 
 As you can see in the following table, sometimes we might need to use
@@ -119,7 +119,7 @@ hundreds of processors to obtain results within reasonable time spans.
 
 
 At the `INM-7`_, were we have mainly developed this library, we have a
-computational cluster that uses HTCondor. To overcome this limitation of 
+computational cluster that uses HTCondor. To overcome this limitation of
 ``julearn`` and `joblib`_, we have created the `joblib-htcondor`_ backend. This
 allows joblib to submit each task as a job in an HTCondor queue, allowing to
 massively parallelize computation.
@@ -144,7 +144,7 @@ the following example:
         backend="htcondor",
         n_jobs=-1,
         request_cpus=1,
-        request_mem="4Gb",
+        request_memory="4Gb",
     ):
         scores = run_cross_validation(
             X=X,
@@ -159,7 +159,7 @@ the following example:
 
 This will submit each task to the HTCondor queue, and the computation will be
 done in parallel. The ``request_cpus`` parameter specifies the number of CPUs
-to request for each job, and the ``request_mem`` parameter specifies the
+to request for each job, and the ``request_memory`` parameter specifies the
 amount of memory to request.
 
 
@@ -203,7 +203,7 @@ For example, at the INM-7, we can have a shared directory at
         backend="htcondor",
         n_jobs=-1,
         request_cpus=1,
-        request_mem="4Gb",
+        request_memory="4Gb",
         shared_data_dir="/data/project/supercool_research",
     ):
         scores = run_cross_validation(
@@ -221,11 +221,11 @@ Pool
 ~~~~
 
 As in any computational cluster, most probably you will be required to submit
-a job to a queue, which will then run the :func:`.run_cross_validation` 
+a job to a queue, which will then run the :func:`.run_cross_validation`
 function that will then submit more jobs to the queue. This is not a problem,
 but it needs to be possible to submit jobs from within a job. Check with your
-cluster's admin team and ask for further instructions. Most probably you'll 
-also need to specify to which `pool` the jobs will be submitted. This can be
+cluster's admin team and ask for further instructions. Most probably you'll
+also need to specify to which ``pool`` the jobs will be submitted. This can be
 done with the ``pool`` parameter. For us, this is ``head2.htc.inm7.de``:
 
 
@@ -244,7 +244,7 @@ done with the ``pool`` parameter. For us, this is ``head2.htc.inm7.de``:
         backend="htcondor",
         n_jobs=-1,
         request_cpus=1,
-        request_mem="4Gb",
+        request_memory="4Gb",
         shared_data_dir="/data/project/supercool_research",
         pool="head2.htc.inm7.de",
     ):
@@ -277,7 +277,7 @@ Let's say we have the following pipeline:
 This is indeed a pipeline with a hyperparameter search. A 5-fold Grid Search
 approach will evaluate 49 different models, 5 times each. And this will happen
 for every outer fold. So if we use `joblib-htcondor`_ as in the previous
-example, each task could also benefit from parallelism, by submitting each 
+example, each task could also benefit from parallelism, by submitting each
 inner fold of each hyperparameter combination as a separate job. This is
 called recursive parallelization and we can instruct the backend to allow this
 by setting the ``max_recursion_level`` parameter to ``1``:
@@ -297,7 +297,7 @@ by setting the ``max_recursion_level`` parameter to ``1``:
         backend="htcondor",
         n_jobs=-1,
         request_cpus=1,
-        request_mem="4Gb",
+        request_memory="4Gb",
         shared_data_dir="/data/project/supercool_research",
         pool="head2.htc.inm7.de",
         max_recursion_level=1,
@@ -312,7 +312,7 @@ by setting the ``max_recursion_level`` parameter to ``1``:
             cv=cv,
         )
 
-.. warning:: 
+.. warning::
     `scikit-learn`_ parallelizes many algorithms internally by default. So if
     you set the ``max_recursion_level`` to something different than 0, you
     might end-up with thousands of thousands of jobs. Please READ THE WHOLE
@@ -321,7 +321,7 @@ by setting the ``max_recursion_level`` parameter to ``1``:
 
 
 But beware! This will submit 245 (5 times 49) jobs for each outer fold. For a
-5 times 5-fold CV, this means 6125 jobs. This can be a lot of jobs, but not 
+5 times 5-fold CV, this means 6125 jobs. This can be a lot of jobs, but not
 for HTCondor. It is though an issue with the data transfer. If each job requires
 500 MB of data, this means 3.1 TB of data transfer, which requires 3.1 TB of
 disk space in the shared directory.
@@ -365,7 +365,7 @@ the inner folds, we can do the following:
         backend="htcondor",
         n_jobs=-1,
         request_cpus=1,
-        request_mem="4Gb",
+        request_memory="4Gb",
         shared_data_dir="/data/project/supercool_research",
         pool="head2.htc.inm7.de",
         max_recursion_level=1,
@@ -402,7 +402,7 @@ Scikit-learn parallelization
 The rule is quite simple, if it has an ``n_jobs`` parameter, it can be
 parallelized using joblib. This is the case for most of the scikit-learn's
 algorithms. While the developers of scikit-learn are doing a great job and
-currently working on documenting how this is done for each algorithm, this is 
+currently working on documenting how this is done for each algorithm, this is
 still not that evident.
 
 Most importantly, the default is always ``n_jobs=-1``. This means that it will
@@ -421,20 +421,20 @@ overhead.
 The following is a non-exhaustive list of scikit-learn's algorithms that might
 make sense to set the ``n_jobs`` parameter to ``-1`` or leave as default:
 
-* :external:class:`~sklearn.ensemble.StackingClassifier` and 
+* :external:class:`~sklearn.ensemble.StackingClassifier` and
   :external:class:`~sklearn.ensemble.StackingRegressor`
 
   This model will first fit the base estimators in parallel for the whole data.
-  Then it will fit and score the base estimators in parallel for each of the 
+  Then it will fit and score the base estimators in parallel for each of the
   internal CV folds, to generate the meta-features.
 
-* :external:class:`~sklearn.ensemble.VotingClassifier` and 
+* :external:class:`~sklearn.ensemble.VotingClassifier` and
   :external:class:`~sklearn.ensemble.VotingRegressor`
 
   Similar to the stacking models.
 
 * Hyperparameter searchers
-  
+
   Most of the hyperparameter searchers in scikit-learn will parallelize the
   search for the best hyperparameters. Either at the internal CV level or at
   both the hyperparameter search space and the internal CV level, depending
@@ -468,7 +468,7 @@ will be used by the UI.
         backend="htcondor",
         n_jobs=-1,
         request_cpus=1,
-        request_mem="4Gb",
+        request_memory="4Gb",
         shared_data_dir="/data/project/supercool_research",
         pool="head2.htc.inm7.de",
         max_recursion_level=1,
@@ -493,7 +493,7 @@ the ``condor_q`` command:
    :alt: condor_q
 
 
-The first row is the original job that is running `run_cross_validation`. The
+The first row is the original job that is running ``run_cross_validation``. The
 rest are joblib-htcondor jobs.
 
 Now this is difficult to understand, so we can use the `joblib-htcondor`_ UI,
@@ -522,7 +522,7 @@ and full final model fitting, and the second level is a Grid Search
 (110 hyperparameter combinations, 5-fold CV). The throttle is set to 26 for
 the outer fold and 60 for the inner folds.
 
-On the bottom, we an see that it has been running for almost 4 days and 
+On the bottom, we an see that it has been running for almost 4 days and
 we are using 10% of the 1.3 Tb of shared disk space.
 
 
@@ -559,6 +559,6 @@ This is a stacked model with a hyperparameter search created as follows:
     )
 
 
-As you can see, even the 
-:external:class:`~sklearn.linear_model.LogisticRegression` model has an 
+As you can see, even the
+:external:class:`~sklearn.linear_model.LogisticRegression` model has an
 ``n_jobs`` parameter that must be set to ``1``!
