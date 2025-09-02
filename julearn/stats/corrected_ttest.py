@@ -7,7 +7,7 @@
 
 import typing
 from itertools import combinations
-from typing import Optional, Tuple
+from typing import Optional
 
 import numpy as np
 import pandas as pd
@@ -54,7 +54,7 @@ def _compute_corrected_ttest(
     n_test: int,
     df: Optional[int] = None,
     alternative: str = "two-sided",
-) -> Tuple[pd.Series, pd.Series]:
+) -> tuple[pd.Series, pd.Series]:
     """Compute paired t-test with corrected variance.
 
     Parameters

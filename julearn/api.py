@@ -4,7 +4,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Optional, Union
 
 import numpy as np
 import pandas as pd
@@ -27,21 +27,21 @@ from .utils.typing import CVLike
 
 
 def _validata_api_params(  # noqa: C901
-    X: List[str],  # noqa: N803
+    X: list[str],  # noqa: N803
     y: str,
-    model: Union[str, PipelineCreator, BaseEstimator, List[PipelineCreator]],
+    model: Union[str, PipelineCreator, BaseEstimator, list[PipelineCreator]],
     data: pd.DataFrame,
-    X_types: Optional[Dict] = None,  # noqa: N803
+    X_types: Optional[dict] = None,  # noqa: N803
     problem_type: Optional[str] = None,
-    preprocess: Union[None, str, List[str]] = None,
+    preprocess: Union[None, str, list[str]] = None,
     return_estimator: Optional[str] = None,
     return_inspector: bool = False,
     groups: Optional[str] = None,
-    pos_labels: Union[str, List[str], None] = None,
-    model_params: Optional[Dict] = None,
-    search_params: Optional[Dict] = None,
+    pos_labels: Union[str, list[str], None] = None,
+    model_params: Optional[dict] = None,
+    search_params: Optional[dict] = None,
     seed: Optional[int] = None,
-) -> Tuple[
+) -> tuple[
     pd.DataFrame,
     pd.Series,
     Optional[pd.Series],
@@ -353,22 +353,22 @@ def _validata_api_params(  # noqa: C901
 
 
 def run_cross_validation(
-    X: List[str],  # noqa: N803
+    X: list[str],  # noqa: N803
     y: str,
-    model: Union[str, PipelineCreator, BaseEstimator, List[PipelineCreator]],
+    model: Union[str, PipelineCreator, BaseEstimator, list[PipelineCreator]],
     data: pd.DataFrame,
-    X_types: Optional[Dict] = None,  # noqa: N803
+    X_types: Optional[dict] = None,  # noqa: N803
     problem_type: Optional[str] = None,
-    preprocess: Union[None, str, List[str]] = None,
+    preprocess: Union[None, str, list[str]] = None,
     return_estimator: Optional[str] = None,
     return_inspector: bool = False,
     return_train_score: bool = False,
     cv: Optional[CVLike] = None,
     groups: Optional[str] = None,
-    scoring: Union[str, List[str], None] = None,
-    pos_labels: Union[str, List[str], None] = None,
-    model_params: Optional[Dict] = None,
-    search_params: Optional[Dict] = None,
+    scoring: Union[str, list[str], None] = None,
+    pos_labels: Union[str, list[str], None] = None,
+    model_params: Optional[dict] = None,
+    search_params: Optional[dict] = None,
     seed: Optional[int] = None,
     n_jobs: Optional[int] = None,
     verbose: Optional[int] = 0,
@@ -636,17 +636,17 @@ def run_cross_validation(
 
 
 def run_fit(
-    X: List[str],  # noqa: N803
+    X: list[str],  # noqa: N803
     y: str,
-    model: Union[str, PipelineCreator, BaseEstimator, List[PipelineCreator]],
+    model: Union[str, PipelineCreator, BaseEstimator, list[PipelineCreator]],
     data: pd.DataFrame,
-    X_types: Optional[Dict] = None,  # noqa: N803
+    X_types: Optional[dict] = None,  # noqa: N803
     problem_type: Optional[str] = None,
-    preprocess: Union[None, str, List[str]] = None,
+    preprocess: Union[None, str, list[str]] = None,
     groups: Optional[str] = None,
-    pos_labels: Union[str, List[str], None] = None,
-    model_params: Optional[Dict] = None,
-    search_params: Optional[Dict] = None,
+    pos_labels: Union[str, list[str], None] = None,
+    model_params: Optional[dict] = None,
+    search_params: Optional[dict] = None,
     seed: Optional[int] = None,
     verbose: Optional[int] = 0,
 ):

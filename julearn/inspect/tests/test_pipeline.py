@@ -4,7 +4,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Any, Dict, List, Optional, Type
+from typing import Any, Optional
 
 import pandas as pd
 import pytest
@@ -87,7 +87,7 @@ class MockTestEst(BaseEstimator):
         ["zscore", "pca", "svm"],
     ],
 )
-def test_get_stepnames(steps: List[str], df_iris: pd.DataFrame) -> None:
+def test_get_stepnames(steps: list[str], df_iris: pd.DataFrame) -> None:
     """Test step names fetch.
 
     Parameters
@@ -118,9 +118,9 @@ def test_get_stepnames(steps: List[str], df_iris: pd.DataFrame) -> None:
     ],
 )
 def test_steps(
-    steps: List[str],
+    steps: list[str],
     as_estimator: bool,
-    returns: List[Type],
+    returns: list[type],
     df_iris: "pd.DataFrame",
 ) -> None:
     """Test steps.
@@ -175,7 +175,7 @@ def test_steps(
     ],
 )
 def test_inspect_estimator(
-    est: Type, fitted_params: Dict[str, int], df_iris: "pd.DataFrame"
+    est: type, fitted_params: dict[str, int], df_iris: "pd.DataFrame"
 ) -> None:
     """Test estimator inspector.
 

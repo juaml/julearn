@@ -77,7 +77,7 @@ class JuTransformedTargetModel(JuBaseEstimator):
 
     def fit(
         self,
-        X: pd.DataFrame,
+        X: pd.DataFrame,  # noqa: N803
         y: DataLike,
         **fit_params: Any,
     ) -> "JuTransformedTargetModel":
@@ -202,7 +202,7 @@ class JuTransformedTargetModel(JuBaseEstimator):
 
     def transform_target(
         self,
-        X: pd.DataFrame,
+        X: pd.DataFrame,  # noqa: N803
         y: DataLike,
     ) -> DataLike:
         """Transform target.

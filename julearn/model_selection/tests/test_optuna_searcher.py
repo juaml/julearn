@@ -3,7 +3,7 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL
 
-from typing import Any, Dict, Tuple
+from typing import Any
 
 import pytest
 
@@ -72,9 +72,9 @@ optd = pytest.importorskip("optuna.distributions")
     ],
 )
 def test__prepare_optuna_hyperparameters_distributions(
-    params_to_tune: Dict[str, Dict[str, Any]],
-    expected_types: Tuple,
-    expected_dist: Tuple,
+    params_to_tune: dict[str, dict[str, Any]],
+    expected_types: tuple,
+    expected_dist: tuple,
 ) -> None:
     """Test the _prepare_optuna_hyperparameters_distributions function.
 

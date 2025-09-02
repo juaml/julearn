@@ -4,7 +4,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import List, Tuple, Union
+from typing import Union
 
 import numpy as np
 import pandas as pd
@@ -35,15 +35,15 @@ class JuTargetPipeline:
 
     def __init__(
         self,
-        steps: List[Tuple[str, Union[JuTargetTransformer, TransformerLike]]],
+        steps: list[tuple[str, Union[JuTargetTransformer, TransformerLike]]],
     ):
-        if not isinstance(steps, List):
+        if not isinstance(steps, list):
             raise TypeError("steps must be a list")
         self.steps = steps
 
     def fit_transform(
         self,
-        X: pd.DataFrame,
+        X: pd.DataFrame,  # noqa: N803
         y: DataLike,
     ) -> DataLike:
         """Fit and transform the target.
@@ -65,7 +65,7 @@ class JuTargetPipeline:
 
     def fit(
         self,
-        X: pd.DataFrame,
+        X: pd.DataFrame,  # noqa: N803
         y: DataLike,
     ) -> "JuTargetPipeline":
         """Fit the target pipeline.
@@ -94,7 +94,7 @@ class JuTargetPipeline:
 
     def transform(
         self,
-        X: pd.DataFrame,
+        X: pd.DataFrame,  # noqa: N803
         y: DataLike,
     ) -> DataLike:
         """Transform the target.
@@ -123,7 +123,7 @@ class JuTargetPipeline:
 
     def inverse_transform(
         self,
-        X: pd.DataFrame,
+        X: pd.DataFrame,  # noqa: N803
         y: DataLike,
     ) -> DataLike:
         """Inverse transform the target.

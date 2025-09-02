@@ -3,8 +3,6 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL
 
-from typing import Dict, Type
-
 import numpy as np
 import pandas as pd
 import pytest
@@ -62,8 +60,8 @@ def df_X_confounds() -> pd.DataFrame:
 )
 def test_JuColumnTransformer(
     name: str,
-    klass: Type[EstimatorLike],
-    params: Dict,
+    klass: type[EstimatorLike],
+    params: dict,
     df_X_confounds: pd.DataFrame,  # noqa: N803
 ):
     """Test JuColumnTransformer class."""

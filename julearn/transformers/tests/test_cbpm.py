@@ -15,7 +15,7 @@ from julearn.transformers import CBPM
 
 
 def test_CBPM_posneg_correlated_features(
-    X_iris: pd.DataFrame,
+    X_iris: pd.DataFrame,  # noqa: N803
     y_iris: pd.DataFrame,
 ) -> None:
     """Test the CBPM transformer with posneg correlated features.
@@ -44,7 +44,7 @@ def test_CBPM_posneg_correlated_features(
 
 
 def test_CBPM_pos_correlated_features(
-    X_iris: pd.DataFrame,
+    X_iris: pd.DataFrame,  # noqa: N803
     y_iris: pd.DataFrame,
 ) -> None:
     """Test the CBPM transformer with positive correlated features.
@@ -75,7 +75,7 @@ def test_CBPM_pos_correlated_features(
 
 
 def test_CBPM_neg_correlated_features(
-    X_iris: pd.DataFrame,
+    X_iris: pd.DataFrame,  # noqa: N803
     y_iris: pd.DataFrame,
 ) -> None:
     """Test the CBPM transformer with positive correlated features.
@@ -106,7 +106,7 @@ def test_CBPM_neg_correlated_features(
 
 
 def test_CBPM_warnings(
-    X_iris: pd.DataFrame,
+    X_iris: pd.DataFrame,  # noqa: N803
     y_iris: pd.DataFrame,
 ) -> None:
     """Test the CBPM transformer warnings.
@@ -181,7 +181,7 @@ def test_CBPM_warnings(
 
 
 def test_CBPM_lower_sign_threshhold(
-    X_iris: pd.DataFrame,
+    X_iris: pd.DataFrame,  # noqa: N803
     y_iris: pd.DataFrame,
 ) -> None:
     """Test the CBPM transformer with lower significance threshold.
@@ -205,7 +205,7 @@ def test_CBPM_lower_sign_threshhold(
 
 
 def test_CBPM_lower_sign_threshhold_no_sig(
-    X_iris: pd.DataFrame,
+    X_iris: pd.DataFrame,  # noqa: N803
     y_iris: pd.DataFrame,
 ) -> None:
     """Test the CBPM transformer with an even lower significance threshold.
@@ -233,7 +233,7 @@ def test_CBPM_lower_sign_threshhold_no_sig(
 
 
 def test_CBPM_spearman(
-    X_iris: pd.DataFrame,
+    X_iris: pd.DataFrame,  # noqa: N803
     y_iris: pd.DataFrame,
 ) -> None:
     """Test the CBPM transformer with spearman correlation.

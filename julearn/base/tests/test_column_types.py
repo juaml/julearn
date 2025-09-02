@@ -4,8 +4,6 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import List, Set
-
 import pandas as pd
 import pytest
 
@@ -45,7 +43,7 @@ from julearn.base import ColumnTypes, ColumnTypesLike, make_type_selector
 def test_make_column_selector(
     X_iris: pd.DataFrame,  # noqa: N803
     pattern: str,
-    column_types: List[str],
+    column_types: list[str],
     selection: slice,
 ) -> None:
     """Test the make_column_selector function.
@@ -107,8 +105,8 @@ def test_make_column_selector(
 )
 def test_ColumnTypes_patterns(
     column_types: ColumnTypesLike,
-    pattern: List[str],
-    resulting_column_types: Set[str],
+    pattern: list[str],
+    resulting_column_types: set[str],
 ) -> None:
     """Test the ColumnTypes patterns.
 
@@ -162,7 +160,7 @@ def test_ColumnTypes_patterns(
 def test_ColumnTypes_to_column_selector(
     X_iris: pd.DataFrame,  # noqa: N803
     selected_column_types: ColumnTypesLike,
-    data_column_types: List[str],
+    data_column_types: list[str],
     selection: slice,
 ) -> None:
     """Test the ColumnTyes.to_column_selector method.

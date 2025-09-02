@@ -18,7 +18,7 @@ from julearn.transformers.target import (
 
 
 def test_JuTransformedTargetModel(
-    X_iris: pd.DataFrame,
+    X_iris: pd.DataFrame,  # noqa: N803
     y_iris: pd.Series,
 ) -> None:
     """Test JuTransformedTargetModel."""
@@ -47,7 +47,7 @@ def test_JuTransformedTargetModel(
 
 
 def test_JuTransformedTargetModel_noinverse(
-    X_iris: pd.DataFrame,
+    X_iris: pd.DataFrame,  # noqa: N803
     y_iris: pd.Series,
 ) -> None:
     """Test JuTransformedTargetModel."""

@@ -83,7 +83,8 @@ class FoldsInspector:
         cv_mdsums = self._scores["cv_mdsum"].unique()
         if cv_mdsums.size > 1:
             raise_error(
-                "The scores CVs are not the same. Can't reproduce the CV folds."
+                "The scores CVs are not the same. "
+                "Can't reproduce the CV folds."
             )
         if cv_mdsums[0] == "non-reproducible":
             raise_error(

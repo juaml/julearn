@@ -3,7 +3,7 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL
 
-from typing import Any, Dict
+from typing import Any
 
 from ..utils import logger
 from .available_searchers import _recreate_reset_copy, register_searcher
@@ -62,8 +62,8 @@ def is_optuna_valid_distribution(obj: Any) -> bool:
 
 
 def _prepare_optuna_hyperparameters_distributions(
-    params_to_tune: Dict[str, Any],
-) -> Dict[str, Any]:
+    params_to_tune: dict[str, Any],
+) -> dict[str, Any]:
     """Prepare hyperparameters distributions for OptunaSearchCV.
 
     This method replaces tuples with distributions for OptunaSearchCV

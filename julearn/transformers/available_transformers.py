@@ -5,7 +5,7 @@
 # License: AGPL
 
 from copy import deepcopy
-from typing import Any, List
+from typing import Any
 
 from sklearn.decomposition import PCA
 from sklearn.feature_selection import (
@@ -65,7 +65,7 @@ _available_transformers = {
 _available_transformers_reset = deepcopy(_available_transformers)
 
 
-def list_transformers() -> List[str]:
+def list_transformers() -> list[str]:
     """List all the available transformers.
 
     Returns

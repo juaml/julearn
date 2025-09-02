@@ -33,7 +33,7 @@ class Fish(BaseEstimator, TransformerMixin):
 
     def fit(
         self,
-        X: DataLike,
+        X: DataLike,  # noqa: N803
         y: Optional[DataLike] = None,
     ) -> "Fish":
         """Fit the fish.

@@ -4,7 +4,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Any, Dict, Optional, Union, cast
+from typing import Any, Optional, Union, cast
 
 import numpy as np
 import pandas as pd
@@ -452,7 +452,7 @@ class WrapModel(JuBaseEstimator):
         """Get the classes of the model."""
         return self.model_.classes_
 
-    def get_params(self, deep: bool = True) -> Dict[str, Any]:
+    def get_params(self, deep: bool = True) -> dict[str, Any]:
         """Get the parameters of the model.
 
         Parameters
@@ -492,7 +492,7 @@ class WrapModel(JuBaseEstimator):
 
         """
         model_params = list(self.model.get_params(True).keys())
-        kwargs = cast("Dict[str, Any]", kwargs)
+        kwargs = cast("dict[str, Any]", kwargs)
         for param, val in kwargs.items():
             if param in model_params:
                 self.model.set_params(**{param: val})

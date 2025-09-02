@@ -4,7 +4,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import List, Optional, Tuple, Union
+from typing import Optional, Union
 
 import numpy as np
 import pandas as pd
@@ -63,7 +63,7 @@ class ConfoundRemover(JuTransformer):
         threshold: Optional[float] = None,
         keep_confounds: bool = False,
         row_select_col_type: Optional[ColumnTypesLike] = None,
-        row_select_vals: Optional[Union[str, int, List, bool]] = None,
+        row_select_vals: Optional[Union[str, int, list, bool]] = None,
     ):
         if model_confound is None:
             model_confound = LinearRegression()  # type: ignore
@@ -80,7 +80,7 @@ class ConfoundRemover(JuTransformer):
 
     def _fit(
         self,
-        X: pd.DataFrame,
+        X: pd.DataFrame,  # noqa: N803
         y: Optional[DataLike] = None,
     ) -> "ConfoundRemover":
         """Fit ConfoundRemover.
@@ -178,8 +178,8 @@ class ConfoundRemover(JuTransformer):
             return self.support_mask_  # type: ignore
 
     def get_feature_names_out(
-        self, input_features: Optional[List[str]] = None
-    ) -> List[str]:
+        self, input_features: Optional[list[str]] = None
+    ) -> list[str]:
         """Get names of features to be returned.
 
         Parameters
@@ -206,7 +206,7 @@ class ConfoundRemover(JuTransformer):
     def _split_into_X_confound(
         self,
         X: pd.DataFrame,  # noqa: N803
-    ) -> Tuple[pd.DataFrame, pd.DataFrame]:
+    ) -> tuple[pd.DataFrame, pd.DataFrame]:
         """Split the original X into the features (X) and confounds.
 
         Parameters

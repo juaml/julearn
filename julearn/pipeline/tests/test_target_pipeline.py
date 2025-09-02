@@ -19,7 +19,7 @@ from julearn.transformers.target import JuTargetTransformer
 
 
 def test_target_pipeline_sklearn(
-    X_iris: pd.DataFrame,
+    X_iris: pd.DataFrame,  # noqa: N803
     y_iris: pd.Series,
 ) -> None:
     """Test the target pipeline using a scikit-learn transformer.
@@ -47,7 +47,7 @@ def test_target_pipeline_sklearn(
 
 
 def test_target_pipeline_jutargettransformer(
-    X_iris: pd.DataFrame,
+    X_iris: pd.DataFrame,  # noqa: N803
     y_iris: pd.Series,
 ) -> None:
     """Test the target pipeline using a JuTargetTransformer.
@@ -64,7 +64,7 @@ def test_target_pipeline_jutargettransformer(
     class MedianSplitter(JuTargetTransformer):
         def fit(
             self,
-            X: pd.DataFrame,
+            X: pd.DataFrame,  # noqa: N803
             y: pd.Series,
         ) -> "MedianSplitter":
             self.median = np.median(y)
@@ -72,7 +72,7 @@ def test_target_pipeline_jutargettransformer(
 
         def transform(
             self,
-            X: pd.DataFrame,
+            X: pd.DataFrame,  # noqa: N803
             y: pd.Series,
         ) -> pd.Series:
             return (y > self.median).astype(int)
@@ -90,7 +90,7 @@ def test_target_pipeline_jutargettransformer(
 
 
 def test_target_pipeline_multiple_ju_sk(
-    X_iris: pd.DataFrame,
+    X_iris: pd.DataFrame,  # noqa: N803
     y_iris: pd.Series,
 ) -> None:
     """Test the target pipeline using JuTargetTransformer and sklearn.
@@ -107,7 +107,7 @@ def test_target_pipeline_multiple_ju_sk(
     class DeMeaner(JuTargetTransformer):
         def fit(
             self,
-            X: pd.DataFrame,
+            X: pd.DataFrame,  # noqa: N803
             y: pd.Series,
         ) -> "DeMeaner":
             self.mean = np.mean(X.iloc[:, 0].values)  # type: ignore
@@ -115,7 +115,7 @@ def test_target_pipeline_multiple_ju_sk(
 
         def transform(
             self,
-            X: pd.DataFrame,
+            X: pd.DataFrame,  # noqa: N803
             y: pd.Series,
         ) -> pd.Series:
             return y - self.mean  # type: ignore
@@ -137,7 +137,7 @@ def test_target_pipeline_multiple_ju_sk(
 
 
 def test_target_pipeline_multiple_sk_ju(
-    X_iris: pd.DataFrame,
+    X_iris: pd.DataFrame,  # noqa: N803
     y_iris: pd.Series,
 ) -> None:
     """Test the target pipeline using sklearn and JuTargetTransformer.
@@ -154,7 +154,7 @@ def test_target_pipeline_multiple_sk_ju(
     class DeMeaner(JuTargetTransformer):
         def fit(
             self,
-            X: pd.DataFrame,
+            X: pd.DataFrame,  # noqa: N803
             y: pd.Series,
         ) -> "DeMeaner":
             self.mean = np.mean(X.iloc[:, 0].values)  # type: ignore
@@ -162,7 +162,7 @@ def test_target_pipeline_multiple_sk_ju(
 
         def transform(
             self,
-            X: pd.DataFrame,
+            X: pd.DataFrame,  # noqa: N803
             y: pd.Series,
         ) -> pd.Series:
             return y - self.mean  # type: ignore

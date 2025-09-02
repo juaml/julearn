@@ -3,7 +3,7 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
-from typing import Dict, Optional
+from typing import Optional
 
 import pandas as pd
 import pytest
@@ -14,7 +14,7 @@ from julearn.transformers.dataframe import SetColumnTypes
 
 def test_SetColumnTypes(
     X_iris: pd.DataFrame,  # noqa: N803
-    X_types_iris: Optional[Dict],  # noqa: N803
+    X_types_iris: Optional[dict],  # noqa: N803
 ) -> None:
     """Test SetColumnTypes.
 
@@ -66,7 +66,7 @@ def test_SetColumnTypes_input_validation(
 
 def test_SetColumnTypes_array(
     X_iris: pd.DataFrame,  # noqa: N803
-    X_types_iris: Optional[Dict],  # noqa:  N803
+    X_types_iris: Optional[dict],  # noqa:  N803
 ) -> None:
     """Test SetColumnTypes.
 

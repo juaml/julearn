@@ -4,7 +4,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import List, Optional
+from typing import Optional
 
 import pandas as pd
 from sklearn.pipeline import Pipeline
@@ -14,7 +14,7 @@ from ..utils import raise_error
 
 def preprocess(
     pipeline: Pipeline,
-    X: List[str],  # noqa: N803
+    X: list[str],  # noqa: N803
     data: pd.DataFrame,
     until: Optional[str] = None,
     with_column_types: bool = False,

@@ -5,7 +5,7 @@
 # License: AGPL
 
 import re
-from typing import Dict, List, Optional, Union
+from typing import Optional, Union
 
 import pandas as pd
 
@@ -35,7 +35,7 @@ class SetColumnTypes(JuTransformer):
 
     def __init__(
         self,
-        X_types: Optional[Dict[str, List[str]]] = None,  # noqa: N803
+        X_types: Optional[dict[str, list[str]]] = None,  # noqa: N803
         row_select_col_type: Optional[ColumnTypesLike] = None,
         row_select_vals: Optional[Union[str, int, list, bool]] = None,
     ):
@@ -59,7 +59,7 @@ class SetColumnTypes(JuTransformer):
 
     def _fit(
         self,
-        X: pd.DataFrame,
+        X: pd.DataFrame,  # noqa: N803
         y: Optional[DataLike] = None,
     ) -> "SetColumnTypes":
         """Fit the transformer.
@@ -130,8 +130,8 @@ class SetColumnTypes(JuTransformer):
         return X
 
     def get_feature_names_out(
-        self, input_features: Optional[List[str]] = None
-    ) -> List[str]:
+        self, input_features: Optional[list[str]] = None
+    ) -> list[str]:
         """Get names of features to be returned.
 
         Parameters

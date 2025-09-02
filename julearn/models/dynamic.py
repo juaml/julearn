@@ -87,7 +87,7 @@ class DynamicSelection(BaseEstimator):
 
     def fit(
         self,
-        X: DataLike,
+        X: DataLike,  # noqa: N803
         y: DataLike,
     ) -> "DynamicSelection":
         """Fit the model.

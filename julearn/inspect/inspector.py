@@ -4,7 +4,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import TYPE_CHECKING, List, Optional, Union
+from typing import TYPE_CHECKING, Optional, Union
 
 import pandas as pd
 from sklearn.model_selection import BaseCrossValidator
@@ -46,7 +46,7 @@ class Inspector:
         model: Union[
             str,
             "PipelineCreator",
-            List["PipelineCreator"],
+            list["PipelineCreator"],
             "BaseEstimator",
             None,
         ] = None,

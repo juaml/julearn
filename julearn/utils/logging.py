@@ -10,7 +10,7 @@ import warnings
 from distutils.version import LooseVersion
 from pathlib import Path
 from subprocess import PIPE, Popen, TimeoutExpired
-from typing import Dict, NoReturn, Optional, Type, Union
+from typing import NoReturn, Optional, Union
 
 
 logger = logging.getLogger("julearn")
@@ -48,7 +48,7 @@ def _get_git_head(path: Path) -> str:
     return proc_stdout
 
 
-def get_versions() -> Dict:
+def get_versions() -> dict:
     """Import stuff and get versions if module.
 
     Returns
@@ -77,7 +77,7 @@ def get_versions() -> Dict:
     return module_versions
 
 
-def _safe_log(versions: Dict, name: str) -> None:
+def _safe_log(versions: dict, name: str) -> None:
     """Log with safety.
 
     Parameters
@@ -200,7 +200,7 @@ def _close_handlers(logger: logging.Logger) -> None:
 
 def raise_error(
     msg: str,
-    klass: Type[Exception] = ValueError,
+    klass: type[Exception] = ValueError,
     exception: Optional[Exception] = None,
 ) -> NoReturn:
     """Raise error, but first log it.
@@ -222,7 +222,7 @@ def raise_error(
         raise klass(msg)
 
 
-def warn_with_log(msg: str, category: Type[Warning] = RuntimeWarning) -> None:
+def warn_with_log(msg: str, category: type[Warning] = RuntimeWarning) -> None:
     """Warn, but first log it.
 
     Parameters

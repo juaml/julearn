@@ -24,7 +24,7 @@ class JuTargetTransformer:
 
     def fit_transform(
         self,
-        X: pd.DataFrame,
+        X: pd.DataFrame,  # noqa: N803
         y: DataLike,
     ) -> DataLike:
         """Fit and transform the target.
@@ -46,7 +46,7 @@ class JuTargetTransformer:
 
     def fit(
         self,
-        X: pd.DataFrame,
+        X: pd.DataFrame,  # noqa: N803
         y: DataLike,
     ) -> "JuTargetTransformer":
         """Fit the target.
@@ -68,7 +68,7 @@ class JuTargetTransformer:
 
     def transform(
         self,
-        X: pd.DataFrame,
+        X: pd.DataFrame,  # noqa: N803
         y: DataLike,
     ) -> DataLike:
         """Transform the target.

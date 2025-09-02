@@ -5,7 +5,7 @@
 # License: AGPL
 
 import warnings
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Optional, Union
 
 import numpy as np
 import pandas as pd
@@ -177,14 +177,14 @@ def compare_models(  # noqa: C901, pragma: no cover
 
 
 def do_scoring_test(
-    X: List[str],  # noqa: N803
+    X: list[str],  # noqa: N803
     y: str,
     data: pd.DataFrame,
-    api_params: Dict[str, Any],
+    api_params: dict[str, Any],
     sklearn_model: Union[EstimatorLike, ModelLike, Any],  # TODO: fix
-    scorers: List[str],
+    scorers: list[str],
     groups: Optional[str] = None,
-    X_types: Optional[Dict[str, List[str]]] = None,  # noqa: N803
+    X_types: Optional[dict[str, list[str]]] = None,  # noqa: N803
     cv: Union[int, BaseCrossValidator] = 5,
     sk_y: Optional[np.ndarray] = None,
     decimal: int = 5,

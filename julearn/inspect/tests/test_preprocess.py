@@ -4,7 +4,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import List, Optional, cast
+from typing import Optional, cast
 
 import pandas as pd
 import pytest
@@ -59,7 +59,7 @@ def test_preprocess_sklearn(
     X_iris: pd.DataFrame,  # noqa: N803
     y_iris: pd.Series,
     pipeline: Pipeline,
-    transformers: List[TransformerLike],
+    transformers: list[TransformerLike],
     until: Optional[str],
 ) -> None:
     """Test the preprocess function.
@@ -79,7 +79,7 @@ def test_preprocess_sklearn(
 
     """
     X = list(X_iris.columns)
-    X = cast("List[str]", X)
+    X = cast("list[str]", X)
     pipeline.fit(X_iris, y=y_iris)
 
     X_train = X_iris.copy()
@@ -111,7 +111,7 @@ def test_preprocess_sklearn_nodataframe(
 
     """
     X = list(X_iris.columns)
-    X = cast("List[str]", X)
+    X = cast("list[str]", X)
     pipeline = Pipeline([("scaler", StandardScaler()), ("svm", SVC())])
     pipeline.fit(X_iris, y=y_iris)
 

@@ -4,7 +4,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Any, Dict, Type
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -68,8 +68,8 @@ from julearn.utils.typing import ModelLike
 def test_naive_bayes_estimators(
     df_iris: pd.DataFrame,
     model_name: str,
-    model_class: Type[ModelLike],
-    model_params: Dict[str, Any],
+    model_class: type[ModelLike],
+    model_params: dict[str, Any],
 ) -> None:
     """Test all naive bayes estimators.
 
@@ -195,8 +195,8 @@ def test_naive_bayes_estimators(
 def test_classificationestimators(
     df_binary: pd.DataFrame,
     model_name: str,
-    model_class: Type[ModelLike],
-    model_params: Dict,
+    model_class: type[ModelLike],
+    model_params: dict,
 ) -> None:
     """Test all classification estimators.
 
@@ -296,8 +296,8 @@ def test_classificationestimators(
 def test_regression_estimators(
     df_binary: pd.DataFrame,
     model_name: str,
-    model_class: Type[ModelLike],
-    model_params: Dict,
+    model_class: type[ModelLike],
+    model_params: dict,
 ) -> None:
     """Test all regression estimators.
 
