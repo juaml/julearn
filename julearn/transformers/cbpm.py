@@ -8,6 +8,7 @@
 from typing import Callable, Optional
 
 import numpy as np
+import sklearn
 from joblib import Parallel, delayed
 from scipy.stats import pearsonr
 from sklearn.base import BaseEstimator, TransformerMixin
@@ -135,7 +136,11 @@ class CBPM(BaseEstimator, TransformerMixin):
             The fitted transformer.
 
         """
-        X, y = self._validate_data(X, y)  # type: ignore
+        # check sklearn changelog
+        if sklearn.__version__ < "1.6.0":
+            X, y = self._validate_data(X, y)
+        else:
+            X, y = sklearn.utils.validation.validate_data(self, X=X, y=y)
 
         # compute correlations using joblib
         self.X_y_correlations_ = np.array(
@@ -175,8 +180,11 @@ class CBPM(BaseEstimator, TransformerMixin):
             The transformed features.
 
         """
-
-        X = self._validate_data(X)  # type: ignore
+        # check sklearn changelog
+        if sklearn.__version__ < "1.6.0":
+            X = self._validate_data(X)
+        else:
+            X = sklearn.utils.validation.validate_data(self, X=X)
 
         if not any(self.used_significant_mask_):
             out = np.ones(X.shape[0]) * self.y_mean_
