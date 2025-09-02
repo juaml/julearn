@@ -79,7 +79,9 @@ class ConfoundRemover(JuTransformer):
         )
 
     def _fit(
-        self, X: pd.DataFrame, y: Optional[DataLike] = None  # noqa: N803
+        self,
+        X: pd.DataFrame,
+        y: Optional[DataLike] = None,
     ) -> "ConfoundRemover":
         """Fit ConfoundRemover.
 
@@ -112,7 +114,9 @@ class ConfoundRemover(JuTransformer):
             return _model  # type: ignore
 
         self.models_confound_ = df_X.apply(
-            fit_confound_models, axis=0, result_type="reduce"  # type: ignore
+            fit_confound_models,
+            axis=0,
+            result_type="reduce",  # type: ignore
         )
         return self
 
@@ -169,9 +173,7 @@ class ConfoundRemover(JuTransformer):
 
         """
         if indices:
-            return np.arange(len(self.support_mask_))[
-                self.support_mask_
-            ]  # type: ignore
+            return np.arange(len(self.support_mask_))[self.support_mask_]  # type: ignore
         else:
             return self.support_mask_  # type: ignore
 
@@ -202,7 +204,8 @@ class ConfoundRemover(JuTransformer):
         return out  # type: ignore
 
     def _split_into_X_confound(
-        self, X: pd.DataFrame  # noqa: N803
+        self,
+        X: pd.DataFrame,  # noqa: N803
     ) -> Tuple[pd.DataFrame, pd.DataFrame]:
         """Split the original X into the features (X) and confounds.
 

@@ -30,6 +30,7 @@ effectively and interpret their outputs with greater confidence.
 Let's start by importing some useful utilities:
 
 """
+
 from pprint import pprint
 import seaborn as sns
 import numpy as np
@@ -139,9 +140,7 @@ print(fold_predictions)
 c_values = []
 for fold_inspector in inspector.folds:
     fold_model = fold_inspector.model
-    c_values.append(
-        fold_model.get_fitted_params()["svm__C"]
-    )
+    c_values.append(fold_model.get_fitted_params()["svm__C"])
 
 ##############################################################################
 # By printing out the unique values in the ``c_values`` list, we realize, that

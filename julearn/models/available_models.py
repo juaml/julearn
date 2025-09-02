@@ -178,8 +178,7 @@ def get_model(name: str, problem_type: str, **kwargs: Any) -> ModelLike:
 
     if problem_type not in _available_models[name]:
         raise_error(
-            f"The specified model ({name})) is not suitable for"
-            f"{problem_type}"
+            f"The specified model ({name})) is not suitable for {problem_type}"
         )
     out = _available_models[name][problem_type](**kwargs)  # type: ignore
     return out

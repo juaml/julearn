@@ -54,7 +54,9 @@ class TargetConfoundRemover(JuTargetTransformer):
         return self.confounds
 
     def fit(
-        self, X: pd.DataFrame, y: pd.Series  # noqa: N803
+        self,
+        X: pd.DataFrame,
+        y: pd.Series,
     ) -> "TargetConfoundRemover":
         """Fit ConfoundRemover.
 
@@ -78,7 +80,9 @@ class TargetConfoundRemover(JuTargetTransformer):
         return self
 
     def transform(
-        self, X: pd.DataFrame, y: pd.Series  # noqa: N803
+        self,
+        X: pd.DataFrame,
+        y: pd.Series,
     ) -> pd.Series:
         """Remove confounds from the target.
 

@@ -78,6 +78,6 @@ def check_scores_df(
     named_scores = []
     for i, score in enumerate(scores):
         if "model" not in score:
-            score["model"] = f"model_{i+1}"
+            score["model"] = f"model_{i + 1}"
         named_scores.append(score)
     return named_scores

@@ -4,7 +4,6 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-
 import hashlib
 import inspect
 import json
@@ -62,7 +61,6 @@ def _compute_cvmdsum(cv):
     if isinstance(cv, PredefinedSplit):
         params["test_fold"] = params["test_fold"].tolist()
         params["unique_folds"] = params["unique_folds"].tolist()
-
 
     if "cv" in params:
         if inspect.isclass(params["cv"]):

@@ -3,7 +3,8 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL
 
-from typing import TYPE_CHECKING, Generator, Optional, Tuple
+from collections.abc import Generator
+from typing import TYPE_CHECKING, Optional, Tuple
 
 import numpy as np
 

@@ -424,7 +424,8 @@ def check_consistency(
 
 
 def _check_x_types(
-    X_types: Optional[Dict], X: List[str]  # noqa: N803
+    X_types: Optional[Dict],
+    X: List[str],  # noqa: N803
 ) -> Dict[str, List]:
     """Check validity of X_types with respect to X.
 
@@ -514,7 +515,7 @@ def _check_x_types(
 
 
 def prepare_search_params(
-    search_params: Optional[Dict[str, Any]]
+    search_params: Optional[Dict[str, Any]],
 ) -> Dict[str, Any]:
     """Prepare the parameters for the search.
 

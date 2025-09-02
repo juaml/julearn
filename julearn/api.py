@@ -283,9 +283,7 @@ def _validata_api_params(  # noqa: C901
         elif preprocess is None:
             pipeline_creator = PipelineCreator(problem_type=problem_type)
         else:
-            raise_error(
-                "preprocess has to be a string or a " "list of strings."
-            )
+            raise_error("preprocess has to be a string or a list of strings.")
 
         # Add the model to the pipeline creator
         t_params = {}
@@ -316,7 +314,7 @@ def _validata_api_params(  # noqa: C901
                 unused_params.append(t_param)
         if len(unused_params) > 0:
             raise_error(
-                "The following model_params are incorrect: " f"{unused_params}"
+                f"The following model_params are incorrect: {unused_params}"
             )
         has_target_transformer = pipeline_creator._added_target_transformer
         pipeline = pipeline_creator.to_pipeline(

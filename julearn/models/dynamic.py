@@ -86,7 +86,9 @@ class DynamicSelection(BaseEstimator):
         self._ds_params = kwargs
 
     def fit(
-        self, X: DataLike, y: DataLike  # noqa: N803
+        self,
+        X: DataLike,
+        y: DataLike,
     ) -> "DynamicSelection":
         """Fit the model.
 

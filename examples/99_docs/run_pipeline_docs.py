@@ -43,6 +43,7 @@ compatible learning algorithm. However, ``julearn`` provides a list of built-in
 
 Let's first specify the data parameters as we learned in :ref:`data_usage`:
 """
+
 from julearn import run_cross_validation
 from seaborn import load_dataset
 

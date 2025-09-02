@@ -42,7 +42,9 @@ class JuTargetPipeline:
         self.steps = steps
 
     def fit_transform(
-        self, X: pd.DataFrame, y: DataLike  # noqa: N803
+        self,
+        X: pd.DataFrame,
+        y: DataLike,
     ) -> DataLike:
         """Fit and transform the target.
 
@@ -62,7 +64,9 @@ class JuTargetPipeline:
         return self.fit(X, y).transform(X, y)
 
     def fit(
-        self, X: pd.DataFrame, y: DataLike  # noqa: N803
+        self,
+        X: pd.DataFrame,
+        y: DataLike,
     ) -> "JuTargetPipeline":
         """Fit the target pipeline.
 
@@ -89,7 +93,9 @@ class JuTargetPipeline:
         return self
 
     def transform(
-        self, X: pd.DataFrame, y: DataLike  # noqa: N803
+        self,
+        X: pd.DataFrame,
+        y: DataLike,
     ) -> DataLike:
         """Transform the target.
 
@@ -116,7 +122,9 @@ class JuTargetPipeline:
         return y
 
     def inverse_transform(
-        self, X: pd.DataFrame, y: DataLike  # noqa: N803
+        self,
+        X: pd.DataFrame,
+        y: DataLike,
     ) -> DataLike:
         """Inverse transform the target.
 

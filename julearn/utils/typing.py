@@ -4,10 +4,10 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
+from collections.abc import Iterable
 from typing import (
     Any,
     Dict,
-    Iterable,
     Optional,
     Protocol,
     Union,

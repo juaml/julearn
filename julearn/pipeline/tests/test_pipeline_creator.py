@@ -101,9 +101,7 @@ def test_construction_working_nowrapping(
         _preprocess, (name, transformer) = element
         assert name.startswith(f"{_preprocess}")
         assert not isinstance(transformer, JuColumnTransformer)
-        assert isinstance(
-            transformer, get_transformer(_preprocess).__class__
-        )
+        assert isinstance(transformer, get_transformer(_preprocess).__class__)
 
     # check model step
     model_name, model = pipeline.steps[-1]
@@ -116,7 +114,6 @@ def test_construction_working_nowrapping(
         ).__class__,
     )
     assert len(preprocess) + 2 == len(pipeline.steps)
-
 
 
 def test_fit_and_transform_no_error(

@@ -124,6 +124,8 @@ def merge_pipelines(
 
     # Finally, we will concatenate the grids and create a new searcher.
     new_searcher = _prepare_hyperparameter_tuning(
-        all_grids, search_params, reference_pipeline  # type: ignore
+        all_grids,
+        search_params,
+        reference_pipeline,  # type: ignore
     )
     return new_searcher

@@ -89,6 +89,7 @@ samples per bin. Let's see an example using a uniform distribution, creating
 200 samples and 10 bins.
 
 """
+
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns

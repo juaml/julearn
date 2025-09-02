@@ -49,7 +49,9 @@ class ChangeColumnTypes(JuTransformer):
         )
 
     def _fit(
-        self, X: pd.DataFrame, y: Optional[DataLike] = None  # noqa: N803
+        self,
+        X: pd.DataFrame,
+        y: Optional[DataLike] = None,
     ) -> "ChangeColumnTypes":
         """Fit the transformer.
 
