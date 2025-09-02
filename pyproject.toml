@@ -228,3 +228,31 @@ showcontent = true
 [tool.towncrier.fragment.change]
 name = "API Changes"
 showcontent = true
+
+[tool.coverage.paths]
+source = [
+    "julearn",
+    "*/site-packages/julearn",
+]
+
+[tool.coverage.run]
+branch = true
+omit = [
+    "*/setup.py",
+    "*/_version.py",
+    "*/tests/*",
+    "*/utils/typing.py",
+    "*/viz/*",
+    "*/external/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    # Have to re-enable the standard pragma
+    "pragma: no cover",
+    # Type checking if statements should not be considered
+    "if TYPE_CHECKING:",
+    # Don't complain if non-runnable code isn't run:
+    "if __name__ == .__main__.:",
+]
+precision = 2
