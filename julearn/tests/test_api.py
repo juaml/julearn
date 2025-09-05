@@ -11,6 +11,7 @@ import joblib
 import numpy as np
 import pandas as pd
 import pytest
+import sklearn
 from sklearn.base import clone
 from sklearn.datasets import make_regression
 from sklearn.model_selection import (
@@ -530,15 +531,27 @@ def test_tune_hyperparam_gridsearch_groups(df_iris: pd.DataFrame) -> None:
     clf = make_pipeline(SVC())
     gs = GridSearchCV(clf, {"svc__C": [0.01, 0.001]}, cv=cv_inner)
 
-    expected = cross_validate(
-        gs,
-        sk_X,
-        sk_y,  # type: ignore
-        cv=cv_outer,
-        scoring=[scoring],
-        groups=sk_groups,  # type: ignore
-        fit_params={"groups": sk_groups},
-    )
+    # check sklearn changelog
+    if sklearn.__version__ < "1.6.0":
+        expected = cross_validate(
+            gs,
+            sk_X,
+            sk_y,  # type: ignore
+            cv=cv_outer,
+            scoring=[scoring],
+            groups=sk_groups,
+            fit_params={"groups": sk_groups},
+        )
+    else:
+        expected = cross_validate(
+            gs,
+            sk_X,
+            sk_y,  # type: ignore
+            cv=cv_outer,
+            scoring=[scoring],
+            groups=sk_groups,
+            params={"groups": sk_groups},
+        )
 
     assert len(actual.columns) == len(expected) + 5  # type: ignore
     assert len(actual["test_accuracy"]) == len(  # type: ignore
