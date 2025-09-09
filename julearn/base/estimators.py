@@ -503,3 +503,9 @@ class WrapModel(JuBaseEstimator):
     @property
     def _estimator_type(self):
         return getattr(self.model, "_estimator_type", None)
+
+    def __sklearn_tags__(self) -> dict[str, Any]:
+        """Get sklearn tags for the wrapped model."""
+        if hasattr(self.model, "__sklearn_tags__"):
+            return self.model.__sklearn_tags__()
+        return {}
