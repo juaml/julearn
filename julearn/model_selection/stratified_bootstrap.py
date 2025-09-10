@@ -175,8 +175,8 @@ class StratifiedBootstrap(_MetadataRequester, _UnsupportedGroupCVMixin):
             Returns the number of splitting iterations in the cross-validator.
 
         """
-        return self.n_splits
+        return self.n_splits  # pragma: no cover
 
     def __repr__(self) -> str:
         """Object representation."""
-        return _build_repr(self)
+        return _build_repr(self)  # pragma: no cover
