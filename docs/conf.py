@@ -52,11 +52,11 @@ release = get_scm_version(
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    "gh_substitutions",
     # Built-in extensions:
     "sphinx.ext.autodoc",  # include documentation from docstrings
     "sphinx.ext.autosummary",  # generate autodoc summaries
     "sphinx.ext.doctest",  # test snippets in the documentation
+    "sphinx.ext.extlinks",  # markup to shorten external links
     "sphinx.ext.intersphinx",  # link to other projects` documentation
     "sphinx.ext.mathjax",  # math support for HTML outputs in Sphinx
     # Third-party extensions:
@@ -179,6 +179,11 @@ intersphinx_mapping = {
     ),
 }
 
+# -- sphinx.ext.extlinks configuration ---------------------------------------
+
+extlinks = {
+    "gh": (f"{github_repo_url}/issues/%s", "#%s"),
+}
 
 # -- numpydoc configuration --------------------------------------------------
 
