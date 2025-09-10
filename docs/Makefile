@@ -20,23 +20,14 @@ clean:
 	rm -rf api/generated/
 
 # For local build
-local: news
-	make _build_local; STATUS=$$?; make news_cleanup; exit $$STATUS
-
-news:
-	@echo "Generating whats_new.rst"
-	cd ../ && towncrier build --keep
-
-news_cleanup:
-	@echo "Cleaning up whats_new.rst"
-	git restore --staged whats_new.rst
-	git restore whats_new.rst
+local:
+	make _build_local; STATUS=$$?; exit $$STATUS
 
 _build_local:
 	sphinx-build "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
-html: news
-	make _html; STATUS=$$?; make news_cleanup; exit $$STATUS
+html:
+	make _html; STATUS=$$?; exit $$STATUS
 
 _html:
 	$(SPHINXBUILD) "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS)
