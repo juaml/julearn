@@ -64,7 +64,7 @@ def get_versions() -> dict:
 
     """
     module_versions = {}
-    for name, module in sys.modules.items():
+    for name, module in sys.modules.copy().items():
         if "." in name:
             continue
         if name in ["_curses"]:
