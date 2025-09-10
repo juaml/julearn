@@ -10,6 +10,16 @@ from sklearn.datasets import make_classification
 from julearn.model_selection import StratifiedBootstrap
 
 
+def test_stratified_bootstrap_error() -> None:
+    """Test stratified bootstrap error."""
+    X, y = make_classification(n_samples=1, n_classes=1)
+    with pytest.raises(
+        ValueError, match="The least populated class in y has only 1"
+    ):
+        cv = StratifiedBootstrap()
+        list(cv.split(X, y))
+
+
 @pytest.mark.parametrize(
     "n_classes, n_splits",
     [
