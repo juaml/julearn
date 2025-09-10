@@ -109,7 +109,7 @@ class StratifiedBootstrap(_MetadataRequester, _UnsupportedGroupCVMixin):
 
         classes, y_indices = np.unique(y, return_inverse=True)
         n_classes = classes.shape[0]
-        # breakpoint()
+
         class_counts = np.bincount(y_indices)
         if np.min(class_counts) < 2:
             raise ValueError(

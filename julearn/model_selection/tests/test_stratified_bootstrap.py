@@ -1,46 +1,71 @@
 """Provides tests for the stratified bootstrap CV generator."""
 
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
+#          Synchon Mandal <s.mandal@fz-juelich.de>
 # License: AGPL
 
-import numpy as np
 import pytest
+from sklearn.datasets import make_classification
 
 from julearn.model_selection import StratifiedBootstrap
 
 
 @pytest.mark.parametrize(
-    "n_classes, test_size",
+    "n_classes, n_splits",
     [
-        (3, 0.2),
-        (2, 0.5),
-        (4, 0.8),
+        (2, 50),
+        (2, 100),
+        (2, 200),
+        (3, 50),
+        (3, 100),
+        (3, 200),
+        (4, 50),
+        (4, 100),
+        (4, 200),
+        (5, 50),
+        (5, 100),
+        (5, 200),
+        (6, 50),
+        (6, 100),
+        (6, 200),
+        (7, 50),
+        (7, 100),
+        (7, 200),
+        (8, 50),
+        (8, 100),
+        (8, 200),
+        (9, 50),
+        (9, 100),
+        (9, 200),
+        (10, 50),
+        (10, 100),
+        (10, 200),
     ],
 )
-def test_stratified_bootstrap(n_classes: int, test_size: float) -> None:
+def test_stratified_bootstrap(n_classes: int, n_splits: int) -> None:
     """Test stratified bootstrap CV generator.
 
     Parameters
     ----------
     n_classes : int
-        Number of classes.
-    test_size : float
-        Test size.
+        The parametrized number of classes (or strata).
+    n_splits : int
+        The parametrized number of splits.
 
     """
-    n_samples = 100
-    X = np.random.rand(n_samples, 2)
-
-    y = np.random.randint(0, n_classes, n_samples)
-
-    cv = StratifiedBootstrap(n_splits=10, test_size=test_size)
-
-    for train, test in cv.split(X, y):
-        y_train = y[train]
-        y_test = y[test]
-        for i in range(n_classes):
-            n_y = (y == i).sum()
-            n_y_train = (y_train == i).sum()
-            n_y_test = (y_test == i).sum()
-            assert abs(n_y_train - (n_y * (1 - test_size))) < 1
-            assert abs(n_y_test - (n_y * test_size)) < 1
+    samples = 100 * n_classes
+    X, y = make_classification(
+        n_samples=samples,
+        n_features=n_classes * 10,
+        n_informative=n_classes,
+        n_redundant=0,
+        n_repeated=0,
+        n_classes=n_classes,
+    )
+    cv = StratifiedBootstrap(n_splits=n_splits, random_state=42)
+    # Check splits
+    results = list(cv.split(X, y))
+    assert len(results) == n_splits
+    # Check train and test indices are disjoint
+    for train_idxs, test_idxs in cv.split(X, y):
+        assert frozenset(train_idxs).isdisjoint(test_idxs)
