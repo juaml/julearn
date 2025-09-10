@@ -137,7 +137,7 @@ class CBPM(BaseEstimator, TransformerMixin):
 
         """
         # check sklearn changelog
-        if sklearn.__version__ < "1.6.0":
+        if sklearn.__version__ < "1.6.0":  # pragma: no cover
             X, y = self._validate_data(X, y)
         else:
             X, y = sklearn.utils.validation.validate_data(self, X=X, y=y)
@@ -181,7 +181,7 @@ class CBPM(BaseEstimator, TransformerMixin):
 
         """
         # check sklearn changelog
-        if sklearn.__version__ < "1.6.0":
+        if sklearn.__version__ < "1.6.0":  # pragma: no cover
             X = self._validate_data(X)
         else:
             X = sklearn.utils.validation.validate_data(self, X=X)

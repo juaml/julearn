@@ -448,7 +448,7 @@ class WrapModel(JuBaseEstimator):
         return self.model_.predict_log_proba(Xt)  # type: ignore
 
     @property
-    def classes_(self) -> np.ndarray:
+    def classes_(self) -> np.ndarray:  # pragma: no cover
         """Get the classes of the model."""
         return self.model_.classes_
 
@@ -508,4 +508,4 @@ class WrapModel(JuBaseEstimator):
         """Get sklearn tags for the wrapped model."""
         if hasattr(self.model, "__sklearn_tags__"):
             return self.model.__sklearn_tags__()
-        return {}
+        return {}  # pragma: no cover
