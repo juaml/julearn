@@ -453,29 +453,18 @@ Please refer to the <a class="reference internal" href="../../what_really_need_k
 <h1>julearn.model_selection.StratifiedBootstrap<a class="headerlink" href="#julearn-model-selection-stratifiedbootstrap" title="Link to this heading">¶</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="julearn.model_selection.StratifiedBootstrap">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">julearn.model_selection.</span></span><span class="sig-name descname"><span class="pre">StratifiedBootstrap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_splits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.model_selection.StratifiedBootstrap" title="Link to this definition">¶</a></dt>
-<dd><p>Stratified Bootstrap cross-validation iterator.</p>
-<p>Provides train/test indices using resampling with replacement, respecting
-the distribution of samples for each class.</p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">julearn.model_selection.</span></span><span class="sig-name descname"><span class="pre">StratifiedBootstrap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_splits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.model_selection.StratifiedBootstrap" title="Link to this definition">¶</a></dt>
+<dd><p>Class-wise stratified bootstrap cross-validator.</p>
+<p>Provides train/test indices to split data in train/test sets.</p>
+<p>This cross-validation object returns stratified randomized folds. The folds
+are made by preserving the percentage of samples for each class in <cite>y</cite> in a
+binary or multiclass classification setting.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>n_splits</strong><span class="classifier">int, default=5</span></dt><dd><p>Number of re-shuffling &amp; splitting iterations.</p>
+<dt><strong>n_splits</strong><span class="classifier">int, default=200</span></dt><dd><p>Number of bootstrap iterations.</p>
 </dd>
-<dt><strong>test_size</strong><span class="classifier">float, int, default=0.2</span></dt><dd><p>If float, should be between 0.0 and 1.0 and represent the proportion
-of groups to include in the test split (rounded up). If int,
-represents the absolute number of test groups. If None, the value is
-set to the complement of the train size.
-The default will change in version 0.21. It will remain 0.2 only
-if <code class="docutils literal notranslate"><span class="pre">train_size</span></code> is unspecified, otherwise it will complement
-the specified <code class="docutils literal notranslate"><span class="pre">train_size</span></code>.</p>
-</dd>
-<dt><strong>train_size</strong><span class="classifier">float or int, default=None</span></dt><dd><p>If float, should be between 0.0 and 1.0 and represent the
-proportion of the groups to include in the train split. If
-int, represents the absolute number of train groups. If None,
-the value is automatically set to the complement of the test size.</p>
-</dd>
-<dt><strong>random_state</strong><span class="classifier">int or RandomState instance, default=None</span></dt><dd><p>Controls the randomness of the training and testing indices produced.
+<dt><strong>random_state</strong><span class="classifier">int or RandomState instance or None, default=None</span></dt><dd><p>Controls the randomness of the training and testing indices produced.
 Pass an int for reproducible output across multiple function calls.</p>
 </dd>
 </dl>
@@ -483,7 +472,7 @@ Pass an int for reproducible output across multiple function calls.</p>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="julearn.model_selection.StratifiedBootstrap.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_splits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.model_selection.StratifiedBootstrap.__init__" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_splits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.model_selection.StratifiedBootstrap.__init__" title="Link to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
 </dl>
 </dd></dl>
@@ -495,17 +484,13 @@ Pass an int for reproducible output across multiple function calls.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_features)</span></dt><dd><p>Training data, where n_samples is the number of samples
-and n_features is the number of features.
-Note that providing <code class="docutils literal notranslate"><span class="pre">y</span></code> is sufficient to generate the splits and
-hence <code class="docutils literal notranslate"><span class="pre">np.zeros(n_samples)</span></code> may be used as a placeholder for
-<code class="docutils literal notranslate"><span class="pre">X</span></code> instead of actual training data.</p>
+<dt><strong>X</strong><span class="classifier">array-like of shape (n_samples, n_features)</span></dt><dd><p>Training data, where <cite>n_samples</cite> is the number of samples
+and <cite>n_features</cite> is the number of features.</p>
 </dd>
-<dt><strong>y</strong><span class="classifier">array-like of shape (n_samples,) or (n_samples, n_labels)</span></dt><dd><p>The target variable for supervised learning problems.
-Stratification is done based on the y labels.</p>
+<dt><strong>y</strong><span class="classifier">array-like of shape (n_samples,)</span></dt><dd><p>The target variable for supervised learning problems.</p>
 </dd>
-<dt><strong>groups</strong><span class="classifier">array-like of shape (n_samples,), default=None</span></dt><dd><p>Group labels for stratifying the samples used while splitting the
-dataset into train/test set.</p>
+<dt><strong>groups</strong><span class="classifier">array-like of shape (n_samples,), default=None</span></dt><dd><p>Group labels for the samples used while splitting the dataset into
+train/test set.</p>
 </dd>
 </dl>
 </dd>
@@ -525,26 +510,9 @@ to an integer.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="julearn.model_selection.StratifiedBootstrap.get_metadata_routing">
-<span class="sig-name descname"><span class="pre">get_metadata_routing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#julearn.model_selection.StratifiedBootstrap.get_metadata_routing" title="Link to this definition">¶</a></dt>
-<dd><p>Get metadata routing of this object.</p>
-<p>Please check <a class="reference external" href="https://scikit-learn.org/stable/metadata_routing.html#metadata-routing" title="(in scikit-learn v1.7)"><span class="xref std std-ref">User Guide</span></a> on how the routing
-mechanism works.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><dl class="simple">
-<dt><strong>routing</strong><span class="classifier">MetadataRequest</span></dt><dd><p>A <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.utils.metadata_routing.MetadataRequest.html#sklearn.utils.metadata_routing.MetadataRequest" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetadataRequest</span></code></a> encapsulating
-routing information.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="julearn.model_selection.StratifiedBootstrap.get_n_splits">
 <span class="sig-name descname"><span class="pre">get_n_splits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">groups</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#julearn.model_selection.StratifiedBootstrap.get_n_splits" title="Link to this definition">¶</a></dt>
-<dd><p>Returns the number of splitting iterations in the cross-validator.</p>
+<dd><p>Return the number of splitting iterations in the cross-validator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
@@ -559,6 +527,23 @@ routing information.</p>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>n_splits</strong><span class="classifier">int</span></dt><dd><p>Returns the number of splitting iterations in the cross-validator.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="julearn.model_selection.StratifiedBootstrap.get_metadata_routing">
+<span class="sig-name descname"><span class="pre">get_metadata_routing</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#julearn.model_selection.StratifiedBootstrap.get_metadata_routing" title="Link to this definition">¶</a></dt>
+<dd><p>Get metadata routing of this object.</p>
+<p>Please check <a class="reference external" href="https://scikit-learn.org/stable/metadata_routing.html#metadata-routing" title="(in scikit-learn v1.7)"><span class="xref std std-ref">User Guide</span></a> on how the routing
+mechanism works.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>routing</strong><span class="classifier">MetadataRequest</span></dt><dd><p>A <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.utils.metadata_routing.MetadataRequest.html#sklearn.utils.metadata_routing.MetadataRequest" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">MetadataRequest</span></code></a> encapsulating
+routing information.</p>
 </dd>
 </dl>
 </dd>
@@ -634,8 +619,8 @@ routing information.</p>
 <li><a class="reference internal" href="#julearn.model_selection.StratifiedBootstrap"><code class="docutils literal notranslate"><span class="pre">StratifiedBootstrap</span></code></a><ul>
 <li><a class="reference internal" href="#julearn.model_selection.StratifiedBootstrap.__init__"><code class="docutils literal notranslate"><span class="pre">StratifiedBootstrap.__init__()</span></code></a></li>
 <li><a class="reference internal" href="#julearn.model_selection.StratifiedBootstrap.split"><code class="docutils literal notranslate"><span class="pre">StratifiedBootstrap.split()</span></code></a></li>
-<li><a class="reference internal" href="#julearn.model_selection.StratifiedBootstrap.get_metadata_routing"><code class="docutils literal notranslate"><span class="pre">StratifiedBootstrap.get_metadata_routing()</span></code></a></li>
 <li><a class="reference internal" href="#julearn.model_selection.StratifiedBootstrap.get_n_splits"><code class="docutils literal notranslate"><span class="pre">StratifiedBootstrap.get_n_splits()</span></code></a></li>
+<li><a class="reference internal" href="#julearn.model_selection.StratifiedBootstrap.get_metadata_routing"><code class="docutils literal notranslate"><span class="pre">StratifiedBootstrap.get_metadata_routing()</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#examples-using-julearn-model-selection-stratifiedbootstrap">Examples using <code class="docutils literal notranslate"><span class="pre">julearn.model_selection.StratifiedBootstrap</span></code></a></li>
@@ -650,7 +635,7 @@ routing information.</p>
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=5dbc789e"></script>
+</div><script src="../../_static/documentation_options.js?v=13c86f00"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
