@@ -119,7 +119,9 @@ def get_cv_scores(request, df_typed_iris):
 
     cv = RepeatedKFold(n_repeats=1, n_splits=n_iters, random_state=2)
     cv_mdsum = _compute_cvmdsum(cv)
-    df = scores(df_typed_iris, n_iters=n_iters, mock_model=mock_model)
+    df = scores(
+        df_typed_iris, n_splits=n_iters, n_repeats=1, mock_model=mock_model
+    )
     df["cv_mdsum"] = cv_mdsum
     return cv, df
 
