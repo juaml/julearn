@@ -18,7 +18,7 @@ jobs:
       with:
         # require all of history to see all tagged versions' docs
         fetch-depth: 0
-    - uses: actions/setup-python@v5
+    - uses: actions/setup-python@v6
       with:
         python-version: "3.x"
     - name: Install Python dependencies
@@ -39,7 +39,7 @@ jobs:
         make -C docs/ html
         touch docs/_build/.nojekyll
         cp docs/redirect.html docs/_build/index.html
-    - uses: peaceiris/actions-gh-pages@v3
+    - uses: peaceiris/actions-gh-pages@v4
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: docs/_build
