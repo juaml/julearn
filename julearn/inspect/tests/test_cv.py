@@ -136,7 +136,7 @@ def test_get_predictions(get_cv_scores, df_typed_iris):
     inspector = FoldsInspector(df_scores, cv=cv, X=X, y=y)
     print(df_scores)
     expected_df = pd.DataFrame(
-        {"repeat0_p0": X.index.values, "target": y.values}
+        {"target": y.values, "repeat0_p0": X.index.values}
     )
     assert_frame_equal(inspector.predict(), expected_df)
     assert_frame_equal(inspector.predict_proba(), expected_df)
