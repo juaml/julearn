@@ -11,7 +11,7 @@
         :class: sphx-glr-download-link-note
 
         :ref:`Go to the end <sphx_glr_download_auto_examples_03_complex_models_run_hyperparameter_tuning_bayessearch.py>`
-        to download the full example code
+        to download the full example code.
 
 .. rst-class:: sphx-glr-example-title
 
@@ -34,7 +34,7 @@ References
 
 .. GENERATED FROM PYTHON SOURCE LINES 16-28
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
@@ -61,7 +61,7 @@ Set the logging level to info to see extra information.
 
 .. GENERATED FROM PYTHON SOURCE LINES 30-32
 
-.. code-block:: default
+.. code-block:: Python
 
     configure_logging(level="INFO")
 
@@ -73,15 +73,15 @@ Set the logging level to info to see extra information.
 
  .. code-block:: none
 
-    /home/runner/work/julearn/julearn/julearn/utils/logging.py:66: UserWarning: The '__version__' attribute is deprecated and will be removed in MarkupSafe 3.1. Use feature detection, or `importlib.metadata.version("markupsafe")`, instead.
+    /home/runner/work/julearn/julearn/julearn/utils/logging.py:72: UserWarning: The '__version__' attribute is deprecated and will be removed in MarkupSafe 3.1. Use feature detection, or `importlib.metadata.version("markupsafe")`, instead.
       vstring = str(getattr(module, "__version__", None))
-    2025-09-11 10:45:00,578 - julearn - INFO - ===== Lib Versions =====
-    2025-09-11 10:45:00,578 - julearn - INFO - numpy: 1.26.4
-    2025-09-11 10:45:00,578 - julearn - INFO - scipy: 1.15.3
-    2025-09-11 10:45:00,578 - julearn - INFO - sklearn: 1.5.2
-    2025-09-11 10:45:00,578 - julearn - INFO - pandas: 2.2.3
-    2025-09-11 10:45:00,578 - julearn - INFO - julearn: 0.3.5.dev31
-    2025-09-11 10:45:00,579 - julearn - INFO - ========================
+    2025-09-11 10:56:25,192 - julearn - INFO - ===== Lib Versions =====
+    2025-09-11 10:56:25,192 - julearn - INFO - numpy: 1.26.4
+    2025-09-11 10:56:25,193 - julearn - INFO - scipy: 1.16.1
+    2025-09-11 10:56:25,193 - julearn - INFO - sklearn: 1.7.2
+    2025-09-11 10:56:25,193 - julearn - INFO - pandas: 2.3.2
+    2025-09-11 10:56:25,193 - julearn - INFO - julearn: 0.3.5.dev59
+    2025-09-11 10:56:25,193 - julearn - INFO - ========================
 
 
 
@@ -92,7 +92,7 @@ Set the random seed to always have the same example.
 
 .. GENERATED FROM PYTHON SOURCE LINES 34-36
 
-.. code-block:: default
+.. code-block:: Python
 
     np.random.seed(42)
 
@@ -109,7 +109,7 @@ Load the dataset.
 
 .. GENERATED FROM PYTHON SOURCE LINES 38-41
 
-.. code-block:: default
+.. code-block:: Python
 
     df_fmri = load_dataset("fmri")
     df_fmri.head()
@@ -201,7 +201,7 @@ Set the dataframe in the right format.
 
 .. GENERATED FROM PYTHON SOURCE LINES 43-50
 
-.. code-block:: default
+.. code-block:: Python
 
     df_fmri = df_fmri.pivot(
         index=["subject", "timepoint", "event"], columns="region", values="signal"
@@ -298,7 +298,7 @@ search to find the best hyperparameters for the SVM model.
 
 .. GENERATED FROM PYTHON SOURCE LINES 53-93
 
-.. code-block:: default
+.. code-block:: Python
 
     X = ["frontal", "parietal"]
     y = "event"
@@ -348,97 +348,97 @@ search to find the best hyperparameters for the SVM model.
 
  .. code-block:: none
 
-    2025-09-11 10:45:00,588 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2025-09-11 10:45:00,588 - julearn - INFO - Step added
-    2025-09-11 10:45:00,588 - julearn - INFO - Adding step svm that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2025-09-11 10:45:00,588 - julearn - INFO - Setting hyperparameter kernel = linear
-    2025-09-11 10:45:00,588 - julearn - INFO - Tuning hyperparameter C = (1e-06, 1000.0, 'log-uniform')
-    2025-09-11 10:45:00,588 - julearn - INFO - Step added
-    2025-09-11 10:45:00,588 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2025-09-11 10:45:00,588 - julearn - INFO - Step added
-    2025-09-11 10:45:00,588 - julearn - INFO - Adding step svm that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2025-09-11 10:45:00,589 - julearn - INFO - Setting hyperparameter kernel = rbf
-    2025-09-11 10:45:00,589 - julearn - INFO - Tuning hyperparameter C = (1e-06, 1000.0, 'log-uniform')
-    2025-09-11 10:45:00,589 - julearn - INFO - Tuning hyperparameter gamma = (1e-06, 10.0, 'log-uniform')
-    2025-09-11 10:45:00,589 - julearn - INFO - Step added
-    2025-09-11 10:45:00,589 - julearn - INFO - ==== Input Data ====
-    2025-09-11 10:45:00,589 - julearn - INFO - Using dataframe as input
-    2025-09-11 10:45:00,589 - julearn - INFO -      Features: ['frontal', 'parietal']
-    2025-09-11 10:45:00,589 - julearn - INFO -      Target: event
-    2025-09-11 10:45:00,589 - julearn - INFO -      Expanded features: ['frontal', 'parietal']
-    2025-09-11 10:45:00,589 - julearn - INFO -      X_types:{}
-    2025-09-11 10:45:00,589 - julearn - WARNING - The following columns are not defined in X_types: ['frontal', 'parietal']. They will be treated as continuous.
-    /home/runner/work/julearn/julearn/julearn/prepare.py:509: RuntimeWarning: The following columns are not defined in X_types: ['frontal', 'parietal']. They will be treated as continuous.
+    2025-09-11 10:56:25,201 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2025-09-11 10:56:25,201 - julearn - INFO - Step added
+    2025-09-11 10:56:25,202 - julearn - INFO - Adding step svm that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2025-09-11 10:56:25,202 - julearn - INFO - Setting hyperparameter kernel = linear
+    2025-09-11 10:56:25,202 - julearn - INFO - Tuning hyperparameter C = (1e-06, 1000.0, 'log-uniform')
+    2025-09-11 10:56:25,202 - julearn - INFO - Step added
+    2025-09-11 10:56:25,202 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2025-09-11 10:56:25,202 - julearn - INFO - Step added
+    2025-09-11 10:56:25,202 - julearn - INFO - Adding step svm that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2025-09-11 10:56:25,202 - julearn - INFO - Setting hyperparameter kernel = rbf
+    2025-09-11 10:56:25,202 - julearn - INFO - Tuning hyperparameter C = (1e-06, 1000.0, 'log-uniform')
+    2025-09-11 10:56:25,203 - julearn - INFO - Tuning hyperparameter gamma = (1e-06, 10.0, 'log-uniform')
+    2025-09-11 10:56:25,203 - julearn - INFO - Step added
+    2025-09-11 10:56:25,203 - julearn - INFO - ==== Input Data ====
+    2025-09-11 10:56:25,203 - julearn - INFO - Using dataframe as input
+    2025-09-11 10:56:25,203 - julearn - INFO -      Features: ['frontal', 'parietal']
+    2025-09-11 10:56:25,203 - julearn - INFO -      Target: event
+    2025-09-11 10:56:25,203 - julearn - INFO -      Expanded features: ['frontal', 'parietal']
+    2025-09-11 10:56:25,203 - julearn - INFO -      X_types:{}
+    2025-09-11 10:56:25,203 - julearn - WARNING - The following columns are not defined in X_types: ['frontal', 'parietal']. They will be treated as continuous.
+    /home/runner/work/julearn/julearn/julearn/prepare.py:510: RuntimeWarning: The following columns are not defined in X_types: ['frontal', 'parietal']. They will be treated as continuous.
       warn_with_log(
-    2025-09-11 10:45:00,590 - julearn - INFO - ====================
-    2025-09-11 10:45:00,590 - julearn - INFO - 
-    2025-09-11 10:45:00,590 - julearn - INFO - = Model Parameters =
-    2025-09-11 10:45:00,591 - julearn - INFO - Tuning hyperparameters using bayes
-    2025-09-11 10:45:00,591 - julearn - INFO - Hyperparameters:
-    2025-09-11 10:45:00,591 - julearn - INFO -      svm__C: (1e-06, 1000.0, 'log-uniform')
-    2025-09-11 10:45:00,591 - julearn - INFO - Hyperparameter svm__C is log-uniform float [1e-06, 1000.0]
-    2025-09-11 10:45:00,591 - julearn - INFO - Using inner CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
-    2025-09-11 10:45:00,592 - julearn - INFO - Search Parameters:
-    2025-09-11 10:45:00,592 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
-    2025-09-11 10:45:00,592 - julearn - INFO -      n_iter: 10
-    2025-09-11 10:45:00,592 - julearn - INFO - ====================
-    2025-09-11 10:45:00,592 - julearn - INFO - 
-    2025-09-11 10:45:00,593 - julearn - INFO - = Model Parameters =
-    2025-09-11 10:45:00,593 - julearn - INFO - Tuning hyperparameters using bayes
-    2025-09-11 10:45:00,593 - julearn - INFO - Hyperparameters:
-    2025-09-11 10:45:00,593 - julearn - INFO -      svm__C: (1e-06, 1000.0, 'log-uniform')
-    2025-09-11 10:45:00,593 - julearn - INFO -      svm__gamma: (1e-06, 10.0, 'log-uniform')
-    2025-09-11 10:45:00,593 - julearn - INFO - Hyperparameter svm__C is log-uniform float [1e-06, 1000.0]
-    2025-09-11 10:45:00,593 - julearn - INFO - Hyperparameter svm__gamma is log-uniform float [1e-06, 10.0]
-    2025-09-11 10:45:00,594 - julearn - INFO - Using inner CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
-    2025-09-11 10:45:00,594 - julearn - INFO - Search Parameters:
-    2025-09-11 10:45:00,594 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
-    2025-09-11 10:45:00,594 - julearn - INFO -      n_iter: 10
-    2025-09-11 10:45:00,595 - julearn - INFO - ====================
-    2025-09-11 10:45:00,595 - julearn - INFO - 
-    2025-09-11 10:45:00,595 - julearn - INFO - = Model Parameters =
-    2025-09-11 10:45:00,595 - julearn - INFO - Tuning hyperparameters using bayes
-    2025-09-11 10:45:00,595 - julearn - INFO - Hyperparameters list:
-    2025-09-11 10:45:00,595 - julearn - INFO -      Set 0
-    2025-09-11 10:45:00,595 - julearn - INFO -              svm__C: Real(low=1e-06, high=1000.0, prior='log-uniform', transform='identity')
-    2025-09-11 10:45:00,595 - julearn - INFO -              set_column_types: [SetColumnTypes(X_types={})]
-    2025-09-11 10:45:00,595 - julearn - INFO -              zscore: [StandardScaler()]
-    2025-09-11 10:45:00,595 - julearn - INFO -              svm: [SVC(kernel='linear')]
-    2025-09-11 10:45:00,595 - julearn - INFO -      Set 1
-    2025-09-11 10:45:00,595 - julearn - INFO -              svm__C: Real(low=1e-06, high=1000.0, prior='log-uniform', transform='identity')
-    2025-09-11 10:45:00,596 - julearn - INFO -              svm__gamma: Real(low=1e-06, high=10.0, prior='log-uniform', transform='identity')
-    2025-09-11 10:45:00,596 - julearn - INFO -              set_column_types: [SetColumnTypes(X_types={})]
-    2025-09-11 10:45:00,596 - julearn - INFO -              zscore: [StandardScaler()]
-    2025-09-11 10:45:00,596 - julearn - INFO -              svm: [SVC()]
-    2025-09-11 10:45:00,596 - julearn - INFO - Hyperparameter svm__C as is Real(low=1e-06, high=1000.0, prior='log-uniform', transform='identity')
-    2025-09-11 10:45:00,596 - julearn - INFO - Hyperparameter set_column_types as is [SetColumnTypes(X_types={})]
-    2025-09-11 10:45:00,596 - julearn - INFO - Hyperparameter zscore as is [StandardScaler()]
-    2025-09-11 10:45:00,597 - julearn - INFO - Hyperparameter svm as is [SVC(kernel='linear')]
-    2025-09-11 10:45:00,597 - julearn - INFO - Hyperparameter svm__C as is Real(low=1e-06, high=1000.0, prior='log-uniform', transform='identity')
-    2025-09-11 10:45:00,597 - julearn - INFO - Hyperparameter svm__gamma as is Real(low=1e-06, high=10.0, prior='log-uniform', transform='identity')
-    2025-09-11 10:45:00,597 - julearn - INFO - Hyperparameter set_column_types as is [SetColumnTypes(X_types={})]
-    2025-09-11 10:45:00,597 - julearn - INFO - Hyperparameter zscore as is [StandardScaler()]
-    2025-09-11 10:45:00,597 - julearn - INFO - Hyperparameter svm as is [SVC()]
-    2025-09-11 10:45:00,597 - julearn - INFO - Using inner CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
-    2025-09-11 10:45:00,597 - julearn - INFO - Search Parameters:
-    2025-09-11 10:45:00,597 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
-    2025-09-11 10:45:00,598 - julearn - INFO -      n_iter: 10
-    2025-09-11 10:45:00,607 - julearn - INFO - ====================
-    2025-09-11 10:45:00,607 - julearn - INFO - 
-    2025-09-11 10:45:00,607 - julearn - INFO - = Data Information =
-    2025-09-11 10:45:00,607 - julearn - INFO -      Problem type: classification
-    2025-09-11 10:45:00,607 - julearn - INFO -      Number of samples: 532
-    2025-09-11 10:45:00,607 - julearn - INFO -      Number of features: 2
-    2025-09-11 10:45:00,607 - julearn - INFO - ====================
-    2025-09-11 10:45:00,607 - julearn - INFO - 
-    2025-09-11 10:45:00,607 - julearn - INFO -      Number of classes: 2
-    2025-09-11 10:45:00,607 - julearn - INFO -      Target type: object
-    2025-09-11 10:45:00,608 - julearn - INFO -      Class distributions: event
+    2025-09-11 10:56:25,204 - julearn - INFO - ====================
+    2025-09-11 10:56:25,204 - julearn - INFO - 
+    2025-09-11 10:56:25,205 - julearn - INFO - = Model Parameters =
+    2025-09-11 10:56:25,205 - julearn - INFO - Tuning hyperparameters using bayes
+    2025-09-11 10:56:25,205 - julearn - INFO - Hyperparameters:
+    2025-09-11 10:56:25,205 - julearn - INFO -      svm__C: (1e-06, 1000.0, 'log-uniform')
+    2025-09-11 10:56:25,205 - julearn - INFO - Hyperparameter svm__C is log-uniform float [1e-06, 1000.0]
+    2025-09-11 10:56:25,206 - julearn - INFO - Using inner CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
+    2025-09-11 10:56:25,206 - julearn - INFO - Search Parameters:
+    2025-09-11 10:56:25,206 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
+    2025-09-11 10:56:25,206 - julearn - INFO -      n_iter: 10
+    2025-09-11 10:56:25,207 - julearn - INFO - ====================
+    2025-09-11 10:56:25,207 - julearn - INFO - 
+    2025-09-11 10:56:25,207 - julearn - INFO - = Model Parameters =
+    2025-09-11 10:56:25,207 - julearn - INFO - Tuning hyperparameters using bayes
+    2025-09-11 10:56:25,208 - julearn - INFO - Hyperparameters:
+    2025-09-11 10:56:25,208 - julearn - INFO -      svm__C: (1e-06, 1000.0, 'log-uniform')
+    2025-09-11 10:56:25,208 - julearn - INFO -      svm__gamma: (1e-06, 10.0, 'log-uniform')
+    2025-09-11 10:56:25,208 - julearn - INFO - Hyperparameter svm__C is log-uniform float [1e-06, 1000.0]
+    2025-09-11 10:56:25,208 - julearn - INFO - Hyperparameter svm__gamma is log-uniform float [1e-06, 10.0]
+    2025-09-11 10:56:25,209 - julearn - INFO - Using inner CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
+    2025-09-11 10:56:25,209 - julearn - INFO - Search Parameters:
+    2025-09-11 10:56:25,210 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
+    2025-09-11 10:56:25,210 - julearn - INFO -      n_iter: 10
+    2025-09-11 10:56:25,210 - julearn - INFO - ====================
+    2025-09-11 10:56:25,210 - julearn - INFO - 
+    2025-09-11 10:56:25,210 - julearn - INFO - = Model Parameters =
+    2025-09-11 10:56:25,210 - julearn - INFO - Tuning hyperparameters using bayes
+    2025-09-11 10:56:25,210 - julearn - INFO - Hyperparameters list:
+    2025-09-11 10:56:25,211 - julearn - INFO -      Set 0
+    2025-09-11 10:56:25,211 - julearn - INFO -              svm__C: Real(low=1e-06, high=1000.0, prior='log-uniform', transform='identity')
+    2025-09-11 10:56:25,211 - julearn - INFO -              set_column_types: [SetColumnTypes(X_types={})]
+    2025-09-11 10:56:25,211 - julearn - INFO -              zscore: [StandardScaler()]
+    2025-09-11 10:56:25,211 - julearn - INFO -              svm: [SVC(kernel='linear')]
+    2025-09-11 10:56:25,211 - julearn - INFO -      Set 1
+    2025-09-11 10:56:25,212 - julearn - INFO -              svm__C: Real(low=1e-06, high=1000.0, prior='log-uniform', transform='identity')
+    2025-09-11 10:56:25,212 - julearn - INFO -              svm__gamma: Real(low=1e-06, high=10.0, prior='log-uniform', transform='identity')
+    2025-09-11 10:56:25,212 - julearn - INFO -              set_column_types: [SetColumnTypes(X_types={})]
+    2025-09-11 10:56:25,212 - julearn - INFO -              zscore: [StandardScaler()]
+    2025-09-11 10:56:25,212 - julearn - INFO -              svm: [SVC()]
+    2025-09-11 10:56:25,212 - julearn - INFO - Hyperparameter svm__C as is Real(low=1e-06, high=1000.0, prior='log-uniform', transform='identity')
+    2025-09-11 10:56:25,213 - julearn - INFO - Hyperparameter set_column_types as is [SetColumnTypes(X_types={})]
+    2025-09-11 10:56:25,213 - julearn - INFO - Hyperparameter zscore as is [StandardScaler()]
+    2025-09-11 10:56:25,213 - julearn - INFO - Hyperparameter svm as is [SVC(kernel='linear')]
+    2025-09-11 10:56:25,213 - julearn - INFO - Hyperparameter svm__C as is Real(low=1e-06, high=1000.0, prior='log-uniform', transform='identity')
+    2025-09-11 10:56:25,213 - julearn - INFO - Hyperparameter svm__gamma as is Real(low=1e-06, high=10.0, prior='log-uniform', transform='identity')
+    2025-09-11 10:56:25,214 - julearn - INFO - Hyperparameter set_column_types as is [SetColumnTypes(X_types={})]
+    2025-09-11 10:56:25,214 - julearn - INFO - Hyperparameter zscore as is [StandardScaler()]
+    2025-09-11 10:56:25,214 - julearn - INFO - Hyperparameter svm as is [SVC()]
+    2025-09-11 10:56:25,214 - julearn - INFO - Using inner CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
+    2025-09-11 10:56:25,214 - julearn - INFO - Search Parameters:
+    2025-09-11 10:56:25,215 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
+    2025-09-11 10:56:25,215 - julearn - INFO -      n_iter: 10
+    2025-09-11 10:56:25,224 - julearn - INFO - ====================
+    2025-09-11 10:56:25,224 - julearn - INFO - 
+    2025-09-11 10:56:25,224 - julearn - INFO - = Data Information =
+    2025-09-11 10:56:25,224 - julearn - INFO -      Problem type: classification
+    2025-09-11 10:56:25,225 - julearn - INFO -      Number of samples: 532
+    2025-09-11 10:56:25,225 - julearn - INFO -      Number of features: 2
+    2025-09-11 10:56:25,225 - julearn - INFO - ====================
+    2025-09-11 10:56:25,225 - julearn - INFO - 
+    2025-09-11 10:56:25,225 - julearn - INFO -      Number of classes: 2
+    2025-09-11 10:56:25,225 - julearn - INFO -      Target type: object
+    2025-09-11 10:56:25,226 - julearn - INFO -      Class distributions: event
     cue     266
     stim    266
     Name: count, dtype: int64
-    2025-09-11 10:45:00,608 - julearn - INFO - Using outer CV scheme KFold(n_splits=2, random_state=None, shuffle=False) (incl. final model)
-    2025-09-11 10:45:00,608 - julearn - INFO - Binary classification problem detected.
+    2025-09-11 10:56:25,226 - julearn - INFO - Using outer CV scheme KFold(n_splits=2, random_state=None, shuffle=False) (incl. final model)
+    2025-09-11 10:56:25,226 - julearn - INFO - Binary classification problem detected.
     0.656015037593985
 
 
@@ -450,7 +450,7 @@ It seems that we might have found a better model, but which one is it?
 
 .. GENERATED FROM PYTHON SOURCE LINES 95-96
 
-.. code-block:: default
+.. code-block:: Python
 
     print(estimator.best_params_)
 
@@ -461,7 +461,7 @@ It seems that we might have found a better model, but which one is it?
 
  .. code-block:: none
 
-    OrderedDict([('set_column_types', SetColumnTypes(X_types={})), ('svm', SVC()), ('svm__C', 0.0018082604408073564), ('svm__gamma', 1.6437581151471767), ('zscore', StandardScaler())])
+    OrderedDict({'set_column_types': SetColumnTypes(X_types={}), 'svm': SVC(), 'svm__C': 0.0018082604408073564, 'svm__gamma': 1.6437581151471767, 'zscore': StandardScaler()})
 
 
 
@@ -469,7 +469,7 @@ It seems that we might have found a better model, but which one is it?
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 4.708 seconds)
+   **Total running time of the script:** (0 minutes 4.022 seconds)
 
 
 .. _sphx_glr_download_auto_examples_03_complex_models_run_hyperparameter_tuning_bayessearch.py:
@@ -478,16 +478,17 @@ It seems that we might have found a better model, but which one is it?
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: run_hyperparameter_tuning_bayessearch.ipynb <run_hyperparameter_tuning_bayessearch.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: run_hyperparameter_tuning_bayessearch.py <run_hyperparameter_tuning_bayessearch.py>`
 
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
+    .. container:: sphx-glr-download sphx-glr-download-zip
 
-      :download:`Download Jupyter notebook: run_hyperparameter_tuning_bayessearch.ipynb <run_hyperparameter_tuning_bayessearch.ipynb>`
+      :download:`Download zipped: run_hyperparameter_tuning_bayessearch.zip <run_hyperparameter_tuning_bayessearch.zip>`
 
 
 .. only:: html

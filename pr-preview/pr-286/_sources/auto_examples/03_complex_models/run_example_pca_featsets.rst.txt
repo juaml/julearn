@@ -11,7 +11,7 @@
         :class: sphx-glr-download-link-note
 
         :ref:`Go to the end <sphx_glr_download_auto_examples_03_complex_models_run_example_pca_featsets.py>`
-        to download the full example code
+        to download the full example code.
 
 .. rst-class:: sphx-glr-example-title
 
@@ -29,7 +29,7 @@ subset of features.
 
 .. GENERATED FROM PYTHON SOURCE LINES 12-31
 
-.. code-block:: default
+.. code-block:: Python
 
     # Authors: Georgios Antonopoulos <g.antonopoulos@fz-juelich.de>
     #          Kaustubh R. Patil <k.patil@fz-juelich.de>
@@ -63,7 +63,7 @@ Set the logging level to info to see extra information.
 
 .. GENERATED FROM PYTHON SOURCE LINES 33-35
 
-.. code-block:: default
+.. code-block:: Python
 
     configure_logging(level="INFO")
 
@@ -75,15 +75,15 @@ Set the logging level to info to see extra information.
 
  .. code-block:: none
 
-    /home/runner/work/julearn/julearn/julearn/utils/logging.py:66: UserWarning: The '__version__' attribute is deprecated and will be removed in MarkupSafe 3.1. Use feature detection, or `importlib.metadata.version("markupsafe")`, instead.
+    /home/runner/work/julearn/julearn/julearn/utils/logging.py:72: UserWarning: The '__version__' attribute is deprecated and will be removed in MarkupSafe 3.1. Use feature detection, or `importlib.metadata.version("markupsafe")`, instead.
       vstring = str(getattr(module, "__version__", None))
-    2025-09-11 10:45:13,959 - julearn - INFO - ===== Lib Versions =====
-    2025-09-11 10:45:13,959 - julearn - INFO - numpy: 1.26.4
-    2025-09-11 10:45:13,959 - julearn - INFO - scipy: 1.15.3
-    2025-09-11 10:45:13,959 - julearn - INFO - sklearn: 1.5.2
-    2025-09-11 10:45:13,959 - julearn - INFO - pandas: 2.2.3
-    2025-09-11 10:45:13,959 - julearn - INFO - julearn: 0.3.5.dev31
-    2025-09-11 10:45:13,959 - julearn - INFO - ========================
+    2025-09-11 10:56:37,811 - julearn - INFO - ===== Lib Versions =====
+    2025-09-11 10:56:37,811 - julearn - INFO - numpy: 1.26.4
+    2025-09-11 10:56:37,811 - julearn - INFO - scipy: 1.16.1
+    2025-09-11 10:56:37,811 - julearn - INFO - sklearn: 1.7.2
+    2025-09-11 10:56:37,812 - julearn - INFO - pandas: 2.3.2
+    2025-09-11 10:56:37,812 - julearn - INFO - julearn: 0.3.5.dev59
+    2025-09-11 10:56:37,812 - julearn - INFO - ========================
 
 
 
@@ -94,7 +94,7 @@ Load the diabetes data from ``sklearn`` as a ``pandas.DataFrame``.
 
 .. GENERATED FROM PYTHON SOURCE LINES 37-39
 
-.. code-block:: default
+.. code-block:: Python
 
     features, target = load_diabetes(return_X_y=True, as_frame=True)
 
@@ -114,7 +114,7 @@ is the target we are interested in predicting.
 
 .. GENERATED FROM PYTHON SOURCE LINES 44-48
 
-.. code-block:: default
+.. code-block:: Python
 
 
     print("Features: \n", features.head())
@@ -158,7 +158,7 @@ and y
 
 .. GENERATED FROM PYTHON SOURCE LINES 51-56
 
-.. code-block:: default
+.. code-block:: Python
 
     data_diabetes = pd.concat([features, target], axis=1)
 
@@ -179,7 +179,7 @@ We will keep 1 component per PCA group.
 
 .. GENERATED FROM PYTHON SOURCE LINES 59-65
 
-.. code-block:: default
+.. code-block:: Python
 
     X_types = {
         "pca1": ["age", "bmi", "bp"],
@@ -203,7 +203,7 @@ know what to do with the categorical features.
 
 .. GENERATED FROM PYTHON SOURCE LINES 70-75
 
-.. code-block:: default
+.. code-block:: Python
 
     creator = PipelineCreator(problem_type="regression")
     creator.add("pca", apply_to="pca1", n_components=1, name="pca_feats1")
@@ -218,16 +218,16 @@ know what to do with the categorical features.
 
  .. code-block:: none
 
-    2025-09-11 10:45:13,974 - julearn - INFO - Adding step pca_feats1 that applies to ColumnTypes<types={'pca1'}; pattern=(?:__:type:__pca1)>
-    2025-09-11 10:45:13,975 - julearn - INFO - Setting hyperparameter n_components = 1
-    2025-09-11 10:45:13,975 - julearn - INFO - Step added
-    2025-09-11 10:45:13,975 - julearn - INFO - Adding step pca_feats2 that applies to ColumnTypes<types={'pca2'}; pattern=(?:__:type:__pca2)>
-    2025-09-11 10:45:13,975 - julearn - INFO - Setting hyperparameter n_components = 1
-    2025-09-11 10:45:13,975 - julearn - INFO - Step added
-    2025-09-11 10:45:13,975 - julearn - INFO - Adding step ridge that applies to ColumnTypes<types={'continuous', 'categorical'}; pattern=(?:__:type:__continuous|__:type:__categorical)>
-    2025-09-11 10:45:13,975 - julearn - INFO - Step added
+    2025-09-11 10:56:37,826 - julearn - INFO - Adding step pca_feats1 that applies to ColumnTypes<types={'pca1'}; pattern=(?:__:type:__pca1)>
+    2025-09-11 10:56:37,826 - julearn - INFO - Setting hyperparameter n_components = 1
+    2025-09-11 10:56:37,826 - julearn - INFO - Step added
+    2025-09-11 10:56:37,826 - julearn - INFO - Adding step pca_feats2 that applies to ColumnTypes<types={'pca2'}; pattern=(?:__:type:__pca2)>
+    2025-09-11 10:56:37,826 - julearn - INFO - Setting hyperparameter n_components = 1
+    2025-09-11 10:56:37,826 - julearn - INFO - Step added
+    2025-09-11 10:56:37,827 - julearn - INFO - Adding step ridge that applies to ColumnTypes<types={'continuous', 'categorical'}; pattern=(?:__:type:__continuous|__:type:__categorical)>
+    2025-09-11 10:56:37,827 - julearn - INFO - Step added
 
-    <julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7f3a4935b250>
+    <julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7f1324cf8210>
 
 
 
@@ -237,7 +237,7 @@ Split the dataset into train and test.
 
 .. GENERATED FROM PYTHON SOURCE LINES 77-79
 
-.. code-block:: default
+.. code-block:: Python
 
     train_diabetes, test_diabetes = train_test_split(data_diabetes, test_size=0.3)
 
@@ -255,7 +255,7 @@ for scoring.
 
 .. GENERATED FROM PYTHON SOURCE LINES 82-92
 
-.. code-block:: default
+.. code-block:: Python
 
     scores, model = run_cross_validation(
         X=X,
@@ -275,25 +275,25 @@ for scoring.
 
  .. code-block:: none
 
-    2025-09-11 10:45:13,976 - julearn - INFO - ==== Input Data ====
-    2025-09-11 10:45:13,976 - julearn - INFO - Using dataframe as input
-    2025-09-11 10:45:13,976 - julearn - INFO -      Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2025-09-11 10:45:13,976 - julearn - INFO -      Target: target
-    2025-09-11 10:45:13,977 - julearn - INFO -      Expanded features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2025-09-11 10:45:13,977 - julearn - INFO -      X_types:{'pca1': ['age', 'bmi', 'bp'], 'pca2': ['s1', 's2', 's3', 's4', 's5', 's6'], 'categorical': ['sex']}
-    2025-09-11 10:45:13,977 - julearn - INFO - ====================
-    2025-09-11 10:45:13,977 - julearn - INFO - 
-    2025-09-11 10:45:13,979 - julearn - INFO - = Model Parameters =
-    2025-09-11 10:45:13,979 - julearn - INFO - ====================
-    2025-09-11 10:45:13,979 - julearn - INFO - 
-    2025-09-11 10:45:13,979 - julearn - INFO - = Data Information =
-    2025-09-11 10:45:13,979 - julearn - INFO -      Problem type: regression
-    2025-09-11 10:45:13,979 - julearn - INFO -      Number of samples: 309
-    2025-09-11 10:45:13,979 - julearn - INFO -      Number of features: 10
-    2025-09-11 10:45:13,979 - julearn - INFO - ====================
-    2025-09-11 10:45:13,979 - julearn - INFO - 
-    2025-09-11 10:45:13,979 - julearn - INFO -      Target type: float64
-    2025-09-11 10:45:13,979 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
+    2025-09-11 10:56:37,828 - julearn - INFO - ==== Input Data ====
+    2025-09-11 10:56:37,828 - julearn - INFO - Using dataframe as input
+    2025-09-11 10:56:37,828 - julearn - INFO -      Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2025-09-11 10:56:37,828 - julearn - INFO -      Target: target
+    2025-09-11 10:56:37,828 - julearn - INFO -      Expanded features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2025-09-11 10:56:37,828 - julearn - INFO -      X_types:{'pca1': ['age', 'bmi', 'bp'], 'pca2': ['s1', 's2', 's3', 's4', 's5', 's6'], 'categorical': ['sex']}
+    2025-09-11 10:56:37,829 - julearn - INFO - ====================
+    2025-09-11 10:56:37,829 - julearn - INFO - 
+    2025-09-11 10:56:37,830 - julearn - INFO - = Model Parameters =
+    2025-09-11 10:56:37,831 - julearn - INFO - ====================
+    2025-09-11 10:56:37,831 - julearn - INFO - 
+    2025-09-11 10:56:37,831 - julearn - INFO - = Data Information =
+    2025-09-11 10:56:37,831 - julearn - INFO -      Problem type: regression
+    2025-09-11 10:56:37,831 - julearn - INFO -      Number of samples: 309
+    2025-09-11 10:56:37,831 - julearn - INFO -      Number of features: 10
+    2025-09-11 10:56:37,831 - julearn - INFO - ====================
+    2025-09-11 10:56:37,831 - julearn - INFO - 
+    2025-09-11 10:56:37,831 - julearn - INFO -      Target type: float64
+    2025-09-11 10:56:37,832 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
 
 
 
@@ -304,7 +304,7 @@ The scores dataframe has all the values for each CV split.
 
 .. GENERATED FROM PYTHON SOURCE LINES 94-96
 
-.. code-block:: default
+.. code-block:: Python
 
     print(scores.head())
 
@@ -317,11 +317,11 @@ The scores dataframe has all the values for each CV split.
  .. code-block:: none
 
        fit_time  score_time  ...  fold                          cv_mdsum
-    0  0.013690    0.006310  ...     0  b10eef89b4192178d482d7a1587a248a
-    1  0.013738    0.006336  ...     1  b10eef89b4192178d482d7a1587a248a
-    2  0.013682    0.006349  ...     2  b10eef89b4192178d482d7a1587a248a
-    3  0.014049    0.006322  ...     3  b10eef89b4192178d482d7a1587a248a
-    4  0.013837    0.006352  ...     4  b10eef89b4192178d482d7a1587a248a
+    0  0.013032    0.006082  ...     0  b10eef89b4192178d482d7a1587a248a
+    1  0.013264    0.006077  ...     1  b10eef89b4192178d482d7a1587a248a
+    2  0.013021    0.006052  ...     2  b10eef89b4192178d482d7a1587a248a
+    3  0.012939    0.006023  ...     3  b10eef89b4192178d482d7a1587a248a
+    4  0.012930    0.005988  ...     4  b10eef89b4192178d482d7a1587a248a
 
     [5 rows x 8 columns]
 
@@ -334,7 +334,7 @@ Mean value of mean absolute error across CV.
 
 .. GENERATED FROM PYTHON SOURCE LINES 98-100
 
-.. code-block:: default
+.. code-block:: Python
 
     print(scores["test_score"].mean())
 
@@ -346,7 +346,7 @@ Mean value of mean absolute error across CV.
 
  .. code-block:: none
 
-    0.3107976743678922
+    0.31079767436789235
 
 
 
@@ -359,7 +359,7 @@ data until the first PCA step. We should get the first PCA component for
 
 .. GENERATED FROM PYTHON SOURCE LINES 104-108
 
-.. code-block:: default
+.. code-block:: Python
 
     data_processed1 = preprocess(model, X, data=train_diabetes, until="pca_feats1")
     print("Data after preprocessing until PCA step 1")
@@ -477,7 +477,7 @@ one PCA component for ["s1", "s2", "s3", "s4", "s5", "s6"].
 
 .. GENERATED FROM PYTHON SOURCE LINES 111-115
 
-.. code-block:: default
+.. code-block:: Python
 
     data_processed2 = preprocess(model, X, data=train_diabetes, until="pca_feats2")
     print("Data after preprocessing until PCA step 2")
@@ -564,7 +564,7 @@ Now we can get the MAE fold and repetition:
 
 .. GENERATED FROM PYTHON SOURCE LINES 117-123
 
-.. code-block:: default
+.. code-block:: Python
 
     df_mae = scores.set_index(["repeat", "fold"])["test_score"].unstack() * -1
     df_mae.index.name = "Repeats"
@@ -593,7 +593,7 @@ Plot heatmap of mean absolute error (MAE) over all repeats and CV splits.
 
 .. GENERATED FROM PYTHON SOURCE LINES 125-129
 
-.. code-block:: default
+.. code-block:: Python
 
     fig, ax = plt.subplots(1, 1, figsize=(10, 7))
     sns.heatmap(df_mae, cmap="YlGnBu")
@@ -624,7 +624,7 @@ of true values vs predicted values.
 
 .. GENERATED FROM PYTHON SOURCE LINES 132-155
 
-.. code-block:: default
+.. code-block:: Python
 
     y_true = test_diabetes[y]
     y_pred = model.predict(test_diabetes[X])
@@ -670,7 +670,7 @@ of true values vs predicted values.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.436 seconds)
+   **Total running time of the script:** (0 minutes 0.357 seconds)
 
 
 .. _sphx_glr_download_auto_examples_03_complex_models_run_example_pca_featsets.py:
@@ -679,16 +679,17 @@ of true values vs predicted values.
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: run_example_pca_featsets.ipynb <run_example_pca_featsets.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: run_example_pca_featsets.py <run_example_pca_featsets.py>`
 
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
+    .. container:: sphx-glr-download sphx-glr-download-zip
 
-      :download:`Download Jupyter notebook: run_example_pca_featsets.ipynb <run_example_pca_featsets.ipynb>`
+      :download:`Download zipped: run_example_pca_featsets.zip <run_example_pca_featsets.zip>`
 
 
 .. only:: html

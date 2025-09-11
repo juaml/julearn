@@ -11,7 +11,7 @@
         :class: sphx-glr-download-link-note
 
         :ref:`Go to the end <sphx_glr_download_auto_examples_00_starting_run_combine_pandas.py>`
-        to download the full example code
+        to download the full example code.
 
 .. rst-class:: sphx-glr-example-title
 
@@ -35,7 +35,7 @@ References
 
 .. GENERATED FROM PYTHON SOURCE LINES 17-24
 
-.. code-block:: default
+.. code-block:: Python
 
     # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
     #
@@ -75,7 +75,7 @@ Let's start with the ``fmri`` dataset.
 
 .. GENERATED FROM PYTHON SOURCE LINES 44-47
 
-.. code-block:: default
+.. code-block:: Python
 
 
     df_fmri = load_dataset("fmri")
@@ -94,7 +94,7 @@ Let's see what this dataset has.
 
 .. GENERATED FROM PYTHON SOURCE LINES 50-52
 
-.. code-block:: default
+.. code-block:: Python
 
     df_fmri.head()
 
@@ -192,7 +192,7 @@ We will use the ``pivot`` method.
 
 .. GENERATED FROM PYTHON SOURCE LINES 61-65
 
-.. code-block:: default
+.. code-block:: Python
 
     df_fmri = df_fmri.pivot(
         index=["subject", "timepoint", "event"], columns="region", values="signal"
@@ -222,7 +222,7 @@ Let's see what we have here:
 
 .. GENERATED FROM PYTHON SOURCE LINES 78-80
 
-.. code-block:: default
+.. code-block:: Python
 
     df_fmri.head()
 
@@ -311,7 +311,7 @@ Check the subtle but important difference:
 
 .. GENERATED FROM PYTHON SOURCE LINES 85-88
 
-.. code-block:: default
+.. code-block:: Python
 
     df_fmri = df_fmri.reset_index()
     df_fmri.head()
@@ -410,7 +410,7 @@ For the purpose of the example, we'll create the dataframe here.
 
 .. GENERATED FROM PYTHON SOURCE LINES 97-105
 
-.. code-block:: default
+.. code-block:: Python
 
     metadata = {
         "subject": [f"s{i}" for i in range(14)],
@@ -553,7 +553,7 @@ We need to set the index in each dataframe before join.
 
 .. GENERATED FROM PYTHON SOURCE LINES 111-116
 
-.. code-block:: default
+.. code-block:: Python
 
     df_fmri = df_fmri.set_index("subject")
     df_meta = df_meta.set_index("subject")
@@ -717,7 +717,7 @@ Finally, let's reset the index and have it ready for ``julearn``.
 
 .. GENERATED FROM PYTHON SOURCE LINES 118-120
 
-.. code-block:: default
+.. code-block:: Python
 
     df_fmri = df_fmri.reset_index()
 
@@ -745,7 +745,7 @@ We will still use the pivot, but in this case, we will have two values:
 
 .. GENERATED FROM PYTHON SOURCE LINES 132-139
 
-.. code-block:: default
+.. code-block:: Python
 
     df_fmri = df_fmri.pivot(
         index=["subject", "timepoint", "age", "scanner"],
@@ -930,7 +930,7 @@ column name.
 
 .. GENERATED FROM PYTHON SOURCE LINES 143-145
 
-.. code-block:: default
+.. code-block:: Python
 
     df_fmri.columns
 
@@ -957,7 +957,7 @@ The following trick will join the different levels using an underscore (*_*)
 
 .. GENERATED FROM PYTHON SOURCE LINES 147-150
 
-.. code-block:: default
+.. code-block:: Python
 
     df_fmri.columns = ["_".join(x) for x in df_fmri.columns]
     df_fmri
@@ -1124,7 +1124,7 @@ We have finally the information we want. We can now reset the index.
 
 .. GENERATED FROM PYTHON SOURCE LINES 152-153
 
-.. code-block:: default
+.. code-block:: Python
 
     df_fmri = df_fmri.reset_index()
 
@@ -1137,7 +1137,7 @@ We have finally the information we want. We can now reset the index.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.499 seconds)
+   **Total running time of the script:** (0 minutes 0.250 seconds)
 
 
 .. _sphx_glr_download_auto_examples_00_starting_run_combine_pandas.py:
@@ -1146,16 +1146,17 @@ We have finally the information we want. We can now reset the index.
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: run_combine_pandas.ipynb <run_combine_pandas.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: run_combine_pandas.py <run_combine_pandas.py>`
 
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
+    .. container:: sphx-glr-download sphx-glr-download-zip
 
-      :download:`Download Jupyter notebook: run_combine_pandas.ipynb <run_combine_pandas.ipynb>`
+      :download:`Download zipped: run_combine_pandas.zip <run_combine_pandas.zip>`
 
 
 .. only:: html
