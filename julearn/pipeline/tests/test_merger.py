@@ -97,7 +97,7 @@ def test_merger_errors() -> None:
     pipe3 = GridSearchCV(SVC(), param_grid={"C": [1, 10]})
     with pytest.raises(
         ValueError,
-        match="All searchers must use a pipeline.",
+        match=r"All searchers must use a pipeline.",
     ):
         merge_pipelines(pipe1, pipe3, search_params=None)  # type: ignore
 
@@ -108,7 +108,7 @@ def test_merger_errors() -> None:
     pipe4 = creator4.to_pipeline(search_params={"kind": "grid"})
     with pytest.raises(
         ValueError,
-        match="must have the same named steps.",
+        match=r"must have the same named steps.",
     ):
         merge_pipelines(pipe1, pipe4, search_params=None)  # type: ignore
 

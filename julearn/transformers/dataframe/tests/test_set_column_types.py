@@ -59,7 +59,7 @@ def test_SetColumnTypes_input_validation(
 
     """
     with pytest.raises(
-        ValueError, match="Each value of X_types must be a list."
+        ValueError, match=r"Each value of X_types must be a list."
     ):
         SetColumnTypes({"confound": "chicken"}).fit(X_iris)  # type: ignore
 

@@ -58,7 +58,7 @@ confounds = ["petal_width"]
 # change the number of bootstrap iterations to at least 2000 for a valid test.
 n_bootstrap = 20
 n_elements = len(df_iris)
-cv = StratifiedBootstrap(n_splits=n_bootstrap, test_size=0.3, random_state=42)
+cv = StratifiedBootstrap(n_splits=n_bootstrap, random_state=42)
 
 ###############################################################################
 # First, we will train a model without performing confound removal on features.
@@ -79,7 +79,7 @@ scores_ncr = run_cross_validation(
 ###############################################################################
 # Next, we train a model after performing confound removal on the features.
 # Note: we initialize the CV again to use the same folds as before.
-cv = StratifiedBootstrap(n_splits=n_bootstrap, test_size=0.3, random_state=42)
+cv = StratifiedBootstrap(n_splits=n_bootstrap, random_state=42)
 
 # In order to tell ``run_cross_validation`` which columns are confounds,
 # and which columns are features, we have to define the X_types:
