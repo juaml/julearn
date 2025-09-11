@@ -288,9 +288,7 @@ def test_estimator_gridsearch(df_iris: "pd.DataFrame") -> None:
     pipe = (
         PipelineCreator(problem_type="classification")
         .add("zscore")
-        .add(
-            "svm", C=[1, 10], kernel=["linear", "rbf"]
-        )
+        .add("svm", C=[1, 10], kernel=["linear", "rbf"])
         .to_pipeline()
     )
     pipe.fit(df_iris.iloc[:, :-1], df_iris.species)
