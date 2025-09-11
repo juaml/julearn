@@ -23,7 +23,9 @@ from sklearn.model_selection._split import PredefinedSplit, _CVIterableWrapper
 
 from ..model_selection import (
     ContinuousStratifiedGroupKFold,
+    ContinuousStratifiedKFold,
     RepeatedContinuousStratifiedGroupKFold,
+    RepeatedContinuousStratifiedKFold,
 )
 from ..model_selection.final_model_cv import _JulearnFinalModelCV
 
@@ -88,6 +90,8 @@ def is_nonoverlapping_cv(cv) -> bool:
         StratifiedGroupKFold,
         ContinuousStratifiedGroupKFold,
         RepeatedContinuousStratifiedGroupKFold,
+        ContinuousStratifiedKFold,
+        RepeatedContinuousStratifiedKFold,
     )
 
     return isinstance(cv, _valid_instances)

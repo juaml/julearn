@@ -11,6 +11,7 @@ import pandas as pd
 import pytest
 from pytest import FixtureRequest, fixture, mark
 from seaborn import load_dataset
+from sklearn.datasets import make_regression
 
 
 _filter_keys = {
@@ -114,7 +115,8 @@ def df_grouped_iris() -> pd.DataFrame:
     """
     df = load_dataset("iris")
     df = typing.cast("pd.DataFrame", df)
-    bins = pd.cut(df.index.values, labels=[1, 2, 3], bins=3)
+    n_groups = 20
+    bins = pd.cut(df.index.values, labels=list(range(n_groups)), bins=n_groups)
     df["group"] = bins.astype(int)
     rename = {
         "sepal_length": "sepal_length__:type:__continuous",
@@ -444,3 +446,38 @@ def preprocess(request: FixtureRequest) -> Union[str, list[str]]:
 
     """
     return request.param
+
+
+@fixture(scope="function")
+def df_regression() -> pd.DataFrame:
+    """Return a regression dataset.
+
+    Returns
+    -------
+    df : pd.DataFrame
+        A regression dataset.
+
+    """
+    n_features = 4
+    n_samples = 150
+    X, y = make_regression(
+        n_features=n_features, n_samples=n_samples, random_state=42
+    )
+
+    # prepare feature names and types
+    X_types = {
+        "type1": ["type1_1", "type1_2"],
+        "type2": ["type2_1", "type2_2"],
+    }
+    X_names = X_types["type1"] + X_types["type2"]
+
+    # make df
+    data = pd.DataFrame(X)
+    data.columns = X_names
+    data["target"] = y
+    n_groups = 20
+    bins = pd.cut(
+        data.index.values, labels=list(range(n_groups)), bins=n_groups
+    )
+    data["group"] = bins.astype(int)
+    return data
