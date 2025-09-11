@@ -8,7 +8,13 @@ import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal
 from sklearn.base import BaseEstimator
-from sklearn.model_selection import RepeatedKFold
+from sklearn.model_selection import (
+    GroupShuffleSplit,
+    PredefinedSplit,
+    RepeatedKFold,
+    ShuffleSplit,
+    StratifiedShuffleSplit,
+)
 
 from julearn.base.estimators import WrapModel
 from julearn.inspect import FoldsInspector, PipelineInspector
@@ -63,8 +69,8 @@ class MockRegressorReturnsIndex(BaseEstimator):
 def scores(df_typed_iris, n_iters=5, mock_model=None):
     """Pre-define scores."""
 
-    X = df_typed_iris.iloc[:, :-1]
-    y = df_typed_iris.iloc[:, -1]
+    X = df_typed_iris.iloc[:, :4]
+    y = df_typed_iris["species"]
 
     if mock_model is None:
         mock_model = MockModelReturnsIndex
@@ -104,8 +110,8 @@ def get_cv_scores(request, df_typed_iris):
 def test_get_predictions(get_cv_scores, df_typed_iris):
     """Test predictions."""
 
-    X = df_typed_iris.iloc[:, :-1]
-    y = df_typed_iris.iloc[:, -1]
+    X = df_typed_iris.iloc[:, :4]
+    y = df_typed_iris["species"]
     cv, df_scores = get_cv_scores
     inspector = FoldsInspector(df_scores, cv=cv, X=X, y=y)
     print(df_scores)
@@ -188,3 +194,54 @@ def test_foldsinspector_iter(get_cv_scores, df_typed_iris):
             i_model.get_step("mockregressorreturnsindex").estimator,
             MockRegressorReturnsIndex,
         )
+
+
+@pytest.mark.parametrize(
+    "klass,params,cv_params",
+    [
+        [ShuffleSplit, [], {"n_splits": 5, "random_state": 2}],
+        [GroupShuffleSplit, ["groups"], {"n_splits": 5, "random_state": 2}],
+        [PredefinedSplit, [], {"test_fold": [1, 2, 3, 4, 5]}],
+        [StratifiedShuffleSplit, [], {"n_splits": 5, "random_state": 2}],
+    ],
+)
+def test_overlapping_cv_predictions(klass, params, cv_params, df_grouped_iris):
+    """Test overlapping CV predictions."""
+    mock_model = MockModelReturnsIndex
+    X = df_grouped_iris.iloc[:, :4]
+    y = df_grouped_iris["species"]
+
+    groups = None
+    if "groups" in params:
+        groups = df_grouped_iris["group"]
+
+    cv = klass(**cv_params)
+    cv_mdsum = _compute_cvmdsum(cv)
+    n_iters = cv.get_n_splits(X, y, groups)
+    df_scores = scores(df_grouped_iris, n_iters=n_iters, mock_model=mock_model)
+    df_scores["cv_mdsum"] = cv_mdsum
+
+    inspector = FoldsInspector(df_scores, cv=cv, X=X, y=y, groups=groups)
+    print(df_scores)
+    expected_dict = {}
+    expected_dict["target"] = y.values
+    for i, (_, test) in enumerate(cv.split(X, y, groups=groups)):
+        expected_dict[f"fold{i}_p0"] = np.array(
+            [j if j in test else np.nan for j in range(len(X))]
+        )
+    expected_df = pd.DataFrame(expected_dict)
+    assert_frame_equal(inspector.predict(), expected_df)
+    assert_frame_equal(inspector.predict_proba(), expected_df)
+    assert_frame_equal(inspector.predict_log_proba(), expected_df)
+    assert_frame_equal(inspector.decision_function(), expected_df)
+
+
+# def test_nonoverlapping_cv_predictions(df_typed_iris):
+#     """Test non-overlapping CV predictions."""
+
+#     n_iters = 5
+#     mock_model = MockModelReturnsIndex
+#     cv = RepeatedKFold(n_repeats=1, n_splits=n_iters, random_state=2)
+#     cv_mdsum = _compute_cvmdsum(cv)
+#     df = scores(df_typed_iris, n_iters=n_iters, mock_model=mock_model)
+#     df["cv_mdsum"] = cv_mdsum

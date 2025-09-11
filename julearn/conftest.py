@@ -103,6 +103,32 @@ def df_typed_iris() -> pd.DataFrame:
 
 
 @fixture(scope="function")
+def df_grouped_iris() -> pd.DataFrame:
+    """Return a typed iris dataset.
+
+    Returns
+    -------
+    df : pd.DataFrame
+        The iris dataset with types.
+
+    """
+    df = load_dataset("iris")
+    df = typing.cast("pd.DataFrame", df)
+    bins = pd.cut(df.index.values, labels=[1, 2, 3], bins=3)
+    df["group"] = bins.astype(int)
+    rename = {
+        "sepal_length": "sepal_length__:type:__continuous",
+        "sepal_width": "sepal_width__:type:__continuous",
+        "petal_length": "petal_length__:type:__continuous",
+        "petal_width": "petal_width__:type:__continuous",
+    }
+
+    df = df.rename(columns=rename)
+
+    return df
+
+
+@fixture(scope="function")
 def df_iris() -> pd.DataFrame:
     """Return the iris dataset.
 
