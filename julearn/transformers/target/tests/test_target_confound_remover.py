@@ -8,7 +8,8 @@ from julearn.transformers.target import TargetConfoundRemover
 
 
 def test_TargetConfoundRemover(
-    X_iris: pd.DataFrame, y_iris: pd.Series  # noqa: N803
+    X_iris: pd.DataFrame,  # noqa: N803
+    y_iris: pd.Series,
 ) -> None:
     """Test target confound remover.
 

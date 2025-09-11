@@ -4,7 +4,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import List, Optional, Type
+from typing import Optional
 
 import numpy as np
 import pandas as pd
@@ -101,8 +101,8 @@ def test_ConfoundRemover__apply_threshold() -> None:
 )
 def test_ConfoundRemover_confound_auto_find_conf(
     df_X_confounds: pd.DataFrame,  # noqa: N803
-    drop: Optional[List[str]],
-    confounds: Optional[List[str]],
+    drop: Optional[list[str]],
+    confounds: Optional[list[str]],
     models_confound_remover: str,
 ) -> None:
     """Test finding confounds in the data types.
@@ -189,8 +189,8 @@ def test_ConfoundRemover_confound_auto_find_conf(
     ],
 )
 def test_confound_set_confounds(
-    model_class: Type[ModelLike],
-    confounds: List[str],
+    model_class: type[ModelLike],
+    confounds: list[str],
     df_X_confounds: pd.DataFrame,  # noqa: N803
 ):
     """Test confound removal confounds parameter setting.

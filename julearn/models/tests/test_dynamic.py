@@ -160,7 +160,8 @@ def test_wrong_algo(df_iris: pd.DataFrame) -> None:
 
     with pytest.raises(ValueError, match="wrong is not a valid or supported"):
         dynamic_model = DynamicSelection(
-            ensemble=ensemble_model, algorithm="wrong"  # type: ignore
+            ensemble=ensemble_model,
+            algorithm="wrong",  # type: ignore
         )
         dynamic_model.fit(df_iris[X], df_iris[y])
 

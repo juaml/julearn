@@ -4,7 +4,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Optional, Union
 
 import pandas as pd
 from sklearn.base import ClassNamePrefixFeaturesOutMixin
@@ -50,7 +50,7 @@ class JuColumnTransformer(JuTransformer):
         apply_to: ColumnTypesLike,
         needed_types: Optional[ColumnTypesLike] = None,
         row_select_col_type: Optional[ColumnTypesLike] = None,
-        row_select_vals: Optional[Union[str, int, List, bool]] = None,
+        row_select_vals: Optional[Union[str, int, list, bool]] = None,
         **params: Any,
     ):
         self.name = name
@@ -120,8 +120,8 @@ class JuColumnTransformer(JuTransformer):
         return self.column_transformer_.transform(X)  # type: ignore
 
     def get_feature_names_out(
-        self, input_features: Optional[List[str]] = None
-    ) -> List[str]:
+        self, input_features: Optional[list[str]] = None
+    ) -> list[str]:
         """Get names of features to be returned.
 
         Parameters
@@ -165,7 +165,7 @@ class JuColumnTransformer(JuTransformer):
             ]
         return out  # type: ignore
 
-    def get_params(self, deep: bool = True) -> Dict[str, Any]:
+    def get_params(self, deep: bool = True) -> dict[str, Any]:
         """Get parameters for this estimator.
 
         Parameters

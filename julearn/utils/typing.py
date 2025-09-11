@@ -4,10 +4,9 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
+from collections.abc import Iterable
 from typing import (
     Any,
-    Dict,
-    Iterable,
     Optional,
     Protocol,
     Union,
@@ -72,7 +71,7 @@ class EstimatorLikeFit1(Protocol):
         """
         return self
 
-    def get_params(self, deep: bool = True) -> Dict:
+    def get_params(self, deep: bool = True) -> dict:
         """Get params.
 
         Parameters
@@ -134,7 +133,7 @@ class EstimatorLikeFit2(Protocol):
         """
         return self
 
-    def get_params(self, deep: bool = True) -> Dict:
+    def get_params(self, deep: bool = True) -> dict:
         """Get params.
 
         Parameters
@@ -187,7 +186,7 @@ class EstimatorLikeFity(Protocol):
         """
         return self
 
-    def get_params(self, deep: bool = True) -> Dict:
+    def get_params(self, deep: bool = True) -> dict:
         """Get params.
 
         Parameters

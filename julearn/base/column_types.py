@@ -4,14 +4,14 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Callable, List, Set, Union
+from typing import Callable, Union
 
 from sklearn.compose import make_column_selector
 
 from ..utils.logging import raise_error
 
 
-ColumnTypesLike = Union[List[str], Set[str], str, "ColumnTypes"]
+ColumnTypesLike = Union[list[str], set[str], str, "ColumnTypes"]
 
 
 def change_column_type(column: str, new_type: str):
@@ -143,9 +143,9 @@ class ColumnTypes:
             _types = column_types._column_types.copy()
         elif isinstance(column_types, str):
             _types = {column_types}
-        elif not isinstance(column_types, Set):
+        elif not isinstance(column_types, set):
             _types = set(column_types)
-        elif isinstance(column_types, Set):
+        elif isinstance(column_types, set):
             _types = column_types
         else:
             raise_error(f"Cannot construct a ColumnType from {column_types}")

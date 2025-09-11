@@ -3,8 +3,6 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>prepa
 # License: AGPL
 
-from typing import Dict
-
 from sklearn.model_selection._search import BaseSearchCV
 from sklearn.pipeline import Pipeline
 
@@ -19,7 +17,7 @@ from .pipeline_creator import _prepare_hyperparameter_tuning
 
 
 def merge_pipelines(
-    *pipelines: EstimatorLike, search_params: Dict
+    *pipelines: EstimatorLike, search_params: dict
 ) -> Pipeline:
     """Merge multiple pipelines into a single one.
 
@@ -124,6 +122,8 @@ def merge_pipelines(
 
     # Finally, we will concatenate the grids and create a new searcher.
     new_searcher = _prepare_hyperparameter_tuning(
-        all_grids, search_params, reference_pipeline  # type: ignore
+        all_grids,
+        search_params,
+        reference_pipeline,  # type: ignore
     )
     return new_searcher

@@ -5,7 +5,7 @@
 # License: AGPL
 import typing
 from copy import copy
-from typing import Callable, Dict, List, Optional, Union
+from typing import Callable, Optional, Union
 
 import pandas as pd
 import pytest
@@ -50,7 +50,7 @@ def pytest_addoption(parser: pytest.Parser) -> None:
 
 
 def pytest_collection_modifyitems(
-    config: pytest.Config, items: List[pytest.Item]
+    config: pytest.Config, items: list[pytest.Item]
 ) -> None:
     """Filter tests based on the key marker.
 
@@ -180,7 +180,7 @@ def y_iris() -> pd.Series:
     ],
     scope="function",
 )
-def X_types_iris(request: FixtureRequest) -> Optional[Dict]:
+def X_types_iris(request: FixtureRequest) -> Optional[dict]:
     """Return different types for the iris dataset features.
 
     Parameters
@@ -244,7 +244,7 @@ def problem_type(request: FixtureRequest) -> str:
     ],
     scope="function",
 )
-def search_params(request: FixtureRequest) -> Optional[Dict]:
+def search_params(request: FixtureRequest) -> Optional[dict]:
     """Return different possibiblites for the search_params argument.
 
     Parameters
@@ -269,7 +269,7 @@ def search_params(request: FixtureRequest) -> Optional[Dict]:
     ],
     scope="function",
 )
-def bayes_search_params(request: FixtureRequest) -> Optional[Dict]:
+def bayes_search_params(request: FixtureRequest) -> Optional[dict]:
     """Return different search_params argument for BayesSearchCV.
 
     Parameters
@@ -294,7 +294,7 @@ def bayes_search_params(request: FixtureRequest) -> Optional[Dict]:
     ],
     scope="function",
 )
-def optuna_search_params(request: FixtureRequest) -> Optional[Dict]:
+def optuna_search_params(request: FixtureRequest) -> Optional[dict]:
     """Return different search_params argument for OptunaSearchCV.
 
     Parameters
@@ -333,7 +333,7 @@ def get_tuning_params() -> Callable:
 
     """
 
-    def get(step: str) -> Dict:
+    def get(step: str) -> dict:
         """Return the parameters to tune for a given step.
 
         Parameters
@@ -373,7 +373,7 @@ def get_tuning_distributions() -> Callable:
 
     """
 
-    def get(step: str) -> Dict:
+    def get(step: str) -> dict:
         """Return the distributions to tune for a given step.
 
         Parameters
@@ -403,7 +403,7 @@ def get_tuning_distributions() -> Callable:
     ],
     scope="function",
 )
-def preprocess(request: FixtureRequest) -> Union[str, List[str]]:
+def preprocess(request: FixtureRequest) -> Union[str, list[str]]:
     """Return different preprocessing steps.
 
     Parameters

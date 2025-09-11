@@ -7,7 +7,7 @@
 import typing
 import warnings
 from copy import deepcopy
-from typing import Callable, Dict, List, Optional, Union
+from typing import Callable, Optional, Union
 
 from sklearn.metrics import _scorer, get_scorer_names, make_scorer
 from sklearn.metrics._scorer import _check_multimetric_scoring  # type: ignore
@@ -57,7 +57,7 @@ def get_scorer(name: str) -> ScorerLike:  # type: ignore TODO: deprecate sklearn
     return scorer
 
 
-def list_scorers() -> List[str]:
+def list_scorers() -> list[str]:
     """List all available scorers.
 
     Returns
@@ -132,9 +132,9 @@ def reset_scorer_register():
 
 def check_scoring(
     estimator: EstimatorLike,
-    scoring: Union[ScorerLike, str, Callable, List[str], None],  # type: ignore
+    scoring: Union[ScorerLike, str, Callable, list[str], None],  # type: ignore
     wrap_score: bool,
-) -> Union[None, ScorerLike, Callable, Dict[str, ScorerLike]]:  # type: ignore
+) -> Union[None, ScorerLike, Callable, dict[str, ScorerLike]]:  # type: ignore
     """Check the scoring.
 
     Parameters
@@ -161,7 +161,7 @@ def check_scoring(
             wrap_score,
         )
     if isinstance(scoring, list):
-        scorer_names = typing.cast("List[str]", scoring)
+        scorer_names = typing.cast("list[str]", scoring)
         scoring_dict = {
             score: _extend_scorer(get_scorer(score), wrap_score)
             for score in scorer_names

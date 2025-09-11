@@ -25,6 +25,7 @@ measurements of flowers.
 We start by loading the dataset and setting the features and target
 variables.
 """
+
 from seaborn import load_dataset
 from pprint import pprint  # To print in a pretty way
 
@@ -400,7 +401,7 @@ creator.add(
     "svm",
     C=(0.01, 10, "log-uniform"),
     gamma=(1e-3, 1e-1, "log-uniform"),
-    class_weight=("balanced", None, "categorical")
+    class_weight=("balanced", None, "categorical"),
 )
 print(creator)
 
@@ -476,6 +477,7 @@ print(creator)
 # For example, we can define a log-uniform distribution with base 2 for the
 # ``C`` hyperparameter of the :class:`~sklearn.svm.SVC` model:
 from skopt.space import Real
+
 creator = PipelineCreator(problem_type="classification")
 creator.add("zscore", with_mean=(True, False, "categorical"))
 creator.add(
@@ -497,6 +499,7 @@ print(creator)
 # transformer, while keeping a log-uniform distribution for the ``C`` and
 # ``gamma`` hyperparameters of the :class:`~sklearn.svm.SVC` model.
 from optuna.distributions import FloatDistribution
+
 creator = PipelineCreator(problem_type="classification")
 creator.add("zscore")
 creator.add(

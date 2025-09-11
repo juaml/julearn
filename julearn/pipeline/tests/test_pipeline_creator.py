@@ -5,7 +5,7 @@
 # License: AGPL
 
 import warnings
-from typing import TYPE_CHECKING, Callable, Dict, List, Tuple, Union
+from typing import TYPE_CHECKING, Callable, Union
 
 import pandas as pd
 import pytest
@@ -27,7 +27,7 @@ if TYPE_CHECKING:
 
 
 def test_construction_working_wrapping(
-    model: str, preprocess: Union[str, List[str]], problem_type: str
+    model: str, preprocess: Union[str, list[str]], problem_type: str
 ) -> None:
     """Test that the pipeline constructions works as expected (wrapping).
 
@@ -73,7 +73,7 @@ def test_construction_working_wrapping(
 
 
 def test_construction_working_nowrapping(
-    model: str, preprocess: Union[str, List[str]], problem_type: str
+    model: str, preprocess: Union[str, list[str]], problem_type: str
 ) -> None:
     """Test that the pipeline constructions works as expected (no wrapping).
 
@@ -101,9 +101,7 @@ def test_construction_working_nowrapping(
         _preprocess, (name, transformer) = element
         assert name.startswith(f"{_preprocess}")
         assert not isinstance(transformer, JuColumnTransformer)
-        assert isinstance(
-            transformer, get_transformer(_preprocess).__class__
-        )
+        assert isinstance(transformer, get_transformer(_preprocess).__class__)
 
     # check model step
     model_name, model = pipeline.steps[-1]
@@ -118,12 +116,11 @@ def test_construction_working_nowrapping(
     assert len(preprocess) + 2 == len(pipeline.steps)
 
 
-
 def test_fit_and_transform_no_error(
     X_iris: pd.DataFrame,  # noqa: N803
     y_iris: pd.Series,
     model: str,
-    preprocess: Union[str, List[str]],
+    preprocess: Union[str, list[str]],
     problem_type: str,
 ) -> None:
     """Test that the pipeline fit and transform does not give an error.
@@ -152,13 +149,13 @@ def test_fit_and_transform_no_error(
 
 
 def _hyperparam_tuning_base_test(
-    X_types_iris: Dict[str, List[str]],  # noqa: N803
+    X_types_iris: dict[str, list[str]],  # noqa: N803
     model: str,
-    preprocess: Union[str, List[str]],
+    preprocess: Union[str, list[str]],
     problem_type: str,
     get_tuning_params: Callable,
-    search_params: Dict[str, List],
-) -> Tuple["Pipeline", Dict]:
+    search_params: dict[str, list],
+) -> tuple["Pipeline", dict]:
     """Test that the pipeline hyperparameter tuning works as expected.
 
     Parameters
@@ -218,12 +215,12 @@ def _hyperparam_tuning_base_test(
 
 
 def test_hyperparameter_tuning(
-    X_types_iris: Dict[str, List[str]],  # noqa: N803
+    X_types_iris: dict[str, list[str]],  # noqa: N803
     model: str,
-    preprocess: Union[str, List[str]],
+    preprocess: Union[str, list[str]],
     problem_type: str,
     get_tuning_params: Callable,
-    search_params: Dict[str, List],
+    search_params: dict[str, list],
 ) -> None:
     """Test that the pipeline hyperparameter tuning works as expected.
 
@@ -267,12 +264,12 @@ def test_hyperparameter_tuning(
 
 
 def test_hyperparameter_tuning_bayes(
-    X_types_iris: Dict[str, List[str]],  # noqa: N803
+    X_types_iris: dict[str, list[str]],  # noqa: N803
     model: str,
-    preprocess: Union[str, List[str]],
+    preprocess: Union[str, list[str]],
     problem_type: str,
     get_tuning_params: Callable,
-    bayes_search_params: Dict[str, List],
+    bayes_search_params: dict[str, list],
 ) -> None:
     """Test that the pipeline hyperparameter tuning (bayes) works as expected.
 
@@ -307,12 +304,12 @@ def test_hyperparameter_tuning_bayes(
 
 
 def test_hyperparameter_tuning_optuna(
-    X_types_iris: Dict[str, List[str]],  # noqa: N803
+    X_types_iris: dict[str, list[str]],  # noqa: N803
     model: str,
-    preprocess: Union[str, List[str]],
+    preprocess: Union[str, list[str]],
     problem_type: str,
     get_tuning_params: Callable,
-    optuna_search_params: Dict[str, List],
+    optuna_search_params: dict[str, list],
 ) -> None:
     """Test that the pipeline hyperparameter tuning (optuna) works as expected.
 
@@ -351,7 +348,7 @@ def test_hyperparameter_tuning_optuna(
     assert pipeline.param_distributions == param_grid  # type: ignore
 
 
-def _compare_param_grids(a: Dict, b: Dict) -> None:
+def _compare_param_grids(a: dict, b: dict) -> None:
     """Compare two param grids.
 
     Parameters
@@ -385,12 +382,12 @@ def _compare_param_grids(a: Dict, b: Dict) -> None:
 
 
 def test_hyperparameter_tuning_distributions(
-    X_types_iris: Dict[str, List[str]],  # noqa: N803
+    X_types_iris: dict[str, list[str]],  # noqa: N803
     model: str,
-    preprocess: Union[str, List[str]],
+    preprocess: Union[str, list[str]],
     problem_type: str,
     get_tuning_distributions: Callable,
-    search_params: Dict[str, List],
+    search_params: dict[str, list],
 ) -> None:
     """Test hyperparameter tuning using distributions.
 
@@ -433,12 +430,12 @@ def test_hyperparameter_tuning_distributions(
 
 
 def test_hyperparameter_tuning_distributions_bayes(
-    X_types_iris: Dict[str, List[str]],  # noqa: N803
+    X_types_iris: dict[str, list[str]],  # noqa: N803
     model: str,
-    preprocess: Union[str, List[str]],
+    preprocess: Union[str, list[str]],
     problem_type: str,
     get_tuning_distributions: Callable,
-    bayes_search_params: Dict[str, List],
+    bayes_search_params: dict[str, list],
 ) -> None:
     """Test BayesSearchCV hyperparameter tuning using distributions.
 
@@ -487,7 +484,7 @@ def test_hyperparameter_tuning_distributions_bayes(
     ],
 )
 def test_X_types_to_pattern_warnings(
-    X_types: Dict[str, List[str]],  # noqa: N803
+    X_types: dict[str, list[str]],  # noqa: N803
     apply_to: ColumnTypesLike,
     warns: bool,
 ) -> None:
@@ -527,7 +524,7 @@ def test_X_types_to_pattern_warnings(
     ],
 )
 def test_X_types_to_pattern_errors(
-    X_types: Dict[str, List[str]],  # noqa: N803
+    X_types: dict[str, list[str]],  # noqa: N803
     apply_to: ColumnTypesLike,
     error: bool,
 ) -> None:

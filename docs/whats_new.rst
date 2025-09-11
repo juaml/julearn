@@ -6,6 +6,8 @@
 What's new
 ==========
 
+.. towncrier-draft-entries:: |release|
+
 .. towncrier release notes start
 
 Julearn 0.3.4 (2024-10-17)

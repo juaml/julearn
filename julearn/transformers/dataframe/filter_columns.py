@@ -4,7 +4,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import List, Optional, Union
+from typing import Optional, Union
 
 import pandas as pd
 from sklearn.compose import ColumnTransformer
@@ -102,8 +102,8 @@ class FilterColumns(JuTransformer):
         return self.filter_columns_.transform(X)  # type: ignore
 
     def get_feature_names_out(
-        self, input_features: Optional[List[str]] = None
-    ) -> List[str]:
+        self, input_features: Optional[list[str]] = None
+    ) -> list[str]:
         """Get names of features to be returned.
 
         Parameters

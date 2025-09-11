@@ -6,7 +6,7 @@
 
 import re
 from collections import Counter
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Optional, Union
 
 import numpy as np
 import pandas as pd
@@ -28,7 +28,7 @@ from .utils.typing import CVLike
 
 
 def _validate_input_data_df(
-    X: Union[str, List[str]],  # noqa: N803
+    X: Union[str, list[str]],  # noqa: N803
     y: str,
     df: pd.DataFrame,
     groups: Optional[str],
@@ -72,7 +72,7 @@ def _validate_input_data_df(
 
 
 def _validate_input_data_df_ext(
-    X: Union[str, List[str]],  # noqa: N803
+    X: Union[str, list[str]],  # noqa: N803
     y: str,
     df: pd.DataFrame,
     groups: Optional[str],
@@ -149,8 +149,8 @@ def _is_regex(string: str) -> bool:
 
 
 def _pick_columns(
-    regexes: Union[str, List[str]], columns: Union[List[str], pd.Index]
-) -> List[str]:
+    regexes: Union[str, list[str]], columns: Union[list[str], pd.Index]
+) -> list[str]:
     """Pick elements from a list based on matches to a list of regexes.
 
     Parameters
@@ -210,13 +210,13 @@ def _pick_columns(
 
 
 def prepare_input_data(
-    X: Union[str, List[str]],  # noqa: N803
+    X: Union[str, list[str]],  # noqa: N803
     y: str,
     df: pd.DataFrame,
-    pos_labels: Union[str, int, float, List, None],
+    pos_labels: Union[str, int, float, list, None],
     groups: Optional[str],
-    X_types: Optional[Dict],  # noqa: N803
-) -> Tuple[pd.DataFrame, pd.Series, Union[pd.Series, None], Dict]:
+    X_types: Optional[dict],  # noqa: N803
+) -> tuple[pd.DataFrame, pd.Series, Union[pd.Series, None], dict]:
     """Prepare the input data and variables for the pipeline.
 
     Parameters
@@ -424,8 +424,9 @@ def check_consistency(
 
 
 def _check_x_types(
-    X_types: Optional[Dict], X: List[str]  # noqa: N803
-) -> Dict[str, List]:
+    X_types: Optional[dict],  # noqa: N803
+    X: list[str],  # noqa: N803
+) -> dict[str, list]:
     """Check validity of X_types with respect to X.
 
     Parameters
@@ -514,8 +515,8 @@ def _check_x_types(
 
 
 def prepare_search_params(
-    search_params: Optional[Dict[str, Any]]
-) -> Dict[str, Any]:
+    search_params: Optional[dict[str, Any]],
+) -> dict[str, Any]:
     """Prepare the parameters for the search.
 
     Parameters

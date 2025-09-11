@@ -5,21 +5,21 @@
 # License: AGPL
 
 from copy import deepcopy
-from typing import Any, Dict, List, Optional, Type
+from typing import Any, Optional
 
 from ...utils import logger, raise_error, warn_with_log
 from .ju_target_transformer import JuTargetTransformer
 from .target_confound_remover import TargetConfoundRemover
 
 
-_available_target_transformers: Dict[str, Type[JuTargetTransformer]] = {
+_available_target_transformers: dict[str, type[JuTargetTransformer]] = {
     "confound_removal": TargetConfoundRemover,
 }
 
 _available_target_transformers_reset = deepcopy(_available_target_transformers)
 
 
-def list_target_transformers() -> List[str]:
+def list_target_transformers() -> list[str]:
     """List all the available target transformers.
 
     Returns
@@ -65,7 +65,7 @@ def get_target_transformer(name: str, **params: Any) -> JuTargetTransformer:
 
 def register_target_transformer(
     transformer_name: str,
-    transformer_cls: Type[JuTargetTransformer],
+    transformer_cls: type[JuTargetTransformer],
     overwrite: Optional[bool] = None,
 ):
     """Register a target transformer to julearn.

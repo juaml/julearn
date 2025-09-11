@@ -6,7 +6,7 @@
 
 import typing
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Optional, Union
 
 import numpy as np
 from scipy import stats
@@ -43,7 +43,7 @@ from .target_pipeline_creator import TargetPipelineCreator
 
 
 def _should_wrap_this_step(
-    X_types: Dict[str, List[str]],  # noqa: N803
+    X_types: dict[str, list[str]],  # noqa: N803
     apply_to: ColumnTypesLike,
 ) -> bool:
     """Check if we should wrap the step.
@@ -75,8 +75,8 @@ def _should_wrap_this_step(
 
 def _params_to_pipeline(
     param: Any,
-    X_types: Dict[str, List],  # noqa: N803
-    search_params: Optional[Dict],
+    X_types: dict[str, list],  # noqa: N803
+    search_params: Optional[dict],
 ):
     """Recursively convert params to pipelines.
 
@@ -146,7 +146,7 @@ class Step:
         default_factory=lambda: ColumnTypes("continuous")
     )
     needed_types: Optional[ColumnTypesLike] = None
-    params_to_tune: Optional[Dict] = None
+    params_to_tune: Optional[dict] = None
 
     row_select_col_type: Optional[ColumnTypesLike] = None
     row_select_vals: Optional[Union[str, int, list, bool]] = None
@@ -355,7 +355,7 @@ class PipelineCreator:
         return self
 
     @property
-    def steps(self) -> List[Step]:
+    def steps(self) -> list[Step]:
         """Get the steps that have been added to the PipelineCreator."""
         return self._steps
 
@@ -435,7 +435,7 @@ class PipelineCreator:
 
     def split(
         self,
-    ) -> List["PipelineCreator"]:
+    ) -> list["PipelineCreator"]:
         """Split the PipelineCreator into multiple PipelineCreators.
 
         If the PipelineCreator has at least two steps with the same name,
@@ -494,8 +494,8 @@ class PipelineCreator:
 
     def to_pipeline(
         self,
-        X_types: Optional[Dict[str, List]] = None,  # noqa: N803
-        search_params: Optional[Dict[str, Any]] = None,
+        X_types: Optional[dict[str, list]] = None,  # noqa: N803
+        search_params: Optional[dict[str, Any]] = None,
     ) -> Pipeline:
         """Create a pipeline from the PipelineCreator.
 
@@ -515,7 +515,7 @@ class PipelineCreator:
         logger.debug("Creating pipeline")
         if not self.has_model():
             raise_error("Cannot create a pipeline without a model")
-        pipeline_steps: List[Tuple[str, Any]] = [
+        pipeline_steps: list[tuple[str, Any]] = [
             ("set_column_types", SetColumnTypes(X_types))
         ]
 
@@ -620,7 +620,7 @@ class PipelineCreator:
     @staticmethod
     def _wrap_target_model(
         model_name: str, model: ModelLike, target_trans_step: Step
-    ) -> Tuple[str, JuTransformedTargetModel]:
+    ) -> tuple[str, JuTransformedTargetModel]:
         """Wrap the model in a JuTransformedTargetModel.
 
         Parameters
@@ -658,7 +658,7 @@ class PipelineCreator:
         return (f"{model_name}_target_transform", target_model)
 
     def _validate_model_params(
-        self, model_name: str, model_params: Dict[str, Any]
+        self, model_name: str, model_params: dict[str, Any]
     ) -> None:
         """Validate the model parameters.
 
@@ -757,8 +757,8 @@ class PipelineCreator:
 
     def _check_X_types(
         self,
-        X_types: Optional[Dict] = None,  # noqa: N803
-    ) -> Dict[str, List[str]]:
+        X_types: Optional[dict] = None,  # noqa: N803
+    ) -> dict[str, list[str]]:
         """Check the X_types against the pipeline creator settings.
 
         Parameters
@@ -917,8 +917,8 @@ class PipelineCreator:
 
 
 def _prepare_hyperparameters_distributions(
-    params_to_tune: Dict[str, Any],
-) -> Dict[str, Any]:
+    params_to_tune: dict[str, Any],
+) -> dict[str, Any]:
     """Prepare hyperparameters distributions for RandomizedSearchCV.
 
     This method replaces tuples with distributions for RandomizedSearchCV
@@ -952,8 +952,8 @@ def _prepare_hyperparameters_distributions(
 
 
 def _prepare_hyperparameter_tuning(
-    params_to_tune: Union[Dict[str, Any], List[Dict[str, Any]]],
-    search_params: Optional[Dict[str, Any]],
+    params_to_tune: Union[dict[str, Any], list[dict[str, Any]]],
+    search_params: Optional[dict[str, Any]],
     pipeline: Pipeline,
 ):
     """Prepare hyperparameter tuning in the pipeline.

@@ -4,7 +4,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import List, Optional, Tuple, Union
+from typing import Optional, Union
 
 import numpy as np
 import pandas as pd
@@ -63,7 +63,7 @@ class ConfoundRemover(JuTransformer):
         threshold: Optional[float] = None,
         keep_confounds: bool = False,
         row_select_col_type: Optional[ColumnTypesLike] = None,
-        row_select_vals: Optional[Union[str, int, List, bool]] = None,
+        row_select_vals: Optional[Union[str, int, list, bool]] = None,
     ):
         if model_confound is None:
             model_confound = LinearRegression()  # type: ignore
@@ -79,7 +79,9 @@ class ConfoundRemover(JuTransformer):
         )
 
     def _fit(
-        self, X: pd.DataFrame, y: Optional[DataLike] = None  # noqa: N803
+        self,
+        X: pd.DataFrame,  # noqa: N803
+        y: Optional[DataLike] = None,
     ) -> "ConfoundRemover":
         """Fit ConfoundRemover.
 
@@ -112,7 +114,9 @@ class ConfoundRemover(JuTransformer):
             return _model  # type: ignore
 
         self.models_confound_ = df_X.apply(
-            fit_confound_models, axis=0, result_type="reduce"  # type: ignore
+            fit_confound_models,
+            axis=0,
+            result_type="reduce",  # type: ignore
         )
         return self
 
@@ -169,15 +173,13 @@ class ConfoundRemover(JuTransformer):
 
         """
         if indices:
-            return np.arange(len(self.support_mask_))[
-                self.support_mask_
-            ]  # type: ignore
+            return np.arange(len(self.support_mask_))[self.support_mask_]  # type: ignore
         else:
             return self.support_mask_  # type: ignore
 
     def get_feature_names_out(
-        self, input_features: Optional[List[str]] = None
-    ) -> List[str]:
+        self, input_features: Optional[list[str]] = None
+    ) -> list[str]:
         """Get names of features to be returned.
 
         Parameters
@@ -202,8 +204,9 @@ class ConfoundRemover(JuTransformer):
         return out  # type: ignore
 
     def _split_into_X_confound(
-        self, X: pd.DataFrame  # noqa: N803
-    ) -> Tuple[pd.DataFrame, pd.DataFrame]:
+        self,
+        X: pd.DataFrame,  # noqa: N803
+    ) -> tuple[pd.DataFrame, pd.DataFrame]:
         """Split the original X into the features (X) and confounds.
 
         Parameters

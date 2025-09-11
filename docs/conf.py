@@ -1,21 +1,16 @@
+"""Provide configuration for Sphinx."""
+
 # Configuration file for the Sphinx documentation builder.
 #
 # This file only contains a selection of the most common options. For a full
 # list see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
-import os
-import re
-import sys
 
-# -- Path setup --------------------------------------------------------------
-# If extensions (or modules to document with autodoc) are in another directory,
-# add these directories to sys.path here. If the directory is relative to the
-# documentation root, use os.path.abspath to make it absolute, like shown here.
-#
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
+import datetime
+from functools import partial
 from pathlib import Path
+
+from setuptools_scm import get_version
 
 
 # Check if sphinx-multiversion is installed
@@ -27,40 +22,58 @@ try:
 except ImportError:
     pass
 
-curdir = Path(__file__).parent
-sys.path.append((curdir / "sphinxext").as_posix())
+
+# -- Path setup --------------------------------------------------------------
+
+PROJECT_ROOT_DIR = Path(__file__).parents[1].resolve()
+get_scm_version = partial(get_version, root=PROJECT_ROOT_DIR)
 
 # -- Project information -----------------------------------------------------
 
-project = "julearn"
-copyright = "2023, Authors of julearn"
-author = "Fede Raimondo"
+github_url = "https://github.com"
+github_repo_org = "juaml"
+github_repo_name = "julearn"
+github_repo_slug = f"{github_repo_org}/{github_repo_name}"
+github_repo_url = f"{github_url}/{github_repo_slug}"
 
+project = github_repo_name
+author = f"{project} Contributors"
+copyright = f"{datetime.date.today().year}, {author}"
+
+# The version along with dev tag
+release = get_scm_version(
+    version_scheme="guess-next-dev",
+    local_scheme="no-local-version",
+)
 
 # -- General configuration ---------------------------------------------------
-
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    "sphinx.ext.autodoc",
-    "sphinx.ext.autosummary",
-    "sphinx.ext.doctest",
-    "sphinx.ext.intersphinx",
-    "sphinx.ext.mathjax",
-    "sphinx_gallery.gen_gallery",
-    "numpydoc",
-    "gh_substitutions",
-    "sphinx_copybutton",
-    "bokeh.sphinxext.bokeh_plot",
+    # Built-in extensions:
+    "sphinx.ext.autodoc",  # include documentation from docstrings
+    "sphinx.ext.autosummary",  # generate autodoc summaries
+    "sphinx.ext.doctest",  # test snippets in the documentation
+    "sphinx.ext.extlinks",  # markup to shorten external links
+    "sphinx.ext.intersphinx",  # link to other projects` documentation
+    "sphinx.ext.mathjax",  # math support for HTML outputs in Sphinx
+    # Third-party extensions:
+    "sphinx_gallery.gen_gallery",  # HTML gallery of examples
+    "numpydoc",  # support for NumPy style docstrings
+    "sphinx_copybutton",  # copy button for code blocks
+    "sphinxcontrib.towncrier.ext",  # towncrier fragment support
+    "bokeh.sphinxext.bokeh_plot",  # bokeh plot support
 ]
 
 if use_multiversion:
     extensions.append("sphinx_multiversion")
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ["_templates"]
+templates_path = [
+    "_templates",
+]
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -95,7 +108,7 @@ nitpick_ignore_regex = [
 # a list of builtin themes.
 #
 html_theme = "furo"
-
+html_title = "julearn documentation"
 html_logo = "images/julearn_logo_it.png"
 
 # These paths are either relative to html_static_path
@@ -126,7 +139,6 @@ html_sidebars = {
         "sidebar/scroll-end.html",
     ]
 }
-
 
 # -- sphinx.ext.autodoc configuration ----------------------------------------
 
@@ -168,6 +180,11 @@ intersphinx_mapping = {
     ),
 }
 
+# -- sphinx.ext.extlinks configuration ---------------------------------------
+
+extlinks = {
+    "gh": (f"{github_repo_url}/issues/%s", "#%s"),
+}
 
 # -- numpydoc configuration --------------------------------------------------
 
@@ -208,7 +225,6 @@ numpydoc_xref_ignore = {
 #     "EX01",
 # }
 
-
 # -- Sphinx-Gallery configuration --------------------------------------------
 
 ex_dirs = [
@@ -243,3 +259,9 @@ smv_rebuild_tags = False
 smv_tag_whitelist = r"^v\d+\.\d+.\d+$"
 smv_branch_whitelist = r"main"
 smv_released_pattern = r"^tags/v.*$"
+
+# -- sphinxcontrib-towncrier configuration -----------------------------------
+
+towncrier_draft_autoversion_mode = "draft"
+towncrier_draft_include_empty = True
+towncrier_draft_working_directory = PROJECT_ROOT_DIR

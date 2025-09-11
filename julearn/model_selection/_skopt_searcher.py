@@ -3,7 +3,7 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL
 
-from typing import Any, Dict
+from typing import Any
 
 from ..utils import logger
 from .available_searchers import _recreate_reset_copy, register_searcher
@@ -37,8 +37,8 @@ def register_bayes_searcher():
 
 
 def _prepare_skopt_hyperparameters_distributions(
-    params_to_tune: Dict[str, Any],
-) -> Dict[str, Any]:
+    params_to_tune: dict[str, Any],
+) -> dict[str, Any]:
     """Prepare hyperparameters distributions for RandomizedSearchCV.
 
     This method replaces tuples with distributions for RandomizedSearchCV
@@ -71,13 +71,12 @@ def _prepare_skopt_hyperparameters_distributions(
                 out[k] = sksp.Categorical(v[:-1])
             elif isinstance(v[0], int) and isinstance(v[1], int):
                 logger.info(
-                    f"Hyperparameter {k} is {prior} integer "
-                    f"[{v[0]}, {v[1]}]"
+                    f"Hyperparameter {k} is {prior} integer [{v[0]}, {v[1]}]"
                 )
                 out[k] = sksp.Integer(v[0], v[1], prior=prior)
             elif isinstance(v[0], float) and isinstance(v[1], float):
                 logger.info(
-                    f"Hyperparameter {k} is {prior} float " f"[{v[0]}, {v[1]}]"
+                    f"Hyperparameter {k} is {prior} float [{v[0]}, {v[1]}]"
                 )
                 out[k] = sksp.Real(v[0], v[1], prior=prior)
             else:

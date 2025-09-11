@@ -3,8 +3,6 @@
 # Author: Federico Raimondo <f.raimondo@fz-juelich.de>
 # License: BSD 3 clause
 
-from typing import List
-
 import numpy as np
 import pandas as pd
 
@@ -13,7 +11,7 @@ from .logging import raise_error
 
 def check_scores_df(
     *scores: pd.DataFrame, same_cv: bool = False
-) -> List[pd.DataFrame]:
+) -> list[pd.DataFrame]:
     """Check the output of `run_cross_validation`.
 
     Parameters
@@ -78,6 +76,6 @@ def check_scores_df(
     named_scores = []
     for i, score in enumerate(scores):
         if "model" not in score:
-            score["model"] = f"model_{i+1}"
+            score["model"] = f"model_{i + 1}"
         named_scores.append(score)
     return named_scores

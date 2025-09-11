@@ -19,6 +19,7 @@ Cross-validation scores
 We consider the ``iris`` data example and one of the pipelines from the previous
 section (feature z-scoring and a ``svm``).
 """
+
 from julearn import run_cross_validation
 from julearn.pipeline import PipelineCreator
 

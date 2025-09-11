@@ -5,7 +5,7 @@
 # License: AGPL
 
 from copy import deepcopy
-from typing import List, Optional, Type, Union
+from typing import Optional, Union
 
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 
@@ -34,7 +34,7 @@ def _recreate_reset_copy() -> None:
     _available_searchers_reset = deepcopy(_available_searchers)
 
 
-def list_searchers() -> List[str]:
+def list_searchers() -> list[str]:
     """List all available searching algorithms.
 
     Returns
@@ -46,7 +46,7 @@ def list_searchers() -> List[str]:
     return list(_available_searchers)
 
 
-def get_searcher(name: str) -> Type:
+def get_searcher(name: str) -> type:
     """Get a searcher by name.
 
     Parameters
@@ -138,7 +138,7 @@ def reset_searcher_register() -> None:
     _available_searchers = deepcopy(_available_searchers_reset)
 
 
-def get_searcher_params_attr(searcher: Union[str, Type]) -> Optional[str]:
+def get_searcher_params_attr(searcher: Union[str, type]) -> Optional[str]:
     """Get the name of the attribute that holds the search space.
 
     Parameters

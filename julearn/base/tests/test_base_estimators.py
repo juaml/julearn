@@ -4,8 +4,6 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import List, Type
-
 import numpy as np
 import pandas as pd
 import pytest
@@ -77,9 +75,9 @@ def model(request):
 def test_WrapModel(
     X_iris: pd.DataFrame,  # noqa: N803
     y_iris: pd.DataFrame,
-    model: Type[ModelLike],
+    model: type[ModelLike],
     apply_to: ColumnTypesLike,
-    column_types: List[str],
+    column_types: list[str],
     selection: slice,
 ) -> None:
     """Test the WrapModel class.

@@ -5,7 +5,7 @@
 # License: AGPL
 
 from copy import deepcopy
-from typing import Any, Dict, List, Optional, Type
+from typing import Any, Optional
 
 from sklearn.dummy import DummyClassifier, DummyRegressor
 from sklearn.ensemble import (
@@ -51,7 +51,7 @@ from ..utils.typing import ModelLike
 from .dynamic import DynamicSelection
 
 
-_available_models: Dict[str, Dict[str, Any]] = {
+_available_models: dict[str, dict[str, Any]] = {
     # SVM
     "svm": {
         "regression": SVR,
@@ -139,7 +139,7 @@ _available_models: Dict[str, Dict[str, Any]] = {
 _available_models_reset = deepcopy(_available_models)
 
 
-def list_models() -> List[str]:
+def list_models() -> list[str]:
     """List all the available model names.
 
     Returns
@@ -178,8 +178,7 @@ def get_model(name: str, problem_type: str, **kwargs: Any) -> ModelLike:
 
     if problem_type not in _available_models[name]:
         raise_error(
-            f"The specified model ({name})) is not suitable for"
-            f"{problem_type}"
+            f"The specified model ({name})) is not suitable for {problem_type}"
         )
     out = _available_models[name][problem_type](**kwargs)  # type: ignore
     return out
@@ -187,8 +186,8 @@ def get_model(name: str, problem_type: str, **kwargs: Any) -> ModelLike:
 
 def register_model(
     model_name: str,
-    classification_cls: Optional[Type[ModelLike]] = None,
-    regression_cls: Optional[Type[ModelLike]] = None,
+    classification_cls: Optional[type[ModelLike]] = None,
+    regression_cls: Optional[type[ModelLike]] = None,
     overwrite: Optional[bool] = None,
 ):
     """Register a model to julearn.

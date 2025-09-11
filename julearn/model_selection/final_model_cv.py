@@ -3,7 +3,8 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL
 
-from typing import TYPE_CHECKING, Generator, Optional, Tuple
+from collections.abc import Generator
+from typing import TYPE_CHECKING, Optional
 
 import numpy as np
 
@@ -34,7 +35,7 @@ class _JulearnFinalModelCV:
         X: np.ndarray,  # noqa: N803
         y: np.ndarray,
         groups: Optional[np.ndarray] = None,
-    ) -> Generator[Tuple[np.ndarray, np.ndarray], None, None]:
+    ) -> Generator[tuple[np.ndarray, np.ndarray], None, None]:
         """Generate indices to split data into training and test set.
 
         Parameters

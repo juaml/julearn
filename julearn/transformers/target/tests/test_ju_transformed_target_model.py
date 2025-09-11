@@ -18,7 +18,8 @@ from julearn.transformers.target import (
 
 
 def test_JuTransformedTargetModel(
-    X_iris: pd.DataFrame, y_iris: pd.Series  # noqa: N803
+    X_iris: pd.DataFrame,  # noqa: N803
+    y_iris: pd.Series,
 ) -> None:
     """Test JuTransformedTargetModel."""
 
@@ -27,7 +28,8 @@ def test_JuTransformedTargetModel(
     model = SVR()
 
     ju_transformed_target_model = JuTransformedTargetModel(
-        transformer=transformer, model=model  # type: ignore
+        transformer=transformer,
+        model=model,  # type: ignore
     )
 
     ju_transformed_target_model.fit(X_iris, y_iris)
@@ -45,7 +47,8 @@ def test_JuTransformedTargetModel(
 
 
 def test_JuTransformedTargetModel_noinverse(
-    X_iris: pd.DataFrame, y_iris: pd.Series  # noqa: N803
+    X_iris: pd.DataFrame,  # noqa: N803
+    y_iris: pd.Series,
 ) -> None:
     """Test JuTransformedTargetModel."""
     steps = [("quantile", Normalizer())]
@@ -53,7 +56,8 @@ def test_JuTransformedTargetModel_noinverse(
     model = SVR()
 
     ju_transformed_target_model = JuTransformedTargetModel(
-        transformer=transformer, model=model  # type: ignore
+        transformer=transformer,
+        model=model,  # type: ignore
     )
 
     ju_transformed_target_model.fit(X_iris, y_iris)
@@ -79,7 +83,8 @@ def test_JuTransformedTargetModel_not_fitted(X_iris, y_iris):  # noqa: N803
     model = SVC(probability=True)
 
     target_model = JuTransformedTargetModel(
-        transformer=transformer, model=model  # type: ignore
+        transformer=transformer,
+        model=model,  # type: ignore
     )
     with pytest.raises(ValueError, match="Model not fitted "):
         target_model.score(X_iris, y_iris)
