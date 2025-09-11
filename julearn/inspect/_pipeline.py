@@ -52,7 +52,10 @@ class PipelineInspector:
             The requested step.
 
         """
-        step = self._model.named_steps[name]
+        model = self._model
+        if hasattr(model, "best_estimator_"):
+            model = model.best_estimator_
+        step = model.named_steps[name]
         if not as_estimator:
             step = _EstimatorInspector(step)
         return step
@@ -83,11 +86,9 @@ class PipelineInspector:
 
         """
         fitted_params = {}
-        model = (
-            self._model.best_estimator_
-            if hasattr(self._model, "best_estimator_")
-            else self._model
-        )
+        model = self._model
+        if hasattr(model, "best_estimator_"):
+            model = model.best_estimator_
         for name, step in model.steps:
             params = _EstimatorInspector(step).get_fitted_params()
             fitted_params = {

@@ -274,3 +274,29 @@ def test_get_estimator(df_iris: "pd.DataFrame") -> None:
     svc = inspector.get_step("svc").estimator
     assert isinstance(svc, SVC)
     assert pipe.get_params() == inspector.get_params()
+
+
+def test_estimator_gridsearch(df_iris: "pd.DataFrame") -> None:
+    """Test estimator fetch from inspector.
+
+    Parameters
+    ----------
+    df_iris : pd.DataFrame
+        The iris dataset.
+
+    """
+    pipe = (
+        PipelineCreator(problem_type="classification")
+        .add("zscore")
+        .add(
+            "svm", C=[1, 10], kernel=["linear", "rbf"]
+        )
+        .to_pipeline()
+    )
+    pipe.fit(df_iris.iloc[:, :-1], df_iris.species)
+    inspector = PipelineInspector(pipe)
+    svc = inspector.get_step("svm").estimator
+    assert isinstance(svc, SVC)
+    assert pipe.get_params() == inspector.get_params()
+    assert isinstance(inspector.get_step_names(), list)
+    assert len(inspector.get_step_names()) == 3
