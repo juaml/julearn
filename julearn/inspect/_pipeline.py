@@ -12,25 +12,76 @@ from ..transformers import JuColumnTransformer
 
 
 class PipelineInspector:
+    """Provide inspector for pipeline.
+
+    Parameters
+    ----------
+    model : Pipeline
+        The pipeline to inspect.
+
+    """
+
     def __init__(self, model):
         check_is_fitted(model)
         self._model = model
 
     def get_step_names(self):
+        """Get the names of the steps in the pipeline.
+
+        Returns
+        -------
+        list
+            The names of the steps in the pipeline.
+
+        """
         return list(self._model.named_steps.keys())
 
     def get_step(self, name, as_estimator=False):
+        """Get a step from the pipeline.
+
+        Parameters
+        ----------
+        name : str
+            The name of the step to retrieve.
+        as_estimator : bool, optional
+            Whether to return the step as an estimator inspector or not.
+
+        Returns
+        -------
+        Union[Pipeline, _EstimatorInspector]
+            The requested step.
+
+        """
         step = self._model.named_steps[name]
         if not as_estimator:
             step = _EstimatorInspector(step)
         return step
 
     def get_params(self):
+        """Get the parameters of the pipeline.
+
+        Returns
+        -------
+        dict
+            The parameters of the pipeline.
+
+        """
         if hasattr(self._model, "best_estimator_"):
             self._model.best_estimator_.get_params()
         return self._model.get_params()
 
     def get_fitted_params(self):
+        """Get the fitted parameters of the pipeline.
+
+        Get the fitted parameters of the pipeline. This includes both
+        hyperparameters and fitted parameters.
+
+        Returns
+        -------
+        dict
+            The fitted parameters of the pipeline.
+
+        """
         fitted_params = {}
         model = (
             self._model.best_estimator_
