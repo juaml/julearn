@@ -313,6 +313,7 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../api/inspect.html">9.5. Inspect</a><input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><div class="visually-hidden">Toggle navigation of 9.5. Inspect</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.inspect.Inspector.html">julearn.inspect.Inspector</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.inspect.FoldsInspector.html">julearn.inspect.FoldsInspector</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.inspect.PipelineInspector.html">julearn.inspect.PipelineInspector</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.inspect.preprocess.html">julearn.inspect.preprocess</a></li>
 </ul>
 </li>
@@ -520,14 +521,14 @@ Finally, we will fit a linear regression model.</p>
 <span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;linreg&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-09-11 11:36:59,340 - julearn - INFO - Adding step confound_removal that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2025-09-11 11:36:59,341 - julearn - INFO - Step added
-2025-09-11 11:36:59,341 - julearn - INFO - Adding step pca that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2025-09-11 11:36:59,341 - julearn - INFO - Step added
-2025-09-11 11:36:59,341 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2025-09-11 11:36:59,342 - julearn - INFO - Step added
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-09-12 08:57:42,357 - julearn - INFO - Adding step confound_removal that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-09-12 08:57:42,358 - julearn - INFO - Step added
+2025-09-12 08:57:42,358 - julearn - INFO - Adding step pca that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-09-12 08:57:42,358 - julearn - INFO - Step added
+2025-09-12 08:57:42,358 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-09-12 08:57:42,358 - julearn - INFO - Step added
 
-&lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fb81c82f1c0&gt;
+&lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fe6cd6da200&gt;
 </pre></div>
 </div>
 <p>Now we need to set the <code class="docutils literal notranslate"><span class="pre">X_types</span></code> argument of the <code class="docutils literal notranslate"><span class="pre">run_cross_validation</span></code>
@@ -553,25 +554,25 @@ features are the features that we want to remove from the <cite>continuous</cite
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-09-11 11:36:59,342 - julearn - INFO - ==== Input Data ====
-2025-09-11 11:36:59,342 - julearn - INFO - Using dataframe as input
-2025-09-11 11:36:59,343 - julearn - INFO -      Features: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;, &#39;sex&#39;]
-2025-09-11 11:36:59,343 - julearn - INFO -      Target: target
-2025-09-11 11:36:59,343 - julearn - INFO -      Expanded features: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;, &#39;sex&#39;]
-2025-09-11 11:36:59,343 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;], &#39;confound&#39;: [&#39;sex&#39;]}
-2025-09-11 11:36:59,344 - julearn - INFO - ====================
-2025-09-11 11:36:59,344 - julearn - INFO -
-2025-09-11 11:36:59,345 - julearn - INFO - = Model Parameters =
-2025-09-11 11:36:59,345 - julearn - INFO - ====================
-2025-09-11 11:36:59,345 - julearn - INFO -
-2025-09-11 11:36:59,345 - julearn - INFO - = Data Information =
-2025-09-11 11:36:59,345 - julearn - INFO -      Problem type: regression
-2025-09-11 11:36:59,346 - julearn - INFO -      Number of samples: 442
-2025-09-11 11:36:59,346 - julearn - INFO -      Number of features: 10
-2025-09-11 11:36:59,346 - julearn - INFO - ====================
-2025-09-11 11:36:59,346 - julearn - INFO -
-2025-09-11 11:36:59,346 - julearn - INFO -      Target type: float64
-2025-09-11 11:36:59,346 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-09-12 08:57:42,359 - julearn - INFO - ==== Input Data ====
+2025-09-12 08:57:42,359 - julearn - INFO - Using dataframe as input
+2025-09-12 08:57:42,359 - julearn - INFO -      Features: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;, &#39;sex&#39;]
+2025-09-12 08:57:42,360 - julearn - INFO -      Target: target
+2025-09-12 08:57:42,360 - julearn - INFO -      Expanded features: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;, &#39;sex&#39;]
+2025-09-12 08:57:42,360 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;], &#39;confound&#39;: [&#39;sex&#39;]}
+2025-09-12 08:57:42,361 - julearn - INFO - ====================
+2025-09-12 08:57:42,361 - julearn - INFO -
+2025-09-12 08:57:42,362 - julearn - INFO - = Model Parameters =
+2025-09-12 08:57:42,362 - julearn - INFO - ====================
+2025-09-12 08:57:42,362 - julearn - INFO -
+2025-09-12 08:57:42,362 - julearn - INFO - = Data Information =
+2025-09-12 08:57:42,362 - julearn - INFO -      Problem type: regression
+2025-09-12 08:57:42,363 - julearn - INFO -      Number of samples: 442
+2025-09-12 08:57:42,363 - julearn - INFO -      Number of features: 10
+2025-09-12 08:57:42,363 - julearn - INFO - ====================
+2025-09-12 08:57:42,363 - julearn - INFO -
+2025-09-12 08:57:42,363 - julearn - INFO -      Target type: float64
+2025-09-12 08:57:42,363 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
 </pre></div>
 </div>
 <p>We can use the <code class="docutils literal notranslate"><span class="pre">preprocess</span></code> method of the <code class="docutils literal notranslate"><span class="pre">inspect</span></code> module to inspect the
@@ -752,15 +753,15 @@ This will keep the confounds after confound removal.</p>
 <span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;linreg&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-09-11 11:36:59,560 - julearn - INFO - Adding step confound_removal that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2025-09-11 11:36:59,560 - julearn - INFO - Setting hyperparameter keep_confounds = True
-2025-09-11 11:36:59,560 - julearn - INFO - Step added
-2025-09-11 11:36:59,560 - julearn - INFO - Adding step pca that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2025-09-11 11:36:59,560 - julearn - INFO - Step added
-2025-09-11 11:36:59,561 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2025-09-11 11:36:59,561 - julearn - INFO - Step added
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-09-12 08:57:42,571 - julearn - INFO - Adding step confound_removal that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-09-12 08:57:42,571 - julearn - INFO - Setting hyperparameter keep_confounds = True
+2025-09-12 08:57:42,571 - julearn - INFO - Step added
+2025-09-12 08:57:42,571 - julearn - INFO - Adding step pca that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-09-12 08:57:42,572 - julearn - INFO - Step added
+2025-09-12 08:57:42,572 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-09-12 08:57:42,572 - julearn - INFO - Step added
 
-&lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fb81c82df60&gt;
+&lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fe6cd47c210&gt;
 </pre></div>
 </div>
 <p>Now we can run the cross validation and get the scores.</p>
@@ -774,25 +775,25 @@ This will keep the confounds after confound removal.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-09-11 11:36:59,561 - julearn - INFO - ==== Input Data ====
-2025-09-11 11:36:59,561 - julearn - INFO - Using dataframe as input
-2025-09-11 11:36:59,561 - julearn - INFO -      Features: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;, &#39;sex&#39;]
-2025-09-11 11:36:59,561 - julearn - INFO -      Target: target
-2025-09-11 11:36:59,562 - julearn - INFO -      Expanded features: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;, &#39;sex&#39;]
-2025-09-11 11:36:59,562 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;], &#39;confound&#39;: [&#39;sex&#39;]}
-2025-09-11 11:36:59,562 - julearn - INFO - ====================
-2025-09-11 11:36:59,562 - julearn - INFO -
-2025-09-11 11:36:59,564 - julearn - INFO - = Model Parameters =
-2025-09-11 11:36:59,564 - julearn - INFO - ====================
-2025-09-11 11:36:59,564 - julearn - INFO -
-2025-09-11 11:36:59,564 - julearn - INFO - = Data Information =
-2025-09-11 11:36:59,564 - julearn - INFO -      Problem type: regression
-2025-09-11 11:36:59,564 - julearn - INFO -      Number of samples: 442
-2025-09-11 11:36:59,564 - julearn - INFO -      Number of features: 10
-2025-09-11 11:36:59,564 - julearn - INFO - ====================
-2025-09-11 11:36:59,565 - julearn - INFO -
-2025-09-11 11:36:59,565 - julearn - INFO -      Target type: float64
-2025-09-11 11:36:59,565 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-09-12 08:57:42,572 - julearn - INFO - ==== Input Data ====
+2025-09-12 08:57:42,572 - julearn - INFO - Using dataframe as input
+2025-09-12 08:57:42,573 - julearn - INFO -      Features: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;, &#39;sex&#39;]
+2025-09-12 08:57:42,573 - julearn - INFO -      Target: target
+2025-09-12 08:57:42,573 - julearn - INFO -      Expanded features: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;, &#39;sex&#39;]
+2025-09-12 08:57:42,573 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;], &#39;confound&#39;: [&#39;sex&#39;]}
+2025-09-12 08:57:42,574 - julearn - INFO - ====================
+2025-09-12 08:57:42,574 - julearn - INFO -
+2025-09-12 08:57:42,575 - julearn - INFO - = Model Parameters =
+2025-09-12 08:57:42,575 - julearn - INFO - ====================
+2025-09-12 08:57:42,575 - julearn - INFO -
+2025-09-12 08:57:42,575 - julearn - INFO - = Data Information =
+2025-09-12 08:57:42,576 - julearn - INFO -      Problem type: regression
+2025-09-12 08:57:42,576 - julearn - INFO -      Number of samples: 442
+2025-09-12 08:57:42,576 - julearn - INFO -      Number of features: 10
+2025-09-12 08:57:42,576 - julearn - INFO - ====================
+2025-09-12 08:57:42,576 - julearn - INFO -
+2025-09-12 08:57:42,576 - julearn - INFO -      Target type: float64
+2025-09-12 08:57:42,576 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
 </pre></div>
 </div>
 <p>As you can see this kept the confound variable <code class="docutils literal notranslate"><span class="pre">sex</span></code> in the data.</p>
@@ -1041,32 +1042,32 @@ removal.</p>
 <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-09-11 11:36:59,796 - julearn - INFO - Adding step confound_removal that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2025-09-11 11:36:59,796 - julearn - INFO - Setting hyperparameter keep_confounds = True
-2025-09-11 11:36:59,796 - julearn - INFO - Step added
-2025-09-11 11:36:59,796 - julearn - INFO - Adding step pca that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
-2025-09-11 11:36:59,796 - julearn - INFO - Step added
-2025-09-11 11:36:59,796 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
-2025-09-11 11:36:59,797 - julearn - INFO - Step added
-2025-09-11 11:36:59,797 - julearn - INFO - ==== Input Data ====
-2025-09-11 11:36:59,797 - julearn - INFO - Using dataframe as input
-2025-09-11 11:36:59,797 - julearn - INFO -      Features: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;, &#39;sex&#39;]
-2025-09-11 11:36:59,797 - julearn - INFO -      Target: target
-2025-09-11 11:36:59,797 - julearn - INFO -      Expanded features: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;, &#39;sex&#39;]
-2025-09-11 11:36:59,797 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;], &#39;confound&#39;: [&#39;sex&#39;]}
-2025-09-11 11:36:59,798 - julearn - INFO - ====================
-2025-09-11 11:36:59,798 - julearn - INFO -
-2025-09-11 11:36:59,799 - julearn - INFO - = Model Parameters =
-2025-09-11 11:36:59,799 - julearn - INFO - ====================
-2025-09-11 11:36:59,799 - julearn - INFO -
-2025-09-11 11:36:59,799 - julearn - INFO - = Data Information =
-2025-09-11 11:36:59,799 - julearn - INFO -      Problem type: regression
-2025-09-11 11:36:59,799 - julearn - INFO -      Number of samples: 442
-2025-09-11 11:36:59,799 - julearn - INFO -      Number of features: 10
-2025-09-11 11:36:59,799 - julearn - INFO - ====================
-2025-09-11 11:36:59,799 - julearn - INFO -
-2025-09-11 11:36:59,800 - julearn - INFO -      Target type: float64
-2025-09-11 11:36:59,800 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-09-12 08:57:42,797 - julearn - INFO - Adding step confound_removal that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-09-12 08:57:42,797 - julearn - INFO - Setting hyperparameter keep_confounds = True
+2025-09-12 08:57:42,797 - julearn - INFO - Step added
+2025-09-12 08:57:42,797 - julearn - INFO - Adding step pca that applies to ColumnTypes&lt;types={&#39;continuous&#39;}; pattern=(?:__:type:__continuous)&gt;
+2025-09-12 08:57:42,798 - julearn - INFO - Step added
+2025-09-12 08:57:42,798 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
+2025-09-12 08:57:42,798 - julearn - INFO - Step added
+2025-09-12 08:57:42,798 - julearn - INFO - ==== Input Data ====
+2025-09-12 08:57:42,798 - julearn - INFO - Using dataframe as input
+2025-09-12 08:57:42,798 - julearn - INFO -      Features: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;, &#39;sex&#39;]
+2025-09-12 08:57:42,798 - julearn - INFO -      Target: target
+2025-09-12 08:57:42,798 - julearn - INFO -      Expanded features: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;, &#39;sex&#39;]
+2025-09-12 08:57:42,799 - julearn - INFO -      X_types:{&#39;continuous&#39;: [&#39;age&#39;, &#39;bmi&#39;, &#39;bp&#39;, &#39;s1&#39;, &#39;s2&#39;, &#39;s3&#39;, &#39;s4&#39;, &#39;s5&#39;, &#39;s6&#39;], &#39;confound&#39;: [&#39;sex&#39;]}
+2025-09-12 08:57:42,799 - julearn - INFO - ====================
+2025-09-12 08:57:42,799 - julearn - INFO -
+2025-09-12 08:57:42,800 - julearn - INFO - = Model Parameters =
+2025-09-12 08:57:42,800 - julearn - INFO - ====================
+2025-09-12 08:57:42,800 - julearn - INFO -
+2025-09-12 08:57:42,801 - julearn - INFO - = Data Information =
+2025-09-12 08:57:42,801 - julearn - INFO -      Problem type: regression
+2025-09-12 08:57:42,801 - julearn - INFO -      Number of samples: 442
+2025-09-12 08:57:42,801 - julearn - INFO -      Number of features: 10
+2025-09-12 08:57:42,801 - julearn - INFO - ====================
+2025-09-12 08:57:42,801 - julearn - INFO -
+2025-09-12 08:57:42,801 - julearn - INFO -      Target type: float64
+2025-09-12 08:57:42,801 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
@@ -1101,8 +1102,8 @@ removal.</p>
   <tbody>
     <tr>
       <th>0</th>
-      <td>0.023802</td>
-      <td>0.008450</td>
+      <td>0.021720</td>
+      <td>0.007613</td>
       <td>0.429556</td>
       <td>353</td>
       <td>89</td>
@@ -1112,8 +1113,8 @@ removal.</p>
     </tr>
     <tr>
       <th>1</th>
-      <td>0.023993</td>
-      <td>0.008397</td>
+      <td>0.021702</td>
+      <td>0.007740</td>
       <td>0.522599</td>
       <td>353</td>
       <td>89</td>
@@ -1123,8 +1124,8 @@ removal.</p>
     </tr>
     <tr>
       <th>2</th>
-      <td>0.024366</td>
-      <td>0.008125</td>
+      <td>0.022775</td>
+      <td>0.007741</td>
       <td>0.482681</td>
       <td>354</td>
       <td>88</td>
@@ -1134,8 +1135,8 @@ removal.</p>
     </tr>
     <tr>
       <th>3</th>
-      <td>0.023191</td>
-      <td>0.008153</td>
+      <td>0.021933</td>
+      <td>0.007806</td>
       <td>0.426498</td>
       <td>354</td>
       <td>88</td>
@@ -1145,8 +1146,8 @@ removal.</p>
     </tr>
     <tr>
       <th>4</th>
-      <td>0.023128</td>
-      <td>0.008186</td>
+      <td>0.021858</td>
+      <td>0.007675</td>
       <td>0.550248</td>
       <td>354</td>
       <td>88</td>
@@ -1171,7 +1172,7 @@ and the confound).</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>10
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.676 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.647 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-04-confounds-run-return-confounds-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/6c774f4eca75f20ba6b46ff437a810e9/run_return_confounds.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">run_return_confounds.ipynb</span></code></a></p>
@@ -1255,7 +1256,7 @@ and the confound).</p>
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=13c86f00"></script>
+</div><script src="../../_static/documentation_options.js?v=9423d816"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>

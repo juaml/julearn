@@ -313,6 +313,7 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../api/inspect.html">9.5. Inspect</a><input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" role="switch" type="checkbox"/><label for="toctree-checkbox-15"><div class="visually-hidden">Toggle navigation of 9.5. Inspect</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.inspect.Inspector.html">julearn.inspect.Inspector</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.inspect.FoldsInspector.html">julearn.inspect.FoldsInspector</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.inspect.PipelineInspector.html">julearn.inspect.PipelineInspector</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.inspect.preprocess.html">julearn.inspect.preprocess</a></li>
 </ul>
 </li>
@@ -475,13 +476,13 @@ some target in a bit of toy data.</p>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/work/julearn/julearn/julearn/utils/logging.py:72: UserWarning: The &#39;__version__&#39; attribute is deprecated and will be removed in MarkupSafe 3.1. Use feature detection, or `importlib.metadata.version(&quot;markupsafe&quot;)`, instead.
   vstring = str(getattr(module, &quot;__version__&quot;, None))
-2025-09-11 11:37:22,750 - julearn - INFO - ===== Lib Versions =====
-2025-09-11 11:37:22,750 - julearn - INFO - numpy: 1.26.4
-2025-09-11 11:37:22,750 - julearn - INFO - scipy: 1.16.1
-2025-09-11 11:37:22,750 - julearn - INFO - sklearn: 1.7.2
-2025-09-11 11:37:22,751 - julearn - INFO - pandas: 2.3.2
-2025-09-11 11:37:22,751 - julearn - INFO - julearn: 0.3.5.dev70
-2025-09-11 11:37:22,751 - julearn - INFO - ========================
+2025-09-12 08:58:05,108 - julearn - INFO - ===== Lib Versions =====
+2025-09-12 08:58:05,108 - julearn - INFO - numpy: 1.26.4
+2025-09-12 08:58:05,108 - julearn - INFO - scipy: 1.16.2
+2025-09-12 08:58:05,108 - julearn - INFO - sklearn: 1.7.2
+2025-09-12 08:58:05,108 - julearn - INFO - pandas: 2.3.2
+2025-09-12 08:58:05,109 - julearn - INFO - julearn: 0.3.5.dev79
+2025-09-12 08:58:05,109 - julearn - INFO - ========================
 </pre></div>
 </div>
 <p>Now, that we have these out of the way, we can create some artificial toy
@@ -506,14 +507,14 @@ the hyperparameter grids we use here are somewhat arbitrary:</p>
 <span class="n">model_1</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;svm&quot;</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">geomspace</span><span class="p">(</span><span class="mf">1e-2</span><span class="p">,</span> <span class="mf">1e2</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-09-11 11:37:22,753 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
-2025-09-11 11:37:22,753 - julearn - INFO - Setting hyperparameter kernel = linear
-2025-09-11 11:37:22,753 - julearn - INFO - Tuning hyperparameter C = [1.00000000e-02 2.78255940e-02 7.74263683e-02 2.15443469e-01
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-09-12 08:58:05,110 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
+2025-09-12 08:58:05,111 - julearn - INFO - Setting hyperparameter kernel = linear
+2025-09-12 08:58:05,111 - julearn - INFO - Tuning hyperparameter C = [1.00000000e-02 2.78255940e-02 7.74263683e-02 2.15443469e-01
  5.99484250e-01 1.66810054e+00 4.64158883e+00 1.29154967e+01
  3.59381366e+01 1.00000000e+02]
-2025-09-11 11:37:22,753 - julearn - INFO - Step added
+2025-09-12 08:58:05,111 - julearn - INFO - Step added
 
-&lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fb82e842740&gt;
+&lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fe6e568d7f0&gt;
 </pre></div>
 </div>
 <p>Note, that we specify applying the model to all of the features using
@@ -529,14 +530,14 @@ forest estimator:</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-09-11 11:37:22,754 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
-2025-09-11 11:37:22,754 - julearn - INFO - Setting hyperparameter n_estimators = 20
-2025-09-11 11:37:22,754 - julearn - INFO - Tuning hyperparameter max_depth = [10, 50]
-2025-09-11 11:37:22,754 - julearn - INFO - Tuning hyperparameter min_samples_leaf = [1, 3, 4]
-2025-09-11 11:37:22,754 - julearn - INFO - Tuning hyperparameter min_samples_split = [2, 10]
-2025-09-11 11:37:22,754 - julearn - INFO - Step added
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-09-12 08:58:05,112 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
+2025-09-12 08:58:05,112 - julearn - INFO - Setting hyperparameter n_estimators = 20
+2025-09-12 08:58:05,112 - julearn - INFO - Tuning hyperparameter max_depth = [10, 50]
+2025-09-12 08:58:05,112 - julearn - INFO - Tuning hyperparameter min_samples_leaf = [1, 3, 4]
+2025-09-12 08:58:05,112 - julearn - INFO - Tuning hyperparameter min_samples_split = [2, 10]
+2025-09-12 08:58:05,112 - julearn - INFO - Step added
 
-&lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fb82e843700&gt;
+&lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fe6e568ef20&gt;
 </pre></div>
 </div>
 <p>We can now provide these two models to a <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> to
@@ -551,11 +552,11 @@ initialize a stacking model. The interface for this is very similar to a
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-09-11 11:37:22,755 - julearn - INFO - Adding step stacking that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
-2025-09-11 11:37:22,755 - julearn - INFO - Setting hyperparameter estimators = [(&#39;model_1&#39;, &lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fb82e842740&gt;), (&#39;model_2&#39;, &lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fb82e843700&gt;)]
-2025-09-11 11:37:22,755 - julearn - INFO - Step added
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-09-12 08:58:05,113 - julearn - INFO - Adding step stacking that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
+2025-09-12 08:58:05,113 - julearn - INFO - Setting hyperparameter estimators = [(&#39;model_1&#39;, &lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fe6e568d7f0&gt;), (&#39;model_2&#39;, &lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fe6e568ef20&gt;)]
+2025-09-12 08:58:05,113 - julearn - INFO - Step added
 
-&lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fb82e840050&gt;
+&lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fe6e568e3c0&gt;
 </pre></div>
 </div>
 <p>This final stacking <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> can now simply be handed over
@@ -570,51 +571,51 @@ to <code class="docutils literal notranslate"><span class="pre">julearn</span></
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-09-11 11:37:22,755 - julearn - INFO - Setting random seed to 200
-2025-09-11 11:37:22,755 - julearn - INFO - ==== Input Data ====
-2025-09-11 11:37:22,756 - julearn - INFO - Using dataframe as input
-2025-09-11 11:37:22,756 - julearn - INFO -      Features: [&#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;feature_20&#39;]
-2025-09-11 11:37:22,756 - julearn - INFO -      Target: target
-2025-09-11 11:37:22,756 - julearn - INFO -      Expanded features: [&#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;feature_20&#39;]
-2025-09-11 11:37:22,756 - julearn - INFO -      X_types:{}
-2025-09-11 11:37:22,756 - julearn - WARNING - The following columns are not defined in X_types: [&#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;feature_20&#39;]. They will be treated as continuous.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-09-12 08:58:05,113 - julearn - INFO - Setting random seed to 200
+2025-09-12 08:58:05,113 - julearn - INFO - ==== Input Data ====
+2025-09-12 08:58:05,114 - julearn - INFO - Using dataframe as input
+2025-09-12 08:58:05,114 - julearn - INFO -      Features: [&#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;feature_20&#39;]
+2025-09-12 08:58:05,114 - julearn - INFO -      Target: target
+2025-09-12 08:58:05,114 - julearn - INFO -      Expanded features: [&#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;feature_20&#39;]
+2025-09-12 08:58:05,114 - julearn - INFO -      X_types:{}
+2025-09-12 08:58:05,114 - julearn - WARNING - The following columns are not defined in X_types: [&#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;feature_20&#39;]. They will be treated as continuous.
 /home/runner/work/julearn/julearn/julearn/prepare.py:510: RuntimeWarning: The following columns are not defined in X_types: [&#39;feature_1&#39;, &#39;feature_2&#39;, &#39;feature_3&#39;, &#39;feature_4&#39;, &#39;feature_5&#39;, &#39;feature_6&#39;, &#39;feature_7&#39;, &#39;feature_8&#39;, &#39;feature_9&#39;, &#39;feature_10&#39;, &#39;feature_11&#39;, &#39;feature_12&#39;, &#39;feature_13&#39;, &#39;feature_14&#39;, &#39;feature_15&#39;, &#39;feature_16&#39;, &#39;feature_17&#39;, &#39;feature_18&#39;, &#39;feature_19&#39;, &#39;feature_20&#39;]. They will be treated as continuous.
   warn_with_log(
-2025-09-11 11:37:22,757 - julearn - INFO - ====================
-2025-09-11 11:37:22,757 - julearn - INFO -
-2025-09-11 11:37:22,758 - julearn - INFO - = Model Parameters =
-2025-09-11 11:37:22,758 - julearn - INFO - Tuning hyperparameters using grid
-2025-09-11 11:37:22,758 - julearn - INFO - Hyperparameters:
-2025-09-11 11:37:22,759 - julearn - INFO -      svm__C: [1.00000000e-02 2.78255940e-02 7.74263683e-02 2.15443469e-01
+2025-09-12 08:58:05,115 - julearn - INFO - ====================
+2025-09-12 08:58:05,115 - julearn - INFO -
+2025-09-12 08:58:05,116 - julearn - INFO - = Model Parameters =
+2025-09-12 08:58:05,116 - julearn - INFO - Tuning hyperparameters using grid
+2025-09-12 08:58:05,116 - julearn - INFO - Hyperparameters:
+2025-09-12 08:58:05,116 - julearn - INFO -      svm__C: [1.00000000e-02 2.78255940e-02 7.74263683e-02 2.15443469e-01
  5.99484250e-01 1.66810054e+00 4.64158883e+00 1.29154967e+01
  3.59381366e+01 1.00000000e+02]
-2025-09-11 11:37:22,759 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2025-09-11 11:37:22,759 - julearn - INFO - Search Parameters:
-2025-09-11 11:37:22,759 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
-2025-09-11 11:37:22,759 - julearn - INFO - ====================
-2025-09-11 11:37:22,759 - julearn - INFO -
-2025-09-11 11:37:22,760 - julearn - INFO - = Model Parameters =
-2025-09-11 11:37:22,760 - julearn - INFO - Tuning hyperparameters using grid
-2025-09-11 11:37:22,760 - julearn - INFO - Hyperparameters:
-2025-09-11 11:37:22,760 - julearn - INFO -      rf__max_depth: [10, 50]
-2025-09-11 11:37:22,760 - julearn - INFO -      rf__min_samples_leaf: [1, 3, 4]
-2025-09-11 11:37:22,760 - julearn - INFO -      rf__min_samples_split: [2, 10]
-2025-09-11 11:37:22,760 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2025-09-11 11:37:22,760 - julearn - INFO - Search Parameters:
-2025-09-11 11:37:22,761 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
-2025-09-11 11:37:22,761 - julearn - INFO - ====================
-2025-09-11 11:37:22,761 - julearn - INFO -
-2025-09-11 11:37:22,785 - julearn - INFO - = Model Parameters =
-2025-09-11 11:37:22,785 - julearn - INFO - ====================
-2025-09-11 11:37:22,785 - julearn - INFO -
-2025-09-11 11:37:22,785 - julearn - INFO - = Data Information =
-2025-09-11 11:37:22,785 - julearn - INFO -      Problem type: regression
-2025-09-11 11:37:22,786 - julearn - INFO -      Number of samples: 200
-2025-09-11 11:37:22,786 - julearn - INFO -      Number of features: 20
-2025-09-11 11:37:22,786 - julearn - INFO - ====================
-2025-09-11 11:37:22,786 - julearn - INFO -
-2025-09-11 11:37:22,786 - julearn - INFO -      Target type: float64
-2025-09-11 11:37:22,786 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
+2025-09-12 08:58:05,117 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2025-09-12 08:58:05,117 - julearn - INFO - Search Parameters:
+2025-09-12 08:58:05,117 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
+2025-09-12 08:58:05,117 - julearn - INFO - ====================
+2025-09-12 08:58:05,117 - julearn - INFO -
+2025-09-12 08:58:05,117 - julearn - INFO - = Model Parameters =
+2025-09-12 08:58:05,118 - julearn - INFO - Tuning hyperparameters using grid
+2025-09-12 08:58:05,118 - julearn - INFO - Hyperparameters:
+2025-09-12 08:58:05,118 - julearn - INFO -      rf__max_depth: [10, 50]
+2025-09-12 08:58:05,118 - julearn - INFO -      rf__min_samples_leaf: [1, 3, 4]
+2025-09-12 08:58:05,118 - julearn - INFO -      rf__min_samples_split: [2, 10]
+2025-09-12 08:58:05,118 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2025-09-12 08:58:05,118 - julearn - INFO - Search Parameters:
+2025-09-12 08:58:05,118 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
+2025-09-12 08:58:05,119 - julearn - INFO - ====================
+2025-09-12 08:58:05,119 - julearn - INFO -
+2025-09-12 08:58:05,143 - julearn - INFO - = Model Parameters =
+2025-09-12 08:58:05,143 - julearn - INFO - ====================
+2025-09-12 08:58:05,143 - julearn - INFO -
+2025-09-12 08:58:05,143 - julearn - INFO - = Data Information =
+2025-09-12 08:58:05,143 - julearn - INFO -      Problem type: regression
+2025-09-12 08:58:05,143 - julearn - INFO -      Number of samples: 200
+2025-09-12 08:58:05,143 - julearn - INFO -      Number of features: 20
+2025-09-12 08:58:05,143 - julearn - INFO - ====================
+2025-09-12 08:58:05,143 - julearn - INFO -
+2025-09-12 08:58:05,144 - julearn - INFO -      Target type: float64
+2025-09-12 08:58:05,144 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
 </pre></div>
 </div>
 </section>
@@ -653,17 +654,17 @@ features of <code class="docutils literal notranslate"><span class="pre">&quot;t
 <span class="n">model_1</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;svm&quot;</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">geomspace</span><span class="p">(</span><span class="mf">1e-2</span><span class="p">,</span> <span class="mf">1e2</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-09-11 11:39:46,738 - julearn - INFO - Adding step filter_columns that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
-2025-09-11 11:39:46,738 - julearn - INFO - Setting hyperparameter keep = type1
-2025-09-11 11:39:46,739 - julearn - INFO - Step added
-2025-09-11 11:39:46,739 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;type1&#39;}; pattern=(?:__:type:__type1)&gt;
-2025-09-11 11:39:46,739 - julearn - INFO - Setting hyperparameter kernel = linear
-2025-09-11 11:39:46,740 - julearn - INFO - Tuning hyperparameter C = [1.00000000e-02 2.78255940e-02 7.74263683e-02 2.15443469e-01
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-09-12 09:00:26,907 - julearn - INFO - Adding step filter_columns that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
+2025-09-12 09:00:26,907 - julearn - INFO - Setting hyperparameter keep = type1
+2025-09-12 09:00:26,907 - julearn - INFO - Step added
+2025-09-12 09:00:26,908 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;type1&#39;}; pattern=(?:__:type:__type1)&gt;
+2025-09-12 09:00:26,908 - julearn - INFO - Setting hyperparameter kernel = linear
+2025-09-12 09:00:26,908 - julearn - INFO - Tuning hyperparameter C = [1.00000000e-02 2.78255940e-02 7.74263683e-02 2.15443469e-01
  5.99484250e-01 1.66810054e+00 4.64158883e+00 1.29154967e+01
  3.59381366e+01 1.00000000e+02]
-2025-09-11 11:39:46,740 - julearn - INFO - Step added
+2025-09-12 09:00:26,908 - julearn - INFO - Step added
 
-&lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fb82e896f90&gt;
+&lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fe6e568f460&gt;
 </pre></div>
 </div>
 <p>Afterwards, let’s configure a <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> to fit a RF on the
@@ -679,17 +680,17 @@ features of <code class="docutils literal notranslate"><span class="pre">&quot;t
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-09-11 11:39:46,740 - julearn - INFO - Adding step filter_columns that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
-2025-09-11 11:39:46,740 - julearn - INFO - Setting hyperparameter keep = type2
-2025-09-11 11:39:46,740 - julearn - INFO - Step added
-2025-09-11 11:39:46,741 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={&#39;type2&#39;}; pattern=(?:__:type:__type2)&gt;
-2025-09-11 11:39:46,741 - julearn - INFO - Setting hyperparameter n_estimators = 20
-2025-09-11 11:39:46,741 - julearn - INFO - Tuning hyperparameter max_depth = [10, 50]
-2025-09-11 11:39:46,741 - julearn - INFO - Tuning hyperparameter min_samples_leaf = [1, 3, 4]
-2025-09-11 11:39:46,741 - julearn - INFO - Tuning hyperparameter min_samples_split = [2, 10]
-2025-09-11 11:39:46,741 - julearn - INFO - Step added
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-09-12 09:00:26,909 - julearn - INFO - Adding step filter_columns that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
+2025-09-12 09:00:26,909 - julearn - INFO - Setting hyperparameter keep = type2
+2025-09-12 09:00:26,909 - julearn - INFO - Step added
+2025-09-12 09:00:26,909 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={&#39;type2&#39;}; pattern=(?:__:type:__type2)&gt;
+2025-09-12 09:00:26,909 - julearn - INFO - Setting hyperparameter n_estimators = 20
+2025-09-12 09:00:26,910 - julearn - INFO - Tuning hyperparameter max_depth = [10, 50]
+2025-09-12 09:00:26,910 - julearn - INFO - Tuning hyperparameter min_samples_leaf = [1, 3, 4]
+2025-09-12 09:00:26,910 - julearn - INFO - Tuning hyperparameter min_samples_split = [2, 10]
+2025-09-12 09:00:26,910 - julearn - INFO - Step added
 
-&lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fb82e897070&gt;
+&lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fe6e568f000&gt;
 </pre></div>
 </div>
 <p>Now, as in the previous example, we only have to create a stacking estimator
@@ -715,51 +716,51 @@ stacking estimator in a <a class="reference internal" href="../api/generated/jul
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-09-11 11:39:46,742 - julearn - INFO - Adding step stacking that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
-2025-09-11 11:39:46,742 - julearn - INFO - Setting hyperparameter estimators = [(&#39;model_1&#39;, &lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fb82e896f90&gt;), (&#39;model_2&#39;, &lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fb82e897070&gt;)]
-2025-09-11 11:39:46,742 - julearn - INFO - Step added
-2025-09-11 11:39:46,742 - julearn - INFO - Setting random seed to 200
-2025-09-11 11:39:46,742 - julearn - INFO - ==== Input Data ====
-2025-09-11 11:39:46,742 - julearn - INFO - Using dataframe as input
-2025-09-11 11:39:46,742 - julearn - INFO -      Features: [&#39;type1_1&#39;, &#39;type1_2&#39;, &#39;type1_3&#39;, &#39;type1_4&#39;, &#39;type1_5&#39;, &#39;type1_6&#39;, &#39;type1_7&#39;, &#39;type1_8&#39;, &#39;type1_9&#39;, &#39;type1_10&#39;, &#39;type2_1&#39;, &#39;type2_2&#39;, &#39;type2_3&#39;, &#39;type2_4&#39;, &#39;type2_5&#39;, &#39;type2_6&#39;, &#39;type2_7&#39;, &#39;type2_8&#39;, &#39;type2_9&#39;, &#39;type2_10&#39;]
-2025-09-11 11:39:46,742 - julearn - INFO -      Target: target
-2025-09-11 11:39:46,743 - julearn - INFO -      Expanded features: [&#39;type1_1&#39;, &#39;type1_2&#39;, &#39;type1_3&#39;, &#39;type1_4&#39;, &#39;type1_5&#39;, &#39;type1_6&#39;, &#39;type1_7&#39;, &#39;type1_8&#39;, &#39;type1_9&#39;, &#39;type1_10&#39;, &#39;type2_1&#39;, &#39;type2_2&#39;, &#39;type2_3&#39;, &#39;type2_4&#39;, &#39;type2_5&#39;, &#39;type2_6&#39;, &#39;type2_7&#39;, &#39;type2_8&#39;, &#39;type2_9&#39;, &#39;type2_10&#39;]
-2025-09-11 11:39:46,743 - julearn - INFO -      X_types:{&#39;type1&#39;: [&#39;type1_1&#39;, &#39;type1_2&#39;, &#39;type1_3&#39;, &#39;type1_4&#39;, &#39;type1_5&#39;, &#39;type1_6&#39;, &#39;type1_7&#39;, &#39;type1_8&#39;, &#39;type1_9&#39;, &#39;type1_10&#39;], &#39;type2&#39;: [&#39;type2_1&#39;, &#39;type2_2&#39;, &#39;type2_3&#39;, &#39;type2_4&#39;, &#39;type2_5&#39;, &#39;type2_6&#39;, &#39;type2_7&#39;, &#39;type2_8&#39;, &#39;type2_9&#39;, &#39;type2_10&#39;]}
-2025-09-11 11:39:46,744 - julearn - INFO - ====================
-2025-09-11 11:39:46,744 - julearn - INFO -
-2025-09-11 11:39:46,746 - julearn - INFO - = Model Parameters =
-2025-09-11 11:39:46,746 - julearn - INFO - Tuning hyperparameters using grid
-2025-09-11 11:39:46,746 - julearn - INFO - Hyperparameters:
-2025-09-11 11:39:46,746 - julearn - INFO -      svm__C: [1.00000000e-02 2.78255940e-02 7.74263683e-02 2.15443469e-01
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2025-09-12 09:00:26,910 - julearn - INFO - Adding step stacking that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
+2025-09-12 09:00:26,910 - julearn - INFO - Setting hyperparameter estimators = [(&#39;model_1&#39;, &lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fe6e568f460&gt;), (&#39;model_2&#39;, &lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fe6e568f000&gt;)]
+2025-09-12 09:00:26,911 - julearn - INFO - Step added
+2025-09-12 09:00:26,911 - julearn - INFO - Setting random seed to 200
+2025-09-12 09:00:26,911 - julearn - INFO - ==== Input Data ====
+2025-09-12 09:00:26,911 - julearn - INFO - Using dataframe as input
+2025-09-12 09:00:26,911 - julearn - INFO -      Features: [&#39;type1_1&#39;, &#39;type1_2&#39;, &#39;type1_3&#39;, &#39;type1_4&#39;, &#39;type1_5&#39;, &#39;type1_6&#39;, &#39;type1_7&#39;, &#39;type1_8&#39;, &#39;type1_9&#39;, &#39;type1_10&#39;, &#39;type2_1&#39;, &#39;type2_2&#39;, &#39;type2_3&#39;, &#39;type2_4&#39;, &#39;type2_5&#39;, &#39;type2_6&#39;, &#39;type2_7&#39;, &#39;type2_8&#39;, &#39;type2_9&#39;, &#39;type2_10&#39;]
+2025-09-12 09:00:26,911 - julearn - INFO -      Target: target
+2025-09-12 09:00:26,912 - julearn - INFO -      Expanded features: [&#39;type1_1&#39;, &#39;type1_2&#39;, &#39;type1_3&#39;, &#39;type1_4&#39;, &#39;type1_5&#39;, &#39;type1_6&#39;, &#39;type1_7&#39;, &#39;type1_8&#39;, &#39;type1_9&#39;, &#39;type1_10&#39;, &#39;type2_1&#39;, &#39;type2_2&#39;, &#39;type2_3&#39;, &#39;type2_4&#39;, &#39;type2_5&#39;, &#39;type2_6&#39;, &#39;type2_7&#39;, &#39;type2_8&#39;, &#39;type2_9&#39;, &#39;type2_10&#39;]
+2025-09-12 09:00:26,912 - julearn - INFO -      X_types:{&#39;type1&#39;: [&#39;type1_1&#39;, &#39;type1_2&#39;, &#39;type1_3&#39;, &#39;type1_4&#39;, &#39;type1_5&#39;, &#39;type1_6&#39;, &#39;type1_7&#39;, &#39;type1_8&#39;, &#39;type1_9&#39;, &#39;type1_10&#39;], &#39;type2&#39;: [&#39;type2_1&#39;, &#39;type2_2&#39;, &#39;type2_3&#39;, &#39;type2_4&#39;, &#39;type2_5&#39;, &#39;type2_6&#39;, &#39;type2_7&#39;, &#39;type2_8&#39;, &#39;type2_9&#39;, &#39;type2_10&#39;]}
+2025-09-12 09:00:26,913 - julearn - INFO - ====================
+2025-09-12 09:00:26,913 - julearn - INFO -
+2025-09-12 09:00:26,914 - julearn - INFO - = Model Parameters =
+2025-09-12 09:00:26,914 - julearn - INFO - Tuning hyperparameters using grid
+2025-09-12 09:00:26,915 - julearn - INFO - Hyperparameters:
+2025-09-12 09:00:26,915 - julearn - INFO -      svm__C: [1.00000000e-02 2.78255940e-02 7.74263683e-02 2.15443469e-01
  5.99484250e-01 1.66810054e+00 4.64158883e+00 1.29154967e+01
  3.59381366e+01 1.00000000e+02]
-2025-09-11 11:39:46,746 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2025-09-11 11:39:46,746 - julearn - INFO - Search Parameters:
-2025-09-11 11:39:46,746 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
-2025-09-11 11:39:46,747 - julearn - INFO - ====================
-2025-09-11 11:39:46,747 - julearn - INFO -
-2025-09-11 11:39:46,748 - julearn - INFO - = Model Parameters =
-2025-09-11 11:39:46,748 - julearn - INFO - Tuning hyperparameters using grid
-2025-09-11 11:39:46,748 - julearn - INFO - Hyperparameters:
-2025-09-11 11:39:46,748 - julearn - INFO -      rf__max_depth: [10, 50]
-2025-09-11 11:39:46,748 - julearn - INFO -      rf__min_samples_leaf: [1, 3, 4]
-2025-09-11 11:39:46,748 - julearn - INFO -      rf__min_samples_split: [2, 10]
-2025-09-11 11:39:46,748 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2025-09-11 11:39:46,748 - julearn - INFO - Search Parameters:
-2025-09-11 11:39:46,749 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
-2025-09-11 11:39:46,749 - julearn - INFO - ====================
-2025-09-11 11:39:46,749 - julearn - INFO -
-2025-09-11 11:39:46,827 - julearn - INFO - = Model Parameters =
-2025-09-11 11:39:46,828 - julearn - INFO - ====================
-2025-09-11 11:39:46,828 - julearn - INFO -
-2025-09-11 11:39:46,828 - julearn - INFO - = Data Information =
-2025-09-11 11:39:46,828 - julearn - INFO -      Problem type: regression
-2025-09-11 11:39:46,828 - julearn - INFO -      Number of samples: 200
-2025-09-11 11:39:46,828 - julearn - INFO -      Number of features: 20
-2025-09-11 11:39:46,828 - julearn - INFO - ====================
-2025-09-11 11:39:46,828 - julearn - INFO -
-2025-09-11 11:39:46,828 - julearn - INFO -      Target type: float64
-2025-09-11 11:39:46,829 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
+2025-09-12 09:00:26,915 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2025-09-12 09:00:26,915 - julearn - INFO - Search Parameters:
+2025-09-12 09:00:26,915 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
+2025-09-12 09:00:26,915 - julearn - INFO - ====================
+2025-09-12 09:00:26,916 - julearn - INFO -
+2025-09-12 09:00:26,917 - julearn - INFO - = Model Parameters =
+2025-09-12 09:00:26,917 - julearn - INFO - Tuning hyperparameters using grid
+2025-09-12 09:00:26,917 - julearn - INFO - Hyperparameters:
+2025-09-12 09:00:26,917 - julearn - INFO -      rf__max_depth: [10, 50]
+2025-09-12 09:00:26,917 - julearn - INFO -      rf__min_samples_leaf: [1, 3, 4]
+2025-09-12 09:00:26,917 - julearn - INFO -      rf__min_samples_split: [2, 10]
+2025-09-12 09:00:26,917 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2025-09-12 09:00:26,917 - julearn - INFO - Search Parameters:
+2025-09-12 09:00:26,918 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
+2025-09-12 09:00:26,918 - julearn - INFO - ====================
+2025-09-12 09:00:26,918 - julearn - INFO -
+2025-09-12 09:00:26,994 - julearn - INFO - = Model Parameters =
+2025-09-12 09:00:26,994 - julearn - INFO - ====================
+2025-09-12 09:00:26,994 - julearn - INFO -
+2025-09-12 09:00:26,995 - julearn - INFO - = Data Information =
+2025-09-12 09:00:26,995 - julearn - INFO -      Problem type: regression
+2025-09-12 09:00:26,995 - julearn - INFO -      Number of samples: 200
+2025-09-12 09:00:26,995 - julearn - INFO -      Number of features: 20
+2025-09-12 09:00:26,995 - julearn - INFO - ====================
+2025-09-12 09:00:26,995 - julearn - INFO -
+2025-09-12 09:00:26,995 - julearn - INFO -      Target type: float64
+2025-09-12 09:00:26,995 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
 </pre></div>
 </div>
 <p>As you can see, the <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> and the in-built
@@ -767,7 +768,7 @@ stacking estimator in a <a class="reference internal" href="../api/generated/jul
 build some very powerful stacking pipelines. Of course, you can do the same
 for classification which will use the
 <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.StackingClassifier.html#sklearn.ensemble.StackingClassifier" title="(in scikit-learn v1.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">StackingClassifier</span></code></a> instead.</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (3 minutes 56.958 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (3 minutes 51.862 seconds)</p>
 </section>
 </section>
 
@@ -840,7 +841,7 @@ for classification which will use the
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=13c86f00"></script>
+</div><script src="../_static/documentation_options.js?v=9423d816"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
