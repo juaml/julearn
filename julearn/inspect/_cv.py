@@ -158,7 +158,9 @@ class FoldsInspector:
                 t_df.columns = [f"fold{i_fold}_{x}" for x in t_df.columns]
         predictions = pd.concat(predictions, axis=1)
         predictions = predictions.sort_index()
-        predictions["target"] = self._y.values  # type: ignore
+        target_df = pd.DataFrame(self._y)
+        target_df.columns = ["target"]
+        predictions = target_df.join(predictions, how="left")
         return predictions
 
     def __getitem__(self, key):
