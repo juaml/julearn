@@ -476,16 +476,40 @@ def _check_x_types(
             )
         missing_columns = []
         defined_columns = []
-        for _, columns in X_types.items():
+        for columns in X_types.values():
+            if not get_config("enable_auto_escape_parenthesis"):
+                if any(char in col for char in ["(", ")"] for col in columns):
+                    warn_with_log(
+                        "`(` and/or `)` found in column names, "
+                        "recommended to use "
+                        '`julearn.config.set_config("enable_auto_escape_'
+                        'parenthesis", True)`'
+                    )
             t_columns = [
                 col
                 for col in X
-                if any(re.fullmatch(exp, col) for exp in columns)
+                if any(
+                    re.fullmatch(
+                        re.escape(exp)
+                        if get_config("enable_auto_escape_parenthesis")
+                        else exp,
+                        col,
+                    )
+                    for exp in columns
+                )
             ]
             t_missing = [
                 exp
                 for exp in columns
-                if not any(re.fullmatch(exp, col) for col in X)
+                if not any(
+                    re.fullmatch(
+                        re.escape(exp)
+                        if get_config("enable_auto_escape_parenthesis")
+                        else exp,
+                        col,
+                    )
+                    for col in X
+                )
             ]
             defined_columns.extend(t_columns)
             missing_columns.extend(t_missing)

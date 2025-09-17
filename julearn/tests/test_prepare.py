@@ -794,3 +794,26 @@ def test__check_x_types_regexp() -> None:
         warnings.simplefilter("error")
         checked_X_types = _check_x_types(X=X, X_types=X_types)
         assert X_types == checked_X_types
+
+
+def test__check_x_types_regexp_parenthesis_escape() -> None:
+    """Test checking for valid X types using regexp with parenthesis escape."""
+    X = [
+        "a",
+        "b",
+        "a_(c)_b",
+        "a_b_(c)_d",
+        "a-b_c_(d)_e",
+        "a-b_c_(d)_e-f",
+        "g",
+    ]
+    X_types = {"continuous": X}
+    # Disable escaping and expect error
+    set_config("enable_auto_escape_parenthesis", False)
+    with pytest.raises(ValueError, match=r"defined in X_types but not in X"):
+        with pytest.raises(RuntimeWarning, match=r"recommended to use"):
+            checked_X_types = _check_x_types(X=X, X_types=X_types)
+    # Enable escaping and no error
+    set_config("enable_auto_escape_parenthesis", True)
+    checked_X_types = _check_x_types(X=X, X_types=X_types)
+    assert X_types == checked_X_types
