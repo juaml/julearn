@@ -476,11 +476,12 @@ def _check_x_types(
             )
         missing_columns = []
         defined_columns = []
+        parens = ["(", ")"]
         for columns in X_types.values():
             if not get_config("enable_auto_escape_parenthesis"):
-                if any(char in col for char in ["(", ")"] for col in columns):
+                if any(char in col for char in parens for col in columns):
                     warn_with_log(
-                        "`(` and/or `)` found in column names, "
+                        f"{parens} found in column names, "
                         "recommended to use "
                         '`julearn.config.set_config("enable_auto_escape_'
                         'parenthesis", True)`'
@@ -492,6 +493,7 @@ def _check_x_types(
                     re.fullmatch(
                         re.escape(exp)
                         if get_config("enable_auto_escape_parenthesis")
+                        and any(char in exp for char in parens)
                         else exp,
                         col,
                     )
@@ -505,6 +507,7 @@ def _check_x_types(
                     re.fullmatch(
                         re.escape(exp)
                         if get_config("enable_auto_escape_parenthesis")
+                        and any(char in exp for char in parens)
                         else exp,
                         col,
                     )
