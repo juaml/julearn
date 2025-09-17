@@ -132,11 +132,18 @@ def test_get_predictions(get_cv_scores, df_typed_iris):
 
     X = df_typed_iris.iloc[:, :4]
     y = df_typed_iris["species"]
+    # Add another kind of index to y
+    y.index = [f"sample-{i:03d}" for i in range(100, len(y) + 100)]
+    y.index.name = "sample_id"
     cv, df_scores = get_cv_scores
     inspector = FoldsInspector(df_scores, cv=cv, X=X, y=y)
     print(df_scores)
     expected_df = pd.DataFrame(
-        {"target": y.values, "repeat0_p0": X.index.values}
+        {
+            "sample_id": y.index.values,
+            "target": y.values,
+            "repeat0_p0": X.index.values,
+        }
     )
     assert_frame_equal(inspector.predict(), expected_df)
     assert_frame_equal(inspector.predict_proba(), expected_df)
@@ -233,7 +240,9 @@ def test_overlapping_cv_predictions(klass, params, cv_params, df_grouped_iris):
     mock_model = MockModelReturnsIndex
     X = df_grouped_iris.iloc[:, :4]
     y = df_grouped_iris["species"]
-
+    # Add another kind of index to y
+    y.index = [f"sample-{i:03d}" for i in range(100, len(y) + 100)]
+    y.index.name = "sample_id"
     groups = None
     if "groups" in params:
         groups = df_grouped_iris["group"]
@@ -253,6 +262,7 @@ def test_overlapping_cv_predictions(klass, params, cv_params, df_grouped_iris):
     inspector = FoldsInspector(df_scores, cv=cv, X=X, y=y, groups=groups)
     print(df_scores)
     expected_dict = {}
+    expected_dict["sample_id"] = y.index.values
     expected_dict["target"] = y.values
     for i, (_, test) in enumerate(cv.split(X, y, groups=groups)):
         expected_dict[f"fold{i}_p0"] = np.array(
@@ -305,7 +315,9 @@ def test_nonoverlapping_cv_predictions(
     mock_model = MockModelReturnsIndex
     X = df_grouped_iris.iloc[:, :4]
     y = df_grouped_iris["species"]
-
+    # Add another kind of index to y
+    y.index = [f"sample-{i:03d}" for i in range(100, len(y) + 100)]
+    y.index.name = "sample_id"
     groups = None
     if "groups" in params:
         groups = df_grouped_iris["group"]
@@ -325,6 +337,7 @@ def test_nonoverlapping_cv_predictions(
     inspector = FoldsInspector(df_scores, cv=cv, X=X, y=y, groups=groups)
     print(df_scores)
     expected_dict = {}
+    expected_dict["sample_id"] = y.index.values
     expected_dict["target"] = y.values
     n_repeats = getattr(cv, "n_repeats", 1)
     for i in range(n_repeats):
@@ -378,7 +391,9 @@ def test_nonoverlapping_continuous_cv_predictions(
     mock_model = MockModelReturnsIndex
     X = df_regression.iloc[:, :-1]
     y = df_regression["target"]
-
+    # Add another kind of index to y
+    y.index = [f"sample-{i:03d}" for i in range(100, len(y) + 100)]
+    y.index.name = "sample_id"
     groups = None
     if "groups" in params:
         groups = df_regression["group"]
@@ -399,6 +414,7 @@ def test_nonoverlapping_continuous_cv_predictions(
     inspector = FoldsInspector(df_scores, cv=cv, X=X, y=y, groups=groups)
     print(df_scores)
     expected_dict = {}
+    expected_dict["sample_id"] = y.index.values
     expected_dict["target"] = y.values
     n_repeats = getattr(cv, "n_repeats", 1)
     for i in range(n_repeats):
