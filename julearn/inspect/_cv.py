@@ -160,6 +160,7 @@ class FoldsInspector:
         predictions = predictions.sort_index()
         target_df = pd.DataFrame(self._y)
         target_df.columns = ["target"]
+        target_df.reset_index(inplace=True)
         predictions = target_df.join(predictions, how="left")
         return predictions
 
