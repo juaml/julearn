@@ -175,6 +175,7 @@ def _pick_columns(
     if not isinstance(regexes, list):
         regexes = [regexes]
 
+    parens = ["(", ")"]
     picks = []
     for exp in regexes:
         if not _is_regex(exp):
@@ -184,7 +185,18 @@ def _pick_columns(
             cols = [
                 col
                 for col in columns
-                if any([re.fullmatch(exp, col)]) and col not in picks
+                if any(
+                    [
+                        re.fullmatch(
+                            re.escape(exp)
+                            if get_config("enable_auto_escape_parenthesis")
+                            and any(char in exp for char in parens)
+                            else exp,
+                            col,
+                        )
+                    ]
+                )
+                and col not in picks
             ]
             if len(cols) > 0:
                 picks.extend(cols)
@@ -199,7 +211,16 @@ def _pick_columns(
             )
         unmatched = []
         for exp in regexes:
-            if not any(re.fullmatch(exp, col) for col in columns):
+            if not any(
+                re.fullmatch(
+                    re.escape(exp)
+                    if get_config("enable_auto_escape_parenthesis")
+                    and any(char in exp for char in parens)
+                    else exp,
+                    col,
+                )
+                for col in columns
+            ):
                 unmatched.append(exp)
         if len(unmatched) > 0:
             raise ValueError(
