@@ -175,6 +175,7 @@ def _pick_columns(
     if not isinstance(regexes, list):
         regexes = [regexes]
 
+    parens = ["(", ")"]
     picks = []
     for exp in regexes:
         if not _is_regex(exp):
@@ -184,7 +185,18 @@ def _pick_columns(
             cols = [
                 col
                 for col in columns
-                if any([re.fullmatch(exp, col)]) and col not in picks
+                if any(
+                    [
+                        re.fullmatch(
+                            re.escape(exp)
+                            if get_config("enable_auto_escape_parenthesis")
+                            and any(char in exp for char in parens)
+                            else exp,
+                            col,
+                        )
+                    ]
+                )
+                and col not in picks
             ]
             if len(cols) > 0:
                 picks.extend(cols)
@@ -199,7 +211,16 @@ def _pick_columns(
             )
         unmatched = []
         for exp in regexes:
-            if not any(re.fullmatch(exp, col) for col in columns):
+            if not any(
+                re.fullmatch(
+                    re.escape(exp)
+                    if get_config("enable_auto_escape_parenthesis")
+                    and any(char in exp for char in parens)
+                    else exp,
+                    col,
+                )
+                for col in columns
+            ):
                 unmatched.append(exp)
         if len(unmatched) > 0:
             raise ValueError(
@@ -476,16 +497,43 @@ def _check_x_types(
             )
         missing_columns = []
         defined_columns = []
-        for _, columns in X_types.items():
+        parens = ["(", ")"]
+        for columns in X_types.values():
+            if not get_config("enable_auto_escape_parenthesis"):
+                if any(char in col for char in parens for col in columns):
+                    warn_with_log(
+                        f"{parens} found in column names, "
+                        "recommended to use "
+                        '`julearn.config.set_config("enable_auto_escape_'
+                        'parenthesis", True)`'
+                    )
             t_columns = [
                 col
                 for col in X
-                if any(re.fullmatch(exp, col) for exp in columns)
+                if any(
+                    re.fullmatch(
+                        re.escape(exp)
+                        if get_config("enable_auto_escape_parenthesis")
+                        and any(char in exp for char in parens)
+                        else exp,
+                        col,
+                    )
+                    for exp in columns
+                )
             ]
             t_missing = [
                 exp
                 for exp in columns
-                if not any(re.fullmatch(exp, col) for col in X)
+                if not any(
+                    re.fullmatch(
+                        re.escape(exp)
+                        if get_config("enable_auto_escape_parenthesis")
+                        and any(char in exp for char in parens)
+                        else exp,
+                        col,
+                    )
+                    for col in X
+                )
             ]
             defined_columns.extend(t_columns)
             missing_columns.extend(t_missing)

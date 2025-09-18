@@ -158,6 +158,32 @@ def test_prepare_input_data() -> None:
     _check_df_input(prepared, X=X, y=y, groups=groups, df=df)
 
 
+def test_prepare_input_data_with_parens_in_col_names() -> None:
+    """Test prepare input data (dataframe) with parenthesis in column names."""
+    X = [
+        "AgeAtScan",
+        "Sex-0.0",
+        "UK_Biobank_assessment_centre-2.0_11025.0",
+        "UK_Biobank_assessment_centre-2.0_11026.0",
+        "UK_Biobank_assessment_centre-2.0_11027.0",
+        "Volumetric_scaling_from_T1_head_image_to_standard_space-2.0",
+        "Scanner_lateral_(X)_brain_position-2.0",
+        "Scanner_transverse_(Y)_brain_position-2.0",
+        "Scanner_longitudinal_(Z)_brain_position-2.0",
+        "Scanner_table_position-2.0",
+        "Intensity_scaling_for_SWI-2.0",
+        "Date_of_attending_assessment_centre-2.0",
+    ]
+    y = "target"
+    X_types = {"continuous": X}
+    df = pd.DataFrame(np.random.randn(100, len(X)), columns=X)
+    df[y] = np.random.randint(0, 2, size=100)
+    df_X, _df_y, _df_groups, _X_types_prepared = prepare_input_data(
+        X=X, y=y, df=df, pos_labels=None, groups=None, X_types=X_types
+    )
+    assert df_X.columns.size == len(X)
+
+
 def test_prepare_input_data_erors() -> None:
     """Test prepare input data (dataframe) errors."""
     data = np.random.rand(4, 10)
@@ -794,3 +820,26 @@ def test__check_x_types_regexp() -> None:
         warnings.simplefilter("error")
         checked_X_types = _check_x_types(X=X, X_types=X_types)
         assert X_types == checked_X_types
+
+
+def test__check_x_types_regexp_parenthesis_escape() -> None:
+    """Test checking for valid X types using regexp with parenthesis escape."""
+    X = [
+        "a",
+        "b",
+        "a_(c)_b",
+        "a_b_(c)_d",
+        "a-b_c_(d)_e",
+        "a-b_c_(d)_e-f",
+        "g",
+    ]
+    X_types = {"continuous": X}
+    # Disable escaping and expect error
+    set_config("enable_auto_escape_parenthesis", False)
+    with pytest.raises(ValueError, match=r"defined in X_types but not in X"):
+        with pytest.raises(RuntimeWarning, match=r"recommended to use"):
+            checked_X_types = _check_x_types(X=X, X_types=X_types)
+    # Enable escaping and no error
+    set_config("enable_auto_escape_parenthesis", True)
+    checked_X_types = _check_x_types(X=X, X_types=X_types)
+    assert X_types == checked_X_types
