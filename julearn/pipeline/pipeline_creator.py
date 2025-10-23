@@ -6,7 +6,7 @@
 
 import typing
 from dataclasses import dataclass, field
-from typing import Any, Optional, Union
+from typing import Any, Optional, Union, tuple
 
 import numpy as np
 from scipy import stats
@@ -279,10 +279,15 @@ class PipelineCreator:
                         "'*'."
                     )
                 else:
-
-                    target_gen_step = next(iter([
-                        x for x in self._steps if x.name == "generate_target"
-                    ]))
+                    target_gen_step = next(
+                        iter(
+                            [
+                                x
+                                for x in self._steps
+                                if x.name == "generate_target"
+                            ]
+                        )
+                    )
                     if len(apply_to & target_gen_step.apply_to) > 0:
                         raise_error(
                             "A target generator was added. The apply_to "
@@ -299,7 +304,7 @@ class PipelineCreator:
                     "TargetPipelineCreator can only be added to the target."
                 )
             step = step.to_pipeline()  # type: ignore
-            step = typing.cast(JuTargetPipeline, step)
+            step = typing.cast("JuTargetPipeline", step)
 
         # The name "generate_target" is reserved for the target generator step
         if name == "generate_target" and step != "generate_target":
@@ -377,7 +382,8 @@ class PipelineCreator:
                 if not isinstance(step, PipelineCreator):
                     raise_error(
                         "The transformer parameter in the generate_target "
-                        "step should be a PipelineCreator.")
+                        "step should be a PipelineCreator."
+                    )
         elif len(params_to_set) > 0:
             step.set_params(**params_to_set)  # type: ignore
 
@@ -745,7 +751,7 @@ class PipelineCreator:
     @staticmethod
     def _wrap_target_model(
         model_name: str, model: ModelLike, target_trans_step: Step, kind: str
-    ) -> Tuple[str, Union[JuTransformedTargetModel, JuGeneratedTargetModel]]:
+    ) -> tuple[str, Union[JuTransformedTargetModel, JuGeneratedTargetModel]]:
         """Wrap the model in a JuTransformedTargetModel.
 
         Parameters

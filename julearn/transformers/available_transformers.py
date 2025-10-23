@@ -66,7 +66,6 @@ _available_transformers = {
     "pca": PCA,
     # Custom
     "cbpm": CBPM,
-
 }
 
 _available_transformers_reset = deepcopy(_available_transformers)

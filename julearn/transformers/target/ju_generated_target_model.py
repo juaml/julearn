@@ -132,7 +132,7 @@ class JuGeneratedTargetModel(JuBaseEstimator):
         """
         if not hasattr(self, "model_"):
             raise_error("Model not fitted yet.")
-        self.model_ = typing.cast(ModelLike, self.model_)
+        self.model_ = typing.cast("ModelLike", self.model_)
         y_pred = self.model_.predict(X)
         warn_with_log(
             "The target has been generated from the features. The output of "
@@ -167,7 +167,7 @@ class JuGeneratedTargetModel(JuBaseEstimator):
                 "provided. The target will be ignored and the generated "
                 "target will be used instead."
             )
-        self.model_ = typing.cast(ModelLike, self.model_)
+        self.model_ = typing.cast("ModelLike", self.model_)
         y_gen = self.generate_target(X, y)
         logger.debug("Scoring model using generated target")
         return self.model_.score(X, y_gen)
@@ -191,7 +191,7 @@ class JuGeneratedTargetModel(JuBaseEstimator):
         """
         if not hasattr(self, "model_"):
             raise_error("Model not fitted yet.")
-        self.model_ = typing.cast(ModelLike, self.model_)
+        self.model_ = typing.cast("ModelLike", self.model_)
         return self.model_.predict_proba(X)  # type: ignore
 
     @available_if(_wrapped_model_has("decision_function"))
@@ -212,7 +212,7 @@ class JuGeneratedTargetModel(JuBaseEstimator):
         """
         if not hasattr(self, "model_"):
             raise_error("Model not fitted yet.")
-        self.model_ = typing.cast(ModelLike, self.model_)
+        self.model_ = typing.cast("ModelLike", self.model_)
         return self.model_.decision_function(X)  # type: ignore
 
     def generate_target(
@@ -251,5 +251,5 @@ class JuGeneratedTargetModel(JuBaseEstimator):
         """Get the classes of the model."""
         if not hasattr(self, "model_"):
             raise_error("Model not fitted yet.")
-        self.model_ = typing.cast(ModelLike, self.model_)
+        self.model_ = typing.cast("ModelLike", self.model_)
         return self.model_.classes_

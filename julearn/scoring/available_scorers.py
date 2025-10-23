@@ -13,11 +13,11 @@ from sklearn.metrics import _scorer, get_scorer_names, make_scorer
 from sklearn.metrics._scorer import _check_multimetric_scoring  # type: ignore
 from sklearn.metrics._scorer import check_scoring as sklearn_check_scoring
 
-from ..transformers.target.ju_transformed_target_model import (
-    TransformedTargetWarning,
-)
 from ..transformers.target.ju_generated_target_model import (
     GeneratedTargetWarning,
+)
+from ..transformers.target.ju_transformed_target_model import (
+    TransformedTargetWarning,
 )
 from ..utils import logger, raise_error, warn_with_log
 from ..utils.typing import EstimatorLike, ScorerLike
