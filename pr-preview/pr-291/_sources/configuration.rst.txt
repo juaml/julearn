@@ -54,3 +54,7 @@ Here you can find the comprehensive list of flags that can be set:
        | If set to ``True``, the parameter will be set back to None.
      - | Column transformers will be applied in parallel, using more resources.
        | than expected.
+   * - ``enable_auto_escape_parenthesis``
+     - | This flag enables escaping parenthesis in column names.
+     - | If column names include parenthesis, then they will be treated as regular
+       | expression metacharacters and not regular characters.
