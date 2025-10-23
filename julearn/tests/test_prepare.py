@@ -178,7 +178,7 @@ def test_prepare_input_data_with_parens_in_col_names() -> None:
     X_types = {"continuous": X}
     df = pd.DataFrame(np.random.randn(100, len(X)), columns=X)
     df[y] = np.random.randint(0, 2, size=100)
-    df_X, _df_y, _df_groups, _X_types_prepared = prepare_input_data(
+    df_X, _, _, _ = prepare_input_data(
         X=X, y=y, df=df, pos_labels=None, groups=None, X_types=X_types
     )
     assert df_X.columns.size == len(X)
