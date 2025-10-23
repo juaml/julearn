@@ -264,6 +264,25 @@ def problem_type(request: FixtureRequest) -> str:
     return request.param
 
 
+@fixture(params=["regression", "classification"], scope="function")
+def problem_type_models(request: FixtureRequest) -> str:
+    """Return different problem types.
+
+    Parameters
+    ----------
+    request : pytest.FixtureRequest
+        The request object.
+
+    Returns
+    -------
+    str
+        The problem type.
+
+    """
+
+    return request.param
+
+
 @fixture(
     params=[
         None,

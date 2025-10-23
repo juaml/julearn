@@ -6,7 +6,7 @@
 
 import typing
 from dataclasses import dataclass, field
-from typing import Any, Optional, Union, tuple
+from typing import Any, Optional, Union
 
 import numpy as np
 from scipy import stats
@@ -695,7 +695,9 @@ class PipelineCreator:
                 for k, v in model_params.items()
             }
             model_estimator.set_params(**model_params)
-            if self.wrap and not isinstance(model_estimator, JuModelLike):
+            if _should_wrap_this_step(
+                X_types, model_step.apply_to
+            ) and not isinstance(model_estimator, JuModelLike):
                 logger.debug(f"Wrapping {model_name}")
                 model_estimator = WrapModel(
                     model_estimator, model_step.apply_to

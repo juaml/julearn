@@ -48,9 +48,11 @@ def test_construction_working_wrapping(
     preprocess = preprocess if isinstance(preprocess, list) else [preprocess]
     for step in preprocess:
         creator.add(step, apply_to="categorical")
+    for step in preprocess:
+        creator.add(step, apply_to="continuous")
     if problem_type in ["classification", "regression"]:
         creator.add(model)
-    X_types = {"categorical": ["A"]}
+    X_types = {"categorical": ["A"], "continuous": ["B"]}
     pipeline = creator.to_pipeline(X_types=X_types)
 
     # check preprocessing steps
@@ -74,13 +76,13 @@ def test_construction_working_wrapping(
                 problem_type=problem_type,
             ).__class__,
         )
-        assert len(preprocess) + 2 == len(pipeline.steps)
+        assert len(preprocess) * 2 + 2 == len(pipeline.steps)
     else:
-        assert len(preprocess) + 1 == len(pipeline.steps)
+        assert len(preprocess) * 2 + 1 == len(pipeline.steps)
 
 
 def test_construction_working_nowrapping(
-    model: str, preprocess: Union[str, list[str]], problem_type: str
+    model: str, preprocess: Union[str, list[str]], problem_type_models: str
 ) -> None:
     """Test that the pipeline constructions works as expected (no wrapping).
 
@@ -90,11 +92,11 @@ def test_construction_working_nowrapping(
         The model to test.
     preprocess : str or list of str
         The preprocessing steps to test.
-    problem_type : str
+    problem_type_models : str
         The problem type to test.
 
     """
-    creator = PipelineCreator(problem_type=problem_type)
+    creator = PipelineCreator(problem_type=problem_type_models)
     preprocess = preprocess if isinstance(preprocess, list) else [preprocess]
     for step in preprocess:
         creator.add(step, apply_to="*")
@@ -117,7 +119,7 @@ def test_construction_working_nowrapping(
         model,
         get_model(
             model_name,
-            problem_type=problem_type,
+            problem_type=problem_type_models,
         ).__class__,
     )
     assert len(preprocess) + 2 == len(pipeline.steps)
@@ -936,7 +938,7 @@ def test_PipelineCreator_generated_target(
         problem_type="transformer", apply_to="petal"
     )
     tranformer_creator.add("pca", n_components=2, random_state=42)
-    tranformer_creator.add("pick_columns", keep="pca__pca0")
+    tranformer_creator.add("pick_columns", keep="pca0")
 
     # Create a model that uses the previous transformer to generate the target
     creator = PipelineCreator(problem_type="regression", apply_to="*")

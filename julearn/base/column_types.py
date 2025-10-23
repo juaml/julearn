@@ -4,7 +4,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Any, Callable, Union, dict
+from typing import Any, Callable, Union
 
 from sklearn.compose import make_column_selector
 
