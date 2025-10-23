@@ -163,16 +163,16 @@ def test_prepare_input_data_with_parens_in_col_names() -> None:
     X = [
         "AgeAtScan",
         "Sex-0.0",
-        "UK_Biobank_assessment_centre-2.0_11025.0",
-        "UK_Biobank_assessment_centre-2.0_11026.0",
-        "UK_Biobank_assessment_centre-2.0_11027.0",
-        "Volumetric_scaling_from_T1_head_image_to_standard_space-2.0",
-        "Scanner_lateral_(X)_brain_position-2.0",
-        "Scanner_transverse_(Y)_brain_position-2.0",
-        "Scanner_longitudinal_(Z)_brain_position-2.0",
-        "Scanner_table_position-2.0",
-        "Intensity_scaling_for_SWI-2.0",
-        "Date_of_attending_assessment_centre-2.0",
+        "Feature_0.0",
+        "Feature_1.1",
+        "Feature_2.2",
+        "Feature_3_4_5_7",
+        "Scanner_(X)_pos_head",
+        "Scanner_(Y)_pos_head",
+        "Scanner_(Z)_pos_head",
+        "Scanner_pos_Table",
+        "Intensity_scaling",
+        "Date_of_evaluation",
     ]
     y = "target"
     X_types = {"continuous": X}
