@@ -84,7 +84,7 @@ scores, estimator = run_cross_validation(
 print(scores["test_score"].mean())
 
 ###############################################################################
-# This did not change much, lets explore other kernels too.
+# This did not change much, let's explore other kernels too.
 
 creator = PipelineCreator(problem_type="classification")
 creator.add("zscore")

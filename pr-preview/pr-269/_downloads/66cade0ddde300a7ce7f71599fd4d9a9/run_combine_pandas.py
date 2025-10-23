@@ -122,7 +122,7 @@ df_fmri = df_fmri.reset_index()
 
 ###############################################################################
 # Reshaping data frames (more complex)
-# Lets suppose that our prediction target is now the *age* and we want to use
+# Let's suppose that our prediction target is now the *age* and we want to use
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # as features the frontal and parietal value during each event. For this
 # purpose, we need to convert the event values into columns. There are two

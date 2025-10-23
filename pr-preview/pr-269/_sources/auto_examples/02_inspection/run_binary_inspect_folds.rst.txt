@@ -11,7 +11,7 @@
         :class: sphx-glr-download-link-note
 
         :ref:`Go to the end <sphx_glr_download_auto_examples_02_inspection_run_binary_inspect_folds.py>`
-        to download the full example code
+        to download the full example code.
 
 .. rst-class:: sphx-glr-example-title
 
@@ -30,7 +30,7 @@ We later inspect the predictions of the model for each fold.
 
 .. GENERATED FROM PYTHON SOURCE LINES 12-23
 
-.. code-block:: default
+.. code-block:: Python
 
     # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
     # License: AGPL
@@ -56,7 +56,7 @@ Set the logging level to info to see extra information.
 
 .. GENERATED FROM PYTHON SOURCE LINES 25-27
 
-.. code-block:: default
+.. code-block:: Python
 
     configure_logging(level="INFO")
 
@@ -68,20 +68,20 @@ Set the logging level to info to see extra information.
 
  .. code-block:: none
 
-    2024-07-30 13:54:01,785 - julearn - INFO - ===== Lib Versions =====
-    2024-07-30 13:54:01,785 - julearn - INFO - numpy: 1.26.4
-    2024-07-30 13:54:01,785 - julearn - INFO - scipy: 1.14.0
-    2024-07-30 13:54:01,785 - julearn - INFO - sklearn: 1.4.2
-    2024-07-30 13:54:01,785 - julearn - INFO - pandas: 2.1.4
-    2024-07-30 13:54:01,785 - julearn - INFO - julearn: 0.3.4.dev10
-    2024-07-30 13:54:01,785 - julearn - INFO - ========================
+    2025-10-23 21:09:18,754 - julearn - INFO - ===== Lib Versions =====
+    2025-10-23 21:09:18,754 - julearn - INFO - numpy: 1.26.4
+    2025-10-23 21:09:18,754 - julearn - INFO - scipy: 1.16.2
+    2025-10-23 21:09:18,754 - julearn - INFO - sklearn: 1.7.2
+    2025-10-23 21:09:18,754 - julearn - INFO - pandas: 2.3.3
+    2025-10-23 21:09:18,754 - julearn - INFO - julearn: 0.3.5.dev105
+    2025-10-23 21:09:18,754 - julearn - INFO - ========================
 
 
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 28-30
 
-.. code-block:: default
+.. code-block:: Python
 
     df_iris = load_dataset("iris")
 
@@ -99,7 +99,7 @@ classification.
 
 .. GENERATED FROM PYTHON SOURCE LINES 33-35
 
-.. code-block:: default
+.. code-block:: Python
 
     df_iris = df_iris[df_iris["species"].isin(["versicolor", "virginica"])]
 
@@ -115,9 +115,9 @@ classification.
 As features, we will use the sepal length, width and petal length.
 We will try to predict the species.
 
-.. GENERATED FROM PYTHON SOURCE LINES 38-61
+.. GENERATED FROM PYTHON SOURCE LINES 38-60
 
-.. code-block:: default
+.. code-block:: Python
 
 
     X = ["sepal_length", "sepal_width", "petal_length"]
@@ -128,7 +128,6 @@ We will try to predict the species.
     creator.add("zscore")
     creator.add("svm")
 
-    cv = ShuffleSplit(n_splits=5, train_size=0.7, random_state=200)
     cv = RepeatedStratifiedKFold(n_splits=5, n_repeats=4, random_state=200)
 
     scores, model, inspector = run_cross_validation(
@@ -150,74 +149,72 @@ We will try to predict the species.
 
  .. code-block:: none
 
-    2024-07-30 13:54:01,788 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2024-07-30 13:54:01,788 - julearn - INFO - Step added
-    2024-07-30 13:54:01,788 - julearn - INFO - Adding step svm that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2024-07-30 13:54:01,789 - julearn - INFO - Step added
-    2024-07-30 13:54:01,789 - julearn - INFO - Inspector requested: setting return_estimator='all'
-    2024-07-30 13:54:01,789 - julearn - INFO - ==== Input Data ====
-    2024-07-30 13:54:01,789 - julearn - INFO - Using dataframe as input
-    2024-07-30 13:54:01,789 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length']
-    2024-07-30 13:54:01,789 - julearn - INFO -      Target: species
-    2024-07-30 13:54:01,789 - julearn - INFO -      Expanded features: ['sepal_length', 'sepal_width', 'petal_length']
-    2024-07-30 13:54:01,789 - julearn - INFO -      X_types:{}
-    2024-07-30 13:54:01,789 - julearn - WARNING - The following columns are not defined in X_types: ['sepal_length', 'sepal_width', 'petal_length']. They will be treated as continuous.
-    /home/runner/work/julearn/julearn/julearn/prepare.py:509: RuntimeWarning: The following columns are not defined in X_types: ['sepal_length', 'sepal_width', 'petal_length']. They will be treated as continuous.
+    2025-10-23 21:09:18,757 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2025-10-23 21:09:18,757 - julearn - INFO - Step added
+    2025-10-23 21:09:18,757 - julearn - INFO - Adding step svm that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2025-10-23 21:09:18,757 - julearn - INFO - Step added
+    2025-10-23 21:09:18,757 - julearn - INFO - ==== Input Data ====
+    2025-10-23 21:09:18,757 - julearn - INFO - Using dataframe as input
+    2025-10-23 21:09:18,758 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length']
+    2025-10-23 21:09:18,758 - julearn - INFO -      Target: species
+    2025-10-23 21:09:18,758 - julearn - INFO -      Expanded features: ['sepal_length', 'sepal_width', 'petal_length']
+    2025-10-23 21:09:18,758 - julearn - INFO -      X_types:{}
+    2025-10-23 21:09:18,758 - julearn - WARNING - The following columns are not defined in X_types: ['sepal_length', 'sepal_width', 'petal_length']. They will be treated as continuous.
+    /home/runner/work/julearn/julearn/julearn/prepare.py:562: RuntimeWarning: The following columns are not defined in X_types: ['sepal_length', 'sepal_width', 'petal_length']. They will be treated as continuous.
       warn_with_log(
-    2024-07-30 13:54:01,790 - julearn - INFO - ====================
-    2024-07-30 13:54:01,790 - julearn - INFO - 
-    2024-07-30 13:54:01,790 - julearn - INFO - = Model Parameters =
-    2024-07-30 13:54:01,790 - julearn - INFO - ====================
-    2024-07-30 13:54:01,790 - julearn - INFO - 
-    2024-07-30 13:54:01,791 - julearn - INFO - = Data Information =
-    2024-07-30 13:54:01,791 - julearn - INFO -      Problem type: classification
-    2024-07-30 13:54:01,791 - julearn - INFO -      Number of samples: 100
-    2024-07-30 13:54:01,791 - julearn - INFO -      Number of features: 3
-    2024-07-30 13:54:01,791 - julearn - INFO - ====================
-    2024-07-30 13:54:01,791 - julearn - INFO - 
-    2024-07-30 13:54:01,791 - julearn - INFO -      Number of classes: 2
-    2024-07-30 13:54:01,791 - julearn - INFO -      Target type: object
-    2024-07-30 13:54:01,791 - julearn - INFO -      Class distributions: species
+    2025-10-23 21:09:18,759 - julearn - INFO - ====================
+    2025-10-23 21:09:18,759 - julearn - INFO - 
+    2025-10-23 21:09:18,759 - julearn - INFO - = Model Parameters =
+    2025-10-23 21:09:18,760 - julearn - INFO - ====================
+    2025-10-23 21:09:18,760 - julearn - INFO - 
+    2025-10-23 21:09:18,760 - julearn - INFO - = Data Information =
+    2025-10-23 21:09:18,760 - julearn - INFO -      Problem type: classification
+    2025-10-23 21:09:18,760 - julearn - INFO -      Number of samples: 100
+    2025-10-23 21:09:18,760 - julearn - INFO -      Number of features: 3
+    2025-10-23 21:09:18,760 - julearn - INFO - ====================
+    2025-10-23 21:09:18,760 - julearn - INFO - 
+    2025-10-23 21:09:18,760 - julearn - INFO -      Number of classes: 2
+    2025-10-23 21:09:18,761 - julearn - INFO -      Target type: object
+    2025-10-23 21:09:18,761 - julearn - INFO -      Class distributions: species
     versicolor    50
     virginica     50
     Name: count, dtype: int64
-    2024-07-30 13:54:01,792 - julearn - INFO - Using outer CV scheme RepeatedStratifiedKFold(n_repeats=4, n_splits=5, random_state=200)
-    2024-07-30 13:54:01,792 - julearn - INFO - Binary classification problem detected.
-    2024-07-30 13:54:01,942 - julearn - INFO - Fitting final model
+    2025-10-23 21:09:18,761 - julearn - INFO - Using outer CV scheme RepeatedStratifiedKFold(n_repeats=4, n_splits=5, random_state=200) (incl. final model)
+    2025-10-23 21:09:18,762 - julearn - INFO - Binary classification problem detected.
         fit_time  score_time  ... fold                          cv_mdsum
-    0   0.004883    0.002518  ...    0  42489ff0163b2f12752440a6b7ef74c7
-    1   0.004454    0.002464  ...    1  42489ff0163b2f12752440a6b7ef74c7
-    2   0.004425    0.002472  ...    2  42489ff0163b2f12752440a6b7ef74c7
-    3   0.004448    0.002435  ...    3  42489ff0163b2f12752440a6b7ef74c7
-    4   0.004465    0.002443  ...    4  42489ff0163b2f12752440a6b7ef74c7
-    5   0.004475    0.002403  ...    0  42489ff0163b2f12752440a6b7ef74c7
-    6   0.004385    0.002442  ...    1  42489ff0163b2f12752440a6b7ef74c7
-    7   0.004497    0.002450  ...    2  42489ff0163b2f12752440a6b7ef74c7
-    8   0.004375    0.002436  ...    3  42489ff0163b2f12752440a6b7ef74c7
-    9   0.004364    0.002532  ...    4  42489ff0163b2f12752440a6b7ef74c7
-    10  0.004399    0.002411  ...    0  42489ff0163b2f12752440a6b7ef74c7
-    11  0.004393    0.002415  ...    1  42489ff0163b2f12752440a6b7ef74c7
-    12  0.004413    0.002450  ...    2  42489ff0163b2f12752440a6b7ef74c7
-    13  0.004388    0.002427  ...    3  42489ff0163b2f12752440a6b7ef74c7
-    14  0.004381    0.002430  ...    4  42489ff0163b2f12752440a6b7ef74c7
-    15  0.004373    0.002414  ...    0  42489ff0163b2f12752440a6b7ef74c7
-    16  0.004388    0.002403  ...    1  42489ff0163b2f12752440a6b7ef74c7
-    17  0.004396    0.002435  ...    2  42489ff0163b2f12752440a6b7ef74c7
-    18  0.004404    0.002498  ...    3  42489ff0163b2f12752440a6b7ef74c7
-    19  0.004397    0.002439  ...    4  42489ff0163b2f12752440a6b7ef74c7
+    0   0.004481    0.002653  ...    0  42489ff0163b2f12752440a6b7ef74c7
+    1   0.004487    0.002620  ...    1  42489ff0163b2f12752440a6b7ef74c7
+    2   0.004423    0.002660  ...    2  42489ff0163b2f12752440a6b7ef74c7
+    3   0.004564    0.002668  ...    3  42489ff0163b2f12752440a6b7ef74c7
+    4   0.004516    0.002657  ...    4  42489ff0163b2f12752440a6b7ef74c7
+    5   0.004457    0.002610  ...    0  42489ff0163b2f12752440a6b7ef74c7
+    6   0.004410    0.002596  ...    1  42489ff0163b2f12752440a6b7ef74c7
+    7   0.004476    0.002616  ...    2  42489ff0163b2f12752440a6b7ef74c7
+    8   0.004445    0.002581  ...    3  42489ff0163b2f12752440a6b7ef74c7
+    9   0.004450    0.002626  ...    4  42489ff0163b2f12752440a6b7ef74c7
+    10  0.004429    0.002590  ...    0  42489ff0163b2f12752440a6b7ef74c7
+    11  0.004500    0.002637  ...    1  42489ff0163b2f12752440a6b7ef74c7
+    12  0.004446    0.002706  ...    2  42489ff0163b2f12752440a6b7ef74c7
+    13  0.004496    0.002661  ...    3  42489ff0163b2f12752440a6b7ef74c7
+    14  0.004390    0.002595  ...    4  42489ff0163b2f12752440a6b7ef74c7
+    15  0.004464    0.002613  ...    0  42489ff0163b2f12752440a6b7ef74c7
+    16  0.004452    0.002586  ...    1  42489ff0163b2f12752440a6b7ef74c7
+    17  0.004524    0.002682  ...    2  42489ff0163b2f12752440a6b7ef74c7
+    18  0.004519    0.002667  ...    3  42489ff0163b2f12752440a6b7ef74c7
+    19  0.004520    0.002639  ...    4  42489ff0163b2f12752440a6b7ef74c7
 
     [20 rows x 9 columns]
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 62-63
+.. GENERATED FROM PYTHON SOURCE LINES 61-62
 
 We can now inspect the predictions of the model for each fold.
 
-.. GENERATED FROM PYTHON SOURCE LINES 63-68
+.. GENERATED FROM PYTHON SOURCE LINES 62-67
 
-.. code-block:: default
+.. code-block:: Python
 
 
     cv_predictions = inspector.folds.predict()
@@ -232,27 +229,27 @@ We can now inspect the predictions of the model for each fold.
 
  .. code-block:: none
 
-        repeat0_p0  repeat1_p0  repeat2_p0  repeat3_p0      target
-    0   versicolor  versicolor  versicolor  versicolor  versicolor
-    1   versicolor  versicolor  versicolor  versicolor  versicolor
-    2   versicolor  versicolor  versicolor  versicolor  versicolor
-    3   versicolor  versicolor  versicolor  versicolor  versicolor
-    4   versicolor  versicolor  versicolor  versicolor  versicolor
-    ..         ...         ...         ...         ...         ...
-    95   virginica   virginica   virginica   virginica   virginica
-    96   virginica   virginica   virginica   virginica   virginica
-    97   virginica   virginica   virginica   virginica   virginica
-    98   virginica   virginica   virginica   virginica   virginica
-    99   virginica   virginica   virginica   virginica   virginica
+        index      target  repeat0_p0  repeat1_p0  repeat2_p0  repeat3_p0
+    0      50  versicolor  versicolor  versicolor  versicolor  versicolor
+    1      51  versicolor  versicolor  versicolor  versicolor  versicolor
+    2      52  versicolor  versicolor  versicolor  versicolor  versicolor
+    3      53  versicolor  versicolor  versicolor  versicolor  versicolor
+    4      54  versicolor  versicolor  versicolor  versicolor  versicolor
+    ..    ...         ...         ...         ...         ...         ...
+    95    145   virginica   virginica   virginica   virginica   virginica
+    96    146   virginica   virginica   virginica   virginica   virginica
+    97    147   virginica   virginica   virginica   virginica   virginica
+    98    148   virginica   virginica   virginica   virginica   virginica
+    99    149   virginica   virginica   virginica   virginica   virginica
 
-    [100 rows x 5 columns]
-
-
+    [100 rows x 6 columns]
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 69-70
 
-.. code-block:: default
+
+.. GENERATED FROM PYTHON SOURCE LINES 68-69
+
+.. code-block:: Python
 
     inspector.folds[0].model
 
@@ -264,14 +261,14 @@ We can now inspect the predictions of the model for each fold.
  .. code-block:: none
 
 
-    <julearn.inspect._pipeline.PipelineInspector object at 0x7fef2d7d72b0>
+    <julearn.inspect._pipeline.PipelineInspector object at 0x7fa0fb6067b0>
 
 
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.237 seconds)
+   **Total running time of the script:** (0 minutes 0.248 seconds)
 
 
 .. _sphx_glr_download_auto_examples_02_inspection_run_binary_inspect_folds.py:
@@ -280,16 +277,17 @@ We can now inspect the predictions of the model for each fold.
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: run_binary_inspect_folds.ipynb <run_binary_inspect_folds.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: run_binary_inspect_folds.py <run_binary_inspect_folds.py>`
 
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
+    .. container:: sphx-glr-download sphx-glr-download-zip
 
-      :download:`Download Jupyter notebook: run_binary_inspect_folds.ipynb <run_binary_inspect_folds.ipynb>`
+      :download:`Download zipped: run_binary_inspect_folds.zip <run_binary_inspect_folds.zip>`
 
 
 .. only:: html

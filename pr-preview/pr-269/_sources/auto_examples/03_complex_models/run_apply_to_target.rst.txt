@@ -11,7 +11,7 @@
         :class: sphx-glr-download-link-note
 
         :ref:`Go to the end <sphx_glr_download_auto_examples_03_complex_models_run_apply_to_target.py>`
-        to download the full example code
+        to download the full example code.
 
 .. rst-class:: sphx-glr-example-title
 
@@ -27,7 +27,7 @@ analysis using Ridge Regression model.
 
 .. GENERATED FROM PYTHON SOURCE LINES 10-24
 
-.. code-block:: default
+.. code-block:: Python
 
     # Authors: Lya K. Paas Oliveros <l.paas.oliveros@fz-juelich.de>
     #          Sami Hamdan <s.hamdan@fz-juelich.de>
@@ -56,7 +56,7 @@ Set the logging level to info to see extra information.
 
 .. GENERATED FROM PYTHON SOURCE LINES 26-28
 
-.. code-block:: default
+.. code-block:: Python
 
     configure_logging(level="INFO")
 
@@ -68,13 +68,13 @@ Set the logging level to info to see extra information.
 
  .. code-block:: none
 
-    2024-07-30 13:54:06,025 - julearn - INFO - ===== Lib Versions =====
-    2024-07-30 13:54:06,025 - julearn - INFO - numpy: 1.26.4
-    2024-07-30 13:54:06,025 - julearn - INFO - scipy: 1.14.0
-    2024-07-30 13:54:06,025 - julearn - INFO - sklearn: 1.4.2
-    2024-07-30 13:54:06,025 - julearn - INFO - pandas: 2.1.4
-    2024-07-30 13:54:06,025 - julearn - INFO - julearn: 0.3.4.dev10
-    2024-07-30 13:54:06,025 - julearn - INFO - ========================
+    2025-10-23 21:09:23,069 - julearn - INFO - ===== Lib Versions =====
+    2025-10-23 21:09:23,069 - julearn - INFO - numpy: 1.26.4
+    2025-10-23 21:09:23,069 - julearn - INFO - scipy: 1.16.2
+    2025-10-23 21:09:23,069 - julearn - INFO - sklearn: 1.7.2
+    2025-10-23 21:09:23,069 - julearn - INFO - pandas: 2.3.3
+    2025-10-23 21:09:23,069 - julearn - INFO - julearn: 0.3.5.dev105
+    2025-10-23 21:09:23,069 - julearn - INFO - ========================
 
 
 
@@ -85,7 +85,7 @@ Load the diabetes dataset from ``sklearn`` as a ``pandas.DataFrame``.
 
 .. GENERATED FROM PYTHON SOURCE LINES 30-32
 
-.. code-block:: default
+.. code-block:: Python
 
     features, target = load_diabetes(return_X_y=True, as_frame=True)
 
@@ -105,7 +105,7 @@ is the target we are interested in predicting.
 
 .. GENERATED FROM PYTHON SOURCE LINES 37-40
 
-.. code-block:: default
+.. code-block:: Python
 
     print("Features: \n", features.head())
     print("Target: \n", target.describe())
@@ -148,7 +148,7 @@ and y.
 
 .. GENERATED FROM PYTHON SOURCE LINES 43-48
 
-.. code-block:: default
+.. code-block:: Python
 
     data_diabetes = pd.concat([features, target], axis=1)
 
@@ -168,7 +168,7 @@ Split the dataset into train and test.
 
 .. GENERATED FROM PYTHON SOURCE LINES 50-52
 
-.. code-block:: default
+.. code-block:: Python
 
     train_diabetes, test_diabetes = train_test_split(data_diabetes, test_size=0.3)
 
@@ -186,7 +186,7 @@ we will first need to create a TargetPipelineCreator for this.
 
 .. GENERATED FROM PYTHON SOURCE LINES 55-59
 
-.. code-block:: default
+.. code-block:: Python
 
 
     target_creator = TargetPipelineCreator()
@@ -201,7 +201,7 @@ we will first need to create a TargetPipelineCreator for this.
  .. code-block:: none
 
 
-    <julearn.pipeline.target_pipeline_creator.TargetPipelineCreator object at 0x7fef2e2510c0>
+    <julearn.pipeline.target_pipeline_creator.TargetPipelineCreator object at 0x7fa0fb607a10>
 
 
 
@@ -211,7 +211,7 @@ Now we can create the pipeline using a PipelineCreator.
 
 .. GENERATED FROM PYTHON SOURCE LINES 61-76
 
-.. code-block:: default
+.. code-block:: Python
 
     creator = PipelineCreator(problem_type="regression")
     creator.add(target_creator, apply_to="target")
@@ -236,39 +236,38 @@ Now we can create the pipeline using a PipelineCreator.
 
  .. code-block:: none
 
-    2024-07-30 13:54:06,041 - julearn - INFO - Adding step jutargetpipeline that applies to ColumnTypes<types={'target'}; pattern=(?:target)>
-    2024-07-30 13:54:06,041 - julearn - INFO - Step added
-    2024-07-30 13:54:06,041 - julearn - INFO - Adding step ridge that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2024-07-30 13:54:06,041 - julearn - INFO - Step added
-    2024-07-30 13:54:06,041 - julearn - INFO - ==== Input Data ====
-    2024-07-30 13:54:06,041 - julearn - INFO - Using dataframe as input
-    2024-07-30 13:54:06,041 - julearn - INFO -      Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2024-07-30 13:54:06,041 - julearn - INFO -      Target: target
-    2024-07-30 13:54:06,042 - julearn - INFO -      Expanded features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2024-07-30 13:54:06,042 - julearn - INFO -      X_types:{}
-    2024-07-30 13:54:06,042 - julearn - WARNING - The following columns are not defined in X_types: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']. They will be treated as continuous.
-    /home/runner/work/julearn/julearn/julearn/prepare.py:509: RuntimeWarning: The following columns are not defined in X_types: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']. They will be treated as continuous.
+    2025-10-23 21:09:23,084 - julearn - INFO - Adding step jutargetpipeline that applies to ColumnTypes<types={'target'}; pattern=(?:target)>
+    2025-10-23 21:09:23,085 - julearn - INFO - Step added
+    2025-10-23 21:09:23,085 - julearn - INFO - Adding step ridge that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2025-10-23 21:09:23,085 - julearn - INFO - Step added
+    2025-10-23 21:09:23,085 - julearn - INFO - ==== Input Data ====
+    2025-10-23 21:09:23,085 - julearn - INFO - Using dataframe as input
+    2025-10-23 21:09:23,085 - julearn - INFO -      Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2025-10-23 21:09:23,085 - julearn - INFO -      Target: target
+    2025-10-23 21:09:23,085 - julearn - INFO -      Expanded features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2025-10-23 21:09:23,086 - julearn - INFO -      X_types:{}
+    2025-10-23 21:09:23,086 - julearn - WARNING - The following columns are not defined in X_types: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']. They will be treated as continuous.
+    /home/runner/work/julearn/julearn/julearn/prepare.py:562: RuntimeWarning: The following columns are not defined in X_types: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']. They will be treated as continuous.
       warn_with_log(
-    2024-07-30 13:54:06,042 - julearn - INFO - ====================
-    2024-07-30 13:54:06,042 - julearn - INFO - 
-    2024-07-30 13:54:06,043 - julearn - INFO - = Model Parameters =
-    2024-07-30 13:54:06,043 - julearn - INFO - ====================
-    2024-07-30 13:54:06,043 - julearn - INFO - 
-    2024-07-30 13:54:06,043 - julearn - INFO - = Data Information =
-    2024-07-30 13:54:06,043 - julearn - INFO -      Problem type: regression
-    2024-07-30 13:54:06,044 - julearn - INFO -      Number of samples: 309
-    2024-07-30 13:54:06,044 - julearn - INFO -      Number of features: 10
-    2024-07-30 13:54:06,044 - julearn - INFO - ====================
-    2024-07-30 13:54:06,044 - julearn - INFO - 
-    2024-07-30 13:54:06,044 - julearn - INFO -      Target type: float64
-    2024-07-30 13:54:06,044 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-    2024-07-30 13:54:06,081 - julearn - INFO - Fitting final model
+    2025-10-23 21:09:23,086 - julearn - INFO - ====================
+    2025-10-23 21:09:23,087 - julearn - INFO - 
+    2025-10-23 21:09:23,087 - julearn - INFO - = Model Parameters =
+    2025-10-23 21:09:23,087 - julearn - INFO - ====================
+    2025-10-23 21:09:23,087 - julearn - INFO - 
+    2025-10-23 21:09:23,087 - julearn - INFO - = Data Information =
+    2025-10-23 21:09:23,087 - julearn - INFO -      Problem type: regression
+    2025-10-23 21:09:23,087 - julearn - INFO -      Number of samples: 309
+    2025-10-23 21:09:23,088 - julearn - INFO -      Number of features: 10
+    2025-10-23 21:09:23,088 - julearn - INFO - ====================
+    2025-10-23 21:09:23,088 - julearn - INFO - 
+    2025-10-23 21:09:23,088 - julearn - INFO -      Target type: float64
+    2025-10-23 21:09:23,088 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
        fit_time  score_time  ...  fold                          cv_mdsum
-    0  0.004469    0.002308  ...     0  b10eef89b4192178d482d7a1587a248a
-    1  0.004112    0.002260  ...     1  b10eef89b4192178d482d7a1587a248a
-    2  0.004157    0.002226  ...     2  b10eef89b4192178d482d7a1587a248a
-    3  0.004053    0.002234  ...     3  b10eef89b4192178d482d7a1587a248a
-    4  0.004062    0.002241  ...     4  b10eef89b4192178d482d7a1587a248a
+    0  0.003224    0.001650  ...     0  b10eef89b4192178d482d7a1587a248a
+    1  0.003196    0.001608  ...     1  b10eef89b4192178d482d7a1587a248a
+    2  0.003162    0.001622  ...     2  b10eef89b4192178d482d7a1587a248a
+    3  0.003138    0.001617  ...     3  b10eef89b4192178d482d7a1587a248a
+    4  0.003135    0.001628  ...     4  b10eef89b4192178d482d7a1587a248a
 
     [5 rows x 8 columns]
 
@@ -281,7 +280,7 @@ Mean value of mean absolute error across CV
 
 .. GENERATED FROM PYTHON SOURCE LINES 78-79
 
-.. code-block:: default
+.. code-block:: Python
 
     print(scores["test_score"].mean() * -1)
 
@@ -292,7 +291,7 @@ Mean value of mean absolute error across CV
 
  .. code-block:: none
 
-    51.51357151914367
+    51.51357151914368
 
 
 
@@ -300,7 +299,7 @@ Mean value of mean absolute error across CV
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.071 seconds)
+   **Total running time of the script:** (0 minutes 0.063 seconds)
 
 
 .. _sphx_glr_download_auto_examples_03_complex_models_run_apply_to_target.py:
@@ -309,16 +308,17 @@ Mean value of mean absolute error across CV
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: run_apply_to_target.ipynb <run_apply_to_target.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: run_apply_to_target.py <run_apply_to_target.py>`
 
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
+    .. container:: sphx-glr-download sphx-glr-download-zip
 
-      :download:`Download Jupyter notebook: run_apply_to_target.ipynb <run_apply_to_target.ipynb>`
+      :download:`Download zipped: run_apply_to_target.zip <run_apply_to_target.zip>`
 
 
 .. only:: html

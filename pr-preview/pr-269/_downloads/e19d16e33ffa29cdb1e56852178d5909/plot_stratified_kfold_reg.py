@@ -75,7 +75,7 @@ sns.displot(data_df, x="target", bins=20)
 # distributed. We can see that the data is skewed towards the lower end of
 # the target variable. We can also see that there are some outliers in the
 # data. In any case, even with a low number of splits, some groups will not be
-# represented in each fold. Lets continue with 40 bins which gives a good
+# represented in each fold. Let's continue with 40 bins which gives a good
 # granularity.
 
 cv_stratified = ContinuousStratifiedKFold(n_bins=40, n_splits=5, shuffle=False)

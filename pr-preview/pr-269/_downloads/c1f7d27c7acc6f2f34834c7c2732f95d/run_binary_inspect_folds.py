@@ -44,7 +44,6 @@ creator = PipelineCreator(problem_type="classification")
 creator.add("zscore")
 creator.add("svm")
 
-cv = ShuffleSplit(n_splits=5, train_size=0.7, random_state=200)
 cv = RepeatedStratifiedKFold(n_splits=5, n_repeats=4, random_state=200)
 
 scores, model, inspector = run_cross_validation(

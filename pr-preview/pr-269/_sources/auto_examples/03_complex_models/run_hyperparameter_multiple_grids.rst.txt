@@ -11,7 +11,7 @@
         :class: sphx-glr-download-link-note
 
         :ref:`Go to the end <sphx_glr_download_auto_examples_03_complex_models_run_hyperparameter_multiple_grids.py>`
-        to download the full example code
+        to download the full example code.
 
 .. rst-class:: sphx-glr-example-title
 
@@ -35,7 +35,7 @@ References
 
 .. GENERATED FROM PYTHON SOURCE LINES 17-27
 
-.. code-block:: default
+.. code-block:: Python
 
     # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
     # License: AGPL
@@ -60,7 +60,7 @@ Set the logging level to info to see extra information.
 
 .. GENERATED FROM PYTHON SOURCE LINES 29-31
 
-.. code-block:: default
+.. code-block:: Python
 
     configure_logging(level="INFO")
 
@@ -72,13 +72,13 @@ Set the logging level to info to see extra information.
 
  .. code-block:: none
 
-    2024-07-30 13:54:10,837 - julearn - INFO - ===== Lib Versions =====
-    2024-07-30 13:54:10,837 - julearn - INFO - numpy: 1.26.4
-    2024-07-30 13:54:10,837 - julearn - INFO - scipy: 1.14.0
-    2024-07-30 13:54:10,837 - julearn - INFO - sklearn: 1.4.2
-    2024-07-30 13:54:10,837 - julearn - INFO - pandas: 2.1.4
-    2024-07-30 13:54:10,837 - julearn - INFO - julearn: 0.3.4.dev10
-    2024-07-30 13:54:10,838 - julearn - INFO - ========================
+    2025-10-23 21:09:27,377 - julearn - INFO - ===== Lib Versions =====
+    2025-10-23 21:09:27,377 - julearn - INFO - numpy: 1.26.4
+    2025-10-23 21:09:27,377 - julearn - INFO - scipy: 1.16.2
+    2025-10-23 21:09:27,377 - julearn - INFO - sklearn: 1.7.2
+    2025-10-23 21:09:27,378 - julearn - INFO - pandas: 2.3.3
+    2025-10-23 21:09:27,378 - julearn - INFO - julearn: 0.3.5.dev105
+    2025-10-23 21:09:27,378 - julearn - INFO - ========================
 
 
 
@@ -89,7 +89,7 @@ Set the random seed to always have the same example.
 
 .. GENERATED FROM PYTHON SOURCE LINES 33-35
 
-.. code-block:: default
+.. code-block:: Python
 
     np.random.seed(42)
 
@@ -106,7 +106,7 @@ Load the dataset.
 
 .. GENERATED FROM PYTHON SOURCE LINES 37-40
 
-.. code-block:: default
+.. code-block:: Python
 
     df_fmri = load_dataset("fmri")
     df_fmri.head()
@@ -198,7 +198,7 @@ Set the dataframe in the right format.
 
 .. GENERATED FROM PYTHON SOURCE LINES 42-49
 
-.. code-block:: default
+.. code-block:: Python
 
     df_fmri = df_fmri.pivot(
         index=["subject", "timepoint", "event"], columns="region", values="signal"
@@ -290,11 +290,11 @@ Set the dataframe in the right format.
 
 .. GENERATED FROM PYTHON SOURCE LINES 50-51
 
-Lets do a first attempt and use a linear SVM with the default parameters.
+Let's do a first attempt and use a linear SVM with the default parameters.
 
 .. GENERATED FROM PYTHON SOURCE LINES 51-63
 
-.. code-block:: default
+.. code-block:: Python
 
 
     X = ["frontal", "parietal"]
@@ -316,39 +316,39 @@ Lets do a first attempt and use a linear SVM with the default parameters.
 
  .. code-block:: none
 
-    2024-07-30 13:54:10,846 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2024-07-30 13:54:10,846 - julearn - INFO - Step added
-    2024-07-30 13:54:10,847 - julearn - INFO - Adding step svm that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2024-07-30 13:54:10,847 - julearn - INFO - Setting hyperparameter kernel = linear
-    2024-07-30 13:54:10,847 - julearn - INFO - Step added
-    2024-07-30 13:54:10,847 - julearn - INFO - ==== Input Data ====
-    2024-07-30 13:54:10,847 - julearn - INFO - Using dataframe as input
-    2024-07-30 13:54:10,847 - julearn - INFO -      Features: ['frontal', 'parietal']
-    2024-07-30 13:54:10,847 - julearn - INFO -      Target: event
-    2024-07-30 13:54:10,847 - julearn - INFO -      Expanded features: ['frontal', 'parietal']
-    2024-07-30 13:54:10,847 - julearn - INFO -      X_types:{}
-    2024-07-30 13:54:10,847 - julearn - WARNING - The following columns are not defined in X_types: ['frontal', 'parietal']. They will be treated as continuous.
-    /home/runner/work/julearn/julearn/julearn/prepare.py:509: RuntimeWarning: The following columns are not defined in X_types: ['frontal', 'parietal']. They will be treated as continuous.
+    2025-10-23 21:09:27,386 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2025-10-23 21:09:27,386 - julearn - INFO - Step added
+    2025-10-23 21:09:27,386 - julearn - INFO - Adding step svm that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2025-10-23 21:09:27,386 - julearn - INFO - Setting hyperparameter kernel = linear
+    2025-10-23 21:09:27,387 - julearn - INFO - Step added
+    2025-10-23 21:09:27,387 - julearn - INFO - ==== Input Data ====
+    2025-10-23 21:09:27,387 - julearn - INFO - Using dataframe as input
+    2025-10-23 21:09:27,387 - julearn - INFO -      Features: ['frontal', 'parietal']
+    2025-10-23 21:09:27,387 - julearn - INFO -      Target: event
+    2025-10-23 21:09:27,387 - julearn - INFO -      Expanded features: ['frontal', 'parietal']
+    2025-10-23 21:09:27,387 - julearn - INFO -      X_types:{}
+    2025-10-23 21:09:27,387 - julearn - WARNING - The following columns are not defined in X_types: ['frontal', 'parietal']. They will be treated as continuous.
+    /home/runner/work/julearn/julearn/julearn/prepare.py:562: RuntimeWarning: The following columns are not defined in X_types: ['frontal', 'parietal']. They will be treated as continuous.
       warn_with_log(
-    2024-07-30 13:54:10,848 - julearn - INFO - ====================
-    2024-07-30 13:54:10,848 - julearn - INFO - 
-    2024-07-30 13:54:10,848 - julearn - INFO - = Model Parameters =
-    2024-07-30 13:54:10,848 - julearn - INFO - ====================
-    2024-07-30 13:54:10,849 - julearn - INFO - 
-    2024-07-30 13:54:10,849 - julearn - INFO - = Data Information =
-    2024-07-30 13:54:10,849 - julearn - INFO -      Problem type: classification
-    2024-07-30 13:54:10,849 - julearn - INFO -      Number of samples: 532
-    2024-07-30 13:54:10,849 - julearn - INFO -      Number of features: 2
-    2024-07-30 13:54:10,849 - julearn - INFO - ====================
-    2024-07-30 13:54:10,849 - julearn - INFO - 
-    2024-07-30 13:54:10,849 - julearn - INFO -      Number of classes: 2
-    2024-07-30 13:54:10,849 - julearn - INFO -      Target type: object
-    2024-07-30 13:54:10,850 - julearn - INFO -      Class distributions: event
+    2025-10-23 21:09:27,388 - julearn - INFO - ====================
+    2025-10-23 21:09:27,388 - julearn - INFO - 
+    2025-10-23 21:09:27,389 - julearn - INFO - = Model Parameters =
+    2025-10-23 21:09:27,389 - julearn - INFO - ====================
+    2025-10-23 21:09:27,389 - julearn - INFO - 
+    2025-10-23 21:09:27,389 - julearn - INFO - = Data Information =
+    2025-10-23 21:09:27,389 - julearn - INFO -      Problem type: classification
+    2025-10-23 21:09:27,389 - julearn - INFO -      Number of samples: 532
+    2025-10-23 21:09:27,389 - julearn - INFO -      Number of features: 2
+    2025-10-23 21:09:27,389 - julearn - INFO - ====================
+    2025-10-23 21:09:27,389 - julearn - INFO - 
+    2025-10-23 21:09:27,390 - julearn - INFO -      Number of classes: 2
+    2025-10-23 21:09:27,390 - julearn - INFO -      Target type: object
+    2025-10-23 21:09:27,390 - julearn - INFO -      Class distributions: event
     cue     266
     stim    266
     Name: count, dtype: int64
-    2024-07-30 13:54:10,850 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-    2024-07-30 13:54:10,850 - julearn - INFO - Binary classification problem detected.
+    2025-10-23 21:09:27,391 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+    2025-10-23 21:09:27,391 - julearn - INFO - Binary classification problem detected.
     0.5939164168576971
 
 
@@ -367,7 +367,7 @@ explicitly specify the name of the step. This is done by passing the
 
 .. GENERATED FROM PYTHON SOURCE LINES 72-99
 
-.. code-block:: default
+.. code-block:: Python
 
     creator = PipelineCreator(problem_type="classification")
     creator.add("zscore")
@@ -404,79 +404,78 @@ explicitly specify the name of the step. This is done by passing the
 
  .. code-block:: none
 
-    2024-07-30 13:54:10,905 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2024-07-30 13:54:10,906 - julearn - INFO - Step added
-    2024-07-30 13:54:10,906 - julearn - INFO - Adding step svm that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2024-07-30 13:54:10,906 - julearn - INFO - Setting hyperparameter kernel = linear
-    2024-07-30 13:54:10,906 - julearn - INFO - Tuning hyperparameter C = [0.01, 0.1]
-    2024-07-30 13:54:10,906 - julearn - INFO - Step added
-    2024-07-30 13:54:10,906 - julearn - INFO - Adding step svm that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2024-07-30 13:54:10,906 - julearn - INFO - Setting hyperparameter kernel = rbf
-    2024-07-30 13:54:10,906 - julearn - INFO - Tuning hyperparameter C = [0.01, 0.1]
-    2024-07-30 13:54:10,906 - julearn - INFO - Tuning hyperparameter gamma = ['scale', 'auto', 0.01, 0.001]
-    2024-07-30 13:54:10,906 - julearn - INFO - Step added
-    2024-07-30 13:54:10,906 - julearn - INFO - ==== Input Data ====
-    2024-07-30 13:54:10,906 - julearn - INFO - Using dataframe as input
-    2024-07-30 13:54:10,906 - julearn - INFO -      Features: ['frontal', 'parietal']
-    2024-07-30 13:54:10,906 - julearn - INFO -      Target: event
-    2024-07-30 13:54:10,906 - julearn - INFO -      Expanded features: ['frontal', 'parietal']
-    2024-07-30 13:54:10,906 - julearn - INFO -      X_types:{}
-    2024-07-30 13:54:10,907 - julearn - WARNING - The following columns are not defined in X_types: ['frontal', 'parietal']. They will be treated as continuous.
-    /home/runner/work/julearn/julearn/julearn/prepare.py:509: RuntimeWarning: The following columns are not defined in X_types: ['frontal', 'parietal']. They will be treated as continuous.
+    2025-10-23 21:09:27,448 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2025-10-23 21:09:27,448 - julearn - INFO - Step added
+    2025-10-23 21:09:27,448 - julearn - INFO - Adding step svm that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2025-10-23 21:09:27,448 - julearn - INFO - Setting hyperparameter kernel = linear
+    2025-10-23 21:09:27,448 - julearn - INFO - Tuning hyperparameter C = [0.01, 0.1]
+    2025-10-23 21:09:27,448 - julearn - INFO - Step added
+    2025-10-23 21:09:27,449 - julearn - INFO - Adding step svm that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2025-10-23 21:09:27,449 - julearn - INFO - Setting hyperparameter kernel = rbf
+    2025-10-23 21:09:27,449 - julearn - INFO - Tuning hyperparameter C = [0.01, 0.1]
+    2025-10-23 21:09:27,449 - julearn - INFO - Tuning hyperparameter gamma = ['scale', 'auto', 0.01, 0.001]
+    2025-10-23 21:09:27,449 - julearn - INFO - Step added
+    2025-10-23 21:09:27,449 - julearn - INFO - ==== Input Data ====
+    2025-10-23 21:09:27,449 - julearn - INFO - Using dataframe as input
+    2025-10-23 21:09:27,449 - julearn - INFO -      Features: ['frontal', 'parietal']
+    2025-10-23 21:09:27,449 - julearn - INFO -      Target: event
+    2025-10-23 21:09:27,449 - julearn - INFO -      Expanded features: ['frontal', 'parietal']
+    2025-10-23 21:09:27,450 - julearn - INFO -      X_types:{}
+    2025-10-23 21:09:27,450 - julearn - WARNING - The following columns are not defined in X_types: ['frontal', 'parietal']. They will be treated as continuous.
+    /home/runner/work/julearn/julearn/julearn/prepare.py:562: RuntimeWarning: The following columns are not defined in X_types: ['frontal', 'parietal']. They will be treated as continuous.
       warn_with_log(
-    2024-07-30 13:54:10,907 - julearn - INFO - ====================
-    2024-07-30 13:54:10,907 - julearn - INFO - 
-    2024-07-30 13:54:10,908 - julearn - INFO - = Model Parameters =
-    2024-07-30 13:54:10,908 - julearn - INFO - Tuning hyperparameters using grid
-    2024-07-30 13:54:10,908 - julearn - INFO - Hyperparameters:
-    2024-07-30 13:54:10,908 - julearn - INFO -      svm__C: [0.01, 0.1]
-    2024-07-30 13:54:10,908 - julearn - INFO - Using inner CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
-    2024-07-30 13:54:10,908 - julearn - INFO - Search Parameters:
-    2024-07-30 13:54:10,908 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
-    2024-07-30 13:54:10,908 - julearn - INFO - ====================
-    2024-07-30 13:54:10,908 - julearn - INFO - 
-    2024-07-30 13:54:10,909 - julearn - INFO - = Model Parameters =
-    2024-07-30 13:54:10,909 - julearn - INFO - Tuning hyperparameters using grid
-    2024-07-30 13:54:10,909 - julearn - INFO - Hyperparameters:
-    2024-07-30 13:54:10,909 - julearn - INFO -      svm__C: [0.01, 0.1]
-    2024-07-30 13:54:10,909 - julearn - INFO -      svm__gamma: ['scale', 'auto', 0.01, 0.001]
-    2024-07-30 13:54:10,909 - julearn - INFO - Using inner CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
-    2024-07-30 13:54:10,909 - julearn - INFO - Search Parameters:
-    2024-07-30 13:54:10,909 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
-    2024-07-30 13:54:10,909 - julearn - INFO - ====================
-    2024-07-30 13:54:10,909 - julearn - INFO - 
-    2024-07-30 13:54:10,909 - julearn - INFO - = Model Parameters =
-    2024-07-30 13:54:10,909 - julearn - INFO - Tuning hyperparameters using grid
-    2024-07-30 13:54:10,910 - julearn - INFO - Hyperparameters list:
-    2024-07-30 13:54:10,910 - julearn - INFO -      Set 0
-    2024-07-30 13:54:10,910 - julearn - INFO -              svm__C: [0.01, 0.1]
-    2024-07-30 13:54:10,910 - julearn - INFO -              set_column_types: [SetColumnTypes(X_types={})]
-    2024-07-30 13:54:10,910 - julearn - INFO -              svm: [SVC(kernel='linear')]
-    2024-07-30 13:54:10,910 - julearn - INFO -      Set 1
-    2024-07-30 13:54:10,910 - julearn - INFO -              svm__C: [0.01, 0.1]
-    2024-07-30 13:54:10,910 - julearn - INFO -              svm__gamma: ['scale', 'auto', 0.01, 0.001]
-    2024-07-30 13:54:10,910 - julearn - INFO -              set_column_types: [SetColumnTypes(X_types={})]
-    2024-07-30 13:54:10,910 - julearn - INFO -              svm: [SVC()]
-    2024-07-30 13:54:10,911 - julearn - INFO - Using inner CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
-    2024-07-30 13:54:10,911 - julearn - INFO - Search Parameters:
-    2024-07-30 13:54:10,911 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
-    2024-07-30 13:54:10,911 - julearn - INFO - ====================
-    2024-07-30 13:54:10,911 - julearn - INFO - 
-    2024-07-30 13:54:10,911 - julearn - INFO - = Data Information =
-    2024-07-30 13:54:10,911 - julearn - INFO -      Problem type: classification
-    2024-07-30 13:54:10,911 - julearn - INFO -      Number of samples: 532
-    2024-07-30 13:54:10,911 - julearn - INFO -      Number of features: 2
-    2024-07-30 13:54:10,911 - julearn - INFO - ====================
-    2024-07-30 13:54:10,911 - julearn - INFO - 
-    2024-07-30 13:54:10,911 - julearn - INFO -      Number of classes: 2
-    2024-07-30 13:54:10,911 - julearn - INFO -      Target type: object
-    2024-07-30 13:54:10,912 - julearn - INFO -      Class distributions: event
+    2025-10-23 21:09:27,450 - julearn - INFO - ====================
+    2025-10-23 21:09:27,450 - julearn - INFO - 
+    2025-10-23 21:09:27,451 - julearn - INFO - = Model Parameters =
+    2025-10-23 21:09:27,451 - julearn - INFO - Tuning hyperparameters using grid
+    2025-10-23 21:09:27,451 - julearn - INFO - Hyperparameters:
+    2025-10-23 21:09:27,451 - julearn - INFO -      svm__C: [0.01, 0.1]
+    2025-10-23 21:09:27,452 - julearn - INFO - Using inner CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
+    2025-10-23 21:09:27,452 - julearn - INFO - Search Parameters:
+    2025-10-23 21:09:27,452 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
+    2025-10-23 21:09:27,452 - julearn - INFO - ====================
+    2025-10-23 21:09:27,452 - julearn - INFO - 
+    2025-10-23 21:09:27,453 - julearn - INFO - = Model Parameters =
+    2025-10-23 21:09:27,453 - julearn - INFO - Tuning hyperparameters using grid
+    2025-10-23 21:09:27,453 - julearn - INFO - Hyperparameters:
+    2025-10-23 21:09:27,453 - julearn - INFO -      svm__C: [0.01, 0.1]
+    2025-10-23 21:09:27,453 - julearn - INFO -      svm__gamma: ['scale', 'auto', 0.01, 0.001]
+    2025-10-23 21:09:27,453 - julearn - INFO - Using inner CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
+    2025-10-23 21:09:27,453 - julearn - INFO - Search Parameters:
+    2025-10-23 21:09:27,454 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
+    2025-10-23 21:09:27,454 - julearn - INFO - ====================
+    2025-10-23 21:09:27,454 - julearn - INFO - 
+    2025-10-23 21:09:27,454 - julearn - INFO - = Model Parameters =
+    2025-10-23 21:09:27,454 - julearn - INFO - Tuning hyperparameters using grid
+    2025-10-23 21:09:27,454 - julearn - INFO - Hyperparameters list:
+    2025-10-23 21:09:27,454 - julearn - INFO -      Set 0
+    2025-10-23 21:09:27,454 - julearn - INFO -              svm__C: [0.01, 0.1]
+    2025-10-23 21:09:27,454 - julearn - INFO -              set_column_types: [SetColumnTypes(X_types={})]
+    2025-10-23 21:09:27,455 - julearn - INFO -              svm: [SVC(kernel='linear')]
+    2025-10-23 21:09:27,455 - julearn - INFO -      Set 1
+    2025-10-23 21:09:27,455 - julearn - INFO -              svm__C: [0.01, 0.1]
+    2025-10-23 21:09:27,455 - julearn - INFO -              svm__gamma: ['scale', 'auto', 0.01, 0.001]
+    2025-10-23 21:09:27,455 - julearn - INFO -              set_column_types: [SetColumnTypes(X_types={})]
+    2025-10-23 21:09:27,456 - julearn - INFO -              svm: [SVC()]
+    2025-10-23 21:09:27,456 - julearn - INFO - Using inner CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
+    2025-10-23 21:09:27,456 - julearn - INFO - Search Parameters:
+    2025-10-23 21:09:27,456 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
+    2025-10-23 21:09:27,456 - julearn - INFO - ====================
+    2025-10-23 21:09:27,456 - julearn - INFO - 
+    2025-10-23 21:09:27,456 - julearn - INFO - = Data Information =
+    2025-10-23 21:09:27,456 - julearn - INFO -      Problem type: classification
+    2025-10-23 21:09:27,457 - julearn - INFO -      Number of samples: 532
+    2025-10-23 21:09:27,457 - julearn - INFO -      Number of features: 2
+    2025-10-23 21:09:27,457 - julearn - INFO - ====================
+    2025-10-23 21:09:27,457 - julearn - INFO - 
+    2025-10-23 21:09:27,457 - julearn - INFO -      Number of classes: 2
+    2025-10-23 21:09:27,457 - julearn - INFO -      Target type: object
+    2025-10-23 21:09:27,458 - julearn - INFO -      Class distributions: event
     cue     266
     stim    266
     Name: count, dtype: int64
-    2024-07-30 13:54:10,912 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-    2024-07-30 13:54:10,912 - julearn - INFO - Binary classification problem detected.
-    2024-07-30 13:54:11,946 - julearn - INFO - Fitting final model
+    2025-10-23 21:09:27,458 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
+    2025-10-23 21:09:27,459 - julearn - INFO - Binary classification problem detected.
     0.7087109857168048
 
 
@@ -488,7 +487,7 @@ It seems that we might have found a better model, but which one is it?
 
 .. GENERATED FROM PYTHON SOURCE LINES 101-103
 
-.. code-block:: default
+.. code-block:: Python
 
     print(estimator.best_params_)
     print(estimator.best_estimator_["svm"]._gamma)
@@ -509,7 +508,7 @@ It seems that we might have found a better model, but which one is it?
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 1.336 seconds)
+   **Total running time of the script:** (0 minutes 1.347 seconds)
 
 
 .. _sphx_glr_download_auto_examples_03_complex_models_run_hyperparameter_multiple_grids.py:
@@ -518,16 +517,17 @@ It seems that we might have found a better model, but which one is it?
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: run_hyperparameter_multiple_grids.ipynb <run_hyperparameter_multiple_grids.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: run_hyperparameter_multiple_grids.py <run_hyperparameter_multiple_grids.py>`
 
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
+    .. container:: sphx-glr-download sphx-glr-download-zip
 
-      :download:`Download Jupyter notebook: run_hyperparameter_multiple_grids.ipynb <run_hyperparameter_multiple_grids.ipynb>`
+      :download:`Download zipped: run_hyperparameter_multiple_grids.zip <run_hyperparameter_multiple_grids.zip>`
 
 
 .. only:: html

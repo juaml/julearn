@@ -172,4 +172,4 @@ scores
 # (including confounds and categorical variables).
 # Here we can see that the model is using 10 features (9 deconfounded features
 # and the confound).
-print(len(model.steps[-1][1].model.coef_))
+print(len(model.steps[-1][1].coef_))
