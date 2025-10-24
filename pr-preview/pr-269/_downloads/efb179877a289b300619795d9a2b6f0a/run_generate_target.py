@@ -48,7 +48,7 @@ X_types = {
 target_creator = PipelineCreator(problem_type="transformer", apply_to="petal")
 target_creator.add("pca", n_components=2)
 # Select only the first component
-target_creator.add("pick_columns", keep="pca0")
+target_creator.add("pick_columns", keep="pca__pca0")
 
 
 ###############################################################################
