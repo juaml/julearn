@@ -69,6 +69,7 @@ class PickColumns(JuTransformer):
             The fitted transformer.
 
         """
+        self.feature_names_in_ = X.columns
         self.support_mask_ = pd.Series(False, index=X.columns, dtype=bool)
 
         self.keep_columns_ = self.filter_columns(X).columns

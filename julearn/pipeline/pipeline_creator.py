@@ -633,7 +633,7 @@ class PipelineCreator:
 
                 target_trans_step.estimator = _params_to_pipeline(
                     target_trans_step.estimator,
-                    X_types=target_trans_step.needed_types.filter(X_types),
+                    X_types=X_types,
                     search_params=search_params,
                 )
                 logger.debug("Target generator pipeline created")

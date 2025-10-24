@@ -82,7 +82,7 @@ def test_construction_working_wrapping(
 
 
 def test_construction_working_nowrapping(
-    model: str, preprocess: Union[str, list[str]], problem_type_models: str
+    model: str, preprocess: Union[str, list[str]], problem_type: str
 ) -> None:
     """Test that the pipeline constructions works as expected (no wrapping).
 
@@ -92,15 +92,16 @@ def test_construction_working_nowrapping(
         The model to test.
     preprocess : str or list of str
         The preprocessing steps to test.
-    problem_type_models : str
+    problem_type : str
         The problem type to test.
 
     """
-    creator = PipelineCreator(problem_type=problem_type_models)
+    creator = PipelineCreator(problem_type=problem_type)
     preprocess = preprocess if isinstance(preprocess, list) else [preprocess]
     for step in preprocess:
         creator.add(step, apply_to="*")
-    creator.add(model, apply_to=["categorical", "continuous"])
+    if problem_type in ["classification", "regression"]:
+        creator.add(model, apply_to=["categorical", "continuous"])
     X_types = {"categorical": ["A"], "continuous": ["B"]}
     pipeline = creator.to_pipeline(X_types=X_types)
 
@@ -112,17 +113,20 @@ def test_construction_working_nowrapping(
         assert not isinstance(transformer, JuColumnTransformer)
         assert isinstance(transformer, get_transformer(_preprocess).__class__)
 
-    # check model step
-    model_name, model = pipeline.steps[-1]
-    assert not isinstance(model, WrapModel)
-    assert isinstance(
-        model,
-        get_model(
-            model_name,
-            problem_type=problem_type_models,
-        ).__class__,
-    )
-    assert len(preprocess) + 2 == len(pipeline.steps)
+    if problem_type in ["classification", "regression"]:
+        # check model step
+        model_name, model = pipeline.steps[-1]
+        assert not isinstance(model, WrapModel)
+        assert isinstance(
+            model,
+            get_model(
+                model_name,
+                problem_type=problem_type,
+            ).__class__,
+        )
+        assert len(preprocess) + 2 == len(pipeline.steps)
+    else:
+        assert len(preprocess) + 1 == len(pipeline.steps)
 
 
 def test_fit_and_transform_no_error(
@@ -574,40 +578,45 @@ def test_X_types_to_pattern_errors(
         pipeline_creator._check_X_types(X_types)
 
 
-def test_pipelinecreator_default_apply_to() -> None:
+def test_pipelinecreator_default_apply_to(problem_type: str) -> None:
     """Test pipeline creator using the default apply_to."""
 
-    pipeline_creator = PipelineCreator(problem_type="classification").add(
-        "rf", apply_to="chicken"
+    pipeline_creator = PipelineCreator(problem_type=problem_type).add(
+        "zscore", apply_to="chicken"
     )
 
     with pytest.raises(ValueError, match="Extra X_types were provided"):
         pipeline_creator._check_X_types({"duck": "B"})
 
-    pipeline_creator = PipelineCreator(problem_type="classification").add(
-        "rf", apply_to=["chicken", "duck"]
+    pipeline_creator = PipelineCreator(problem_type=problem_type).add(
+        "zscore", apply_to=["chicken", "duck"]
     )
     with pytest.warns(match="is not in the provided X_types"):
         pipeline_creator._check_X_types({"chicken": "teriyaki"})
 
-    pipeline_creator = PipelineCreator(problem_type="classification").add(
-        "rf", apply_to="*"
+    pipeline_creator = PipelineCreator(problem_type=problem_type).add(
+        "zscore", apply_to="*"
     )
     pipeline_creator._check_X_types({"duck": "teriyaki"})
 
 
-def test_pipelinecreator_default_constructor_apply_to() -> None:
+def test_pipelinecreator_default_constructor_apply_to(
+    problem_type: str,
+) -> None:
     """Test pipeline creator using a default apply_to in the constructor."""
     pipeline_creator = PipelineCreator(
-        problem_type="classification", apply_to="duck"
-    ).add("rf")
+        problem_type=problem_type, apply_to="duck"
+    ).add("zscore")
     pipeline_creator._check_X_types({"duck": "teriyaki"})
 
     pipeline_creator = PipelineCreator(
-        problem_type="classification", apply_to="duck"
+        problem_type=problem_type, apply_to="duck"
     )
     pipeline_creator.add("zscore", apply_to="chicken")
-    pipeline_creator.add("rf")
+    if problem_type == "transformer":
+        pipeline_creator.add("pca")
+    else:
+        pipeline_creator.add("rf")
     pipeline_creator._check_X_types({"duck": "teriyaki", "chicken": "1"})
 
 
@@ -938,7 +947,7 @@ def test_PipelineCreator_generated_target(
         problem_type="transformer", apply_to="petal"
     )
     tranformer_creator.add("pca", n_components=2, random_state=42)
-    tranformer_creator.add("pick_columns", keep="pca0")
+    tranformer_creator.add("pick_columns", keep="pca__pca0")
 
     # Create a model that uses the previous transformer to generate the target
     creator = PipelineCreator(problem_type="regression", apply_to="*")
