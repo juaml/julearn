@@ -1012,7 +1012,7 @@ def test_PipelineCreator_generated_target_errors() -> None:
             "generate_target", apply_to="*", transformer=transformer_creator
         )
 
-    with pytest.raises(ValueError, match="cannot have a model."):
+    with pytest.raises(ValueError, match="cannot have a model"):
         creator = PipelineCreator(problem_type="regression", apply_to="*")
         transformer_creator_model = PipelineCreator(
             problem_type="transformer", apply_to="petal"
@@ -1027,7 +1027,7 @@ def test_PipelineCreator_generated_target_errors() -> None:
         creator.to_pipeline(X_types)
 
     creator = PipelineCreator(problem_type="regression", apply_to="*")
-    with pytest.raises(ValueError, match="cannot be applied to the target."):
+    with pytest.raises(ValueError, match="cannot be applied to the target"):
         creator.add(
             "generate_target",
             apply_to="target",

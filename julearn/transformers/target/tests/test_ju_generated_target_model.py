@@ -125,14 +125,14 @@ def test_JuGeneratedTargetModel_no_fit(
         transformer=transformer,  # type: ignore
     )
     fake_y = pd.Series(np.zeros(X_iris.shape[0]))
-    with pytest.raises(ValueError, match="Model not fitted yet."):
+    with pytest.raises(ValueError, match="Model not fitted yet"):
         ju_generated_target_model.predict(X_iris)
 
-    with pytest.raises(ValueError, match="Model not fitted yet."):
+    with pytest.raises(ValueError, match="Model not fitted yet"):
         ju_generated_target_model.score(X_iris, fake_y)
 
-    with pytest.raises(ValueError, match="Model not fitted yet."):
+    with pytest.raises(ValueError, match="Model not fitted yet"):
         ju_generated_target_model.predict_proba(X_iris)
 
-    with pytest.raises(ValueError, match="Model not fitted yet."):
+    with pytest.raises(ValueError, match="Model not fitted yet"):
         ju_generated_target_model.decision_function(X_iris)
