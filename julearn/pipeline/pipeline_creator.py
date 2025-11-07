@@ -79,7 +79,7 @@ def _should_wrap_this_step(
 def _params_to_pipeline(
     param: Any,
     X_types: dict[str, list],  # noqa: N803
-    search_params: Optional[dict],
+    search_params: Optional[dict] = None,
 ):
     """Recursively convert params to pipelines.
 

@@ -5,7 +5,7 @@
 # License: AGPL
 
 import warnings
-from typing import TYPE_CHECKING, Callable, Union
+from typing import Callable, Union
 
 import pandas as pd
 import pytest
@@ -15,18 +15,21 @@ from sklearn.dummy import DummyClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
+from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import RobustScaler, StandardScaler
 from sklearn.svm import SVC
 
 from julearn.base import ColumnTypesLike, WrapModel
 from julearn.models import get_model
-from julearn.pipeline import PipelineCreator, TargetPipelineCreator
-from julearn.pipeline.pipeline_creator import JuColumnTransformer
+from julearn.pipeline import (
+    PipelineCreator,
+    TargetPipelineCreator,
+)
+from julearn.pipeline.pipeline_creator import (
+    JuColumnTransformer,
+    _params_to_pipeline,
+)
 from julearn.transformers import get_transformer
-
-
-if TYPE_CHECKING:
-    from sklearn.pipeline import Pipeline
 
 
 def test_construction_working_wrapping(
@@ -789,6 +792,47 @@ def test_PipelineCreator_repeated_steps() -> None:
     assert len(creator2._steps) == 3
     assert creator2._steps[0].name == "scale"
     assert creator2._steps[1].name == "scale"
+
+
+def test__params_to_pipeline() -> None:
+    """Test the _params_to_pipeline method."""
+    creator = PipelineCreator(problem_type="classification")
+    creator.add("zscore", apply_to="continuous")
+    creator.add("pca", apply_to="continuous")
+    creator.add("rf")
+
+    X_types = {"continuous": ["A", "B", "C"]}
+
+    param = creator
+
+    out = _params_to_pipeline(param, X_types=X_types)
+
+    assert isinstance(out, Pipeline)
+
+    param = [creator, "abc", "def"]
+
+    out = _params_to_pipeline(param, X_types=X_types)
+
+    assert isinstance(out, list)
+    assert len(out) == 3
+    assert isinstance(out[0], Pipeline)
+    assert out[1] == "abc"
+    assert out[2] == "def"
+
+    param = {"a": 1, "b": 2, "c": creator}
+
+    out = _params_to_pipeline(param, X_types=X_types)
+    assert isinstance(out, dict)
+    assert out["a"] == 1
+    assert out["b"] == 2
+    assert isinstance(out["c"], Pipeline)
+
+    param = (1, "abc", creator)
+    out = _params_to_pipeline(param, X_types=X_types)
+    assert isinstance(out, tuple)
+    assert out[0] == 1
+    assert out[1] == "abc"
+    assert isinstance(out[2], Pipeline)
 
 
 def test_PipelineCreator_repeated_steps_error() -> None:
