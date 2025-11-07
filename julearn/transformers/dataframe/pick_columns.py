@@ -88,7 +88,10 @@ class PickColumns(JuTransformer):
         self.support_mask_ = self.support_mask_.values
         return self
 
-    def transform(self, X: pd.DataFrame) -> Union[pd.DataFrame, pd.Series]:  # noqa: N803
+    def transform(
+        self,
+        X: pd.DataFrame,  # noqa: N803
+    ) -> Union[pd.DataFrame, pd.Series]:
         """Pick the columns.
 
         Parameters
@@ -126,7 +129,7 @@ class PickColumns(JuTransformer):
 
         """
         if indices:
-            return np.arange(len(self.support_mask_))[self.support_mask_]  # type: ignore
+            return np.arange(len(self.support_mask_))[self.support_mask_]
         else:
             return self.support_mask_  # type: ignore
 

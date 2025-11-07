@@ -68,6 +68,7 @@ class DropColumns(JuTransformer):
             The fitted transformer.
 
         """
+        self.feature_names_in_ = X.columns
         self.support_mask_ = pd.Series(True, index=X.columns, dtype=bool)
 
         try:
@@ -112,7 +113,7 @@ class DropColumns(JuTransformer):
 
         """
         if indices:
-            return np.arange(len(self.support_mask_))[self.support_mask_]  # type: ignore
+            return np.arange(len(self.support_mask_))[self.support_mask_]
         else:
             return self.support_mask_  # type: ignore
 

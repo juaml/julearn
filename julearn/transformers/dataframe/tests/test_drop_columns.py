@@ -46,3 +46,6 @@ def test_DropColumns() -> None:
         X_trans,
     )
     assert all(support == [1, 1, 0, 0, 1, 1])  # type: ignore
+
+    features_out = drop_columns.get_feature_names_out()
+    assert all(features_out == non_confound)  # type: ignore

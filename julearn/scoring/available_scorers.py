@@ -32,7 +32,8 @@ _extra_available_scorers = {
 _extra_available_scorers_reset = deepcopy(_extra_available_scorers)
 
 
-def get_scorer(name: str) -> ScorerLike:  # type: ignore TODO: deprecate sklearn < 1.4.0
+# TODO: deprecate sklearn < 1.4.0
+def get_scorer(name: str) -> ScorerLike:  # type: ignore
     """Get available scorer by name.
 
     Parameters
