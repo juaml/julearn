@@ -108,7 +108,7 @@ class DropColumns(JuTransformer):
 
         Returns
         -------
-        support_mask : numpy.array
+        support_mask : numpy.array or pd.Series
             The support mask
 
         """
@@ -117,8 +117,22 @@ class DropColumns(JuTransformer):
         else:
             return self.support_mask_  # type: ignore
 
-    def get_feature_names_out(self, input_features=None):
-        """Get output feature names."""
+    def get_feature_names_out(
+        self, input_features: Optional[list[str]] = None
+    ) -> list[str]:
+        """Get output feature names.
+
+        Parameters
+        ----------
+        input_features : array-like of str, optional
+            Input feature names. By default, the feature names seen during fit.
+
+        Returns
+        -------
+        output_feature_names : array-like of str
+            Output feature names.
+
+        """
         check_is_fitted(self)
         out = self.feature_names_in_  # type: ignore
         return out[self.support_mask_]

@@ -75,7 +75,7 @@ class JuGeneratedTargetModel(JuBaseEstimator):
         self,
         model: ModelLike,
         transformer: Union[EstimatorLike, JuEstimatorLike],
-    ):
+    ) -> None:
         self.model = model
         self.transformer = transformer
 
@@ -91,7 +91,7 @@ class JuGeneratedTargetModel(JuBaseEstimator):
         ----------
         X : pd.DataFrame
             The input data.
-        y : str
+        y : {"__generated__"}
             The target. Should be the string "__generated__"
         **fit_params : dict
             Additional parameters to be passed to the model fit method.
@@ -248,7 +248,14 @@ class JuGeneratedTargetModel(JuBaseEstimator):
 
     @property
     def classes_(self) -> np.ndarray:
-        """Get the classes of the model."""
+        """Get the classes of the model.
+
+        Returns
+        -------
+        np.ndarray
+            The classes of the model.
+
+        """
         if not hasattr(self, "model_"):
             raise_error("Model not fitted yet.")
         self.model_ = typing.cast("ModelLike", self.model_)

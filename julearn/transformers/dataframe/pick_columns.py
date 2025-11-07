@@ -25,10 +25,11 @@ class PickColumns(JuTransformer):
     ----------
     keep : str
         Which feature (names) to keep.
-    row_select_col_type : str or list of str or set of str or ColumnTypes
-        The column types needed to select rows (default is None)
-        Not really useful for this one, but here for compatibility.
-    row_select_vals : str, int, bool or list of str, int, bool
+    row_select_col_type : str or list of str or set of str or \
+        ColumnTypes, optional
+            The column types needed to select rows (default is None)
+            Not really useful for this one, but here for compatibility.
+    row_select_vals : str, int, bool or list of str, int, bool, optional
         The value(s) which should be selected in the row_select_col_type
         to select the rows used for training (default is None)
         Not really useful for this one, but here for compatibility.
@@ -40,7 +41,7 @@ class PickColumns(JuTransformer):
         keep: str,
         row_select_col_type: Optional[ColumnTypesLike] = None,
         row_select_vals: Optional[Union[str, int, list, bool]] = None,
-    ):
+    ) -> None:
         self.keep = keep
         super().__init__(
             apply_to="*",
@@ -60,12 +61,12 @@ class PickColumns(JuTransformer):
         ----------
         X : pd.DataFrame
             The data to fit the transformer on.
-        y : DataLike, optional
-            The target data. This data will not be used.
+        y : DataLike or None, optional
+            The target data. This data will not be used (default is None).
 
         Returns
         -------
-        FilterColumns
+        PickColumns
             The fitted transformer.
 
         """
@@ -101,7 +102,7 @@ class PickColumns(JuTransformer):
 
         Returns
         -------
-        pd.DataFrame
+        pd.DataFrame or pd.Series
             Data with dropped columns.
 
         """
@@ -124,7 +125,7 @@ class PickColumns(JuTransformer):
 
         Returns
         -------
-        support_mask : numpy.array
+        support_mask : numpy.array or pd.Series
             The support mask
 
         """
@@ -133,8 +134,22 @@ class PickColumns(JuTransformer):
         else:
             return self.support_mask_  # type: ignore
 
-    def get_feature_names_out(self, input_features=None):
-        """Get output feature names."""
+    def get_feature_names_out(
+        self, input_features: Optional[list[str]] = None
+    ) -> list[str]:
+        """Get output feature names.
+
+        Parameters
+        ----------
+        input_features : list of str, optional
+            Input feature names (not used).
+
+        Returns
+        -------
+        output_feature_names : list of str
+            Output feature names.
+
+        """
         check_is_fitted(self)
         out = self.feature_names_in_  # type: ignore
         return out[self.support_mask_]
