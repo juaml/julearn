@@ -329,6 +329,10 @@ def prepare_input_data(
 
     # Convert the target to binary if pos_labels is not None
     if pos_labels is not None:
+        if y == "__generated__":
+            raise_error(
+                "pos_labels cannot be used when the target is generated."
+            )
         if not isinstance(pos_labels, list):
             pos_labels = [pos_labels]
         logger.info(f"Setting the following as positive labels {pos_labels}")

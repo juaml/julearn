@@ -102,7 +102,7 @@ class JuGeneratedTargetModel(JuBaseEstimator):
             The fitted model.
 
         """
-        if (y != 0).any():
+        if np.any(y != 0):
             warn_with_log(
                 "The target should be the generated but a non-zero target was "
                 "provided. The target will be ignored and the generated "
@@ -161,7 +161,7 @@ class JuGeneratedTargetModel(JuBaseEstimator):
         """
         if not hasattr(self, "model_"):
             raise_error("Model not fitted yet.")
-        if (y != 0).any():
+        if np.any(y != 0):
             warn_with_log(
                 "The target should be the generated but a non-zero target was "
                 "provided. The target will be ignored and the generated "

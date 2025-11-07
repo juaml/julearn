@@ -943,16 +943,16 @@ def test_PipelineCreator_generated_target(
     """Test the pipeline creator with a generated target."""
 
     # Create a transformer that will apply to the petal features
-    tranformer_creator = PipelineCreator(
+    transformer_creator = PipelineCreator(
         problem_type="transformer", apply_to="petal"
     )
-    tranformer_creator.add("pca", n_components=2, random_state=42)
-    tranformer_creator.add("pick_columns", keep="pca__pca0")
+    transformer_creator.add("pca", n_components=2, random_state=42)
+    transformer_creator.add("pick_columns", keep="pca__pca0")
 
     # Create a model that uses the previous transformer to generate the target
     creator = PipelineCreator(problem_type="regression", apply_to="*")
     creator.add(
-        "generate_target", apply_to="petal", transformer=tranformer_creator
+        "generate_target", apply_to="petal", transformer=transformer_creator
     )
     creator.add("linreg", apply_to="sepal")  # sepal only
 
@@ -987,11 +987,14 @@ def test_PipelineCreator_generated_target(
 
 def test_PipelineCreator_generated_target_errors() -> None:
     """Test errors with the generated target."""
-    tranformer_creator = PipelineCreator(
+    transformer_creator = PipelineCreator(
         problem_type="transformer", apply_to="petal"
     )
-    tranformer_creator.add("pca")
-
+    transformer_creator.add("pca")
+    X_types = {
+        "sepal": ["sepal_length", "sepal_width"],
+        "petal": ["petal_length", "petal_width"],
+    }
     # Create a model that uses the previous transformer to generate the target
     with pytest.raises(ValueError, match="reserved for the target"):
         creator = PipelineCreator(problem_type="regression", apply_to="*")
@@ -1006,13 +1009,40 @@ def test_PipelineCreator_generated_target_errors() -> None:
     with pytest.raises(ValueError, match="all types"):
         creator = PipelineCreator(problem_type="regression", apply_to="*")
         creator.add(
-            "generate_target", apply_to="*", transformer=tranformer_creator
+            "generate_target", apply_to="*", transformer=transformer_creator
         )
 
+    with pytest.raises(ValueError, match="cannot have a model."):
+        creator = PipelineCreator(problem_type="regression", apply_to="*")
+        transformer_creator_model = PipelineCreator(
+            problem_type="transformer", apply_to="petal"
+        )
+        transformer_creator_model.add(SVC())
+        creator.add(
+            "generate_target",
+            apply_to="petal",
+            transformer=transformer_creator_model,
+        )
+        creator.add("linreg", apply_to=["sepal"])
+        creator.to_pipeline(X_types)
+
+    creator = PipelineCreator(problem_type="regression", apply_to="*")
+    with pytest.raises(ValueError, match="cannot be applied to the target."):
+        creator.add(
+            "generate_target",
+            apply_to="target",
+            transformer=transformer_creator,
+        )
     creator = PipelineCreator(problem_type="regression", apply_to="*")
     creator.add(
-        "generate_target", apply_to="petal", transformer=tranformer_creator
+        "generate_target", apply_to="petal", transformer=transformer_creator
     )
+    with pytest.raises(ValueError, match="add two target generators"):
+        creator.add(
+            "generate_target",
+            apply_to="sepal",
+            transformer=transformer_creator,
+        )
     with pytest.raises(ValueError, match="explicitly set the apply_to"):
         creator.add("linreg")
     with pytest.raises(ValueError, match="exclude the types"):

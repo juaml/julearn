@@ -727,7 +727,7 @@ class PipelineCreator:
                 target_step_to_tune = {
                     f"{model_name}_{kind}__transformer__{param}": val
                     for param, val in (
-                        target_trans_step.params_to_tune.items()  # type: ignore
+                        target_trans_step.params_to_tune.items()
                     )
                 }
                 step_params_to_tune = {
@@ -898,6 +898,7 @@ class PipelineCreator:
             self._added_model = True
         elif step == "generate_target":
             if self._added_target_transformer:
+                # Impossible case, caught by earlier validation (model only)
                 raise_error(
                     "Cannot add a target generator after a target transformer."
                 )
