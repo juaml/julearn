@@ -13,6 +13,9 @@ from sklearn.metrics import _scorer, get_scorer_names, make_scorer
 from sklearn.metrics._scorer import _check_multimetric_scoring  # type: ignore
 from sklearn.metrics._scorer import check_scoring as sklearn_check_scoring
 
+from ..transformers.target.ju_generated_target_model import (
+    GeneratedTargetWarning,
+)
 from ..transformers.target.ju_transformed_target_model import (
     TransformedTargetWarning,
 )
@@ -29,7 +32,8 @@ _extra_available_scorers = {
 _extra_available_scorers_reset = deepcopy(_extra_available_scorers)
 
 
-def get_scorer(name: str) -> ScorerLike:  # type: ignore TODO: deprecate sklearn < 1.4.0
+# TODO: deprecate sklearn < 1.4.0
+def get_scorer(name: str) -> ScorerLike:  # type: ignore
     """Get available scorer by name.
 
     Parameters
@@ -145,11 +149,14 @@ def check_scoring(
         scoring to check
     wrap_score : bool
         Does the score needs to be wrapped
-        to handle non_inverse transformable target pipelines.
+        to handle non_inverse transformable/generated target pipelines.
 
     """
     if scoring is None:
         return scoring
+    logger.debug(
+        f"Checking scoring{' (wrapping)' if wrap_score else ''}: [{scoring}]"
+    )
     if isinstance(scoring, str):
         scoring = _extend_scorer(get_scorer(scoring), wrap_score)
     if callable(scoring):
@@ -188,12 +195,24 @@ class _ExtendedScorer:
         X_trans = X
         for _, transform in estimator.steps[:-1]:
             X_trans = transform.transform(X_trans)
-        y_true = estimator.steps[-1][-1].transform_target(  # last est
-            X_trans, y
-        )
+        if hasattr(estimator.steps[-1][-1], "transform_target"):
+            y_true = estimator.steps[-1][-1].transform_target(  # last est
+                X_trans, y
+            )
+        elif hasattr(estimator.steps[-1][-1], "generate_target"):
+            y_true = estimator.steps[-1][-1].generate_target(X_trans, y)
+        else:
+            raise_error(
+                "A scorer was wrapped to handle non-invertible or generated "
+                "but the model does not generate or transform the target."
+            )
         with warnings.catch_warnings():
             warnings.filterwarnings(
                 action="ignore", category=TransformedTargetWarning
+            )
+            warnings.filterwarnings(
+                action="ignore",
+                category=GeneratedTargetWarning,
             )
             scores = self.scorer(estimator, X, y_true)
         return scores

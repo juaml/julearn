@@ -5,25 +5,31 @@
 # License: AGPL
 
 import warnings
-from typing import TYPE_CHECKING, Callable, Union
+from typing import Callable, Union
 
 import pandas as pd
 import pytest
+from numpy.testing import assert_array_equal
+from sklearn.decomposition import PCA
 from sklearn.dummy import DummyClassifier
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
+from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import RobustScaler, StandardScaler
 from sklearn.svm import SVC
 
 from julearn.base import ColumnTypesLike, WrapModel
 from julearn.models import get_model
-from julearn.pipeline import PipelineCreator, TargetPipelineCreator
-from julearn.pipeline.pipeline_creator import JuColumnTransformer
+from julearn.pipeline import (
+    PipelineCreator,
+    TargetPipelineCreator,
+)
+from julearn.pipeline.pipeline_creator import (
+    JuColumnTransformer,
+    _params_to_pipeline,
+)
 from julearn.transformers import get_transformer
-
-
-if TYPE_CHECKING:
-    from sklearn.pipeline import Pipeline
 
 
 def test_construction_working_wrapping(
@@ -45,7 +51,10 @@ def test_construction_working_wrapping(
     preprocess = preprocess if isinstance(preprocess, list) else [preprocess]
     for step in preprocess:
         creator.add(step, apply_to="categorical")
-    creator.add(model)
+    for step in preprocess:
+        creator.add(step, apply_to="continuous")
+    if problem_type in ["classification", "regression"]:
+        creator.add(model)
     X_types = {"categorical": ["A"], "continuous": ["B"]}
     pipeline = creator.to_pipeline(X_types=X_types)
 
@@ -60,16 +69,19 @@ def test_construction_working_wrapping(
         )
 
     # check model step
-    model_name, model = pipeline.steps[-1]
-    assert isinstance(model, WrapModel)
-    assert isinstance(
-        model.model,
-        get_model(
-            model_name,
-            problem_type=problem_type,
-        ).__class__,
-    )
-    assert len(preprocess) + 2 == len(pipeline.steps)
+    if problem_type in ["classification", "regression"]:
+        model_name, model = pipeline.steps[-1]
+        assert isinstance(model, WrapModel)
+        assert isinstance(
+            model.model,
+            get_model(
+                model_name,
+                problem_type=problem_type,
+            ).__class__,
+        )
+        assert len(preprocess) * 2 + 2 == len(pipeline.steps)
+    else:
+        assert len(preprocess) * 2 + 1 == len(pipeline.steps)
 
 
 def test_construction_working_nowrapping(
@@ -91,7 +103,8 @@ def test_construction_working_nowrapping(
     preprocess = preprocess if isinstance(preprocess, list) else [preprocess]
     for step in preprocess:
         creator.add(step, apply_to="*")
-    creator.add(model, apply_to=["categorical", "continuous"])
+    if problem_type in ["classification", "regression"]:
+        creator.add(model, apply_to=["categorical", "continuous"])
     X_types = {"categorical": ["A"], "continuous": ["B"]}
     pipeline = creator.to_pipeline(X_types=X_types)
 
@@ -103,17 +116,20 @@ def test_construction_working_nowrapping(
         assert not isinstance(transformer, JuColumnTransformer)
         assert isinstance(transformer, get_transformer(_preprocess).__class__)
 
-    # check model step
-    model_name, model = pipeline.steps[-1]
-    assert not isinstance(model, WrapModel)
-    assert isinstance(
-        model,
-        get_model(
-            model_name,
-            problem_type=problem_type,
-        ).__class__,
-    )
-    assert len(preprocess) + 2 == len(pipeline.steps)
+    if problem_type in ["classification", "regression"]:
+        # check model step
+        model_name, model = pipeline.steps[-1]
+        assert not isinstance(model, WrapModel)
+        assert isinstance(
+            model,
+            get_model(
+                model_name,
+                problem_type=problem_type,
+            ).__class__,
+        )
+        assert len(preprocess) + 2 == len(pipeline.steps)
+    else:
+        assert len(preprocess) + 1 == len(pipeline.steps)
 
 
 def test_fit_and_transform_no_error(
@@ -142,10 +158,14 @@ def test_fit_and_transform_no_error(
     creator = PipelineCreator.from_list(
         preprocess, model_params={}, problem_type=problem_type
     )
-    creator.add(model)
+    if problem_type in ["classification", "regression"]:
+        creator.add(model)
     pipeline = creator.to_pipeline({})
     pipeline.fit(X_iris, y_iris)
-    pipeline[:-1].transform(X_iris)
+    if problem_type in ["classification", "regression"]:
+        pipeline[:-1].transform(X_iris)
+    else:
+        pipeline.transform(X_iris)
 
 
 def _hyperparam_tuning_base_test(
@@ -182,6 +202,8 @@ def _hyperparam_tuning_base_test(
         convention.
 
     """
+    if problem_type == "transformer":
+        pytest.skip("Transformers can't be tuned")
     if isinstance(preprocess, str):
         preprocess = [preprocess]
 
@@ -241,7 +263,8 @@ def test_hyperparameter_tuning(
 
 
     """
-
+    if problem_type == "transformer":
+        pytest.skip("Transformers can't be tuned")
     pipeline, param_grid = _hyperparam_tuning_base_test(
         X_types_iris,
         model,
@@ -289,6 +312,8 @@ def test_hyperparameter_tuning_bayes(
         The parameters for the search.
 
     """
+    if problem_type == "transformer":
+        pytest.skip("Transformers can't be tuned")
     BayesSearchCV = pytest.importorskip("skopt.BayesSearchCV")
 
     pipeline, param_grid = _hyperparam_tuning_base_test(
@@ -336,6 +361,8 @@ def test_hyperparameter_tuning_optuna(
     # OptunaSearchCV = optuna_integration.OptunaSearchCV
     from julearn.external.optuna_searchcv import OptunaSearchCV
 
+    if problem_type == "transformer":
+        pytest.skip("Transformers can't be tuned")
     pipeline, param_grid = _hyperparam_tuning_base_test(
         X_types_iris,
         model,
@@ -407,6 +434,8 @@ def test_hyperparameter_tuning_distributions(
         The parameters for the search.
 
     """
+    if problem_type == "transformer":
+        pytest.skip("Transformers can't be tuned")
     kind = "grid"
     if search_params is not None:
         kind = search_params.get("kind", "grid")
@@ -455,6 +484,8 @@ def test_hyperparameter_tuning_distributions_bayes(
         The parameters for the search.
 
     """
+    if problem_type == "transformer":
+        pytest.skip("Transformers can't be tuned")
     BayesSearchCV = pytest.importorskip("skopt.BayesSearchCV")
 
     pipeline, param_grid = _hyperparam_tuning_base_test(
@@ -550,40 +581,45 @@ def test_X_types_to_pattern_errors(
         pipeline_creator._check_X_types(X_types)
 
 
-def test_pipelinecreator_default_apply_to() -> None:
+def test_pipelinecreator_default_apply_to(problem_type: str) -> None:
     """Test pipeline creator using the default apply_to."""
 
-    pipeline_creator = PipelineCreator(problem_type="classification").add(
-        "rf", apply_to="chicken"
+    pipeline_creator = PipelineCreator(problem_type=problem_type).add(
+        "zscore", apply_to="chicken"
     )
 
     with pytest.raises(ValueError, match="Extra X_types were provided"):
         pipeline_creator._check_X_types({"duck": "B"})
 
-    pipeline_creator = PipelineCreator(problem_type="classification").add(
-        "rf", apply_to=["chicken", "duck"]
+    pipeline_creator = PipelineCreator(problem_type=problem_type).add(
+        "zscore", apply_to=["chicken", "duck"]
     )
     with pytest.warns(match="is not in the provided X_types"):
         pipeline_creator._check_X_types({"chicken": "teriyaki"})
 
-    pipeline_creator = PipelineCreator(problem_type="classification").add(
-        "rf", apply_to="*"
+    pipeline_creator = PipelineCreator(problem_type=problem_type).add(
+        "zscore", apply_to="*"
     )
     pipeline_creator._check_X_types({"duck": "teriyaki"})
 
 
-def test_pipelinecreator_default_constructor_apply_to() -> None:
+def test_pipelinecreator_default_constructor_apply_to(
+    problem_type: str,
+) -> None:
     """Test pipeline creator using a default apply_to in the constructor."""
     pipeline_creator = PipelineCreator(
-        problem_type="classification", apply_to="duck"
-    ).add("rf")
+        problem_type=problem_type, apply_to="duck"
+    ).add("zscore")
     pipeline_creator._check_X_types({"duck": "teriyaki"})
 
     pipeline_creator = PipelineCreator(
-        problem_type="classification", apply_to="duck"
+        problem_type=problem_type, apply_to="duck"
     )
     pipeline_creator.add("zscore", apply_to="chicken")
-    pipeline_creator.add("rf")
+    if problem_type == "transformer":
+        pipeline_creator.add("pca")
+    else:
+        pipeline_creator.add("rf")
     pipeline_creator._check_X_types({"duck": "teriyaki", "chicken": "1"})
 
 
@@ -758,6 +794,47 @@ def test_PipelineCreator_repeated_steps() -> None:
     assert creator2._steps[1].name == "scale"
 
 
+def test__params_to_pipeline() -> None:
+    """Test the _params_to_pipeline method."""
+    creator = PipelineCreator(problem_type="classification")
+    creator.add("zscore", apply_to="continuous")
+    creator.add("pca", apply_to="continuous")
+    creator.add("rf")
+
+    X_types = {"continuous": ["A", "B", "C"]}
+
+    param = creator
+
+    out = _params_to_pipeline(param, X_types=X_types)
+
+    assert isinstance(out, Pipeline)
+
+    param = [creator, "abc", "def"]
+
+    out = _params_to_pipeline(param, X_types=X_types)
+
+    assert isinstance(out, list)
+    assert len(out) == 3
+    assert isinstance(out[0], Pipeline)
+    assert out[1] == "abc"
+    assert out[2] == "def"
+
+    param = {"a": 1, "b": 2, "c": creator}
+
+    out = _params_to_pipeline(param, X_types=X_types)
+    assert isinstance(out, dict)
+    assert out["a"] == 1
+    assert out["b"] == 2
+    assert isinstance(out["c"], Pipeline)
+
+    param = (1, "abc", creator)
+    out = _params_to_pipeline(param, X_types=X_types)
+    assert isinstance(out, tuple)
+    assert out[0] == 1
+    assert out[1] == "abc"
+    assert isinstance(out[2], Pipeline)
+
+
 def test_PipelineCreator_repeated_steps_error() -> None:
     """Test error with repeated steps."""
 
@@ -902,3 +979,118 @@ def test_PipelineCreator_set_hyperparameter() -> None:
     model3 = creator3.to_pipeline()
 
     assert model3.steps[-1][1].get_params()["strategy"] == "uniform"
+
+
+def test_PipelineCreator_generated_target(
+    X_iris: pd.DataFrame,  # noqa: N803
+) -> None:
+    """Test the pipeline creator with a generated target."""
+
+    # Create a transformer that will apply to the petal features
+    transformer_creator = PipelineCreator(
+        problem_type="transformer", apply_to="petal"
+    )
+    transformer_creator.add("pca", n_components=2, random_state=42)
+    transformer_creator.add("pick_columns", keep="pca__pca0")
+
+    # Create a model that uses the previous transformer to generate the target
+    creator = PipelineCreator(problem_type="regression", apply_to="*")
+    creator.add(
+        "generate_target", apply_to="petal", transformer=transformer_creator
+    )
+    creator.add("linreg", apply_to="sepal")  # sepal only
+
+    X_types = {
+        "sepal": ["sepal_length", "sepal_width"],
+        "petal": ["petal_length", "petal_width"],
+    }
+    fake_y = pd.Series([0] * len(X_iris))
+
+    model = creator.to_pipeline(X_types)
+    assert len(model.steps) == 2
+    assert model.steps[0][0] == "set_column_types"
+    assert model.steps[1][0] == "linreg_target_generate"
+
+    model.fit(X_iris.copy(), fake_y)
+
+    # Get the in sample predictions
+    ju_pred = model.predict(X_iris.copy())
+
+    pca = PCA(n_components=2, random_state=42)
+    linreg = LinearRegression()
+
+    X_iris_petal_vals = X_iris[["petal_length", "petal_width"]].values
+    X_iris_sepal_vals = X_iris[["sepal_length", "sepal_width"]].values
+    y_gen = pca.fit(X_iris_petal_vals).transform(X_iris_petal_vals)[:, 0]
+
+    linreg.fit(X_iris_sepal_vals, y_gen)
+    sk_pred = linreg.predict(X_iris_sepal_vals)
+
+    assert_array_equal(ju_pred, sk_pred)
+
+
+def test_PipelineCreator_generated_target_errors() -> None:
+    """Test errors with the generated target."""
+    transformer_creator = PipelineCreator(
+        problem_type="transformer", apply_to="petal"
+    )
+    transformer_creator.add("pca")
+    X_types = {
+        "sepal": ["sepal_length", "sepal_width"],
+        "petal": ["petal_length", "petal_width"],
+    }
+    # Create a model that uses the previous transformer to generate the target
+    with pytest.raises(ValueError, match="reserved for the target"):
+        creator = PipelineCreator(problem_type="regression", apply_to="*")
+        creator.add("pca", name="generate_target")
+    with pytest.raises(ValueError, match="have a transformer parameter"):
+        creator = PipelineCreator(problem_type="regression", apply_to="*")
+        creator.add("generate_target", apply_to="petal")
+    with pytest.raises(ValueError, match="should be a PipelineCreator"):
+        creator = PipelineCreator(problem_type="regression", apply_to="*")
+        creator.add("generate_target", apply_to="petal", transformer="pca")
+
+    with pytest.raises(ValueError, match="all types"):
+        creator = PipelineCreator(problem_type="regression", apply_to="*")
+        creator.add(
+            "generate_target", apply_to="*", transformer=transformer_creator
+        )
+
+    with pytest.raises(ValueError, match="cannot have a model"):
+        creator = PipelineCreator(problem_type="regression", apply_to="*")
+        transformer_creator_model = PipelineCreator(
+            problem_type="transformer", apply_to="petal"
+        )
+        transformer_creator_model.add(SVC())
+        creator.add(
+            "generate_target",
+            apply_to="petal",
+            transformer=transformer_creator_model,
+        )
+        creator.add("linreg", apply_to=["sepal"])
+        creator.to_pipeline(X_types)
+
+    creator = PipelineCreator(problem_type="regression", apply_to="*")
+    with pytest.raises(ValueError, match="cannot be applied to the target"):
+        creator.add(
+            "generate_target",
+            apply_to="target",
+            transformer=transformer_creator,
+        )
+    creator = PipelineCreator(problem_type="regression", apply_to="*")
+    creator.add(
+        "generate_target", apply_to="petal", transformer=transformer_creator
+    )
+    with pytest.raises(ValueError, match="add two target generators"):
+        creator.add(
+            "generate_target",
+            apply_to="sepal",
+            transformer=transformer_creator,
+        )
+    with pytest.raises(ValueError, match="explicitly set the apply_to"):
+        creator.add("linreg")
+    with pytest.raises(ValueError, match="exclude the types"):
+        creator.add("linreg", apply_to=["sepal", "petal"])
+    with pytest.raises(ValueError, match="wildcard"):
+        creator.add("linreg", apply_to="*")
+    creator.add("linreg", apply_to=["sepal"])

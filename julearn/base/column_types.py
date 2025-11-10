@@ -4,7 +4,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Callable, Union
+from typing import Any, Callable, Union
 
 from sklearn.compose import make_column_selector
 
@@ -12,6 +12,7 @@ from ..utils.logging import raise_error
 
 
 ColumnTypesLike = Union[list[str], set[str], str, "ColumnTypes"]
+ColumnTypesDict = dict[str, ColumnTypesLike]
 
 
 def change_column_type(column: str, new_type: str):
@@ -240,6 +241,42 @@ class ColumnTypes:
         other = other if isinstance(other, ColumnTypes) else ColumnTypes(other)
         return self._column_types == other._column_types
 
+    def __and__(self, other: "ColumnTypes"):
+        """Get the intersection of the column_types.
+
+        Parameters
+        ----------
+        other : ColumnTypes
+            The other column_types to get the intersection with.
+
+        Returns
+        -------
+        ColumnTypes
+            The intersection of the column_types.
+
+        """
+        return ColumnTypes(self._column_types & other._column_types)
+
+    def __or__(self, other: "ColumnTypes"):
+        """Get the union of the column_types.
+
+        Parameters
+        ----------
+        other : ColumnTypes
+            The other column_types to get the union with.
+
+        Returns
+        -------
+        ColumnTypes
+            The union of the column_types.
+
+        """
+        return ColumnTypes(self._column_types | other._column_types)
+
+    def __len__(self):
+        """Get the number of column_types."""
+        return len(self._column_types)
+
     def __iter__(self):
         """Iterate over the column_types."""
 
@@ -250,6 +287,22 @@ class ColumnTypes:
         return (
             f"ColumnTypes<types={self._column_types}; pattern={self.pattern}>"
         )
+
+    def filter(self, X_types: dict[str, Any]) -> dict[str, Any]:  # noqa: N803
+        """Filter the X_types based on the column_types.
+
+        Parameters
+        ----------
+        X_types : dict
+            The types of the columns.
+
+        Returns
+        -------
+        dict:
+            The filtered X_types.
+
+        """
+        return {k: v for k, v in X_types.items() if k in self._column_types}
 
     def copy(self) -> "ColumnTypes":
         """Get a copy of the ColumnTypes.

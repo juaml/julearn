@@ -447,6 +447,42 @@ def test_prepare_input_data_pos_labels() -> None:
         assert_series_equal(prep_y, bin_y)
 
 
+def test_prepare_input_data_generated_target() -> None:
+    """Test prepare input data with generated target."""
+    data = np.random.rand(20, 10)
+    columns = [f"f_{x}" for x in range(data.shape[1])]
+    df = pd.DataFrame(data=data, columns=columns)
+    X = columns[:-1]
+    y = columns[-1]
+    X_types = {"continuous": X}
+    # Test pos_labels as int
+    t_df = df.copy()
+    t_df[y] = (t_df[y] > 0.5).astype(int)
+    _, prep_y, _, _ = prepare_input_data(
+        X=X,
+        y="__generated__",
+        df=t_df,
+        pos_labels=None,
+        groups=None,
+        X_types=X_types,
+    )
+    y = pd.Series(np.zeros(t_df.shape[0]))
+    assert_series_equal(prep_y, y)
+
+    with pytest.raises(
+        ValueError,
+        match=r"pos_labels cannot be used when the target is generated.",
+    ):
+        prepare_input_data(
+            X=X,
+            y="__generated__",
+            df=t_df,
+            pos_labels=1,
+            groups=None,
+            X_types=X_types,
+        )
+
+
 def test_pick_columns_using_column_name() -> None:
     """Test pick columns using column names as regexes."""
     columns = ["conf_1", "conf_2", "feat_1", "feat_2", "Feat_3"]

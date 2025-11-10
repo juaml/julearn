@@ -253,3 +253,71 @@ def test_ColumnTypes_add(
     """
     summed = ColumnTypes(left).add(right)
     assert summed == ColumnTypes(result)
+
+
+@pytest.mark.parametrize(
+    "left,right,result",
+    [
+        (
+            ["continuous"],
+            ["continuous"],
+            ["continuous"],
+        ),
+        (
+            ["cont", "cat"],
+            "cat",
+            ["cat"],
+        ),
+    ],
+)
+def test_ColumnTypes_and(
+    left: ColumnTypesLike, right: ColumnTypesLike, result: ColumnTypesLike
+) -> None:
+    """Test the ColumnTypes addition.
+
+    Parameters
+    ----------
+    left : ColumnTypesLike
+        The left hand side of the addition.
+    right : ColumnTypesLike
+        The right hand side of the addition.
+    result : ColumnTypes
+        The expected result.
+
+    """
+    anded = ColumnTypes(left) & ColumnTypes(right)
+    assert anded == ColumnTypes(result)
+
+
+@pytest.mark.parametrize(
+    "left,right,result",
+    [
+        (
+            ["continuous"],
+            ["continuous"],
+            ["continuous"],
+        ),
+        (
+            ["cont", "cat"],
+            "cat",
+            ["cont", "cat"],
+        ),
+    ],
+)
+def test_ColumnTypes_or(
+    left: ColumnTypesLike, right: ColumnTypesLike, result: ColumnTypesLike
+) -> None:
+    """Test the ColumnTypes addition.
+
+    Parameters
+    ----------
+    left : ColumnTypesLike
+        The left hand side of the addition.
+    right : ColumnTypesLike
+        The right hand side of the addition.
+    result : ColumnTypes
+        The expected result.
+
+    """
+    orred = ColumnTypes(left) | ColumnTypes(right)
+    assert orred == ColumnTypes(result)
