@@ -87,7 +87,6 @@ def _compute_distances(
     distances : ndarray of shape (n_samples_1, n_samples_2)
         Distances between each pair of the two collections of inputs.
     """
-    print(f"_compute_distances metric: {metric}")
     if metric == "euclidean":
         return _euclidean_distances(
             X, Y, Y_norm_squared=Y_norm_squared, squared=squared
