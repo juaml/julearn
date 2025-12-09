@@ -23,7 +23,7 @@ from sklearn.cluster._k_means_common import (
     _inertia_sparse,
     _is_same_clustering,
 )
-from sklearn.preprocessing import normalize
+
 from sklearn.cluster._k_means_elkan import (
     elkan_iter_chunked_dense,
     elkan_iter_chunked_sparse,
@@ -1576,7 +1576,7 @@ class KMeans(_BaseKMeans):
             self._validate_center_shape(X, init)
 
         # subtract of mean of x for more accurate distance computations
-        if not sp.issparse(X):
+        if not sp.issparse(X) and self.metric == "euclidean":
             X_mean = X.mean(axis=0)
             # The copy was already done above
             X -= X_mean
@@ -1633,9 +1633,16 @@ class KMeans(_BaseKMeans):
                 best_inertia = inertia
                 best_n_iter = n_iter_
 
-        if not sp.issparse(X):
+        if not sp.issparse(X) and self.metric == "euclidean":
             X += X_mean
             best_centers += X_mean
+
+        # If the metric is not euclidean, we need to recompute the labels
+        # for the best centers found
+        if self.metric != "euclidean":
+            best_labels = np.argmin(
+                _compute_distances(X, best_centers, metric=self.metric), axis=1
+            )
 
         distinct_clusters = len(set(best_labels))
         if distinct_clusters < self.n_clusters:
@@ -1645,13 +1652,6 @@ class KMeans(_BaseKMeans):
                 "in X.".format(distinct_clusters, self.n_clusters),
                 ConvergenceWarning,
                 stacklevel=2,
-            )
-
-        # If the metric is not euclidean, we need to recompute the labels
-        # for the best centers found
-        if self.metric != "euclidean":
-            best_labels = np.argmin(
-                _compute_distances(X, best_centers, metric=self.metric), axis=1
             )
 
         self.cluster_centers_ = best_centers
