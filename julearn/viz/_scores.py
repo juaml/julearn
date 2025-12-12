@@ -44,7 +44,7 @@ class _JulearnScoresViewer(param.Parameterized):
 
     """
 
-    metric = param.Selector([], default=None)  # type: ignore
+    metric = param.Selector(objects=[], default=None)  # type: ignore
     models: Sequence = param.ListSelector(default=None, objects=[])
     sets: Sequence = param.ListSelector(default=None, objects=[])
     show_stats: bool = param.Boolean(False)
