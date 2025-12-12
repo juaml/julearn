@@ -58,6 +58,7 @@ with try_import() as _imports:
 
     import sklearn
     from sklearn.base import BaseEstimator
+    from sklearn.model_selection._search import BaseSearchCV
     from sklearn.base import clone
     from sklearn.base import is_classifier
     from sklearn.metrics import check_scoring
@@ -402,7 +403,7 @@ class _Objective:
 
 
 @experimental_class("0.17.0")
-class OptunaSearchCV(BaseEstimator):
+class OptunaSearchCV(BaseSearchCV, BaseEstimator):
     """Hyperparameter search with cross-validation.
 
     Args:
@@ -629,7 +630,6 @@ class OptunaSearchCV(BaseEstimator):
 
         return self.study_.user_attrs
 
-    @property
     def decision_function(self) -> Callable[..., OneDimArrayLikeType | TwoDimArrayLikeType]:
         """Call ``decision_function`` on the best estimator.
 
@@ -641,7 +641,6 @@ class OptunaSearchCV(BaseEstimator):
 
         return self.best_estimator_.decision_function
 
-    @property
     def inverse_transform(self) -> Callable[..., TwoDimArrayLikeType]:
         """Call ``inverse_transform`` on the best estimator.
 
@@ -653,7 +652,7 @@ class OptunaSearchCV(BaseEstimator):
 
         return self.best_estimator_.inverse_transform
 
-    @property
+
     def predict(self) -> Callable[..., OneDimArrayLikeType | TwoDimArrayLikeType]:
         """Call ``predict`` on the best estimator.
 
@@ -665,7 +664,6 @@ class OptunaSearchCV(BaseEstimator):
 
         return self.best_estimator_.predict
 
-    @property
     def predict_log_proba(self) -> Callable[..., TwoDimArrayLikeType]:
         """Call ``predict_log_proba`` on the best estimator.
 
@@ -677,7 +675,6 @@ class OptunaSearchCV(BaseEstimator):
 
         return self.best_estimator_.predict_log_proba
 
-    @property
     def predict_proba(self) -> Callable[..., TwoDimArrayLikeType]:
         """Call ``predict_proba`` on the best estimator.
 
@@ -709,7 +706,7 @@ class OptunaSearchCV(BaseEstimator):
 
         return self.study_.set_user_attr
 
-    @property
+    
     def transform(self) -> Callable[..., TwoDimArrayLikeType]:
         """Call ``transform`` on the best estimator.
 
