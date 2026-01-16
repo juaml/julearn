@@ -4,6 +4,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
+import inspect
 from typing import Optional, Union
 
 import numpy as np
@@ -26,7 +27,10 @@ from .utils import _compute_cvmdsum, logger, raise_error
 from .utils.typing import CVLike
 
 
-def _validata_api_params(  # noqa: C901
+sklearn.set_config(enable_metadata_routing=True)
+
+
+def _validate_api_params(  # noqa: C901
     X: list[str],  # noqa: N803
     y: str,
     model: Union[str, PipelineCreator, BaseEstimator, list[PipelineCreator]],
@@ -533,7 +537,7 @@ def run_cross_validation(
         return_inspector,
         wrap_score,
         problem_type,
-    ) = _validata_api_params(
+    ) = _validate_api_params(
         X=X,
         y=y,
         model=model,
@@ -561,7 +565,7 @@ def run_cross_validation(
     )
     logger.info(f"Using outer CV scheme {cv_outer}")
 
-    check_consistency(df_y, cv, groups, problem_type)  # type: ignore
+    groups_needed = check_consistency(df_y, cv, groups, problem_type)  # type: ignore
 
     scoring = check_scoring(
         pipeline,  # type: ignore
@@ -570,10 +574,18 @@ def run_cross_validation(
     )
 
     cv_mdsum = _compute_cvmdsum(cv_outer)
+
     fit_params = {}
     if df_groups is not None:
-        if isinstance(pipeline, BaseSearchCV):
-            fit_params["groups"] = df_groups.values
+        if groups_needed:
+            # If we need groups, we have to pass them to the fit method of
+            # the last step of the pipeline
+            if not isinstance(pipeline, BaseSearchCV):
+                last_step = pipeline.steps[-1][1]
+                argspec = inspect.getfullargspec(last_step.fit)
+                if "groups" in argspec.args:
+                    last_step.set_fit_request(groups=True)
+        fit_params["groups"] = df_groups.values
 
     _sklearn_deprec_fit_params = {}
     if sklearn.__version__ >= "1.4.0":
@@ -587,7 +599,7 @@ def run_cross_validation(
         df_y,
         cv=cv_outer,
         scoring=scoring,
-        groups=df_groups,
+        # groups=df_groups,
         return_estimator=cv_return_estimator,
         n_jobs=n_jobs,
         return_train_score=return_train_score,
@@ -776,7 +788,7 @@ def run_fit(
         _,
         _,
         problem_type,
-    ) = _validata_api_params(
+    ) = _validate_api_params(
         X=X,
         y=y,
         model=model,

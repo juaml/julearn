@@ -245,13 +245,17 @@ def do_scoring_test(
     )
 
     np.random.seed(42)
+    if sk_groups is not None:
+        params = dict(groups=sk_groups)
+    else:
+        params = {}
     expected = cross_validate(
         sklearn_model,  # type: ignore
         sk_X,
         sk_y,
         cv=sk_cv,
         scoring=scorers,
-        groups=sk_groups,  # type: ignore
+        params=params,  # type: ignore
     )
 
     # Compare the models
