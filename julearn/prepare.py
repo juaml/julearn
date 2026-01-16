@@ -382,7 +382,8 @@ def check_consistency(
     Returns
     -------
     groups_needed : bool
-        True if the groups variable is needed for the CV scheme, False otherwise.
+        True if the groups variable is needed for the CV scheme,
+        False otherwise.
 
     Raises
     ------

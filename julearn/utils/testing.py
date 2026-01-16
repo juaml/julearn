@@ -246,7 +246,7 @@ def do_scoring_test(
 
     np.random.seed(42)
     if sk_groups is not None:
-        params = dict(groups=sk_groups)
+        params = {"groups": sk_groups}
     else:
         params = {}
     expected = cross_validate(

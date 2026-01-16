@@ -4,11 +4,10 @@
 # License: AGPL
 
 from collections.abc import Generator
-from typing import TYPE_CHECKING, Optional
+from typing import, Optional
 
 import numpy as np
 from sklearn.model_selection import BaseCrossValidator
-from sklearn.model_selection._split import GroupsConsumerMixin
 
 
 class _JulearnFinalModelCV(BaseCrossValidator):
