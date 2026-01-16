@@ -4,7 +4,7 @@
 # License: AGPL
 
 from collections.abc import Generator
-from typing import, Optional
+from typing import Optional
 
 import numpy as np
 from sklearn.model_selection import BaseCrossValidator
