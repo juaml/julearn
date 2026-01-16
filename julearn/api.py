@@ -576,6 +576,8 @@ def run_cross_validation(
     cv_mdsum = _compute_cvmdsum(cv_outer)
 
     fit_params = {}
+    _sklearn_deprec_fit_params = {}
+
     if df_groups is not None:
         if groups_needed:
             # If we need groups, we have to pass them to the fit method of
@@ -587,11 +589,10 @@ def run_cross_validation(
                     last_step.set_fit_request(groups=True)
         fit_params["groups"] = df_groups.values
 
-    _sklearn_deprec_fit_params = {}
-    if sklearn.__version__ >= "1.4.0":
-        _sklearn_deprec_fit_params["params"] = fit_params
-    else:
-        _sklearn_deprec_fit_params["fit_params"] = fit_params
+        if sklearn.__version__ >= "1.4.0":
+            _sklearn_deprec_fit_params["params"] = fit_params
+        else:
+            _sklearn_deprec_fit_params["fit_params"] = fit_params
 
     scores = cross_validate(
         pipeline,
