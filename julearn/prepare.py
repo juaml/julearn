@@ -453,23 +453,28 @@ def check_consistency(
         )
     # Check groups and CV scheme
     groups_needed = False
+    valid_group_cv_instances = (
+        GroupKFold,
+        GroupShuffleSplit,
+        LeaveOneGroupOut,
+        LeavePGroupsOut,
+        StratifiedGroupKFold,
+        ContinuousStratifiedGroupKFold,
+        RepeatedContinuousStratifiedGroupKFold,
+    )
     if groups is not None:
-        valid_instances = (
-            GroupKFold,
-            GroupShuffleSplit,
-            LeaveOneGroupOut,
-            LeavePGroupsOut,
-            StratifiedGroupKFold,
-            ContinuousStratifiedGroupKFold,
-            RepeatedContinuousStratifiedGroupKFold,
-        )
-        if not isinstance(cv, valid_instances):
+        if not isinstance(cv, valid_group_cv_instances):
             warn_with_log(
                 "The parameter groups was specified but the CV strategy "
                 "will not consider them."
             )
         else:
             groups_needed = True
+    elif isinstance(cv, valid_group_cv_instances):
+        raise_error(
+            "The CV strategy requires groups but the parameter groups was "
+            "not specified."
+        )
     return groups_needed
 
 
