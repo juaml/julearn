@@ -586,6 +586,9 @@ def run_cross_validation(
                 last_step = pipeline.steps[-1][1]
                 argspec = inspect.getfullargspec(last_step.fit)
                 if "groups" in argspec.args:
+                    logger.debug(
+                        "Pipeline's last step uses groups," \
+                        "calling `set_fit_request(groups=True)`")
                     last_step.set_fit_request(groups=True)
         fit_params["groups"] = df_groups.values
 
