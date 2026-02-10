@@ -471,13 +471,13 @@ predict the generated target from the sepal features</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">&quot;DEBUG&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-01-21 14:43:32,953 - julearn - INFO - ===== Lib Versions =====
-2026-01-21 14:43:32,953 - julearn - INFO - numpy: 1.26.4
-2026-01-21 14:43:32,953 - julearn - INFO - scipy: 1.17.0
-2026-01-21 14:43:32,953 - julearn - INFO - sklearn: 1.7.2
-2026-01-21 14:43:32,953 - julearn - INFO - pandas: 2.3.3
-2026-01-21 14:43:32,953 - julearn - INFO - julearn: 0.3.5.dev125
-2026-01-21 14:43:32,953 - julearn - INFO - ========================
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-02-10 14:37:57,330 - julearn - INFO - ===== Lib Versions =====
+2026-02-10 14:37:57,331 - julearn - INFO - numpy: 1.26.4
+2026-02-10 14:37:57,331 - julearn - INFO - scipy: 1.17.0
+2026-02-10 14:37:57,331 - julearn - INFO - sklearn: 1.7.2
+2026-02-10 14:37:57,331 - julearn - INFO - pandas: 2.3.3
+2026-02-10 14:37:57,331 - julearn - INFO - julearn: 0.3.5.dev126
+2026-02-10 14:37:57,331 - julearn - INFO - ========================
 </pre></div>
 </div>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_iris</span></a> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;iris&quot;</span><span class="p">)</span>
@@ -505,16 +505,16 @@ and apply to the “petal” feature types.</p>
 <span class="n">target_creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;pick_columns&quot;</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="s2">&quot;pca__pca0&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-01-21 14:43:32,955 - julearn - INFO - Adding step pca that applies to ColumnTypes&lt;types={&#39;petal&#39;}; pattern=(?:__:type:__petal)&gt;
-2026-01-21 14:43:32,955 - julearn - INFO - Setting hyperparameter n_components = 2
-2026-01-21 14:43:32,955 - julearn - DEBUG - Getting estimator from string: pca
-2026-01-21 14:43:32,956 - julearn - INFO - Step added
-2026-01-21 14:43:32,956 - julearn - INFO - Adding step pick_columns that applies to ColumnTypes&lt;types={&#39;petal&#39;}; pattern=(?:__:type:__petal)&gt;
-2026-01-21 14:43:32,956 - julearn - INFO - Setting hyperparameter keep = pca__pca0
-2026-01-21 14:43:32,956 - julearn - DEBUG - Getting estimator from string: pick_columns
-2026-01-21 14:43:32,956 - julearn - INFO - Step added
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-02-10 14:37:57,333 - julearn - INFO - Adding step pca that applies to ColumnTypes&lt;types={&#39;petal&#39;}; pattern=(?:__:type:__petal)&gt;
+2026-02-10 14:37:57,333 - julearn - INFO - Setting hyperparameter n_components = 2
+2026-02-10 14:37:57,333 - julearn - DEBUG - Getting estimator from string: pca
+2026-02-10 14:37:57,334 - julearn - INFO - Step added
+2026-02-10 14:37:57,334 - julearn - INFO - Adding step pick_columns that applies to ColumnTypes&lt;types={&#39;petal&#39;}; pattern=(?:__:type:__petal)&gt;
+2026-02-10 14:37:57,334 - julearn - INFO - Setting hyperparameter keep = pca__pca0
+2026-02-10 14:37:57,334 - julearn - DEBUG - Getting estimator from string: pick_columns
+2026-02-10 14:37:57,334 - julearn - INFO - Step added
 
-&lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7f73a7c40250&gt;
+&lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7f8fac3b00d0&gt;
 </pre></div>
 </div>
 <p>We now create the pipeline that will be used to predict the target. This
@@ -527,11 +527,11 @@ target_creator pipeline as the transformer.</p>
 <span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">&quot;linreg&quot;</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">&quot;sepal&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-01-21 14:43:32,957 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
-2026-01-21 14:43:32,957 - julearn - DEBUG - Getting estimator from string: zscore
-2026-01-21 14:43:32,957 - julearn - INFO - Step added
-2026-01-21 14:43:32,957 - julearn - INFO - Adding step generate_target that applies to ColumnTypes&lt;types={&#39;petal&#39;}; pattern=(?:__:type:__petal)&gt;
-2026-01-21 14:43:32,957 - julearn - INFO - Setting hyperparameter transformer = PipelineCreator:
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-02-10 14:37:57,335 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
+2026-02-10 14:37:57,335 - julearn - DEBUG - Getting estimator from string: zscore
+2026-02-10 14:37:57,335 - julearn - INFO - Step added
+2026-02-10 14:37:57,335 - julearn - INFO - Adding step generate_target that applies to ColumnTypes&lt;types={&#39;petal&#39;}; pattern=(?:__:type:__petal)&gt;
+2026-02-10 14:37:57,336 - julearn - INFO - Setting hyperparameter transformer = PipelineCreator:
   Step 0: pca
     estimator:     PCA(n_components=2)
     apply to:      ColumnTypes&lt;types={&#39;petal&#39;}; pattern=(?:__:type:__petal)&gt;
@@ -543,13 +543,13 @@ target_creator pipeline as the transformer.</p>
     needed types:  ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
     tuning params: {}
 
-2026-01-21 14:43:32,958 - julearn - DEBUG - Special step is generate_target
-2026-01-21 14:43:32,958 - julearn - INFO - Step added
-2026-01-21 14:43:32,958 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;sepal&#39;}; pattern=(?:__:type:__sepal)&gt;
-2026-01-21 14:43:32,958 - julearn - DEBUG - Getting estimator from string: linreg
-2026-01-21 14:43:32,958 - julearn - INFO - Step added
+2026-02-10 14:37:57,336 - julearn - DEBUG - Special step is generate_target
+2026-02-10 14:37:57,336 - julearn - INFO - Step added
+2026-02-10 14:37:57,336 - julearn - INFO - Adding step linreg that applies to ColumnTypes&lt;types={&#39;sepal&#39;}; pattern=(?:__:type:__sepal)&gt;
+2026-02-10 14:37:57,336 - julearn - DEBUG - Getting estimator from string: linreg
+2026-02-10 14:37:57,336 - julearn - INFO - Step added
 
-&lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7f73a7c1afd0&gt;
+&lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7f8fac860ad0&gt;
 </pre></div>
 </div>
 <p>We finally evaluate the model within the cross validation.</p>
@@ -566,66 +566,66 @@ target_creator pipeline as the transformer.</p>
 <span class="nb">print</span><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">scores</span></a><span class="p">[</span><span class="s2">&quot;test_score&quot;</span><span class="p">])</span>  <span class="c1"># type: ignore</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-01-21 14:43:32,959 - julearn - INFO - ==== Input Data ====
-2026-01-21 14:43:32,959 - julearn - INFO - Using dataframe as input
-2026-01-21 14:43:32,959 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2026-01-21 14:43:32,959 - julearn - INFO -      Target: __generated__
-2026-01-21 14:43:32,959 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2026-01-21 14:43:32,959 - julearn - INFO -      X_types:{&#39;sepal&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;], &#39;petal&#39;: [&#39;petal_length&#39;, &#39;petal_width&#39;]}
-2026-01-21 14:43:32,960 - julearn - INFO - Target will be generated
-2026-01-21 14:43:32,960 - julearn - INFO - ====================
-2026-01-21 14:43:32,960 - julearn - INFO -
-2026-01-21 14:43:32,960 - julearn - DEBUG - Generating pipeline from PipelineCreator or list of them
-2026-01-21 14:43:32,960 - julearn - DEBUG - Creating pipeline
-2026-01-21 14:43:32,960 - julearn - DEBUG - Ensuring target generator pipeline
-2026-01-21 14:43:32,960 - julearn - DEBUG - Creating pipeline
-2026-01-21 14:43:32,960 - julearn - DEBUG - Creating a pipeline with no model added
-2026-01-21 14:43:32,961 - julearn - DEBUG - Adding transformer pca
-2026-01-21 14:43:32,961 - julearn - DEBUG -      Estimator: PCA(n_components=2)
-2026-01-21 14:43:32,961 - julearn - DEBUG -      Params to tune: {}
-2026-01-21 14:43:32,961 - julearn - DEBUG - Adding transformer pick_columns
-2026-01-21 14:43:32,961 - julearn - DEBUG -      Estimator: PickColumns(keep=&#39;pca__pca0&#39;)
-2026-01-21 14:43:32,961 - julearn - DEBUG -      Params to tune: {}
-2026-01-21 14:43:32,961 - julearn - INFO - = Model Parameters =
-2026-01-21 14:43:32,962 - julearn - INFO - ====================
-2026-01-21 14:43:32,962 - julearn - INFO -
-2026-01-21 14:43:32,962 - julearn - DEBUG - Pipeline created
-2026-01-21 14:43:32,962 - julearn - DEBUG - Target generator pipeline created
-2026-01-21 14:43:32,962 - julearn - DEBUG - Adding transformer zscore
-2026-01-21 14:43:32,962 - julearn - DEBUG -      Estimator: StandardScaler()
-2026-01-21 14:43:32,962 - julearn - DEBUG -      Params to tune: {}
-2026-01-21 14:43:32,962 - julearn - DEBUG - Adding model linreg
-2026-01-21 14:43:32,962 - julearn - DEBUG - Wrapping linreg
-2026-01-21 14:43:32,963 - julearn - DEBUG -      Estimator: WrapModel(apply_to=ColumnTypes&lt;types={&#39;sepal&#39;}; pattern=(?:__:type:__sepal)&gt;,
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-02-10 14:37:57,337 - julearn - INFO - ==== Input Data ====
+2026-02-10 14:37:57,337 - julearn - INFO - Using dataframe as input
+2026-02-10 14:37:57,337 - julearn - INFO -      Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2026-02-10 14:37:57,337 - julearn - INFO -      Target: __generated__
+2026-02-10 14:37:57,338 - julearn - INFO -      Expanded features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
+2026-02-10 14:37:57,338 - julearn - INFO -      X_types:{&#39;sepal&#39;: [&#39;sepal_length&#39;, &#39;sepal_width&#39;], &#39;petal&#39;: [&#39;petal_length&#39;, &#39;petal_width&#39;]}
+2026-02-10 14:37:57,338 - julearn - INFO - Target will be generated
+2026-02-10 14:37:57,338 - julearn - INFO - ====================
+2026-02-10 14:37:57,339 - julearn - INFO -
+2026-02-10 14:37:57,339 - julearn - DEBUG - Generating pipeline from PipelineCreator or list of them
+2026-02-10 14:37:57,339 - julearn - DEBUG - Creating pipeline
+2026-02-10 14:37:57,339 - julearn - DEBUG - Ensuring target generator pipeline
+2026-02-10 14:37:57,339 - julearn - DEBUG - Creating pipeline
+2026-02-10 14:37:57,339 - julearn - DEBUG - Creating a pipeline with no model added
+2026-02-10 14:37:57,339 - julearn - DEBUG - Adding transformer pca
+2026-02-10 14:37:57,339 - julearn - DEBUG -      Estimator: PCA(n_components=2)
+2026-02-10 14:37:57,340 - julearn - DEBUG -      Params to tune: {}
+2026-02-10 14:37:57,340 - julearn - DEBUG - Adding transformer pick_columns
+2026-02-10 14:37:57,340 - julearn - DEBUG -      Estimator: PickColumns(keep=&#39;pca__pca0&#39;)
+2026-02-10 14:37:57,340 - julearn - DEBUG -      Params to tune: {}
+2026-02-10 14:37:57,340 - julearn - INFO - = Model Parameters =
+2026-02-10 14:37:57,340 - julearn - INFO - ====================
+2026-02-10 14:37:57,340 - julearn - INFO -
+2026-02-10 14:37:57,340 - julearn - DEBUG - Pipeline created
+2026-02-10 14:37:57,341 - julearn - DEBUG - Target generator pipeline created
+2026-02-10 14:37:57,341 - julearn - DEBUG - Adding transformer zscore
+2026-02-10 14:37:57,341 - julearn - DEBUG -      Estimator: StandardScaler()
+2026-02-10 14:37:57,341 - julearn - DEBUG -      Params to tune: {}
+2026-02-10 14:37:57,341 - julearn - DEBUG - Adding model linreg
+2026-02-10 14:37:57,341 - julearn - DEBUG - Wrapping linreg
+2026-02-10 14:37:57,342 - julearn - DEBUG -      Estimator: WrapModel(apply_to=ColumnTypes&lt;types={&#39;sepal&#39;}; pattern=(?:__:type:__sepal)&gt;,
           copy_X=True, fit_intercept=True, model=LinearRegression(),
           n_jobs=None, positive=False, tol=1e-06)
-2026-01-21 14:43:32,963 - julearn - DEBUG -      Looking for nested pipeline creators
-2026-01-21 14:43:32,963 - julearn - DEBUG -      Params to tune: {}
-2026-01-21 14:43:32,963 - julearn - DEBUG - Wrapping target model linreg as target_generate
-2026-01-21 14:43:32,963 - julearn - INFO - = Model Parameters =
-2026-01-21 14:43:32,963 - julearn - INFO - ====================
-2026-01-21 14:43:32,964 - julearn - INFO -
-2026-01-21 14:43:32,964 - julearn - DEBUG - Pipeline created
-2026-01-21 14:43:32,964 - julearn - DEBUG - Pipeline has target generator
-2026-01-21 14:43:32,964 - julearn - INFO - = Data Information =
-2026-01-21 14:43:32,964 - julearn - INFO -      Problem type: regression
-2026-01-21 14:43:32,964 - julearn - INFO -      Number of samples: 150
-2026-01-21 14:43:32,964 - julearn - INFO -      Number of features: 4
-2026-01-21 14:43:32,964 - julearn - INFO - ====================
-2026-01-21 14:43:32,964 - julearn - INFO -
-2026-01-21 14:43:32,964 - julearn - INFO -      Target type: float64
-2026-01-21 14:43:32,965 - julearn - INFO - Using outer CV scheme KFold(n_splits=2, random_state=None, shuffle=False) (incl. final model)
-2026-01-21 14:43:32,969 - julearn - DEBUG - Setting column types for Index([&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;], dtype=&#39;object&#39;)
-2026-01-21 14:43:32,969 - julearn - DEBUG -     Column mappers for {&#39;sepal_length&#39;: &#39;sepal_length__:type:__sepal&#39;, &#39;sepal_width&#39;: &#39;sepal_width__:type:__sepal&#39;, &#39;petal_length&#39;: &#39;petal_length__:type:__petal&#39;, &#39;petal_width&#39;: &#39;petal_width__:type:__petal&#39;}
-2026-01-21 14:43:32,972 - julearn - DEBUG - Fitting the target generator
-2026-01-21 14:43:32,973 - julearn - DEBUG - Setting column types for Index([&#39;sepal_length__:type:__sepal&#39;, &#39;sepal_width__:type:__sepal&#39;,
+2026-02-10 14:37:57,342 - julearn - DEBUG -      Looking for nested pipeline creators
+2026-02-10 14:37:57,342 - julearn - DEBUG -      Params to tune: {}
+2026-02-10 14:37:57,342 - julearn - DEBUG - Wrapping target model linreg as target_generate
+2026-02-10 14:37:57,342 - julearn - INFO - = Model Parameters =
+2026-02-10 14:37:57,342 - julearn - INFO - ====================
+2026-02-10 14:37:57,342 - julearn - INFO -
+2026-02-10 14:37:57,343 - julearn - DEBUG - Pipeline created
+2026-02-10 14:37:57,343 - julearn - DEBUG - Pipeline has target generator
+2026-02-10 14:37:57,343 - julearn - INFO - = Data Information =
+2026-02-10 14:37:57,343 - julearn - INFO -      Problem type: regression
+2026-02-10 14:37:57,343 - julearn - INFO -      Number of samples: 150
+2026-02-10 14:37:57,343 - julearn - INFO -      Number of features: 4
+2026-02-10 14:37:57,343 - julearn - INFO - ====================
+2026-02-10 14:37:57,343 - julearn - INFO -
+2026-02-10 14:37:57,343 - julearn - INFO -      Target type: float64
+2026-02-10 14:37:57,344 - julearn - INFO - Using outer CV scheme KFold(n_splits=2, random_state=None, shuffle=False) (incl. final model)
+2026-02-10 14:37:57,348 - julearn - DEBUG - Setting column types for Index([&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;], dtype=&#39;object&#39;)
+2026-02-10 14:37:57,349 - julearn - DEBUG -     Column mappers for {&#39;sepal_length&#39;: &#39;sepal_length__:type:__sepal&#39;, &#39;sepal_width&#39;: &#39;sepal_width__:type:__sepal&#39;, &#39;petal_length&#39;: &#39;petal_length__:type:__petal&#39;, &#39;petal_width&#39;: &#39;petal_width__:type:__petal&#39;}
+2026-02-10 14:37:57,352 - julearn - DEBUG - Fitting the target generator
+2026-02-10 14:37:57,352 - julearn - DEBUG - Setting column types for Index([&#39;sepal_length__:type:__sepal&#39;, &#39;sepal_width__:type:__sepal&#39;,
        &#39;petal_length__:type:__petal&#39;, &#39;petal_width__:type:__petal&#39;],
       dtype=&#39;object&#39;)
-2026-01-21 14:43:32,973 - julearn - DEBUG -     Column mappers for {&#39;sepal_length&#39;: &#39;sepal_length__:type:__sepal&#39;, &#39;sepal_width&#39;: &#39;sepal_width__:type:__sepal&#39;, &#39;petal_length&#39;: &#39;petal_length__:type:__petal&#39;, &#39;petal_width&#39;: &#39;petal_width__:type:__petal&#39;}
-2026-01-21 14:43:32,980 - julearn - DEBUG - Generating target
-2026-01-21 14:43:32,983 - julearn - DEBUG - Picking columns: [&#39;pca__pca0&#39;]
-2026-01-21 14:43:32,983 - julearn - DEBUG - Target generated: pca__pca0
-2026-01-21 14:43:32,983 - julearn - DEBUG - Fitting model from generated target
+2026-02-10 14:37:57,352 - julearn - DEBUG -     Column mappers for {&#39;sepal_length&#39;: &#39;sepal_length__:type:__sepal&#39;, &#39;sepal_width&#39;: &#39;sepal_width__:type:__sepal&#39;, &#39;petal_length&#39;: &#39;petal_length__:type:__petal&#39;, &#39;petal_width&#39;: &#39;petal_width__:type:__petal&#39;}
+2026-02-10 14:37:57,360 - julearn - DEBUG - Generating target
+2026-02-10 14:37:57,363 - julearn - DEBUG - Picking columns: [&#39;pca__pca0&#39;]
+2026-02-10 14:37:57,363 - julearn - DEBUG - Target generated: pca__pca0
+2026-02-10 14:37:57,364 - julearn - DEBUG - Fitting model from generated target
 /opt/hostedtoolcache/Python/3.14.2/x64/lib/python3.14/site-packages/sklearn/model_selection/_validation.py:953: UserWarning: Scoring failed. The score on this train-test partition for these parameters will be set to nan. Details:
 Traceback (most recent call last):
   File &quot;/opt/hostedtoolcache/Python/3.14.2/x64/lib/python3.14/site-packages/sklearn/model_selection/_validation.py&quot;, line 942, in _score
@@ -647,17 +647,17 @@ Traceback (most recent call last):
 TypeError: Pipeline.score got unexpected argument(s) {&#39;sample_weight&#39;}, which are not routed to any object.
 
   warnings.warn(
-2026-01-21 14:43:32,991 - julearn - DEBUG - Setting column types for Index([&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;], dtype=&#39;object&#39;)
-2026-01-21 14:43:32,992 - julearn - DEBUG -     Column mappers for {&#39;sepal_length&#39;: &#39;sepal_length__:type:__sepal&#39;, &#39;sepal_width&#39;: &#39;sepal_width__:type:__sepal&#39;, &#39;petal_length&#39;: &#39;petal_length__:type:__petal&#39;, &#39;petal_width&#39;: &#39;petal_width__:type:__petal&#39;}
-2026-01-21 14:43:32,994 - julearn - DEBUG - Fitting the target generator
-2026-01-21 14:43:32,995 - julearn - DEBUG - Setting column types for Index([&#39;sepal_length__:type:__sepal&#39;, &#39;sepal_width__:type:__sepal&#39;,
+2026-02-10 14:37:57,372 - julearn - DEBUG - Setting column types for Index([&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;], dtype=&#39;object&#39;)
+2026-02-10 14:37:57,372 - julearn - DEBUG -     Column mappers for {&#39;sepal_length&#39;: &#39;sepal_length__:type:__sepal&#39;, &#39;sepal_width&#39;: &#39;sepal_width__:type:__sepal&#39;, &#39;petal_length&#39;: &#39;petal_length__:type:__petal&#39;, &#39;petal_width&#39;: &#39;petal_width__:type:__petal&#39;}
+2026-02-10 14:37:57,375 - julearn - DEBUG - Fitting the target generator
+2026-02-10 14:37:57,376 - julearn - DEBUG - Setting column types for Index([&#39;sepal_length__:type:__sepal&#39;, &#39;sepal_width__:type:__sepal&#39;,
        &#39;petal_length__:type:__petal&#39;, &#39;petal_width__:type:__petal&#39;],
       dtype=&#39;object&#39;)
-2026-01-21 14:43:32,995 - julearn - DEBUG -     Column mappers for {&#39;sepal_length&#39;: &#39;sepal_length__:type:__sepal&#39;, &#39;sepal_width&#39;: &#39;sepal_width__:type:__sepal&#39;, &#39;petal_length&#39;: &#39;petal_length__:type:__petal&#39;, &#39;petal_width&#39;: &#39;petal_width__:type:__petal&#39;}
-2026-01-21 14:43:33,003 - julearn - DEBUG - Generating target
-2026-01-21 14:43:33,005 - julearn - DEBUG - Picking columns: [&#39;pca__pca0&#39;]
-2026-01-21 14:43:33,006 - julearn - DEBUG - Target generated: pca__pca0
-2026-01-21 14:43:33,006 - julearn - DEBUG - Fitting model from generated target
+2026-02-10 14:37:57,376 - julearn - DEBUG -     Column mappers for {&#39;sepal_length&#39;: &#39;sepal_length__:type:__sepal&#39;, &#39;sepal_width&#39;: &#39;sepal_width__:type:__sepal&#39;, &#39;petal_length&#39;: &#39;petal_length__:type:__petal&#39;, &#39;petal_width&#39;: &#39;petal_width__:type:__petal&#39;}
+2026-02-10 14:37:57,383 - julearn - DEBUG - Generating target
+2026-02-10 14:37:57,385 - julearn - DEBUG - Picking columns: [&#39;pca__pca0&#39;]
+2026-02-10 14:37:57,386 - julearn - DEBUG - Target generated: pca__pca0
+2026-02-10 14:37:57,386 - julearn - DEBUG - Fitting model from generated target
 /opt/hostedtoolcache/Python/3.14.2/x64/lib/python3.14/site-packages/sklearn/model_selection/_validation.py:953: UserWarning: Scoring failed. The score on this train-test partition for these parameters will be set to nan. Details:
 Traceback (most recent call last):
   File &quot;/opt/hostedtoolcache/Python/3.14.2/x64/lib/python3.14/site-packages/sklearn/model_selection/_validation.py&quot;, line 942, in _score
@@ -679,17 +679,17 @@ Traceback (most recent call last):
 TypeError: Pipeline.score got unexpected argument(s) {&#39;sample_weight&#39;}, which are not routed to any object.
 
   warnings.warn(
-2026-01-21 14:43:33,013 - julearn - DEBUG - Setting column types for Index([&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;], dtype=&#39;object&#39;)
-2026-01-21 14:43:33,013 - julearn - DEBUG -     Column mappers for {&#39;sepal_length&#39;: &#39;sepal_length__:type:__sepal&#39;, &#39;sepal_width&#39;: &#39;sepal_width__:type:__sepal&#39;, &#39;petal_length&#39;: &#39;petal_length__:type:__petal&#39;, &#39;petal_width&#39;: &#39;petal_width__:type:__petal&#39;}
-2026-01-21 14:43:33,016 - julearn - DEBUG - Fitting the target generator
-2026-01-21 14:43:33,016 - julearn - DEBUG - Setting column types for Index([&#39;sepal_length__:type:__sepal&#39;, &#39;sepal_width__:type:__sepal&#39;,
+2026-02-10 14:37:57,393 - julearn - DEBUG - Setting column types for Index([&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;], dtype=&#39;object&#39;)
+2026-02-10 14:37:57,393 - julearn - DEBUG -     Column mappers for {&#39;sepal_length&#39;: &#39;sepal_length__:type:__sepal&#39;, &#39;sepal_width&#39;: &#39;sepal_width__:type:__sepal&#39;, &#39;petal_length&#39;: &#39;petal_length__:type:__petal&#39;, &#39;petal_width&#39;: &#39;petal_width__:type:__petal&#39;}
+2026-02-10 14:37:57,396 - julearn - DEBUG - Fitting the target generator
+2026-02-10 14:37:57,396 - julearn - DEBUG - Setting column types for Index([&#39;sepal_length__:type:__sepal&#39;, &#39;sepal_width__:type:__sepal&#39;,
        &#39;petal_length__:type:__petal&#39;, &#39;petal_width__:type:__petal&#39;],
       dtype=&#39;object&#39;)
-2026-01-21 14:43:33,016 - julearn - DEBUG -     Column mappers for {&#39;sepal_length&#39;: &#39;sepal_length__:type:__sepal&#39;, &#39;sepal_width&#39;: &#39;sepal_width__:type:__sepal&#39;, &#39;petal_length&#39;: &#39;petal_length__:type:__petal&#39;, &#39;petal_width&#39;: &#39;petal_width__:type:__petal&#39;}
-2026-01-21 14:43:33,023 - julearn - DEBUG - Generating target
-2026-01-21 14:43:33,026 - julearn - DEBUG - Picking columns: [&#39;pca__pca0&#39;]
-2026-01-21 14:43:33,026 - julearn - DEBUG - Target generated: pca__pca0
-2026-01-21 14:43:33,026 - julearn - DEBUG - Fitting model from generated target
+2026-02-10 14:37:57,397 - julearn - DEBUG -     Column mappers for {&#39;sepal_length&#39;: &#39;sepal_length__:type:__sepal&#39;, &#39;sepal_width&#39;: &#39;sepal_width__:type:__sepal&#39;, &#39;petal_length&#39;: &#39;petal_length__:type:__petal&#39;, &#39;petal_width&#39;: &#39;petal_width__:type:__petal&#39;}
+2026-02-10 14:37:57,404 - julearn - DEBUG - Generating target
+2026-02-10 14:37:57,406 - julearn - DEBUG - Picking columns: [&#39;pca__pca0&#39;]
+2026-02-10 14:37:57,407 - julearn - DEBUG - Target generated: pca__pca0
+2026-02-10 14:37:57,407 - julearn - DEBUG - Fitting model from generated target
 /opt/hostedtoolcache/Python/3.14.2/x64/lib/python3.14/site-packages/sklearn/model_selection/_validation.py:953: UserWarning: Scoring failed. The score on this train-test partition for these parameters will be set to nan. Details:
 Traceback (most recent call last):
   File &quot;/opt/hostedtoolcache/Python/3.14.2/x64/lib/python3.14/site-packages/sklearn/model_selection/_validation.py&quot;, line 942, in _score
@@ -716,7 +716,7 @@ TypeError: Pipeline.score got unexpected argument(s) {&#39;sample_weight&#39;}, 
 Name: test_score, dtype: float64
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.082 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.085 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-03-complex-models-run-generate-target-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/a2ca49308e5b49c0ee0af19f71f15dea/run_generate_target.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">run_generate_target.ipynb</span></code></a></p>
@@ -780,7 +780,7 @@ Name: test_score, dtype: float64
       
     </aside>
   </div>
-</div><script src="../../_static/documentation_options.js?v=15350593"></script>
+</div><script src="../../_static/documentation_options.js?v=22cd8ff9"></script>
     <script src="../../_static/doctools.js?v=9a2dae69"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
