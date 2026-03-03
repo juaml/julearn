@@ -417,7 +417,9 @@ def check_consistency(
             logger.info("Binary classification problem detected.")
     elif problem_type == "regression":
         # Regression
-        is_numeric = np.issubdtype(y.values.dtype, np.number)  # type: ignore
+        is_numeric = isinstance(y.values.dtype, np.dtype) and np.issubdtype(
+            y.values.dtype, np.number
+        )  # type: ignore
         if not is_numeric:
             warn_with_log(
                 f"The kind of values in y ({y.values.dtype}) is not "
