@@ -491,18 +491,17 @@ continuous measures in the dataset.</p>
 <span class="n">penguins_df</span><span class="p">[</span><span class="s2">&quot;species&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">penguins_df</span><span class="p">[</span><span class="s2">&quot;species&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
     <span class="p">{</span><span class="s2">&quot;Adelie&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;Gentoo&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
 <span class="p">)</span>
+<span class="n">penguins_df</span><span class="p">[</span><span class="s2">&quot;species&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">penguins_df</span><span class="p">[</span><span class="s2">&quot;species&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
 <span class="n">features</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">penguins_df</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">x</span> <span class="o">!=</span> <span class="s2">&quot;species&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-02-10 14:38:20,055 - julearn - INFO - ===== Lib Versions =====
-2026-02-10 14:38:20,055 - julearn - INFO - numpy: 1.26.4
-2026-02-10 14:38:20,055 - julearn - INFO - scipy: 1.17.0
-2026-02-10 14:38:20,055 - julearn - INFO - sklearn: 1.7.2
-2026-02-10 14:38:20,055 - julearn - INFO - pandas: 2.3.3
-2026-02-10 14:38:20,055 - julearn - INFO - julearn: 0.3.5.dev126
-2026-02-10 14:38:20,055 - julearn - INFO - ========================
-/home/runner/work/julearn/julearn/examples/99_docs/run_model_inspection_docs.py:57: FutureWarning: Downcasting behavior in `replace` is deprecated and will be removed in a future version. To retain the old behavior, explicitly call `result.infer_objects(copy=False)`. To opt-in to the future behavior, set `pd.set_option(&#39;future.no_silent_downcasting&#39;, True)`
-  penguins_df[&quot;species&quot;] = penguins_df[&quot;species&quot;].replace(
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-03-04 11:25:21,213 - julearn - INFO - ===== Lib Versions =====
+2026-03-04 11:25:21,213 - julearn - INFO - numpy: 2.4.2
+2026-03-04 11:25:21,213 - julearn - INFO - scipy: 1.17.1
+2026-03-04 11:25:21,213 - julearn - INFO - sklearn: 1.8.0
+2026-03-04 11:25:21,213 - julearn - INFO - pandas: 3.0.1
+2026-03-04 11:25:21,213 - julearn - INFO - julearn: 0.3.5.dev133
+2026-03-04 11:25:21,213 - julearn - INFO - ========================
 </pre></div>
 </div>
 <p>We are going to use a fairly simple pipeline, in which we z-score the
@@ -514,12 +513,12 @@ features and then apply a support vector classifier to classify species.</p>
 <span class="nb">print</span><span class="p">(</span><span class="n">pipeline_creator</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-02-10 14:38:20,139 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
-2026-02-10 14:38:20,139 - julearn - INFO - Step added
-2026-02-10 14:38:20,139 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
-2026-02-10 14:38:20,140 - julearn - INFO - Setting hyperparameter kernel = linear
-2026-02-10 14:38:20,140 - julearn - INFO - Tuning hyperparameter C = [1.e-02 1.e-01 1.e+00 1.e+01 1.e+02]
-2026-02-10 14:38:20,140 - julearn - INFO - Step added
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-03-04 11:25:21,389 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
+2026-03-04 11:25:21,389 - julearn - INFO - Step added
+2026-03-04 11:25:21,389 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={&#39;*&#39;}; pattern=.*&gt;
+2026-03-04 11:25:21,389 - julearn - INFO - Setting hyperparameter kernel = linear
+2026-03-04 11:25:21,389 - julearn - INFO - Tuning hyperparameter C = [1.e-02 1.e-01 1.e+00 1.e+01 1.e+02]
+2026-03-04 11:25:21,390 - julearn - INFO - Step added
 PipelineCreator:
   Step 0: zscore
     estimator:     StandardScaler()
@@ -552,41 +551,41 @@ example:</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-02-10 14:38:20,141 - julearn - INFO - Setting random seed to 200
-2026-02-10 14:38:20,141 - julearn - INFO - ==== Input Data ====
-2026-02-10 14:38:20,141 - julearn - INFO - Using dataframe as input
-2026-02-10 14:38:20,141 - julearn - INFO -      Features: [&#39;bill_length_mm&#39;, &#39;bill_depth_mm&#39;, &#39;flipper_length_mm&#39;, &#39;body_mass_g&#39;]
-2026-02-10 14:38:20,141 - julearn - INFO -      Target: species
-2026-02-10 14:38:20,142 - julearn - INFO -      Expanded features: [&#39;bill_length_mm&#39;, &#39;bill_depth_mm&#39;, &#39;flipper_length_mm&#39;, &#39;body_mass_g&#39;]
-2026-02-10 14:38:20,142 - julearn - INFO -      X_types:{}
-2026-02-10 14:38:20,142 - julearn - WARNING - The following columns are not defined in X_types: [&#39;bill_length_mm&#39;, &#39;bill_depth_mm&#39;, &#39;flipper_length_mm&#39;, &#39;body_mass_g&#39;]. They will be treated as continuous.
-/home/runner/work/julearn/julearn/julearn/prepare.py:581: RuntimeWarning: The following columns are not defined in X_types: [&#39;bill_length_mm&#39;, &#39;bill_depth_mm&#39;, &#39;flipper_length_mm&#39;, &#39;body_mass_g&#39;]. They will be treated as continuous.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-03-04 11:25:21,391 - julearn - INFO - Setting random seed to 200
+2026-03-04 11:25:21,391 - julearn - INFO - ==== Input Data ====
+2026-03-04 11:25:21,391 - julearn - INFO - Using dataframe as input
+2026-03-04 11:25:21,391 - julearn - INFO -      Features: [&#39;bill_length_mm&#39;, &#39;bill_depth_mm&#39;, &#39;flipper_length_mm&#39;, &#39;body_mass_g&#39;]
+2026-03-04 11:25:21,391 - julearn - INFO -      Target: species
+2026-03-04 11:25:21,392 - julearn - INFO -      Expanded features: [&#39;bill_length_mm&#39;, &#39;bill_depth_mm&#39;, &#39;flipper_length_mm&#39;, &#39;body_mass_g&#39;]
+2026-03-04 11:25:21,392 - julearn - INFO -      X_types:{}
+2026-03-04 11:25:21,392 - julearn - WARNING - The following columns are not defined in X_types: [&#39;bill_length_mm&#39;, &#39;bill_depth_mm&#39;, &#39;flipper_length_mm&#39;, &#39;body_mass_g&#39;]. They will be treated as continuous.
+/home/runner/work/julearn/julearn/julearn/prepare.py:592: RuntimeWarning: The following columns are not defined in X_types: [&#39;bill_length_mm&#39;, &#39;bill_depth_mm&#39;, &#39;flipper_length_mm&#39;, &#39;body_mass_g&#39;]. They will be treated as continuous.
   warn_with_log(
-2026-02-10 14:38:20,143 - julearn - INFO - ====================
-2026-02-10 14:38:20,143 - julearn - INFO -
-2026-02-10 14:38:20,144 - julearn - INFO - = Model Parameters =
-2026-02-10 14:38:20,144 - julearn - INFO - Tuning hyperparameters using grid
-2026-02-10 14:38:20,144 - julearn - INFO - Hyperparameters:
-2026-02-10 14:38:20,144 - julearn - INFO -      svm__C: [1.e-02 1.e-01 1.e+00 1.e+01 1.e+02]
-2026-02-10 14:38:20,144 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2026-02-10 14:38:20,144 - julearn - INFO - Search Parameters:
-2026-02-10 14:38:20,145 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
-2026-02-10 14:38:20,145 - julearn - INFO - ====================
-2026-02-10 14:38:20,145 - julearn - INFO -
-2026-02-10 14:38:20,145 - julearn - INFO - = Data Information =
-2026-02-10 14:38:20,145 - julearn - INFO -      Problem type: classification
-2026-02-10 14:38:20,145 - julearn - INFO -      Number of samples: 274
-2026-02-10 14:38:20,145 - julearn - INFO -      Number of features: 4
-2026-02-10 14:38:20,145 - julearn - INFO - ====================
-2026-02-10 14:38:20,145 - julearn - INFO -
-2026-02-10 14:38:20,145 - julearn - INFO -      Number of classes: 2
-2026-02-10 14:38:20,146 - julearn - INFO -      Target type: int64
-2026-02-10 14:38:20,146 - julearn - INFO -      Class distributions: species
+2026-03-04 11:25:21,393 - julearn - INFO - ====================
+2026-03-04 11:25:21,393 - julearn - INFO -
+2026-03-04 11:25:21,394 - julearn - INFO - = Model Parameters =
+2026-03-04 11:25:21,394 - julearn - INFO - Tuning hyperparameters using grid
+2026-03-04 11:25:21,394 - julearn - INFO - Hyperparameters:
+2026-03-04 11:25:21,394 - julearn - INFO -      svm__C: [1.e-02 1.e-01 1.e+00 1.e+01 1.e+02]
+2026-03-04 11:25:21,394 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2026-03-04 11:25:21,394 - julearn - INFO - Search Parameters:
+2026-03-04 11:25:21,395 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
+2026-03-04 11:25:21,395 - julearn - INFO - ====================
+2026-03-04 11:25:21,395 - julearn - INFO -
+2026-03-04 11:25:21,395 - julearn - INFO - = Data Information =
+2026-03-04 11:25:21,395 - julearn - INFO -      Problem type: classification
+2026-03-04 11:25:21,395 - julearn - INFO -      Number of samples: 274
+2026-03-04 11:25:21,395 - julearn - INFO -      Number of features: 4
+2026-03-04 11:25:21,395 - julearn - INFO - ====================
+2026-03-04 11:25:21,395 - julearn - INFO -
+2026-03-04 11:25:21,396 - julearn - INFO -      Number of classes: 2
+2026-03-04 11:25:21,396 - julearn - INFO -      Target type: int64
+2026-03-04 11:25:21,396 - julearn - INFO -      Class distributions: species
 0    151
 1    123
 Name: count, dtype: int64
-2026-02-10 14:38:20,146 - julearn - INFO - Using outer CV scheme RepeatedKFold(n_repeats=10, n_splits=5, random_state=200) (incl. final model)
-2026-02-10 14:38:20,147 - julearn - INFO - Binary classification problem detected.
+2026-03-04 11:25:21,396 - julearn - INFO - Using outer CV scheme RepeatedKFold(n_repeats=10, n_splits=5, random_state=200) (incl. final model)
+2026-03-04 11:25:21,397 - julearn - INFO - Binary classification problem detected.
 </pre></div>
 </div>
 <p>After this is done, we can now use the inspector to look at final model
@@ -651,10 +650,10 @@ parameters:</p>
                                       &#39;bill_length_mm&#39;: &#39;bill_length_mm__:type:__continuous&#39;,
                                       &#39;body_mass_g&#39;: &#39;body_mass_g__:type:__continuous&#39;,
                                       &#39;flipper_length_mm&#39;: &#39;flipper_length_mm__:type:__continuous&#39;},
- &#39;set_column_types__feature_names_in_&#39;: Index([&#39;bill_length_mm&#39;, &#39;bill_depth_mm&#39;, &#39;flipper_length_mm&#39;, &#39;body_mass_g&#39;], dtype=&#39;object&#39;),
+ &#39;set_column_types__feature_names_in_&#39;: Index([&#39;bill_length_mm&#39;, &#39;bill_depth_mm&#39;, &#39;flipper_length_mm&#39;, &#39;body_mass_g&#39;], dtype=&#39;str&#39;),
  &#39;set_column_types__row_select_col_type&#39;: None,
  &#39;set_column_types__row_select_vals&#39;: None,
- &#39;svm__C&#39;: 0.01,
+ &#39;svm__C&#39;: np.float64(0.01),
  &#39;svm__break_ties&#39;: False,
  &#39;svm__cache_size&#39;: 200,
  &#39;svm__class_weight&#39;: None,
@@ -845,7 +844,7 @@ parameters:</p>
        &#39;body_mass_g__:type:__continuous&#39;], dtype=object),
  &#39;zscore__mean_&#39;: array([  42.70291971,   16.83613139,  202.17883212, 4318.06569343]),
  &#39;zscore__n_features_in_&#39;: 4,
- &#39;zscore__n_samples_seen_&#39;: 274,
+ &#39;zscore__n_samples_seen_&#39;: np.float64(274.0),
  &#39;zscore__scale_&#39;: array([  5.18607683,   2.00973207,  15.02045287, 834.40628575]),
  &#39;zscore__var_&#39;: array([2.68953929e+01, 4.03902299e+00, 2.25614004e+02, 6.96233850e+05]),
  &#39;zscore__with_mean&#39;: True,
@@ -913,7 +912,7 @@ our search grid.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">c_values</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>{0.01}
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>{np.float64(0.01)}
 </pre></div>
 </div>
 <p>As you can see the inspector provides you with a set of powerful tools to
@@ -927,7 +926,7 @@ interpretability, and reliable decision-making. With <code class="docutils liter
 inspection capabilities, you can confidently navigate the complexities of
 machine learning models and harness their full potential in real-world
 applications.</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 10.369 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 11.490 seconds)</p>
 </section>
 
         </article>
@@ -979,7 +978,7 @@ applications.</p>
       
     </aside>
   </div>
-</div><script src="../_static/documentation_options.js?v=22cd8ff9"></script>
+</div><script src="../_static/documentation_options.js?v=1e0bc103"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

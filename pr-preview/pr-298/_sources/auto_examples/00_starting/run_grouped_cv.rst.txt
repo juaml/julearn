@@ -76,13 +76,13 @@ Set the logging level to info to see extra information
 
  .. code-block:: none
 
-    2026-02-10 14:37:44,506 - julearn - INFO - ===== Lib Versions =====
-    2026-02-10 14:37:44,506 - julearn - INFO - numpy: 1.26.4
-    2026-02-10 14:37:44,506 - julearn - INFO - scipy: 1.17.0
-    2026-02-10 14:37:44,506 - julearn - INFO - sklearn: 1.7.2
-    2026-02-10 14:37:44,507 - julearn - INFO - pandas: 2.3.3
-    2026-02-10 14:37:44,507 - julearn - INFO - julearn: 0.3.5.dev126
-    2026-02-10 14:37:44,507 - julearn - INFO - ========================
+    2026-03-04 11:24:42,874 - julearn - INFO - ===== Lib Versions =====
+    2026-03-04 11:24:42,874 - julearn - INFO - numpy: 2.4.2
+    2026-03-04 11:24:42,874 - julearn - INFO - scipy: 1.17.1
+    2026-03-04 11:24:42,874 - julearn - INFO - sklearn: 1.8.0
+    2026-03-04 11:24:42,874 - julearn - INFO - pandas: 3.0.1
+    2026-03-04 11:24:42,874 - julearn - INFO - julearn: 0.3.5.dev133
+    2026-03-04 11:24:42,874 - julearn - INFO - ========================
 
 
 
@@ -160,10 +160,17 @@ Let's check how many kinds of each we have.
 
  .. code-block:: none
 
-    ['stim' 'cue']
-    ['parietal' 'frontal']
-    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
-    ['s13' 's5' 's12' 's11' 's10' 's9' 's8' 's7' 's6' 's4' 's3' 's2' 's1' 's0']
+    <StringArray>
+    ['stim', 'cue']
+    Length: 2, dtype: str
+    <StringArray>
+    ['parietal', 'frontal']
+    Length: 2, dtype: str
+    [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(6), np.int64(7), np.int64(8), np.int64(9), np.int64(10), np.int64(11), np.int64(12), np.int64(13), np.int64(14), np.int64(15), np.int64(16), np.int64(17), np.int64(18)]
+    <StringArray>
+    ['s13',  's5', 's12', 's11', 's10',  's9',  's8',  's7',  's6',  's4',  's3',
+      's2',  's1',  's0']
+    Length: 14, dtype: str
 
 
 
@@ -293,38 +300,41 @@ Machine classifier.
 
  .. code-block:: none
 
-    2026-02-10 14:37:44,525 - julearn - INFO - ==== Input Data ====
-    2026-02-10 14:37:44,525 - julearn - INFO - Using dataframe as input
-    2026-02-10 14:37:44,526 - julearn - INFO -      Features: ['parietal', 'frontal']
-    2026-02-10 14:37:44,526 - julearn - INFO -      Target: event
-    2026-02-10 14:37:44,526 - julearn - INFO -      Expanded features: ['parietal', 'frontal']
-    2026-02-10 14:37:44,526 - julearn - INFO -      X_types:{}
-    2026-02-10 14:37:44,526 - julearn - WARNING - The following columns are not defined in X_types: ['parietal', 'frontal']. They will be treated as continuous.
-    /home/runner/work/julearn/julearn/julearn/prepare.py:581: RuntimeWarning: The following columns are not defined in X_types: ['parietal', 'frontal']. They will be treated as continuous.
+    2026-03-04 11:24:42,896 - julearn - INFO - ==== Input Data ====
+    2026-03-04 11:24:42,896 - julearn - INFO - Using dataframe as input
+    2026-03-04 11:24:42,896 - julearn - INFO -      Features: ['parietal', 'frontal']
+    2026-03-04 11:24:42,896 - julearn - INFO -      Target: event
+    2026-03-04 11:24:42,896 - julearn - INFO -      Expanded features: ['parietal', 'frontal']
+    2026-03-04 11:24:42,896 - julearn - INFO -      X_types:{}
+    2026-03-04 11:24:42,896 - julearn - WARNING - The following columns are not defined in X_types: ['parietal', 'frontal']. They will be treated as continuous.
+    /home/runner/work/julearn/julearn/julearn/prepare.py:592: RuntimeWarning: The following columns are not defined in X_types: ['parietal', 'frontal']. They will be treated as continuous.
       warn_with_log(
-    2026-02-10 14:37:44,527 - julearn - INFO - ====================
-    2026-02-10 14:37:44,527 - julearn - INFO - 
-    2026-02-10 14:37:44,527 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2026-02-10 14:37:44,527 - julearn - INFO - Step added
-    2026-02-10 14:37:44,527 - julearn - INFO - Adding step rf that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2026-02-10 14:37:44,528 - julearn - INFO - Step added
-    2026-02-10 14:37:44,528 - julearn - INFO - = Model Parameters =
-    2026-02-10 14:37:44,528 - julearn - INFO - ====================
-    2026-02-10 14:37:44,528 - julearn - INFO - 
-    2026-02-10 14:37:44,529 - julearn - INFO - = Data Information =
-    2026-02-10 14:37:44,529 - julearn - INFO -      Problem type: classification
-    2026-02-10 14:37:44,529 - julearn - INFO -      Number of samples: 532
-    2026-02-10 14:37:44,529 - julearn - INFO -      Number of features: 2
-    2026-02-10 14:37:44,529 - julearn - INFO - ====================
-    2026-02-10 14:37:44,529 - julearn - INFO - 
-    2026-02-10 14:37:44,529 - julearn - INFO -      Number of classes: 2
-    2026-02-10 14:37:44,529 - julearn - INFO -      Target type: object
-    2026-02-10 14:37:44,530 - julearn - INFO -      Class distributions: event
+    2026-03-04 11:24:42,897 - julearn - INFO - ====================
+    2026-03-04 11:24:42,897 - julearn - INFO - 
+    2026-03-04 11:24:42,898 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2026-03-04 11:24:42,898 - julearn - INFO - Step added
+    2026-03-04 11:24:42,898 - julearn - INFO - Adding step rf that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2026-03-04 11:24:42,898 - julearn - INFO - Step added
+    2026-03-04 11:24:42,899 - julearn - INFO - = Model Parameters =
+    2026-03-04 11:24:42,899 - julearn - INFO - ====================
+    2026-03-04 11:24:42,899 - julearn - INFO - 
+    2026-03-04 11:24:42,899 - julearn - INFO - = Data Information =
+    2026-03-04 11:24:42,899 - julearn - INFO -      Problem type: classification
+    2026-03-04 11:24:42,899 - julearn - INFO -      Number of samples: 532
+    2026-03-04 11:24:42,899 - julearn - INFO -      Number of features: 2
+    2026-03-04 11:24:42,899 - julearn - INFO - ====================
+    2026-03-04 11:24:42,899 - julearn - INFO - 
+    2026-03-04 11:24:42,900 - julearn - INFO -      Number of classes: 2
+    2026-03-04 11:24:42,900 - julearn - INFO -      Target type: str
+    2026-03-04 11:24:42,900 - julearn - INFO -      Class distributions: event
     cue     266
     stim    266
     Name: count, dtype: int64
-    2026-02-10 14:37:44,530 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-    2026-02-10 14:37:44,531 - julearn - INFO - Binary classification problem detected.
+    2026-03-04 11:24:42,901 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+    2026-03-04 11:24:42,901 - julearn - WARNING - The kind of values in y (str) is not suitable for a classification. Values should be numeric.
+    /home/runner/work/julearn/julearn/julearn/prepare.py:408: RuntimeWarning: The kind of values in y (str) is not suitable for a classification. Values should be numeric.
+      warn_with_log(
+    2026-03-04 11:24:42,901 - julearn - INFO - Binary classification problem detected.
     0.6841826838300122
 
 
@@ -360,37 +370,40 @@ Train classification model with stratification on data
 
  .. code-block:: none
 
-    2026-02-10 14:37:45,259 - julearn - INFO - ==== Input Data ====
-    2026-02-10 14:37:45,259 - julearn - INFO - Using dataframe as input
-    2026-02-10 14:37:45,259 - julearn - INFO -      Features: ['parietal', 'frontal']
-    2026-02-10 14:37:45,259 - julearn - INFO -      Target: event
-    2026-02-10 14:37:45,259 - julearn - INFO -      Expanded features: ['parietal', 'frontal']
-    2026-02-10 14:37:45,259 - julearn - INFO -      X_types:{}
-    2026-02-10 14:37:45,260 - julearn - WARNING - The following columns are not defined in X_types: ['parietal', 'frontal']. They will be treated as continuous.
-    /home/runner/work/julearn/julearn/julearn/prepare.py:581: RuntimeWarning: The following columns are not defined in X_types: ['parietal', 'frontal']. They will be treated as continuous.
+    2026-03-04 11:24:43,786 - julearn - INFO - ==== Input Data ====
+    2026-03-04 11:24:43,787 - julearn - INFO - Using dataframe as input
+    2026-03-04 11:24:43,787 - julearn - INFO -      Features: ['parietal', 'frontal']
+    2026-03-04 11:24:43,787 - julearn - INFO -      Target: event
+    2026-03-04 11:24:43,787 - julearn - INFO -      Expanded features: ['parietal', 'frontal']
+    2026-03-04 11:24:43,787 - julearn - INFO -      X_types:{}
+    2026-03-04 11:24:43,787 - julearn - WARNING - The following columns are not defined in X_types: ['parietal', 'frontal']. They will be treated as continuous.
+    /home/runner/work/julearn/julearn/julearn/prepare.py:592: RuntimeWarning: The following columns are not defined in X_types: ['parietal', 'frontal']. They will be treated as continuous.
       warn_with_log(
-    2026-02-10 14:37:45,261 - julearn - INFO - Using subject as groups
-    2026-02-10 14:37:45,261 - julearn - INFO - ====================
-    2026-02-10 14:37:45,261 - julearn - INFO - 
-    2026-02-10 14:37:45,261 - julearn - INFO - Adding step rf that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2026-02-10 14:37:45,261 - julearn - INFO - Step added
-    2026-02-10 14:37:45,262 - julearn - INFO - = Model Parameters =
-    2026-02-10 14:37:45,262 - julearn - INFO - ====================
-    2026-02-10 14:37:45,262 - julearn - INFO - 
-    2026-02-10 14:37:45,262 - julearn - INFO - = Data Information =
-    2026-02-10 14:37:45,262 - julearn - INFO -      Problem type: classification
-    2026-02-10 14:37:45,263 - julearn - INFO -      Number of samples: 532
-    2026-02-10 14:37:45,263 - julearn - INFO -      Number of features: 2
-    2026-02-10 14:37:45,263 - julearn - INFO - ====================
-    2026-02-10 14:37:45,263 - julearn - INFO - 
-    2026-02-10 14:37:45,263 - julearn - INFO -      Number of classes: 2
-    2026-02-10 14:37:45,263 - julearn - INFO -      Target type: object
-    2026-02-10 14:37:45,264 - julearn - INFO -      Class distributions: event
+    2026-03-04 11:24:43,788 - julearn - INFO - Using subject as groups
+    2026-03-04 11:24:43,788 - julearn - INFO - ====================
+    2026-03-04 11:24:43,788 - julearn - INFO - 
+    2026-03-04 11:24:43,788 - julearn - INFO - Adding step rf that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2026-03-04 11:24:43,789 - julearn - INFO - Step added
+    2026-03-04 11:24:43,789 - julearn - INFO - = Model Parameters =
+    2026-03-04 11:24:43,789 - julearn - INFO - ====================
+    2026-03-04 11:24:43,789 - julearn - INFO - 
+    2026-03-04 11:24:43,789 - julearn - INFO - = Data Information =
+    2026-03-04 11:24:43,789 - julearn - INFO -      Problem type: classification
+    2026-03-04 11:24:43,789 - julearn - INFO -      Number of samples: 532
+    2026-03-04 11:24:43,790 - julearn - INFO -      Number of features: 2
+    2026-03-04 11:24:43,790 - julearn - INFO - ====================
+    2026-03-04 11:24:43,790 - julearn - INFO - 
+    2026-03-04 11:24:43,790 - julearn - INFO -      Number of classes: 2
+    2026-03-04 11:24:43,790 - julearn - INFO -      Target type: str
+    2026-03-04 11:24:43,791 - julearn - INFO -      Class distributions: event
     cue     266
     stim    266
     Name: count, dtype: int64
-    2026-02-10 14:37:45,265 - julearn - INFO - Using outer CV scheme StratifiedGroupKFold(n_splits=2, random_state=None, shuffle=False) (incl. final model)
-    2026-02-10 14:37:45,265 - julearn - INFO - Binary classification problem detected.
+    2026-03-04 11:24:43,791 - julearn - INFO - Using outer CV scheme StratifiedGroupKFold(n_splits=2, random_state=None, shuffle=False) (incl. final model)
+    2026-03-04 11:24:43,791 - julearn - WARNING - The kind of values in y (str) is not suitable for a classification. Values should be numeric.
+    /home/runner/work/julearn/julearn/julearn/prepare.py:408: RuntimeWarning: The kind of values in y (str) is not suitable for a classification. Values should be numeric.
+      warn_with_log(
+    2026-03-04 11:24:43,792 - julearn - INFO - Binary classification problem detected.
     0.6710526315789473
 
 
@@ -425,37 +438,40 @@ Train classification model without stratification on data
 
  .. code-block:: none
 
-    2026-02-10 14:37:45,742 - julearn - INFO - ==== Input Data ====
-    2026-02-10 14:37:45,742 - julearn - INFO - Using dataframe as input
-    2026-02-10 14:37:45,742 - julearn - INFO -      Features: ['parietal', 'frontal']
-    2026-02-10 14:37:45,742 - julearn - INFO -      Target: event
-    2026-02-10 14:37:45,743 - julearn - INFO -      Expanded features: ['parietal', 'frontal']
-    2026-02-10 14:37:45,743 - julearn - INFO -      X_types:{}
-    2026-02-10 14:37:45,743 - julearn - WARNING - The following columns are not defined in X_types: ['parietal', 'frontal']. They will be treated as continuous.
-    /home/runner/work/julearn/julearn/julearn/prepare.py:581: RuntimeWarning: The following columns are not defined in X_types: ['parietal', 'frontal']. They will be treated as continuous.
+    2026-03-04 11:24:44,267 - julearn - INFO - ==== Input Data ====
+    2026-03-04 11:24:44,267 - julearn - INFO - Using dataframe as input
+    2026-03-04 11:24:44,267 - julearn - INFO -      Features: ['parietal', 'frontal']
+    2026-03-04 11:24:44,268 - julearn - INFO -      Target: event
+    2026-03-04 11:24:44,268 - julearn - INFO -      Expanded features: ['parietal', 'frontal']
+    2026-03-04 11:24:44,268 - julearn - INFO -      X_types:{}
+    2026-03-04 11:24:44,268 - julearn - WARNING - The following columns are not defined in X_types: ['parietal', 'frontal']. They will be treated as continuous.
+    /home/runner/work/julearn/julearn/julearn/prepare.py:592: RuntimeWarning: The following columns are not defined in X_types: ['parietal', 'frontal']. They will be treated as continuous.
       warn_with_log(
-    2026-02-10 14:37:45,744 - julearn - INFO - Using subject as groups
-    2026-02-10 14:37:45,744 - julearn - INFO - ====================
-    2026-02-10 14:37:45,744 - julearn - INFO - 
-    2026-02-10 14:37:45,744 - julearn - INFO - Adding step rf that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2026-02-10 14:37:45,744 - julearn - INFO - Step added
-    2026-02-10 14:37:45,745 - julearn - INFO - = Model Parameters =
-    2026-02-10 14:37:45,745 - julearn - INFO - ====================
-    2026-02-10 14:37:45,745 - julearn - INFO - 
-    2026-02-10 14:37:45,745 - julearn - INFO - = Data Information =
-    2026-02-10 14:37:45,745 - julearn - INFO -      Problem type: classification
-    2026-02-10 14:37:45,745 - julearn - INFO -      Number of samples: 532
-    2026-02-10 14:37:45,745 - julearn - INFO -      Number of features: 2
-    2026-02-10 14:37:45,745 - julearn - INFO - ====================
-    2026-02-10 14:37:45,745 - julearn - INFO - 
-    2026-02-10 14:37:45,746 - julearn - INFO -      Number of classes: 2
-    2026-02-10 14:37:45,746 - julearn - INFO -      Target type: object
-    2026-02-10 14:37:45,746 - julearn - INFO -      Class distributions: event
+    2026-03-04 11:24:44,269 - julearn - INFO - Using subject as groups
+    2026-03-04 11:24:44,269 - julearn - INFO - ====================
+    2026-03-04 11:24:44,269 - julearn - INFO - 
+    2026-03-04 11:24:44,269 - julearn - INFO - Adding step rf that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2026-03-04 11:24:44,269 - julearn - INFO - Step added
+    2026-03-04 11:24:44,270 - julearn - INFO - = Model Parameters =
+    2026-03-04 11:24:44,270 - julearn - INFO - ====================
+    2026-03-04 11:24:44,270 - julearn - INFO - 
+    2026-03-04 11:24:44,270 - julearn - INFO - = Data Information =
+    2026-03-04 11:24:44,270 - julearn - INFO -      Problem type: classification
+    2026-03-04 11:24:44,270 - julearn - INFO -      Number of samples: 532
+    2026-03-04 11:24:44,270 - julearn - INFO -      Number of features: 2
+    2026-03-04 11:24:44,270 - julearn - INFO - ====================
+    2026-03-04 11:24:44,271 - julearn - INFO - 
+    2026-03-04 11:24:44,271 - julearn - INFO -      Number of classes: 2
+    2026-03-04 11:24:44,271 - julearn - INFO -      Target type: str
+    2026-03-04 11:24:44,272 - julearn - INFO -      Class distributions: event
     cue     266
     stim    266
     Name: count, dtype: int64
-    2026-02-10 14:37:45,747 - julearn - INFO - Using outer CV scheme GroupKFold(n_splits=2, random_state=None, shuffle=False) (incl. final model)
-    2026-02-10 14:37:45,747 - julearn - INFO - Binary classification problem detected.
+    2026-03-04 11:24:44,272 - julearn - INFO - Using outer CV scheme GroupKFold(n_splits=2, random_state=None, shuffle=False) (incl. final model)
+    2026-03-04 11:24:44,272 - julearn - WARNING - The kind of values in y (str) is not suitable for a classification. Values should be numeric.
+    /home/runner/work/julearn/julearn/julearn/prepare.py:408: RuntimeWarning: The kind of values in y (str) is not suitable for a classification. Values should be numeric.
+      warn_with_log(
+    2026-03-04 11:24:44,272 - julearn - INFO - Binary classification problem detected.
     0.6672932330827068
 
 
@@ -464,7 +480,7 @@ Train classification model without stratification on data
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 1.680 seconds)
+   **Total running time of the script:** (0 minutes 1.873 seconds)
 
 
 .. _sphx_glr_download_auto_examples_00_starting_run_grouped_cv.py:
