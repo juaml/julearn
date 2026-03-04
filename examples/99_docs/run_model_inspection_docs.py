@@ -57,6 +57,7 @@ penguins_df = penguins_df.query("species != 'Chinstrap'").dropna()
 penguins_df["species"] = penguins_df["species"].replace(
     {"Adelie": 0, "Gentoo": 1}
 )
+penguins_df["species"] = penguins_df["species"].astype(int)
 features = [x for x in penguins_df.columns if x != "species"]
 
 ##############################################################################

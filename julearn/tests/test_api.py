@@ -549,7 +549,6 @@ def test_tune_hyperparam_gridsearch_groups(df_iris: pd.DataFrame) -> None:
             sk_y,  # type: ignore
             cv=cv_outer,
             scoring=[scoring],
-            groups=sk_groups,
             params={"groups": sk_groups},
         )
 
