@@ -603,7 +603,6 @@ def run_cross_validation(
         df_y,
         cv=cv_outer,
         scoring=scoring,
-        # groups=df_groups,
         return_estimator=cv_return_estimator,
         n_jobs=n_jobs,
         return_train_score=return_train_score,
