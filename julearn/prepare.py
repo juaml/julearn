@@ -395,6 +395,15 @@ def check_consistency(
     # Check problem type and the target.
     n_classes = np.unique(y.values).shape[0]  # type: ignore
     if problem_type == "classification":
+        is_numeric = isinstance(y.values.dtype, np.dtype) and np.issubdtype(
+            y.values.dtype, np.number
+        )  # type: ignore
+        if not is_numeric:
+            warn_with_log(
+                f"The kind of values in y ({y.values.dtype}) is not "
+                "suitable for a classification. Values should be numeric."
+            )
+
         # If not exactly two classes:
         if n_classes == 1:
             raise_error(
@@ -417,7 +426,9 @@ def check_consistency(
             logger.info("Binary classification problem detected.")
     elif problem_type == "regression":
         # Regression
-        is_numeric = np.issubdtype(y.values.dtype, np.number)  # type: ignore
+        is_numeric = isinstance(y.values.dtype, np.dtype) and np.issubdtype(
+            y.values.dtype, np.number
+        )  # type: ignore
         if not is_numeric:
             warn_with_log(
                 f"The kind of values in y ({y.values.dtype}) is not "
