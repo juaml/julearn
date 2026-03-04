@@ -9,7 +9,9 @@ from dataclasses import dataclass, field
 from typing import Any, Optional, Union
 
 import numpy as np
+import sklearn
 from scipy import stats
+from sklearn.ensemble import AdaBoostClassifier, AdaBoostRegressor
 from sklearn.model_selection import RandomizedSearchCV, check_cv
 from sklearn.pipeline import Pipeline
 
@@ -416,6 +418,16 @@ class PipelineCreator:
         params_to_tune = {
             f"{name}__{param}": val for param, val in params_to_tune.items()
         }
+
+        # Disable metadata routing for AdaBoost-based estimators until
+        # scikit-learn implements them.
+
+        if isinstance(step, (AdaBoostClassifier, AdaBoostRegressor)):
+            warn_with_log(
+                "Disabling metadata routing for AdaBoost-based "
+                "estimators until scikit-learn implements them."
+            )
+            sklearn.set_config(enable_metadata_routing=False)
 
         self._steps.append(
             Step(

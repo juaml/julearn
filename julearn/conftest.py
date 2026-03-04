@@ -19,6 +19,14 @@ _filter_keys = {
 }
 
 
+@pytest.fixture(autouse=True)
+def enable_metadata_routing() -> None:
+    """Enable metadata routing in sklearn for all tests."""
+    import sklearn
+
+    sklearn.set_config(enable_metadata_routing=True)
+
+
 def pytest_configure(config: pytest.Config) -> None:
     """Add a new marker to pytest.
 

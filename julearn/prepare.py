@@ -365,7 +365,7 @@ def check_consistency(
     cv: CVLike,
     groups: Optional[pd.Series],
     problem_type: str,
-) -> None:
+) -> bool:
     """Check the consistency of the parameters/input.
 
     Parameters
@@ -378,6 +378,12 @@ def check_consistency(
         The grouping variable.
     problem_type : str
         The problem type. Can be "classification" or "regression".
+
+    Returns
+    -------
+    groups_needed : bool
+        True if the groups variable is needed for the CV scheme,
+        False otherwise.
 
     Raises
     ------
@@ -446,21 +452,30 @@ def check_consistency(
             "The problem type must be either 'classification' or 'regression'."
         )
     # Check groups and CV scheme
+    groups_needed = False
+    valid_group_cv_instances = (
+        GroupKFold,
+        GroupShuffleSplit,
+        LeaveOneGroupOut,
+        LeavePGroupsOut,
+        StratifiedGroupKFold,
+        ContinuousStratifiedGroupKFold,
+        RepeatedContinuousStratifiedGroupKFold,
+    )
     if groups is not None:
-        valid_instances = (
-            GroupKFold,
-            GroupShuffleSplit,
-            LeaveOneGroupOut,
-            LeavePGroupsOut,
-            StratifiedGroupKFold,
-            ContinuousStratifiedGroupKFold,
-            RepeatedContinuousStratifiedGroupKFold,
-        )
-        if not isinstance(cv, valid_instances):
+        if not isinstance(cv, valid_group_cv_instances):
             warn_with_log(
                 "The parameter groups was specified but the CV strategy "
                 "will not consider them."
             )
+        else:
+            groups_needed = True
+    elif isinstance(cv, valid_group_cv_instances):
+        raise_error(
+            "The CV strategy requires groups but the parameter groups was "
+            "not specified."
+        )
+    return groups_needed
 
 
 def _check_x_types(

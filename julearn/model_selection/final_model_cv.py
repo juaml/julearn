@@ -4,16 +4,13 @@
 # License: AGPL
 
 from collections.abc import Generator
-from typing import TYPE_CHECKING, Optional
+from typing import Optional
 
 import numpy as np
+from sklearn.model_selection import BaseCrossValidator
 
 
-if TYPE_CHECKING:
-    from sklearn.model_selection import BaseCrossValidator
-
-
-class _JulearnFinalModelCV:
+class _JulearnFinalModelCV(BaseCrossValidator):
     """Final model cross-validation iterator.
 
     Wraps any CV iterator to provide an extra iteration with the full dataset.
@@ -29,6 +26,20 @@ class _JulearnFinalModelCV:
         self.cv = cv
         if hasattr(cv, "n_repeats"):
             self.n_repeats = cv.n_repeats
+
+    def get_metadata_routing(self) -> dict:
+        """Get metadata routing information from the underlying CV.
+
+        Returns
+        -------
+        dict
+            The metadata routing information.
+
+        """
+        if hasattr(self.cv, "get_metadata_routing"):
+            return self.cv.get_metadata_routing()
+        else:
+            return {}
 
     def split(
         self,

@@ -19,6 +19,7 @@ References
 
 import numpy as np
 from seaborn import load_dataset
+import sklearn
 
 from julearn import run_cross_validation
 from julearn.utils import configure_logging, logger
@@ -28,6 +29,10 @@ from julearn.pipeline import PipelineCreator
 ###############################################################################
 # Set the logging level to info to see extra information.
 configure_logging(level="INFO")
+
+###############################################################################
+# Disable metadata routing to avoid errors due to BayesSearchCV being used.
+sklearn.set_config(enable_metadata_routing=False)
 
 ###############################################################################
 # Set the random seed to always have the same example.
