@@ -709,7 +709,6 @@ def test_check_consistency() -> None:
     with pytest.warns(RuntimeWarning, match="should be numeric"):
         check_consistency(y=y, cv=cv, groups=groups, problem_type=problem_type)
 
-
     # Test with wrong dtype in series
     y = pd.Series(["A"] * 10)
     problem_type = "regression"
