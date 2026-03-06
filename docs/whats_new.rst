@@ -10,6 +10,75 @@ What's new
 
 .. towncrier release notes start
 
+Julearn 0.3.5 (2026-03-06)
+--------------------------
+
+Bugfixes
+^^^^^^^^
+
+- Fix parenthesis escaping in column names by `Synchon Mandal`_ (:gh:`226`)
+- Fix :class:`.StratifiedBootstrap` behaviour to not leak test and train
+  indices during splitting by `Synchon Mandal`_ (:gh:`254`)
+- Fix a bug in which inspecting predictions from
+  :class:`.ContinuousStratifiedKFold` would provide overlapping fold results by
+  `Fede Raimondo`_ (:gh:`285`)
+- Fix a bug in which the :class:`.PipelineInspector` will fail for pipelines
+  with hyperparameter tuning by `Fede Raimondo`_ (:gh:`286`)
+- Fix a bug in which inspecting predictions will result in NaNs if y had a
+  custom index by `Fede Raimondo`_ (:gh:`288`)
+- Change minimum scikit-learn version to 1.5.0 by `Fede Raimondo`_. (:gh:`291`)
+- Fix a bug in which ``OptunaSearchCV`` would fail when expecting the ``group``
+  parameter in the ``fit`` method by `Fede Raimondo`_. (:gh:`297`)
+- Enable and use metadata routing for hyperparameter tuning estimators by `Fede
+  Raimondo`_ (:gh:`298`)
+
+
+API Changes
+^^^^^^^^^^^
+
+- Remove ``test_size`` and ``train_size`` parameters and change default value
+  of ``n_splits`` from 5 to 200 for :class:`.StratifiedBootstrap` by `Synchon
+  Mandal`_ (:gh:`254`)
+
+
+Improved Documentation
+^^^^^^^^^^^^^^^^^^^^^^
+
+- Include documentation on how to use the `joblib`_ and `joblib-htcondor`_
+  library to parallelize computation by `Fede Raimondo`_ (:gh:`278`)
+- Update citation in README by `Synchon Mandal`_ (:gh:`279`)
+- Update joblib usage docs by `Synchon Mandal`_ (:gh:`282`)
+- Add JuRSE Code Pick shield in README by `Synchon Mandal`_ (:gh:`283`)
+
+
+Enhancements
+^^^^^^^^^^^^
+
+- Avoid parallel calls in :class:`.FilterColumns` if not specified by the user
+  in the :mod:`.config` module by `Fede Raimondo`_ (:gh:`277`)
+
+
+Features
+^^^^^^^^
+
+- Add a new global config option ``"enable_auto_escape_parenthesis"`` to escape
+  parenthesis in column names by `Synchon Mandal`_ (:gh:`226`)
+
+
+Misc
+^^^^
+
+- Regular repository maintenance by updating ``.pre-commit-config.yaml``,
+  replacing ``black`` with ``ruff-format``, updating tool configs and GitHub
+  Actions workflows and dependency version constraints, dropping support for
+  Python 3.8 and adding support for Python 3.12 and 3.13 by `Synchon Mandal`_
+  (:gh:`284`)
+- Update julearn.viz module to support param version 2.3.0 by `Fede Raimondo`_
+  (:gh:`297`)
+- Update versions of dependencies in pyproject.toml to support pandas 3.X.X,
+  numpy 2.X.X and scikit-learn 1.8.X by `Fede Raimondo`_ (:gh:`299`)
+
+
 Julearn 0.3.4 (2024-10-17)
 --------------------------
 

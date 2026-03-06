@@ -706,7 +706,7 @@ class OptunaSearchCV(BaseSearchCV, BaseEstimator):
 
         return self.study_.set_user_attr
 
-    
+
     def transform(self) -> Callable[..., TwoDimArrayLikeType]:
         """Call ``transform`` on the best estimator.
 
