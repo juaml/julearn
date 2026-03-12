@@ -49,6 +49,9 @@ from sklearn.svm import SVC, SVR
 from ..utils import logger, raise_error, warn_with_log
 from ..utils.typing import ModelLike
 from .dynamic import DynamicSelection
+from .heuristic_c import LinearSVCHeuristicC, LogisticRegressionHeuristicC
+from .lassolambdamax import LassoLambdaMax
+from .logisticl1lambdamax import LogisticL1LambdaMax
 
 
 _available_models: dict[str, dict[str, Any]] = {
@@ -133,6 +136,18 @@ _available_models: dict[str, dict[str, Any]] = {
     "dummy": {
         "regression": DummyRegressor,
         "classification": DummyClassifier,
+    },
+    "linearsvc_hc": {
+        "classification": LinearSVCHeuristicC,
+    },
+    "logistic_hc": {
+        "classification": LogisticRegressionHeuristicC,
+    },
+    "lassolambdamax": {
+        "regression": LassoLambdaMax,
+    },
+    "logisticl1lambdamax": {
+        "classification": LogisticL1LambdaMax,
     },
 }
 
