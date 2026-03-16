@@ -118,6 +118,7 @@ class LassoLambdaMax(BaseEstimator, RegressorMixin):
             npy = y
         base_lasso = Lasso(
             max_iter=self.max_iter,
+            fit_intercept=self.fit_intercept,
             tol=self.tol,
             positive=self.positive,
             random_state=self.random_state,
