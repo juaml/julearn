@@ -68,28 +68,32 @@ def _prepare_skopt_hyperparameters_distributions(
                 logger.info(
                     __(
                         "Hyperparameter {k} is categorical with 2 "
-                        "options: [{v[0]} and {v[1]}]",
+                        "options: [{v1} and {v2}]",
                         k=k,
-                        v=v,
+                        v1=v[0],
+                        v2=v[1],
                     )
                 )
                 out[k] = sksp.Categorical(v[:-1])
             elif isinstance(v[0], int) and isinstance(v[1], int):
                 logger.info(
                     __(
-                        "Hyperparameter {k} is {prior} integer "
-                        "[{v[0]}, {v[1]}]",
+                        "Hyperparameter {k} is {prior} integer [{v1}, {v2}]",
                         k=k,
-                        v=v,
+                        prior=prior,
+                        v1=v[0],
+                        v2=v[1],
                     )
                 )
                 out[k] = sksp.Integer(v[0], v[1], prior=prior)
             elif isinstance(v[0], float) and isinstance(v[1], float):
                 logger.info(
                     __(
-                        "Hyperparameter {k} is {prior} float [{v[0]}, {v[1]}]",
+                        "Hyperparameter {k} is {prior} float [{v1}, {v2}]",
                         k=k,
-                        v=v,
+                        prior=prior,
+                        v1=v[0],
+                        v2=v[1],
                     )
                 )
                 out[k] = sksp.Real(v[0], v[1], prior=prior)

@@ -93,19 +93,20 @@ def _prepare_optuna_hyperparameters_distributions(
                     logger.info(
                         __(
                             "Hyperparameter {k} is uniform integer "
-                            "[{v[0]}, {v[1]}]",
+                            "[{v1}, {v2}]",
                             k=k,
-                            v=v,
+                            v1=v[0],
+                            v2=v[1],
                         )
                     )
                     out[k] = optd.IntDistribution(v[0], v[1], log=False)
                 else:
                     logger.info(
                         __(
-                            "Hyperparameter {k} is uniform float "
-                            "[{v[0]}, {v[1]}]",
+                            "Hyperparameter {k} is uniform float [{v1}, {v2}]",
                             k=k,
-                            v=v,
+                            v1=v[0],
+                            v2=v[1],
                         )
                     )
                     out[k] = optd.FloatDistribution(v[0], v[1], log=False)
@@ -114,9 +115,10 @@ def _prepare_optuna_hyperparameters_distributions(
                     logger.info(
                         __(
                             "Hyperparameter {k} is log-uniform int "
-                            "[{v[0]}, {v[1]}]",
+                            "[{v1}, {v2}]",
                             k=k,
-                            v=v,
+                            v1=v[0],
+                            v2=v[1],
                         )
                     )
                     out[k] = optd.IntDistribution(v[0], v[1], log=True)
@@ -124,9 +126,10 @@ def _prepare_optuna_hyperparameters_distributions(
                     logger.info(
                         __(
                             "Hyperparameter {k} is log-uniform float "
-                            "[{v[0]}, {v[1]}]",
+                            "[{v1}, {v2}]",
                             k=k,
-                            v=v,
+                            v1=v[0],
+                            v2=v[1],
                         )
                     )
                     out[k] = optd.FloatDistribution(v[0], v[1], log=True)
@@ -134,9 +137,10 @@ def _prepare_optuna_hyperparameters_distributions(
                 logger.info(
                     __(
                         "Hyperparameter {k} is categorical with 2 "
-                        "options: [{v[0]} and {v[1]}]",
+                        "options: [{v1} and {v2}]",
                         k=k,
-                        v=v,
+                        v1=v[0],
+                        v2=v[1],
                     )
                 )
                 out[k] = optd.CategoricalDistribution((v[0], v[1]))
@@ -148,7 +152,7 @@ def _prepare_optuna_hyperparameters_distributions(
             and v[-1] == "categorical"
         ):
             logger.info(
-                __("Hyperparameter {k} is categorical [{v[:-1]}]", k=k, v=v)
+                __("Hyperparameter {k} is categorical [{v}]", k=k, v=v[:-1])
             )
             out[k] = optd.CategoricalDistribution(v[:-1])
         else:
