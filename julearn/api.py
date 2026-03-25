@@ -24,6 +24,7 @@ from .pipeline.merger import merge_pipelines
 from .prepare import check_consistency, prepare_input_data
 from .scoring import check_scoring
 from .utils import _compute_cvmdsum, logger, raise_error
+from .utils.logging import DelayedFmtMessage as __
 from .utils.typing import CVLike
 
 
@@ -185,7 +186,7 @@ def _validate_api_params(  # noqa: C901
     if seed is not None:
         # If a seed is passed, use it, otherwise do not do anything. User
         # might have set the seed outside of the library
-        logger.info(f"Setting random seed to {seed}")
+        logger.info(__("Setting random seed to {seed}", seed=seed))
         np.random.seed(seed)
 
     # Interpret the input data and prepare it to be used with the library
@@ -341,18 +342,32 @@ def _validate_api_params(  # noqa: C901
 
     # Log some information
     logger.info("= Data Information =")
-    logger.info(f"\tProblem type: {problem_type}")
-    logger.info(f"\tNumber of samples: {len(df_X)}")
-    logger.info(f"\tNumber of features: {len(df_X.columns)}")
+    logger.info(
+        __("\tProblem type: {problem_type}", problem_type=problem_type)
+    )
+    logger.info(__("\tNumber of samples: {n_samples}", n_samples=len(df_X)))
+    logger.info(
+        __("\tNumber of features: {n_features}", n_features=len(df_X.columns))
+    )
     logger.info("====================")
     logger.info("")
 
     if problem_type == "classification":
-        logger.info(f"\tNumber of classes: {len(np.unique(df_y))}")
-        logger.info(f"\tTarget type: {df_y.dtype}")
-        logger.info(f"\tClass distributions: {df_y.value_counts()}")
+        logger.info(
+            __(
+                "\tNumber of classes: {n_classes}",
+                n_classes=len(np.unique(df_y)),
+            )
+        )
+        logger.info(__("\tTarget type: {target_type}", target_type=df_y.dtype))
+        logger.info(
+            __(
+                "\tClass distributions: {class_distributions}",
+                class_distributions=df_y.value_counts(),
+            )
+        )
     elif problem_type == "regression":
-        logger.info(f"\tTarget type: {df_y.dtype}")
+        logger.info(__("\tTarget type: {target_type}", target_type=df_y.dtype))
 
     out = (
         df_X,

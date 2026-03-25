@@ -10,6 +10,7 @@ from .utils import logger, raise_error
 
 _global_config = {}
 _global_config["MAX_X_WARNS"] = 5000
+_global_config["max_x_logs"] = 100
 _global_config["disable_x_check"] = False
 _global_config["disable_xtypes_check"] = False
 _global_config["disable_x_verbose"] = False
