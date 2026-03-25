@@ -96,7 +96,7 @@ def _safe_log(versions: dict, name: str) -> None:
 
     """
     if name in versions:
-        logger.info(f"{name}: {versions[name]}")
+        logger.info(DelayedFmtMessage("{name}: {versions[name]}", name=name))
 
 
 def log_versions() -> None:

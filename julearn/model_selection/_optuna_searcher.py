@@ -6,6 +6,7 @@
 from typing import Any
 
 from ..utils import logger
+from ..utils.logging import DelayedFmtMessage as __
 from .available_searchers import _recreate_reset_copy, register_searcher
 
 
@@ -90,32 +91,53 @@ def _prepare_optuna_hyperparameters_distributions(
             if v[2] == "uniform":
                 if isinstance(v[0], int) and isinstance(v[1], int):
                     logger.info(
-                        f"Hyperparameter {k} is uniform integer "
-                        f"[{v[0]}, {v[1]}]"
+                        __(
+                            "Hyperparameter {k} is uniform integer "
+                            "[{v[0]}, {v[1]}]",
+                            k=k,
+                            v=v,
+                        )
                     )
                     out[k] = optd.IntDistribution(v[0], v[1], log=False)
                 else:
                     logger.info(
-                        f"Hyperparameter {k} is uniform float [{v[0]}, {v[1]}]"
+                        __(
+                            "Hyperparameter {k} is uniform float "
+                            "[{v[0]}, {v[1]}]",
+                            k=k,
+                            v=v,
+                        )
                     )
                     out[k] = optd.FloatDistribution(v[0], v[1], log=False)
             elif v[2] == "log-uniform":
                 if isinstance(v[0], int) and isinstance(v[1], int):
                     logger.info(
-                        f"Hyperparameter {k} is log-uniform int "
-                        f"[{v[0]}, {v[1]}]"
+                        __(
+                            "Hyperparameter {k} is log-uniform int "
+                            "[{v[0]}, {v[1]}]",
+                            k=k,
+                            v=v,
+                        )
                     )
                     out[k] = optd.IntDistribution(v[0], v[1], log=True)
                 else:
                     logger.info(
-                        f"Hyperparameter {k} is log-uniform float "
-                        f"[{v[0]}, {v[1]}]"
+                        __(
+                            "Hyperparameter {k} is log-uniform float "
+                            "[{v[0]}, {v[1]}]",
+                            k=k,
+                            v=v,
+                        )
                     )
                     out[k] = optd.FloatDistribution(v[0], v[1], log=True)
             elif v[2] == "categorical":
                 logger.info(
-                    f"Hyperparameter {k} is categorical with 2 "
-                    f"options: [{v[0]} and {v[1]}]"
+                    __(
+                        "Hyperparameter {k} is categorical with 2 "
+                        "options: [{v[0]} and {v[1]}]",
+                        k=k,
+                        v=v,
+                    )
                 )
                 out[k] = optd.CategoricalDistribution((v[0], v[1]))
             else:
@@ -125,9 +147,11 @@ def _prepare_optuna_hyperparameters_distributions(
             and isinstance(v[-1], str)
             and v[-1] == "categorical"
         ):
-            logger.info(f"Hyperparameter {k} is categorical [{v[:-1]}]")
+            logger.info(
+                __("Hyperparameter {k} is categorical [{v[:-1]}]", k=k, v=v)
+            )
             out[k] = optd.CategoricalDistribution(v[:-1])
         else:
-            logger.info(f"Hyperparameter {k} as is {v}")
+            logger.info(__("Hyperparameter {k} as is {v}", k=k, v=v))
             out[k] = v
     return out

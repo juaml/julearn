@@ -578,7 +578,7 @@ def run_cross_validation(
         classifier=problem_type == "classification",
         include_final_model=include_final_model,
     )
-    logger.info(f"Using outer CV scheme {cv_outer}")
+    logger.info(__("Using outer CV scheme {cv_outer}", cv_outer=cv_outer))
 
     groups_needed = check_consistency(df_y, cv, groups, problem_type)  # type: ignore
 

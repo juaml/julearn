@@ -6,6 +6,7 @@
 from typing import Any
 
 from .utils import logger, raise_error
+from .utils.logging import DelayedFmtMessage as __
 
 
 _global_config = {}
@@ -32,7 +33,9 @@ def set_config(key: str, value: Any) -> None:
     """
     if key not in _global_config:
         raise_error(f"Global config {key} does not exist")
-    logger.info(f"Setting global config {key} to {value}")
+    logger.info(
+        __("Setting global config {key} to {value}", key=key, value=value)
+    )
     _global_config[key] = value
 
 

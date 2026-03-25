@@ -20,6 +20,7 @@ from ..transformers.target.ju_transformed_target_model import (
     TransformedTargetWarning,
 )
 from ..utils import logger, raise_error, warn_with_log
+from ..utils.logging import DelayedFmtMessage as __
 from ..utils.typing import EstimatorLike, ScorerLike
 from .metrics import r2_corr, r_corr
 
@@ -116,7 +117,12 @@ def register_scorer(
                 f"Therefore, {scorer_name} will be overwritten. "
                 "To remove this warning set overwrite=True "
             )
-            logger.info(f"registering scorer named {scorer_name}")
+            logger.info(
+                __(
+                    "registering scorer named {scorer_name}",
+                    scorer_name=scorer_name,
+                )
+            )
         elif overwrite is False:
             raise_error(
                 f"scorer named {scorer_name} already exists and "
@@ -124,7 +130,9 @@ def register_scorer(
                 "existing scorers. Set overwrite=True in case you want to "
                 "overwrite existing scorers"
             )
-    logger.info(f"registering scorer named {scorer_name}")
+    logger.info(
+        __("registering scorer named {scorer_name}", scorer_name=scorer_name)
+    )
     _extra_available_scorers[scorer_name] = scorer
 
 
@@ -155,7 +163,11 @@ def check_scoring(
     if scoring is None:
         return scoring
     logger.debug(
-        f"Checking scoring{' (wrapping)' if wrap_score else ''}: [{scoring}]"
+        __(
+            "Checking scoring{score}: [{scoring}]",
+            score=" (wrapping)" if wrap_score else "",
+            scoring=scoring,
+        )
     )
     if isinstance(scoring, str):
         scoring = _extend_scorer(get_scorer(scoring), wrap_score)

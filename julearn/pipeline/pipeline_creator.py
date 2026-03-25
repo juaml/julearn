@@ -479,7 +479,7 @@ class PipelineCreator:
                 row_select_vals=row_select_vals,
             )
         )
-        logger.info(__("Step added"))
+        logger.info("Step added")
         return self
 
     @property
@@ -511,7 +511,7 @@ class PipelineCreator:
             The copy of the PipelineCreator
 
         """
-        logger.debug(__("Copying creator"))
+        logger.debug("Copying creator")
         other = PipelineCreator(
             problem_type=self.problem_type, apply_to=self.apply_to
         )
@@ -645,7 +645,7 @@ class PipelineCreator:
             The pipeline created from the PipelineCreator
 
         """
-        logger.debug(__("Creating pipeline"))
+        logger.debug("Creating pipeline")
         if not self.has_model() and not self.no_model_ok:
             raise_error("Cannot create a pipeline without a model")
         pipeline_steps: list[tuple[str, Any]] = [
@@ -655,7 +655,7 @@ class PipelineCreator:
         X_types = self._check_X_types(X_types)
         if self.no_model_ok and not self.has_model():
             model_step = None
-            logger.debug(__("Creating a pipeline with no model added"))
+            logger.debug("Creating a pipeline with no model added")
         else:
             model_step = self._steps[-1]
 
@@ -670,7 +670,7 @@ class PipelineCreator:
                 target_trans_step = _step
             elif _step.name == "generate_target":
                 target_trans_step = _step
-                logger.debug(__("Ensuring target generator pipeline"))
+                logger.debug("Ensuring target generator pipeline")
                 is_transformer = True
                 if isinstance(target_trans_step.estimator, PipelineCreator):
                     if target_trans_step.estimator.has_model():
@@ -687,7 +687,7 @@ class PipelineCreator:
                     X_types=X_types,
                     search_params=search_params,
                 )
-                logger.debug(__("Target generator pipeline created"))
+                logger.debug("Target generator pipeline created")
                 # logger.info("Dropping columns used to generate target")
                 # transformer_steps.append(
                 #     Step(
@@ -820,7 +820,7 @@ class PipelineCreator:
         out = _prepare_hyperparameter_tuning(
             params_to_tune, search_params, pipeline
         )
-        logger.debug(__("Pipeline created"))
+        logger.debug("Pipeline created")
         return out
 
     @staticmethod
@@ -1236,7 +1236,9 @@ def _prepare_hyperparameter_tuning(
         cv_inner = search_params.get("cv", None)
 
         if search in list_searchers():
-            logger.info(f"Tuning hyperparameters using {search}")
+            logger.info(
+                __("Tuning hyperparameters using {search}", search=search)
+            )
             search = get_searcher(search)
         else:
             if isinstance(search, str):
