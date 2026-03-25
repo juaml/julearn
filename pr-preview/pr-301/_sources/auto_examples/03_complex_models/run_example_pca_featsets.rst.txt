@@ -75,13 +75,578 @@ Set the logging level to info to see extra information.
 
  .. code-block:: none
 
-    2026-03-25 11:13:23,791 - julearn - INFO - ===== Lib Versions =====
-    2026-03-25 11:13:23,792 - julearn - INFO - numpy: 2.4.3
-    2026-03-25 11:13:23,792 - julearn - INFO - scipy: 1.17.1
-    2026-03-25 11:13:23,792 - julearn - INFO - sklearn: 1.8.0
-    2026-03-25 11:13:23,792 - julearn - INFO - pandas: 3.0.1
-    2026-03-25 11:13:23,792 - julearn - INFO - julearn: 0.3.6.dev3
-    2026-03-25 11:13:23,792 - julearn - INFO - ========================
+    2026-03-25 13:12:22,518 - julearn - INFO - ===== Lib Versions =====
+    --- Logging error ---
+    Traceback (most recent call last):
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/logging/__init__.py", line 1151, in emit
+        msg = self.format(record)
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/logging/__init__.py", line 999, in format
+        return fmt.format(record)
+               ~~~~~~~~~~^^^^^^^^
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/logging/__init__.py", line 712, in format
+        record.message = record.getMessage()
+                         ~~~~~~~~~~~~~~~~~^^
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/logging/__init__.py", line 398, in getMessage
+        msg = str(self.msg)
+      File "/home/runner/work/julearn/julearn/julearn/utils/logging.py", line 282, in __str__
+        return self.fmt.format(*self.args, **self.kwargs)
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    KeyError: 'versions'
+    Call stack:
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/bin/sphinx-build", line 6, in <module>
+        sys.exit(main())
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/cmd/build.py", line 384, in main
+        return build_main(argv)
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/cmd/build.py", line 332, in build_main
+        app = Sphinx(args.sourcedir, args.confdir, args.outputdir,
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/application.py", line 292, in __init__
+        self._init_builder()
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/application.py", line 366, in _init_builder
+        self.events.emit('builder-inited')
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/events.py", line 100, in emit
+        results.append(listener.handler(self.app, *args))
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_gallery.py", line 757, in generate_gallery_rst
+        ) = generate_dir_rst(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 606, in generate_dir_rst
+        results = parallel(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 607, in <genexpr>
+        p_fun(fname, target_dir, src_dir, gallery_conf) for fname in iterator
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 1374, in generate_file_rst
+        output_blocks, time_elapsed = execute_script(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 1192, in execute_script
+        execute_code_block(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 1048, in execute_code_block
+        is_last_expr, mem_max = _exec_and_get_memory(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 869, in _exec_and_get_memory
+        mem_last, _ = call_memory(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 1725, in _sg_call_memory_noop
+        return 0.0, func()
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 794, in __call__
+        exec(self.code, self.fake_main.__dict__)
+      File "/home/runner/work/julearn/julearn/examples/03_complex_models/run_example_pca_featsets.py", line 33, in <module>
+        configure_logging(level="INFO")
+      File "/home/runner/work/julearn/julearn/julearn/utils/logging.py", line 188, in configure_logging
+        log_versions()  # log versions of installed packages
+      File "/home/runner/work/julearn/julearn/julearn/utils/logging.py", line 106, in log_versions
+        _safe_log(versions, "numpy")
+      File "/home/runner/work/julearn/julearn/julearn/utils/logging.py", line 99, in _safe_log
+        logger.info(DelayedFmtMessage("{name}: {versions[name]}", name=name))
+    Message: <julearn.utils.logging.DelayedFmtMessage object at 0x7fd700980b90>
+    Arguments: ()
+    --- Logging error ---
+    Traceback (most recent call last):
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/logging/__init__.py", line 1151, in emit
+        msg = self.format(record)
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/logging/__init__.py", line 999, in format
+        return fmt.format(record)
+               ~~~~~~~~~~^^^^^^^^
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/logging/__init__.py", line 712, in format
+        record.message = record.getMessage()
+                         ~~~~~~~~~~~~~~~~~^^
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/logging/__init__.py", line 398, in getMessage
+        msg = str(self.msg)
+      File "/home/runner/work/julearn/julearn/julearn/utils/logging.py", line 282, in __str__
+        return self.fmt.format(*self.args, **self.kwargs)
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    KeyError: 'versions'
+    Call stack:
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/bin/sphinx-build", line 6, in <module>
+        sys.exit(main())
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/cmd/build.py", line 384, in main
+        return build_main(argv)
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/cmd/build.py", line 332, in build_main
+        app = Sphinx(args.sourcedir, args.confdir, args.outputdir,
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/application.py", line 292, in __init__
+        self._init_builder()
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/application.py", line 366, in _init_builder
+        self.events.emit('builder-inited')
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/events.py", line 100, in emit
+        results.append(listener.handler(self.app, *args))
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_gallery.py", line 757, in generate_gallery_rst
+        ) = generate_dir_rst(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 606, in generate_dir_rst
+        results = parallel(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 607, in <genexpr>
+        p_fun(fname, target_dir, src_dir, gallery_conf) for fname in iterator
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 1374, in generate_file_rst
+        output_blocks, time_elapsed = execute_script(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 1192, in execute_script
+        execute_code_block(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 1048, in execute_code_block
+        is_last_expr, mem_max = _exec_and_get_memory(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 869, in _exec_and_get_memory
+        mem_last, _ = call_memory(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 1725, in _sg_call_memory_noop
+        return 0.0, func()
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 794, in __call__
+        exec(self.code, self.fake_main.__dict__)
+      File "/home/runner/work/julearn/julearn/examples/03_complex_models/run_example_pca_featsets.py", line 33, in <module>
+        configure_logging(level="INFO")
+      File "/home/runner/work/julearn/julearn/julearn/utils/logging.py", line 188, in configure_logging
+        log_versions()  # log versions of installed packages
+      File "/home/runner/work/julearn/julearn/julearn/utils/logging.py", line 106, in log_versions
+        _safe_log(versions, "numpy")
+      File "/home/runner/work/julearn/julearn/julearn/utils/logging.py", line 99, in _safe_log
+        logger.info(DelayedFmtMessage("{name}: {versions[name]}", name=name))
+    Message: <julearn.utils.logging.DelayedFmtMessage object at 0x7fd700980b90>
+    Arguments: ()
+    --- Logging error ---
+    Traceback (most recent call last):
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/logging/__init__.py", line 1151, in emit
+        msg = self.format(record)
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/logging/__init__.py", line 999, in format
+        return fmt.format(record)
+               ~~~~~~~~~~^^^^^^^^
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/logging/__init__.py", line 712, in format
+        record.message = record.getMessage()
+                         ~~~~~~~~~~~~~~~~~^^
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/logging/__init__.py", line 398, in getMessage
+        msg = str(self.msg)
+      File "/home/runner/work/julearn/julearn/julearn/utils/logging.py", line 282, in __str__
+        return self.fmt.format(*self.args, **self.kwargs)
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    KeyError: 'versions'
+    Call stack:
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/bin/sphinx-build", line 6, in <module>
+        sys.exit(main())
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/cmd/build.py", line 384, in main
+        return build_main(argv)
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/cmd/build.py", line 332, in build_main
+        app = Sphinx(args.sourcedir, args.confdir, args.outputdir,
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/application.py", line 292, in __init__
+        self._init_builder()
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/application.py", line 366, in _init_builder
+        self.events.emit('builder-inited')
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/events.py", line 100, in emit
+        results.append(listener.handler(self.app, *args))
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_gallery.py", line 757, in generate_gallery_rst
+        ) = generate_dir_rst(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 606, in generate_dir_rst
+        results = parallel(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 607, in <genexpr>
+        p_fun(fname, target_dir, src_dir, gallery_conf) for fname in iterator
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 1374, in generate_file_rst
+        output_blocks, time_elapsed = execute_script(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 1192, in execute_script
+        execute_code_block(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 1048, in execute_code_block
+        is_last_expr, mem_max = _exec_and_get_memory(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 869, in _exec_and_get_memory
+        mem_last, _ = call_memory(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 1725, in _sg_call_memory_noop
+        return 0.0, func()
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 794, in __call__
+        exec(self.code, self.fake_main.__dict__)
+      File "/home/runner/work/julearn/julearn/examples/03_complex_models/run_example_pca_featsets.py", line 33, in <module>
+        configure_logging(level="INFO")
+      File "/home/runner/work/julearn/julearn/julearn/utils/logging.py", line 188, in configure_logging
+        log_versions()  # log versions of installed packages
+      File "/home/runner/work/julearn/julearn/julearn/utils/logging.py", line 107, in log_versions
+        _safe_log(versions, "scipy")
+      File "/home/runner/work/julearn/julearn/julearn/utils/logging.py", line 99, in _safe_log
+        logger.info(DelayedFmtMessage("{name}: {versions[name]}", name=name))
+    Message: <julearn.utils.logging.DelayedFmtMessage object at 0x7fd700980b90>
+    Arguments: ()
+    --- Logging error ---
+    Traceback (most recent call last):
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/logging/__init__.py", line 1151, in emit
+        msg = self.format(record)
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/logging/__init__.py", line 999, in format
+        return fmt.format(record)
+               ~~~~~~~~~~^^^^^^^^
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/logging/__init__.py", line 712, in format
+        record.message = record.getMessage()
+                         ~~~~~~~~~~~~~~~~~^^
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/logging/__init__.py", line 398, in getMessage
+        msg = str(self.msg)
+      File "/home/runner/work/julearn/julearn/julearn/utils/logging.py", line 282, in __str__
+        return self.fmt.format(*self.args, **self.kwargs)
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    KeyError: 'versions'
+    Call stack:
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/bin/sphinx-build", line 6, in <module>
+        sys.exit(main())
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/cmd/build.py", line 384, in main
+        return build_main(argv)
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/cmd/build.py", line 332, in build_main
+        app = Sphinx(args.sourcedir, args.confdir, args.outputdir,
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/application.py", line 292, in __init__
+        self._init_builder()
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/application.py", line 366, in _init_builder
+        self.events.emit('builder-inited')
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/events.py", line 100, in emit
+        results.append(listener.handler(self.app, *args))
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_gallery.py", line 757, in generate_gallery_rst
+        ) = generate_dir_rst(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 606, in generate_dir_rst
+        results = parallel(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 607, in <genexpr>
+        p_fun(fname, target_dir, src_dir, gallery_conf) for fname in iterator
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 1374, in generate_file_rst
+        output_blocks, time_elapsed = execute_script(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 1192, in execute_script
+        execute_code_block(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 1048, in execute_code_block
+        is_last_expr, mem_max = _exec_and_get_memory(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 869, in _exec_and_get_memory
+        mem_last, _ = call_memory(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 1725, in _sg_call_memory_noop
+        return 0.0, func()
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 794, in __call__
+        exec(self.code, self.fake_main.__dict__)
+      File "/home/runner/work/julearn/julearn/examples/03_complex_models/run_example_pca_featsets.py", line 33, in <module>
+        configure_logging(level="INFO")
+      File "/home/runner/work/julearn/julearn/julearn/utils/logging.py", line 188, in configure_logging
+        log_versions()  # log versions of installed packages
+      File "/home/runner/work/julearn/julearn/julearn/utils/logging.py", line 107, in log_versions
+        _safe_log(versions, "scipy")
+      File "/home/runner/work/julearn/julearn/julearn/utils/logging.py", line 99, in _safe_log
+        logger.info(DelayedFmtMessage("{name}: {versions[name]}", name=name))
+    Message: <julearn.utils.logging.DelayedFmtMessage object at 0x7fd700980b90>
+    Arguments: ()
+    --- Logging error ---
+    Traceback (most recent call last):
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/logging/__init__.py", line 1151, in emit
+        msg = self.format(record)
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/logging/__init__.py", line 999, in format
+        return fmt.format(record)
+               ~~~~~~~~~~^^^^^^^^
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/logging/__init__.py", line 712, in format
+        record.message = record.getMessage()
+                         ~~~~~~~~~~~~~~~~~^^
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/logging/__init__.py", line 398, in getMessage
+        msg = str(self.msg)
+      File "/home/runner/work/julearn/julearn/julearn/utils/logging.py", line 282, in __str__
+        return self.fmt.format(*self.args, **self.kwargs)
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    KeyError: 'versions'
+    Call stack:
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/bin/sphinx-build", line 6, in <module>
+        sys.exit(main())
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/cmd/build.py", line 384, in main
+        return build_main(argv)
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/cmd/build.py", line 332, in build_main
+        app = Sphinx(args.sourcedir, args.confdir, args.outputdir,
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/application.py", line 292, in __init__
+        self._init_builder()
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/application.py", line 366, in _init_builder
+        self.events.emit('builder-inited')
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/events.py", line 100, in emit
+        results.append(listener.handler(self.app, *args))
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_gallery.py", line 757, in generate_gallery_rst
+        ) = generate_dir_rst(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 606, in generate_dir_rst
+        results = parallel(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 607, in <genexpr>
+        p_fun(fname, target_dir, src_dir, gallery_conf) for fname in iterator
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 1374, in generate_file_rst
+        output_blocks, time_elapsed = execute_script(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 1192, in execute_script
+        execute_code_block(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 1048, in execute_code_block
+        is_last_expr, mem_max = _exec_and_get_memory(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 869, in _exec_and_get_memory
+        mem_last, _ = call_memory(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 1725, in _sg_call_memory_noop
+        return 0.0, func()
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 794, in __call__
+        exec(self.code, self.fake_main.__dict__)
+      File "/home/runner/work/julearn/julearn/examples/03_complex_models/run_example_pca_featsets.py", line 33, in <module>
+        configure_logging(level="INFO")
+      File "/home/runner/work/julearn/julearn/julearn/utils/logging.py", line 188, in configure_logging
+        log_versions()  # log versions of installed packages
+      File "/home/runner/work/julearn/julearn/julearn/utils/logging.py", line 108, in log_versions
+        _safe_log(versions, "sklearn")
+      File "/home/runner/work/julearn/julearn/julearn/utils/logging.py", line 99, in _safe_log
+        logger.info(DelayedFmtMessage("{name}: {versions[name]}", name=name))
+    Message: <julearn.utils.logging.DelayedFmtMessage object at 0x7fd700980b90>
+    Arguments: ()
+    --- Logging error ---
+    Traceback (most recent call last):
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/logging/__init__.py", line 1151, in emit
+        msg = self.format(record)
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/logging/__init__.py", line 999, in format
+        return fmt.format(record)
+               ~~~~~~~~~~^^^^^^^^
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/logging/__init__.py", line 712, in format
+        record.message = record.getMessage()
+                         ~~~~~~~~~~~~~~~~~^^
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/logging/__init__.py", line 398, in getMessage
+        msg = str(self.msg)
+      File "/home/runner/work/julearn/julearn/julearn/utils/logging.py", line 282, in __str__
+        return self.fmt.format(*self.args, **self.kwargs)
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    KeyError: 'versions'
+    Call stack:
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/bin/sphinx-build", line 6, in <module>
+        sys.exit(main())
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/cmd/build.py", line 384, in main
+        return build_main(argv)
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/cmd/build.py", line 332, in build_main
+        app = Sphinx(args.sourcedir, args.confdir, args.outputdir,
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/application.py", line 292, in __init__
+        self._init_builder()
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/application.py", line 366, in _init_builder
+        self.events.emit('builder-inited')
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/events.py", line 100, in emit
+        results.append(listener.handler(self.app, *args))
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_gallery.py", line 757, in generate_gallery_rst
+        ) = generate_dir_rst(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 606, in generate_dir_rst
+        results = parallel(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 607, in <genexpr>
+        p_fun(fname, target_dir, src_dir, gallery_conf) for fname in iterator
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 1374, in generate_file_rst
+        output_blocks, time_elapsed = execute_script(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 1192, in execute_script
+        execute_code_block(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 1048, in execute_code_block
+        is_last_expr, mem_max = _exec_and_get_memory(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 869, in _exec_and_get_memory
+        mem_last, _ = call_memory(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 1725, in _sg_call_memory_noop
+        return 0.0, func()
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 794, in __call__
+        exec(self.code, self.fake_main.__dict__)
+      File "/home/runner/work/julearn/julearn/examples/03_complex_models/run_example_pca_featsets.py", line 33, in <module>
+        configure_logging(level="INFO")
+      File "/home/runner/work/julearn/julearn/julearn/utils/logging.py", line 188, in configure_logging
+        log_versions()  # log versions of installed packages
+      File "/home/runner/work/julearn/julearn/julearn/utils/logging.py", line 108, in log_versions
+        _safe_log(versions, "sklearn")
+      File "/home/runner/work/julearn/julearn/julearn/utils/logging.py", line 99, in _safe_log
+        logger.info(DelayedFmtMessage("{name}: {versions[name]}", name=name))
+    Message: <julearn.utils.logging.DelayedFmtMessage object at 0x7fd700980b90>
+    Arguments: ()
+    --- Logging error ---
+    Traceback (most recent call last):
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/logging/__init__.py", line 1151, in emit
+        msg = self.format(record)
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/logging/__init__.py", line 999, in format
+        return fmt.format(record)
+               ~~~~~~~~~~^^^^^^^^
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/logging/__init__.py", line 712, in format
+        record.message = record.getMessage()
+                         ~~~~~~~~~~~~~~~~~^^
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/logging/__init__.py", line 398, in getMessage
+        msg = str(self.msg)
+      File "/home/runner/work/julearn/julearn/julearn/utils/logging.py", line 282, in __str__
+        return self.fmt.format(*self.args, **self.kwargs)
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    KeyError: 'versions'
+    Call stack:
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/bin/sphinx-build", line 6, in <module>
+        sys.exit(main())
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/cmd/build.py", line 384, in main
+        return build_main(argv)
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/cmd/build.py", line 332, in build_main
+        app = Sphinx(args.sourcedir, args.confdir, args.outputdir,
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/application.py", line 292, in __init__
+        self._init_builder()
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/application.py", line 366, in _init_builder
+        self.events.emit('builder-inited')
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/events.py", line 100, in emit
+        results.append(listener.handler(self.app, *args))
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_gallery.py", line 757, in generate_gallery_rst
+        ) = generate_dir_rst(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 606, in generate_dir_rst
+        results = parallel(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 607, in <genexpr>
+        p_fun(fname, target_dir, src_dir, gallery_conf) for fname in iterator
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 1374, in generate_file_rst
+        output_blocks, time_elapsed = execute_script(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 1192, in execute_script
+        execute_code_block(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 1048, in execute_code_block
+        is_last_expr, mem_max = _exec_and_get_memory(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 869, in _exec_and_get_memory
+        mem_last, _ = call_memory(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 1725, in _sg_call_memory_noop
+        return 0.0, func()
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 794, in __call__
+        exec(self.code, self.fake_main.__dict__)
+      File "/home/runner/work/julearn/julearn/examples/03_complex_models/run_example_pca_featsets.py", line 33, in <module>
+        configure_logging(level="INFO")
+      File "/home/runner/work/julearn/julearn/julearn/utils/logging.py", line 188, in configure_logging
+        log_versions()  # log versions of installed packages
+      File "/home/runner/work/julearn/julearn/julearn/utils/logging.py", line 109, in log_versions
+        _safe_log(versions, "pandas")
+      File "/home/runner/work/julearn/julearn/julearn/utils/logging.py", line 99, in _safe_log
+        logger.info(DelayedFmtMessage("{name}: {versions[name]}", name=name))
+    Message: <julearn.utils.logging.DelayedFmtMessage object at 0x7fd700980b90>
+    Arguments: ()
+    --- Logging error ---
+    Traceback (most recent call last):
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/logging/__init__.py", line 1151, in emit
+        msg = self.format(record)
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/logging/__init__.py", line 999, in format
+        return fmt.format(record)
+               ~~~~~~~~~~^^^^^^^^
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/logging/__init__.py", line 712, in format
+        record.message = record.getMessage()
+                         ~~~~~~~~~~~~~~~~~^^
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/logging/__init__.py", line 398, in getMessage
+        msg = str(self.msg)
+      File "/home/runner/work/julearn/julearn/julearn/utils/logging.py", line 282, in __str__
+        return self.fmt.format(*self.args, **self.kwargs)
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    KeyError: 'versions'
+    Call stack:
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/bin/sphinx-build", line 6, in <module>
+        sys.exit(main())
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/cmd/build.py", line 384, in main
+        return build_main(argv)
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/cmd/build.py", line 332, in build_main
+        app = Sphinx(args.sourcedir, args.confdir, args.outputdir,
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/application.py", line 292, in __init__
+        self._init_builder()
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/application.py", line 366, in _init_builder
+        self.events.emit('builder-inited')
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/events.py", line 100, in emit
+        results.append(listener.handler(self.app, *args))
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_gallery.py", line 757, in generate_gallery_rst
+        ) = generate_dir_rst(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 606, in generate_dir_rst
+        results = parallel(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 607, in <genexpr>
+        p_fun(fname, target_dir, src_dir, gallery_conf) for fname in iterator
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 1374, in generate_file_rst
+        output_blocks, time_elapsed = execute_script(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 1192, in execute_script
+        execute_code_block(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 1048, in execute_code_block
+        is_last_expr, mem_max = _exec_and_get_memory(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 869, in _exec_and_get_memory
+        mem_last, _ = call_memory(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 1725, in _sg_call_memory_noop
+        return 0.0, func()
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 794, in __call__
+        exec(self.code, self.fake_main.__dict__)
+      File "/home/runner/work/julearn/julearn/examples/03_complex_models/run_example_pca_featsets.py", line 33, in <module>
+        configure_logging(level="INFO")
+      File "/home/runner/work/julearn/julearn/julearn/utils/logging.py", line 188, in configure_logging
+        log_versions()  # log versions of installed packages
+      File "/home/runner/work/julearn/julearn/julearn/utils/logging.py", line 109, in log_versions
+        _safe_log(versions, "pandas")
+      File "/home/runner/work/julearn/julearn/julearn/utils/logging.py", line 99, in _safe_log
+        logger.info(DelayedFmtMessage("{name}: {versions[name]}", name=name))
+    Message: <julearn.utils.logging.DelayedFmtMessage object at 0x7fd700980b90>
+    Arguments: ()
+    --- Logging error ---
+    Traceback (most recent call last):
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/logging/__init__.py", line 1151, in emit
+        msg = self.format(record)
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/logging/__init__.py", line 999, in format
+        return fmt.format(record)
+               ~~~~~~~~~~^^^^^^^^
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/logging/__init__.py", line 712, in format
+        record.message = record.getMessage()
+                         ~~~~~~~~~~~~~~~~~^^
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/logging/__init__.py", line 398, in getMessage
+        msg = str(self.msg)
+      File "/home/runner/work/julearn/julearn/julearn/utils/logging.py", line 282, in __str__
+        return self.fmt.format(*self.args, **self.kwargs)
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    KeyError: 'versions'
+    Call stack:
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/bin/sphinx-build", line 6, in <module>
+        sys.exit(main())
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/cmd/build.py", line 384, in main
+        return build_main(argv)
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/cmd/build.py", line 332, in build_main
+        app = Sphinx(args.sourcedir, args.confdir, args.outputdir,
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/application.py", line 292, in __init__
+        self._init_builder()
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/application.py", line 366, in _init_builder
+        self.events.emit('builder-inited')
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/events.py", line 100, in emit
+        results.append(listener.handler(self.app, *args))
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_gallery.py", line 757, in generate_gallery_rst
+        ) = generate_dir_rst(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 606, in generate_dir_rst
+        results = parallel(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 607, in <genexpr>
+        p_fun(fname, target_dir, src_dir, gallery_conf) for fname in iterator
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 1374, in generate_file_rst
+        output_blocks, time_elapsed = execute_script(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 1192, in execute_script
+        execute_code_block(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 1048, in execute_code_block
+        is_last_expr, mem_max = _exec_and_get_memory(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 869, in _exec_and_get_memory
+        mem_last, _ = call_memory(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 1725, in _sg_call_memory_noop
+        return 0.0, func()
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 794, in __call__
+        exec(self.code, self.fake_main.__dict__)
+      File "/home/runner/work/julearn/julearn/examples/03_complex_models/run_example_pca_featsets.py", line 33, in <module>
+        configure_logging(level="INFO")
+      File "/home/runner/work/julearn/julearn/julearn/utils/logging.py", line 188, in configure_logging
+        log_versions()  # log versions of installed packages
+      File "/home/runner/work/julearn/julearn/julearn/utils/logging.py", line 110, in log_versions
+        _safe_log(versions, "julearn")
+      File "/home/runner/work/julearn/julearn/julearn/utils/logging.py", line 99, in _safe_log
+        logger.info(DelayedFmtMessage("{name}: {versions[name]}", name=name))
+    Message: <julearn.utils.logging.DelayedFmtMessage object at 0x7fd700980b90>
+    Arguments: ()
+    --- Logging error ---
+    Traceback (most recent call last):
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/logging/__init__.py", line 1151, in emit
+        msg = self.format(record)
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/logging/__init__.py", line 999, in format
+        return fmt.format(record)
+               ~~~~~~~~~~^^^^^^^^
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/logging/__init__.py", line 712, in format
+        record.message = record.getMessage()
+                         ~~~~~~~~~~~~~~~~~^^
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/logging/__init__.py", line 398, in getMessage
+        msg = str(self.msg)
+      File "/home/runner/work/julearn/julearn/julearn/utils/logging.py", line 282, in __str__
+        return self.fmt.format(*self.args, **self.kwargs)
+               ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    KeyError: 'versions'
+    Call stack:
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/bin/sphinx-build", line 6, in <module>
+        sys.exit(main())
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/cmd/build.py", line 384, in main
+        return build_main(argv)
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/cmd/build.py", line 332, in build_main
+        app = Sphinx(args.sourcedir, args.confdir, args.outputdir,
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/application.py", line 292, in __init__
+        self._init_builder()
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/application.py", line 366, in _init_builder
+        self.events.emit('builder-inited')
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx/events.py", line 100, in emit
+        results.append(listener.handler(self.app, *args))
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_gallery.py", line 757, in generate_gallery_rst
+        ) = generate_dir_rst(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 606, in generate_dir_rst
+        results = parallel(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 607, in <genexpr>
+        p_fun(fname, target_dir, src_dir, gallery_conf) for fname in iterator
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 1374, in generate_file_rst
+        output_blocks, time_elapsed = execute_script(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 1192, in execute_script
+        execute_code_block(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 1048, in execute_code_block
+        is_last_expr, mem_max = _exec_and_get_memory(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 869, in _exec_and_get_memory
+        mem_last, _ = call_memory(
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 1725, in _sg_call_memory_noop
+        return 0.0, func()
+      File "/opt/hostedtoolcache/Python/3.14.3/x64/lib/python3.14/site-packages/sphinx_gallery/gen_rst.py", line 794, in __call__
+        exec(self.code, self.fake_main.__dict__)
+      File "/home/runner/work/julearn/julearn/examples/03_complex_models/run_example_pca_featsets.py", line 33, in <module>
+        configure_logging(level="INFO")
+      File "/home/runner/work/julearn/julearn/julearn/utils/logging.py", line 188, in configure_logging
+        log_versions()  # log versions of installed packages
+      File "/home/runner/work/julearn/julearn/julearn/utils/logging.py", line 110, in log_versions
+        _safe_log(versions, "julearn")
+      File "/home/runner/work/julearn/julearn/julearn/utils/logging.py", line 99, in _safe_log
+        logger.info(DelayedFmtMessage("{name}: {versions[name]}", name=name))
+    Message: <julearn.utils.logging.DelayedFmtMessage object at 0x7fd700980b90>
+    Arguments: ()
+    2026-03-25 13:12:22,534 - julearn - INFO - ========================
 
 
 
@@ -216,16 +781,16 @@ know what to do with the categorical features.
 
  .. code-block:: none
 
-    2026-03-25 11:13:23,807 - julearn - INFO - Adding step pca_feats1 that applies to ColumnTypes<types={'pca1'}; pattern=(?:__:type:__pca1)>
-    2026-03-25 11:13:23,807 - julearn - INFO - Setting hyperparameter n_components = 1
-    2026-03-25 11:13:23,807 - julearn - INFO - Step added
-    2026-03-25 11:13:23,807 - julearn - INFO - Adding step pca_feats2 that applies to ColumnTypes<types={'pca2'}; pattern=(?:__:type:__pca2)>
-    2026-03-25 11:13:23,808 - julearn - INFO - Setting hyperparameter n_components = 1
-    2026-03-25 11:13:23,808 - julearn - INFO - Step added
-    2026-03-25 11:13:23,808 - julearn - INFO - Adding step ridge that applies to ColumnTypes<types={'categorical', 'continuous'}; pattern=(?:__:type:__categorical|__:type:__continuous)>
-    2026-03-25 11:13:23,808 - julearn - INFO - Step added
+    2026-03-25 13:12:22,549 - julearn - INFO - Adding step pca_feats1 that applies to ColumnTypes<types={'pca1'}; pattern=(?:__:type:__pca1)>
+    2026-03-25 13:12:22,549 - julearn - INFO - Setting hyperparameter n_components = 1
+    2026-03-25 13:12:22,550 - julearn - INFO - Step added
+    2026-03-25 13:12:22,550 - julearn - INFO - Adding step pca_feats2 that applies to ColumnTypes<types={'pca2'}; pattern=(?:__:type:__pca2)>
+    2026-03-25 13:12:22,550 - julearn - INFO - Setting hyperparameter n_components = 1
+    2026-03-25 13:12:22,550 - julearn - INFO - Step added
+    2026-03-25 13:12:22,550 - julearn - INFO - Adding step ridge that applies to ColumnTypes<types={'categorical', 'continuous'}; pattern=(?:__:type:__categorical|__:type:__continuous)>
+    2026-03-25 13:12:22,550 - julearn - INFO - Step added
 
-    <julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fefb550e2d0>
+    <julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fd6ff1234d0>
 
 
 
@@ -273,25 +838,25 @@ for scoring.
 
  .. code-block:: none
 
-    2026-03-25 11:13:23,809 - julearn - INFO - ==== Input Data ====
-    2026-03-25 11:13:23,810 - julearn - INFO - Using dataframe as input
-    2026-03-25 11:13:23,810 - julearn - INFO -      Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2026-03-25 11:13:23,810 - julearn - INFO -      Target: target
-    2026-03-25 11:13:23,810 - julearn - INFO -      Expanded features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2026-03-25 11:13:23,810 - julearn - INFO -      X_types:{'pca1': ['age', 'bmi', 'bp'], 'pca2': ['s1', 's2', 's3', 's4', 's5', 's6'], 'categorical': ['sex']}
-    2026-03-25 11:13:23,811 - julearn - INFO - ====================
-    2026-03-25 11:13:23,811 - julearn - INFO - 
-    2026-03-25 11:13:23,812 - julearn - INFO - = Model Parameters =
-    2026-03-25 11:13:23,812 - julearn - INFO - ====================
-    2026-03-25 11:13:23,812 - julearn - INFO - 
-    2026-03-25 11:13:23,812 - julearn - INFO - = Data Information =
-    2026-03-25 11:13:23,812 - julearn - INFO -      Problem type: regression
-    2026-03-25 11:13:23,812 - julearn - INFO -      Number of samples: 309
-    2026-03-25 11:13:23,812 - julearn - INFO -      Number of features: 10
-    2026-03-25 11:13:23,812 - julearn - INFO - ====================
-    2026-03-25 11:13:23,812 - julearn - INFO - 
-    2026-03-25 11:13:23,813 - julearn - INFO -      Target type: float64
-    2026-03-25 11:13:23,813 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
+    2026-03-25 13:12:22,552 - julearn - INFO - ==== Input Data ====
+    2026-03-25 13:12:22,552 - julearn - INFO - Using dataframe as input
+    2026-03-25 13:12:22,552 - julearn - INFO -      Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2026-03-25 13:12:22,552 - julearn - INFO -      Target: target
+    2026-03-25 13:12:22,552 - julearn - INFO -      Expanded features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2026-03-25 13:12:22,552 - julearn - INFO -      X_types:{'pca1': ['age', 'bmi', 'bp'], 'pca2': ['s1', 's2', 's3', 's4', 's5', 's6'], 'categorical': ['sex']}
+    2026-03-25 13:12:22,553 - julearn - INFO - ====================
+    2026-03-25 13:12:22,553 - julearn - INFO - 
+    2026-03-25 13:12:22,554 - julearn - INFO - = Model Parameters =
+    2026-03-25 13:12:22,554 - julearn - INFO - ====================
+    2026-03-25 13:12:22,554 - julearn - INFO - 
+    2026-03-25 13:12:22,554 - julearn - INFO - = Data Information =
+    2026-03-25 13:12:22,554 - julearn - INFO -      Problem type: regression
+    2026-03-25 13:12:22,554 - julearn - INFO -      Number of samples: 309
+    2026-03-25 13:12:22,554 - julearn - INFO -      Number of features: 10
+    2026-03-25 13:12:22,555 - julearn - INFO - ====================
+    2026-03-25 13:12:22,555 - julearn - INFO - 
+    2026-03-25 13:12:22,555 - julearn - INFO -      Target type: float64
+    2026-03-25 13:12:22,555 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
 
 
 
@@ -315,11 +880,11 @@ The scores dataframe has all the values for each CV split.
  .. code-block:: none
 
        fit_time  score_time  ...  fold                          cv_mdsum
-    0  0.015158    0.007076  ...     0  b10eef89b4192178d482d7a1587a248a
-    1  0.015042    0.007131  ...     1  b10eef89b4192178d482d7a1587a248a
-    2  0.014924    0.007171  ...     2  b10eef89b4192178d482d7a1587a248a
-    3  0.061307    0.007248  ...     3  b10eef89b4192178d482d7a1587a248a
-    4  0.015276    0.007138  ...     4  b10eef89b4192178d482d7a1587a248a
+    0  0.015002    0.007232  ...     0  b10eef89b4192178d482d7a1587a248a
+    1  0.014910    0.007100  ...     1  b10eef89b4192178d482d7a1587a248a
+    2  0.016681    0.007311  ...     2  b10eef89b4192178d482d7a1587a248a
+    3  0.066005    0.007597  ...     3  b10eef89b4192178d482d7a1587a248a
+    4  0.015939    0.007668  ...     4  b10eef89b4192178d482d7a1587a248a
 
     [5 rows x 8 columns]
 
@@ -668,7 +1233,7 @@ of true values vs predicted values.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.428 seconds)
+   **Total running time of the script:** (0 minutes 0.456 seconds)
 
 
 .. _sphx_glr_download_auto_examples_03_complex_models_run_example_pca_featsets.py:
