@@ -333,7 +333,7 @@ def prepare_input_data(
 
     # Get groups
     if groups is not None:
-        logger.info(__("Using {groups} as groups"), groups=groups)
+        logger.info(__("Using {groups} as groups", groups=groups))
         df_groups = df.loc[:, groups].copy()
 
     # Convert the target to binary if pos_labels is not None
@@ -345,8 +345,10 @@ def prepare_input_data(
         if not isinstance(pos_labels, list):
             pos_labels = [pos_labels]
         logger.info(
-            __("Setting the following as positive labels {pos_labels}"),
-            pos_labels=pos_labels,
+            __(
+                "Setting the following as positive labels {pos_labels}",
+                pos_labels=pos_labels,
+            )
         )
 
         not_in_labels = [x for x in pos_labels if x not in df_y.unique()]
