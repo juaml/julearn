@@ -97,15 +97,20 @@ def _joblib_htcondor_context_func(current_func=None) -> None:
     _config["jht_current_func"] = current_func
 
     def _set_context_vars(**kwargs):
+        # First, call the previous function
+        jht_current_func = kwargs.pop("jht_current_func")
+        if jht_current_func is not None:
+            jht_current_func()
+
+        # Julearn then sets the config variables. If user has set any variable
+        # in the context function, current julearn state should override this
+        # setting.
         for key, value in kwargs.items():
             if key == "sklearn_config":
                 sklearn.set_config(**value)
             elif key == "julearn_logging_config":
                 from julearn.utils import configure_logging
                 configure_logging(**value)
-            elif key == "jht_current_func":
-                if value is not None:
-                    value()
             elif key == "julearn_config":
                 for k, v in value.items():
                     set_config(k, v)
