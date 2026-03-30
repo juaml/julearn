@@ -54,3 +54,31 @@ def get_config(key: str) -> Any:
 
     """
     return _global_config.get(key, None)
+
+
+def _joblib_htcondor_context_func() -> None:
+    """Create a function to seet the config variables.
+
+    Returns
+    -------
+    function
+        A function to set the config variables.
+
+    """
+    from copy import deepcopy
+    from functools import partial
+
+    import sklearn
+
+    _vars = deepcopy(_global_config)
+    sklearn_config = sklearn.get_config()
+    _vars["sklearn_config"] = sklearn_config
+
+    def _set_context_vars(**kwargs):
+        for key, value in kwargs.items():
+            if key == "sklearn_config":
+                sklearn.set_config(**value)
+            else:
+                set_config(key, value)
+
+    return partial(_set_context_vars, **_vars)

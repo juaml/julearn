@@ -382,6 +382,21 @@ def _validate_api_params(  # noqa: C901
     return out
 
 
+def _check_configure_joblib_backend() -> None:
+    """Check and configure if we are running in a joblib parallel backend."""
+    from joblib.parallel import get_active_backend
+
+    from .config import _joblib_htcondor_context_func
+    backend, _ = get_active_backend()
+
+    # If we are in an HTCondor backend, we need to set the context function to
+    # set the global configuration variables from both julearn and scikit-
+    # learn, as these are not automatically propagated to the workers in
+    # non-shared memory backends.
+    if backend.__class__.__name__ == "_HTCondorBackend":
+        backend._context_func = _joblib_htcondor_context_func()
+
+
 def run_cross_validation(
     X: list[str],  # noqa: N803
     y: str,
@@ -613,6 +628,8 @@ def run_cross_validation(
         else:
             _sklearn_deprec_fit_params["fit_params"] = fit_params
 
+    _check_configure_joblib_backend()
+
     scores = cross_validate(
         pipeline,
         df_X,
@@ -834,6 +851,8 @@ def run_fit(
         _sklearn_deprec_fit_params["params"] = fit_params
     else:
         _sklearn_deprec_fit_params["fit_params"] = fit_params
+
+    _check_configure_joblib_backend()
 
     logger.info("Fitting final model")
     pipeline.fit(df_X, df_y, **fit_params)
