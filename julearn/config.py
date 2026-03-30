@@ -56,13 +56,14 @@ def get_config(key: str) -> Any:
     return _global_config.get(key, None)
 
 
-def _joblib_htcondor_context_func(v) -> None:
+def _joblib_htcondor_context_func(current_func=None) -> None:
     """Create a function to seet the config variables.
 
     Parameters
     ----------
-    v : dict
-        The aggregated config dict.
+    current_func : function
+        The current function that was set in the joblib context. If not None,
+        it will be called before setting the config variables (default None).
 
     Returns
     -------
@@ -70,17 +71,43 @@ def _joblib_htcondor_context_func(v) -> None:
         A function to set the config variables.
 
     """
+    from copy import deepcopy
     from functools import partial
 
     import sklearn
 
-    from julearn.config import set_config
+    # Copy the global config
+    _config = {}
+    _config["julearn_config"] = deepcopy(_global_config)
+
+    _config["sklearn_config"] = sklearn.get_config()
+
+    # add the loggging configuration
+    level = logger.level
+    fmt = None
+    if len(logger.handlers) > 0:
+        fmt = logger.handlers[0].formatter._fmt  # type: ignore
+
+    _config["julearn_logging_config"] = {
+        "level": level,
+        "output_format": fmt,
+    }
+
+    # Log the current function, if any, to be called before setting the config
+    _config["jht_current_func"] = current_func
 
     def _set_context_vars(**kwargs):
         for key, value in kwargs.items():
             if key == "sklearn_config":
                 sklearn.set_config(**value)
-            else:
-                set_config(key, value)
+            elif key == "julearn_logging_config":
+                from julearn.utils import configure_logging
+                configure_logging(**value)
+            elif key == "jht_current_func":
+                if value is not None:
+                    value()
+            elif key == "julearn_config":
+                for k, v in value.items():
+                    set_config(k, v)
 
-    return partial(_set_context_vars, **v)
+    return partial(_set_context_vars, **_config)  # type: ignore

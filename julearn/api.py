@@ -19,7 +19,7 @@ from sklearn.model_selection import (
 from sklearn.model_selection._search import BaseSearchCV
 from sklearn.pipeline import Pipeline
 
-from .config import _global_config, _joblib_htcondor_context_func
+from .config import _joblib_htcondor_context_func
 from .inspect import Inspector
 from .model_selection.utils import check_cv
 from .pipeline import PipelineCreator
@@ -394,10 +394,17 @@ def _check_configure_joblib_backend() -> None:
     # learn, as these are not automatically propagated to the workers in
     # non-shared memory backends.
     if backend.__class__.__name__ == "_HTCondorBackend":
-        _vars = deepcopy(_global_config)
-        sklearn_config = sklearn.get_config()
-        _vars["sklearn_config"] = sklearn_config
-        backend._context_func = _joblib_htcondor_context_func(_vars)
+        if hasattr(backend, "_context_func"):
+            backend._context_func = _joblib_htcondor_context_func(
+                current_func=backend._context_func
+            )
+        else:
+            logger.warning(
+                "Running in an HTCondor backend, but it does not have a "
+                "_context_func attribute. Global configuration variables "
+                "will not be propagated to the workers. Please update your "
+                "joblib-htcondor package to version 0.2.3 or higher."
+            )
 
 
 def run_cross_validation(
