@@ -5,7 +5,6 @@
 # License: AGPL
 
 import inspect
-from copy import deepcopy
 from typing import Optional, Union
 
 import numpy as np
