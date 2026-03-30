@@ -8,6 +8,7 @@ from copy import deepcopy
 from typing import Any, Optional
 
 from ...utils import logger, raise_error, warn_with_log
+from ...utils.logging import DelayedFmtMessage as __
 from .ju_target_transformer import JuTargetTransformer
 from .target_confound_remover import TargetConfoundRemover
 
@@ -110,7 +111,9 @@ def register_target_transformer(
                 "transformer."
             )
 
-    logger.info(f"registering transformer named {transformer_name}.")
+    logger.info(
+        __("registering transformer named {name}.", name=transformer_name)
+    )
 
     _available_target_transformers[transformer_name] = transformer_cls
 

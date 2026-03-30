@@ -24,6 +24,7 @@ from .model_selection import (
     RepeatedContinuousStratifiedGroupKFold,
 )
 from .utils import logger, raise_error, warn_with_log
+from .utils.logging import DelayedFmtMessage as __
 from .utils.typing import CVLike
 
 
@@ -290,8 +291,11 @@ def prepare_input_data(
 
     # Validate the variables
     _validate_input_data_df(X, y, df, groups)
-    logger.info(f"\tFeatures: {X}")
-    logger.info(f"\tTarget: {y}")
+    if len(X) <= get_config("max_x_logs"):
+        logger.info(__("\tFeatures: {features}", features=X))
+    else:
+        logger.info(__("\tFeatures: {n_features} columns", n_features=len(X)))
+    logger.info(__("\tTarget: {target}", target=y))
 
     if not isinstance(X, list):
         X = [X]
@@ -304,7 +308,12 @@ def prepare_input_data(
         X_columns = _pick_columns(X, df.columns)
 
     if not get_config("disable_x_verbose"):
-        logger.info(f"\tExpanded features: {X_columns}")
+        logger.info(
+            __(
+                "\tExpanded features: {expanded_features}",
+                expanded_features=X_columns,
+            )
+        )
 
     _validate_input_data_df_ext(X_columns, y, df, groups)
 
@@ -324,7 +333,7 @@ def prepare_input_data(
 
     # Get groups
     if groups is not None:
-        logger.info(f"Using {groups} as groups")
+        logger.info(__("Using {groups} as groups", groups=groups))
         df_groups = df.loc[:, groups].copy()
 
     # Convert the target to binary if pos_labels is not None
@@ -335,7 +344,12 @@ def prepare_input_data(
             )
         if not isinstance(pos_labels, list):
             pos_labels = [pos_labels]
-        logger.info(f"Setting the following as positive labels {pos_labels}")
+        logger.info(
+            __(
+                "Setting the following as positive labels {pos_labels}",
+                pos_labels=pos_labels,
+            )
+        )
 
         not_in_labels = [x for x in pos_labels if x not in df_y.unique()]
         if len(not_in_labels) > 0:
@@ -418,8 +432,11 @@ def check_consistency(
             )
         if n_classes != 2:
             logger.info(
-                "Multi-class classification problem detected "
-                f"#classes = {n_classes}."
+                __(
+                    "Multi-class classification problem detected "
+                    "#classes = {n_classes}.",
+                    n_classes=n_classes,
+                )
             )
             if n_classes > (y.shape[0] / 2):
                 warn_with_log(
@@ -519,7 +536,7 @@ def _check_x_types(
         k: [v] if not isinstance(v, list) else v for k, v in X_types.items()
     }
     if not get_config("disable_xtypes_verbose"):
-        logger.info(f"\tX_types:{X_types}")
+        logger.info(__("\tX_types:{X_types}", X_types=X_types))
 
     skip_this_check = get_config("disable_xtypes_check")
     if not skip_this_check:

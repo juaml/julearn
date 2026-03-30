@@ -6,6 +6,7 @@
 from typing import Any
 
 from ..utils import logger
+from ..utils.logging import DelayedFmtMessage as __
 from .available_searchers import _recreate_reset_copy, register_searcher
 
 
@@ -65,22 +66,39 @@ def _prepare_skopt_hyperparameters_distributions(
             prior = v[2]
             if prior == "categorical":
                 logger.info(
-                    f"Hyperparameter {k} is categorical with 2 "
-                    f"options: [{v[0]} and {v[1]}]"
+                    __(
+                        "Hyperparameter {k} is categorical with 2 "
+                        "options: [{v1} and {v2}]",
+                        k=k,
+                        v1=v[0],
+                        v2=v[1],
+                    )
                 )
                 out[k] = sksp.Categorical(v[:-1])
             elif isinstance(v[0], int) and isinstance(v[1], int):
                 logger.info(
-                    f"Hyperparameter {k} is {prior} integer [{v[0]}, {v[1]}]"
+                    __(
+                        "Hyperparameter {k} is {prior} integer [{v1}, {v2}]",
+                        k=k,
+                        prior=prior,
+                        v1=v[0],
+                        v2=v[1],
+                    )
                 )
                 out[k] = sksp.Integer(v[0], v[1], prior=prior)
             elif isinstance(v[0], float) and isinstance(v[1], float):
                 logger.info(
-                    f"Hyperparameter {k} is {prior} float [{v[0]}, {v[1]}]"
+                    __(
+                        "Hyperparameter {k} is {prior} float [{v1}, {v2}]",
+                        k=k,
+                        prior=prior,
+                        v1=v[0],
+                        v2=v[1],
+                    )
                 )
                 out[k] = sksp.Real(v[0], v[1], prior=prior)
             else:
-                logger.info(f"Hyperparameter {k} as is {v}")
+                logger.info(__("Hyperparameter {k} as is {v}", k=k, v=v))
                 out[k] = v
         elif (
             isinstance(v, tuple)
@@ -89,6 +107,6 @@ def _prepare_skopt_hyperparameters_distributions(
         ):
             out[k] = sksp.Categorical(v[:-1])
         else:
-            logger.info(f"Hyperparameter {k} as is {v}")
+            logger.info(__("Hyperparameter {k} as is {v}", k=k, v=v))
             out[k] = v
     return out

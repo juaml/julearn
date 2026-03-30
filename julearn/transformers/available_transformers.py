@@ -28,6 +28,7 @@ from sklearn.preprocessing import (
 )
 
 from ..utils import logger, raise_error, warn_with_log
+from ..utils.logging import DelayedFmtMessage as __
 from ..utils.typing import TransformerLike
 from .cbpm import CBPM
 from .confound_remover import ConfoundRemover
@@ -155,7 +156,12 @@ def register_transformer(transformer_name, transformer_cls, overwrite=None):
                 "in case you want to overwrite an existing transformer."
             )
 
-    logger.info(f"registering transformer named {transformer_name}.")
+    logger.info(
+        __(
+            "registering transformer named {transformer_name}.",
+            transformer_name=transformer_name,
+        )
+    )
 
     _available_transformers[transformer_name] = transformer_cls
 

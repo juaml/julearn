@@ -11,6 +11,7 @@ import pandas as pd
 
 from ...base import ColumnTypesLike, JuTransformer, change_column_type
 from ...utils import logger, raise_error
+from ...utils.logging import DelayedFmtMessage as __
 from ...utils.typing import DataLike
 
 
@@ -85,7 +86,12 @@ class SetColumnTypes(JuTransformer):
             X.columns = X.columns.astype(str)
 
         self.feature_names_in_ = X.columns
-        logger.debug(f"Setting column types for {self.feature_names_in_}")
+        logger.debug(
+            __(
+                "Setting column types for {features}",
+                features=self.feature_names_in_,
+            )
+        )
 
         # initialize the column_mapper_ using the X_types of X
         column_mapper_ = {}
@@ -109,7 +115,9 @@ class SetColumnTypes(JuTransformer):
                 {col: change_column_type(col, X_type) for col in t_columns}
             )
 
-        logger.debug(f"\tColumn mappers for {column_mapper_}")
+        logger.debug(
+            __("\tColumn mappers for {mapper}", mapper=column_mapper_)
+        )
         self.column_mapper_ = column_mapper_
         return self
 

@@ -6,10 +6,12 @@
 from typing import Any
 
 from .utils import logger, raise_error
+from .utils.logging import DelayedFmtMessage as __
 
 
 _global_config = {}
 _global_config["MAX_X_WARNS"] = 5000
+_global_config["max_x_logs"] = 100
 _global_config["disable_x_check"] = False
 _global_config["disable_xtypes_check"] = False
 _global_config["disable_x_verbose"] = False
@@ -31,7 +33,9 @@ def set_config(key: str, value: Any) -> None:
     """
     if key not in _global_config:
         raise_error(f"Global config {key} does not exist")
-    logger.info(f"Setting global config {key} to {value}")
+    logger.info(
+        __("Setting global config {key} to {value}", key=key, value=value)
+    )
     _global_config[key] = value
 
 

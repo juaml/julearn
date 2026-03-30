@@ -9,7 +9,14 @@ from typing import Optional, Union
 
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 
-from julearn.utils.logging import logger, raise_error, warn_with_log
+from julearn.utils.logging import (
+    DelayedFmtMessage as __,
+)
+from julearn.utils.logging import (
+    logger,
+    raise_error,
+    warn_with_log,
+)
 
 
 _available_searchers = {
@@ -125,7 +132,12 @@ def register_searcher(
                 "Set `overwrite=True` in case you want to "
                 "overwrite existing searchers."
             )
-    logger.info(f"Registering new searcher: {searcher_name}")
+    logger.info(
+        __(
+            "Registering new searcher: {searcher_name}",
+            searcher_name=searcher_name,
+        )
+    )
     _available_searchers[searcher_name] = {
         "class": searcher,
         "params_attr": params_attr,

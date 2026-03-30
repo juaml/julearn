@@ -15,6 +15,7 @@ from ...base import (
     JuTransformer,
 )
 from ...utils import logger, raise_error
+from ...utils.logging import DelayedFmtMessage as __
 from ...utils.typing import DataLike
 
 
@@ -106,7 +107,7 @@ class PickColumns(JuTransformer):
             Data with dropped columns.
 
         """
-        logger.debug(f"Picking columns: {self.keep_columns_}")
+        logger.debug(__("Picking columns: {cols}", cols=self.keep_columns_))
         if len(self.keep_columns_) == 1:
             out = X[self.keep_columns_[0]]
         else:

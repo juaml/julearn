@@ -14,6 +14,7 @@ from sklearn.utils.metaestimators import available_if
 
 from ...base import JuBaseEstimator
 from ...utils import logger, raise_error, warn_with_log
+from ...utils.logging import DelayedFmtMessage as __
 from ...utils.typing import DataLike, EstimatorLike, JuEstimatorLike, ModelLike
 
 
@@ -241,9 +242,9 @@ class JuGeneratedTargetModel(JuBaseEstimator):
         # If it's a pandas dataframe convert to series
         if gen_y.shape[1] == 1:
             gen_y = gen_y.iloc[:, 0]
-            logger.debug(f"Target generated: {gen_y.name}")
+            logger.debug(__("Target generated: {name}", name=gen_y.name))
         else:
-            logger.debug(f"Target generated: {gen_y.columns}")
+            logger.debug(__("Target generated: {name}", name=gen_y.columns))
         return gen_y
 
     @property

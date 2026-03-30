@@ -47,6 +47,7 @@ from sklearn.naive_bayes import (
 from sklearn.svm import SVC, SVR
 
 from ..utils import logger, raise_error, warn_with_log
+from ..utils.logging import DelayedFmtMessage as __
 from ..utils.typing import ModelLike
 from .dynamic import DynamicSelection
 
@@ -256,15 +257,23 @@ def register_model(
                         )
 
                     logger.info(
-                        f"registering model named {model_name} "
-                        f"with problem_type {problem_type}"
+                        __(
+                            "registering model named {model_name} "
+                            "with problem_type {problem_type}",
+                            model_name=model_name,
+                            problem_type=problem_type,
+                        )
                     )
 
                 _available_models[model_name][problem_type] = cls
             else:
                 logger.info(
-                    f"registering model named {model_name} "
-                    f"with problem_type {problem_type}"
+                    __(
+                        "registering model named {model_name} "
+                        "with problem_type {problem_type}",
+                        model_name=model_name,
+                        problem_type=problem_type,
+                    )
                 )
                 _available_models[model_name] = {problem_type: cls}
 

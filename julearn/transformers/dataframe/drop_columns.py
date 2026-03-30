@@ -13,6 +13,7 @@ from sklearn.base import check_is_fitted
 
 from ...base import ColumnTypesLike, JuTransformer
 from ...utils import logger
+from ...utils.logging import DelayedFmtMessage as __
 from ...utils.typing import DataLike
 
 
@@ -93,7 +94,7 @@ class DropColumns(JuTransformer):
             Data with dropped columns.
 
         """
-        logger.debug(f"Dropping columns: {self.drop_columns_}")
+        logger.debug(__("Dropping columns: {cols}", cols=self.drop_columns_))
         return X.drop(columns=self.drop_columns_)
 
     def get_support(

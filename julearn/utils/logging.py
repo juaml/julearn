@@ -96,7 +96,11 @@ def _safe_log(versions: dict, name: str) -> None:
 
     """
     if name in versions:
-        logger.info(f"{name}: {versions[name]}")
+        logger.info(
+            DelayedFmtMessage(
+                "{name}: {version}", name=name, version=versions[name]
+            )
+        )
 
 
 def log_versions() -> None:
@@ -248,6 +252,38 @@ def warn_with_log(msg: str, category: type[Warning] = RuntimeWarning) -> None:
     if not skip_log:
         logger.warning(msg)
     warnings.warn(msg, category=category, stacklevel=2)
+
+
+class DelayedFmtMessage:
+    """Class for delayed formatting of log messages.
+
+    This is useful for cases where the log message is expensive to compute and
+    the logging level is such that the message would not be printed. In this
+    case, the message will only be computed if it is actually going to be
+    printed.
+
+    """
+
+    def __init__(self, fmt: str, *args: object, **kwargs: object) -> None:
+        """Initialize DelayedFmtMessage.
+
+        Parameters
+        ----------
+        fmt : str
+            The format string for the log message.
+        *args : object
+            The arguments to format into the log message.
+        **kwargs : object
+            The keyword arguments to format into the log message.
+
+        """
+        self.fmt = fmt
+        self.args = args
+        self.kwargs = kwargs
+
+    def __str__(self) -> str:
+        """Format the log message."""
+        return self.fmt.format(*self.args, **self.kwargs)
 
 
 class WrapStdOut(logging.StreamHandler):

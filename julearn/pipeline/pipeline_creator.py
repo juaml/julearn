@@ -37,6 +37,7 @@ from ..transformers.target import (
     JuTransformedTargetModel,
 )
 from ..utils import logger, raise_error, warn_with_log
+from ..utils.logging import DelayedFmtMessage as __
 from ..utils.typing import (
     EstimatorLike,
     JuEstimatorLike,
@@ -331,7 +332,13 @@ class PipelineCreator:
 
         # If the user did not give a name, we will create one.
         name = self._get_step_name(name, step)
-        logger.info(f"Adding step {name} that applies to {apply_to}")
+        logger.info(
+            __(
+                "Adding step {name} that applies to {apply_to}",
+                name=name,
+                apply_to=apply_to,
+            )
+        )
 
         # Find which parameters should be set and which should be tuned.
         params_to_set = {}
@@ -345,31 +352,63 @@ class PipelineCreator:
                 and not isinstance(vals, str)
             ):
                 if len(vals) > 1:
-                    logger.info(f"Tuning hyperparameter {param} = {vals}")
+                    logger.info(
+                        __(
+                            "Tuning hyperparameter {param} = {vals}",
+                            param=param,
+                            vals=vals,
+                        )
+                    )
                     params_to_tune[param] = vals
                 else:
-                    logger.info(f"Setting hyperparameter {param} = {vals[0]}")
+                    logger.info(
+                        __(
+                            "Setting hyperparameter {param} = {vals[0]}",
+                            param=param,
+                            vals=vals,
+                        )
+                    )
                     params_to_set[param] = vals[0]
             elif hasattr(vals, "rvs"):
                 # If it is a distribution, we will tune it.
-                logger.info(f"Tuning hyperparameter {param} = {vals}")
+                logger.info(
+                    __(
+                        "Tuning hyperparameter {param} = {vals}",
+                        param=param,
+                        vals=vals,
+                    )
+                )
                 params_to_tune[param] = vals
             elif is_optuna_valid_distribution(vals):
-                logger.info(f"Tuning hyperparameter {param} = {vals}")
+                logger.info(
+                    __(
+                        "Tuning hyperparameter {param} = {vals}",
+                        param=param,
+                        vals=vals,
+                    )
+                )
                 params_to_tune[param] = vals
             else:
-                logger.info(f"Setting hyperparameter {param} = {vals}")
+                logger.info(
+                    __(
+                        "Setting hyperparameter {param} = {vals}",
+                        param=param,
+                        vals=vals,
+                    )
+                )
                 params_to_set[param] = vals
 
         # Build the estimator for this step
         if isinstance(step, str):
             if step != "generate_target":
-                logger.debug(f"Getting estimator from string: {step}")
+                logger.debug(
+                    __("Getting estimator from string: {step}", step=step)
+                )
                 step = self._get_estimator_from(
                     step, self.problem_type, **params_to_set
                 )
             else:
-                logger.debug(f"Special step is {step}")
+                logger.debug(__("Special step is {step}", step=step))
                 name = "generate_target"
                 if len(apply_to & ColumnTypes("*")) > 0:
                     raise_error(
@@ -668,12 +707,17 @@ class PipelineCreator:
         # Add transformers
         params_to_tune = {}
         for step_dict in transformer_steps:
-            logger.debug(f"Adding transformer {step_dict.name}")
+            logger.debug(__("Adding transformer {name}", name=step_dict.name))
             name = step_dict.name
             estimator = step_dict.estimator
-            logger.debug(f"\t Estimator: {estimator}")
+            logger.debug(__("\t Estimator: {estimator}", estimator=estimator))
             step_params_to_tune = step_dict.params_to_tune
-            logger.debug(f"\t Params to tune: {step_params_to_tune}")
+            logger.debug(
+                __(
+                    "\t Params to tune: {step_params_to_tune}",
+                    step_params_to_tune=step_params_to_tune,
+                )
+            )
 
             # Wrap in a JuTransformer if needed
             if _should_wrap_this_step(
@@ -697,7 +741,9 @@ class PipelineCreator:
         if model_step is not None:
             model_name = model_step.name
             model_estimator = model_step.estimator
-            logger.debug(f"Adding model {model_name}")
+            logger.debug(
+                __("Adding model {model_name}", model_name=model_name)
+            )
 
             model_params = model_estimator.get_params(deep=False)
             model_params = {
@@ -710,16 +756,25 @@ class PipelineCreator:
             if _should_wrap_this_step(
                 X_types, model_step.apply_to
             ) and not isinstance(model_estimator, JuModelLike):
-                logger.debug(f"Wrapping {model_name}")
+                logger.debug(
+                    __("Wrapping {model_name}", model_name=model_name)
+                )
                 model_estimator = WrapModel(
                     model_estimator, model_step.apply_to
                 )
 
             step_params_to_tune = model_step.params_to_tune
 
-            logger.debug(f"\t Estimator: {model_estimator}")
-            logger.debug("\t Looking for nested pipeline creators")
-            logger.debug(f"\t Params to tune: {step_params_to_tune}")
+            logger.debug(
+                __("\t Estimator: {estimator}", estimator=model_estimator)
+            )
+            logger.debug(__("\t Looking for nested pipeline creators"))
+            logger.debug(
+                __(
+                    "\t Params to tune: {step_params_to_tune}",
+                    step_params_to_tune=step_params_to_tune,
+                )
+            )
             if self._added_target_transformer or self._added_target_generator:
                 # If we have a target transformer, we need to wrap the model
                 # in the right "Targeted" transformer.
@@ -728,7 +783,13 @@ class PipelineCreator:
                     if self._added_target_transformer
                     else "target_generate"
                 )
-                logger.debug(f"Wrapping target model {model_name} as {kind}")
+                logger.debug(
+                    __(
+                        "Wrapping target model {model_name} as {kind}",
+                        model_name=model_name,
+                        kind=kind,
+                    )
+                )
 
                 target_model_step = self._wrap_target_model(
                     model_name,
@@ -1175,7 +1236,9 @@ def _prepare_hyperparameter_tuning(
         cv_inner = search_params.get("cv", None)
 
         if search in list_searchers():
-            logger.info(f"Tuning hyperparameters using {search}")
+            logger.info(
+                __("Tuning hyperparameters using {search}", search=search)
+            )
             search = get_searcher(search)
         else:
             if isinstance(search, str):
@@ -1190,19 +1253,22 @@ def _prepare_hyperparameter_tuning(
             else:
                 warn_with_log(f"{search} is not a registered searcher. ")
                 logger.info(
-                    f"Tuning hyperparameters using not registered {search}"
+                    __(
+                        "Tuning hyperparameters using not registered {search}",
+                        search=search,
+                    )
                 )
 
         if isinstance(params_to_tune, dict):
             logger.info("Hyperparameters:")
             for k, v in params_to_tune.items():
-                logger.info(f"\t{k}: {v}")
+                logger.info(__("\t{k}: {v}", k=k, v=v))
         else:
             logger.info("Hyperparameters list:")
             for i_list, t_params in enumerate(params_to_tune):
-                logger.info(f"\tSet {i_list}")
+                logger.info(__("\tSet {i_list}", i_list=i_list))
                 for k, v in t_params.items():
-                    logger.info(f"\t\t{k}: {v}")
+                    logger.info(__("\t\t{k}: {v}", k=k, v=v))
 
         if search == RandomizedSearchCV:
             # If we are using RandomizedSearchCV, we can adopt the
@@ -1238,11 +1304,11 @@ def _prepare_hyperparameter_tuning(
                     for p in params_to_tune
                 ]
         cv_inner = check_cv(cv_inner)  # type: ignore
-        logger.info(f"Using inner CV scheme {cv_inner}")
+        logger.info(__("Using inner CV scheme {cv_inner}", cv_inner=cv_inner))
         search_params["cv"] = cv_inner
         logger.info("Search Parameters:")
         for k, v in search_params.items():
-            logger.info(f"\t{k}: {v}")
+            logger.info(__("\t{k}: {v}", k=k, v=v))
 
         # TODO: missing searcher typing
         pipeline = search(  # type: ignore
