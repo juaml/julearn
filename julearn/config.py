@@ -56,8 +56,13 @@ def get_config(key: str) -> Any:
     return _global_config.get(key, None)
 
 
-def _joblib_htcondor_context_func() -> None:
+def _joblib_htcondor_context_func(v) -> None:
     """Create a function to seet the config variables.
+
+    Parameters
+    ----------
+    v : dict
+        The aggregated config dict.
 
     Returns
     -------
@@ -65,14 +70,11 @@ def _joblib_htcondor_context_func() -> None:
         A function to set the config variables.
 
     """
-    from copy import deepcopy
     from functools import partial
 
     import sklearn
 
-    _vars = deepcopy(_global_config)
-    sklearn_config = sklearn.get_config()
-    _vars["sklearn_config"] = sklearn_config
+    from julearn.config import set_config
 
     def _set_context_vars(**kwargs):
         for key, value in kwargs.items():
@@ -81,4 +83,4 @@ def _joblib_htcondor_context_func() -> None:
             else:
                 set_config(key, value)
 
-    return partial(_set_context_vars, **_vars)
+    return partial(_set_context_vars, **v)

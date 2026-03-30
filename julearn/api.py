@@ -5,11 +5,13 @@
 # License: AGPL
 
 import inspect
+from copy import deepcopy
 from typing import Optional, Union
 
 import numpy as np
 import pandas as pd
 import sklearn
+from joblib.parallel import get_active_backend
 from sklearn.base import BaseEstimator
 from sklearn.model_selection import (
     cross_validate,
@@ -17,6 +19,7 @@ from sklearn.model_selection import (
 from sklearn.model_selection._search import BaseSearchCV
 from sklearn.pipeline import Pipeline
 
+from .config import _global_config, _joblib_htcondor_context_func
 from .inspect import Inspector
 from .model_selection.utils import check_cv
 from .pipeline import PipelineCreator
@@ -384,9 +387,6 @@ def _validate_api_params(  # noqa: C901
 
 def _check_configure_joblib_backend() -> None:
     """Check and configure if we are running in a joblib parallel backend."""
-    from joblib.parallel import get_active_backend
-
-    from .config import _joblib_htcondor_context_func
     backend, _ = get_active_backend()
 
     # If we are in an HTCondor backend, we need to set the context function to
@@ -394,7 +394,10 @@ def _check_configure_joblib_backend() -> None:
     # learn, as these are not automatically propagated to the workers in
     # non-shared memory backends.
     if backend.__class__.__name__ == "_HTCondorBackend":
-        backend._context_func = _joblib_htcondor_context_func()
+        _vars = deepcopy(_global_config)
+        sklearn_config = sklearn.get_config()
+        _vars["sklearn_config"] = sklearn_config
+        backend._context_func = _joblib_htcondor_context_func(_vars)
 
 
 def run_cross_validation(
