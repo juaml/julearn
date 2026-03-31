@@ -398,7 +398,7 @@ def _check_configure_joblib_backend() -> None:
                 current_func=backend._context_func
             )
         else:
-            logger.warning(
+            raise_error(
                 "Running in an HTCondor backend, but it does not have a "
                 "_context_func attribute. Global configuration variables "
                 "will not be propagated to the workers. Please update your "
