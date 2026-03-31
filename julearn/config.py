@@ -82,7 +82,7 @@ def _joblib_htcondor_context_func(current_func=None) -> None:
 
     _config["sklearn_config"] = sklearn.get_config()
 
-    # add the loggging configuration
+    # add the logging configuration
     level = logger.level
     fmt = None
     if len(logger.handlers) > 0:
