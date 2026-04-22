@@ -54,3 +54,65 @@ def get_config(key: str) -> Any:
 
     """
     return _global_config.get(key, None)
+
+
+def _joblib_htcondor_context_func(current_func=None) -> None:
+    """Create a function to seet the config variables.
+
+    Parameters
+    ----------
+    current_func : function
+        The current function that was set in the joblib context. If not None,
+        it will be called before setting the config variables (default None).
+
+    Returns
+    -------
+    function
+        A function to set the config variables.
+
+    """
+    from copy import deepcopy
+    from functools import partial
+
+    import sklearn
+
+    # Copy the global config
+    _config = {}
+    _config["julearn_config"] = deepcopy(_global_config)
+
+    _config["sklearn_config"] = sklearn.get_config()
+
+    # add the logging configuration
+    level = logger.level
+    fmt = None
+    if len(logger.handlers) > 0:
+        fmt = logger.handlers[0].formatter._fmt  # type: ignore
+
+    _config["julearn_logging_config"] = {
+        "level": level,
+        "output_format": fmt,
+    }
+
+    # Log the current function, if any, to be called before setting the config
+    _config["jht_current_func"] = current_func
+
+    def _set_context_vars(**kwargs):
+        # First, call the previous function
+        jht_current_func = kwargs.pop("jht_current_func")
+        if jht_current_func is not None:
+            jht_current_func()
+
+        # Julearn then sets the config variables. If user has set any variable
+        # in the context function, current julearn state should override this
+        # setting.
+        for key, value in kwargs.items():
+            if key == "sklearn_config":
+                sklearn.set_config(**value)
+            elif key == "julearn_logging_config":
+                from julearn.utils import configure_logging
+                configure_logging(**value)
+            elif key == "julearn_config":
+                for k, v in value.items():
+                    set_config(k, v)
+
+    return partial(_set_context_vars, **_config)  # type: ignore
