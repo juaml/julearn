@@ -1,25 +1,30 @@
 # Classifier wrapper for XGBoost with cross-validated early stopping
 
-import copy
-import inspect
-from typing import Any, Dict, Self
+from typing import Self
 
 import numpy as np
 import pandas as pd
 import sklearn
+from scipy.sparse._bsr import spmatrix
 from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.model_selection import (
     GroupShuffleSplit,
     train_test_split,
 )
-from xgboost import XGBClassifier, XGBRegressor∏
+from xgboost import XGBClassifier, XGBRegressor
 
 
 sklearn.set_config(enable_metadata_routing=True)
 
 
 class _BaseXGBCVEarlyStopping(BaseEstimator):
-    def __init__(self, base_estimator, test_size, early_stopping_rounds, **kwargs):
+    def __init__(
+        self,
+        base_estimator,
+        test_size,
+        early_stopping_rounds,
+        **kwargs,
+    ):
         self.test_size = test_size
         if early_stopping_rounds is None:
             raise ValueError(
@@ -36,26 +41,28 @@ class _BaseXGBCVEarlyStopping(BaseEstimator):
         self.set_fit_request(groups=True)
 
     def fit(self, X, y, groups=None):
-        # groups = kwargs.get("groups", None)
         if groups is not None:
-            print("Using groups for early stopping CV.")
             gss = GroupShuffleSplit(
                 n_splits=1,
                 test_size=self.test_size,
                 random_state=self.random_state,
             )
             train_idx, test_idx = next(gss.split(X, y, groups))
-            if isinstance(X, pd.DataFrame) or isinstance(X, pd.Series):
+            if isinstance(X, pd.DataFrame):
                 X_train, X_test = X.iloc[train_idx], X.iloc[test_idx]
-                y_train, y_test = y.iloc[train_idx], y.iloc[test_idx]
             else:
                 X_train, X_test = X[train_idx], X[test_idx]
+
+            if isinstance(X, pd.Series):
+                y_train, y_test = y.iloc[train_idx], y.iloc[test_idx]
+            else:
                 y_train, y_test = y[train_idx], y[test_idx]
+            self._grouped_cv = True
         else:
-            print("Not using groups for early stopping CV.")
             X_train, X_test, y_train, y_test = train_test_split(
                 X, y, test_size=self.test_size, random_state=self.random_state
             )
+            self._grouped_cv = False
         # Build a first model
         model = self.base_estimator(
             early_stopping_rounds=self.early_stopping_rounds,
@@ -78,7 +85,6 @@ class _BaseXGBCVEarlyStopping(BaseEstimator):
         model.fit(X=X, y=y)
         self._model = model
         self._is_fitted = True
-        self.classes_ = self._model.classes_
 
         return self
 
@@ -86,7 +92,6 @@ class _BaseXGBCVEarlyStopping(BaseEstimator):
         if self._model is None:
             raise ValueError("Model not fitted")
         return self._model.predict(X)
-
 
     def __sklearn_is_fitted__(self):
         return hasattr(self, "_is_fitted") and self._is_fitted
@@ -111,32 +116,50 @@ class _BaseXGBCVEarlyStopping(BaseEstimator):
         return self
 
 
-class XGBRegressorCVEarlyStopping(
-    _BaseXGBCVEarlyStopping, ClassifierMixin
-):
-
+class XGBRegressorCVEarlyStopping(_BaseXGBCVEarlyStopping, ClassifierMixin):
     def __init__(self, test_size, early_stopping_rounds, **kwargs):
         super().__init__(
             base_estimator=XGBRegressor,
             test_size=test_size,
             early_stopping_rounds=early_stopping_rounds,
-            **kwargs
+            **kwargs,
         )
 
 
-class XGBClassifierCVEarlyStopping(
-    _BaseXGBCVEarlyStopping, ClassifierMixin
-):
-
+class XGBClassifierCVEarlyStopping(_BaseXGBCVEarlyStopping, ClassifierMixin):
     def __init__(self, test_size, early_stopping_rounds, **kwargs):
         super().__init__(
             base_estimator=XGBClassifier,
             test_size=test_size,
             early_stopping_rounds=early_stopping_rounds,
-            **kwargs
+            **kwargs,
         )
+
+    def fit(self, X, y, groups=None):
+        self._label_encoder = None
+        # Check if labels are strings and convert to integers if so, to avoid issues with XGBoost
+        if isinstance(y, pd.Series) and y.dtype in ["object", "string"]:
+            self._label_encoder = sklearn.preprocessing.LabelEncoder()
+            y = self._label_encoder.fit_transform(y)
+        elif isinstance(y, np.ndarray) and y.dtype == "object":
+            self._label_encoder = sklearn.preprocessing.LabelEncoder()
+            y = self._label_encoder.fit_transform(y)
+        out = super().fit(X, y, groups)
+        self.classes_ = self._model.classes_
+        return out
+
+    def predict(self, X):
+        out = super().predict(X)
+        if self._label_encoder is not None:
+            out = self._label_encoder.inverse_transform(out)
+        return out
 
     def predict_proba(self, X):
         if self._model is None:
             raise ValueError("Model not fitted")
         return self._model.predict_proba(X)
+
+    def score(self, X, y, sample_weight=None) -> float:
+        if self._label_encoder is not None:
+            y = self._label_encoder.transform(y)
+        return super().score(X, y, sample_weight)

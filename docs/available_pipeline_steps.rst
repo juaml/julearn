@@ -235,6 +235,13 @@ Ensemble
      - Y
      - Y
      - Y
+   * - ``xgb``
+     - XGBoost
+     - | :class:`~xgboost.XGBClassifier` and
+       | :class:`~xgboost.XGBRegressor`
+     - Y
+     - Y
+     - Y
 
 Gaussian Processes
 ~~~~~~~~~~~~~~~~~~

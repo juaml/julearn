@@ -45,11 +45,16 @@ from sklearn.naive_bayes import (
     MultinomialNB,
 )
 from sklearn.svm import SVC, SVR
+from xgboost import XGBClassifier, XGBRegressor
 
 from ..utils import logger, raise_error, warn_with_log
 from ..utils.logging import DelayedFmtMessage as __
 from ..utils.typing import ModelLike
 from .dynamic import DynamicSelection
+from .xgb_cvearlystopping import (
+    XGBClassifierCVEarlyStopping,
+    XGBRegressorCVEarlyStopping,
+)
 
 
 _available_models: dict[str, dict[str, Any]] = {
@@ -134,6 +139,15 @@ _available_models: dict[str, dict[str, Any]] = {
     "dummy": {
         "regression": DummyRegressor,
         "classification": DummyClassifier,
+    },
+    # XGBoost
+    "xgb": {
+        "regression": XGBRegressor,
+        "classification": XGBClassifier,
+    },
+    "xgb_cvearlystopping": {
+        "regression": XGBRegressorCVEarlyStopping,
+        "classification": XGBClassifierCVEarlyStopping,
     },
 }
 
