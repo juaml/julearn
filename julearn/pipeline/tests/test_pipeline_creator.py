@@ -395,16 +395,22 @@ def _compare_param_grids(a: dict, b: dict) -> None:
     for key, val in a.items():
         assert key in b
         if hasattr(val, "rvs"):
-            assert val.low == b[key][0]
-            assert val.high == b[key][1]
-            if b[key][2] == "log-uniform":
-                assert val.prior == "log-uniform"
-            elif b[key][2] == "uniform":
-                assert val.prior == "uniform"
+            if hasattr(val, "prior"):  # skopt's BayesSearchCV
+                assert val.prior == b[key][2]
+                assert val.low == b[key][0]
+                assert val.high == b[key][1]
+                assert val.prior == b[key][2]
             else:
-                pytest.fail(
-                    f"Unknown distributions {val.prior} or {b[key][2]}"
-                )
+                assert val.support()[0] == b[key][0]
+                assert val.support()[1] == b[key][1]
+                if b[key][2] == "log-uniform":
+                    assert val.dist.name == "loguniform"
+                elif b[key][2] == "uniform":
+                    assert val.dist.name == "uniform"
+                else:
+                    pytest.fail(
+                        f"Unknown distributions {val.prior} or {b[key][2]}"
+                    )
         else:
             assert val == b[key]
 

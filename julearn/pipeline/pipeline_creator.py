@@ -1171,9 +1171,11 @@ def _prepare_hyperparameters_distributions(
     for k, v in params_to_tune.items():
         if isinstance(v, tuple) and len(v) == 3:
             if v[2] == "uniform":
-                mod_params_to_tune[k] = stats.uniform(v[0], v[1])
+                mod_params_to_tune[k] = stats.uniform(
+                    loc=v[0], scale=v[1] - v[0]
+                )
             elif v[2] == "log-uniform":
-                mod_params_to_tune[k] = stats.loguniform(v[0], v[1])
+                mod_params_to_tune[k] = stats.loguniform(a=v[0], b=v[1])
             else:
                 mod_params_to_tune[k] = v
         else:
