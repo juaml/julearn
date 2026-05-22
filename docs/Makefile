@@ -23,7 +23,9 @@ clean:
 local:
 	make _build_local; STATUS=$$?; exit $$STATUS
 
+## First build will create warnings for auto_examples. Second one will work correctly.
 _build_local:
+	sphinx-build "$(SOURCEDIR)" "$(BUILDDIR)" "-E" $(O)
 	sphinx-build "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 html:
