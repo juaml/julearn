@@ -174,7 +174,7 @@ def test_naive_bayes_estimators(
         ),
         ("et", ExtraTreesClassifier, {"n_estimators": 10, "random_state": 42}),
         ("dummy", DummyClassifier, {"strategy": "prior"}),
-        ("gauss", GaussianProcessClassifier, {}),
+        ("gauss", GaussianProcessClassifier, {"random_state": 42}),
         ("logit", LogisticRegression, {}),
         ("logitcv", LogisticRegressionCV, {}),
         ("ridge", RidgeClassifier, {}),

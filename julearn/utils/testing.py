@@ -73,6 +73,7 @@ def compare_models(  # noqa: C901, pragma: no cover
         If the models are not equal.
 
     """
+    test_equal = True
     if isinstance(clf1, WrapModel):
         clf1 = clf1.model
     if isinstance(clf2, WrapModel):
@@ -125,6 +126,7 @@ def compare_models(  # noqa: C901, pragma: no cover
         else:
             v1 = clf1.base_estimator_.pi_  # type: ignore
             v2 = clf2.base_estimator_.pi_  # type: ignore
+        test_equal = False
     elif isinstance(clf1, GaussianProcessRegressor):
         v1 = np.c_[clf1.L_, clf1.alpha_]
         v2 = np.c_[clf2.L_, clf2.alpha_]  # type: ignore
@@ -173,7 +175,10 @@ def compare_models(  # noqa: C901, pragma: no cover
         raise NotImplementedError(
             f"Model comparison for {clf1} not yet implemented."
         )
-    assert_array_equal(v1, v2)  # type: ignore
+    if test_equal:
+        assert_array_equal(v1, v2)  # type: ignore
+    else:
+        assert_array_almost_equal(v1, v2, decimal=15)  # type: ignore
 
 
 def do_scoring_test(

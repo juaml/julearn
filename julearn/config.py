@@ -110,6 +110,7 @@ def _joblib_htcondor_context_func(current_func=None) -> None:
                 sklearn.set_config(**value)
             elif key == "julearn_logging_config":
                 from julearn.utils import configure_logging
+
                 configure_logging(**value)
             elif key == "julearn_config":
                 for k, v in value.items():

@@ -314,7 +314,8 @@ def test_hyperparameter_tuning_bayes(
     """
     if problem_type == "transformer":
         pytest.skip("Transformers can't be tuned")
-    BayesSearchCV = pytest.importorskip("skopt.BayesSearchCV")
+    skopt = pytest.importorskip("skopt")
+    BayesSearchCV = skopt.BayesSearchCV
 
     pipeline, param_grid = _hyperparam_tuning_base_test(
         X_types_iris,
@@ -394,15 +395,15 @@ def _compare_param_grids(a: dict, b: dict) -> None:
     for key, val in a.items():
         assert key in b
         if hasattr(val, "rvs"):
-            assert val.args[0] == b[key][0]
-            assert val.args[1] == b[key][1]
+            assert val.low == b[key][0]
+            assert val.high == b[key][1]
             if b[key][2] == "log-uniform":
-                assert val.dist.name == "loguniform"
+                assert val.prior == "log-uniform"
             elif b[key][2] == "uniform":
-                assert val.dist.name == "uniform"
+                assert val.prior == "uniform"
             else:
                 pytest.fail(
-                    f"Unknown distributions {val.dist.name} or {b[key][2]}"
+                    f"Unknown distributions {val.prior} or {b[key][2]}"
                 )
         else:
             assert val == b[key]
@@ -486,7 +487,8 @@ def test_hyperparameter_tuning_distributions_bayes(
     """
     if problem_type == "transformer":
         pytest.skip("Transformers can't be tuned")
-    BayesSearchCV = pytest.importorskip("skopt.BayesSearchCV")
+    skopt = pytest.importorskip("skopt")
+    BayesSearchCV = skopt.BayesSearchCV
 
     pipeline, param_grid = _hyperparam_tuning_base_test(
         X_types_iris,
