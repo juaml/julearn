@@ -68,7 +68,10 @@ extensions = [
 ]
 
 if use_multiversion:
+    print("using sphinx-multiversion for documentation")
     extensions.append("sphinx_multiversion")
+else:
+    print("sphinx-multiversion not found, building documentation without it")
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = [
