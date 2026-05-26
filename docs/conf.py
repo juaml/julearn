@@ -65,6 +65,7 @@ extensions = [
     "sphinx_copybutton",  # copy button for code blocks
     "sphinxcontrib.towncrier.ext",  # towncrier fragment support
     "bokeh.sphinxext.bokeh_plot",  # bokeh plot support
+    "sphinx_autodoc_typehints",  # automatically document type hints
 ]
 
 if use_multiversion:
@@ -148,6 +149,17 @@ html_sidebars = {
 autoclass_content = "both"
 autodoc_typehints = "description"
 autodoc_typehints_description_target = "documented"
+autodoc_type_aliases = {
+    "ColumnTypesLike": "julearn.base.ColumnTypesLike",
+    "ColumnTypesDict": "julearn.base.ColumnTypesDict",
+    "EstimatorLike": "julearn.utils.typing.EstimatorLike",
+    "ModelLike": "julearn.utils.typing.ModelLike",
+    "TransformerLike": "julearn.utils.typing.TransformerLike",
+    "JuModelLike": "julearn.utils.typing.JuModelLike",
+    "JuTransformerLike": "julearn.utils.typing.JuTransformerLike",
+    "CVLike": "julearn.utils.typing.CVLike",
+}
+
 
 # -- sphinx.ext.autosummary configuration ------------------------------------
 
@@ -268,3 +280,6 @@ smv_released_pattern = r"^tags/v.*$"
 towncrier_draft_autoversion_mode = "draft"
 towncrier_draft_include_empty = True
 towncrier_draft_working_directory = PROJECT_ROOT_DIR
+
+# -- sphinx_autodoc_typehints configuration ---------------------------------------
+always_use_bars_union = True

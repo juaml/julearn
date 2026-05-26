@@ -15,119 +15,6 @@ ColumnTypesLike = Union[list[str], set[str], str, "ColumnTypes"]
 ColumnTypesDict = dict[str, ColumnTypesLike]
 
 
-def change_column_type(column: str, new_type: str):
-    """Change the type of a column.
-
-    Parameters
-    ----------
-    column : str
-        The column to change the type of.
-    new_type : str
-        The new type of the column.
-
-    Returns
-    -------
-    str
-        The new column name with the type changed.
-
-    """
-    return "__:type:__".join([*column.split("__:type:__")[0:1], new_type])
-
-
-def get_column_type(column):
-    """Get the type of a column.
-
-    Parameters
-    ----------
-    column : str
-        The column to get the type of.
-
-    Returns
-    -------
-    str
-        The type of the column.
-
-    """
-    return column.split("__:type:__")[1]
-
-
-def get_renamer(X_df):  # noqa: N803
-    """Get the dictionary that will rename the columns to add the type.
-
-    Parameters
-    ----------
-    X_df : pd.DataFrame
-        The dataframe to rename the columns of.
-
-    Returns
-    -------
-    dict
-        The dictionary that will rename the columns.
-
-    """
-    return {
-        x: (x if "__:type:__" in x else f"{x}__:type:__continuous")
-        for x in X_df.columns
-    }
-
-
-class make_type_selector:
-    """Make a type selector.
-
-    This type selector is to be used with
-    :class:`sklearn.compose.ColumnTransformer`
-
-    Parameters
-    ----------
-    pattern : str
-        The pattern to select the columns.
-
-    Returns
-    -------
-    function
-        The type selector.
-
-    """
-
-    def __init__(self, pattern):
-        self.pattern = pattern
-
-    def __call__(self, X_df):  # noqa: N803
-        """Select the columns based on the pattern.
-
-        Parameters
-        ----------
-        X_df : pd.DataFrame
-            The dataframe to select the columns of.
-
-        Returns
-        -------
-        list
-            The list of selected columns.
-
-        """
-        # Rename the columns to add the type if not present
-        renamer = get_renamer(X_df)
-        _X_df = X_df.rename(columns=renamer)
-        reverse_renamer = {
-            new_name: name for name, new_name in renamer.items()
-        }
-
-        # Select the columns based on the pattern
-        selected_columns = make_column_selector(self.pattern)(_X_df)
-        if len(selected_columns) == 0:
-            raise_error(
-                f"No columns selected with pattern {self.pattern} in "
-                f"{_X_df.columns.to_list()}"
-            )
-
-        # Rename the column back to their original name
-        return [
-            reverse_renamer[col] if col in reverse_renamer else col
-            for col in selected_columns
-        ]
-
-
 class ColumnTypes:
     """Class to hold types in regards to a pd.DataFrame Column.
 
@@ -314,6 +201,121 @@ class ColumnTypes:
 
         """
         return ColumnTypes(self)
+
+
+
+def change_column_type(column: str, new_type: str):
+    """Change the type of a column.
+
+    Parameters
+    ----------
+    column : str
+        The column to change the type of.
+    new_type : str
+        The new type of the column.
+
+    Returns
+    -------
+    str
+        The new column name with the type changed.
+
+    """
+    return "__:type:__".join([*column.split("__:type:__")[0:1], new_type])
+
+
+def get_column_type(column):
+    """Get the type of a column.
+
+    Parameters
+    ----------
+    column : str
+        The column to get the type of.
+
+    Returns
+    -------
+    str
+        The type of the column.
+
+    """
+    return column.split("__:type:__")[1]
+
+
+def get_renamer(X_df):  # noqa: N803
+    """Get the dictionary that will rename the columns to add the type.
+
+    Parameters
+    ----------
+    X_df : pd.DataFrame
+        The dataframe to rename the columns of.
+
+    Returns
+    -------
+    dict
+        The dictionary that will rename the columns.
+
+    """
+    return {
+        x: (x if "__:type:__" in x else f"{x}__:type:__continuous")
+        for x in X_df.columns
+    }
+
+
+class make_type_selector:
+    """Make a type selector.
+
+    This type selector is to be used with
+    :class:`sklearn.compose.ColumnTransformer`
+
+    Parameters
+    ----------
+    pattern : str
+        The pattern to select the columns.
+
+    Returns
+    -------
+    function
+        The type selector.
+
+    """
+
+    def __init__(self, pattern):
+        self.pattern = pattern
+
+    def __call__(self, X_df):  # noqa: N803
+        """Select the columns based on the pattern.
+
+        Parameters
+        ----------
+        X_df : pd.DataFrame
+            The dataframe to select the columns of.
+
+        Returns
+        -------
+        list
+            The list of selected columns.
+
+        """
+        # Rename the columns to add the type if not present
+        renamer = get_renamer(X_df)
+        _X_df = X_df.rename(columns=renamer)
+        reverse_renamer = {
+            new_name: name for name, new_name in renamer.items()
+        }
+
+        # Select the columns based on the pattern
+        selected_columns = make_column_selector(self.pattern)(_X_df)
+        if len(selected_columns) == 0:
+            raise_error(
+                f"No columns selected with pattern {self.pattern} in "
+                f"{_X_df.columns.to_list()}"
+            )
+
+        # Rename the column back to their original name
+        return [
+            reverse_renamer[col] if col in reverse_renamer else col
+            for col in selected_columns
+        ]
+
 
 
 def ensure_column_types(attr: ColumnTypesLike) -> ColumnTypes:
