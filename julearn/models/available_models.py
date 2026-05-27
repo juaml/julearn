@@ -50,6 +50,11 @@ from sklearn.svm import SVC, SVR
 try:  # pragma: no cover
     from xgboost import XGBClassifier, XGBRegressor
 
+    from .xgb_cvearlystopping import (
+        XGBClassifierCVEarlyStopping,
+        XGBRegressorCVEarlyStopping,
+    )
+
     _has_xgboost = True
 except ImportError:
     _has_xgboost = False
@@ -58,10 +63,6 @@ from ..utils import logger, raise_error, warn_with_log
 from ..utils.logging import DelayedFmtMessage as __
 from ..utils.typing import ModelLike
 from .dynamic import DynamicSelection
-from .xgb_cvearlystopping import (
-    XGBClassifierCVEarlyStopping,
-    XGBRegressorCVEarlyStopping,
-)
 
 
 _available_models: dict[str, dict[str, Any]] = {
