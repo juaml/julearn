@@ -251,6 +251,16 @@ def test_XGBClassifierCVEarlyStopping_binary(df_binary) -> None:
         model._model.get_params()["n_estimators"]
         == (model._best_iteration + 1) * 2
     )
+    y_pred = model.predict(df_binary[X])
+    assert y_pred.shape == (len(df_binary),)
+    assert set(y_pred).issubset(set(df_binary[y]))
+
+    y_probas = model.predict_proba(df_binary[X])
+    assert y_probas.shape == (len(df_binary), 2)
+    assert (y_probas >= 0).all() and (y_probas <= 1).all()
+
+    score = model.score(df_binary[X], df_binary[y])
+    assert isinstance(score, float)
 
 
 def test_XGBClassifierCVEarlyStopping_errors() -> None:
@@ -285,7 +295,7 @@ def test_XGBClassifierCVEarlyStopping_numpy(df_iris) -> None:
 
     assert _is_fitted(model) is False
     assert not hasattr(model, "_grouped_cv")
-    model.fit(df_iris[X].values, (df_iris[y].values == "setosa").astype(int))
+    model.fit(df_iris[X].values, df_iris[y].values)
     assert _is_fitted(model)
     assert hasattr(model, "_grouped_cv")
     assert model._grouped_cv is False
@@ -295,11 +305,38 @@ def test_XGBClassifierCVEarlyStopping_numpy(df_iris) -> None:
     assert model._model.get_params()["random_state"] == 42
     assert model._best_iteration is not None
 
-    # Two classes, so the number of trees is the best iteration times 2
+    # Three classes, so the number of trees is the best iteration times 3
     assert (
         model._model.get_params()["n_estimators"]
-        == (model._best_iteration + 1) * 2
+        == (model._best_iteration + 1) * 3
     )
+
+    model.fit(df_iris[X].values, df_iris[y].values.to_numpy())
+    assert _is_fitted(model)
+    assert hasattr(model, "_grouped_cv")
+    assert model._grouped_cv is False
+
+    # Check that the model was refit with the best number of iterations
+    assert model._model.get_params()["early_stopping_rounds"] is None
+    assert model._model.get_params()["random_state"] == 42
+    assert model._best_iteration is not None
+
+    # Three classes, so the number of trees is the best iteration times 3
+    assert (
+        model._model.get_params()["n_estimators"]
+        == (model._best_iteration + 1) * 3
+    )
+
+    y_pred = model.predict(df_iris[X])
+    assert y_pred.shape == (len(df_iris),)
+    assert set(y_pred).issubset(set(df_iris[y]))
+
+    y_probas = model.predict_proba(df_iris[X])
+    assert y_probas.shape == (len(df_iris), 3)
+    assert (y_probas >= 0).all() and (y_probas <= 1).all()
+
+    score = model.score(df_iris[X], df_iris[y])
+    assert isinstance(score, float)
 
 
 def test_XGBClassifierCVEarlyStopping_set_params(df_iris) -> None:
@@ -344,10 +381,16 @@ def test_XGBClassifierCVEarlyStopping_set_params(df_iris) -> None:
         == (model._best_iteration + 1) * 3
     )
 
-    model.set_params(test_size=0.3, early_stopping_rounds=10, random_state=24)
+    model.set_params(
+        test_size=0.3,
+        early_stopping_rounds=10,
+        random_state=24,
+        num_parallel_tree=2,
+    )
     assert model.get_params()["test_size"] == 0.3
     assert model.get_params()["early_stopping_rounds"] == 10
     assert model.get_params()["random_state"] == 24
+    assert model.get_params()["num_parallel_tree"] == 2
     model.fit(df_iris[X], df_iris[y], groups=df_iris["group"])
     assert _is_fitted(model)
     assert hasattr(model, "_grouped_cv")
@@ -355,6 +398,7 @@ def test_XGBClassifierCVEarlyStopping_set_params(df_iris) -> None:
     assert model.get_params()["test_size"] == 0.3
     assert model.get_params()["early_stopping_rounds"] == 10
     assert model.get_params()["random_state"] == 24
+    assert model.get_params()["num_parallel_tree"] == 2
     # Check that the model was refit with the best number of iterations
     assert model._model.get_params()["early_stopping_rounds"] is None
     assert model._model.get_params()["random_state"] == 24
@@ -362,5 +406,5 @@ def test_XGBClassifierCVEarlyStopping_set_params(df_iris) -> None:
     # Three classes, so the number of trees is the best iteration times 3
     assert (
         model._model.get_params()["n_estimators"]
-        == (model._best_iteration + 1) * 3
+        == (model._best_iteration + 1) * 3 * 2
     )

@@ -311,10 +311,9 @@ class XGBClassifierCVEarlyStopping(_BaseXGBCVEarlyStopping, ClassifierMixin):
         self._label_encoder = None
         # Check if labels are strings and convert to integers if so, to avoid
         # issues with XGBoost
-        if isinstance(y, pd.Series) and y.dtype in ["object", "string"]:
-            self._label_encoder = LabelEncoder()
-            y = self._label_encoder.fit_transform(y)  # type: ignore
-        elif isinstance(y, np.ndarray) and y.dtype == "object":
+        if isinstance(
+            y, pd.Series | np.ndarray | pd.arrays.StringArray
+        ) and y.dtype in ["object", "string"]:
             self._label_encoder = LabelEncoder()
             y = self._label_encoder.fit_transform(y)  # type: ignore
         super().fit(X, y, groups)
@@ -357,23 +356,3 @@ class XGBClassifierCVEarlyStopping(_BaseXGBCVEarlyStopping, ClassifierMixin):
         if self._model is None:
             raise ValueError("Model not fitted")
         return self._model.predict_proba(X)
-
-    def score(self, X: DataLike, y: DataLike) -> float:  # noqa: N803
-        """Score the model.
-
-        Parameters
-        ----------
-        X : pd.DataFrame
-            The data to predict on.
-        y : DataLike
-            The true target values.
-
-        Returns
-        -------
-        float
-            The score.
-
-        """
-        if self._label_encoder is not None:
-            y = self._label_encoder.transform(y)
-        return super().score(X, y)
