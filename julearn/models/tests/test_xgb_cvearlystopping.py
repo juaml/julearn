@@ -4,6 +4,7 @@
 # License: AGPL
 
 import pandas as pd
+import pytest
 from sklearn.utils.validation import _is_fitted
 
 from julearn.models.xgb_cvearlystopping import (
@@ -116,6 +117,9 @@ def test_XGBClassifierCVEarlyStopping_grouped(df_iris) -> None:
     assert _is_fitted(model)
     assert hasattr(model, "_grouped_cv")
     assert model._grouped_cv is True
+    assert model.get_params()["test_size"] == 0.2
+    assert model.get_params()["early_stopping_rounds"] == 5
+    assert model.get_params()["random_state"] == 42
 
 
 def test_XGBClassifierCVEarlyStopping_binary(df_binary) -> None:
@@ -131,7 +135,7 @@ def test_XGBClassifierCVEarlyStopping_binary(df_binary) -> None:
     y = "species"
 
     model = XGBClassifierCVEarlyStopping(
-        test_size=0.2, early_stopping_rounds=5, random_state=42
+        test_size=0.2, early_stopping_rounds=5
     )
 
     assert _is_fitted(model) is False
@@ -140,3 +144,19 @@ def test_XGBClassifierCVEarlyStopping_binary(df_binary) -> None:
     assert _is_fitted(model)
     assert hasattr(model, "_grouped_cv")
     assert model._grouped_cv is False
+    assert model.get_params()["test_size"] == 0.2
+    assert model.get_params()["early_stopping_rounds"] == 5
+
+
+def test_XGBClassifierCVEarlyStopping_errors() -> None:
+    """Test XGBClassifierCVEarlyStopping error handling."""
+    with pytest.raises(ValueError, match="early_stopping_rounds"):
+        model = XGBClassifierCVEarlyStopping(
+            test_size=0.2, early_stopping_rounds=None, random_state=42
+        )
+
+    with pytest.raises(ValueError, match="not fitted"):
+        model = XGBClassifierCVEarlyStopping(
+            test_size=None, early_stopping_rounds=5, random_state=42
+        )
+        model.predict([[1, 2], [3, 4], [5, 6]])
