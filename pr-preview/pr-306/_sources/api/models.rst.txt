@@ -27,6 +27,7 @@ around existing models in other libraries but rather variants of existing
 models or novel models.
 
 .. autosummary::
+   :nosignatures:
    :toctree: generated/
    :template: class.rst
 
