@@ -45,7 +45,14 @@ from sklearn.naive_bayes import (
     MultinomialNB,
 )
 from sklearn.svm import SVC, SVR
-from xgboost import XGBClassifier, XGBRegressor
+
+
+try:  # pragma: no cover
+    from xgboost import XGBClassifier, XGBRegressor
+
+    _has_xgboost = True
+except ImportError:
+    _has_xgboost = False
 
 from ..utils import logger, raise_error, warn_with_log
 from ..utils.logging import DelayedFmtMessage as __
@@ -140,16 +147,25 @@ _available_models: dict[str, dict[str, Any]] = {
         "regression": DummyRegressor,
         "classification": DummyClassifier,
     },
-    # XGBoost
-    "xgb": {
+}
+
+if _has_xgboost is True:
+    _available_models["xgb"] = {
         "regression": XGBRegressor,
         "classification": XGBClassifier,
-    },
-    "xgb_cvearlystopping": {
+    }
+    _available_models["xgb_cvearlystopping"] = {
         "regression": XGBRegressorCVEarlyStopping,
         "classification": XGBClassifierCVEarlyStopping,
-    },
-}
+    }
+    logger.info(
+        "XGBoost is available and has been added to the model registry."
+    )
+else:
+    logger.info(
+        "XGBoost is not available and has not been added to the model "
+        "registry. To use XGBoost models, please install the xgboost package."
+    )
 
 _available_models_reset = deepcopy(_available_models)
 

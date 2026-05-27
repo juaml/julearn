@@ -587,8 +587,7 @@ dependencies = [
     { name = "pandas" },
     { name = "scikit-learn" },
     { name = "statsmodels" },
-    { name = "xgboost", version = "2.1.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
-    { name = "xgboost", version = "3.2.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.10'" },
+    { name = "xgboost" },
 ]
 
 [package.optional-dependencies]
@@ -599,6 +598,7 @@ all = [
     { name = "panel" },
     { name = "param" },
     { name = "scikit-optimize" },
+    { name = "xgboost" },
 ]
 deslib = [
     { name = "deslib" },
@@ -653,6 +653,9 @@ viz = [
     { name = "panel" },
     { name = "param" },
 ]
+xgboost = [
+    { name = "xgboost" },
+]
 
 [package.dev-dependencies]
 dev = [
@@ -683,6 +686,7 @@ optional = [
     { name = "optuna" },
     { name = "optuna-integration" },
     { name = "scikit-optimize" },
+    { name = "xgboost" },
 ]
 viz = [
     { name = "bokeh" },
@@ -696,7 +700,7 @@ requires-dist = [
     { name = "deslib", marker = "extra == 'deslib'", specifier = ">=0.3.5,<0.4.0" },
     { name = "furo", marker = "extra == 'sphinx'", specifier = ">=2025.7.19" },
     { name = "julearn", extras = ["optuna", "skopt", "sphinx", "viz"], marker = "extra == 'docs'" },
-    { name = "julearn", extras = ["optuna", "skopt", "viz"], marker = "extra == 'all'" },
+    { name = "julearn", extras = ["optuna", "skopt", "viz", "xgboost"], marker = "extra == 'all'" },
     { name = "looseversion", marker = "python_full_version >= '3.12'", specifier = "==1.3.0" },
     { name = "numpy", specifier = ">=2.3.0,<3.0.0" },
     { name = "numpydoc", marker = "extra == 'sphinx'", specifier = ">=1.9.0" },
@@ -722,8 +726,9 @@ requires-dist = [
     { name = "towncrier", marker = "extra == 'sphinx'", specifier = ">=25.8.0" },
     { name = "tox", marker = "extra == 'dev'" },
     { name = "xgboost", specifier = ">=2.1.4" },
+    { name = "xgboost", marker = "extra == 'xgboost'", specifier = ">=2.1.4,<4.0.0" },
 ]
-provides-extras = ["dev", "sphinx", "deslib", "viz", "skopt", "optuna", "docs", "all"]
+provides-extras = ["dev", "sphinx", "deslib", "viz", "skopt", "optuna", "xgboos", "docs", "all"]
 
 [package.metadata.requires-dev]
 dev = [
@@ -754,6 +759,7 @@ optional = [
     { name = "optuna", specifier = ">=4.0.0,<5.0.0" },
     { name = "optuna-integration", specifier = ">=4.0.0,<5.0.0" },
     { name = "scikit-optimize", specifier = ">=0.10.2,<0.11.0" },
+    { name = "xgboost", specifier = ">=2.1.4,<4.0.0" },
 ]
 viz = [
     { name = "bokeh", specifier = ">=3.4.3" },
@@ -1976,7 +1982,10 @@ wheels = [
 name = "sphinx-polyversion"
 version = "2.0.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/75/01/7755fc4b01ff281df937f6563c190b55313a14e9b1b5ac960003933f0793/sphinx_polyversion-2.0.0.tar.gz", hash = "sha256:ce5d15bbf5d2003aaec9e25c1646ec4f8a91cd55dac89df60ff17bd15630f926", size = 32265, upload-time = "2025-09-25T15:15:13.035Z" }
+dependencies = [
+    { name = "sphinx" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/9a/10/25231164a97a9016bdc73a3530af8f4a6846bdc564af1460af2ff3e59a50/sphinx-multiversion-0.2.4.tar.gz", hash = "sha256:5cd1ca9ecb5eed63cb8d6ce5e9c438ca13af4fa98e7eb6f376be541dd4990bcb", size = 7024, upload-time = "2020-08-12T15:48:20.566Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/13/ac/88c719ec04351cd1d56c5faab18e6183b3d82eb5c64a10284feeaadb6ff1/sphinx_polyversion-2.0.0-py3-none-any.whl", hash = "sha256:5455e8a5560d587a0401009196612c98b067138e69556891eb9b8edc547e1327", size = 36628, upload-time = "2025-09-25T15:15:11.939Z" },
 ]
@@ -2300,49 +2309,12 @@ wheels = [
 
 [[package]]
 name = "xgboost"
-version = "2.1.4"
-source = { registry = "https://pypi.org/simple" }
-resolution-markers = [
-    "python_full_version < '3.10'",
-]
-dependencies = [
-    { name = "numpy", version = "2.0.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
-    { name = "nvidia-nccl-cu12", marker = "python_full_version < '3.10' and platform_machine != 'aarch64' and sys_platform == 'linux'" },
-    { name = "scipy", version = "1.13.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.10'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/e2/5e/860a1ef13ce38db8c257c83e138be64bcffde8f401e84bf1e2e91838afa3/xgboost-2.1.4.tar.gz", hash = "sha256:ab84c4bbedd7fae1a26f61e9dd7897421d5b08454b51c6eb072abc1d346d08d7", size = 1091127, upload-time = "2025-02-06T18:18:20.192Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/b6/fe/7a1d2342c2e93f22b41515e02b73504c7809247b16ae395bd2ee7ef11e19/xgboost-2.1.4-py3-none-macosx_10_15_x86_64.macosx_11_0_x86_64.macosx_12_0_x86_64.whl", hash = "sha256:78d88da184562deff25c820d943420342014dd55e0f4c017cc4563c2148df5ee", size = 2140692, upload-time = "2025-02-06T18:16:59.23Z" },
-    { url = "https://files.pythonhosted.org/packages/f5/b6/653a70910739f127adffbefb688ebc22b51139292757de7c22b1e04ce792/xgboost-2.1.4-py3-none-macosx_12_0_arm64.whl", hash = "sha256:523db01d4e74b05c61a985028bde88a4dd380eadc97209310621996d7d5d14a7", size = 1939418, upload-time = "2025-02-06T18:17:02.494Z" },
-    { url = "https://files.pythonhosted.org/packages/43/06/905fee34c10fb0d0c3baa15106413b76f360d8e958765ec57c9eddf762fa/xgboost-2.1.4-py3-none-manylinux2014_aarch64.whl", hash = "sha256:57c7e98111aceef4b689d7d2ce738564a1f7fe44237136837a47847b8b33bade", size = 4442052, upload-time = "2025-02-06T18:17:04.029Z" },
-    { url = "https://files.pythonhosted.org/packages/f8/6a/41956f91ab984f2fa44529b2551d825a20d33807eba051a60d06ede2a87c/xgboost-2.1.4-py3-none-manylinux2014_x86_64.whl", hash = "sha256:f1343a512e634822eab30d300bfc00bf777dc869d881cc74854b42173cfcdb14", size = 4533170, upload-time = "2025-02-06T18:17:05.753Z" },
-    { url = "https://files.pythonhosted.org/packages/b1/53/37032dca20dae7a88ad1907f817a81f232ca6e935f0c28c98db3c0a0bd22/xgboost-2.1.4-py3-none-manylinux_2_28_aarch64.whl", hash = "sha256:d366097d0db047315736f46af852feaa907f6d7371716af741cdce488ae36d20", size = 4206715, upload-time = "2025-02-06T18:17:08.448Z" },
-    { url = "https://files.pythonhosted.org/packages/e4/3c/e3a93bfa7e8693c825df5ec02a40f7ff5f0950e02198b1e85da9315a8d47/xgboost-2.1.4-py3-none-manylinux_2_28_x86_64.whl", hash = "sha256:8df6da72963969ab2bf49a520c3e147b1e15cbeddd3aa0e3e039b3532c739339", size = 223642416, upload-time = "2025-02-06T18:17:25.08Z" },
-    { url = "https://files.pythonhosted.org/packages/43/80/0b5a2dfcf5b4da27b0b68d2833f05d77e1a374d43db951fca200a1f12a52/xgboost-2.1.4-py3-none-win_amd64.whl", hash = "sha256:8bbfe4fedc151b83a52edbf0de945fd94358b09a81998f2945ad330fd5f20cd6", size = 124910381, upload-time = "2025-02-06T18:17:43.202Z" },
-]
-
-[[package]]
-name = "xgboost"
 version = "3.2.0"
 source = { registry = "https://pypi.org/simple" }
-resolution-markers = [
-    "python_full_version >= '3.14' and sys_platform == 'win32'",
-    "python_full_version >= '3.14' and sys_platform == 'emscripten'",
-    "python_full_version >= '3.14' and sys_platform != 'emscripten' and sys_platform != 'win32'",
-    "python_full_version >= '3.12' and python_full_version < '3.14' and sys_platform == 'win32'",
-    "python_full_version >= '3.12' and python_full_version < '3.14' and sys_platform == 'emscripten'",
-    "python_full_version >= '3.12' and python_full_version < '3.14' and sys_platform != 'emscripten' and sys_platform != 'win32'",
-    "python_full_version == '3.11.*' and sys_platform == 'win32'",
-    "python_full_version == '3.11.*' and sys_platform == 'emscripten'",
-    "python_full_version == '3.11.*' and sys_platform != 'emscripten' and sys_platform != 'win32'",
-    "python_full_version == '3.10.*'",
-]
 dependencies = [
-    { name = "numpy", version = "2.2.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.10.*'" },
-    { name = "numpy", version = "2.4.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
-    { name = "nvidia-nccl-cu12", marker = "python_full_version >= '3.10' and sys_platform == 'linux'" },
-    { name = "scipy", version = "1.15.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.10.*'" },
-    { name = "scipy", version = "1.17.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
+    { name = "numpy" },
+    { name = "nvidia-nccl-cu12", marker = "sys_platform == 'linux'" },
+    { name = "scipy" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/91/bb/1eb0242409d22db725d7a88088e6cfd6556829fb0736f9ff69aa9f1e9455/xgboost-3.2.0.tar.gz", hash = "sha256:99b0e9a2a64896cdaf509c5e46372d336c692406646d20f2af505003c0c5d70d", size = 1263936, upload-time = "2026-02-10T11:03:05.542Z" }
 wheels = [
