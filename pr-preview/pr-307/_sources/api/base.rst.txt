@@ -19,7 +19,6 @@ Classes
     JuTransformer
     WrapModel
     ColumnTypes
-    ColumnTypesLike
 
 Functions
 ---------
