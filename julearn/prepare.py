@@ -6,7 +6,7 @@
 
 import re
 from collections import Counter
-from typing import Any, Optional, Union
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -29,10 +29,10 @@ from .utils.typing import CVLike
 
 
 def _validate_input_data_df(
-    X: Union[str, list[str]],  # noqa: N803
+    X: str | list[str],  # noqa: N803
     y: str,
     df: pd.DataFrame,
-    groups: Optional[str],
+    groups: str | None,
 ) -> None:
     """Validate the input data types for the pipeline.
 
@@ -56,13 +56,13 @@ def _validate_input_data_df(
         If any of the input parameters is not of a valid type.
 
     """
-    if not isinstance(X, (str, list)):
+    if not isinstance(X, str | list):
         raise_error("X must be a string or list of strings")
 
     if not isinstance(y, str):
         raise_error("y must be a string")
 
-    if not isinstance(groups, (str, type(None))):
+    if not isinstance(groups, str | type(None)):
         raise_error("groups must be a string")
 
     if not isinstance(df, pd.DataFrame):
@@ -73,10 +73,10 @@ def _validate_input_data_df(
 
 
 def _validate_input_data_df_ext(
-    X: Union[str, list[str]],  # noqa: N803
+    X: str | list[str],  # noqa: N803
     y: str,
     df: pd.DataFrame,
-    groups: Optional[str],
+    groups: str | None,
 ) -> None:
     """Validate the input dataframe for the pipeline.
 
@@ -150,7 +150,7 @@ def _is_regex(string: str) -> bool:
 
 
 def _pick_columns(
-    regexes: Union[str, list[str]], columns: Union[list[str], pd.Index]
+    regexes: str | list[str], columns: list[str] | pd.Index
 ) -> list[str]:
     """Pick elements from a list based on matches to a list of regexes.
 
@@ -232,13 +232,13 @@ def _pick_columns(
 
 
 def prepare_input_data(
-    X: Union[str, list[str]],  # noqa: N803
+    X: str | list[str],  # noqa: N803
     y: str,
     df: pd.DataFrame,
-    pos_labels: Union[str, int, float, list, None],
-    groups: Optional[str],
-    X_types: Optional[dict],  # noqa: N803
-) -> tuple[pd.DataFrame, pd.Series, Union[pd.Series, None], dict]:
+    pos_labels: str | int | float | list | None,
+    groups: str | None,
+    X_types: dict | None,  # noqa: N803
+) -> tuple[pd.DataFrame, pd.Series, pd.Series | None, dict]:
     """Prepare the input data and variables for the pipeline.
 
     Parameters
@@ -377,7 +377,7 @@ def prepare_input_data(
 def check_consistency(
     y: pd.Series,
     cv: CVLike,
-    groups: Optional[pd.Series],
+    groups: pd.Series | None,
     problem_type: str,
 ) -> bool:
     """Check the consistency of the parameters/input.
@@ -496,7 +496,7 @@ def check_consistency(
 
 
 def _check_x_types(
-    X_types: Optional[dict],  # noqa: N803
+    X_types: dict | None,  # noqa: N803
     X: list[str],  # noqa: N803
 ) -> dict[str, list]:
     """Check validity of X_types with respect to X.
@@ -614,7 +614,7 @@ def _check_x_types(
 
 
 def prepare_search_params(
-    search_params: Optional[dict[str, Any]],
+    search_params: dict[str, Any] | None,
 ) -> dict[str, Any]:
     """Prepare the parameters for the search.
 

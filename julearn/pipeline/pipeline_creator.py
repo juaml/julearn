@@ -6,7 +6,7 @@
 
 import typing
 from dataclasses import dataclass, field
-from typing import Any, Optional, Union
+from typing import Any
 
 import numpy as np
 import sklearn
@@ -15,7 +15,7 @@ from sklearn.ensemble import AdaBoostClassifier, AdaBoostRegressor
 from sklearn.model_selection import RandomizedSearchCV, check_cv
 from sklearn.pipeline import Pipeline
 
-from ..base import ColumnTypes, ColumnTypesLike, JuTransformer, WrapModel
+from ..base import ColumnTypes, JuTransformer, WrapModel
 from ..model_selection._optuna_searcher import (
     _prepare_optuna_hyperparameters_distributions,
     is_optuna_valid_distribution,
@@ -39,6 +39,7 @@ from ..transformers.target import (
 from ..utils import logger, raise_error, warn_with_log
 from ..utils.logging import DelayedFmtMessage as __
 from ..utils.typing import (
+    ColumnTypesLike,
     EstimatorLike,
     JuEstimatorLike,
     JuModelLike,
@@ -82,7 +83,7 @@ def _should_wrap_this_step(
 def _params_to_pipeline(
     param: Any,
     X_types: dict[str, list],  # noqa: N803
-    search_params: Optional[dict] = None,
+    search_params: dict | None = None,
 ):
     """Recursively convert params to pipelines.
 
@@ -150,15 +151,15 @@ class Step:
     """
 
     name: str
-    estimator: Union[JuEstimatorLike, EstimatorLike]
+    estimator: JuEstimatorLike | EstimatorLike
     apply_to: ColumnTypes = field(
         default_factory=lambda: ColumnTypes("continuous")
     )
-    needed_types: Optional[ColumnTypesLike] = None
-    params_to_tune: Optional[dict] = None
+    needed_types: ColumnTypesLike | None = None
+    params_to_tune: dict | None = None
 
-    row_select_col_type: Optional[ColumnTypesLike] = None
-    row_select_vals: Optional[Union[str, int, list, bool]] = None
+    row_select_col_type: ColumnTypesLike | None = None
+    row_select_vals: str | int | list | bool | None = None
 
     def __post_init__(self) -> None:
         """Post init."""
@@ -207,11 +208,11 @@ class PipelineCreator:
 
     def add(  # noqa: C901
         self,
-        step: Union[EstimatorLike, str, TargetPipelineCreator],
-        name: Optional[str] = None,
-        apply_to: Optional[ColumnTypesLike] = None,
-        row_select_col_type: Optional[ColumnTypesLike] = None,
-        row_select_vals: Optional[Union[str, int, list, bool]] = None,
+        step: EstimatorLike | str | TargetPipelineCreator,
+        name: str | None = None,
+        apply_to: ColumnTypesLike | None = None,
+        row_select_col_type: ColumnTypesLike | None = None,
+        row_select_vals: str | int | list | bool | None = None,
         **params: Any,
     ) -> "PipelineCreator":
         """Add a step to the PipelineCreator.
@@ -461,7 +462,7 @@ class PipelineCreator:
         # Disable metadata routing for AdaBoost-based estimators until
         # scikit-learn implements them.
 
-        if isinstance(step, (AdaBoostClassifier, AdaBoostRegressor)):
+        if isinstance(step, AdaBoostClassifier | AdaBoostRegressor):
             warn_with_log(
                 "Disabling metadata routing for AdaBoost-based "
                 "estimators until scikit-learn implements them."
@@ -524,7 +525,7 @@ class PipelineCreator:
     @classmethod
     def from_list(
         cls,
-        transformers: Union[str, list],
+        transformers: str | list,
         model_params: dict,
         problem_type: str,
         apply_to: ColumnTypesLike = "continuous",
@@ -627,8 +628,8 @@ class PipelineCreator:
 
     def to_pipeline(
         self,
-        X_types: Optional[dict[str, list]] = None,  # noqa: N803
-        search_params: Optional[dict[str, Any]] = None,
+        X_types: dict[str, list] | None = None,  # noqa: N803
+        search_params: dict[str, Any] | None = None,
     ) -> Pipeline:
         """Create a pipeline from the PipelineCreator.
 
@@ -826,7 +827,7 @@ class PipelineCreator:
     @staticmethod
     def _wrap_target_model(
         model_name: str, model: ModelLike, target_trans_step: Step, kind: str
-    ) -> tuple[str, Union[JuTransformedTargetModel, JuGeneratedTargetModel]]:
+    ) -> tuple[str, JuTransformedTargetModel | JuGeneratedTargetModel]:
         """Wrap the model in a JuTransformedTargetModel.
 
         Parameters
@@ -903,8 +904,8 @@ class PipelineCreator:
 
     def _get_step_name(
         self,
-        name: Optional[str],
-        step: Union[EstimatorLike, str, TargetPipelineCreator],
+        name: str | None,
+        step: EstimatorLike | str | TargetPipelineCreator,
     ) -> str:
         """Get the name of a step, with a count if it is repeated.
 
@@ -936,7 +937,7 @@ class PipelineCreator:
 
     def _validate_step(
         self,
-        step: Union[EstimatorLike, str, TargetPipelineCreator],
+        step: EstimatorLike | str | TargetPipelineCreator,
         apply_to: ColumnTypesLike,
     ) -> None:
         """Validate a step.
@@ -987,7 +988,7 @@ class PipelineCreator:
 
     def _check_X_types(
         self,
-        X_types: Optional[dict] = None,  # noqa: N803
+        X_types: dict | None = None,  # noqa: N803
     ) -> dict[str, list[str]]:
         """Check the X_types against the pipeline creator settings.
 
@@ -1058,7 +1059,7 @@ class PipelineCreator:
 
     @staticmethod
     def _is_transformer_step(
-        step: Union[str, EstimatorLike, TargetPipelineCreator],
+        step: str | EstimatorLike | TargetPipelineCreator,
     ) -> bool:
         """Check if a step is a transformer."""
         if step in list_transformers():
@@ -1069,7 +1070,7 @@ class PipelineCreator:
 
     @staticmethod
     def _is_model_step(
-        step: Union[EstimatorLike, str, TargetPipelineCreator],
+        step: EstimatorLike | str | TargetPipelineCreator,
     ) -> bool:
         """Check if a step is a model."""
         if step in list_models():
@@ -1184,8 +1185,8 @@ def _prepare_hyperparameters_distributions(
 
 
 def _prepare_hyperparameter_tuning(
-    params_to_tune: Union[dict[str, Any], list[dict[str, Any]]],
-    search_params: Optional[dict[str, Any]],
+    params_to_tune: dict[str, Any] | list[dict[str, Any]],
+    search_params: dict[str, Any] | None,
     pipeline: Pipeline,
 ):
     """Prepare hyperparameter tuning in the pipeline.

@@ -5,7 +5,7 @@
 # License: AGPL
 
 import typing
-from typing import TYPE_CHECKING, Any, Union
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import pandas as pd
@@ -75,7 +75,7 @@ class JuGeneratedTargetModel(JuBaseEstimator):
     def __init__(
         self,
         model: ModelLike,
-        transformer: Union[EstimatorLike, JuEstimatorLike],
+        transformer: EstimatorLike | JuEstimatorLike,
     ) -> None:
         self.model = model
         self.transformer = transformer

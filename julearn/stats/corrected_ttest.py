@@ -7,7 +7,6 @@
 
 import typing
 from itertools import combinations
-from typing import Optional
 
 import numpy as np
 import pandas as pd
@@ -52,7 +51,7 @@ def _compute_corrected_ttest(
     differences: pd.DataFrame,
     n_train: int,
     n_test: int,
-    df: Optional[int] = None,
+    df: int | None = None,
     alternative: str = "two-sided",
 ) -> tuple[pd.Series, pd.Series]:
     """Compute paired t-test with corrected variance.
@@ -108,7 +107,7 @@ def _compute_corrected_ttest(
 
 def corrected_ttest(
     *scores: pd.DataFrame,
-    df: Optional[int] = None,
+    df: int | None = None,
     method: str = "bonferroni",
     alternative: str = "two-sided",
 ) -> pd.DataFrame:

@@ -4,7 +4,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Any, Optional
+from typing import Any
 
 import pandas as pd
 import pytest
@@ -37,7 +37,7 @@ class MockTestEst(BaseEstimator):
     def fit(
         self,
         X: pd.DataFrame,  # noqa: N803
-        y: Optional[pd.Series] = None,
+        y: pd.Series | None = None,
         **fit_params: Any,
     ) -> "MockTestEst":
         """Fit the estimator.

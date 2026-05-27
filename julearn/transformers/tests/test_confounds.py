@@ -4,8 +4,6 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Optional
-
 import numpy as np
 import pandas as pd
 import pytest
@@ -101,8 +99,8 @@ def test_ConfoundRemover__apply_threshold() -> None:
 )
 def test_ConfoundRemover_confound_auto_find_conf(
     df_X_confounds: pd.DataFrame,  # noqa: N803
-    drop: Optional[list[str]],
-    confounds: Optional[list[str]],
+    drop: list[str] | None,
+    confounds: list[str] | None,
     models_confound_remover: str,
 ) -> None:
     """Test finding confounds in the data types.
@@ -149,6 +147,7 @@ def test_ConfoundRemover_confound_auto_find_conf(
         confound_remover.models_confound_,
         confound_regressions,
         features,
+        strict=False,
     ):
         manual_pred = confound_regression.predict(  # type: ignore
             df_X.loc[:, confounds]  # type: ignore
@@ -234,6 +233,7 @@ def test_confound_set_confounds(
         confound_remover.models_confound_,
         confound_regressions,
         features,
+        strict=False,
     ):
         t_confounds = df_X_confounds.loc[:, conf_as_feat]  # type: ignore
         manual_pred = confound_regression.predict(t_confounds)  # type: ignore

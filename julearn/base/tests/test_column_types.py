@@ -7,7 +7,8 @@
 import pandas as pd
 import pytest
 
-from julearn.base import ColumnTypes, ColumnTypesLike, make_type_selector
+from julearn.base import ColumnTypes, make_type_selector
+from julearn.utils.typing import ColumnTypesLike
 
 
 @pytest.mark.parametrize(
@@ -63,7 +64,7 @@ def test_make_column_selector(
     column_types = [col or "continuous" for col in column_types]
     to_rename = {
         col: f"{col.split('__:type:__')[0]}__:type:__{ctype}"  # type:ignore
-        for col, ctype in zip(X_iris.columns, column_types)
+        for col, ctype in zip(X_iris.columns, column_types, strict=False)
     }
     X_iris.rename(columns=to_rename, inplace=True)
     col_true_selected = X_iris.iloc[:, selection].columns.tolist()
@@ -182,7 +183,7 @@ def test_ColumnTypes_to_column_selector(
     _column_types = [col or "continuous" for col in data_column_types]
     to_rename = {
         col: f"{col.split('__:type:__')[0]}__:type:__{ctype}"  # type:ignore
-        for col, ctype in zip(X_iris.columns, _column_types)
+        for col, ctype in zip(X_iris.columns, _column_types, strict=False)
     }
     X_iris.rename(columns=to_rename, inplace=True)
     col_true_selected = X_iris.iloc[:, selection].columns.tolist()

@@ -4,8 +4,8 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 import typing
+from collections.abc import Callable
 from copy import copy
-from typing import Callable, Optional, Union
 
 import pandas as pd
 import pytest
@@ -216,7 +216,7 @@ def y_iris() -> pd.Series:
     ],
     scope="function",
 )
-def X_types_iris(request: FixtureRequest) -> Optional[dict]:
+def X_types_iris(request: FixtureRequest) -> dict | None:
     """Return different types for the iris dataset features.
 
     Parameters
@@ -282,7 +282,7 @@ def problem_type(request: FixtureRequest) -> str:
     ],
     scope="function",
 )
-def search_params(request: FixtureRequest) -> Optional[dict]:
+def search_params(request: FixtureRequest) -> dict | None:
     """Return different possibiblites for the search_params argument.
 
     Parameters
@@ -307,7 +307,7 @@ def search_params(request: FixtureRequest) -> Optional[dict]:
     ],
     scope="function",
 )
-def bayes_search_params(request: FixtureRequest) -> Optional[dict]:
+def bayes_search_params(request: FixtureRequest) -> dict | None:
     """Return different search_params argument for BayesSearchCV.
 
     Parameters
@@ -332,7 +332,7 @@ def bayes_search_params(request: FixtureRequest) -> Optional[dict]:
     ],
     scope="function",
 )
-def optuna_search_params(request: FixtureRequest) -> Optional[dict]:
+def optuna_search_params(request: FixtureRequest) -> dict | None:
     """Return different search_params argument for OptunaSearchCV.
 
     Parameters
@@ -441,7 +441,7 @@ def get_tuning_distributions() -> Callable:
     ],
     scope="function",
 )
-def preprocess(request: FixtureRequest) -> Union[str, list[str]]:
+def preprocess(request: FixtureRequest) -> str | list[str]:
     """Return different preprocessing steps.
 
     Parameters

@@ -5,7 +5,6 @@
 # License: AGPL
 
 from copy import deepcopy
-from typing import Optional, Union
 
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 
@@ -85,7 +84,7 @@ def register_searcher(
     searcher_name: str,
     searcher: object,
     params_attr: str,
-    overwrite: Optional[bool] = None,
+    overwrite: bool | None = None,
 ) -> None:
     """Register searcher to julearn.
 
@@ -150,7 +149,7 @@ def reset_searcher_register() -> None:
     _available_searchers = deepcopy(_available_searchers_reset)
 
 
-def get_searcher_params_attr(searcher: Union[str, type]) -> Optional[str]:
+def get_searcher_params_attr(searcher: str | type) -> str | None:
     """Get the name of the attribute that holds the search space.
 
     Parameters

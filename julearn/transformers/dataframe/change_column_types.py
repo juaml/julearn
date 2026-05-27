@@ -4,12 +4,10 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Optional, Union
-
 import pandas as pd
 
-from ...base import ColumnTypesLike, JuTransformer
-from ...utils.typing import DataLike
+from ...base import JuTransformer
+from ...utils.typing import ColumnTypesLike, DataLike
 
 
 class ChangeColumnTypes(JuTransformer):
@@ -37,8 +35,8 @@ class ChangeColumnTypes(JuTransformer):
         self,
         X_types_renamer: dict[str, str],  # noqa: N803
         apply_to: ColumnTypesLike,
-        row_select_col_type: Optional[ColumnTypesLike] = None,
-        row_select_vals: Optional[Union[str, int, list, bool]] = None,
+        row_select_col_type: ColumnTypesLike | None = None,
+        row_select_vals: str | int | list | bool | None = None,
     ):
         self.X_types_renamer = X_types_renamer
         super().__init__(
@@ -51,7 +49,7 @@ class ChangeColumnTypes(JuTransformer):
     def _fit(
         self,
         X: pd.DataFrame,  # noqa: N803
-        y: Optional[DataLike] = None,
+        y: DataLike | None = None,
     ) -> "ChangeColumnTypes":
         """Fit the transformer.
 
@@ -100,7 +98,7 @@ class ChangeColumnTypes(JuTransformer):
         return X.rename(columns=self._renamer)
 
     def get_feature_names_out(
-        self, input_features: Optional[list[str]] = None
+        self, input_features: list[str] | None = None
     ) -> list[str]:
         """Get names of features to be returned.
 

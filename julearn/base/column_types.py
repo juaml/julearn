@@ -4,15 +4,13 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Any, Callable, Union
+from collections.abc import Callable
+from typing import Any
 
 from sklearn.compose import make_column_selector
 
 from ..utils.logging import raise_error
-
-
-ColumnTypesLike = Union[list[str], set[str], str, "ColumnTypes"]
-ColumnTypesDict = dict[str, ColumnTypesLike]
+from ..utils.typing import ColumnTypesLike
 
 
 class ColumnTypes:
@@ -111,7 +109,7 @@ class ColumnTypes:
             pattern += r")"
         return pattern
 
-    def __eq__(self, other: Union["ColumnTypes", str]):
+    def __eq__(self, other: "ColumnTypes | str") -> bool:
         """Check if the column_types are equal to another column_types.
 
         Parameters
@@ -201,7 +199,6 @@ class ColumnTypes:
 
         """
         return ColumnTypes(self)
-
 
 
 def change_column_type(column: str, new_type: str):
@@ -315,7 +312,6 @@ class make_type_selector:
             reverse_renamer[col] if col in reverse_renamer else col
             for col in selected_columns
         ]
-
 
 
 def ensure_column_types(attr: ColumnTypesLike) -> ColumnTypes:

@@ -5,7 +5,7 @@
 #          Synchon Mandal <s.mandal@fz-juelich.de>
 # License: AGPL
 
-from typing import ClassVar, Optional, Union
+from typing import ClassVar
 
 import numpy as np
 from numpy.random import RandomState
@@ -52,7 +52,7 @@ class StratifiedBootstrap(_MetadataRequester, _UnsupportedGroupCVMixin):
     def __init__(
         self,
         n_splits: int = 200,
-        random_state: Optional[Union[int, RandomState]] = None,
+        random_state: int | RandomState | None = None,
     ) -> None:
         self.n_splits = n_splits
         self.random_state = random_state

@@ -5,7 +5,7 @@
 #          Kaustubh Patil <k.patil@fz-juelich.de>
 # License: AGPL
 
-from typing import Callable, Optional
+from collections.abc import Callable
 
 import numpy as np
 import sklearn
@@ -102,7 +102,7 @@ class CBPM(BaseEstimator, TransformerMixin):
         corr_method: Callable = pearsonr,
         agg_method: Callable = np.sum,
         corr_sign: str = "posneg",
-        n_jobs: Optional[int] = None,
+        n_jobs: int | None = None,
         verbose: int = 0,
     ):
         self.significance_threshold = significance_threshold

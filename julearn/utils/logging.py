@@ -6,17 +6,12 @@
 
 import logging
 import sys
-
-
-if sys.version_info < (3, 12):  # pragma: no cover
-    from distutils.version import LooseVersion
-else:
-    from looseversion import LooseVersion
-
 import warnings
 from pathlib import Path
 from subprocess import PIPE, Popen, TimeoutExpired
-from typing import NoReturn, Optional, Union
+from typing import NoReturn
+
+from looseversion import LooseVersion
 
 
 logger = logging.getLogger("julearn")
@@ -125,9 +120,9 @@ _logging_types = {
 
 
 def configure_logging(
-    level: Union[int, str] = "WARNING",
-    fname: Optional[Union[str, Path]] = None,
-    overwrite: Optional[bool] = None,
+    level: int | str = "WARNING",
+    fname: str | Path | None = None,
+    overwrite: bool | None = None,
     output_format=None,
 ) -> None:
     """Configure the logging functionality.
@@ -202,7 +197,7 @@ def _close_handlers(logger: logging.Logger) -> None:
 
     """
     for handler in list(logger.handlers):
-        if isinstance(handler, (logging.FileHandler, logging.StreamHandler)):
+        if isinstance(handler, logging.FileHandler | logging.StreamHandler):
             if isinstance(handler, logging.FileHandler):
                 handler.close()
             logger.removeHandler(handler)
@@ -211,7 +206,7 @@ def _close_handlers(logger: logging.Logger) -> None:
 def raise_error(
     msg: str,
     klass: type[Exception] = ValueError,
-    exception: Optional[Exception] = None,
+    exception: Exception | None = None,
 ) -> NoReturn:
     """Raise error, but first log it.
 

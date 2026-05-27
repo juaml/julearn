@@ -4,7 +4,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import TYPE_CHECKING, Optional, Union
+from typing import TYPE_CHECKING, Union
 
 import pandas as pd
 from sklearn.model_selection import BaseCrossValidator
@@ -50,10 +50,10 @@ class Inspector:
             "BaseEstimator",
             None,
         ] = None,
-        X: Optional[pd.DataFrame] = None,  # noqa: N803
-        y: Optional[pd.Series] = None,
-        groups: Optional[pd.Series] = None,
-        cv: Optional[Union[int, BaseCrossValidator]] = None,
+        X: pd.DataFrame | None = None,  # noqa: N803
+        y: pd.Series | None = None,
+        groups: pd.Series | None = None,
+        cv: int | BaseCrossValidator | None = None,
     ) -> None:
         self._scores = scores
         self._model = model

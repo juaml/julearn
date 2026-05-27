@@ -466,6 +466,7 @@ def test_tune_hyperparam_gridsearch(df_iris: pd.DataFrame) -> None:
         for a, b in zip(
             actual["test_accuracy"],  # type: ignore
             expected["test_accuracy"],
+            strict=False,
         )
     )
 
@@ -561,6 +562,7 @@ def test_tune_hyperparam_gridsearch_groups(df_iris: pd.DataFrame) -> None:
         for a, b in zip(
             actual["test_accuracy"],  # type: ignore
             expected["test_accuracy"],
+            strict=False,
         )
     )
 
@@ -650,6 +652,7 @@ def test_tune_hyperparam_randomsearch(df_iris: pd.DataFrame) -> None:
         for a, b in zip(
             actual["test_accuracy"],  # type: ignore
             expected["test_accuracy"],
+            strict=False,
         )
     )
 
@@ -768,6 +771,7 @@ def test_tune_hyperparams_multiple_grid(df_iris: pd.DataFrame) -> None:
         for a, b in zip(
             actual1["test_accuracy"],  # type: ignore
             expected["test_accuracy"],
+            strict=False,
         )
     )
     assert all(
@@ -775,6 +779,7 @@ def test_tune_hyperparams_multiple_grid(df_iris: pd.DataFrame) -> None:
         for a, b in zip(
             actual2["test_accuracy"],  # type: ignore
             expected["test_accuracy"],
+            strict=False,
         )
     )
     # Compare the models

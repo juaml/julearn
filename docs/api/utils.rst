@@ -5,16 +5,15 @@ Utils
    :no-members:
    :no-inherited-members:
 
-Classes
+Members
 -------
 
 .. currentmodule:: julearn.utils
 
 .. autosummary::
    :toctree: generated/
-   :template: class.rst
 
-    logger
+   logger
 
 Functions
 ---------
@@ -36,17 +35,36 @@ Typing
    :no-members:
    :no-inherited-members:
 
-Classes
--------
+
+Types
+-----
 
 .. currentmodule:: julearn.utils.typing
 
 .. autosummary::
    :toctree: generated/
-   :template: class.rst
+   :template: type.rst
 
-    JuEstimatorLike
+    DataLike
+    ScorerLike
     EstimatorLike
+    CVLike
+    ColumnTypesLike
+
+
+Protocols
+---------
+
+.. currentmodule:: julearn.utils.typing
+
+.. autosummary::
+   :toctree: generated/
+   :template: protocol.rst
+
     EstimatorLikeFit1
     EstimatorLikeFit2
     EstimatorLikeFity
+    TransformerLike
+    ModelLike
+    JuEstimatorLike
+    JuModelLike

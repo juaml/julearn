@@ -5,7 +5,6 @@
 # License: AGPL
 
 import inspect
-from typing import Optional, Union
 
 import numpy as np
 import pandas as pd
@@ -36,24 +35,24 @@ sklearn.set_config(enable_metadata_routing=True)
 def _validate_api_params(  # noqa: C901
     X: list[str],  # noqa: N803
     y: str,
-    model: Union[str, PipelineCreator, BaseEstimator, list[PipelineCreator]],
+    model: str | PipelineCreator | BaseEstimator | list[PipelineCreator],
     data: pd.DataFrame,
-    X_types: Optional[dict] = None,  # noqa: N803
-    problem_type: Optional[str] = None,
-    preprocess: Union[None, str, list[str]] = None,
-    return_estimator: Optional[str] = None,
+    X_types: dict | None = None,  # noqa: N803
+    problem_type: str | None = None,
+    preprocess: None | str | list[str] = None,
+    return_estimator: str | None = None,
     return_inspector: bool = False,
-    groups: Optional[str] = None,
-    pos_labels: Union[str, list[str], None] = None,
-    model_params: Optional[dict] = None,
-    search_params: Optional[dict] = None,
-    seed: Optional[int] = None,
+    groups: str | None = None,
+    pos_labels: str | list[str] | None = None,
+    model_params: dict | None = None,
+    search_params: dict | None = None,
+    seed: int | None = None,
 ) -> tuple[
     pd.DataFrame,
     pd.Series,
-    Optional[pd.Series],
-    Union[Pipeline, BaseSearchCV],
-    Optional[str],
+    pd.Series | None,
+    Pipeline | BaseSearchCV,
+    str | None,
     bool,
     bool,
     str,
@@ -215,7 +214,7 @@ def _validate_api_params(  # noqa: C901
         )
 
     wrap_score = False
-    if isinstance(model, (PipelineCreator, list)):
+    if isinstance(model, PipelineCreator | list):
         logger.debug(
             "Generating pipeline from PipelineCreator or list of them"
         )
@@ -278,7 +277,7 @@ def _validate_api_params(  # noqa: C901
             wrap_score = True
         problem_type = model[0].problem_type
 
-    elif not isinstance(model, (str, BaseEstimator)):
+    elif not isinstance(model, str | BaseEstimator):
         raise_error(
             "Model has to be a PipelineCreator, a string or a "
             "scikit-learn compatible model."
@@ -409,23 +408,23 @@ def _check_configure_joblib_backend() -> None:
 def run_cross_validation(
     X: list[str],  # noqa: N803
     y: str,
-    model: Union[str, PipelineCreator, BaseEstimator, list[PipelineCreator]],
+    model: str | PipelineCreator | BaseEstimator | list[PipelineCreator],
     data: pd.DataFrame,
-    X_types: Optional[dict] = None,  # noqa: N803
-    problem_type: Optional[str] = None,
-    preprocess: Union[None, str, list[str]] = None,
-    return_estimator: Optional[str] = None,
+    X_types: dict | None = None,  # noqa: N803
+    problem_type: str | None = None,
+    preprocess: None | str | list[str] = None,
+    return_estimator: str | None = None,
     return_inspector: bool = False,
     return_train_score: bool = False,
-    cv: Optional[CVLike] = None,
-    groups: Optional[str] = None,
-    scoring: Union[str, list[str], None] = None,
-    pos_labels: Union[str, list[str], None] = None,
-    model_params: Optional[dict] = None,
-    search_params: Optional[dict] = None,
-    seed: Optional[int] = None,
-    n_jobs: Optional[int] = None,
-    verbose: Optional[int] = 0,
+    cv: CVLike | None = None,
+    groups: str | None = None,
+    scoring: str | list[str] | None = None,
+    pos_labels: str | list[str] | None = None,
+    model_params: dict | None = None,
+    search_params: dict | None = None,
+    seed: int | None = None,
+    n_jobs: int | None = None,
+    verbose: int | None = 0,
 ):
     """Run cross validation and score.
 
@@ -706,17 +705,17 @@ def run_cross_validation(
 def run_fit(
     X: list[str],  # noqa: N803
     y: str,
-    model: Union[str, PipelineCreator, BaseEstimator, list[PipelineCreator]],
+    model: str | PipelineCreator | BaseEstimator | list[PipelineCreator],
     data: pd.DataFrame,
-    X_types: Optional[dict] = None,  # noqa: N803
-    problem_type: Optional[str] = None,
-    preprocess: Union[None, str, list[str]] = None,
-    groups: Optional[str] = None,
-    pos_labels: Union[str, list[str], None] = None,
-    model_params: Optional[dict] = None,
-    search_params: Optional[dict] = None,
-    seed: Optional[int] = None,
-    verbose: Optional[int] = 0,
+    X_types: dict | None = None,  # noqa: N803
+    problem_type: str | None = None,
+    preprocess: None | str | list[str] = None,
+    groups: str | None = None,
+    pos_labels: str | list[str] | None = None,
+    model_params: dict | None = None,
+    search_params: dict | None = None,
+    seed: int | None = None,
+    verbose: int | None = 0,
 ):
     """Fit the model on all the data.
 

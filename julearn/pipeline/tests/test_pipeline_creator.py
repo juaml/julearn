@@ -5,7 +5,7 @@
 # License: AGPL
 
 import warnings
-from typing import Callable, Union
+from collections.abc import Callable
 
 import pandas as pd
 import pytest
@@ -19,7 +19,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import RobustScaler, StandardScaler
 from sklearn.svm import SVC
 
-from julearn.base import ColumnTypesLike, WrapModel
+from julearn.base import WrapModel
 from julearn.models import get_model
 from julearn.pipeline import (
     PipelineCreator,
@@ -30,10 +30,11 @@ from julearn.pipeline.pipeline_creator import (
     _params_to_pipeline,
 )
 from julearn.transformers import get_transformer
+from julearn.utils.typing import ColumnTypesLike
 
 
 def test_construction_working_wrapping(
-    model: str, preprocess: Union[str, list[str]], problem_type: str
+    model: str, preprocess: str | list[str], problem_type: str
 ) -> None:
     """Test that the pipeline constructions works as expected (wrapping).
 
@@ -60,7 +61,7 @@ def test_construction_working_wrapping(
 
     # check preprocessing steps
     # ignoring first step for types and last for model
-    for element in zip(preprocess, pipeline.steps[1:-1]):
+    for element in zip(preprocess, pipeline.steps[1:-1], strict=False):
         _preprocess, (name, transformer) = element
         assert name.startswith(f"{_preprocess}")
         assert isinstance(transformer, JuColumnTransformer)
@@ -85,7 +86,7 @@ def test_construction_working_wrapping(
 
 
 def test_construction_working_nowrapping(
-    model: str, preprocess: Union[str, list[str]], problem_type: str
+    model: str, preprocess: str | list[str], problem_type: str
 ) -> None:
     """Test that the pipeline constructions works as expected (no wrapping).
 
@@ -110,7 +111,7 @@ def test_construction_working_nowrapping(
 
     # check preprocessing steps
     # ignoring first step for types and last for model
-    for element in zip(preprocess, pipeline.steps[1:-1]):
+    for element in zip(preprocess, pipeline.steps[1:-1], strict=False):
         _preprocess, (name, transformer) = element
         assert name.startswith(f"{_preprocess}")
         assert not isinstance(transformer, JuColumnTransformer)
@@ -136,7 +137,7 @@ def test_fit_and_transform_no_error(
     X_iris: pd.DataFrame,  # noqa: N803
     y_iris: pd.Series,
     model: str,
-    preprocess: Union[str, list[str]],
+    preprocess: str | list[str],
     problem_type: str,
 ) -> None:
     """Test that the pipeline fit and transform does not give an error.
@@ -171,7 +172,7 @@ def test_fit_and_transform_no_error(
 def _hyperparam_tuning_base_test(
     X_types_iris: dict[str, list[str]],  # noqa: N803
     model: str,
-    preprocess: Union[str, list[str]],
+    preprocess: str | list[str],
     problem_type: str,
     get_tuning_params: Callable,
     search_params: dict[str, list],
@@ -239,7 +240,7 @@ def _hyperparam_tuning_base_test(
 def test_hyperparameter_tuning(
     X_types_iris: dict[str, list[str]],  # noqa: N803
     model: str,
-    preprocess: Union[str, list[str]],
+    preprocess: str | list[str],
     problem_type: str,
     get_tuning_params: Callable,
     search_params: dict[str, list],
@@ -289,7 +290,7 @@ def test_hyperparameter_tuning(
 def test_hyperparameter_tuning_bayes(
     X_types_iris: dict[str, list[str]],  # noqa: N803
     model: str,
-    preprocess: Union[str, list[str]],
+    preprocess: str | list[str],
     problem_type: str,
     get_tuning_params: Callable,
     bayes_search_params: dict[str, list],
@@ -332,7 +333,7 @@ def test_hyperparameter_tuning_bayes(
 def test_hyperparameter_tuning_optuna(
     X_types_iris: dict[str, list[str]],  # noqa: N803
     model: str,
-    preprocess: Union[str, list[str]],
+    preprocess: str | list[str],
     problem_type: str,
     get_tuning_params: Callable,
     optuna_search_params: dict[str, list],
@@ -418,7 +419,7 @@ def _compare_param_grids(a: dict, b: dict) -> None:
 def test_hyperparameter_tuning_distributions(
     X_types_iris: dict[str, list[str]],  # noqa: N803
     model: str,
-    preprocess: Union[str, list[str]],
+    preprocess: str | list[str],
     problem_type: str,
     get_tuning_distributions: Callable,
     search_params: dict[str, list],
@@ -468,7 +469,7 @@ def test_hyperparameter_tuning_distributions(
 def test_hyperparameter_tuning_distributions_bayes(
     X_types_iris: dict[str, list[str]],  # noqa: N803
     model: str,
-    preprocess: Union[str, list[str]],
+    preprocess: str | list[str],
     problem_type: str,
     get_tuning_distributions: Callable,
     bayes_search_params: dict[str, list],

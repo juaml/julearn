@@ -4,8 +4,6 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Optional, Union
-
 import pandas as pd
 from sklearn.model_selection import BaseCrossValidator, check_cv
 from sklearn.utils.metaestimators import available_if
@@ -61,11 +59,11 @@ class FoldsInspector:
     def __init__(
         self,
         scores: pd.DataFrame,
-        cv: Union[BaseCrossValidator, int],
+        cv: BaseCrossValidator | int,
         X: DataLike,  # noqa: N803
         y: pd.Series,
         func: str = "predict",
-        groups: Optional[pd.Series] = None,
+        groups: pd.Series | None = None,
     ):
         self._scores = scores
         self._X = X

@@ -4,7 +4,6 @@
 # License: AGPL
 
 from collections.abc import Generator
-from typing import Optional
 
 import numpy as np
 from sklearn.model_selection import BaseCrossValidator
@@ -45,8 +44,8 @@ class _JulearnFinalModelCV(BaseCrossValidator):
         self,
         X: np.ndarray,  # noqa: N803
         y: np.ndarray,
-        groups: Optional[np.ndarray] = None,
-    ) -> Generator[tuple[np.ndarray, np.ndarray], None, None]:
+        groups: np.ndarray | None = None,
+    ) -> Generator[tuple[np.ndarray, np.ndarray]]:
         """Generate indices to split data into training and test set.
 
         Parameters

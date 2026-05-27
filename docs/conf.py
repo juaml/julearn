@@ -9,9 +9,13 @@
 import datetime
 from functools import partial
 from pathlib import Path
+import sys
 
 from setuptools_scm import get_version
 
+import types
+from typing import TypeAliasType
+from sphinx_autodoc_typehints import format_annotation
 
 # Check if sphinx-multiversion is installed
 use_multiversion = False
@@ -103,7 +107,18 @@ nitpick_ignore_regex = [
     ("py:class", "pipeline.Pipeline"),
     ("py:class", "sklearn.utils.metadata_routing.MetadataRequest"),
     ("py:class", "julearn.inspect._pipeline.PipelineInspector"),
+    ("py:class", "sklearn.model_selection._split.*"),
+    ("py:class", "sklearn.metrics._scorer.*"),
 ]
+
+to_ignore = ["array-like", "shape", "optional", "or", "the", "options",
+             "n_samples", "default=.*", "n_features", "n_outputs", "True",
+             "False"]
+
+for i in to_ignore:
+    nitpick_ignore_regex.append(("py:class", i))
+
+suppress_warnings = ["sphinx_autodoc_typehints"]
 
 
 # -- Options for HTML output -------------------------------------------------
@@ -147,17 +162,21 @@ html_sidebars = {
 # -- sphinx.ext.autodoc configuration ----------------------------------------
 
 autoclass_content = "both"
-autodoc_typehints = "description"
-autodoc_typehints_description_target = "documented"
+# autodoc_typehints = "description"
+# autodoc_typehints_description_target = "documented"
 autodoc_type_aliases = {
-    "ColumnTypesLike": "julearn.base.ColumnTypesLike",
-    "ColumnTypesDict": "julearn.base.ColumnTypesDict",
-    "EstimatorLike": "julearn.utils.typing.EstimatorLike",
-    "ModelLike": "julearn.utils.typing.ModelLike",
-    "TransformerLike": "julearn.utils.typing.TransformerLike",
-    "JuModelLike": "julearn.utils.typing.JuModelLike",
-    "JuTransformerLike": "julearn.utils.typing.JuTransformerLike",
-    "CVLike": "julearn.utils.typing.CVLike",
+    "ColumnTypes": "julearn.base.column_types.ColumnTypes",
+    "Pipeline": "sklearn.pipeline.Pipeline",
+    "RandomState": "numpy.random.RandomState",
+#     "ColumnTypesLike": "julearn.utils.typing.ColumnTypesLike",
+#     "DataLike": "julearn.utils.typing.DataLike",
+#     "ScorerLike": "julearn.utils.typing.ScorerLike",
+#     "EstimatorLike": "julearn.utils.typing.EstimatorLike",
+#     "ModelLike": "julearn.utils.typing.ModelLike",
+#     "TransformerLike": "julearn.utils.typing.TransformerLike",
+#     "JuModelLike": "julearn.utils.typing.JuModelLike",
+#     "JuTransformerLike": "julearn.utils.typing.JuTransformerLike",
+#     "CVLike": "julearn.utils.typing.CVLike",
 }
 
 
@@ -193,6 +212,7 @@ intersphinx_mapping = {
         "https://optuna-integration.readthedocs.io/en/stable",
         None,
     ),
+    "panel": ("https://panel.holoviz.org/", None),
 }
 
 # -- sphinx.ext.extlinks configuration ---------------------------------------
@@ -283,3 +303,64 @@ towncrier_draft_working_directory = PROJECT_ROOT_DIR
 
 # -- sphinx_autodoc_typehints configuration ---------------------------------------
 always_use_bars_union = True
+simplify_optional_unions = True
+typehints_defaults = "comma"
+# Don't show return types at all
+typehints_document_rtype = False
+
+# Don't show "None" return types, but show all others
+typehints_document_rtype_none = False
+
+# Show the return type inline with the return description
+# instead of as a separate block
+typehints_use_rtype = False
+
+def _get_canonical_type_alias_name(annotation: TypeAliasType) -> str:
+    """
+    Get canonical public qualified name for a TypeAliasType.
+
+    For types defined in private modules (e.g. ``numpy._typing.ArrayLike``),
+    search ``sys.modules`` for a public re-export
+    (e.g. ``numpy.typing.ArrayLike``).
+    """
+    module = getattr(annotation, "__module__", "") or ""
+    name = getattr(annotation, "__name__", "") or ""
+    if not module or not name:
+        return ""
+    if not any(part.startswith("_") for part in module.split(".")):
+        return f"{module}.{name}"
+    top_pkg = module.split(".")[0]
+    for mod_name in sorted(sys.modules):
+        if not mod_name.startswith(top_pkg):
+            continue
+        mod = sys.modules[mod_name]
+        if not isinstance(mod, types.ModuleType):
+            continue
+        if any(part.startswith("_") for part in mod_name.split(".")):
+            continue
+        if getattr(mod, name, None) is annotation:
+            return f"{mod_name}.{name}"
+    return f"{module}.{name}"
+
+
+def _typehints_formatter(annotation, config):
+    """Handle formatting of PEP695 type aliases in sphinx-autodoc-typehints."""
+    if isinstance(annotation, TypeAliasType):
+        module = getattr(annotation, "__module__", "") or ""
+        name = getattr(annotation, "__name__", "") or ""
+        intersphinx_mapping = getattr(config, "intersphinx_mapping", {})
+        is_external = module and any(
+            module == pkg or module.startswith(f"{pkg}.")
+            for pkg in intersphinx_mapping
+        )
+        # Handle external PEP695 type aliases
+        if is_external and name:
+            canonical = _get_canonical_type_alias_name(annotation)
+            if canonical:
+                return f":py:obj:`~{canonical}`"
+        # Unwrap internal PEP695 type aliases to their underlying types
+        return format_annotation(annotation.__value__, config)
+    return None
+
+
+typehints_formatter = _typehints_formatter

@@ -37,7 +37,7 @@ def test_continuous_stratified_kfold_binning() -> None:
         n_bins=n_bins, n_splits=3, shuffle=True, random_state=42
     )
     for (sk_train, sk_test), (ju_train, ju_test) in zip(
-        skcv.split(X, bins), jucv.split(X, y)
+        skcv.split(X, bins), jucv.split(X, y), strict=False
     ):
         assert_array_equal(sk_train, ju_train)
         assert_array_equal(sk_test, ju_test)
@@ -47,7 +47,7 @@ def test_continuous_stratified_kfold_binning() -> None:
         n_bins=n_bins, n_repeats=4, n_splits=3, random_state=42
     )
     for (sk_train, sk_test), (ju_train, ju_test) in zip(
-        skcv.split(X, bins), jucv.split(X, y)
+        skcv.split(X, bins), jucv.split(X, y), strict=False
     ):
         assert_array_equal(sk_train, ju_train)
         assert_array_equal(sk_test, ju_test)
@@ -76,7 +76,7 @@ def test_continuous_stratified_kfold_quantile() -> None:
         random_state=42,
     )
     for (sk_train, sk_test), (ju_train, ju_test) in zip(
-        skcv.split(X, bins), jucv.split(X, y)
+        skcv.split(X, bins), jucv.split(X, y), strict=False
     ):
         assert_array_equal(sk_train, ju_train)
         assert_array_equal(sk_test, ju_test)
@@ -90,7 +90,7 @@ def test_continuous_stratified_kfold_quantile() -> None:
         random_state=42,
     )
     for (sk_train, sk_test), (ju_train, ju_test) in zip(
-        skcv.split(X, bins), jucv.split(X, y)
+        skcv.split(X, bins), jucv.split(X, y), strict=False
     ):
         assert_array_equal(sk_train, ju_train)
         assert_array_equal(sk_test, ju_test)
@@ -113,7 +113,9 @@ def test_continuous_stratified_group_kfold_binning() -> None:
         n_bins=n_bins, n_splits=3, shuffle=True, random_state=42
     )
     for (sk_train, sk_test), (ju_train, ju_test) in zip(
-        skcv.split(X, bins, groups=groups), jucv.split(X, y, groups=groups)
+        skcv.split(X, bins, groups=groups),
+        jucv.split(X, y, groups=groups),
+        strict=False,
     ):
         assert_array_equal(sk_train, ju_train)
         assert_array_equal(sk_test, ju_test)
@@ -155,7 +157,9 @@ def test_continuous_stratified_group_kfold_quantile() -> None:
         random_state=42,
     )
     for (sk_train, sk_test), (ju_train, ju_test) in zip(
-        skcv.split(X, bins, groups=groups), jucv.split(X, y, groups=groups)
+        skcv.split(X, bins, groups=groups),
+        jucv.split(X, y, groups=groups),
+        strict=False,
     ):
         assert_array_equal(sk_train, ju_train)
         assert_array_equal(sk_test, ju_test)

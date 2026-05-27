@@ -5,10 +5,17 @@
 # License: AGPL
 
 import re
+from typing import TYPE_CHECKING, Union
 
 from sklearn.utils.validation import check_is_fitted
 
 from ..transformers import JuColumnTransformer
+
+
+if TYPE_CHECKING:
+    from sklearn.pipeline import Pipeline
+
+    from julearn.utils.typing import EstimatorLike
 
 
 class PipelineInspector:
@@ -21,7 +28,7 @@ class PipelineInspector:
 
     """
 
-    def __init__(self, model):
+    def __init__(self, model: "Pipeline"):
         check_is_fitted(model)
         self._model = model
 
@@ -39,7 +46,9 @@ class PipelineInspector:
             model = model.best_estimator_
         return list(model.named_steps.keys())
 
-    def get_step(self, name, as_estimator=False):
+    def get_step(
+        self, name: str, as_estimator: bool = False
+    ) -> Union["Pipeline", "_EstimatorInspector"]:
         """Get a step from the pipeline.
 
         Parameters
@@ -63,7 +72,7 @@ class PipelineInspector:
             step = _EstimatorInspector(step)
         return step
 
-    def get_params(self):
+    def get_params(self) -> dict:
         """Get the parameters of the pipeline.
 
         Returns
@@ -75,7 +84,7 @@ class PipelineInspector:
 
         return self._model.get_params()
 
-    def get_fitted_params(self):
+    def get_fitted_params(self) -> dict:
         """Get the fitted parameters of the pipeline.
 
         Get the fitted parameters of the pipeline. This includes both
@@ -101,13 +110,13 @@ class PipelineInspector:
 
 
 class _EstimatorInspector:
-    def __init__(self, estimator):
+    def __init__(self, estimator: "EstimatorLike"):
         self._estimator = estimator
 
-    def get_params(self):
+    def get_params(self) -> dict:
         return self._estimator.get_params()
 
-    def get_fitted_params(self):
+    def get_fitted_params(self) -> dict:
         all_params = vars(self._estimator)
         if isinstance(self._estimator, JuColumnTransformer):
             all_params = {

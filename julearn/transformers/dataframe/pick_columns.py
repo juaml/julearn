@@ -3,20 +3,15 @@
 # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL
 
-from typing import Optional, Union
-
 import numpy as np
 import pandas as pd
 from numpy.typing import ArrayLike
 from sklearn.base import check_is_fitted
 
-from ...base import (
-    ColumnTypesLike,
-    JuTransformer,
-)
+from ...base import JuTransformer
 from ...utils import logger, raise_error
 from ...utils.logging import DelayedFmtMessage as __
-from ...utils.typing import DataLike
+from ...utils.typing import ColumnTypesLike, DataLike
 
 
 class PickColumns(JuTransformer):
@@ -40,8 +35,8 @@ class PickColumns(JuTransformer):
     def __init__(
         self,
         keep: str,
-        row_select_col_type: Optional[ColumnTypesLike] = None,
-        row_select_vals: Optional[Union[str, int, list, bool]] = None,
+        row_select_col_type: ColumnTypesLike | None = None,
+        row_select_vals: str | int | list | bool | None = None,
     ) -> None:
         self.keep = keep
         super().__init__(
@@ -54,7 +49,7 @@ class PickColumns(JuTransformer):
     def _fit(
         self,
         X: pd.DataFrame,  # noqa: N803
-        y: Optional[DataLike] = None,
+        y: DataLike | None = None,
     ) -> "PickColumns":
         """Fit the transformer.
 
@@ -93,7 +88,7 @@ class PickColumns(JuTransformer):
     def transform(
         self,
         X: pd.DataFrame,  # noqa: N803
-    ) -> Union[pd.DataFrame, pd.Series]:
+    ) -> pd.DataFrame | pd.Series:
         """Pick the columns.
 
         Parameters
@@ -114,9 +109,7 @@ class PickColumns(JuTransformer):
             out = X[self.keep_columns_]
         return out
 
-    def get_support(
-        self, indices: bool = False
-    ) -> Union[ArrayLike, pd.Series]:
+    def get_support(self, indices: bool = False) -> ArrayLike | pd.Series:
         """Get the support mask.
 
         Parameters
@@ -136,7 +129,7 @@ class PickColumns(JuTransformer):
             return self.support_mask_  # type: ignore
 
     def get_feature_names_out(
-        self, input_features: Optional[list[str]] = None
+        self, input_features: list[str] | None = None
     ) -> list[str]:
         """Get output feature names.
 
