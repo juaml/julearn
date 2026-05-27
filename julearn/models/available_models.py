@@ -5,7 +5,7 @@
 # License: AGPL
 
 from copy import deepcopy
-from typing import Any, Optional
+from typing import Any
 
 from sklearn.dummy import DummyClassifier, DummyRegressor
 from sklearn.ensemble import (
@@ -187,9 +187,9 @@ def get_model(name: str, problem_type: str, **kwargs: Any) -> ModelLike:
 
 def register_model(
     model_name: str,
-    classification_cls: Optional[type[ModelLike]] = None,
-    regression_cls: Optional[type[ModelLike]] = None,
-    overwrite: Optional[bool] = None,
+    classification_cls: type[ModelLike] | None = None,
+    regression_cls: type[ModelLike] | None = None,
+    overwrite: bool | None = None,
 ):
     """Register a model to julearn.
 
@@ -228,7 +228,7 @@ def register_model(
     """
     problem_types = ["classification", "regression"]
     for cls, problem_type in zip(
-        [classification_cls, regression_cls], problem_types
+        [classification_cls, regression_cls], problem_types, strict=False
     ):
         if cls is not None:
             if (t_available := _available_models.get(model_name)) is not None:

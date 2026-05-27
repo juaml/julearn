@@ -12,8 +12,8 @@ from sklearn.linear_model import LinearRegression, LogisticRegression
 from sklearn.svm import SVC, SVR
 from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
 
-from julearn.base import ColumnTypesLike, WrapModel
-from julearn.utils.typing import ModelLike
+from julearn.base import WrapModel
+from julearn.utils.typing import ColumnTypesLike, ModelLike
 
 
 @pytest.fixture(
@@ -101,7 +101,7 @@ def test_WrapModel(
     column_types = [col or "continuous" for col in column_types]
     to_rename = {
         col: f"{col.split('__:type:__')[0]}__:type:__{ctype}"  # type:ignore
-        for col, ctype in zip(X_iris.columns, column_types)
+        for col, ctype in zip(X_iris.columns, column_types, strict=False)
     }
     X_iris.rename(columns=to_rename, inplace=True)
     X_iris_selected = X_iris.iloc[:, selection]

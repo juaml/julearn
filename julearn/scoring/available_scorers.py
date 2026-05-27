@@ -6,8 +6,8 @@
 
 import typing
 import warnings
+from collections.abc import Callable
 from copy import deepcopy
-from typing import Callable, Optional, Union
 
 from sklearn.metrics import _scorer, get_scorer_names, make_scorer
 from sklearn.metrics._scorer import _check_multimetric_scoring  # type: ignore
@@ -79,7 +79,7 @@ def list_scorers() -> list[str]:
 def register_scorer(
     scorer_name: str,
     scorer: ScorerLike,  # type: ignore TODO: deprecate sklearn < 1.4.0
-    overwrite: Optional[bool] = None,
+    overwrite: bool | None = None,
 ) -> None:
     """Register a scorer, so that it can be accessed by name.
 
@@ -144,16 +144,16 @@ def reset_scorer_register():
 
 def check_scoring(
     estimator: EstimatorLike,
-    scoring: Union[ScorerLike, str, Callable, list[str], None],  # type: ignore
+    scoring: ScorerLike | str | Callable | list[str] | None,  # type: ignore
     wrap_score: bool,
-) -> Union[None, ScorerLike, Callable, dict[str, ScorerLike]]:  # type: ignore
+) -> None | ScorerLike | Callable | dict[str, ScorerLike]:  # type: ignore
     """Check the scoring.
 
     Parameters
     ----------
     estimator : EstimatorLike
         estimator to check the scoring for
-    scoring : Union[ScorerLike, str, Callable]
+    scoring : ScorerLike or str or Callable or list[str] or None
         scoring to check
     wrap_score : bool
         Does the score needs to be wrapped

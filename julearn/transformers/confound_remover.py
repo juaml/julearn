@@ -4,8 +4,6 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Optional, Union
-
 import numpy as np
 import pandas as pd
 from numpy.typing import ArrayLike
@@ -13,9 +11,9 @@ from pandas._typing import Scalar
 from sklearn.base import clone
 from sklearn.linear_model import LinearRegression
 
-from ..base import ColumnTypesLike, JuTransformer, ensure_column_types
+from ..base import JuTransformer, ensure_column_types
 from ..utils import raise_error
-from ..utils.typing import DataLike, ModelLike
+from ..utils.typing import ColumnTypesLike, DataLike, ModelLike
 
 
 class ConfoundRemover(JuTransformer):
@@ -58,12 +56,12 @@ class ConfoundRemover(JuTransformer):
     def __init__(
         self,
         apply_to: ColumnTypesLike = "continuous",
-        model_confound: Optional[ModelLike] = None,
+        model_confound: ModelLike | None = None,
         confounds: ColumnTypesLike = "confound",
-        threshold: Optional[float] = None,
+        threshold: float | None = None,
         keep_confounds: bool = False,
-        row_select_col_type: Optional[ColumnTypesLike] = None,
-        row_select_vals: Optional[Union[str, int, list, bool]] = None,
+        row_select_col_type: ColumnTypesLike | None = None,
+        row_select_vals: str | int | list | bool | None = None,
     ):
         if model_confound is None:
             model_confound = LinearRegression()  # type: ignore
@@ -81,7 +79,7 @@ class ConfoundRemover(JuTransformer):
     def _fit(
         self,
         X: pd.DataFrame,  # noqa: N803
-        y: Optional[DataLike] = None,
+        y: DataLike | None = None,
     ) -> "ConfoundRemover":
         """Fit ConfoundRemover.
 
@@ -156,9 +154,7 @@ class ConfoundRemover(JuTransformer):
 
         return df_out
 
-    def get_support(
-        self, indices: bool = False
-    ) -> Union[ArrayLike, pd.Series]:
+    def get_support(self, indices: bool = False) -> ArrayLike | pd.Series:
         """Get the support mask.
 
         Parameters
@@ -178,7 +174,7 @@ class ConfoundRemover(JuTransformer):
             return self.support_mask_  # type: ignore
 
     def get_feature_names_out(
-        self, input_features: Optional[list[str]] = None
+        self, input_features: list[str] | None = None
     ) -> list[str]:
         """Get names of features to be returned.
 

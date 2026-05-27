@@ -5,7 +5,7 @@
 # License: AGPL
 
 from copy import deepcopy
-from typing import Any, Optional
+from typing import Any
 
 from ...utils import logger, raise_error, warn_with_log
 from ...utils.logging import DelayedFmtMessage as __
@@ -67,7 +67,7 @@ def get_target_transformer(name: str, **params: Any) -> JuTargetTransformer:
 def register_target_transformer(
     transformer_name: str,
     transformer_cls: type[JuTargetTransformer],
-    overwrite: Optional[bool] = None,
+    overwrite: bool | None = None,
 ):
     """Register a target transformer to julearn.
 

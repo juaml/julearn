@@ -4,19 +4,16 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Optional, Union
-
 import pandas as pd
 from sklearn.compose import ColumnTransformer
 
 from ...base import (
     ColumnTypes,
-    ColumnTypesLike,
     JuTransformer,
     ensure_column_types,
 )
 from ...config import get_config
-from ...utils.typing import DataLike
+from ...utils.typing import ColumnTypesLike, DataLike
 
 
 class FilterColumns(JuTransformer):
@@ -39,9 +36,9 @@ class FilterColumns(JuTransformer):
 
     def __init__(
         self,
-        keep: Optional[ColumnTypesLike] = None,
-        row_select_col_type: Optional[ColumnTypesLike] = None,
-        row_select_vals: Optional[Union[str, int, list, bool]] = None,
+        keep: ColumnTypesLike | None = None,
+        row_select_col_type: ColumnTypesLike | None = None,
+        row_select_vals: str | int | list | bool | None = None,
     ):
         if keep is None:
             keep = "continuous"
@@ -56,7 +53,7 @@ class FilterColumns(JuTransformer):
     def _fit(
         self,
         X: pd.DataFrame,  # noqa: N803
-        y: Optional[DataLike] = None,
+        y: DataLike | None = None,
     ) -> "FilterColumns":
         """Fit the transformer.
 
@@ -102,7 +99,7 @@ class FilterColumns(JuTransformer):
         return self.filter_columns_.transform(X)  # type: ignore
 
     def get_feature_names_out(
-        self, input_features: Optional[list[str]] = None
+        self, input_features: list[str] | None = None
     ) -> list[str]:
         """Get names of features to be returned.
 

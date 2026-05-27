@@ -4,17 +4,17 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Any, Optional, Union
+from typing import Any
 
 import pandas as pd
 from sklearn.base import ClassNamePrefixFeaturesOutMixin
 from sklearn.compose import ColumnTransformer
 from sklearn.utils.validation import check_is_fitted
 
-from ..base import ColumnTypesLike, JuTransformer, ensure_column_types
+from ..base import JuTransformer, ensure_column_types
 from ..config import get_config
 from ..utils.logging import raise_error
-from ..utils.typing import DataLike, EstimatorLike
+from ..utils.typing import ColumnTypesLike, DataLike, EstimatorLike
 
 
 class JuColumnTransformer(JuTransformer):
@@ -48,9 +48,9 @@ class JuColumnTransformer(JuTransformer):
         name: str,
         transformer: EstimatorLike,
         apply_to: ColumnTypesLike,
-        needed_types: Optional[ColumnTypesLike] = None,
-        row_select_col_type: Optional[ColumnTypesLike] = None,
-        row_select_vals: Optional[Union[str, int, list, bool]] = None,
+        needed_types: ColumnTypesLike | None = None,
+        row_select_col_type: ColumnTypesLike | None = None,
+        row_select_vals: str | int | list | bool | None = None,
         **params: Any,
     ):
         self.name = name
@@ -64,7 +64,7 @@ class JuColumnTransformer(JuTransformer):
     def _fit(
         self,
         X: pd.DataFrame,  # noqa: N803
-        y: Optional[DataLike] = None,
+        y: DataLike | None = None,
         **fit_params: Any,
     ) -> "JuColumnTransformer":
         """Fit the transformer.
@@ -120,7 +120,7 @@ class JuColumnTransformer(JuTransformer):
         return self.column_transformer_.transform(X)  # type: ignore
 
     def get_feature_names_out(
-        self, input_features: Optional[list[str]] = None
+        self, input_features: list[str] | None = None
     ) -> list[str]:
         """Get names of features to be returned.
 
@@ -170,7 +170,7 @@ class JuColumnTransformer(JuTransformer):
 
         Parameters
         ----------
-        deep : bool, default=True
+        deep : bool
             Not used. Kept for compatibility with scikit-learn.
 
         Returns

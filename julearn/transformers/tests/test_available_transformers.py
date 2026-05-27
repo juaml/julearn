@@ -4,7 +4,6 @@
 # License: AGPL
 
 import warnings
-from typing import Optional
 
 import pytest
 from sklearn.base import BaseEstimator, TransformerMixin
@@ -34,7 +33,7 @@ class Fish(BaseEstimator, TransformerMixin):
     def fit(
         self,
         X: DataLike,  # noqa: N803
-        y: Optional[DataLike] = None,
+        y: DataLike | None = None,
     ) -> "Fish":
         """Fit the fish.
 

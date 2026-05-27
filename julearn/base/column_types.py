@@ -4,15 +4,201 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Any, Callable, Union
+from collections.abc import Callable
+from typing import Any
 
 from sklearn.compose import make_column_selector
 
 from ..utils.logging import raise_error
+from ..utils.typing import ColumnTypesLike
 
 
-ColumnTypesLike = Union[list[str], set[str], str, "ColumnTypes"]
-ColumnTypesDict = dict[str, ColumnTypesLike]
+class ColumnTypes:
+    """Class to hold types in regards to a pd.DataFrame Column.
+
+    Parameters
+    ----------
+    column_types : ColumnTypes or str or list of str or set of str
+        One str representing on type if columns or a list of these.
+        Instead of a str you can also provide a ColumnTypes itself.
+
+    """
+
+    def __init__(self, column_types: ColumnTypesLike):
+        if isinstance(column_types, ColumnTypes):
+            _types = column_types._column_types.copy()
+        elif isinstance(column_types, str):
+            _types = {column_types}
+        elif not isinstance(column_types, set):
+            _types = set(column_types)
+        elif isinstance(column_types, set):
+            _types = column_types
+        else:
+            raise_error(f"Cannot construct a ColumnType from {column_types}")
+        self._column_types = _types
+
+    def add(self, column_types: ColumnTypesLike) -> "ColumnTypes":
+        """Add more column_types to the column_types.
+
+        Parameters
+        ----------
+        column_types : ColumnTypes or str or list of str or ColumnTypes
+            One str representing on type if columns or a list of these.
+            Instead of a str you can also provide a ColumnTypes itself.
+
+
+        Returns
+        -------
+        self: ColumnTypes
+            The updates ColumnTypes.
+
+        """
+        if not isinstance(column_types, ColumnTypes):
+            column_types = ColumnTypes(column_types)
+        self._column_types.update(column_types)
+        return self
+
+    @property
+    def pattern(self) -> str:
+        """Get the pattern/regex that matches all the column types."""
+        return self._to_pattern()
+
+    def to_type_selector(self) -> Callable:
+        """Create a type selector from the ColumnType.
+
+        The type selector is usable by
+        :class:`sklearn.compose.ColumnTransformer`
+
+
+        Returns
+        -------
+        Callable
+            The type selector.
+
+        """
+        return make_type_selector(self.pattern)
+
+    def _to_pattern(self):
+        """Convert column_types to pattern/regex.
+
+        This pattern is usable to make a column_selector.
+
+        Returns
+        -------
+        pattern: str
+            The pattern/regex that matches all the column types
+
+        """
+        if "*" in self._column_types or ".*" in self._column_types:
+            pattern = ".*"
+        else:
+            types_patterns = []
+            for t_type in self._column_types:
+                if "__:type:__" in t_type:
+                    t_pattern = t_type
+                elif "target" == t_type:
+                    t_pattern = t_type
+                else:
+                    t_pattern = f"__:type:__{t_type}"
+                types_patterns.append(t_pattern)
+
+            pattern = f"(?:{types_patterns[0]}"
+            if len(types_patterns) > 1:
+                for t in types_patterns[1:]:
+                    pattern += rf"|{t}"
+            pattern += r")"
+        return pattern
+
+    def __eq__(self, other: "ColumnTypes | str") -> bool:
+        """Check if the column_types are equal to another column_types.
+
+        Parameters
+        ----------
+        other : ColumnTypes or str
+            The other column_types to compare to.
+
+        Returns
+        -------
+        bool
+            True if the column_types are equal, False otherwise.
+
+        """
+        other = other if isinstance(other, ColumnTypes) else ColumnTypes(other)
+        return self._column_types == other._column_types
+
+    def __and__(self, other: "ColumnTypes"):
+        """Get the intersection of the column_types.
+
+        Parameters
+        ----------
+        other : ColumnTypes
+            The other column_types to get the intersection with.
+
+        Returns
+        -------
+        ColumnTypes
+            The intersection of the column_types.
+
+        """
+        return ColumnTypes(self._column_types & other._column_types)
+
+    def __or__(self, other: "ColumnTypes"):
+        """Get the union of the column_types.
+
+        Parameters
+        ----------
+        other : ColumnTypes
+            The other column_types to get the union with.
+
+        Returns
+        -------
+        ColumnTypes
+            The union of the column_types.
+
+        """
+        return ColumnTypes(self._column_types | other._column_types)
+
+    def __len__(self):
+        """Get the number of column_types."""
+        return len(self._column_types)
+
+    def __iter__(self):
+        """Iterate over the column_types."""
+
+        return self._column_types.__iter__()
+
+    def __repr__(self):
+        """Get the representation of the ColumnTypes."""
+        return (
+            f"ColumnTypes<types={self._column_types}; pattern={self.pattern}>"
+        )
+
+    def filter(self, X_types: dict[str, Any]) -> dict[str, Any]:  # noqa: N803
+        """Filter the X_types based on the column_types.
+
+        Parameters
+        ----------
+        X_types : dict
+            The types of the columns.
+
+        Returns
+        -------
+        dict:
+            The filtered X_types.
+
+        """
+        return {k: v for k, v in X_types.items() if k in self._column_types}
+
+    def copy(self) -> "ColumnTypes":
+        """Get a copy of the ColumnTypes.
+
+        Returns
+        -------
+        ColumnTypes
+            The copy of the ColumnTypes.
+
+        """
+        return ColumnTypes(self)
 
 
 def change_column_type(column: str, new_type: str):
@@ -126,194 +312,6 @@ class make_type_selector:
             reverse_renamer[col] if col in reverse_renamer else col
             for col in selected_columns
         ]
-
-
-class ColumnTypes:
-    """Class to hold types in regards to a pd.DataFrame Column.
-
-    Parameters
-    ----------
-    column_types : ColumnTypes or str or list of str or set of str
-        One str representing on type if columns or a list of these.
-        Instead of a str you can also provide a ColumnTypes itself.
-
-    """
-
-    def __init__(self, column_types: ColumnTypesLike):
-        if isinstance(column_types, ColumnTypes):
-            _types = column_types._column_types.copy()
-        elif isinstance(column_types, str):
-            _types = {column_types}
-        elif not isinstance(column_types, set):
-            _types = set(column_types)
-        elif isinstance(column_types, set):
-            _types = column_types
-        else:
-            raise_error(f"Cannot construct a ColumnType from {column_types}")
-        self._column_types = _types
-
-    def add(self, column_types: ColumnTypesLike) -> "ColumnTypes":
-        """Add more column_types to the column_types.
-
-        Parameters
-        ----------
-        column_types : ColumnTypes or str or list of str or ColumnTypes
-            One str representing on type if columns or a list of these.
-            Instead of a str you can also provide a ColumnTypes itself.
-
-
-        Returns
-        -------
-        self: ColumnTypes
-            The updates ColumnTypes.
-
-        """
-        if not isinstance(column_types, ColumnTypes):
-            column_types = ColumnTypes(column_types)
-        self._column_types.update(column_types)
-        return self
-
-    @property
-    def pattern(self) -> str:
-        """Get the pattern/regex that matches all the column types."""
-        return self._to_pattern()
-
-    def to_type_selector(self) -> Callable:
-        """Create a type selector from the ColumnType.
-
-        The type selector is usable by
-        :class:`sklearn.compose.ColumnTransformer`
-
-
-        Returns
-        -------
-        Callable
-            The type selector.
-
-        """
-        return make_type_selector(self.pattern)
-
-    def _to_pattern(self):
-        """Convert column_types to pattern/regex.
-
-        This pattern is usable to make a column_selector.
-
-        Returns
-        -------
-        pattern: str
-            The pattern/regex that matches all the column types
-
-        """
-        if "*" in self._column_types or ".*" in self._column_types:
-            pattern = ".*"
-        else:
-            types_patterns = []
-            for t_type in self._column_types:
-                if "__:type:__" in t_type:
-                    t_pattern = t_type
-                elif "target" == t_type:
-                    t_pattern = t_type
-                else:
-                    t_pattern = f"__:type:__{t_type}"
-                types_patterns.append(t_pattern)
-
-            pattern = f"(?:{types_patterns[0]}"
-            if len(types_patterns) > 1:
-                for t in types_patterns[1:]:
-                    pattern += rf"|{t}"
-            pattern += r")"
-        return pattern
-
-    def __eq__(self, other: Union["ColumnTypes", str]):
-        """Check if the column_types are equal to another column_types.
-
-        Parameters
-        ----------
-        other : ColumnTypes or str
-            The other column_types to compare to.
-
-        Returns
-        -------
-        bool
-            True if the column_types are equal, False otherwise.
-
-        """
-        other = other if isinstance(other, ColumnTypes) else ColumnTypes(other)
-        return self._column_types == other._column_types
-
-    def __and__(self, other: "ColumnTypes"):
-        """Get the intersection of the column_types.
-
-        Parameters
-        ----------
-        other : ColumnTypes
-            The other column_types to get the intersection with.
-
-        Returns
-        -------
-        ColumnTypes
-            The intersection of the column_types.
-
-        """
-        return ColumnTypes(self._column_types & other._column_types)
-
-    def __or__(self, other: "ColumnTypes"):
-        """Get the union of the column_types.
-
-        Parameters
-        ----------
-        other : ColumnTypes
-            The other column_types to get the union with.
-
-        Returns
-        -------
-        ColumnTypes
-            The union of the column_types.
-
-        """
-        return ColumnTypes(self._column_types | other._column_types)
-
-    def __len__(self):
-        """Get the number of column_types."""
-        return len(self._column_types)
-
-    def __iter__(self):
-        """Iterate over the column_types."""
-
-        return self._column_types.__iter__()
-
-    def __repr__(self):
-        """Get the representation of the ColumnTypes."""
-        return (
-            f"ColumnTypes<types={self._column_types}; pattern={self.pattern}>"
-        )
-
-    def filter(self, X_types: dict[str, Any]) -> dict[str, Any]:  # noqa: N803
-        """Filter the X_types based on the column_types.
-
-        Parameters
-        ----------
-        X_types : dict
-            The types of the columns.
-
-        Returns
-        -------
-        dict:
-            The filtered X_types.
-
-        """
-        return {k: v for k, v in X_types.items() if k in self._column_types}
-
-    def copy(self) -> "ColumnTypes":
-        """Get a copy of the ColumnTypes.
-
-        Returns
-        -------
-        ColumnTypes
-            The copy of the ColumnTypes.
-
-        """
-        return ColumnTypes(self)
 
 
 def ensure_column_types(attr: ColumnTypesLike) -> ColumnTypes:

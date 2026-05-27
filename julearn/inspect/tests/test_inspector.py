@@ -69,7 +69,8 @@ def test_normal_usage(df_iris: "pd.DataFrame") -> None:
     assert pipe == inspect.model._model  # type: ignore
     for (_, score), inspect_fold in zip(
         scores.iterrows(),  # type: ignore
-        inspect.folds,  # type: ignore
+        inspect.folds,
+        strict=False,  # type: ignore
     ):
         assert score["estimator"] == inspect_fold.model._model
 
@@ -87,7 +88,8 @@ def test_normal_usage(df_iris: "pd.DataFrame") -> None:
     scores, inspect = out
     for (_, score), inspect_fold in zip(
         scores.iterrows(),  # type: ignore
-        inspect.folds,  # type: ignore
+        inspect.folds,
+        strict=False,  # type: ignore
     ):
         assert score["estimator"] == inspect_fold.model._model
 

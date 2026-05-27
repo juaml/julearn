@@ -4,8 +4,6 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Optional, Union
-
 import numpy as np
 from numpy.random import RandomState
 from sklearn.model_selection._split import (
@@ -75,11 +73,11 @@ class ContinuousStratifiedKFold(StratifiedKFold):
 
     def __init__(
         self,
-        n_bins,
-        method="binning",
-        n_splits=5,
-        shuffle=False,
-        random_state=None,
+        n_bins: int,
+        method: str = "binning",
+        n_splits: int = 5,
+        shuffle: bool = False,
+        random_state: int | RandomState | None = None,
     ):
         self.n_bins = n_bins
         if method not in ["binning", "quantile"]:
@@ -95,7 +93,7 @@ class ContinuousStratifiedKFold(StratifiedKFold):
         self,
         X: np.ndarray,  # noqa: N803
         y: np.ndarray,
-        groups: Optional[np.ndarray] = None,
+        groups: np.ndarray | None = None,
     ):
         """Generate indices to split data into training and test set.
 
@@ -170,7 +168,7 @@ class RepeatedContinuousStratifiedKFold(_RepeatedSplits):
         method="binning",
         n_splits: int = 5,
         n_repeats: int = 10,
-        random_state: Optional[Union[int, RandomState]] = None,
+        random_state: int | RandomState | None = None,
     ):
         super().__init__(
             ContinuousStratifiedKFold,
@@ -221,11 +219,11 @@ class ContinuousStratifiedGroupKFold(StratifiedGroupKFold):
 
     def __init__(
         self,
-        n_bins,
-        method="binning",
-        n_splits=5,
-        shuffle=False,
-        random_state=None,
+        n_bins: int,
+        method: str = "binning",
+        n_splits: int = 5,
+        shuffle: bool = False,
+        random_state: int | RandomState | None = None,
     ):
         self.n_bins = n_bins
         if method not in ["binning", "quantile"]:
@@ -241,7 +239,7 @@ class ContinuousStratifiedGroupKFold(StratifiedGroupKFold):
         self,
         X: np.ndarray,  # noqa: N803
         y: np.ndarray,
-        groups: Optional[np.ndarray] = None,
+        groups: np.ndarray | None = None,
     ):
         """Generate indices to split data into training and test set.
 
@@ -317,7 +315,7 @@ class RepeatedContinuousStratifiedGroupKFold(_RepeatedSplits):
         method="binning",
         n_splits: int = 5,
         n_repeats: int = 10,
-        random_state: Optional[Union[int, RandomState]] = None,
+        random_state: int | RandomState | None = None,
     ):
         super().__init__(
             ContinuousStratifiedGroupKFold,

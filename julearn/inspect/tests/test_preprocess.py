@@ -4,7 +4,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Optional, cast
+from typing import cast
 
 import pandas as pd
 import pytest
@@ -60,7 +60,7 @@ def test_preprocess_sklearn(
     y_iris: pd.Series,
     pipeline: Pipeline,
     transformers: list[TransformerLike],
-    until: Optional[str],
+    until: str | None,
 ) -> None:
     """Test the preprocess function.
 

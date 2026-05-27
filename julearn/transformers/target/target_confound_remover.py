@@ -4,15 +4,14 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 import typing
-from typing import Optional
 
 import numpy as np
 import pandas as pd
 from sklearn.base import clone
 from sklearn.linear_model import LinearRegression
 
-from ...base.column_types import ColumnTypesLike, ensure_column_types
-from ...utils.typing import ModelLike
+from ...base.column_types import ensure_column_types
+from ...utils.typing import ColumnTypesLike, ModelLike
 from .ju_target_transformer import JuTargetTransformer
 
 
@@ -38,9 +37,9 @@ class TargetConfoundRemover(JuTargetTransformer):
 
     def __init__(
         self,
-        model_confound: Optional[ModelLike] = None,
+        model_confound: ModelLike | None = None,
         confounds: ColumnTypesLike = "confound",
-        threshold: Optional[float] = None,
+        threshold: float | None = None,
     ):
         if model_confound is None:
             model_confound = LinearRegression()  # type: ignore

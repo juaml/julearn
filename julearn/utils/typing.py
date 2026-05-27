@@ -6,8 +6,8 @@
 
 from collections.abc import Iterable
 from typing import (
+    TYPE_CHECKING,
     Any,
-    Optional,
     Protocol,
     Union,
     runtime_checkable,
@@ -16,30 +16,20 @@ from typing import (
 import numpy as np
 import pandas as pd
 from numpy.typing import ArrayLike
+from sklearn.metrics._scorer import _Scorer  # type: ignore
 from sklearn.model_selection import BaseCrossValidator, BaseShuffleSplit
 from sklearn.model_selection._split import _RepeatedSplits
+
+
+if TYPE_CHECKING:
+    from ..base.column_types import ColumnTypes
 
 from ..model_selection.final_model_cv import _JulearnFinalModelCV
 
 
-try:  # sklearn >= 1.4.0
-    from sklearn.metrics._scorer import _Scorer  # type: ignore
+type ScorerLike = _Scorer | _Scorer
 
-    ScorerLike = Union[_Scorer, _Scorer]
-except ImportError:  # sklearn < 1.4.0
-    from sklearn.metrics._scorer import (
-        _PredictScorer,
-        _ProbaScorer,
-        _ThresholdScorer,
-    )
-
-    ScorerLike = Union[_ProbaScorer, _ThresholdScorer, _PredictScorer]
-
-
-from ..base import ColumnTypes
-
-
-DataLike = Union[np.ndarray, pd.DataFrame, pd.Series]
+type DataLike = np.ndarray | pd.DataFrame | pd.Series
 
 
 @runtime_checkable
@@ -219,7 +209,7 @@ class EstimatorLikeFity(Protocol):
         return self
 
 
-EstimatorLike = Union[EstimatorLikeFit1, EstimatorLikeFit2, EstimatorLikeFity]
+type EstimatorLike = EstimatorLikeFit1 | EstimatorLikeFit2 | EstimatorLikeFity
 
 
 @runtime_checkable
@@ -265,7 +255,7 @@ class TransformerLike(EstimatorLikeFit1, Protocol):
     def fit_transform(
         self,
         X: DataLike,  # noqa: N803
-        y: Optional[DataLike] = None,
+        y: DataLike | None = None,
     ) -> DataLike:
         """Fit and transform.
 
@@ -311,7 +301,7 @@ class ModelLike(EstimatorLikeFit1, Protocol):
         self,
         X: pd.DataFrame,  # noqa: N803
         y: DataLike,
-        sample_weight: Optional[DataLike] = None,
+        sample_weight: DataLike | None = None,
     ) -> float:
         """Score the model.
 
@@ -337,7 +327,7 @@ class ModelLike(EstimatorLikeFit1, Protocol):
 class JuEstimatorLike(EstimatorLikeFit1, Protocol):
     """Class for juestimator-like."""
 
-    def get_needed_types(self) -> ColumnTypes:
+    def get_needed_types(self) -> "ColumnTypes":
         """Get the column types needed by the estimator.
 
         Returns
@@ -346,9 +336,9 @@ class JuEstimatorLike(EstimatorLikeFit1, Protocol):
             The column types needed by the estimator.
 
         """
-        return ColumnTypes("placeholder")
+        return None
 
-    def get_apply_to(self) -> ColumnTypes:
+    def get_apply_to(self) -> "ColumnTypes":
         """Get the column types the estimator applies to.
 
         Returns
@@ -357,14 +347,14 @@ class JuEstimatorLike(EstimatorLikeFit1, Protocol):
             The column types the estimator applies to.
 
         """
-        return ColumnTypes("placeholder")
+        return None
 
 
 @runtime_checkable
 class JuModelLike(ModelLike, Protocol):
     """Class for jumodel-like."""
 
-    def get_needed_types(self) -> ColumnTypes:
+    def get_needed_types(self) -> "ColumnTypes":
         """Get the column types needed by the estimator.
 
         Returns
@@ -373,9 +363,9 @@ class JuModelLike(ModelLike, Protocol):
             The column types needed by the estimator.
 
         """
-        return ColumnTypes("placeholder")
+        return None
 
-    def get_apply_to(self) -> ColumnTypes:
+    def get_apply_to(self) -> "ColumnTypes":
         """Get the column types the estimator applies to.
 
         Returns
@@ -384,14 +374,16 @@ class JuModelLike(ModelLike, Protocol):
             The column types the estimator applies to.
 
         """
-        return ColumnTypes("placeholder")
+        return None
 
 
-CVLike = Union[
-    int,
-    BaseCrossValidator,
-    _RepeatedSplits,
-    BaseShuffleSplit,
-    Iterable,
-    _JulearnFinalModelCV,
-]
+type CVLike = (
+    int
+    | BaseCrossValidator
+    | _RepeatedSplits
+    | BaseShuffleSplit
+    | Iterable
+    | _JulearnFinalModelCV
+)
+
+type ColumnTypesLike = Union[list[str], set[str], str, "ColumnTypes"]  # noqa: UP007

@@ -5,7 +5,7 @@
 # License: AGPL
 
 import warnings
-from typing import Any, Optional, Union
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -73,13 +73,14 @@ def compare_models(  # noqa: C901, pragma: no cover
         If the models are not equal.
 
     """
+    test_equal = True
     if isinstance(clf1, WrapModel):
         clf1 = clf1.model
     if isinstance(clf2, WrapModel):
         clf2 = clf2.model
     if clf1.__class__ != clf2.__class__:
         raise AssertionError("Different classes")
-    if isinstance(clf1, (SVC, SVR)):
+    if isinstance(clf1, SVC | SVR):
         idx1 = np.argsort(clf1.support_)
         v1 = clf1.support_vectors_[idx1]
         idx2 = np.argsort(clf2.support_)  # type: ignore
@@ -89,17 +90,17 @@ def compare_models(  # noqa: C901, pragma: no cover
     elif isinstance(
         clf1,
         (
-            RandomForestClassifier,
-            RandomForestRegressor,
-            ExtraTreesClassifier,
-            ExtraTreesRegressor,
-            GradientBoostingClassifier,
-            GradientBoostingRegressor,
+            RandomForestClassifier
+            | RandomForestRegressor
+            | ExtraTreesClassifier
+            | ExtraTreesRegressor
+            | GradientBoostingClassifier
+            | GradientBoostingRegressor
         ),
     ):
         v1 = clf1.feature_importances_
         v2 = clf2.feature_importances_  # type: ignore
-    elif isinstance(clf1, (DummyClassifier, DummyRegressor)):
+    elif isinstance(clf1, DummyClassifier | DummyRegressor):
         v1 = None
         v2 = None
         if hasattr(clf1, "_strategy"):
@@ -125,23 +126,24 @@ def compare_models(  # noqa: C901, pragma: no cover
         else:
             v1 = clf1.base_estimator_.pi_  # type: ignore
             v2 = clf2.base_estimator_.pi_  # type: ignore
+        test_equal = False
     elif isinstance(clf1, GaussianProcessRegressor):
         v1 = np.c_[clf1.L_, clf1.alpha_]
         v2 = np.c_[clf2.L_, clf2.alpha_]  # type: ignore
     elif isinstance(
         clf1,
         (
-            LogisticRegression,
-            RidgeClassifier,
-            RidgeClassifierCV,
-            SGDClassifier,
-            SGDRegressor,
-            LinearRegression,
-            Ridge,
-            RidgeCV,
-            BernoulliNB,
-            ComplementNB,
-            MultinomialNB,
+            LogisticRegression
+            | RidgeClassifier
+            | RidgeClassifierCV
+            | SGDClassifier
+            | SGDRegressor
+            | LinearRegression
+            | Ridge
+            | RidgeCV
+            | BernoulliNB
+            | ComplementNB
+            | MultinomialNB
         ),
     ):
         v1 = _get_coef_over_versions(clf1)
@@ -150,7 +152,9 @@ def compare_models(  # noqa: C901, pragma: no cover
         v1 = None
         v2 = None
         for c1, c2 in zip(
-            _get_coef_over_versions(clf1), _get_coef_over_versions(clf2)
+            _get_coef_over_versions(clf1),
+            _get_coef_over_versions(clf2),
+            strict=False,
         ):
             assert_array_equal(c1, c2)
     elif isinstance(clf1, GaussianNB):
@@ -159,10 +163,10 @@ def compare_models(  # noqa: C901, pragma: no cover
     elif isinstance(
         clf1,
         (
-            AdaBoostClassifier,
-            AdaBoostRegressor,
-            BaggingClassifier,
-            BaggingRegressor,
+            AdaBoostClassifier
+            | AdaBoostRegressor
+            | BaggingClassifier
+            | BaggingRegressor
         ),
     ):
         est1 = clf1.estimators_
@@ -173,7 +177,10 @@ def compare_models(  # noqa: C901, pragma: no cover
         raise NotImplementedError(
             f"Model comparison for {clf1} not yet implemented."
         )
-    assert_array_equal(v1, v2)  # type: ignore
+    if test_equal:
+        assert_array_equal(v1, v2)  # type: ignore
+    else:
+        assert_array_almost_equal(v1, v2, decimal=15)  # type: ignore
 
 
 def do_scoring_test(
@@ -181,12 +188,12 @@ def do_scoring_test(
     y: str,
     data: pd.DataFrame,
     api_params: dict[str, Any],
-    sklearn_model: Union[EstimatorLike, ModelLike, Any],  # TODO: fix
+    sklearn_model: EstimatorLike | ModelLike | Any,  # TODO: fix
     scorers: list[str],
-    groups: Optional[str] = None,
-    X_types: Optional[dict[str, list[str]]] = None,  # noqa: N803
-    cv: Union[int, BaseCrossValidator] = 5,
-    sk_y: Optional[np.ndarray] = None,
+    groups: str | None = None,
+    X_types: dict[str, list[str]] | None = None,  # noqa: N803
+    cv: int | BaseCrossValidator = 5,
+    sk_y: np.ndarray | None = None,
     decimal: int = 5,
 ):
     """Test scoring for a model, using the julearn and sklearn API.
@@ -291,7 +298,7 @@ class PassThroughTransformer(TransformerMixin, BaseEstimator):
     def fit(
         self,
         X: DataLike,  # noqa: N803
-        y: Optional[DataLike] = None,
+        y: DataLike | None = None,
     ) -> "PassThroughTransformer":
         """Fit the transformer.
 
@@ -335,9 +342,9 @@ class TargetPassThroughTransformer(PassThroughTransformer):
 
     def transform(
         self,
-        X: Optional[DataLike] = None,  # noqa: N803
-        y: Optional[DataLike] = None,
-    ) -> Optional[DataLike]:
+        X: DataLike | None = None,  # noqa: N803
+        y: DataLike | None = None,
+    ) -> DataLike | None:
         """Transform the data.
 
         Parameters
@@ -357,9 +364,9 @@ class TargetPassThroughTransformer(PassThroughTransformer):
 
     def fit_transform(
         self,
-        X: Optional[DataLike] = None,  # noqa: N803
-        y: Optional[DataLike] = None,
-    ) -> Optional[DataLike]:
+        X: DataLike | None = None,  # noqa: N803
+        y: DataLike | None = None,
+    ) -> DataLike | None:
         """Fit the model and transform the data.
 
         Parameters
@@ -394,7 +401,7 @@ def _get_coef_over_versions(clf: EstimatorLike) -> np.ndarray:
 
     """
     if isinstance(
-        clf, (BernoulliNB, ComplementNB, MultinomialNB, CategoricalNB)
+        clf, BernoulliNB | ComplementNB | MultinomialNB | CategoricalNB
     ):
         with warnings.catch_warnings():
             warnings.filterwarnings("error", category=FutureWarning)

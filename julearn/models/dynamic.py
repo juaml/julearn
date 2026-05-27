@@ -5,7 +5,7 @@
 #          Shammi More <s.more@fz-juelich.de>
 # License: AGPL
 
-from typing import Any, Optional
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -74,8 +74,8 @@ class DynamicSelection(BaseEstimator):
         ensemble: ModelLike,
         algorithm: str,
         ds_split: float = 0.2,
-        random_state: Optional[int] = None,
-        random_state_algorithm: Optional[int] = None,
+        random_state: int | None = None,
+        random_state_algorithm: int | None = None,
         **kwargs: Any,
     ):
         self.ensemble = ensemble
@@ -127,7 +127,7 @@ class DynamicSelection(BaseEstimator):
                 X_train = X[train]
                 X_dsel = X[test]
 
-            if isinstance(y, (pd.DataFrame, pd.Series)):
+            if isinstance(y, pd.DataFrame | pd.Series):
                 y_train = y.iloc[train]
                 y_dsel = y.iloc[test]
             else:
@@ -180,7 +180,7 @@ class DynamicSelection(BaseEstimator):
         self,
         X: DataLike,  # noqa: N803
         y: DataLike,
-        sample_weight: Optional[DataLike] = None,
+        sample_weight: DataLike | None = None,
     ) -> float:
         """Score the model.
 

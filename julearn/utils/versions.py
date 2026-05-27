@@ -1,15 +1,16 @@
 """Utils for handling scikit-learn versions."""
 
-from typing import Any, Callable, Optional
+from collections.abc import Callable
+from typing import Any
 
 import sklearn
 
 
 def check_version(
     version: str,
-    major_check: Optional[Callable] = None,
-    minor_check: Optional[Callable] = None,
-    patch_check: Optional[Callable] = None,
+    major_check: Callable | None = None,
+    minor_check: Callable | None = None,
+    patch_check: Callable | None = None,
 ):
     """Check a version following major.minor.patch version numbers.
 
@@ -43,7 +44,9 @@ def check_version(
     version_checks = [major_check, minor_check, patch_check]
     versions_checked = [
         get_check(check)(version)
-        for version, check in zip(version.split("."), version_checks)
+        for version, check in zip(
+            version.split("."), version_checks, strict=False
+        )
     ]
 
     return all(versions_checked)

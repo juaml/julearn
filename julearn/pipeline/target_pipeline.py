@@ -4,8 +4,6 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Union
-
 import numpy as np
 import pandas as pd
 
@@ -28,14 +26,14 @@ class JuTargetPipeline:
 
     Parameters
     ----------
-    steps : List[Tuple[str, Union[JuTargetTransformer, TransformerLike]]]
+    steps : list of tuple [str, JuTargetTransformer or TransformerLike]
         List of steps to be performed on the target.
 
     """
 
     def __init__(
         self,
-        steps: list[tuple[str, Union[JuTargetTransformer, TransformerLike]]],
+        steps: list[tuple[str, JuTargetTransformer | TransformerLike]],
     ):
         if not isinstance(steps, list):
             raise TypeError("steps must be a list")

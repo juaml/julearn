@@ -4,27 +4,21 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Any, Optional, Union, cast
+from typing import Any, cast
 
 import numpy as np
 import pandas as pd
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.utils.metaestimators import available_if
+from sklearn.utils.validation import _check_method_params  # type: ignore
 
-
-try:  # sklearn < 1.4.0
-    from sklearn.utils.validation import _check_fit_params  # type: ignore
-
-    fit_params_checker = _check_fit_params
-except ImportError:  # sklearn >= 1.4.0
-    from sklearn.utils.validation import _check_method_params  # type: ignore
-
-    fit_params_checker = _check_method_params
-
-from ..base.column_types import make_type_selector
+from ..base.column_types import ColumnTypes, make_type_selector
 from ..utils import raise_error
-from ..utils.typing import DataLike, ModelLike
-from .column_types import ColumnTypes, ColumnTypesLike, ensure_column_types
+from ..utils.typing import ColumnTypesLike, DataLike, ModelLike
+from .column_types import ensure_column_types
+
+
+fit_params_checker = _check_method_params
 
 
 def _wrapped_model_has(attr):
@@ -101,7 +95,7 @@ class JuBaseEstimator(BaseEstimator):
     def __init__(
         self,
         apply_to: ColumnTypesLike,
-        needed_types: Optional[ColumnTypesLike] = None,
+        needed_types: ColumnTypesLike | None = None,
     ):
         self.apply_to = apply_to
         self.needed_types = needed_types
@@ -171,9 +165,9 @@ class JuTransformer(JuBaseEstimator, TransformerMixin):
     def __init__(
         self,
         apply_to: ColumnTypesLike,
-        needed_types: Optional[ColumnTypesLike] = None,
-        row_select_col_type: Optional[ColumnTypesLike] = None,
-        row_select_vals: Optional[Union[str, int, list, bool]] = None,
+        needed_types: ColumnTypesLike | None = None,
+        row_select_col_type: ColumnTypesLike | None = None,
+        row_select_vals: str | int | list | bool | None = None,
     ):
         self.apply_to = apply_to
         self.needed_types = needed_types
@@ -183,7 +177,7 @@ class JuTransformer(JuBaseEstimator, TransformerMixin):
     def fit(
         self,
         X: pd.DataFrame,  # noqa: N803
-        y: Optional[pd.Series] = None,
+        y: pd.Series | None = None,
         **fit_params,
     ):
         """Fit the model.
@@ -225,7 +219,7 @@ class JuTransformer(JuBaseEstimator, TransformerMixin):
     def _fit(
         self,
         X: pd.DataFrame,  # noqa: N803,
-        y: Optional[pd.Series],
+        y: pd.Series | None,
         **kwargs,
     ) -> None:
         raise_error(
@@ -305,8 +299,8 @@ class WrapModel(JuBaseEstimator):
     def __init__(
         self,
         model: ModelLike,
-        apply_to: Optional[ColumnTypesLike] = None,
-        needed_types: Optional[ColumnTypesLike] = None,
+        apply_to: ColumnTypesLike | None = None,
+        needed_types: ColumnTypesLike | None = None,
         **params,
     ):
         self.model = model
@@ -320,7 +314,7 @@ class WrapModel(JuBaseEstimator):
     def fit(
         self,
         X: DataLike,  # noqa: N803
-        y: Optional[DataLike] = None,
+        y: DataLike | None = None,
         **fit_params: Any,
     ) -> "WrapModel":
         """Fit the model.
@@ -419,9 +413,9 @@ class WrapModel(JuBaseEstimator):
 
         Returns
         -------
-        X : array-like of shape (n_samples, n_class * (n_class-1) / 2)
+        X : np.ndarray
             Returns the decision function of the sample for each class
-            in the model.
+            in the model. Shape is (n_samples, n_class * (n_class-1) / 2).
 
         """
         Xt = self.filter_columns(X)
@@ -457,9 +451,9 @@ class WrapModel(JuBaseEstimator):
 
         Parameters
         ----------
-        deep : bool, default=True
+        deep : bool
             If True, will return the parameters for this model and
-            contained subobjects that are estimators.
+            contained subobjects that are estimators (default is True).
 
         Returns
         -------

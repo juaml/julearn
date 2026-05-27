@@ -4,8 +4,6 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Optional, Union
-
 import numpy as np
 
 from ..transformers import get_transformer
@@ -29,7 +27,7 @@ class TargetPipelineCreator:
         self._steps = []
 
     def add(
-        self, step: str, name: Optional[str] = None, **params
+        self, step: str, name: str | None = None, **params
     ) -> "TargetPipelineCreator":
         """Add a step to the pipeline.
 
@@ -72,7 +70,7 @@ class TargetPipelineCreator:
         return JuTargetPipeline(self._steps)
 
     def _get_step_name(
-        self, name: Optional[str], step: Union[EstimatorLike, str]
+        self, name: str | None, step: EstimatorLike | str
     ) -> str:
         """Get the name of a step, with a count if it is repeated.
 

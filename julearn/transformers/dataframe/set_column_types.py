@@ -5,14 +5,13 @@
 # License: AGPL
 
 import re
-from typing import Optional, Union
 
 import pandas as pd
 
-from ...base import ColumnTypesLike, JuTransformer, change_column_type
+from ...base import JuTransformer, change_column_type
 from ...utils import logger, raise_error
 from ...utils.logging import DelayedFmtMessage as __
-from ...utils.typing import DataLike
+from ...utils.typing import ColumnTypesLike, DataLike
 
 
 class SetColumnTypes(JuTransformer):
@@ -36,9 +35,9 @@ class SetColumnTypes(JuTransformer):
 
     def __init__(
         self,
-        X_types: Optional[dict[str, list[str]]] = None,  # noqa: N803
-        row_select_col_type: Optional[ColumnTypesLike] = None,
-        row_select_vals: Optional[Union[str, int, list, bool]] = None,
+        X_types: dict[str, list[str]] | None = None,  # noqa: N803
+        row_select_col_type: ColumnTypesLike | None = None,
+        row_select_vals: str | int | list | bool | None = None,
     ):
         if X_types is None:
             X_types = {}
@@ -61,7 +60,7 @@ class SetColumnTypes(JuTransformer):
     def _fit(
         self,
         X: pd.DataFrame,  # noqa: N803
-        y: Optional[DataLike] = None,
+        y: DataLike | None = None,
     ) -> "SetColumnTypes":
         """Fit the transformer.
 
@@ -81,7 +80,7 @@ class SetColumnTypes(JuTransformer):
             The fitted transformer.
 
         """
-        if not isinstance(X, (pd.DataFrame, pd.Series)):
+        if not isinstance(X, pd.DataFrame | pd.Series):
             X = pd.DataFrame(X)
             X.columns = X.columns.astype(str)
 
@@ -138,7 +137,7 @@ class SetColumnTypes(JuTransformer):
         return X
 
     def get_feature_names_out(
-        self, input_features: Optional[list[str]] = None
+        self, input_features: list[str] | None = None
     ) -> list[str]:
         """Get names of features to be returned.
 
