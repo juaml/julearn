@@ -534,7 +534,7 @@ class PipelineCreator:
 
         Parameters
         ----------
-        transformers : Union[str, list]
+        transformers : str or list
             The transformers that should be added to the PipelineCreator.
             This can be a str or a list of str.
         model_params : dict

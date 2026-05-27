@@ -118,7 +118,7 @@ to_ignore = ["array-like", "shape", "optional", "or", "the", "options",
 for i in to_ignore:
     nitpick_ignore_regex.append(("py:class", i))
 
-suppress_warnings = ["sphinx_autodoc_typehints"]
+suppress_warnings = ["sphinx_autodoc_typehints", "config.cache"]
 
 
 # -- Options for HTML output -------------------------------------------------

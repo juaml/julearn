@@ -4,20 +4,14 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import TYPE_CHECKING, Union
-
 import pandas as pd
+from sklearn.base import BaseEstimator
 from sklearn.model_selection import BaseCrossValidator
 
+from ..pipeline.pipeline_creator import PipelineCreator
 from ..utils.logging import raise_error
 from ._cv import FoldsInspector
 from ._pipeline import PipelineInspector
-
-
-if TYPE_CHECKING:
-    from sklearn.base import BaseEstimator
-
-    from ..pipeline.pipeline_creator import PipelineCreator
 
 
 class Inspector:
@@ -42,14 +36,8 @@ class Inspector:
 
     def __init__(
         self,
-        scores: "pd.DataFrame",
-        model: Union[
-            str,
-            "PipelineCreator",
-            list["PipelineCreator"],
-            "BaseEstimator",
-            None,
-        ] = None,
+        scores: pd.DataFrame,
+        model: str | PipelineCreator | BaseEstimator | None = None,
         X: pd.DataFrame | None = None,  # noqa: N803
         y: pd.Series | None = None,
         groups: pd.Series | None = None,

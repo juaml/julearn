@@ -26,7 +26,7 @@ class JuTargetPipeline:
 
     Parameters
     ----------
-    steps : List[Tuple[str, Union[JuTargetTransformer, TransformerLike]]]
+    steps : list of tuple [str, JuTargetTransformer or TransformerLike]
         List of steps to be performed on the target.
 
     """

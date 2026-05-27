@@ -153,7 +153,7 @@ def check_scoring(
     ----------
     estimator : EstimatorLike
         estimator to check the scoring for
-    scoring : Union[ScorerLike, str, Callable]
+    scoring : ScorerLike or str or Callable or list[str] or None
         scoring to check
     wrap_score : bool
         Does the score needs to be wrapped

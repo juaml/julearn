@@ -9,6 +9,7 @@ from typing import (
     TYPE_CHECKING,
     Any,
     Protocol,
+    Union,
     runtime_checkable,
 )
 
@@ -19,11 +20,12 @@ from sklearn.metrics._scorer import _Scorer  # type: ignore
 from sklearn.model_selection import BaseCrossValidator, BaseShuffleSplit
 from sklearn.model_selection._split import _RepeatedSplits
 
-from ..model_selection.final_model_cv import _JulearnFinalModelCV
-
 
 if TYPE_CHECKING:
     from ..base.column_types import ColumnTypes
+
+from ..model_selection.final_model_cv import _JulearnFinalModelCV
+
 
 type ScorerLike = _Scorer | _Scorer
 
@@ -384,4 +386,4 @@ type CVLike = (
     | _JulearnFinalModelCV
 )
 
-type ColumnTypesLike = list[str] | set[str] | str | "ColumnTypes"
+type ColumnTypesLike = Union[list[str], set[str], str, "ColumnTypes"]  # noqa: UP007
