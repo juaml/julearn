@@ -4,13 +4,17 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 import re
+from typing import TYPE_CHECKING, Union
 
 from sklearn.pipeline import Pipeline
 from sklearn.utils.validation import check_is_fitted
 
 from ..transformers import JuColumnTransformer
 from ..utils.typing import EstimatorLike
-from ._pipeline import _EstimatorInspector
+
+
+if TYPE_CHECKING:
+    from ._pipeline import _EstimatorInspector
 
 
 class PipelineInspector:
@@ -43,7 +47,7 @@ class PipelineInspector:
 
     def get_step(
         self, name: str, as_estimator: bool = False
-    ) -> Pipeline | _EstimatorInspector:
+    ) -> Union[Pipeline, "_EstimatorInspector"]:
         """Get a step from the pipeline.
 
         Parameters
