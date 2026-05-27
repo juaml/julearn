@@ -19,6 +19,20 @@ Functions
     register_model
     reset_model_register
 
+Julearn custom models
+---------------------
+
+This is a list of models implemented by Julearn that are not simple wrappers
+around existing models in other libraries but rather variants of existing
+models or novel models.
+
+.. autosummary::
+   :toctree: generated/
+   :template: class.rst
+
+   xgb_cvearlystopping.XGBClassifierCVEarlyStopping
+   xgb_cvearlystopping.XGBRegressorCVEarlyStopping
+
 Dynamic Selection (DESLib)
 ==========================
 
