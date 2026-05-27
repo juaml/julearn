@@ -327,15 +327,15 @@ def test_XGBClassifierCVEarlyStopping_numpy(df_iris) -> None:
         == (model._best_iteration + 1) * 3
     )
 
-    y_pred = model.predict(df_iris[X])
+    y_pred = model.predict(df_iris[X].values)
     assert y_pred.shape == (len(df_iris),)
     assert set(y_pred).issubset(set(df_iris[y]))
 
-    y_probas = model.predict_proba(df_iris[X])
+    y_probas = model.predict_proba(df_iris[X].values)
     assert y_probas.shape == (len(df_iris), 3)
     assert (y_probas >= 0).all() and (y_probas <= 1).all()
 
-    score = model.score(df_iris[X], df_iris[y])
+    score = model.score(df_iris[X].values, df_iris[y].values)
     assert isinstance(score, float)
 
 
