@@ -124,15 +124,14 @@ class _BaseXGBCVEarlyStopping(BaseEstimator):
         # Create a model with the max iterations set as the best epochs and
         # refit on full data
         t_kwargs = self._xgboost_kwargs.copy()
-        if hasattr(model, "best_ntree_limit"):
-            t_kwargs["n_estimators"] = model.best_ntree_limit
-        else:
-            num_parallel_tree = model.get_params().get("num_parallel_tree")
-            if num_parallel_tree is None:
-                num_parallel_tree = 1
-            t_kwargs["n_estimators"] = (
-                model.best_iteration + 1
-            ) * num_parallel_tree
+
+        num_parallel_tree = model.get_params().get("num_parallel_tree")
+        if num_parallel_tree is None:
+            num_parallel_tree = 1
+        n_classes = model.get_params().get("n_classes_", 1)
+        t_kwargs["n_estimators"] = (
+            (model.best_iteration + 1) * num_parallel_tree * n_classes
+        )
         model = self.base_estimator(**t_kwargs)
         model.fit(X=X, y=y)
         self._model = model

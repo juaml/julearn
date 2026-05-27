@@ -116,3 +116,27 @@ def test_XGBClassifierCVEarlyStopping_grouped(df_iris) -> None:
     assert _is_fitted(model)
     assert hasattr(model, "_grouped_cv")
     assert model._grouped_cv is True
+
+
+def test_XGBClassifierCVEarlyStopping_binary(df_binary) -> None:
+    """Test XGBClassifierCVEarlyStopping with binary classification.
+
+    Parameters
+    ----------
+    df_binary : pd.DataFrame
+        The binary classification dataset as a DataFrame.
+
+    """
+    X = ["sepal_length", "sepal_width", "petal_width"]
+    y = "species"
+
+    model = XGBClassifierCVEarlyStopping(
+        test_size=0.2, early_stopping_rounds=5, random_state=42
+    )
+
+    assert _is_fitted(model) is False
+    assert not hasattr(model, "_grouped_cv")
+    model.fit(df_binary[X], df_binary[y])
+    assert _is_fitted(model)
+    assert hasattr(model, "_grouped_cv")
+    assert model._grouped_cv is False
