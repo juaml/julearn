@@ -242,7 +242,7 @@ Ensemble
      - Y
      - Y
      - Y
-    * - ``xgb_cvearlystopping``
+   * - ``xgb_cvearlystopping``
      - XGBoost with Cross-Validation and Early Stopping
      - | :class:`~julearn.models.xgb_cvearlystopping.XGBClassifierCVEarlyStopping` and
        | :class:`~julearn.models.xgb_cvearlystopping.XGBRegressorCVEarlyStopping`
