@@ -1,4 +1,7 @@
-# Provide tests for XGBEarlyStoppingCV.
+"""Provide tests for XGBEarlyStoppingCV."""
+
+# Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
+# License: AGPL
 
 import pandas as pd
 from sklearn.utils.validation import _is_fitted
@@ -10,7 +13,14 @@ from julearn.models.xgb_cvearlystopping import (
 
 
 def test_XGBRegressorCVEarlyStopping_grouped(df_iris) -> None:
-    """Test XGBRegressorCVEarlyStopping with grouped data."""
+    """Test XGBRegressorCVEarlyStopping with grouped data.
+
+    Parameters
+    ----------
+    df_iris : pd.DataFrame
+        The iris dataset as a DataFrame.
+
+    """
     X = ["sepal_length", "sepal_width", "petal_width"]
     y = "petal_length"
     n_groups = 20
@@ -30,8 +40,16 @@ def test_XGBRegressorCVEarlyStopping_grouped(df_iris) -> None:
     assert hasattr(model, "_grouped_cv")
     assert model._grouped_cv is True
 
+
 def test_XGBRegressorCVEarlyStopping_notgrouped(df_iris) -> None:
-    """Test XGBRegressorCVEarlyStopping with non-grouped data."""
+    """Test XGBRegressorCVEarlyStopping with non-grouped data.
+
+    Parameters
+    ----------
+    df_iris : pd.DataFrame
+        The iris dataset as a DataFrame.
+
+    """
     X = ["sepal_length", "sepal_width", "petal_width"]
     y = "petal_length"
 
@@ -48,7 +66,14 @@ def test_XGBRegressorCVEarlyStopping_notgrouped(df_iris) -> None:
 
 
 def test_XGBClassifierCVEarlyStopping_notgrouped(df_iris) -> None:
-    """Test XGBClassifierCVEarlyStopping with non-grouped data."""
+    """Test XGBClassifierCVEarlyStopping with non-grouped data.
+
+    Parameters
+    ----------
+    df_iris : pd.DataFrame
+        The iris dataset as a DataFrame.
+
+    """
     X = ["sepal_length", "sepal_width", "petal_width"]
     y = "species"
 
@@ -63,8 +88,16 @@ def test_XGBClassifierCVEarlyStopping_notgrouped(df_iris) -> None:
     assert hasattr(model, "_grouped_cv")
     assert model._grouped_cv is False
 
+
 def test_XGBClassifierCVEarlyStopping_grouped(df_iris) -> None:
-    """Test XGBClassifierCVEarlyStopping with grouped data."""
+    """Test XGBClassifierCVEarlyStopping with grouped data.
+
+    Parameters
+    ----------
+    df_iris : pd.DataFrame
+        The iris dataset as a DataFrame.
+
+    """
     X = ["sepal_length", "sepal_width", "petal_width"]
     y = "species"
     n_groups = 20
@@ -83,4 +116,3 @@ def test_XGBClassifierCVEarlyStopping_grouped(df_iris) -> None:
     assert _is_fitted(model)
     assert hasattr(model, "_grouped_cv")
     assert model._grouped_cv is True
-
