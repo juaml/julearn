@@ -11,11 +11,7 @@ from pathlib import Path
 from subprocess import PIPE, Popen, TimeoutExpired
 from typing import NoReturn
 
-
-if sys.version_info < (3, 12):  # pragma: no cover
-    from distutils.version import LooseVersion
-else:
-    from looseversion import LooseVersion
+from looseversion import LooseVersion
 
 
 logger = logging.getLogger("julearn")
