@@ -18,7 +18,7 @@ from sphinx_polyversion.git import (
 )
 from sphinx_polyversion.pyvenv import Pip
 from sphinx_polyversion.setuptools_scm import SetuptoolsScmDriver
-from sphinx_polyversion.sphinx import SphinxBuilder
+from sphinx_polyversion.sphinx import Placeholder, SphinxBuilder
 
 
 #: Regex matching the branches to build docs for
@@ -69,9 +69,16 @@ out_dir = root / OUTPUT_DIR
 logger.info(f"Docs Source directory: {docs_src}")
 logger.info(f"Output directory: {out_dir}")
 
+
+# Command to ensure that the output directory is clean before building
+# (otherswise old files may remain if they were removed in the new version).
+pre_cmd = ["rm", "-r", Placeholder.OUTPUT_DIR]
+
 # Builders by version:
 BUILDER = {
-    None: SphinxBuilder(docs_src, args=SPHINX_ARGS.split()),  # default
+    None: SphinxBuilder(
+        docs_src, args=SPHINX_ARGS.split(), pre_cmd=pre_cmd
+    ),  # default
 }
 
 
@@ -311,6 +318,7 @@ if not BUILD_ALL:
     logger.info(f"Updated TAG_REGEX to: {TAG_REGEX}")
 
 
+#
 #: Data passed to templates
 def data(driver, rev, env):
     """Create a factory for data passed to templates.
