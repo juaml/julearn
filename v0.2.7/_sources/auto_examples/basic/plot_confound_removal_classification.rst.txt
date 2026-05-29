@@ -10,8 +10,8 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_auto_examples_basic_plot_confound_removal_classification.py>`
-        to download the full example code
+        :ref:`Go to the end <sphx_glr_download_auto_examples_basic_plot_confound_removal_classification.py>`
+        to download the full example code.
 
 .. rst-class:: sphx-glr-example-title
 
@@ -26,7 +26,7 @@ with and without confound removal using a Random Forest classifier.
 
 .. GENERATED FROM PYTHON SOURCE LINES 9-24
 
-.. code-block:: default
+.. code-block:: Python
 
 
     # Authors: Shammi More <s.more@fz-juelich.de>
@@ -56,7 +56,7 @@ Set the logging level to info to see extra information
 
 .. GENERATED FROM PYTHON SOURCE LINES 26-28
 
-.. code-block:: default
+.. code-block:: Python
 
     configure_logging(level='INFO')
 
@@ -68,13 +68,13 @@ Set the logging level to info to see extra information
 
  .. code-block:: none
 
-    2022-12-08 10:45:47,762 - julearn - INFO - ===== Lib Versions =====
-    2022-12-08 10:45:47,762 - julearn - INFO - numpy: 1.23.5
-    2022-12-08 10:45:47,762 - julearn - INFO - scipy: 1.9.3
-    2022-12-08 10:45:47,762 - julearn - INFO - sklearn: 1.0.2
-    2022-12-08 10:45:47,762 - julearn - INFO - pandas: 1.4.4
-    2022-12-08 10:45:47,762 - julearn - INFO - julearn: 0.2.7
-    2022-12-08 10:45:47,762 - julearn - INFO - ========================
+    2026-05-29 20:46:10,057 - julearn - INFO - ===== Lib Versions =====
+    2026-05-29 20:46:10,058 - julearn - INFO - numpy: 1.23.5
+    2026-05-29 20:46:10,058 - julearn - INFO - scipy: 1.10.1
+    2026-05-29 20:46:10,058 - julearn - INFO - sklearn: 1.0.2
+    2026-05-29 20:46:10,058 - julearn - INFO - pandas: 2.0.3
+    2026-05-29 20:46:10,058 - julearn - INFO - julearn: 0.3.0.dev0
+    2026-05-29 20:46:10,058 - julearn - INFO - ========================
 
 
 
@@ -85,7 +85,7 @@ load the iris data from seaborn
 
 .. GENERATED FROM PYTHON SOURCE LINES 30-32
 
-.. code-block:: default
+.. code-block:: Python
 
     df_iris = load_dataset('iris')
 
@@ -103,7 +103,7 @@ classification.
 
 .. GENERATED FROM PYTHON SOURCE LINES 35-38
 
-.. code-block:: default
+.. code-block:: Python
 
     df_iris = df_iris[df_iris['species'].isin(['versicolor', 'virginica'])]
 
@@ -122,7 +122,7 @@ petal width as confound.
 
 .. GENERATED FROM PYTHON SOURCE LINES 41-46
 
-.. code-block:: default
+.. code-block:: Python
 
 
     X = ['sepal_length', 'sepal_width', 'petal_length']
@@ -154,7 +154,7 @@ number of bootstrap iterations to at least 2000 for a valid test.
 
 .. GENERATED FROM PYTHON SOURCE LINES 60-64
 
-.. code-block:: default
+.. code-block:: Python
 
     n_bootstrap = 20
     n_elements = len(df_iris)
@@ -174,7 +174,7 @@ Note: confounds=None by default
 
 .. GENERATED FROM PYTHON SOURCE LINES 67-72
 
-.. code-block:: default
+.. code-block:: Python
 
     scores_ncr = run_cross_validation(
         X=X, y=y, data=df_iris, model='rf', cv=cv, preprocess_X='zscore',
@@ -189,20 +189,20 @@ Note: confounds=None by default
 
  .. code-block:: none
 
-    2022-12-08 10:45:47,766 - julearn - INFO - Setting random seed to 200
-    2022-12-08 10:45:47,766 - julearn - INFO - ==== Input Data ====
-    2022-12-08 10:45:47,766 - julearn - INFO - Using dataframe as input
-    2022-12-08 10:45:47,766 - julearn - INFO - Features: ['sepal_length', 'sepal_width', 'petal_length']
-    2022-12-08 10:45:47,766 - julearn - INFO - Target: species
-    2022-12-08 10:45:47,766 - julearn - INFO - Expanded X: ['sepal_length', 'sepal_width', 'petal_length']
-    2022-12-08 10:45:47,766 - julearn - INFO - Expanded Confounds: []
-    2022-12-08 10:45:47,767 - julearn - INFO - ====================
-    2022-12-08 10:45:47,767 - julearn - INFO - 
-    2022-12-08 10:45:47,767 - julearn - INFO - ====== Model ======
-    2022-12-08 10:45:47,767 - julearn - INFO - Obtaining model by name: rf
-    2022-12-08 10:45:47,767 - julearn - INFO - ===================
-    2022-12-08 10:45:47,767 - julearn - INFO - 
-    2022-12-08 10:45:47,768 - julearn - INFO - Using scikit-learn CV scheme StratifiedBootstrap(n_splits=20, random_state=42, test_size=0.3,
+    2026-05-29 20:46:10,064 - julearn - INFO - Setting random seed to 200
+    2026-05-29 20:46:10,064 - julearn - INFO - ==== Input Data ====
+    2026-05-29 20:46:10,064 - julearn - INFO - Using dataframe as input
+    2026-05-29 20:46:10,064 - julearn - INFO - Features: ['sepal_length', 'sepal_width', 'petal_length']
+    2026-05-29 20:46:10,065 - julearn - INFO - Target: species
+    2026-05-29 20:46:10,065 - julearn - INFO - Expanded X: ['sepal_length', 'sepal_width', 'petal_length']
+    2026-05-29 20:46:10,065 - julearn - INFO - Expanded Confounds: []
+    2026-05-29 20:46:10,066 - julearn - INFO - ====================
+    2026-05-29 20:46:10,066 - julearn - INFO - 
+    2026-05-29 20:46:10,067 - julearn - INFO - ====== Model ======
+    2026-05-29 20:46:10,067 - julearn - INFO - Obtaining model by name: rf
+    2026-05-29 20:46:10,067 - julearn - INFO - ===================
+    2026-05-29 20:46:10,067 - julearn - INFO - 
+    2026-05-29 20:46:10,067 - julearn - INFO - Using scikit-learn CV scheme StratifiedBootstrap(n_splits=20, random_state=42, test_size=0.3,
               train_size=None)
 
 
@@ -215,7 +215,7 @@ Note: we initialize the CV again to use the same folds as before
 
 .. GENERATED FROM PYTHON SOURCE LINES 75-81
 
-.. code-block:: default
+.. code-block:: Python
 
     cv = StratifiedBootstrap(n_splits=n_bootstrap, test_size=.3, random_state=42)
     scores_cr = run_cross_validation(
@@ -231,21 +231,21 @@ Note: we initialize the CV again to use the same folds as before
 
  .. code-block:: none
 
-    2022-12-08 10:45:50,322 - julearn - INFO - Setting random seed to 200
-    2022-12-08 10:45:50,322 - julearn - INFO - ==== Input Data ====
-    2022-12-08 10:45:50,322 - julearn - INFO - Using dataframe as input
-    2022-12-08 10:45:50,322 - julearn - INFO - Features: ['sepal_length', 'sepal_width', 'petal_length']
-    2022-12-08 10:45:50,322 - julearn - INFO - Target: species
-    2022-12-08 10:45:50,322 - julearn - INFO - Confounds: petal_width
-    2022-12-08 10:45:50,323 - julearn - INFO - Expanded X: ['sepal_length', 'sepal_width', 'petal_length']
-    2022-12-08 10:45:50,323 - julearn - INFO - Expanded Confounds: ['petal_width']
-    2022-12-08 10:45:50,323 - julearn - INFO - ====================
-    2022-12-08 10:45:50,323 - julearn - INFO - 
-    2022-12-08 10:45:50,323 - julearn - INFO - ====== Model ======
-    2022-12-08 10:45:50,323 - julearn - INFO - Obtaining model by name: rf
-    2022-12-08 10:45:50,324 - julearn - INFO - ===================
-    2022-12-08 10:45:50,324 - julearn - INFO - 
-    2022-12-08 10:45:50,324 - julearn - INFO - Using scikit-learn CV scheme StratifiedBootstrap(n_splits=20, random_state=42, test_size=0.3,
+    2026-05-29 20:46:13,997 - julearn - INFO - Setting random seed to 200
+    2026-05-29 20:46:13,997 - julearn - INFO - ==== Input Data ====
+    2026-05-29 20:46:13,997 - julearn - INFO - Using dataframe as input
+    2026-05-29 20:46:13,997 - julearn - INFO - Features: ['sepal_length', 'sepal_width', 'petal_length']
+    2026-05-29 20:46:13,998 - julearn - INFO - Target: species
+    2026-05-29 20:46:13,998 - julearn - INFO - Confounds: petal_width
+    2026-05-29 20:46:13,998 - julearn - INFO - Expanded X: ['sepal_length', 'sepal_width', 'petal_length']
+    2026-05-29 20:46:13,998 - julearn - INFO - Expanded Confounds: ['petal_width']
+    2026-05-29 20:46:13,999 - julearn - INFO - ====================
+    2026-05-29 20:46:13,999 - julearn - INFO - 
+    2026-05-29 20:46:14,000 - julearn - INFO - ====== Model ======
+    2026-05-29 20:46:14,000 - julearn - INFO - Obtaining model by name: rf
+    2026-05-29 20:46:14,000 - julearn - INFO - ===================
+    2026-05-29 20:46:14,000 - julearn - INFO - 
+    2026-05-29 20:46:14,001 - julearn - INFO - Using scikit-learn CV scheme StratifiedBootstrap(n_splits=20, random_state=42, test_size=0.3,
               train_size=None)
 
 
@@ -258,7 +258,7 @@ pandas dataframes
 
 .. GENERATED FROM PYTHON SOURCE LINES 84-87
 
-.. code-block:: default
+.. code-block:: Python
 
     scores_ncr['confounds'] = 'Not Removed'
     scores_cr['confounds'] = 'Removed'
@@ -277,7 +277,7 @@ to long format)
 
 .. GENERATED FROM PYTHON SOURCE LINES 90-107
 
-.. code-block:: default
+.. code-block:: Python
 
 
     index = ['fold', 'confounds']
@@ -320,7 +320,7 @@ And finally plot the results
 
 .. GENERATED FROM PYTHON SOURCE LINES 109-113
 
-.. code-block:: default
+.. code-block:: Python
 
     sns.catplot(x='confounds', y='value', col='metric', data=df_metrics,
                 kind='swarm')
@@ -350,7 +350,7 @@ between the metrics
 
 .. GENERATED FROM PYTHON SOURCE LINES 121-128
 
-.. code-block:: default
+.. code-block:: Python
 
 
     df_cr_metrics = df_cr_metrics.reset_index().set_index(['fold', 'metric'])
@@ -373,7 +373,7 @@ at 2.5 and 97.5 to see the 95% CI.
 
 .. GENERATED FROM PYTHON SOURCE LINES 131-136
 
-.. code-block:: default
+.. code-block:: Python
 
     sns.boxplot(x='metric', y='value', data=df_diff_metrics.reset_index(),
                 whis=[2.5, 97.5])
@@ -410,7 +410,7 @@ fold.
 
 .. GENERATED FROM PYTHON SOURCE LINES 150-175
 
-.. code-block:: default
+.. code-block:: Python
 
 
     ncr_fi = []
@@ -450,7 +450,7 @@ We can now plot the importances
 
 .. GENERATED FROM PYTHON SOURCE LINES 177-181
 
-.. code-block:: default
+.. code-block:: Python
 
     sns.catplot(x='feature', y='importance', hue='confounds', dodge=True,
                 data=feature_importance, kind='swarm', s=3)
@@ -475,7 +475,7 @@ a difference in importances.
 
 .. GENERATED FROM PYTHON SOURCE LINES 184-190
 
-.. code-block:: default
+.. code-block:: Python
 
     diff_fi = (cr_fi.set_index(['feature', 'fold'])['importance'] -
                ncr_fi.set_index(['feature', 'fold'])['importance'])
@@ -498,7 +498,7 @@ a difference in importances.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  6.732 seconds)
+   **Total running time of the script:** (0 minutes 10.773 seconds)
 
 
 .. _sphx_glr_download_auto_examples_basic_plot_confound_removal_classification.py:
@@ -507,14 +507,17 @@ a difference in importances.
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
+
+      :download:`Download Jupyter notebook: plot_confound_removal_classification.ipynb <plot_confound_removal_classification.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_confound_removal_classification.py <plot_confound_removal_classification.py>`
 
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
+    .. container:: sphx-glr-download sphx-glr-download-zip
 
-      :download:`Download Jupyter notebook: plot_confound_removal_classification.ipynb <plot_confound_removal_classification.ipynb>`
+      :download:`Download zipped: plot_confound_removal_classification.zip <plot_confound_removal_classification.zip>`
 
 
 .. only:: html

@@ -10,8 +10,8 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_auto_examples_advanced_run_hyperparameter_tuning.py>`
-        to download the full example code
+        :ref:`Go to the end <sphx_glr_download_auto_examples_advanced_run_hyperparameter_tuning.py>`
+        to download the full example code.
 
 .. rst-class:: sphx-glr-example-title
 
@@ -35,7 +35,7 @@ cognitive control in context-dependent decision-making. Cerebral Cortex.
 
 .. GENERATED FROM PYTHON SOURCE LINES 17-26
 
-.. code-block:: default
+.. code-block:: Python
 
     # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
     #
@@ -59,7 +59,7 @@ Set the logging level to info to see extra information
 
 .. GENERATED FROM PYTHON SOURCE LINES 28-30
 
-.. code-block:: default
+.. code-block:: Python
 
     configure_logging(level='INFO')
 
@@ -69,17 +69,15 @@ Set the logging level to info to see extra information
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
-    2021-01-28 20:09:14,180 - julearn - INFO - ===== Lib Versions =====
-    2021-01-28 20:09:14,180 - julearn - INFO - numpy: 1.19.5
-    2021-01-28 20:09:14,180 - julearn - INFO - scipy: 1.6.0
-    2021-01-28 20:09:14,180 - julearn - INFO - sklearn: 0.24.1
-    2021-01-28 20:09:14,180 - julearn - INFO - pandas: 1.2.1
-    2021-01-28 20:09:14,180 - julearn - INFO - julearn: 0.2.5.dev19+g9c15c5f
-    2021-01-28 20:09:14,180 - julearn - INFO - ========================
+    2026-05-29 20:45:12,763 - julearn - INFO - ===== Lib Versions =====
+    2026-05-29 20:45:12,763 - julearn - INFO - numpy: 1.19.3
+    2026-05-29 20:45:12,763 - julearn - INFO - scipy: 1.9.3
+    2026-05-29 20:45:12,763 - julearn - INFO - sklearn: 0.23.2
+    2026-05-29 20:45:12,764 - julearn - INFO - pandas: 1.4.4
+    2026-05-29 20:45:12,764 - julearn - INFO - julearn: 0.2.4
+    2026-05-29 20:45:12,764 - julearn - INFO - ========================
 
 
 
@@ -90,7 +88,7 @@ Set the random seed to always have the same example
 
 .. GENERATED FROM PYTHON SOURCE LINES 32-35
 
-.. code-block:: default
+.. code-block:: Python
 
     np.random.seed(42)
 
@@ -108,7 +106,7 @@ Load the dataset
 
 .. GENERATED FROM PYTHON SOURCE LINES 37-40
 
-.. code-block:: default
+.. code-block:: Python
 
     df_fmri = load_dataset('fmri')
     print(df_fmri.head())
@@ -118,8 +116,6 @@ Load the dataset
 
 
 .. rst-class:: sphx-glr-script-out
-
- Out:
 
  .. code-block:: none
 
@@ -139,7 +135,7 @@ Set the dataframe in the right format
 
 .. GENERATED FROM PYTHON SOURCE LINES 42-50
 
-.. code-block:: default
+.. code-block:: Python
 
     df_fmri = df_fmri.pivot(
         index=['subject', 'timepoint', 'event'],
@@ -154,8 +150,6 @@ Set the dataframe in the right format
 
 
 .. rst-class:: sphx-glr-script-out
-
- Out:
 
  .. code-block:: none
 
@@ -175,7 +169,7 @@ Lets do a first attempt and use a linear SVM with the default parameters.
 
 .. GENERATED FROM PYTHON SOURCE LINES 52-61
 
-.. code-block:: default
+.. code-block:: Python
 
     model_params = {'svm__kernel': 'linear'}
     X = ['frontal', 'parietal']
@@ -192,28 +186,25 @@ Lets do a first attempt and use a linear SVM with the default parameters.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
-    2021-01-28 20:09:14,204 - julearn - INFO - Using default CV
-    2021-01-28 20:09:14,204 - julearn - INFO - ==== Input Data ====
-    2021-01-28 20:09:14,204 - julearn - INFO - Using dataframe as input
-    2021-01-28 20:09:14,204 - julearn - INFO - Features: ['frontal', 'parietal']
-    2021-01-28 20:09:14,204 - julearn - INFO - Target: event
-    2021-01-28 20:09:14,204 - julearn - INFO - Expanded X: ['frontal', 'parietal']
-    2021-01-28 20:09:14,204 - julearn - INFO - Expanded Confounds: []
-    2021-01-28 20:09:14,205 - julearn - INFO - ====================
-    2021-01-28 20:09:14,205 - julearn - INFO - 
-    2021-01-28 20:09:14,206 - julearn - INFO - ====== Model ======
-    2021-01-28 20:09:14,206 - julearn - INFO - Obtaining model by name: svm
-    2021-01-28 20:09:14,206 - julearn - INFO - ===================
-    2021-01-28 20:09:14,206 - julearn - INFO - 
-    2021-01-28 20:09:14,206 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
-    2021-01-28 20:09:14,206 - julearn - INFO - = Model Parameters =
-    2021-01-28 20:09:14,206 - julearn - INFO - Setting hyperparameter svm__kernel = linear
-    2021-01-28 20:09:14,207 - julearn - INFO - ====================
-    2021-01-28 20:09:14,207 - julearn - INFO - 
+    2026-05-29 20:45:12,779 - julearn - INFO - Using default CV
+    2026-05-29 20:45:12,779 - julearn - INFO - ==== Input Data ====
+    2026-05-29 20:45:12,779 - julearn - INFO - Using dataframe as input
+    2026-05-29 20:45:12,779 - julearn - INFO - Features: ['frontal', 'parietal']
+    2026-05-29 20:45:12,779 - julearn - INFO - Target: event
+    2026-05-29 20:45:12,779 - julearn - INFO - Expanded X: ['frontal', 'parietal']
+    2026-05-29 20:45:12,779 - julearn - INFO - Expanded Confounds: []
+    2026-05-29 20:45:12,780 - julearn - INFO - ====================
+    2026-05-29 20:45:12,780 - julearn - INFO - 
+    2026-05-29 20:45:12,780 - julearn - INFO - ====== Model ======
+    2026-05-29 20:45:12,780 - julearn - INFO - Obtaining model by name: svm
+    2026-05-29 20:45:12,780 - julearn - INFO - ===================
+    2026-05-29 20:45:12,780 - julearn - INFO - 
+    2026-05-29 20:45:12,780 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+    2026-05-29 20:45:12,780 - julearn - INFO - = Model Parameters =
+    2026-05-29 20:45:12,781 - julearn - INFO - ====================
+    2026-05-29 20:45:12,781 - julearn - INFO - 
     0.5765508728619291
 
 
@@ -226,7 +217,7 @@ regularization parameter (C) for the linear SVM.
 
 .. GENERATED FROM PYTHON SOURCE LINES 64-76
 
-.. code-block:: default
+.. code-block:: Python
 
     model_params = {
         'svm__kernel': 'linear',
@@ -246,35 +237,32 @@ regularization parameter (C) for the linear SVM.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
-    2021-01-28 20:09:14,852 - julearn - INFO - Using default CV
-    2021-01-28 20:09:14,852 - julearn - INFO - ==== Input Data ====
-    2021-01-28 20:09:14,852 - julearn - INFO - Using dataframe as input
-    2021-01-28 20:09:14,852 - julearn - INFO - Features: ['frontal', 'parietal']
-    2021-01-28 20:09:14,852 - julearn - INFO - Target: event
-    2021-01-28 20:09:14,852 - julearn - INFO - Expanded X: ['frontal', 'parietal']
-    2021-01-28 20:09:14,852 - julearn - INFO - Expanded Confounds: []
-    2021-01-28 20:09:14,853 - julearn - INFO - ====================
-    2021-01-28 20:09:14,853 - julearn - INFO - 
-    2021-01-28 20:09:14,853 - julearn - INFO - ====== Model ======
-    2021-01-28 20:09:14,853 - julearn - INFO - Obtaining model by name: svm
-    2021-01-28 20:09:14,853 - julearn - INFO - ===================
-    2021-01-28 20:09:14,853 - julearn - INFO - 
-    2021-01-28 20:09:14,853 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
-    2021-01-28 20:09:14,853 - julearn - INFO - = Model Parameters =
-    2021-01-28 20:09:14,853 - julearn - INFO - Setting hyperparameter svm__kernel = linear
-    2021-01-28 20:09:14,854 - julearn - INFO - Tunning hyperparameters using {search}
-    2021-01-28 20:09:14,854 - julearn - INFO - Hyperparameters:
-    2021-01-28 20:09:14,854 - julearn - INFO -      svm__C: [0.01, 0.1]
-    2021-01-28 20:09:14,855 - julearn - INFO - Using scikit-learn CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
-    2021-01-28 20:09:14,855 - julearn - INFO - Search Parameters:
-    2021-01-28 20:09:14,855 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
-    2021-01-28 20:09:14,855 - julearn - INFO -      scoring: None
-    2021-01-28 20:09:14,855 - julearn - INFO - ====================
-    2021-01-28 20:09:14,855 - julearn - INFO - 
+    2026-05-29 20:45:13,176 - julearn - INFO - Using default CV
+    2026-05-29 20:45:13,177 - julearn - INFO - ==== Input Data ====
+    2026-05-29 20:45:13,177 - julearn - INFO - Using dataframe as input
+    2026-05-29 20:45:13,177 - julearn - INFO - Features: ['frontal', 'parietal']
+    2026-05-29 20:45:13,177 - julearn - INFO - Target: event
+    2026-05-29 20:45:13,177 - julearn - INFO - Expanded X: ['frontal', 'parietal']
+    2026-05-29 20:45:13,177 - julearn - INFO - Expanded Confounds: []
+    2026-05-29 20:45:13,178 - julearn - INFO - ====================
+    2026-05-29 20:45:13,178 - julearn - INFO - 
+    2026-05-29 20:45:13,178 - julearn - INFO - ====== Model ======
+    2026-05-29 20:45:13,178 - julearn - INFO - Obtaining model by name: svm
+    2026-05-29 20:45:13,178 - julearn - INFO - ===================
+    2026-05-29 20:45:13,178 - julearn - INFO - 
+    2026-05-29 20:45:13,178 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+    2026-05-29 20:45:13,178 - julearn - INFO - = Model Parameters =
+    2026-05-29 20:45:13,179 - julearn - INFO - Tunning hyperparameters using {search}
+    2026-05-29 20:45:13,179 - julearn - INFO - Hyperparameters:
+    2026-05-29 20:45:13,179 - julearn - INFO -      svm__C: [0.01, 0.1]
+    2026-05-29 20:45:13,179 - julearn - INFO - Using scikit-learn CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
+    2026-05-29 20:45:13,179 - julearn - INFO - Search Parameters:
+    2026-05-29 20:45:13,180 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
+    2026-05-29 20:45:13,180 - julearn - INFO -      scoring: None
+    2026-05-29 20:45:13,180 - julearn - INFO - ====================
+    2026-05-29 20:45:13,180 - julearn - INFO - 
     0.575591606418621
 
 
@@ -286,7 +274,7 @@ This did not change much, lets explore other kernels too.
 
 .. GENERATED FROM PYTHON SOURCE LINES 78-89
 
-.. code-block:: default
+.. code-block:: Python
 
     model_params = {
         'svm__kernel': ['linear', 'rbf', 'poly'],
@@ -305,35 +293,33 @@ This did not change much, lets explore other kernels too.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
-    2021-01-28 20:09:17,954 - julearn - INFO - Using default CV
-    2021-01-28 20:09:17,955 - julearn - INFO - ==== Input Data ====
-    2021-01-28 20:09:17,955 - julearn - INFO - Using dataframe as input
-    2021-01-28 20:09:17,955 - julearn - INFO - Features: ['frontal', 'parietal']
-    2021-01-28 20:09:17,955 - julearn - INFO - Target: event
-    2021-01-28 20:09:17,955 - julearn - INFO - Expanded X: ['frontal', 'parietal']
-    2021-01-28 20:09:17,955 - julearn - INFO - Expanded Confounds: []
-    2021-01-28 20:09:17,956 - julearn - INFO - ====================
-    2021-01-28 20:09:17,956 - julearn - INFO - 
-    2021-01-28 20:09:17,956 - julearn - INFO - ====== Model ======
-    2021-01-28 20:09:17,956 - julearn - INFO - Obtaining model by name: svm
-    2021-01-28 20:09:17,956 - julearn - INFO - ===================
-    2021-01-28 20:09:17,956 - julearn - INFO - 
-    2021-01-28 20:09:17,956 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
-    2021-01-28 20:09:17,956 - julearn - INFO - = Model Parameters =
-    2021-01-28 20:09:17,956 - julearn - INFO - Tunning hyperparameters using {search}
-    2021-01-28 20:09:17,956 - julearn - INFO - Hyperparameters:
-    2021-01-28 20:09:17,957 - julearn - INFO -      svm__kernel: ['linear', 'rbf', 'poly']
-    2021-01-28 20:09:17,957 - julearn - INFO -      svm__C: [0.01, 0.1]
-    2021-01-28 20:09:17,957 - julearn - INFO - Using scikit-learn CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
-    2021-01-28 20:09:17,957 - julearn - INFO - Search Parameters:
-    2021-01-28 20:09:17,957 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
-    2021-01-28 20:09:17,957 - julearn - INFO -      scoring: None
-    2021-01-28 20:09:17,957 - julearn - INFO - ====================
-    2021-01-28 20:09:17,957 - julearn - INFO - 
+    2026-05-29 20:45:15,175 - julearn - INFO - Using default CV
+    2026-05-29 20:45:15,176 - julearn - INFO - ==== Input Data ====
+    2026-05-29 20:45:15,176 - julearn - INFO - Using dataframe as input
+    2026-05-29 20:45:15,176 - julearn - INFO - Features: ['frontal', 'parietal']
+    2026-05-29 20:45:15,176 - julearn - INFO - Target: event
+    2026-05-29 20:45:15,176 - julearn - INFO - Expanded X: ['frontal', 'parietal']
+    2026-05-29 20:45:15,176 - julearn - INFO - Expanded Confounds: []
+    2026-05-29 20:45:15,177 - julearn - INFO - ====================
+    2026-05-29 20:45:15,177 - julearn - INFO - 
+    2026-05-29 20:45:15,177 - julearn - INFO - ====== Model ======
+    2026-05-29 20:45:15,177 - julearn - INFO - Obtaining model by name: svm
+    2026-05-29 20:45:15,177 - julearn - INFO - ===================
+    2026-05-29 20:45:15,177 - julearn - INFO - 
+    2026-05-29 20:45:15,177 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+    2026-05-29 20:45:15,177 - julearn - INFO - = Model Parameters =
+    2026-05-29 20:45:15,177 - julearn - INFO - Tunning hyperparameters using {search}
+    2026-05-29 20:45:15,177 - julearn - INFO - Hyperparameters:
+    2026-05-29 20:45:15,178 - julearn - INFO -      svm__kernel: ['linear', 'rbf', 'poly']
+    2026-05-29 20:45:15,178 - julearn - INFO -      svm__C: [0.01, 0.1]
+    2026-05-29 20:45:15,178 - julearn - INFO - Using scikit-learn CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
+    2026-05-29 20:45:15,178 - julearn - INFO - Search Parameters:
+    2026-05-29 20:45:15,178 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
+    2026-05-29 20:45:15,178 - julearn - INFO -      scoring: None
+    2026-05-29 20:45:15,178 - julearn - INFO - ====================
+    2026-05-29 20:45:15,178 - julearn - INFO - 
     0.7116487391994357
 
 
@@ -345,7 +331,7 @@ It seems that we might have found a better model, but which one is it?
 
 .. GENERATED FROM PYTHON SOURCE LINES 91-93
 
-.. code-block:: default
+.. code-block:: Python
 
     print(estimator.best_params_)
 
@@ -354,8 +340,6 @@ It seems that we might have found a better model, but which one is it?
 
 
 .. rst-class:: sphx-glr-script-out
-
- Out:
 
  .. code-block:: none
 
@@ -371,7 +355,7 @@ parameters.
 
 .. GENERATED FROM PYTHON SOURCE LINES 96-110
 
-.. code-block:: default
+.. code-block:: Python
 
     model_params = {
         'svm__kernel': 'rbf',
@@ -393,36 +377,33 @@ parameters.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
-    2021-01-28 20:09:26,338 - julearn - INFO - Using default CV
-    2021-01-28 20:09:26,338 - julearn - INFO - ==== Input Data ====
-    2021-01-28 20:09:26,338 - julearn - INFO - Using dataframe as input
-    2021-01-28 20:09:26,338 - julearn - INFO - Features: ['frontal', 'parietal']
-    2021-01-28 20:09:26,338 - julearn - INFO - Target: event
-    2021-01-28 20:09:26,338 - julearn - INFO - Expanded X: ['frontal', 'parietal']
-    2021-01-28 20:09:26,338 - julearn - INFO - Expanded Confounds: []
-    2021-01-28 20:09:26,339 - julearn - INFO - ====================
-    2021-01-28 20:09:26,339 - julearn - INFO - 
-    2021-01-28 20:09:26,340 - julearn - INFO - ====== Model ======
-    2021-01-28 20:09:26,340 - julearn - INFO - Obtaining model by name: svm
-    2021-01-28 20:09:26,340 - julearn - INFO - ===================
-    2021-01-28 20:09:26,340 - julearn - INFO - 
-    2021-01-28 20:09:26,340 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
-    2021-01-28 20:09:26,340 - julearn - INFO - = Model Parameters =
-    2021-01-28 20:09:26,340 - julearn - INFO - Setting hyperparameter svm__kernel = rbf
-    2021-01-28 20:09:26,341 - julearn - INFO - Tunning hyperparameters using {search}
-    2021-01-28 20:09:26,341 - julearn - INFO - Hyperparameters:
-    2021-01-28 20:09:26,341 - julearn - INFO -      svm__C: [0.01, 0.1]
-    2021-01-28 20:09:26,341 - julearn - INFO -      svm__gamma: [0.01, 0.001]
-    2021-01-28 20:09:26,341 - julearn - INFO - Using scikit-learn CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
-    2021-01-28 20:09:26,341 - julearn - INFO - Search Parameters:
-    2021-01-28 20:09:26,341 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
-    2021-01-28 20:09:26,341 - julearn - INFO -      scoring: None
-    2021-01-28 20:09:26,342 - julearn - INFO - ====================
-    2021-01-28 20:09:26,342 - julearn - INFO - 
+    2026-05-29 20:45:22,125 - julearn - INFO - Using default CV
+    2026-05-29 20:45:22,125 - julearn - INFO - ==== Input Data ====
+    2026-05-29 20:45:22,125 - julearn - INFO - Using dataframe as input
+    2026-05-29 20:45:22,125 - julearn - INFO - Features: ['frontal', 'parietal']
+    2026-05-29 20:45:22,125 - julearn - INFO - Target: event
+    2026-05-29 20:45:22,126 - julearn - INFO - Expanded X: ['frontal', 'parietal']
+    2026-05-29 20:45:22,126 - julearn - INFO - Expanded Confounds: []
+    2026-05-29 20:45:22,127 - julearn - INFO - ====================
+    2026-05-29 20:45:22,127 - julearn - INFO - 
+    2026-05-29 20:45:22,127 - julearn - INFO - ====== Model ======
+    2026-05-29 20:45:22,128 - julearn - INFO - Obtaining model by name: svm
+    2026-05-29 20:45:22,128 - julearn - INFO - ===================
+    2026-05-29 20:45:22,128 - julearn - INFO - 
+    2026-05-29 20:45:22,128 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+    2026-05-29 20:45:22,128 - julearn - INFO - = Model Parameters =
+    2026-05-29 20:45:22,129 - julearn - INFO - Tunning hyperparameters using {search}
+    2026-05-29 20:45:22,129 - julearn - INFO - Hyperparameters:
+    2026-05-29 20:45:22,129 - julearn - INFO -      svm__C: [0.01, 0.1]
+    2026-05-29 20:45:22,130 - julearn - INFO -      svm__gamma: [0.01, 0.001]
+    2026-05-29 20:45:22,130 - julearn - INFO - Using scikit-learn CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
+    2026-05-29 20:45:22,130 - julearn - INFO - Search Parameters:
+    2026-05-29 20:45:22,130 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
+    2026-05-29 20:45:22,130 - julearn - INFO -      scoring: None
+    2026-05-29 20:45:22,131 - julearn - INFO - ====================
+    2026-05-29 20:45:22,131 - julearn - INFO - 
     0.47479104214424267
     {'svm__C': 0.01, 'svm__gamma': 0.001}
 
@@ -436,7 +417,7 @@ Let's add the default value and see what happens.
 
 .. GENERATED FROM PYTHON SOURCE LINES 113-127
 
-.. code-block:: default
+.. code-block:: Python
 
     model_params = {
         'svm__kernel': 'rbf',
@@ -458,36 +439,33 @@ Let's add the default value and see what happens.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
-    2021-01-28 20:09:32,900 - julearn - INFO - Using default CV
-    2021-01-28 20:09:32,900 - julearn - INFO - ==== Input Data ====
-    2021-01-28 20:09:32,900 - julearn - INFO - Using dataframe as input
-    2021-01-28 20:09:32,900 - julearn - INFO - Features: ['frontal', 'parietal']
-    2021-01-28 20:09:32,900 - julearn - INFO - Target: event
-    2021-01-28 20:09:32,900 - julearn - INFO - Expanded X: ['frontal', 'parietal']
-    2021-01-28 20:09:32,900 - julearn - INFO - Expanded Confounds: []
-    2021-01-28 20:09:32,901 - julearn - INFO - ====================
-    2021-01-28 20:09:32,901 - julearn - INFO - 
-    2021-01-28 20:09:32,901 - julearn - INFO - ====== Model ======
-    2021-01-28 20:09:32,902 - julearn - INFO - Obtaining model by name: svm
-    2021-01-28 20:09:32,902 - julearn - INFO - ===================
-    2021-01-28 20:09:32,902 - julearn - INFO - 
-    2021-01-28 20:09:32,902 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
-    2021-01-28 20:09:32,902 - julearn - INFO - = Model Parameters =
-    2021-01-28 20:09:32,902 - julearn - INFO - Setting hyperparameter svm__kernel = rbf
-    2021-01-28 20:09:32,903 - julearn - INFO - Tunning hyperparameters using {search}
-    2021-01-28 20:09:32,903 - julearn - INFO - Hyperparameters:
-    2021-01-28 20:09:32,903 - julearn - INFO -      svm__C: [0.01, 0.1]
-    2021-01-28 20:09:32,903 - julearn - INFO -      svm__gamma: [0.01, 0.001, 'scale']
-    2021-01-28 20:09:32,903 - julearn - INFO - Using scikit-learn CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
-    2021-01-28 20:09:32,903 - julearn - INFO - Search Parameters:
-    2021-01-28 20:09:32,903 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
-    2021-01-28 20:09:32,903 - julearn - INFO -      scoring: None
-    2021-01-28 20:09:32,903 - julearn - INFO - ====================
-    2021-01-28 20:09:32,903 - julearn - INFO - 
+    2026-05-29 20:45:28,441 - julearn - INFO - Using default CV
+    2026-05-29 20:45:28,441 - julearn - INFO - ==== Input Data ====
+    2026-05-29 20:45:28,441 - julearn - INFO - Using dataframe as input
+    2026-05-29 20:45:28,441 - julearn - INFO - Features: ['frontal', 'parietal']
+    2026-05-29 20:45:28,441 - julearn - INFO - Target: event
+    2026-05-29 20:45:28,441 - julearn - INFO - Expanded X: ['frontal', 'parietal']
+    2026-05-29 20:45:28,441 - julearn - INFO - Expanded Confounds: []
+    2026-05-29 20:45:28,442 - julearn - INFO - ====================
+    2026-05-29 20:45:28,443 - julearn - INFO - 
+    2026-05-29 20:45:28,443 - julearn - INFO - ====== Model ======
+    2026-05-29 20:45:28,443 - julearn - INFO - Obtaining model by name: svm
+    2026-05-29 20:45:28,443 - julearn - INFO - ===================
+    2026-05-29 20:45:28,443 - julearn - INFO - 
+    2026-05-29 20:45:28,443 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+    2026-05-29 20:45:28,443 - julearn - INFO - = Model Parameters =
+    2026-05-29 20:45:28,444 - julearn - INFO - Tunning hyperparameters using {search}
+    2026-05-29 20:45:28,444 - julearn - INFO - Hyperparameters:
+    2026-05-29 20:45:28,444 - julearn - INFO -      svm__C: [0.01, 0.1]
+    2026-05-29 20:45:28,444 - julearn - INFO -      svm__gamma: [0.01, 0.001, 'scale']
+    2026-05-29 20:45:28,445 - julearn - INFO - Using scikit-learn CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
+    2026-05-29 20:45:28,445 - julearn - INFO - Search Parameters:
+    2026-05-29 20:45:28,445 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
+    2026-05-29 20:45:28,445 - julearn - INFO -      scoring: None
+    2026-05-29 20:45:28,445 - julearn - INFO - ====================
+    2026-05-29 20:45:28,445 - julearn - INFO - 
     0.7074977958032092
     {'svm__C': 0.1, 'svm__gamma': 'scale'}
 
@@ -500,7 +478,7 @@ So what was the best ``gamma`` in the end?
 
 .. GENERATED FROM PYTHON SOURCE LINES 129-130
 
-.. code-block:: default
+.. code-block:: Python
 
     print(estimator.best_estimator_['svm']._gamma)
 
@@ -508,8 +486,6 @@ So what was the best ``gamma`` in the end?
 
 
 .. rst-class:: sphx-glr-script-out
-
- Out:
 
  .. code-block:: none
 
@@ -521,28 +497,26 @@ So what was the best ``gamma`` in the end?
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  27.947 seconds)
+   **Total running time of the script:** (0 minutes 24.281 seconds)
 
 
 .. _sphx_glr_download_auto_examples_advanced_run_hyperparameter_tuning.py:
 
+.. only:: html
 
-.. only :: html
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
+      :download:`Download Jupyter notebook: run_hyperparameter_tuning.ipynb <run_hyperparameter_tuning.ipynb>`
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: run_hyperparameter_tuning.py <run_hyperparameter_tuning.py>`
 
-     :download:`Download Python source code: run_hyperparameter_tuning.py <run_hyperparameter_tuning.py>`
+    .. container:: sphx-glr-download sphx-glr-download-zip
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: run_hyperparameter_tuning.ipynb <run_hyperparameter_tuning.ipynb>`
+      :download:`Download zipped: run_hyperparameter_tuning.zip <run_hyperparameter_tuning.zip>`
 
 
 .. only:: html

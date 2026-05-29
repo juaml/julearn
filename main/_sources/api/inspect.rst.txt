@@ -17,6 +17,7 @@ Classes
 
     Inspector
     FoldsInspector
+    PipelineInspector
 
 Functions
 ---------

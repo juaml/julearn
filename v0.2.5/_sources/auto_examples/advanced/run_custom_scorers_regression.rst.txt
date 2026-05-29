@@ -10,8 +10,8 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_auto_examples_advanced_run_custom_scorers_regression.py>`
-        to download the full example code
+        :ref:`Go to the end <sphx_glr_download_auto_examples_advanced_run_custom_scorers_regression.py>`
+        to download the full example code.
 
 .. rst-class:: sphx-glr-example-title
 
@@ -27,7 +27,7 @@ scikit-learn, julearn and a custom metric defined by the user.
 
 .. GENERATED FROM PYTHON SOURCE LINES 10-25
 
-.. code-block:: default
+.. code-block:: Python
 
     # Authors: Shammi More <s.more@fz-juelich.de>
     #          Federico Raimondo <f.raimondo@fz-juelich.de>
@@ -57,7 +57,7 @@ Set the logging level to info to see extra information
 
 .. GENERATED FROM PYTHON SOURCE LINES 27-29
 
-.. code-block:: default
+.. code-block:: Python
 
     configure_logging(level='INFO')
 
@@ -67,17 +67,15 @@ Set the logging level to info to see extra information
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
-    2022-07-21 09:55:04,058 - julearn - INFO - ===== Lib Versions =====
-    2022-07-21 09:55:04,058 - julearn - INFO - numpy: 1.23.1
-    2022-07-21 09:55:04,058 - julearn - INFO - scipy: 1.8.1
-    2022-07-21 09:55:04,058 - julearn - INFO - sklearn: 1.0.2
-    2022-07-21 09:55:04,058 - julearn - INFO - pandas: 1.4.3
-    2022-07-21 09:55:04,058 - julearn - INFO - julearn: 0.2.5
-    2022-07-21 09:55:04,058 - julearn - INFO - ========================
+    2026-05-29 20:46:20,528 - julearn - INFO - ===== Lib Versions =====
+    2026-05-29 20:46:20,528 - julearn - INFO - numpy: 1.23.1
+    2026-05-29 20:46:20,528 - julearn - INFO - scipy: 1.10.1
+    2026-05-29 20:46:20,529 - julearn - INFO - sklearn: 1.0.2
+    2026-05-29 20:46:20,529 - julearn - INFO - pandas: 2.0.3
+    2026-05-29 20:46:20,529 - julearn - INFO - julearn: 0.2.5
+    2026-05-29 20:46:20,529 - julearn - INFO - ========================
 
 
 
@@ -88,7 +86,7 @@ load the diabetes data from sklearn as a pandas dataframe
 
 .. GENERATED FROM PYTHON SOURCE LINES 31-33
 
-.. code-block:: default
+.. code-block:: Python
 
     features, target = load_diabetes(return_X_y=True, as_frame=True)
 
@@ -108,7 +106,7 @@ is the target we are interested in predicting.
 
 .. GENERATED FROM PYTHON SOURCE LINES 38-42
 
-.. code-block:: default
+.. code-block:: Python
 
 
     print('Features: \n', features.head())  # type: ignore
@@ -120,19 +118,15 @@ is the target we are interested in predicting.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     Features: 
-             age       sex       bmi  ...        s4        s5        s6
-    0  0.038076  0.050680  0.061696  ... -0.002592  0.019908 -0.017646
-    1 -0.001882 -0.044642 -0.051474  ... -0.039493 -0.068330 -0.092204
-    2  0.085299  0.050680  0.044451  ... -0.002592  0.002864 -0.025930
-    3 -0.089063 -0.044642 -0.011595  ...  0.034309  0.022692 -0.009362
-    4  0.005383 -0.044642 -0.036385  ... -0.002592 -0.031991 -0.046641
-
-    [5 rows x 10 columns]
+             age       sex       bmi        bp        s1        s2        s3        s4        s5        s6
+    0  0.038076  0.050680  0.061696  0.021872 -0.044223 -0.034821 -0.043401 -0.002592  0.019908 -0.017646
+    1 -0.001882 -0.044642 -0.051474 -0.026328 -0.008449 -0.019163  0.074412 -0.039493 -0.068330 -0.092204
+    2  0.085299  0.050680  0.044451 -0.005671 -0.045599 -0.034194 -0.032356 -0.002592  0.002864 -0.025930
+    3 -0.089063 -0.044642 -0.011595 -0.036656  0.012191  0.024991 -0.036038  0.034309  0.022692 -0.009362
+    4  0.005383 -0.044642 -0.036385  0.021872  0.003935  0.015596  0.008142 -0.002592 -0.031991 -0.046641
     Target: 
      count    442.000000
     mean     152.133484
@@ -154,7 +148,7 @@ and y
 
 .. GENERATED FROM PYTHON SOURCE LINES 45-51
 
-.. code-block:: default
+.. code-block:: Python
 
     data_diabetes = pd.concat([features, target], axis=1)  # type: ignore
 
@@ -176,7 +170,7 @@ for scoring
 
 .. GENERATED FROM PYTHON SOURCE LINES 54-59
 
-.. code-block:: default
+.. code-block:: Python
 
     scores, model = run_cross_validation(
         X=X, y=y, data=data_diabetes, preprocess_X='zscore',
@@ -189,24 +183,22 @@ for scoring
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
-    2022-07-21 09:55:04,076 - julearn - INFO - Using default CV
-    2022-07-21 09:55:04,076 - julearn - INFO - ==== Input Data ====
-    2022-07-21 09:55:04,077 - julearn - INFO - Using dataframe as input
-    2022-07-21 09:55:04,077 - julearn - INFO - Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2022-07-21 09:55:04,077 - julearn - INFO - Target: target
-    2022-07-21 09:55:04,077 - julearn - INFO - Expanded X: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2022-07-21 09:55:04,077 - julearn - INFO - Expanded Confounds: []
-    2022-07-21 09:55:04,078 - julearn - INFO - ====================
-    2022-07-21 09:55:04,078 - julearn - INFO - 
-    2022-07-21 09:55:04,078 - julearn - INFO - ====== Model ======
-    2022-07-21 09:55:04,078 - julearn - INFO - Obtaining model by name: ridge
-    2022-07-21 09:55:04,078 - julearn - INFO - ===================
-    2022-07-21 09:55:04,078 - julearn - INFO - 
-    2022-07-21 09:55:04,078 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+    2026-05-29 20:46:20,555 - julearn - INFO - Using default CV
+    2026-05-29 20:46:20,555 - julearn - INFO - ==== Input Data ====
+    2026-05-29 20:46:20,555 - julearn - INFO - Using dataframe as input
+    2026-05-29 20:46:20,555 - julearn - INFO - Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2026-05-29 20:46:20,555 - julearn - INFO - Target: target
+    2026-05-29 20:46:20,556 - julearn - INFO - Expanded X: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2026-05-29 20:46:20,556 - julearn - INFO - Expanded Confounds: []
+    2026-05-29 20:46:20,557 - julearn - INFO - ====================
+    2026-05-29 20:46:20,557 - julearn - INFO - 
+    2026-05-29 20:46:20,557 - julearn - INFO - ====== Model ======
+    2026-05-29 20:46:20,557 - julearn - INFO - Obtaining model by name: ridge
+    2026-05-29 20:46:20,557 - julearn - INFO - ===================
+    2026-05-29 20:46:20,557 - julearn - INFO - 
+    2026-05-29 20:46:20,557 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
 
 
 
@@ -217,7 +209,7 @@ The scores dataframe has all the values for each CV split.
 
 .. GENERATED FROM PYTHON SOURCE LINES 61-64
 
-.. code-block:: default
+.. code-block:: Python
 
 
     print(scores.head())
@@ -228,16 +220,14 @@ The scores dataframe has all the values for each CV split.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
        fit_time  score_time  test_score  repeat  fold
-    0  0.008516    0.005568  -44.386924       0     0
-    1  0.008201    0.005484  -45.094063       0     1
-    2  0.008235    0.005721  -43.188016       0     2
-    3  0.008671    0.005671  -41.591935       0     3
-    4  0.008196    0.005460  -49.226121       0     4
+    0  0.010234    0.006728  -44.386924       0     0
+    1  0.011613    0.006591  -45.094063       0     1
+    2  0.010631    0.009931  -43.188016       0     2
+    3  0.012909    0.006970  -41.591935       0     3
+    4  0.009986    0.008395  -49.226121       0     4
 
 
 
@@ -248,7 +238,7 @@ Mean value of mean absolute error across CV
 
 .. GENERATED FROM PYTHON SOURCE LINES 66-68
 
-.. code-block:: default
+.. code-block:: Python
 
     print(scores['test_score'].mean() * -1)  # type: ignore
 
@@ -258,11 +248,9 @@ Mean value of mean absolute error across CV
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
-    44.56947555620945
+    44.56947555620943
 
 
 
@@ -274,7 +262,7 @@ correlation coefficient (squared) as scoring functions
 
 .. GENERATED FROM PYTHON SOURCE LINES 71-76
 
-.. code-block:: default
+.. code-block:: Python
 
     scores, model = run_cross_validation(
         X=X, y=y, data=data_diabetes, preprocess_X='zscore',
@@ -287,24 +275,22 @@ correlation coefficient (squared) as scoring functions
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
-    2022-07-21 09:55:04,457 - julearn - INFO - Using default CV
-    2022-07-21 09:55:04,457 - julearn - INFO - ==== Input Data ====
-    2022-07-21 09:55:04,457 - julearn - INFO - Using dataframe as input
-    2022-07-21 09:55:04,457 - julearn - INFO - Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2022-07-21 09:55:04,457 - julearn - INFO - Target: target
-    2022-07-21 09:55:04,458 - julearn - INFO - Expanded X: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2022-07-21 09:55:04,458 - julearn - INFO - Expanded Confounds: []
-    2022-07-21 09:55:04,458 - julearn - INFO - ====================
-    2022-07-21 09:55:04,459 - julearn - INFO - 
-    2022-07-21 09:55:04,459 - julearn - INFO - ====== Model ======
-    2022-07-21 09:55:04,459 - julearn - INFO - Obtaining model by name: ridge
-    2022-07-21 09:55:04,459 - julearn - INFO - ===================
-    2022-07-21 09:55:04,459 - julearn - INFO - 
-    2022-07-21 09:55:04,459 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+    2026-05-29 20:46:21,124 - julearn - INFO - Using default CV
+    2026-05-29 20:46:21,124 - julearn - INFO - ==== Input Data ====
+    2026-05-29 20:46:21,124 - julearn - INFO - Using dataframe as input
+    2026-05-29 20:46:21,124 - julearn - INFO - Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2026-05-29 20:46:21,124 - julearn - INFO - Target: target
+    2026-05-29 20:46:21,125 - julearn - INFO - Expanded X: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2026-05-29 20:46:21,125 - julearn - INFO - Expanded Confounds: []
+    2026-05-29 20:46:21,126 - julearn - INFO - ====================
+    2026-05-29 20:46:21,126 - julearn - INFO - 
+    2026-05-29 20:46:21,127 - julearn - INFO - ====== Model ======
+    2026-05-29 20:46:21,127 - julearn - INFO - Obtaining model by name: ridge
+    2026-05-29 20:46:21,127 - julearn - INFO - ===================
+    2026-05-29 20:46:21,127 - julearn - INFO - 
+    2026-05-29 20:46:21,127 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
 
 
 
@@ -317,7 +303,7 @@ unders the column names 'test_neg_mean_absolute_error' and
 
 .. GENERATED FROM PYTHON SOURCE LINES 80-83
 
-.. code-block:: default
+.. code-block:: Python
 
     print(scores[['test_neg_mean_absolute_error', 'test_r2_corr']].mean())
 
@@ -327,8 +313,6 @@ unders the column names 'test_neg_mean_absolute_error' and
 
 
 .. rst-class:: sphx-glr-script-out
-
- Out:
 
  .. code-block:: none
 
@@ -347,7 +331,7 @@ In this case, we want to compute Pearson correlation coefficient (r).
 
 .. GENERATED FROM PYTHON SOURCE LINES 87-93
 
-.. code-block:: default
+.. code-block:: Python
 
 
     def pearson_scorer(y_true, y_pred):
@@ -369,7 +353,7 @@ with julearn.
 
 .. GENERATED FROM PYTHON SOURCE LINES 96-98
 
-.. code-block:: default
+.. code-block:: Python
 
     register_scorer(scorer_name='pearsonr', scorer=make_scorer(pearson_scorer))
 
@@ -379,11 +363,9 @@ with julearn.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
-    2022-07-21 09:55:04,969 - julearn - INFO - registering scorer named pearsonr
+    2026-05-29 20:46:21,882 - julearn - INFO - registering scorer named pearsonr
 
 
 
@@ -394,7 +376,7 @@ Now we can use it as another scoring metric.
 
 .. GENERATED FROM PYTHON SOURCE LINES 100-104
 
-.. code-block:: default
+.. code-block:: Python
 
     scores, model = run_cross_validation(
         X=X, y=y, data=data_diabetes, preprocess_X='zscore',
@@ -406,24 +388,22 @@ Now we can use it as another scoring metric.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
-    2022-07-21 09:55:04,970 - julearn - INFO - Using default CV
-    2022-07-21 09:55:04,970 - julearn - INFO - ==== Input Data ====
-    2022-07-21 09:55:04,970 - julearn - INFO - Using dataframe as input
-    2022-07-21 09:55:04,970 - julearn - INFO - Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2022-07-21 09:55:04,970 - julearn - INFO - Target: target
-    2022-07-21 09:55:04,970 - julearn - INFO - Expanded X: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2022-07-21 09:55:04,971 - julearn - INFO - Expanded Confounds: []
-    2022-07-21 09:55:04,971 - julearn - INFO - ====================
-    2022-07-21 09:55:04,971 - julearn - INFO - 
-    2022-07-21 09:55:04,971 - julearn - INFO - ====== Model ======
-    2022-07-21 09:55:04,971 - julearn - INFO - Obtaining model by name: ridge
-    2022-07-21 09:55:04,971 - julearn - INFO - ===================
-    2022-07-21 09:55:04,971 - julearn - INFO - 
-    2022-07-21 09:55:04,972 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+    2026-05-29 20:46:21,883 - julearn - INFO - Using default CV
+    2026-05-29 20:46:21,883 - julearn - INFO - ==== Input Data ====
+    2026-05-29 20:46:21,883 - julearn - INFO - Using dataframe as input
+    2026-05-29 20:46:21,883 - julearn - INFO - Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2026-05-29 20:46:21,883 - julearn - INFO - Target: target
+    2026-05-29 20:46:21,884 - julearn - INFO - Expanded X: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2026-05-29 20:46:21,884 - julearn - INFO - Expanded Confounds: []
+    2026-05-29 20:46:21,885 - julearn - INFO - ====================
+    2026-05-29 20:46:21,885 - julearn - INFO - 
+    2026-05-29 20:46:21,885 - julearn - INFO - ====== Model ======
+    2026-05-29 20:46:21,885 - julearn - INFO - Obtaining model by name: ridge
+    2026-05-29 20:46:21,885 - julearn - INFO - ===================
+    2026-05-29 20:46:21,886 - julearn - INFO - 
+    2026-05-29 20:46:21,886 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
 
 
 
@@ -431,28 +411,26 @@ Now we can use it as another scoring metric.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  1.560 seconds)
+   **Total running time of the script:** (0 minutes 2.350 seconds)
 
 
 .. _sphx_glr_download_auto_examples_advanced_run_custom_scorers_regression.py:
 
+.. only:: html
 
-.. only :: html
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
+      :download:`Download Jupyter notebook: run_custom_scorers_regression.ipynb <run_custom_scorers_regression.ipynb>`
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: run_custom_scorers_regression.py <run_custom_scorers_regression.py>`
 
-     :download:`Download Python source code: run_custom_scorers_regression.py <run_custom_scorers_regression.py>`
+    .. container:: sphx-glr-download sphx-glr-download-zip
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: run_custom_scorers_regression.ipynb <run_custom_scorers_regression.ipynb>`
+      :download:`Download zipped: run_custom_scorers_regression.zip <run_custom_scorers_regression.zip>`
 
 
 .. only:: html

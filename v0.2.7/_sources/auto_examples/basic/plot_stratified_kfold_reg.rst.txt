@@ -10,8 +10,8 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_auto_examples_basic_plot_stratified_kfold_reg.py>`
-        to download the full example code
+        :ref:`Go to the end <sphx_glr_download_auto_examples_basic_plot_stratified_kfold_reg.py>`
+        to download the full example code.
 
 .. rst-class:: sphx-glr-example-title
 
@@ -28,7 +28,7 @@ perform stratified Kfold CV for a regression problem,
 
 .. GENERATED FROM PYTHON SOURCE LINES 10-26
 
-.. code-block:: default
+.. code-block:: Python
 
     # Authors: Shammi More <s.more@fz-juelich.de>
     #          Federico Raimondo <f.raimondo@fz-juelich.de>
@@ -59,7 +59,7 @@ Set the logging level to info to see extra information
 
 .. GENERATED FROM PYTHON SOURCE LINES 28-30
 
-.. code-block:: default
+.. code-block:: Python
 
     configure_logging(level='INFO')
 
@@ -71,13 +71,13 @@ Set the logging level to info to see extra information
 
  .. code-block:: none
 
-    2022-12-08 10:45:39,281 - julearn - INFO - ===== Lib Versions =====
-    2022-12-08 10:45:39,282 - julearn - INFO - numpy: 1.23.5
-    2022-12-08 10:45:39,282 - julearn - INFO - scipy: 1.9.3
-    2022-12-08 10:45:39,282 - julearn - INFO - sklearn: 1.0.2
-    2022-12-08 10:45:39,282 - julearn - INFO - pandas: 1.4.4
-    2022-12-08 10:45:39,282 - julearn - INFO - julearn: 0.2.7
-    2022-12-08 10:45:39,282 - julearn - INFO - ========================
+    2026-05-29 20:45:56,812 - julearn - INFO - ===== Lib Versions =====
+    2026-05-29 20:45:56,812 - julearn - INFO - numpy: 1.23.5
+    2026-05-29 20:45:56,812 - julearn - INFO - scipy: 1.10.1
+    2026-05-29 20:45:56,813 - julearn - INFO - sklearn: 1.0.2
+    2026-05-29 20:45:56,813 - julearn - INFO - pandas: 2.0.3
+    2026-05-29 20:45:56,813 - julearn - INFO - julearn: 0.3.0.dev0
+    2026-05-29 20:45:56,813 - julearn - INFO - ========================
 
 
 
@@ -88,7 +88,7 @@ load the diabetes data from sklearn as a pandas dataframe
 
 .. GENERATED FROM PYTHON SOURCE LINES 32-34
 
-.. code-block:: default
+.. code-block:: Python
 
     features, target = load_diabetes(return_X_y=True, as_frame=True)
 
@@ -108,7 +108,7 @@ is the target we are interested in predicting.
 
 .. GENERATED FROM PYTHON SOURCE LINES 39-43
 
-.. code-block:: default
+.. code-block:: Python
 
 
     print('Features: \n', features.head())
@@ -123,14 +123,12 @@ is the target we are interested in predicting.
  .. code-block:: none
 
     Features: 
-             age       sex       bmi  ...        s4        s5        s6
-    0  0.038076  0.050680  0.061696  ... -0.002592  0.019908 -0.017646
-    1 -0.001882 -0.044642 -0.051474  ... -0.039493 -0.068330 -0.092204
-    2  0.085299  0.050680  0.044451  ... -0.002592  0.002864 -0.025930
-    3 -0.089063 -0.044642 -0.011595  ...  0.034309  0.022692 -0.009362
-    4  0.005383 -0.044642 -0.036385  ... -0.002592 -0.031991 -0.046641
-
-    [5 rows x 10 columns]
+             age       sex       bmi        bp        s1        s2        s3        s4        s5        s6
+    0  0.038076  0.050680  0.061696  0.021872 -0.044223 -0.034821 -0.043401 -0.002592  0.019908 -0.017646
+    1 -0.001882 -0.044642 -0.051474 -0.026328 -0.008449 -0.019163  0.074412 -0.039493 -0.068330 -0.092204
+    2  0.085299  0.050680  0.044451 -0.005671 -0.045599 -0.034194 -0.032356 -0.002592  0.002864 -0.025930
+    3 -0.089063 -0.044642 -0.011595 -0.036656  0.012191  0.024991 -0.036038  0.034309  0.022692 -0.009362
+    4  0.005383 -0.044642 -0.036385  0.021872  0.003935  0.015596  0.008142 -0.002592 -0.031991 -0.046641
     Target: 
      count    442.000000
     mean     152.133484
@@ -153,7 +151,7 @@ stratification
 
 .. GENERATED FROM PYTHON SOURCE LINES 47-60
 
-.. code-block:: default
+.. code-block:: Python
 
 
     data_df = pd.concat([features, target], axis=1)
@@ -176,7 +174,7 @@ stratification
 
  .. code-block:: none
 
-    /tmp/tmpdgvnwsvg/d61bcee9db7116896d326b1ef04e2a92cc163c65/examples/basic/plot_stratified_kfold_reg.py:52: SettingWithCopyWarning: 
+    /private/var/folders/09/t22x2_p106j7p24khr0jdxrw0000gn/T/tmpgocqh723/examples/basic/plot_stratified_kfold_reg.py:52: SettingWithCopyWarning: 
     A value is trying to be set on a copy of a slice from a DataFrame.
     Try using .loc[row_indexer,col_indexer] = value instead
 
@@ -192,7 +190,7 @@ Define number of splits for CV and create bins/group for stratification
 
 .. GENERATED FROM PYTHON SOURCE LINES 62-70
 
-.. code-block:: default
+.. code-block:: Python
 
     num_splits = 7
 
@@ -215,7 +213,7 @@ Train a linear regression model with stratification on target
 
 .. GENERATED FROM PYTHON SOURCE LINES 72-79
 
-.. code-block:: default
+.. code-block:: Python
 
 
     cv_stratified = StratifiedGroupsKFold(n_splits=num_splits, shuffle=False)
@@ -232,21 +230,21 @@ Train a linear regression model with stratification on target
 
  .. code-block:: none
 
-    2022-12-08 10:45:39,306 - julearn - INFO - ==== Input Data ====
-    2022-12-08 10:45:39,306 - julearn - INFO - Using dataframe as input
-    2022-12-08 10:45:39,306 - julearn - INFO - Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2022-12-08 10:45:39,306 - julearn - INFO - Target: target
-    2022-12-08 10:45:39,307 - julearn - INFO - Expanded X: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2022-12-08 10:45:39,307 - julearn - INFO - Expanded Confounds: []
-    2022-12-08 10:45:39,307 - julearn - INFO - Using bins as groups
-    2022-12-08 10:45:39,308 - julearn - INFO - ====================
-    2022-12-08 10:45:39,308 - julearn - INFO - 
-    2022-12-08 10:45:39,308 - julearn - INFO - ====== Model ======
-    2022-12-08 10:45:39,308 - julearn - INFO - Obtaining model by name: linreg
-    2022-12-08 10:45:39,308 - julearn - INFO - ===================
-    2022-12-08 10:45:39,308 - julearn - INFO - 
-    2022-12-08 10:45:39,308 - julearn - INFO - Using scikit-learn CV scheme StratifiedGroupsKFold(n_splits=7, random_state=None, shuffle=False)
-    /opt/hostedtoolcache/Python/3.8.15/x64/lib/python3.8/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=7.
+    2026-05-29 20:45:56,856 - julearn - INFO - ==== Input Data ====
+    2026-05-29 20:45:56,856 - julearn - INFO - Using dataframe as input
+    2026-05-29 20:45:56,856 - julearn - INFO - Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2026-05-29 20:45:56,856 - julearn - INFO - Target: target
+    2026-05-29 20:45:56,857 - julearn - INFO - Expanded X: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2026-05-29 20:45:56,857 - julearn - INFO - Expanded Confounds: []
+    2026-05-29 20:45:56,858 - julearn - INFO - Using bins as groups
+    2026-05-29 20:45:56,859 - julearn - INFO - ====================
+    2026-05-29 20:45:56,859 - julearn - INFO - 
+    2026-05-29 20:45:56,859 - julearn - INFO - ====== Model ======
+    2026-05-29 20:45:56,859 - julearn - INFO - Obtaining model by name: linreg
+    2026-05-29 20:45:56,859 - julearn - INFO - ===================
+    2026-05-29 20:45:56,859 - julearn - INFO - 
+    2026-05-29 20:45:56,860 - julearn - INFO - Using scikit-learn CV scheme StratifiedGroupsKFold(n_splits=7, random_state=None, shuffle=False)
+    /private/var/folders/09/t22x2_p106j7p24khr0jdxrw0000gn/T/tmpgocqh723/.venv/lib/python3.8/site-packages/sklearn/model_selection/_split.py:676: UserWarning: The least populated class in y has only 1 members, which is less than n_splits=7.
       warnings.warn(
 
 
@@ -258,7 +256,7 @@ Train a linear regression model without stratification on target
 
 .. GENERATED FROM PYTHON SOURCE LINES 81-88
 
-.. code-block:: default
+.. code-block:: Python
 
 
     cv = KFold(n_splits=num_splits, shuffle=False, random_state=None)
@@ -275,19 +273,19 @@ Train a linear regression model without stratification on target
 
  .. code-block:: none
 
-    2022-12-08 10:45:39,420 - julearn - INFO - ==== Input Data ====
-    2022-12-08 10:45:39,420 - julearn - INFO - Using dataframe as input
-    2022-12-08 10:45:39,420 - julearn - INFO - Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2022-12-08 10:45:39,420 - julearn - INFO - Target: target
-    2022-12-08 10:45:39,421 - julearn - INFO - Expanded X: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2022-12-08 10:45:39,421 - julearn - INFO - Expanded Confounds: []
-    2022-12-08 10:45:39,421 - julearn - INFO - ====================
-    2022-12-08 10:45:39,422 - julearn - INFO - 
-    2022-12-08 10:45:39,422 - julearn - INFO - ====== Model ======
-    2022-12-08 10:45:39,422 - julearn - INFO - Obtaining model by name: linreg
-    2022-12-08 10:45:39,422 - julearn - INFO - ===================
-    2022-12-08 10:45:39,422 - julearn - INFO - 
-    2022-12-08 10:45:39,422 - julearn - INFO - Using scikit-learn CV scheme KFold(n_splits=7, random_state=None, shuffle=False)
+    2026-05-29 20:45:57,009 - julearn - INFO - ==== Input Data ====
+    2026-05-29 20:45:57,009 - julearn - INFO - Using dataframe as input
+    2026-05-29 20:45:57,009 - julearn - INFO - Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2026-05-29 20:45:57,009 - julearn - INFO - Target: target
+    2026-05-29 20:45:57,010 - julearn - INFO - Expanded X: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2026-05-29 20:45:57,010 - julearn - INFO - Expanded Confounds: []
+    2026-05-29 20:45:57,011 - julearn - INFO - ====================
+    2026-05-29 20:45:57,011 - julearn - INFO - 
+    2026-05-29 20:45:57,011 - julearn - INFO - ====== Model ======
+    2026-05-29 20:45:57,011 - julearn - INFO - Obtaining model by name: linreg
+    2026-05-29 20:45:57,011 - julearn - INFO - ===================
+    2026-05-29 20:45:57,012 - julearn - INFO - 
+    2026-05-29 20:45:57,012 - julearn - INFO - Using scikit-learn CV scheme KFold(n_splits=7, random_state=None, shuffle=False)
 
 
 
@@ -299,7 +297,7 @@ stratification. We can combine the two outputs as pandas dataframes
 
 .. GENERATED FROM PYTHON SOURCE LINES 91-97
 
-.. code-block:: default
+.. code-block:: Python
 
 
     scores_strat['model'] = 'With stratification'
@@ -322,7 +320,7 @@ stratified
 
 .. GENERATED FROM PYTHON SOURCE LINES 101-106
 
-.. code-block:: default
+.. code-block:: Python
 
 
     fig, ax = plt.subplots(1, 1, figsize=(10, 7))
@@ -344,7 +342,7 @@ stratified
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.411 seconds)
+   **Total running time of the script:** (0 minutes 8.763 seconds)
 
 
 .. _sphx_glr_download_auto_examples_basic_plot_stratified_kfold_reg.py:
@@ -353,14 +351,17 @@ stratified
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
+
+      :download:`Download Jupyter notebook: plot_stratified_kfold_reg.ipynb <plot_stratified_kfold_reg.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_stratified_kfold_reg.py <plot_stratified_kfold_reg.py>`
 
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
+    .. container:: sphx-glr-download sphx-glr-download-zip
 
-      :download:`Download Jupyter notebook: plot_stratified_kfold_reg.ipynb <plot_stratified_kfold_reg.ipynb>`
+      :download:`Download zipped: plot_stratified_kfold_reg.zip <plot_stratified_kfold_reg.zip>`
 
 
 .. only:: html

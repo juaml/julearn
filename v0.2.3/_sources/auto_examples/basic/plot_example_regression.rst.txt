@@ -10,8 +10,8 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_auto_examples_basic_plot_example_regression.py>`
-        to download the full example code
+        :ref:`Go to the end <sphx_glr_download_auto_examples_basic_plot_example_regression.py>`
+        to download the full example code.
 
 .. rst-class:: sphx-glr-example-title
 
@@ -26,7 +26,7 @@ a regression analysis using a Ridge Regression model.
 
 .. GENERATED FROM PYTHON SOURCE LINES 9-25
 
-.. code-block:: default
+.. code-block:: Python
 
     # Authors: Shammi More <s.more@fz-juelich.de>
     #          Federico Raimondo <f.raimondo@fz-juelich.de>
@@ -48,15 +48,6 @@ a regression analysis using a Ridge Regression model.
 
 
 
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
-
-    /home/travis/virtualenv/python3.7.1/lib/python3.7/importlib/_bootstrap.py:219: RuntimeWarning: numpy.ufunc size changed, may indicate binary incompatibility. Expected 192 from C header, got 216 from PyObject
-      return f(*args, **kwds)
-
 
 
 
@@ -66,7 +57,7 @@ Set the logging level to info to see extra information
 
 .. GENERATED FROM PYTHON SOURCE LINES 27-29
 
-.. code-block:: default
+.. code-block:: Python
 
     configure_logging(level='INFO')
 
@@ -76,17 +67,15 @@ Set the logging level to info to see extra information
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
-    2021-01-28 20:08:00,657 - julearn - INFO - ===== Lib Versions =====
-    2021-01-28 20:08:00,657 - julearn - INFO - numpy: 1.19.5
-    2021-01-28 20:08:00,657 - julearn - INFO - scipy: 1.6.0
-    2021-01-28 20:08:00,657 - julearn - INFO - sklearn: 0.24.1
-    2021-01-28 20:08:00,657 - julearn - INFO - pandas: 1.2.1
-    2021-01-28 20:08:00,657 - julearn - INFO - julearn: 0.2.5.dev19+g9c15c5f
-    2021-01-28 20:08:00,657 - julearn - INFO - ========================
+    2026-05-29 20:45:03,510 - julearn - INFO - ===== Lib Versions =====
+    2026-05-29 20:45:03,510 - julearn - INFO - numpy: 1.19.3
+    2026-05-29 20:45:03,510 - julearn - INFO - scipy: 1.9.3
+    2026-05-29 20:45:03,510 - julearn - INFO - sklearn: 0.23.2
+    2026-05-29 20:45:03,510 - julearn - INFO - pandas: 1.4.4
+    2026-05-29 20:45:03,510 - julearn - INFO - julearn: 0.2.3
+    2026-05-29 20:45:03,510 - julearn - INFO - ========================
 
 
 
@@ -97,7 +86,7 @@ load the diabetes data from sklearn as a pandas dataframe
 
 .. GENERATED FROM PYTHON SOURCE LINES 31-33
 
-.. code-block:: default
+.. code-block:: Python
 
     features, target = load_diabetes(return_X_y=True, as_frame=True)
 
@@ -117,7 +106,7 @@ is the target we are interested in predicting.
 
 .. GENERATED FROM PYTHON SOURCE LINES 38-42
 
-.. code-block:: default
+.. code-block:: Python
 
 
     print('Features: \n', features.head())
@@ -129,19 +118,15 @@ is the target we are interested in predicting.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
     Features: 
-             age       sex       bmi  ...        s4        s5        s6
-    0  0.038076  0.050680  0.061696  ... -0.002592  0.019908 -0.017646
-    1 -0.001882 -0.044642 -0.051474  ... -0.039493 -0.068330 -0.092204
-    2  0.085299  0.050680  0.044451  ... -0.002592  0.002864 -0.025930
-    3 -0.089063 -0.044642 -0.011595  ...  0.034309  0.022692 -0.009362
-    4  0.005383 -0.044642 -0.036385  ... -0.002592 -0.031991 -0.046641
-
-    [5 rows x 10 columns]
+             age       sex       bmi        bp        s1        s2        s3        s4        s5        s6
+    0  0.038076  0.050680  0.061696  0.021872 -0.044223 -0.034821 -0.043401 -0.002592  0.019908 -0.017646
+    1 -0.001882 -0.044642 -0.051474 -0.026328 -0.008449 -0.019163  0.074412 -0.039493 -0.068330 -0.092204
+    2  0.085299  0.050680  0.044451 -0.005671 -0.045599 -0.034194 -0.032356 -0.002592  0.002864 -0.025930
+    3 -0.089063 -0.044642 -0.011595 -0.036656  0.012191  0.024991 -0.036038  0.034309  0.022692 -0.009362
+    4  0.005383 -0.044642 -0.036385  0.021872  0.003935  0.015596  0.008142 -0.002592 -0.031991 -0.046641
     Target: 
      count    442.000000
     mean     152.133484
@@ -163,7 +148,7 @@ and y
 
 .. GENERATED FROM PYTHON SOURCE LINES 45-50
 
-.. code-block:: default
+.. code-block:: Python
 
     data_diabetes = pd.concat([features, target], axis=1)
 
@@ -183,7 +168,7 @@ calculate correlations between the features/variables and plot it as heat map
 
 .. GENERATED FROM PYTHON SOURCE LINES 52-59
 
-.. code-block:: default
+.. code-block:: Python
 
     corr = data_diabetes.corr()
     fig, ax = plt.subplots(1, 1, figsize=(10, 7))
@@ -195,19 +180,18 @@ calculate correlations between the features/variables and plot it as heat map
 
 
 
-.. image:: /auto_examples/basic/images/sphx_glr_plot_example_regression_001.png
-    :alt: plot example regression
-    :class: sphx-glr-single-img
+.. image-sg:: /auto_examples/basic/images/sphx_glr_plot_example_regression_001.png
+   :alt: plot example regression
+   :srcset: /auto_examples/basic/images/sphx_glr_plot_example_regression_001.png
+   :class: sphx-glr-single-img
 
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
 
-    <AxesSubplot:>
+    <AxesSubplot: >
 
 
 
@@ -217,7 +201,7 @@ Split the dataset into train and test
 
 .. GENERATED FROM PYTHON SOURCE LINES 61-63
 
-.. code-block:: default
+.. code-block:: Python
 
     train_diabetes, test_diabetes = train_test_split(data_diabetes, test_size=0.3)
 
@@ -235,7 +219,7 @@ for scoring
 
 .. GENERATED FROM PYTHON SOURCE LINES 66-71
 
-.. code-block:: default
+.. code-block:: Python
 
     scores, model = run_cross_validation(
         X=X, y=y, data=train_diabetes, preprocess_X='zscore',
@@ -248,24 +232,22 @@ for scoring
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
-    2021-01-28 20:08:01,081 - julearn - INFO - Using default CV
-    2021-01-28 20:08:01,081 - julearn - INFO - ==== Input Data ====
-    2021-01-28 20:08:01,081 - julearn - INFO - Using dataframe as input
-    2021-01-28 20:08:01,081 - julearn - INFO - Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2021-01-28 20:08:01,081 - julearn - INFO - Target: target
-    2021-01-28 20:08:01,082 - julearn - INFO - Expanded X: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2021-01-28 20:08:01,082 - julearn - INFO - Expanded Confounds: []
-    2021-01-28 20:08:01,083 - julearn - INFO - ====================
-    2021-01-28 20:08:01,083 - julearn - INFO - 
-    2021-01-28 20:08:01,083 - julearn - INFO - ====== Model ======
-    2021-01-28 20:08:01,083 - julearn - INFO - Obtaining model by name: ridge
-    2021-01-28 20:08:01,083 - julearn - INFO - ===================
-    2021-01-28 20:08:01,083 - julearn - INFO - 
-    2021-01-28 20:08:01,083 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+    2026-05-29 20:45:03,798 - julearn - INFO - Using default CV
+    2026-05-29 20:45:03,798 - julearn - INFO - ==== Input Data ====
+    2026-05-29 20:45:03,798 - julearn - INFO - Using dataframe as input
+    2026-05-29 20:45:03,798 - julearn - INFO - Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2026-05-29 20:45:03,798 - julearn - INFO - Target: target
+    2026-05-29 20:45:03,799 - julearn - INFO - Expanded X: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2026-05-29 20:45:03,799 - julearn - INFO - Expanded Confounds: []
+    2026-05-29 20:45:03,800 - julearn - INFO - ====================
+    2026-05-29 20:45:03,800 - julearn - INFO - 
+    2026-05-29 20:45:03,800 - julearn - INFO - ====== Model ======
+    2026-05-29 20:45:03,800 - julearn - INFO - Obtaining model by name: ridge
+    2026-05-29 20:45:03,800 - julearn - INFO - ===================
+    2026-05-29 20:45:03,800 - julearn - INFO - 
+    2026-05-29 20:45:03,800 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
 
 
 
@@ -276,7 +258,7 @@ The scores dataframe has all the values for each CV split.
 
 .. GENERATED FROM PYTHON SOURCE LINES 73-76
 
-.. code-block:: default
+.. code-block:: Python
 
 
     print(scores.head())
@@ -287,16 +269,14 @@ The scores dataframe has all the values for each CV split.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
        fit_time  score_time  test_neg_mean_absolute_error  repeat  fold
-    0  0.012554    0.007784                    -53.711774       0     0
-    1  0.011844    0.008358                    -38.334731       0     1
-    2  0.012480    0.007795                    -46.578596       0     2
-    3  0.011738    0.007895                    -48.109208       0     3
-    4  0.011963    0.007806                    -42.632269       0     4
+    0  0.008656    0.006242                    -53.711774       0     0
+    1  0.007178    0.004647                    -38.334731       0     1
+    2  0.007291    0.004898                    -46.578596       0     2
+    3  0.007274    0.005100                    -48.109208       0     3
+    4  0.007539    0.004981                    -42.632269       0     4
 
 
 
@@ -307,7 +287,7 @@ Mean value of mean absolute error across CV
 
 .. GENERATED FROM PYTHON SOURCE LINES 78-80
 
-.. code-block:: default
+.. code-block:: Python
 
     print(scores['test_neg_mean_absolute_error'].mean() * -1)
 
@@ -316,8 +296,6 @@ Mean value of mean absolute error across CV
 
 
 .. rst-class:: sphx-glr-script-out
-
- Out:
 
  .. code-block:: none
 
@@ -332,7 +310,7 @@ Now we can get the MAE fold and repetition:
 
 .. GENERATED FROM PYTHON SOURCE LINES 82-90
 
-.. code-block:: default
+.. code-block:: Python
 
 
     df_mae = scores.set_index(
@@ -347,8 +325,6 @@ Now we can get the MAE fold and repetition:
 
 
 .. rst-class:: sphx-glr-script-out
-
- Out:
 
  .. code-block:: none
 
@@ -369,7 +345,7 @@ Plot heatmap of mean absolute error (MAE) over all repeats and CV splits
 
 .. GENERATED FROM PYTHON SOURCE LINES 92-96
 
-.. code-block:: default
+.. code-block:: Python
 
     fig, ax = plt.subplots(1, 1, figsize=(10, 7))
     sns.heatmap(df_mae, cmap="YlGnBu")
@@ -378,14 +354,13 @@ Plot heatmap of mean absolute error (MAE) over all repeats and CV splits
 
 
 
-.. image:: /auto_examples/basic/images/sphx_glr_plot_example_regression_002.png
-    :alt: Cross-validation MAE
-    :class: sphx-glr-single-img
+.. image-sg:: /auto_examples/basic/images/sphx_glr_plot_example_regression_002.png
+   :alt: Cross-validation MAE
+   :srcset: /auto_examples/basic/images/sphx_glr_plot_example_regression_002.png
+   :class: sphx-glr-single-img
 
 
 .. rst-class:: sphx-glr-script-out
-
- Out:
 
  .. code-block:: none
 
@@ -400,7 +375,7 @@ Let's plot the feature importance using the coefficients of the trained model
 
 .. GENERATED FROM PYTHON SOURCE LINES 98-111
 
-.. code-block:: default
+.. code-block:: Python
 
 
     features = pd.DataFrame({'Features': X, 'importance': model['ridge'].coef_})
@@ -418,14 +393,13 @@ Let's plot the feature importance using the coefficients of the trained model
 
 
 
-.. image:: /auto_examples/basic/images/sphx_glr_plot_example_regression_003.png
-    :alt: Variable importance for Ridge Regression
-    :class: sphx-glr-single-img
+.. image-sg:: /auto_examples/basic/images/sphx_glr_plot_example_regression_003.png
+   :alt: Variable importance for Ridge Regression
+   :srcset: /auto_examples/basic/images/sphx_glr_plot_example_regression_003.png
+   :class: sphx-glr-single-img
 
 
 .. rst-class:: sphx-glr-script-out
-
- Out:
 
  .. code-block:: none
 
@@ -441,7 +415,7 @@ of true values vs predicted values
 
 .. GENERATED FROM PYTHON SOURCE LINES 114-132
 
-.. code-block:: default
+.. code-block:: Python
 
 
     y_true = test_diabetes[y]
@@ -464,14 +438,13 @@ of true values vs predicted values
 
 
 
-.. image:: /auto_examples/basic/images/sphx_glr_plot_example_regression_004.png
-    :alt: Actual vs Predicted
-    :class: sphx-glr-single-img
+.. image-sg:: /auto_examples/basic/images/sphx_glr_plot_example_regression_004.png
+   :alt: Actual vs Predicted
+   :srcset: /auto_examples/basic/images/sphx_glr_plot_example_regression_004.png
+   :class: sphx-glr-single-img
 
 
 .. rst-class:: sphx-glr-script-out
-
- Out:
 
  .. code-block:: none
 
@@ -483,28 +456,26 @@ of true values vs predicted values
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  1.494 seconds)
+   **Total running time of the script:** (0 minutes 14.350 seconds)
 
 
 .. _sphx_glr_download_auto_examples_basic_plot_example_regression.py:
 
+.. only:: html
 
-.. only :: html
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
+      :download:`Download Jupyter notebook: plot_example_regression.ipynb <plot_example_regression.ipynb>`
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: plot_example_regression.py <plot_example_regression.py>`
 
-     :download:`Download Python source code: plot_example_regression.py <plot_example_regression.py>`
+    .. container:: sphx-glr-download sphx-glr-download-zip
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: plot_example_regression.ipynb <plot_example_regression.ipynb>`
+      :download:`Download zipped: plot_example_regression.zip <plot_example_regression.zip>`
 
 
 .. only:: html

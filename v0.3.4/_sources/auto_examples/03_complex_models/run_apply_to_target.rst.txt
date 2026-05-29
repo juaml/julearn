@@ -68,15 +68,13 @@ Set the logging level to info to see extra information.
 
  .. code-block:: none
 
-    /home/runner/work/julearn/julearn/julearn/utils/logging.py:66: UserWarning: The '__version__' attribute is deprecated and will be removed in MarkupSafe 3.1. Use feature detection, or `importlib.metadata.version("markupsafe")`, instead.
-      vstring = str(getattr(module, "__version__", None))
-    2024-10-17 14:15:39,980 - julearn - INFO - ===== Lib Versions =====
-    2024-10-17 14:15:39,980 - julearn - INFO - numpy: 1.26.4
-    2024-10-17 14:15:39,980 - julearn - INFO - scipy: 1.14.1
-    2024-10-17 14:15:39,981 - julearn - INFO - sklearn: 1.5.2
-    2024-10-17 14:15:39,981 - julearn - INFO - pandas: 2.2.3
-    2024-10-17 14:15:39,981 - julearn - INFO - julearn: 0.3.4
-    2024-10-17 14:15:39,981 - julearn - INFO - ========================
+    2026-05-29 20:46:11,478 - julearn - INFO - ===== Lib Versions =====
+    2026-05-29 20:46:11,478 - julearn - INFO - numpy: 1.26.4
+    2026-05-29 20:46:11,478 - julearn - INFO - scipy: 1.17.1
+    2026-05-29 20:46:11,478 - julearn - INFO - sklearn: 1.5.2
+    2026-05-29 20:46:11,478 - julearn - INFO - pandas: 2.2.3
+    2026-05-29 20:46:11,478 - julearn - INFO - julearn: 0.3.4
+    2026-05-29 20:46:11,478 - julearn - INFO - ========================
 
 
 
@@ -121,14 +119,12 @@ is the target we are interested in predicting.
  .. code-block:: none
 
     Features: 
-             age       sex       bmi  ...        s4        s5        s6
-    0  0.038076  0.050680  0.061696  ... -0.002592  0.019907 -0.017646
-    1 -0.001882 -0.044642 -0.051474  ... -0.039493 -0.068332 -0.092204
-    2  0.085299  0.050680  0.044451  ... -0.002592  0.002861 -0.025930
-    3 -0.089063 -0.044642 -0.011595  ...  0.034309  0.022688 -0.009362
-    4  0.005383 -0.044642 -0.036385  ... -0.002592 -0.031988 -0.046641
-
-    [5 rows x 10 columns]
+             age       sex       bmi        bp        s1        s2        s3        s4        s5        s6
+    0  0.038076  0.050680  0.061696  0.021872 -0.044223 -0.034821 -0.043401 -0.002592  0.019907 -0.017646
+    1 -0.001882 -0.044642 -0.051474 -0.026328 -0.008449 -0.019163  0.074412 -0.039493 -0.068332 -0.092204
+    2  0.085299  0.050680  0.044451 -0.005670 -0.045599 -0.034194 -0.032356 -0.002592  0.002861 -0.025930
+    3 -0.089063 -0.044642 -0.011595 -0.036656  0.012191  0.024991 -0.036038  0.034309  0.022688 -0.009362
+    4  0.005383 -0.044642 -0.036385  0.021872  0.003935  0.015596  0.008142 -0.002592 -0.031988 -0.046641
     Target: 
      count    442.000000
     mean     152.133484
@@ -203,7 +199,7 @@ we will first need to create a TargetPipelineCreator for this.
  .. code-block:: none
 
 
-    <julearn.pipeline.target_pipeline_creator.TargetPipelineCreator object at 0x7f45e1d0dba0>
+    <julearn.pipeline.target_pipeline_creator.TargetPipelineCreator object at 0x12506b310>
 
 
 
@@ -238,40 +234,38 @@ Now we can create the pipeline using a PipelineCreator.
 
  .. code-block:: none
 
-    2024-10-17 14:15:39,997 - julearn - INFO - Adding step jutargetpipeline that applies to ColumnTypes<types={'target'}; pattern=(?:target)>
-    2024-10-17 14:15:39,997 - julearn - INFO - Step added
-    2024-10-17 14:15:39,997 - julearn - INFO - Adding step ridge that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2024-10-17 14:15:39,997 - julearn - INFO - Step added
-    2024-10-17 14:15:39,997 - julearn - INFO - ==== Input Data ====
-    2024-10-17 14:15:39,997 - julearn - INFO - Using dataframe as input
-    2024-10-17 14:15:39,997 - julearn - INFO -      Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2024-10-17 14:15:39,997 - julearn - INFO -      Target: target
-    2024-10-17 14:15:39,997 - julearn - INFO -      Expanded features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2024-10-17 14:15:39,998 - julearn - INFO -      X_types:{}
-    2024-10-17 14:15:39,998 - julearn - WARNING - The following columns are not defined in X_types: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']. They will be treated as continuous.
-    /home/runner/work/julearn/julearn/julearn/prepare.py:509: RuntimeWarning: The following columns are not defined in X_types: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']. They will be treated as continuous.
+    2026-05-29 20:46:11,502 - julearn - INFO - Adding step jutargetpipeline that applies to ColumnTypes<types={'target'}; pattern=(?:target)>
+    2026-05-29 20:46:11,503 - julearn - INFO - Step added
+    2026-05-29 20:46:11,503 - julearn - INFO - Adding step ridge that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2026-05-29 20:46:11,503 - julearn - INFO - Step added
+    2026-05-29 20:46:11,503 - julearn - INFO - ==== Input Data ====
+    2026-05-29 20:46:11,503 - julearn - INFO - Using dataframe as input
+    2026-05-29 20:46:11,503 - julearn - INFO -      Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2026-05-29 20:46:11,503 - julearn - INFO -      Target: target
+    2026-05-29 20:46:11,504 - julearn - INFO -      Expanded features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2026-05-29 20:46:11,504 - julearn - INFO -      X_types:{}
+    2026-05-29 20:46:11,504 - julearn - WARNING - The following columns are not defined in X_types: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']. They will be treated as continuous.
+    /private/var/folders/09/t22x2_p106j7p24khr0jdxrw0000gn/T/tmpde53h0pp/julearn/prepare.py:509: RuntimeWarning: The following columns are not defined in X_types: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']. They will be treated as continuous.
       warn_with_log(
-    2024-10-17 14:15:39,998 - julearn - INFO - ====================
-    2024-10-17 14:15:39,998 - julearn - INFO - 
-    2024-10-17 14:15:39,999 - julearn - INFO - = Model Parameters =
-    2024-10-17 14:15:39,999 - julearn - INFO - ====================
-    2024-10-17 14:15:39,999 - julearn - INFO - 
-    2024-10-17 14:15:39,999 - julearn - INFO - = Data Information =
-    2024-10-17 14:15:39,999 - julearn - INFO -      Problem type: regression
-    2024-10-17 14:15:39,999 - julearn - INFO -      Number of samples: 309
-    2024-10-17 14:15:39,999 - julearn - INFO -      Number of features: 10
-    2024-10-17 14:15:39,999 - julearn - INFO - ====================
-    2024-10-17 14:15:39,999 - julearn - INFO - 
-    2024-10-17 14:15:39,999 - julearn - INFO -      Target type: float64
-    2024-10-17 14:15:39,999 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
-       fit_time  score_time  ...  fold                          cv_mdsum
-    0  0.003185    0.001606  ...     0  b10eef89b4192178d482d7a1587a248a
-    1  0.003516    0.001956  ...     1  b10eef89b4192178d482d7a1587a248a
-    2  0.003582    0.001598  ...     2  b10eef89b4192178d482d7a1587a248a
-    3  0.003345    0.001564  ...     3  b10eef89b4192178d482d7a1587a248a
-    4  0.003198    0.001550  ...     4  b10eef89b4192178d482d7a1587a248a
-
-    [5 rows x 8 columns]
+    2026-05-29 20:46:11,505 - julearn - INFO - ====================
+    2026-05-29 20:46:11,505 - julearn - INFO - 
+    2026-05-29 20:46:11,506 - julearn - INFO - = Model Parameters =
+    2026-05-29 20:46:11,506 - julearn - INFO - ====================
+    2026-05-29 20:46:11,506 - julearn - INFO - 
+    2026-05-29 20:46:11,506 - julearn - INFO - = Data Information =
+    2026-05-29 20:46:11,506 - julearn - INFO -      Problem type: regression
+    2026-05-29 20:46:11,506 - julearn - INFO -      Number of samples: 309
+    2026-05-29 20:46:11,506 - julearn - INFO -      Number of features: 10
+    2026-05-29 20:46:11,506 - julearn - INFO - ====================
+    2026-05-29 20:46:11,507 - julearn - INFO - 
+    2026-05-29 20:46:11,507 - julearn - INFO -      Target type: float64
+    2026-05-29 20:46:11,507 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
+       fit_time  score_time  test_score  n_train  n_test  repeat  fold                          cv_mdsum
+    0  0.005994    0.002850  -46.841131      247      62       0     0  b10eef89b4192178d482d7a1587a248a
+    1  0.004284    0.001766  -51.472092      247      62       0     1  b10eef89b4192178d482d7a1587a248a
+    2  0.003566    0.001752  -53.857139      247      62       0     2  b10eef89b4192178d482d7a1587a248a
+    3  0.003842    0.001799  -52.551950      247      62       0     3  b10eef89b4192178d482d7a1587a248a
+    4  0.004506    0.001922  -52.845546      248      61       0     4  b10eef89b4192178d482d7a1587a248a
 
 
 
@@ -301,7 +295,7 @@ Mean value of mean absolute error across CV
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.066 seconds)
+   **Total running time of the script:** (0 minutes 0.088 seconds)
 
 
 .. _sphx_glr_download_auto_examples_03_complex_models_run_apply_to_target.py:

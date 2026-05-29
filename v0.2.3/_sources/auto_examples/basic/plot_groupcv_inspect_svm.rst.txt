@@ -10,8 +10,8 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_auto_examples_basic_plot_groupcv_inspect_svm.py>`
-        to download the full example code
+        :ref:`Go to the end <sphx_glr_download_auto_examples_basic_plot_groupcv_inspect_svm.py>`
+        to download the full example code.
 
 .. rst-class:: sphx-glr-example-title
 
@@ -35,7 +35,7 @@ cognitive control in context-dependent decision-making. Cerebral Cortex.
 
 .. GENERATED FROM PYTHON SOURCE LINES 17-31
 
-.. code-block:: default
+.. code-block:: Python
 
     # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
     #
@@ -64,7 +64,7 @@ Set the logging level to info to see extra information
 
 .. GENERATED FROM PYTHON SOURCE LINES 33-36
 
-.. code-block:: default
+.. code-block:: Python
 
     configure_logging(level='INFO')
 
@@ -75,17 +75,15 @@ Set the logging level to info to see extra information
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
-    2021-01-28 20:07:59,182 - julearn - INFO - ===== Lib Versions =====
-    2021-01-28 20:07:59,182 - julearn - INFO - numpy: 1.19.5
-    2021-01-28 20:07:59,182 - julearn - INFO - scipy: 1.6.0
-    2021-01-28 20:07:59,182 - julearn - INFO - sklearn: 0.24.1
-    2021-01-28 20:07:59,182 - julearn - INFO - pandas: 1.2.1
-    2021-01-28 20:07:59,182 - julearn - INFO - julearn: 0.2.5.dev19+g9c15c5f
-    2021-01-28 20:07:59,182 - julearn - INFO - ========================
+    2026-05-29 20:44:46,844 - julearn - INFO - ===== Lib Versions =====
+    2026-05-29 20:44:46,844 - julearn - INFO - numpy: 1.19.3
+    2026-05-29 20:44:46,844 - julearn - INFO - scipy: 1.9.3
+    2026-05-29 20:44:46,844 - julearn - INFO - sklearn: 0.23.2
+    2026-05-29 20:44:46,844 - julearn - INFO - pandas: 1.4.4
+    2026-05-29 20:44:46,844 - julearn - INFO - julearn: 0.2.3
+    2026-05-29 20:44:46,844 - julearn - INFO - ========================
 
 
 
@@ -98,7 +96,7 @@ Dealing with Cross-Validation techinques
 
 .. GENERATED FROM PYTHON SOURCE LINES 40-43
 
-.. code-block:: default
+.. code-block:: Python
 
 
     df_fmri = load_dataset('fmri')
@@ -117,7 +115,7 @@ First, lets get some information on what the dataset has:
 
 .. GENERATED FROM PYTHON SOURCE LINES 46-48
 
-.. code-block:: default
+.. code-block:: Python
 
     print(df_fmri.head())
 
@@ -126,8 +124,6 @@ First, lets get some information on what the dataset has:
 
 
 .. rst-class:: sphx-glr-script-out
-
- Out:
 
  .. code-block:: none
 
@@ -151,7 +147,7 @@ Lets check how many kinds of each we have.
 
 .. GENERATED FROM PYTHON SOURCE LINES 54-60
 
-.. code-block:: default
+.. code-block:: Python
 
 
     print(df_fmri['event'].unique())
@@ -164,8 +160,6 @@ Lets check how many kinds of each we have.
 
 
 .. rst-class:: sphx-glr-script-out
-
- Out:
 
  .. code-block:: none
 
@@ -185,7 +179,7 @@ Lets see how many samples we have for each condition
 
 .. GENERATED FROM PYTHON SOURCE LINES 64-69
 
-.. code-block:: default
+.. code-block:: Python
 
 
     print(df_fmri.groupby(['subject', 'timepoint', 'event', 'region']).count())
@@ -197,8 +191,6 @@ Lets see how many samples we have for each condition
 
 
 .. rst-class:: sphx-glr-script-out
-
- Out:
 
  .. code-block:: none
 
@@ -233,7 +225,7 @@ First we define our X and y variables.
 
 .. GENERATED FROM PYTHON SOURCE LINES 76-79
 
-.. code-block:: default
+.. code-block:: Python
 
     X = ['parietal', 'frontal']
     y = 'event'
@@ -255,7 +247,7 @@ values. And the columns *subject*, *timepoint* and *event* will be the index
 
 .. GENERATED FROM PYTHON SOURCE LINES 85-92
 
-.. code-block:: default
+.. code-block:: Python
 
     df_fmri = df_fmri.pivot(
         index=['subject', 'timepoint', 'event'],
@@ -277,7 +269,7 @@ We will use a Support Vector Machine.
 
 .. GENERATED FROM PYTHON SOURCE LINES 94-100
 
-.. code-block:: default
+.. code-block:: Python
 
 
     scores = run_cross_validation(X=X, y=y, preprocess_X='zscore', data=df_fmri,
@@ -291,24 +283,22 @@ We will use a Support Vector Machine.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
-    2021-01-28 20:07:59,218 - julearn - INFO - Using default CV
-    2021-01-28 20:07:59,218 - julearn - INFO - ==== Input Data ====
-    2021-01-28 20:07:59,218 - julearn - INFO - Using dataframe as input
-    2021-01-28 20:07:59,218 - julearn - INFO - Features: ['parietal', 'frontal']
-    2021-01-28 20:07:59,218 - julearn - INFO - Target: event
-    2021-01-28 20:07:59,218 - julearn - INFO - Expanded X: ['parietal', 'frontal']
-    2021-01-28 20:07:59,218 - julearn - INFO - Expanded Confounds: []
-    2021-01-28 20:07:59,219 - julearn - INFO - ====================
-    2021-01-28 20:07:59,220 - julearn - INFO - 
-    2021-01-28 20:07:59,220 - julearn - INFO - ====== Model ======
-    2021-01-28 20:07:59,220 - julearn - INFO - Obtaining model by name: svm
-    2021-01-28 20:07:59,220 - julearn - INFO - ===================
-    2021-01-28 20:07:59,220 - julearn - INFO - 
-    2021-01-28 20:07:59,220 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+    2026-05-29 20:44:46,866 - julearn - INFO - Using default CV
+    2026-05-29 20:44:46,867 - julearn - INFO - ==== Input Data ====
+    2026-05-29 20:44:46,867 - julearn - INFO - Using dataframe as input
+    2026-05-29 20:44:46,867 - julearn - INFO - Features: ['parietal', 'frontal']
+    2026-05-29 20:44:46,867 - julearn - INFO - Target: event
+    2026-05-29 20:44:46,867 - julearn - INFO - Expanded X: ['parietal', 'frontal']
+    2026-05-29 20:44:46,867 - julearn - INFO - Expanded Confounds: []
+    2026-05-29 20:44:46,868 - julearn - INFO - ====================
+    2026-05-29 20:44:46,868 - julearn - INFO - 
+    2026-05-29 20:44:46,868 - julearn - INFO - ====== Model ======
+    2026-05-29 20:44:46,868 - julearn - INFO - Obtaining model by name: svm
+    2026-05-29 20:44:46,868 - julearn - INFO - ===================
+    2026-05-29 20:44:46,868 - julearn - INFO - 
+    2026-05-29 20:44:46,868 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
     0.7221618762123082
 
 
@@ -340,7 +330,7 @@ later to do some analysis.
 
 .. GENERATED FROM PYTHON SOURCE LINES 122-129
 
-.. code-block:: default
+.. code-block:: Python
 
     cv = GroupShuffleSplit(n_splits=5, test_size=0.5, random_state=42)
 
@@ -355,24 +345,22 @@ later to do some analysis.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
-    2021-01-28 20:07:59,930 - julearn - INFO - ==== Input Data ====
-    2021-01-28 20:07:59,930 - julearn - INFO - Using dataframe as input
-    2021-01-28 20:07:59,931 - julearn - INFO - Features: ['parietal', 'frontal']
-    2021-01-28 20:07:59,931 - julearn - INFO - Target: event
-    2021-01-28 20:07:59,931 - julearn - INFO - Expanded X: ['parietal', 'frontal']
-    2021-01-28 20:07:59,931 - julearn - INFO - Expanded Confounds: []
-    2021-01-28 20:07:59,932 - julearn - INFO - Using subject as groups
-    2021-01-28 20:07:59,932 - julearn - INFO - ====================
-    2021-01-28 20:07:59,932 - julearn - INFO - 
-    2021-01-28 20:07:59,932 - julearn - INFO - ====== Model ======
-    2021-01-28 20:07:59,932 - julearn - INFO - Obtaining model by name: svm
-    2021-01-28 20:07:59,932 - julearn - INFO - ===================
-    2021-01-28 20:07:59,932 - julearn - INFO - 
-    2021-01-28 20:07:59,932 - julearn - INFO - Using scikit-learn CV scheme GroupShuffleSplit(n_splits=5, random_state=42, test_size=0.5, train_size=None)
+    2026-05-29 20:44:47,254 - julearn - INFO - ==== Input Data ====
+    2026-05-29 20:44:47,254 - julearn - INFO - Using dataframe as input
+    2026-05-29 20:44:47,254 - julearn - INFO - Features: ['parietal', 'frontal']
+    2026-05-29 20:44:47,254 - julearn - INFO - Target: event
+    2026-05-29 20:44:47,254 - julearn - INFO - Expanded X: ['parietal', 'frontal']
+    2026-05-29 20:44:47,254 - julearn - INFO - Expanded Confounds: []
+    2026-05-29 20:44:47,255 - julearn - INFO - Using subject as groups
+    2026-05-29 20:44:47,255 - julearn - INFO - ====================
+    2026-05-29 20:44:47,255 - julearn - INFO - 
+    2026-05-29 20:44:47,255 - julearn - INFO - ====== Model ======
+    2026-05-29 20:44:47,255 - julearn - INFO - Obtaining model by name: svm
+    2026-05-29 20:44:47,255 - julearn - INFO - ===================
+    2026-05-29 20:44:47,255 - julearn - INFO - 
+    2026-05-29 20:44:47,255 - julearn - INFO - Using scikit-learn CV scheme GroupShuffleSplit(n_splits=5, random_state=42, test_size=0.5, train_size=None)
     0.7210526315789474
 
 
@@ -388,7 +376,7 @@ the preprocessing part of the model does.
 
 .. GENERATED FROM PYTHON SOURCE LINES 135-146
 
-.. code-block:: default
+.. code-block:: Python
 
     fig, axes = plt.subplots(1, 2, figsize=(8, 4))
     sns.scatterplot(x='parietal', y='frontal', hue='event', data=df_fmri,
@@ -404,14 +392,13 @@ the preprocessing part of the model does.
 
 
 
-.. image:: /auto_examples/basic/images/sphx_glr_plot_groupcv_inspect_svm_001.png
-    :alt: Raw data, Preprocessed data
-    :class: sphx-glr-single-img
+.. image-sg:: /auto_examples/basic/images/sphx_glr_plot_groupcv_inspect_svm_001.png
+   :alt: Raw data, Preprocessed data
+   :srcset: /auto_examples/basic/images/sphx_glr_plot_groupcv_inspect_svm_001.png
+   :class: sphx-glr-single-img
 
 
 .. rst-class:: sphx-glr-script-out
-
- Out:
 
  .. code-block:: none
 
@@ -429,7 +416,7 @@ how the SVM does this complex task.
 
 .. GENERATED FROM PYTHON SOURCE LINES 151-165
 
-.. code-block:: default
+.. code-block:: Python
 
     clf = model['svm']
     ax = sns.scatterplot(x='parietal', y='frontal', hue='event', data=pre_df, s=5)
@@ -448,14 +435,13 @@ how the SVM does this complex task.
 
 
 
-.. image:: /auto_examples/basic/images/sphx_glr_plot_groupcv_inspect_svm_002.png
-    :alt: Preprocessed data with SVM decision function boundaries
-    :class: sphx-glr-single-img
+.. image-sg:: /auto_examples/basic/images/sphx_glr_plot_groupcv_inspect_svm_002.png
+   :alt: Preprocessed data with SVM decision function boundaries
+   :srcset: /auto_examples/basic/images/sphx_glr_plot_groupcv_inspect_svm_002.png
+   :class: sphx-glr-single-img
 
 
 .. rst-class:: sphx-glr-script-out
-
- Out:
 
  .. code-block:: none
 
@@ -467,28 +453,26 @@ how the SVM does this complex task.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  1.353 seconds)
+   **Total running time of the script:** (0 minutes 3.312 seconds)
 
 
 .. _sphx_glr_download_auto_examples_basic_plot_groupcv_inspect_svm.py:
 
+.. only:: html
 
-.. only :: html
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
+      :download:`Download Jupyter notebook: plot_groupcv_inspect_svm.ipynb <plot_groupcv_inspect_svm.ipynb>`
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: plot_groupcv_inspect_svm.py <plot_groupcv_inspect_svm.py>`
 
-     :download:`Download Python source code: plot_groupcv_inspect_svm.py <plot_groupcv_inspect_svm.py>`
+    .. container:: sphx-glr-download sphx-glr-download-zip
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: plot_groupcv_inspect_svm.ipynb <plot_groupcv_inspect_svm.ipynb>`
+      :download:`Download zipped: plot_groupcv_inspect_svm.zip <plot_groupcv_inspect_svm.zip>`
 
 
 .. only:: html

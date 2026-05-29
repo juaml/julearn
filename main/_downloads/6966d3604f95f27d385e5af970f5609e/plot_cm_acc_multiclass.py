@@ -89,7 +89,7 @@ print(cm)
 ###############################################################################
 # Now that we have our confusion matrix, let's build another matrix with
 # annotations.
-cm_sum = np.sum(cm, axis=1, keepdims=True)
+cm_sum = np.sum(cm, axis=1)
 cm_perc = cm / cm_sum.astype(float) * 100
 annot = np.empty_like(cm).astype(str)
 nrows, ncols = cm.shape

@@ -22,6 +22,7 @@ Classes
     ContinuousStratifiedGroupKFold
     RepeatedContinuousStratifiedGroupKFold
     StratifiedBootstrap
+    final_model_cv._JulearnFinalModelCV
 
 Functions
 ---------

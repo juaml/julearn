@@ -76,13 +76,13 @@ Set the logging level to info to see extra information
 
  .. code-block:: none
 
-    2023-07-19 12:42:07,639 - julearn - INFO - ===== Lib Versions =====
-    2023-07-19 12:42:07,639 - julearn - INFO - numpy: 1.25.1
-    2023-07-19 12:42:07,639 - julearn - INFO - scipy: 1.11.1
-    2023-07-19 12:42:07,639 - julearn - INFO - sklearn: 1.3.0
-    2023-07-19 12:42:07,639 - julearn - INFO - pandas: 2.0.3
-    2023-07-19 12:42:07,640 - julearn - INFO - julearn: 0.3.1.dev1
-    2023-07-19 12:42:07,640 - julearn - INFO - ========================
+    2026-05-29 20:46:22,417 - julearn - INFO - ===== Lib Versions =====
+    2026-05-29 20:46:22,417 - julearn - INFO - numpy: 1.25.2
+    2026-05-29 20:46:22,417 - julearn - INFO - scipy: 1.16.3
+    2026-05-29 20:46:22,417 - julearn - INFO - sklearn: 1.3.0
+    2026-05-29 20:46:22,417 - julearn - INFO - pandas: 2.0.3
+    2026-05-29 20:46:22,417 - julearn - INFO - julearn: 0.3.1.dev0
+    2026-05-29 20:46:22,418 - julearn - INFO - ========================
 
 
 
@@ -128,14 +128,12 @@ is the target we are interested in predicting.
  .. code-block:: none
 
     Features: 
-             age       sex       bmi  ...        s4        s5        s6
-    0  0.038076  0.050680  0.061696  ... -0.002592  0.019907 -0.017646
-    1 -0.001882 -0.044642 -0.051474  ... -0.039493 -0.068332 -0.092204
-    2  0.085299  0.050680  0.044451  ... -0.002592  0.002861 -0.025930
-    3 -0.089063 -0.044642 -0.011595  ...  0.034309  0.022688 -0.009362
-    4  0.005383 -0.044642 -0.036385  ... -0.002592 -0.031988 -0.046641
-
-    [5 rows x 10 columns]
+             age       sex       bmi        bp        s1        s2        s3        s4        s5        s6
+    0  0.038076  0.050680  0.061696  0.021872 -0.044223 -0.034821 -0.043401 -0.002592  0.019907 -0.017646
+    1 -0.001882 -0.044642 -0.051474 -0.026328 -0.008449 -0.019163  0.074412 -0.039493 -0.068332 -0.092204
+    2  0.085299  0.050680  0.044451 -0.005670 -0.045599 -0.034194 -0.032356 -0.002592  0.002861 -0.025930
+    3 -0.089063 -0.044642 -0.011595 -0.036656  0.012191  0.024991 -0.036038  0.034309  0.022688 -0.009362
+    4  0.005383 -0.044642 -0.036385  0.021872  0.003935  0.015596  0.008142 -0.002592 -0.031988 -0.046641
     Target: 
      count    442.000000
     mean     152.133484
@@ -218,16 +216,16 @@ know what to do with the categorical features.
 
  .. code-block:: none
 
-    2023-07-19 12:42:07,657 - julearn - INFO - Adding step pca_feats1 that applies to ColumnTypes<types={'pca1'}; pattern=(?:__:type:__pca1)>
-    2023-07-19 12:42:07,657 - julearn - INFO - Setting hyperparameter n_components = 1
-    2023-07-19 12:42:07,658 - julearn - INFO - Step added
-    2023-07-19 12:42:07,658 - julearn - INFO - Adding step pca_feats2 that applies to ColumnTypes<types={'pca2'}; pattern=(?:__:type:__pca2)>
-    2023-07-19 12:42:07,658 - julearn - INFO - Setting hyperparameter n_components = 1
-    2023-07-19 12:42:07,658 - julearn - INFO - Step added
-    2023-07-19 12:42:07,658 - julearn - INFO - Adding step ridge that applies to ColumnTypes<types={'categorical', 'continuous'}; pattern=(?:__:type:__categorical|__:type:__continuous)>
-    2023-07-19 12:42:07,658 - julearn - INFO - Step added
+    2026-05-29 20:46:22,446 - julearn - INFO - Adding step pca_feats1 that applies to ColumnTypes<types={'pca1'}; pattern=(?:__:type:__pca1)>
+    2026-05-29 20:46:22,446 - julearn - INFO - Setting hyperparameter n_components = 1
+    2026-05-29 20:46:22,446 - julearn - INFO - Step added
+    2026-05-29 20:46:22,446 - julearn - INFO - Adding step pca_feats2 that applies to ColumnTypes<types={'pca2'}; pattern=(?:__:type:__pca2)>
+    2026-05-29 20:46:22,446 - julearn - INFO - Setting hyperparameter n_components = 1
+    2026-05-29 20:46:22,447 - julearn - INFO - Step added
+    2026-05-29 20:46:22,447 - julearn - INFO - Adding step ridge that applies to ColumnTypes<types={'continuous', 'categorical'}; pattern=(?:__:type:__continuous|__:type:__categorical)>
+    2026-05-29 20:46:22,447 - julearn - INFO - Step added
 
-    <julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7f7f62f0d600>
+    <julearn.pipeline.pipeline_creator.PipelineCreator object at 0x12ddc2190>
 
 
 
@@ -275,25 +273,25 @@ for scoring/
 
  .. code-block:: none
 
-    2023-07-19 12:42:07,659 - julearn - INFO - ==== Input Data ====
-    2023-07-19 12:42:07,659 - julearn - INFO - Using dataframe as input
-    2023-07-19 12:42:07,659 - julearn - INFO -      Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2023-07-19 12:42:07,660 - julearn - INFO -      Target: target
-    2023-07-19 12:42:07,660 - julearn - INFO -      Expanded features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-    2023-07-19 12:42:07,660 - julearn - INFO -      X_types:{'pca1': ['age', 'bmi', 'bp'], 'pca2': ['s1', 's2', 's3', 's4', 's5', 's6'], 'categorical': ['sex']}
-    2023-07-19 12:42:07,661 - julearn - INFO - ====================
-    2023-07-19 12:42:07,661 - julearn - INFO - 
-    2023-07-19 12:42:07,662 - julearn - INFO - = Model Parameters =
-    2023-07-19 12:42:07,662 - julearn - INFO - ====================
-    2023-07-19 12:42:07,662 - julearn - INFO - 
-    2023-07-19 12:42:07,662 - julearn - INFO - = Data Information =
-    2023-07-19 12:42:07,662 - julearn - INFO -      Problem type: regression
-    2023-07-19 12:42:07,662 - julearn - INFO -      Number of samples: 309
-    2023-07-19 12:42:07,663 - julearn - INFO -      Number of features: 10
-    2023-07-19 12:42:07,663 - julearn - INFO - ====================
-    2023-07-19 12:42:07,663 - julearn - INFO - 
-    2023-07-19 12:42:07,663 - julearn - INFO -      Target type: float64
-    2023-07-19 12:42:07,663 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+    2026-05-29 20:46:22,449 - julearn - INFO - ==== Input Data ====
+    2026-05-29 20:46:22,450 - julearn - INFO - Using dataframe as input
+    2026-05-29 20:46:22,450 - julearn - INFO -      Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2026-05-29 20:46:22,450 - julearn - INFO -      Target: target
+    2026-05-29 20:46:22,450 - julearn - INFO -      Expanded features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+    2026-05-29 20:46:22,450 - julearn - INFO -      X_types:{'pca1': ['age', 'bmi', 'bp'], 'pca2': ['s1', 's2', 's3', 's4', 's5', 's6'], 'categorical': ['sex']}
+    2026-05-29 20:46:22,452 - julearn - INFO - ====================
+    2026-05-29 20:46:22,452 - julearn - INFO - 
+    2026-05-29 20:46:22,454 - julearn - INFO - = Model Parameters =
+    2026-05-29 20:46:22,454 - julearn - INFO - ====================
+    2026-05-29 20:46:22,454 - julearn - INFO - 
+    2026-05-29 20:46:22,454 - julearn - INFO - = Data Information =
+    2026-05-29 20:46:22,454 - julearn - INFO -      Problem type: regression
+    2026-05-29 20:46:22,455 - julearn - INFO -      Number of samples: 309
+    2026-05-29 20:46:22,455 - julearn - INFO -      Number of features: 10
+    2026-05-29 20:46:22,455 - julearn - INFO - ====================
+    2026-05-29 20:46:22,455 - julearn - INFO - 
+    2026-05-29 20:46:22,455 - julearn - INFO -      Target type: float64
+    2026-05-29 20:46:22,455 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
 
 
 
@@ -316,14 +314,12 @@ The scores dataframe has all the values for each CV split.
 
  .. code-block:: none
 
-       fit_time  score_time  ...  fold                          cv_mdsum
-    0  0.016804    0.007410  ...     0  b10eef89b4192178d482d7a1587a248a
-    1  0.016177    0.007426  ...     1  b10eef89b4192178d482d7a1587a248a
-    2  0.015846    0.007478  ...     2  b10eef89b4192178d482d7a1587a248a
-    3  0.015954    0.007679  ...     3  b10eef89b4192178d482d7a1587a248a
-    4  0.015999    0.007387  ...     4  b10eef89b4192178d482d7a1587a248a
-
-    [5 rows x 8 columns]
+       fit_time  score_time  test_score  n_train  n_test  repeat  fold                          cv_mdsum
+    0  0.023090    0.010007    0.341472      247      62       0     0  b10eef89b4192178d482d7a1587a248a
+    1  0.020804    0.008586    0.348168      247      62       0     1  b10eef89b4192178d482d7a1587a248a
+    2  0.020336    0.010005    0.269257      247      62       0     2  b10eef89b4192178d482d7a1587a248a
+    3  0.019858    0.011058    0.286067      247      62       0     3  b10eef89b4192178d482d7a1587a248a
+    4  0.022109    0.010564    0.309025      248      61       0     4  b10eef89b4192178d482d7a1587a248a
 
 
 
@@ -347,7 +343,7 @@ Mean value of mean absolute error across CV
 
  .. code-block:: none
 
-    0.3107976743678922
+    0.3107976743678923
 
 
 
@@ -381,14 +377,12 @@ PCA component for ['age', 'bmi', 'bp'] and other  features untouched
  .. code-block:: none
 
     Data after preprocessing until PCA step 1
-         pca_feats1__pca0       sex        s1  ...        s4        s5        s6
-    161         -0.063175  0.050680  0.133274  ...  0.108111  0.075741  0.085907
-    140         -0.054779  0.050680 -0.030464  ... -0.002592 -0.033246  0.015491
-    145         -0.098172 -0.044642 -0.033216  ... -0.039493 -0.015999 -0.050783
-    9            0.032289 -0.044642 -0.012577  ... -0.002592  0.067737 -0.013504
-    315          0.045025 -0.044642  0.031454  ... -0.039493 -0.010903 -0.001078
-
-    [5 rows x 8 columns]
+         pca_feats1__pca0       sex        s1        s2        s3        s4        s5        s6
+    161         -0.063175  0.050680  0.133274  0.131461 -0.039719  0.108111  0.075741  0.085907
+    140         -0.054779  0.050680 -0.030464 -0.001314 -0.043401 -0.002592 -0.033246  0.015491
+    145         -0.098172 -0.044642 -0.033216 -0.032629  0.011824 -0.039493 -0.015999 -0.050783
+    9            0.032289 -0.044642 -0.012577 -0.034508 -0.024993 -0.002592  0.067737 -0.013504
+    315          0.045025 -0.044642  0.031454  0.020607  0.056003 -0.039493 -0.010903 -0.001078
     Data after preprocessing until PCA step 2
          pca_feats2__pca0  pca_feats1__pca0       sex
     161          0.234716         -0.063175  0.050680
@@ -512,7 +506,7 @@ of true values vs predicted values
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  0.453 seconds)
+   **Total running time of the script:** ( 0 minutes  0.542 seconds)
 
 
 .. _sphx_glr_download_auto_examples_03_complex_models_run_example_pca_featsets.py:

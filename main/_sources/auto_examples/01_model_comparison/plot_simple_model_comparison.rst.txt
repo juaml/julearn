@@ -11,7 +11,7 @@
         :class: sphx-glr-download-link-note
 
         :ref:`Go to the end <sphx_glr_download_auto_examples_01_model_comparison_plot_simple_model_comparison.py>`
-        to download the full example code
+        to download the full example code.
 
 .. rst-class:: sphx-glr-example-title
 
@@ -30,7 +30,7 @@ whether the difference in performance is significant.
 
 .. GENERATED FROM PYTHON SOURCE LINES 12-21
 
-.. code-block:: default
+.. code-block:: Python
 
     # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
     # License: AGPL
@@ -54,7 +54,7 @@ Set the logging level to info to see extra information.
 
 .. GENERATED FROM PYTHON SOURCE LINES 23-25
 
-.. code-block:: default
+.. code-block:: Python
 
     configure_logging(level="INFO")
 
@@ -66,22 +66,20 @@ Set the logging level to info to see extra information.
 
  .. code-block:: none
 
-    /home/runner/work/julearn/julearn/julearn/utils/logging.py:66: UserWarning: The '__version__' attribute is deprecated and will be removed in MarkupSafe 3.1. Use feature detection, or `importlib.metadata.version("markupsafe")`, instead.
-      vstring = str(getattr(module, "__version__", None))
-    2025-07-07 11:52:57,096 - julearn - INFO - ===== Lib Versions =====
-    2025-07-07 11:52:57,097 - julearn - INFO - numpy: 1.26.4
-    2025-07-07 11:52:57,097 - julearn - INFO - scipy: 1.15.3
-    2025-07-07 11:52:57,097 - julearn - INFO - sklearn: 1.5.2
-    2025-07-07 11:52:57,097 - julearn - INFO - pandas: 2.2.3
-    2025-07-07 11:52:57,097 - julearn - INFO - julearn: 0.3.5.dev28
-    2025-07-07 11:52:57,097 - julearn - INFO - ========================
+    2026-05-29 20:45:47,323 - julearn - INFO - ===== Lib Versions =====
+    2026-05-29 20:45:47,323 - julearn - INFO - numpy: 2.4.6
+    2026-05-29 20:45:47,323 - julearn - INFO - scipy: 1.17.1
+    2026-05-29 20:45:47,323 - julearn - INFO - sklearn: 1.8.0
+    2026-05-29 20:45:47,323 - julearn - INFO - pandas: 3.0.3
+    2026-05-29 20:45:47,323 - julearn - INFO - julearn: 0.3.6.dev47
+    2026-05-29 20:45:47,323 - julearn - INFO - ========================
 
 
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 26-28
 
-.. code-block:: default
+.. code-block:: Python
 
     df_iris = load_dataset("iris")
 
@@ -99,7 +97,7 @@ classification.
 
 .. GENERATED FROM PYTHON SOURCE LINES 31-33
 
-.. code-block:: default
+.. code-block:: Python
 
     df_iris = df_iris[df_iris["species"].isin(["versicolor", "virginica"])]
 
@@ -117,7 +115,7 @@ We will try to predict the species.
 
 .. GENERATED FROM PYTHON SOURCE LINES 36-50
 
-.. code-block:: default
+.. code-block:: Python
 
 
     X = ["sepal_length", "sepal_width", "petal_length"]
@@ -141,38 +139,41 @@ We will try to predict the species.
 
  .. code-block:: none
 
-    2025-07-07 11:52:57,099 - julearn - INFO - ==== Input Data ====
-    2025-07-07 11:52:57,099 - julearn - INFO - Using dataframe as input
-    2025-07-07 11:52:57,099 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length']
-    2025-07-07 11:52:57,100 - julearn - INFO -      Target: species
-    2025-07-07 11:52:57,100 - julearn - INFO -      Expanded features: ['sepal_length', 'sepal_width', 'petal_length']
-    2025-07-07 11:52:57,100 - julearn - INFO -      X_types:{}
-    2025-07-07 11:52:57,100 - julearn - WARNING - The following columns are not defined in X_types: ['sepal_length', 'sepal_width', 'petal_length']. They will be treated as continuous.
-    /home/runner/work/julearn/julearn/julearn/prepare.py:509: RuntimeWarning: The following columns are not defined in X_types: ['sepal_length', 'sepal_width', 'petal_length']. They will be treated as continuous.
+    2026-05-29 20:45:47,326 - julearn - INFO - ==== Input Data ====
+    2026-05-29 20:45:47,327 - julearn - INFO - Using dataframe as input
+    2026-05-29 20:45:47,327 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length']
+    2026-05-29 20:45:47,327 - julearn - INFO -      Target: species
+    2026-05-29 20:45:47,327 - julearn - INFO -      Expanded features: ['sepal_length', 'sepal_width', 'petal_length']
+    2026-05-29 20:45:47,327 - julearn - INFO -      X_types:{}
+    2026-05-29 20:45:47,328 - julearn - WARNING - The following columns are not defined in X_types: ['sepal_length', 'sepal_width', 'petal_length']. They will be treated as continuous.
+    /private/var/folders/09/t22x2_p106j7p24khr0jdxrw0000gn/T/tmpj3nzjtlc/julearn/prepare.py:609: RuntimeWarning: The following columns are not defined in X_types: ['sepal_length', 'sepal_width', 'petal_length']. They will be treated as continuous.
       warn_with_log(
-    2025-07-07 11:52:57,100 - julearn - INFO - ====================
-    2025-07-07 11:52:57,100 - julearn - INFO - 
-    2025-07-07 11:52:57,101 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2025-07-07 11:52:57,101 - julearn - INFO - Step added
-    2025-07-07 11:52:57,101 - julearn - INFO - Adding step svm that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2025-07-07 11:52:57,101 - julearn - INFO - Step added
-    2025-07-07 11:52:57,101 - julearn - INFO - = Model Parameters =
-    2025-07-07 11:52:57,101 - julearn - INFO - ====================
-    2025-07-07 11:52:57,102 - julearn - INFO - 
-    2025-07-07 11:52:57,102 - julearn - INFO - = Data Information =
-    2025-07-07 11:52:57,102 - julearn - INFO -      Problem type: classification
-    2025-07-07 11:52:57,102 - julearn - INFO -      Number of samples: 100
-    2025-07-07 11:52:57,102 - julearn - INFO -      Number of features: 3
-    2025-07-07 11:52:57,102 - julearn - INFO - ====================
-    2025-07-07 11:52:57,102 - julearn - INFO - 
-    2025-07-07 11:52:57,102 - julearn - INFO -      Number of classes: 2
-    2025-07-07 11:52:57,102 - julearn - INFO -      Target type: object
-    2025-07-07 11:52:57,103 - julearn - INFO -      Class distributions: species
+    2026-05-29 20:45:47,329 - julearn - INFO - ====================
+    2026-05-29 20:45:47,329 - julearn - INFO - 
+    2026-05-29 20:45:47,329 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2026-05-29 20:45:47,329 - julearn - INFO - Step added
+    2026-05-29 20:45:47,329 - julearn - INFO - Adding step svm that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2026-05-29 20:45:47,329 - julearn - INFO - Step added
+    2026-05-29 20:45:47,330 - julearn - INFO - = Model Parameters =
+    2026-05-29 20:45:47,330 - julearn - INFO - ====================
+    2026-05-29 20:45:47,330 - julearn - INFO - 
+    2026-05-29 20:45:47,330 - julearn - INFO - = Data Information =
+    2026-05-29 20:45:47,330 - julearn - INFO -      Problem type: classification
+    2026-05-29 20:45:47,330 - julearn - INFO -      Number of samples: 100
+    2026-05-29 20:45:47,330 - julearn - INFO -      Number of features: 3
+    2026-05-29 20:45:47,330 - julearn - INFO - ====================
+    2026-05-29 20:45:47,330 - julearn - INFO - 
+    2026-05-29 20:45:47,331 - julearn - INFO -      Number of classes: 2
+    2026-05-29 20:45:47,331 - julearn - INFO -      Target type: str
+    2026-05-29 20:45:47,331 - julearn - INFO -      Class distributions: species
     versicolor    50
     virginica     50
     Name: count, dtype: int64
-    2025-07-07 11:52:57,103 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-    2025-07-07 11:52:57,103 - julearn - INFO - Binary classification problem detected.
+    2026-05-29 20:45:47,332 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+    2026-05-29 20:45:47,332 - julearn - WARNING - The kind of values in y (str) is not suitable for a classification. Values should be numeric.
+    /private/var/folders/09/t22x2_p106j7p24khr0jdxrw0000gn/T/tmpj3nzjtlc/julearn/prepare.py:422: RuntimeWarning: The kind of values in y (str) is not suitable for a classification. Values should be numeric.
+      warn_with_log(
+    2026-05-29 20:45:47,333 - julearn - INFO - Binary classification problem detected.
     0    0.90
     1    0.75
     2    0.95
@@ -192,7 +193,7 @@ For example, we might have an unbalanced dataset:
 
 .. GENERATED FROM PYTHON SOURCE LINES 55-59
 
-.. code-block:: default
+.. code-block:: Python
 
 
     df_unbalanced = df_iris[20:]  # drop the first 20 versicolor samples
@@ -220,7 +221,7 @@ So we will choose to use the `balanced_accuracy` and `roc_auc` metrics.
 
 .. GENERATED FROM PYTHON SOURCE LINES 61-64
 
-.. code-block:: default
+.. code-block:: Python
 
 
     scoring = ["balanced_accuracy", "roc_auc"]
@@ -239,7 +240,7 @@ to use the same random seed to split the data in the same way.
 
 .. GENERATED FROM PYTHON SOURCE LINES 67-70
 
-.. code-block:: default
+.. code-block:: Python
 
 
     cv = RepeatedStratifiedKFold(n_splits=5, n_repeats=5, random_state=42)
@@ -257,7 +258,7 @@ First we will use a default SVM model.
 
 .. GENERATED FROM PYTHON SOURCE LINES 72-85
 
-.. code-block:: default
+.. code-block:: Python
 
     scores1 = run_cross_validation(
         X=X,
@@ -280,38 +281,41 @@ First we will use a default SVM model.
 
  .. code-block:: none
 
-    2025-07-07 11:52:57,144 - julearn - INFO - ==== Input Data ====
-    2025-07-07 11:52:57,144 - julearn - INFO - Using dataframe as input
-    2025-07-07 11:52:57,145 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length']
-    2025-07-07 11:52:57,145 - julearn - INFO -      Target: species
-    2025-07-07 11:52:57,145 - julearn - INFO -      Expanded features: ['sepal_length', 'sepal_width', 'petal_length']
-    2025-07-07 11:52:57,145 - julearn - INFO -      X_types:{}
-    2025-07-07 11:52:57,145 - julearn - WARNING - The following columns are not defined in X_types: ['sepal_length', 'sepal_width', 'petal_length']. They will be treated as continuous.
-    /home/runner/work/julearn/julearn/julearn/prepare.py:509: RuntimeWarning: The following columns are not defined in X_types: ['sepal_length', 'sepal_width', 'petal_length']. They will be treated as continuous.
+    2026-05-29 20:45:47,405 - julearn - INFO - ==== Input Data ====
+    2026-05-29 20:45:47,405 - julearn - INFO - Using dataframe as input
+    2026-05-29 20:45:47,405 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length']
+    2026-05-29 20:45:47,406 - julearn - INFO -      Target: species
+    2026-05-29 20:45:47,406 - julearn - INFO -      Expanded features: ['sepal_length', 'sepal_width', 'petal_length']
+    2026-05-29 20:45:47,406 - julearn - INFO -      X_types:{}
+    2026-05-29 20:45:47,406 - julearn - WARNING - The following columns are not defined in X_types: ['sepal_length', 'sepal_width', 'petal_length']. They will be treated as continuous.
+    /private/var/folders/09/t22x2_p106j7p24khr0jdxrw0000gn/T/tmpj3nzjtlc/julearn/prepare.py:609: RuntimeWarning: The following columns are not defined in X_types: ['sepal_length', 'sepal_width', 'petal_length']. They will be treated as continuous.
       warn_with_log(
-    2025-07-07 11:52:57,145 - julearn - INFO - ====================
-    2025-07-07 11:52:57,145 - julearn - INFO - 
-    2025-07-07 11:52:57,145 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2025-07-07 11:52:57,146 - julearn - INFO - Step added
-    2025-07-07 11:52:57,146 - julearn - INFO - Adding step svm that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2025-07-07 11:52:57,146 - julearn - INFO - Step added
-    2025-07-07 11:52:57,146 - julearn - INFO - = Model Parameters =
-    2025-07-07 11:52:57,146 - julearn - INFO - ====================
-    2025-07-07 11:52:57,146 - julearn - INFO - 
-    2025-07-07 11:52:57,146 - julearn - INFO - = Data Information =
-    2025-07-07 11:52:57,146 - julearn - INFO -      Problem type: classification
-    2025-07-07 11:52:57,146 - julearn - INFO -      Number of samples: 80
-    2025-07-07 11:52:57,147 - julearn - INFO -      Number of features: 3
-    2025-07-07 11:52:57,147 - julearn - INFO - ====================
-    2025-07-07 11:52:57,147 - julearn - INFO - 
-    2025-07-07 11:52:57,147 - julearn - INFO -      Number of classes: 2
-    2025-07-07 11:52:57,147 - julearn - INFO -      Target type: object
-    2025-07-07 11:52:57,147 - julearn - INFO -      Class distributions: species
+    2026-05-29 20:45:47,407 - julearn - INFO - ====================
+    2026-05-29 20:45:47,407 - julearn - INFO - 
+    2026-05-29 20:45:47,407 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2026-05-29 20:45:47,408 - julearn - INFO - Step added
+    2026-05-29 20:45:47,408 - julearn - INFO - Adding step svm that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2026-05-29 20:45:47,408 - julearn - INFO - Step added
+    2026-05-29 20:45:47,408 - julearn - INFO - = Model Parameters =
+    2026-05-29 20:45:47,408 - julearn - INFO - ====================
+    2026-05-29 20:45:47,409 - julearn - INFO - 
+    2026-05-29 20:45:47,409 - julearn - INFO - = Data Information =
+    2026-05-29 20:45:47,409 - julearn - INFO -      Problem type: classification
+    2026-05-29 20:45:47,409 - julearn - INFO -      Number of samples: 80
+    2026-05-29 20:45:47,409 - julearn - INFO -      Number of features: 3
+    2026-05-29 20:45:47,409 - julearn - INFO - ====================
+    2026-05-29 20:45:47,409 - julearn - INFO - 
+    2026-05-29 20:45:47,409 - julearn - INFO -      Number of classes: 2
+    2026-05-29 20:45:47,409 - julearn - INFO -      Target type: str
+    2026-05-29 20:45:47,410 - julearn - INFO -      Class distributions: species
     virginica     50
     versicolor    30
     Name: count, dtype: int64
-    2025-07-07 11:52:57,147 - julearn - INFO - Using outer CV scheme RepeatedStratifiedKFold(n_repeats=5, n_splits=5, random_state=42)
-    2025-07-07 11:52:57,148 - julearn - INFO - Binary classification problem detected.
+    2026-05-29 20:45:47,411 - julearn - INFO - Using outer CV scheme RepeatedStratifiedKFold(n_repeats=5, n_splits=5, random_state=42)
+    2026-05-29 20:45:47,411 - julearn - WARNING - The kind of values in y (str) is not suitable for a classification. Values should be numeric.
+    /private/var/folders/09/t22x2_p106j7p24khr0jdxrw0000gn/T/tmpj3nzjtlc/julearn/prepare.py:422: RuntimeWarning: The kind of values in y (str) is not suitable for a classification. Values should be numeric.
+      warn_with_log(
+    2026-05-29 20:45:47,411 - julearn - INFO - Binary classification problem detected.
 
 
 
@@ -322,7 +326,7 @@ Second we will use a default Random Forest model.
 
 .. GENERATED FROM PYTHON SOURCE LINES 87-100
 
-.. code-block:: default
+.. code-block:: Python
 
     scores2 = run_cross_validation(
         X=X,
@@ -345,38 +349,41 @@ Second we will use a default Random Forest model.
 
  .. code-block:: none
 
-    2025-07-07 11:52:57,441 - julearn - INFO - ==== Input Data ====
-    2025-07-07 11:52:57,442 - julearn - INFO - Using dataframe as input
-    2025-07-07 11:52:57,442 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length']
-    2025-07-07 11:52:57,442 - julearn - INFO -      Target: species
-    2025-07-07 11:52:57,442 - julearn - INFO -      Expanded features: ['sepal_length', 'sepal_width', 'petal_length']
-    2025-07-07 11:52:57,442 - julearn - INFO -      X_types:{}
-    2025-07-07 11:52:57,442 - julearn - WARNING - The following columns are not defined in X_types: ['sepal_length', 'sepal_width', 'petal_length']. They will be treated as continuous.
-    /home/runner/work/julearn/julearn/julearn/prepare.py:509: RuntimeWarning: The following columns are not defined in X_types: ['sepal_length', 'sepal_width', 'petal_length']. They will be treated as continuous.
+    2026-05-29 20:45:47,988 - julearn - INFO - ==== Input Data ====
+    2026-05-29 20:45:47,988 - julearn - INFO - Using dataframe as input
+    2026-05-29 20:45:47,988 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length']
+    2026-05-29 20:45:47,989 - julearn - INFO -      Target: species
+    2026-05-29 20:45:47,989 - julearn - INFO -      Expanded features: ['sepal_length', 'sepal_width', 'petal_length']
+    2026-05-29 20:45:47,989 - julearn - INFO -      X_types:{}
+    2026-05-29 20:45:47,989 - julearn - WARNING - The following columns are not defined in X_types: ['sepal_length', 'sepal_width', 'petal_length']. They will be treated as continuous.
+    /private/var/folders/09/t22x2_p106j7p24khr0jdxrw0000gn/T/tmpj3nzjtlc/julearn/prepare.py:609: RuntimeWarning: The following columns are not defined in X_types: ['sepal_length', 'sepal_width', 'petal_length']. They will be treated as continuous.
       warn_with_log(
-    2025-07-07 11:52:57,442 - julearn - INFO - ====================
-    2025-07-07 11:52:57,443 - julearn - INFO - 
-    2025-07-07 11:52:57,443 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2025-07-07 11:52:57,443 - julearn - INFO - Step added
-    2025-07-07 11:52:57,443 - julearn - INFO - Adding step rf that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2025-07-07 11:52:57,443 - julearn - INFO - Step added
-    2025-07-07 11:52:57,443 - julearn - INFO - = Model Parameters =
-    2025-07-07 11:52:57,444 - julearn - INFO - ====================
-    2025-07-07 11:52:57,444 - julearn - INFO - 
-    2025-07-07 11:52:57,444 - julearn - INFO - = Data Information =
-    2025-07-07 11:52:57,444 - julearn - INFO -      Problem type: classification
-    2025-07-07 11:52:57,444 - julearn - INFO -      Number of samples: 80
-    2025-07-07 11:52:57,444 - julearn - INFO -      Number of features: 3
-    2025-07-07 11:52:57,444 - julearn - INFO - ====================
-    2025-07-07 11:52:57,444 - julearn - INFO - 
-    2025-07-07 11:52:57,444 - julearn - INFO -      Number of classes: 2
-    2025-07-07 11:52:57,444 - julearn - INFO -      Target type: object
-    2025-07-07 11:52:57,445 - julearn - INFO -      Class distributions: species
+    2026-05-29 20:45:47,991 - julearn - INFO - ====================
+    2026-05-29 20:45:47,991 - julearn - INFO - 
+    2026-05-29 20:45:47,991 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2026-05-29 20:45:47,991 - julearn - INFO - Step added
+    2026-05-29 20:45:47,991 - julearn - INFO - Adding step rf that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2026-05-29 20:45:47,992 - julearn - INFO - Step added
+    2026-05-29 20:45:47,992 - julearn - INFO - = Model Parameters =
+    2026-05-29 20:45:47,992 - julearn - INFO - ====================
+    2026-05-29 20:45:47,992 - julearn - INFO - 
+    2026-05-29 20:45:47,992 - julearn - INFO - = Data Information =
+    2026-05-29 20:45:47,993 - julearn - INFO -      Problem type: classification
+    2026-05-29 20:45:47,993 - julearn - INFO -      Number of samples: 80
+    2026-05-29 20:45:47,993 - julearn - INFO -      Number of features: 3
+    2026-05-29 20:45:47,993 - julearn - INFO - ====================
+    2026-05-29 20:45:47,993 - julearn - INFO - 
+    2026-05-29 20:45:47,993 - julearn - INFO -      Number of classes: 2
+    2026-05-29 20:45:47,994 - julearn - INFO -      Target type: str
+    2026-05-29 20:45:47,994 - julearn - INFO -      Class distributions: species
     virginica     50
     versicolor    30
     Name: count, dtype: int64
-    2025-07-07 11:52:57,445 - julearn - INFO - Using outer CV scheme RepeatedStratifiedKFold(n_repeats=5, n_splits=5, random_state=42)
-    2025-07-07 11:52:57,445 - julearn - INFO - Binary classification problem detected.
+    2026-05-29 20:45:47,995 - julearn - INFO - Using outer CV scheme RepeatedStratifiedKFold(n_repeats=5, n_splits=5, random_state=42)
+    2026-05-29 20:45:47,996 - julearn - WARNING - The kind of values in y (str) is not suitable for a classification. Values should be numeric.
+    /private/var/folders/09/t22x2_p106j7p24khr0jdxrw0000gn/T/tmpj3nzjtlc/julearn/prepare.py:422: RuntimeWarning: The kind of values in y (str) is not suitable for a classification. Values should be numeric.
+      warn_with_log(
+    2026-05-29 20:45:47,996 - julearn - INFO - Binary classification problem detected.
 
 
 
@@ -387,7 +394,7 @@ The third model will be a SVM with a linear kernel.
 
 .. GENERATED FROM PYTHON SOURCE LINES 102-116
 
-.. code-block:: default
+.. code-block:: Python
 
     scores3 = run_cross_validation(
         X=X,
@@ -411,39 +418,42 @@ The third model will be a SVM with a linear kernel.
 
  .. code-block:: none
 
-    2025-07-07 11:53:00,383 - julearn - INFO - ==== Input Data ====
-    2025-07-07 11:53:00,383 - julearn - INFO - Using dataframe as input
-    2025-07-07 11:53:00,383 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length']
-    2025-07-07 11:53:00,383 - julearn - INFO -      Target: species
-    2025-07-07 11:53:00,383 - julearn - INFO -      Expanded features: ['sepal_length', 'sepal_width', 'petal_length']
-    2025-07-07 11:53:00,383 - julearn - INFO -      X_types:{}
-    2025-07-07 11:53:00,383 - julearn - WARNING - The following columns are not defined in X_types: ['sepal_length', 'sepal_width', 'petal_length']. They will be treated as continuous.
-    /home/runner/work/julearn/julearn/julearn/prepare.py:509: RuntimeWarning: The following columns are not defined in X_types: ['sepal_length', 'sepal_width', 'petal_length']. They will be treated as continuous.
+    2026-05-29 20:45:52,155 - julearn - INFO - ==== Input Data ====
+    2026-05-29 20:45:52,155 - julearn - INFO - Using dataframe as input
+    2026-05-29 20:45:52,155 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length']
+    2026-05-29 20:45:52,155 - julearn - INFO -      Target: species
+    2026-05-29 20:45:52,155 - julearn - INFO -      Expanded features: ['sepal_length', 'sepal_width', 'petal_length']
+    2026-05-29 20:45:52,156 - julearn - INFO -      X_types:{}
+    2026-05-29 20:45:52,156 - julearn - WARNING - The following columns are not defined in X_types: ['sepal_length', 'sepal_width', 'petal_length']. They will be treated as continuous.
+    /private/var/folders/09/t22x2_p106j7p24khr0jdxrw0000gn/T/tmpj3nzjtlc/julearn/prepare.py:609: RuntimeWarning: The following columns are not defined in X_types: ['sepal_length', 'sepal_width', 'petal_length']. They will be treated as continuous.
       warn_with_log(
-    2025-07-07 11:53:00,384 - julearn - INFO - ====================
-    2025-07-07 11:53:00,384 - julearn - INFO - 
-    2025-07-07 11:53:00,384 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2025-07-07 11:53:00,384 - julearn - INFO - Step added
-    2025-07-07 11:53:00,384 - julearn - INFO - Adding step svm that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2025-07-07 11:53:00,384 - julearn - INFO - Setting hyperparameter kernel = linear
-    2025-07-07 11:53:00,384 - julearn - INFO - Step added
-    2025-07-07 11:53:00,385 - julearn - INFO - = Model Parameters =
-    2025-07-07 11:53:00,385 - julearn - INFO - ====================
-    2025-07-07 11:53:00,385 - julearn - INFO - 
-    2025-07-07 11:53:00,385 - julearn - INFO - = Data Information =
-    2025-07-07 11:53:00,385 - julearn - INFO -      Problem type: classification
-    2025-07-07 11:53:00,385 - julearn - INFO -      Number of samples: 80
-    2025-07-07 11:53:00,385 - julearn - INFO -      Number of features: 3
-    2025-07-07 11:53:00,385 - julearn - INFO - ====================
-    2025-07-07 11:53:00,385 - julearn - INFO - 
-    2025-07-07 11:53:00,385 - julearn - INFO -      Number of classes: 2
-    2025-07-07 11:53:00,385 - julearn - INFO -      Target type: object
-    2025-07-07 11:53:00,386 - julearn - INFO -      Class distributions: species
+    2026-05-29 20:45:52,157 - julearn - INFO - ====================
+    2026-05-29 20:45:52,157 - julearn - INFO - 
+    2026-05-29 20:45:52,157 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2026-05-29 20:45:52,157 - julearn - INFO - Step added
+    2026-05-29 20:45:52,158 - julearn - INFO - Adding step svm that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2026-05-29 20:45:52,158 - julearn - INFO - Setting hyperparameter kernel = linear
+    2026-05-29 20:45:52,158 - julearn - INFO - Step added
+    2026-05-29 20:45:52,158 - julearn - INFO - = Model Parameters =
+    2026-05-29 20:45:52,158 - julearn - INFO - ====================
+    2026-05-29 20:45:52,158 - julearn - INFO - 
+    2026-05-29 20:45:52,158 - julearn - INFO - = Data Information =
+    2026-05-29 20:45:52,159 - julearn - INFO -      Problem type: classification
+    2026-05-29 20:45:52,159 - julearn - INFO -      Number of samples: 80
+    2026-05-29 20:45:52,159 - julearn - INFO -      Number of features: 3
+    2026-05-29 20:45:52,159 - julearn - INFO - ====================
+    2026-05-29 20:45:52,159 - julearn - INFO - 
+    2026-05-29 20:45:52,159 - julearn - INFO -      Number of classes: 2
+    2026-05-29 20:45:52,159 - julearn - INFO -      Target type: str
+    2026-05-29 20:45:52,160 - julearn - INFO -      Class distributions: species
     virginica     50
     versicolor    30
     Name: count, dtype: int64
-    2025-07-07 11:53:00,386 - julearn - INFO - Using outer CV scheme RepeatedStratifiedKFold(n_repeats=5, n_splits=5, random_state=42)
-    2025-07-07 11:53:00,386 - julearn - INFO - Binary classification problem detected.
+    2026-05-29 20:45:52,161 - julearn - INFO - Using outer CV scheme RepeatedStratifiedKFold(n_repeats=5, n_splits=5, random_state=42)
+    2026-05-29 20:45:52,161 - julearn - WARNING - The kind of values in y (str) is not suitable for a classification. Values should be numeric.
+    /private/var/folders/09/t22x2_p106j7p24khr0jdxrw0000gn/T/tmpj3nzjtlc/julearn/prepare.py:422: RuntimeWarning: The kind of values in y (str) is not suitable for a classification. Values should be numeric.
+      warn_with_log(
+    2026-05-29 20:45:52,161 - julearn - INFO - Binary classification problem detected.
 
 
 
@@ -454,7 +464,7 @@ We can now compare the performance of the models using corrected statistics.
 
 .. GENERATED FROM PYTHON SOURCE LINES 118-122
 
-.. code-block:: default
+.. code-block:: Python
 
 
     stats_df = corrected_ttest(scores1, scores2, scores3)
@@ -468,15 +478,13 @@ We can now compare the performance of the models using corrected statistics.
 
  .. code-block:: none
 
-                       metric    t-stat  ...     model_2 p-val-corrected
-    0  test_balanced_accuracy -0.175075  ...          rf        1.000000
-    2  test_balanced_accuracy -1.062567  ...  svm_linear        0.895662
-    4  test_balanced_accuracy -1.151390  ...  svm_linear        0.782741
-    1            test_roc_auc  1.108944  ...          rf        0.835331
-    3            test_roc_auc -1.236153  ...  svm_linear        0.685092
-    5            test_roc_auc -1.669010  ...  svm_linear        0.324331
-
-    [6 rows x 6 columns]
+                       metric    t-stat     p-val model_1     model_2  p-val-corrected
+    0  test_balanced_accuracy -0.175075  0.862489     svm          rf         1.000000
+    2  test_balanced_accuracy -1.062567  0.298554     svm  svm_linear         0.895662
+    4  test_balanced_accuracy -1.151390  0.260914      rf  svm_linear         0.782741
+    1            test_roc_auc  1.108944  0.278444     svm          rf         0.835331
+    3            test_roc_auc -1.236153  0.228364     svm  svm_linear         0.685092
+    5            test_roc_auc -1.669010  0.108110      rf  svm_linear         0.324331
 
 
 
@@ -489,7 +497,8 @@ We can now compare the performance of the models using corrected statistics.
 
 .. GENERATED FROM PYTHON SOURCE LINES 126-128
 
-.. code-block:: default
+.. code-block:: Python
+   :dedent: 1
 
 
 
@@ -507,7 +516,7 @@ Viewer.
 
 .. GENERATED FROM PYTHON SOURCE LINES 139-148
 
-.. code-block:: default
+.. code-block:: Python
 
 
     from julearn.viz import plot_scores
@@ -549,7 +558,7 @@ This is how the plot looks like.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 3.736 seconds)
+   **Total running time of the script:** (0 minutes 5.372 seconds)
 
 
 .. _sphx_glr_download_auto_examples_01_model_comparison_plot_simple_model_comparison.py:
@@ -558,16 +567,17 @@ This is how the plot looks like.
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: plot_simple_model_comparison.ipynb <plot_simple_model_comparison.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_simple_model_comparison.py <plot_simple_model_comparison.py>`
 
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
+    .. container:: sphx-glr-download sphx-glr-download-zip
 
-      :download:`Download Jupyter notebook: plot_simple_model_comparison.ipynb <plot_simple_model_comparison.ipynb>`
+      :download:`Download zipped: plot_simple_model_comparison.zip <plot_simple_model_comparison.zip>`
 
 
 .. only:: html

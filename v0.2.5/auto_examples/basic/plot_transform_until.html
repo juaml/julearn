@@ -1,49 +1,45 @@
+
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+
+<html class="writer-html5" lang="en">
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Preprocessing with variance threshold, zscore and PCA &mdash; julearn  documentation</title>
-      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/sg_gallery-binder.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/sg_gallery-dataframe.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/sg_gallery-rendered-html.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/js/theme.js"></script>
-    <link rel="index" title="Index" href="../../genindex.html" />
-    <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Regression Analysis" href="plot_example_regression.html" />
-    <link rel="prev" title="Stratified K-fold CV for regression analysis" href="plot_stratified_kfold_reg.html" /> 
+<meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Preprocessing with variance threshold, zscore and PCA — julearn  documentation</title>
+<link href="../../_static/pygments.css?v=b86133f3" rel="stylesheet" type="text/css"/>
+<link href="../../_static/css/theme.css?v=9edc463e" rel="stylesheet" type="text/css"/>
+<link href="../../_static/sg_gallery.css?v=d2d258e8" rel="stylesheet" type="text/css"/>
+<link href="../../_static/sg_gallery-binder.css?v=f4aeca0c" rel="stylesheet" type="text/css"/>
+<link href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" rel="stylesheet" type="text/css"/>
+<link href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" rel="stylesheet" type="text/css"/>
+<script src="../../_static/jquery.js?v=5d32c60e"></script>
+<script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+<script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b3ba4146"></script>
+<script src="../../_static/doctools.js?v=888ff710"></script>
+<script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+<script src="../../_static/js/theme.js"></script>
+<link href="../../genindex.html" rel="index" title="Index"/>
+<link href="../../search.html" rel="search" title="Search"/>
+<link href="plot_example_regression.html" rel="next" title="Regression Analysis"/>
+<link href="plot_stratified_kfold_reg.html" rel="prev" title="Stratified K-fold CV for regression analysis"/>
 </head>
-
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-            <a href="../../index.html">
-            <img src="../../_static/julearn_logo_it.png" class="logo" alt="Logo"/>
-          </a>
+<body class="wy-body-for-nav">
+<div class="wy-grid-for-nav">
+<nav class="wy-nav-side" data-toggle="wy-nav-shift">
+<div class="wy-side-scroll">
+<div class="wy-side-nav-search">
+<a href="../../index.html">
+<img alt="Logo" class="logo" src="../../_static/julearn_logo_it.png"/>
+</a>
 <div role="search">
-  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
+<form action="../../search.html" class="wy-form" id="rtd-search-form" method="get">
+<input aria-label="Search docs" name="q" placeholder="Search docs" type="text"/>
+<input name="check_keywords" type="hidden" value="yes"/>
+<input name="area" type="hidden" value="default"/>
+</form>
 </div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+</div><div aria-label="Navigation menu" class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation">
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installing julearn</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../input.html">Input Data</a></li>
@@ -69,36 +65,36 @@
 <li class="toctree-l1"><a class="reference internal" href="../../maintaining.html">Maintaining julearn</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">What’s new</a></li>
 </ul>
-
-        </div>
-      </div>
-    </nav>
-
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">julearn</a>
-      </nav>
-
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="index.html">Basic Examples</a> &raquo;</li>
-      <li>Preprocessing with variance threshold, zscore and PCA</li>
-      <li class="wy-breadcrumbs-aside">
-            <a href="../../_sources/auto_examples/basic/plot_transform_until.rst.txt" rel="nofollow"> View page source</a>
-      </li>
-  </ul>
-  <hr/>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
-  <div class="sphx-glr-download-link-note admonition note">
+</div>
+</nav>
+<section class="wy-nav-content-wrap" data-toggle="wy-nav-shift"><nav aria-label="Mobile navigation menu" class="wy-nav-top">
+<i class="fa fa-bars" data-toggle="wy-nav-top"></i>
+<a href="../../index.html">julearn</a>
+</nav>
+<div class="wy-nav-content">
+<div class="rst-content">
+<div aria-label="Page navigation" role="navigation">
+<ul class="wy-breadcrumbs">
+<li><a aria-label="Home" class="icon icon-home" href="../../index.html"></a></li>
+<li class="breadcrumb-item"><a href="index.html">Basic Examples</a></li>
+<li class="breadcrumb-item active">Preprocessing with variance threshold, zscore and PCA</li>
+<li class="wy-breadcrumbs-aside">
+<a href="../../_sources/auto_examples/basic/plot_transform_until.rst.txt" rel="nofollow"> View page source</a>
+</li>
+</ul>
+<hr/>
+</div>
+<div class="document" itemscope="itemscope" itemtype="http://schema.org/Article" role="main"><div role="note" style="padding:0.75rem 1rem;margin-bottom:1.5rem;background-color:#f8d7da;border-left:4px solid #dc3545;font-size:0.9em;line-height:1.5;">
+<strong>⚠ Old version</strong> — You are viewing an old version of julearn
+  (v0.2.5). Switch to the
+  <a href="../../../v0.3.5/index.html">latest stable release (v0.3.5)</a>.
+</div>
+<div itemprop="articleBody">
+<div class="sphx-glr-download-link-note admonition note">
 <p class="admonition-title">Note</p>
-<p>Click <a class="reference internal" href="#sphx-glr-download-auto-examples-basic-plot-transform-until-py"><span class="std std-ref">here</span></a>
-to download the full example code</p>
+<p><a class="reference internal" href="#sphx-glr-download-auto-examples-basic-plot-transform-until-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code.</p>
 </div>
 <section class="sphx-glr-example-title" id="preprocessing-with-variance-threshold-zscore-and-pca">
 <span id="sphx-glr-auto-examples-basic-plot-transform-until-py"></span><h1>Preprocessing with variance threshold, zscore and PCA<a class="headerlink" href="#preprocessing-with-variance-threshold-zscore-and-pca" title="Permalink to this heading"></a></h1>
@@ -106,79 +102,50 @@ to download the full example code</p>
 classification after the pre-processing the features including removal of low
 variance features, feature normalization using zscore and feature reduction
 using PCA. We will check the features after each preprocessing step.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Authors: Shammi More &lt;s.more@fz-juelich.de&gt;</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Authors: Shammi More &lt;s.more@fz-juelich.de&gt;</span>
 <span class="c1">#</span>
 <span class="c1"># License: AGPL</span>
 
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-<span class="kn">from</span> <span class="nn">seaborn</span> <span class="kn">import</span> <span class="n">load_dataset</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dataset</span>
 
-<span class="kn">from</span> <span class="nn">julearn</span> <span class="kn">import</span> <span class="n">run_cross_validation</span>
-<span class="kn">from</span> <span class="nn">julearn.utils</span> <span class="kn">import</span> <span class="n">configure_logging</span>
-</pre></div>
-</div>
-<p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/cm.py:1582: UserWarning: Trying to register the cmap &#39;rocket&#39; which already exists.
-  mpl_cm.register_cmap(_name, _cmap)
-/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/cm.py:1583: UserWarning: Trying to register the cmap &#39;rocket_r&#39; which already exists.
-  mpl_cm.register_cmap(_name + &quot;_r&quot;, _cmap_r)
-/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/cm.py:1582: UserWarning: Trying to register the cmap &#39;mako&#39; which already exists.
-  mpl_cm.register_cmap(_name, _cmap)
-/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/cm.py:1583: UserWarning: Trying to register the cmap &#39;mako_r&#39; which already exists.
-  mpl_cm.register_cmap(_name + &quot;_r&quot;, _cmap_r)
-/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/cm.py:1582: UserWarning: Trying to register the cmap &#39;icefire&#39; which already exists.
-  mpl_cm.register_cmap(_name, _cmap)
-/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/cm.py:1583: UserWarning: Trying to register the cmap &#39;icefire_r&#39; which already exists.
-  mpl_cm.register_cmap(_name + &quot;_r&quot;, _cmap_r)
-/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/cm.py:1582: UserWarning: Trying to register the cmap &#39;vlag&#39; which already exists.
-  mpl_cm.register_cmap(_name, _cmap)
-/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/cm.py:1583: UserWarning: Trying to register the cmap &#39;vlag_r&#39; which already exists.
-  mpl_cm.register_cmap(_name + &quot;_r&quot;, _cmap_r)
-/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/cm.py:1582: UserWarning: Trying to register the cmap &#39;flare&#39; which already exists.
-  mpl_cm.register_cmap(_name, _cmap)
-/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/cm.py:1583: UserWarning: Trying to register the cmap &#39;flare_r&#39; which already exists.
-  mpl_cm.register_cmap(_name + &quot;_r&quot;, _cmap_r)
-/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/cm.py:1582: UserWarning: Trying to register the cmap &#39;crest&#39; which already exists.
-  mpl_cm.register_cmap(_name, _cmap)
-/opt/hostedtoolcache/Python/3.8.13/x64/lib/python3.8/site-packages/seaborn/cm.py:1583: UserWarning: Trying to register the cmap &#39;crest_r&#39; which already exists.
-  mpl_cm.register_cmap(_name + &quot;_r&quot;, _cmap_r)
+<span class="kn">from</span><span class="w"> </span><span class="nn">julearn</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_cross_validation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">julearn.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">configure_logging</span>
 </pre></div>
 </div>
 <p>Set the logging level to info to see extra information</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s1">&#39;INFO&#39;</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s1">'INFO'</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-07-21 09:54:48,984 - julearn - INFO - ===== Lib Versions =====
-2022-07-21 09:54:48,984 - julearn - INFO - numpy: 1.23.1
-2022-07-21 09:54:48,984 - julearn - INFO - scipy: 1.8.1
-2022-07-21 09:54:48,984 - julearn - INFO - sklearn: 1.0.2
-2022-07-21 09:54:48,984 - julearn - INFO - pandas: 1.4.3
-2022-07-21 09:54:48,984 - julearn - INFO - julearn: 0.2.5
-2022-07-21 09:54:48,984 - julearn - INFO - ========================
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-05-29 20:45:56,878 - julearn - INFO - ===== Lib Versions =====
+2026-05-29 20:45:56,878 - julearn - INFO - numpy: 1.23.1
+2026-05-29 20:45:56,878 - julearn - INFO - scipy: 1.10.1
+2026-05-29 20:45:56,878 - julearn - INFO - sklearn: 1.0.2
+2026-05-29 20:45:56,878 - julearn - INFO - pandas: 2.0.3
+2026-05-29 20:45:56,878 - julearn - INFO - julearn: 0.2.5
+2026-05-29 20:45:56,879 - julearn - INFO - ========================
 </pre></div>
 </div>
 <p>Load the iris data from seaborn</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">df_iris</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s1">&#39;iris&#39;</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">df_iris</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s1">'iris'</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The dataset has three kind of species. We will keep two to perform a binary
 classification.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">df_iris</span> <span class="o">=</span> <span class="n">df_iris</span><span class="p">[</span><span class="n">df_iris</span><span class="p">[</span><span class="s1">&#39;species&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s1">&#39;versicolor&#39;</span><span class="p">,</span> <span class="s1">&#39;virginica&#39;</span><span class="p">])]</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">df_iris</span> <span class="o">=</span> <span class="n">df_iris</span><span class="p">[</span><span class="n">df_iris</span><span class="p">[</span><span class="s1">'species'</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s1">'versicolor'</span><span class="p">,</span> <span class="s1">'virginica'</span><span class="p">])]</span>
 </pre></div>
 </div>
 <p>We will use the sepal length, width and petal length and
 petal width as features and predict the species</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;sepal_length&#39;</span><span class="p">,</span> <span class="s1">&#39;sepal_width&#39;</span><span class="p">,</span> <span class="s1">&#39;petal_length&#39;</span><span class="p">,</span> <span class="s1">&#39;petal_width&#39;</span><span class="p">]</span>
-<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a> <span class="o">=</span> <span class="s1">&#39;species&#39;</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list"><span class="n">X</span></a> <span class="o">=</span> <span class="p">[</span><span class="s1">'sepal_length'</span><span class="p">,</span> <span class="s1">'sepal_width'</span><span class="p">,</span> <span class="s1">'petal_length'</span><span class="p">,</span> <span class="s1">'petal_width'</span><span class="p">]</span>
+<a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str"><span class="n">y</span></a> <span class="o">=</span> <span class="s1">'species'</span>
 </pre></div>
 </div>
 <p>Let’s look at the summary statistics of the raw features</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Summary Statistics of the raw features : </span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">df_iris</span><span class="o">.</span><span class="n">describe</span><span class="p">())</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">'Summary Statistics of the raw features : </span><span class="se">\n</span><span class="s1">'</span><span class="p">,</span> <span class="n">df_iris</span><span class="o">.</span><span class="n">describe</span><span class="p">())</span>
 </pre></div>
 </div>
-<p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Summary Statistics of the raw features :
         sepal_length  sepal_width  petal_length  petal_width
 count    100.000000   100.000000    100.000000   100.000000
@@ -193,44 +160,43 @@ max        7.900000     3.800000      6.900000     2.500000
 </div>
 <p>We will preprocess the features using variance thresholding, zscore and PCA
 and then train a random forest model</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the model parameters and preprocessing steps first</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define the model parameters and preprocessing steps first</span>
 <span class="c1"># Setting the threshold for variance to 0.15, number of PCA components to 2</span>
 <span class="c1"># and number of trees for random forest to 200</span>
 
-<a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model_params</span></a> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;select_variance__threshold&#39;</span><span class="p">:</span> <span class="mf">0.15</span><span class="p">,</span>
-                <span class="s1">&#39;pca__n_components&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-                <span class="s1">&#39;rf__n_estimators&#39;</span><span class="p">:</span> <span class="mi">200</span><span class="p">}</span>
+<a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict"><span class="n">model_params</span></a> <span class="o">=</span> <span class="p">{</span><span class="s1">'select_variance__threshold'</span><span class="p">:</span> <span class="mf">0.15</span><span class="p">,</span>
+                <span class="s1">'pca__n_components'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+                <span class="s1">'rf__n_estimators'</span><span class="p">:</span> <span class="mi">200</span><span class="p">}</span>
 
-<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">preprocess_X</span></a> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;select_variance&#39;</span><span class="p">,</span> <span class="s1">&#39;zscore&#39;</span><span class="p">,</span> <span class="s1">&#39;pca&#39;</span><span class="p">]</span>
+<a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list"><span class="n">preprocess_X</span></a> <span class="o">=</span> <span class="p">[</span><span class="s1">'select_variance'</span><span class="p">,</span> <span class="s1">'zscore'</span><span class="p">,</span> <span class="s1">'pca'</span><span class="p">]</span>
 
 <span class="n">scores</span><span class="p">,</span> <span class="n">model</span> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
-    <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df_iris</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">&#39;rf&#39;</span><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">preprocess_X</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">preprocess_X</span></a><span class="p">,</span>
-    <span class="n">scoring</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;accuracy&#39;</span><span class="p">,</span> <span class="s1">&#39;roc_auc&#39;</span><span class="p">],</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model_params</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">model_params</span></a><span class="p">,</span>
-    <span class="n">return_estimator</span><span class="o">=</span><span class="s1">&#39;final&#39;</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+    <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list"><span class="n">X</span></a><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list"><span class="n">X</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str"><span class="n">y</span></a><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str"><span class="n">y</span></a><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df_iris</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="s1">'rf'</span><span class="p">,</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list"><span class="n">preprocess_X</span></a><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list"><span class="n">preprocess_X</span></a><span class="p">,</span>
+    <span class="n">scoring</span><span class="o">=</span><span class="p">[</span><span class="s1">'accuracy'</span><span class="p">,</span> <span class="s1">'roc_auc'</span><span class="p">],</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict"><span class="n">model_params</span></a><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict"><span class="n">model_params</span></a><span class="p">,</span>
+    <span class="n">return_estimator</span><span class="o">=</span><span class="s1">'final'</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2022-07-21 09:54:48,999 - julearn - INFO - Setting random seed to 200
-2022-07-21 09:54:48,999 - julearn - INFO - Using default CV
-2022-07-21 09:54:48,999 - julearn - INFO - ==== Input Data ====
-2022-07-21 09:54:48,999 - julearn - INFO - Using dataframe as input
-2022-07-21 09:54:48,999 - julearn - INFO - Features: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2022-07-21 09:54:48,999 - julearn - INFO - Target: species
-2022-07-21 09:54:49,000 - julearn - INFO - Expanded X: [&#39;sepal_length&#39;, &#39;sepal_width&#39;, &#39;petal_length&#39;, &#39;petal_width&#39;]
-2022-07-21 09:54:49,000 - julearn - INFO - Expanded Confounds: []
-2022-07-21 09:54:49,000 - julearn - INFO - ====================
-2022-07-21 09:54:49,000 - julearn - INFO -
-2022-07-21 09:54:49,001 - julearn - INFO - ====== Model ======
-2022-07-21 09:54:49,001 - julearn - INFO - Obtaining model by name: rf
-2022-07-21 09:54:49,001 - julearn - INFO - ===================
-2022-07-21 09:54:49,001 - julearn - INFO -
-2022-07-21 09:54:49,001 - julearn - INFO - = Model Parameters =
-2022-07-21 09:54:49,001 - julearn - INFO - Setting hyperparameter select_variance__threshold = 0.15
-2022-07-21 09:54:49,002 - julearn - INFO - Setting hyperparameter pca__n_components = 2
-2022-07-21 09:54:49,003 - julearn - INFO - Setting hyperparameter rf__n_estimators = 200
-2022-07-21 09:54:49,004 - julearn - INFO - ====================
-2022-07-21 09:54:49,004 - julearn - INFO -
-2022-07-21 09:54:49,004 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-05-29 20:45:56,898 - julearn - INFO - Setting random seed to 200
+2026-05-29 20:45:56,898 - julearn - INFO - Using default CV
+2026-05-29 20:45:56,898 - julearn - INFO - ==== Input Data ====
+2026-05-29 20:45:56,898 - julearn - INFO - Using dataframe as input
+2026-05-29 20:45:56,898 - julearn - INFO - Features: ['sepal_length', 'sepal_width', 'petal_length', 'petal_width']
+2026-05-29 20:45:56,899 - julearn - INFO - Target: species
+2026-05-29 20:45:56,899 - julearn - INFO - Expanded X: ['sepal_length', 'sepal_width', 'petal_length', 'petal_width']
+2026-05-29 20:45:56,899 - julearn - INFO - Expanded Confounds: []
+2026-05-29 20:45:56,900 - julearn - INFO - ====================
+2026-05-29 20:45:56,901 - julearn - INFO -
+2026-05-29 20:45:56,901 - julearn - INFO - ====== Model ======
+2026-05-29 20:45:56,901 - julearn - INFO - Obtaining model by name: rf
+2026-05-29 20:45:56,901 - julearn - INFO - ===================
+2026-05-29 20:45:56,901 - julearn - INFO -
+2026-05-29 20:45:56,902 - julearn - INFO - = Model Parameters =
+2026-05-29 20:45:56,902 - julearn - INFO - Setting hyperparameter select_variance__threshold = 0.15
+2026-05-29 20:45:56,903 - julearn - INFO - Setting hyperparameter pca__n_components = 2
+2026-05-29 20:45:56,904 - julearn - INFO - Setting hyperparameter rf__n_estimators = 200
+2026-05-29 20:45:56,905 - julearn - INFO - ====================
+2026-05-29 20:45:56,905 - julearn - INFO -
+2026-05-29 20:45:56,905 - julearn - INFO - CV interpreted as RepeatedKFold with 5 repetitions of 5 folds
 </pre></div>
 </div>
 <p>Now let’s look at the data after pre-processing. It can be done using
@@ -238,22 +204,21 @@ and then train a random forest model</p>
 (<cite>‘select_variance’</cite>, <cite>‘zscore’</cite>, <cite>‘pca’</cite> in this case) and return
 pre-processed data. Note that here we are applying pre-processing only on X.
 Notice that the column names have changed in this new dataframe.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pre_X</span><span class="p">,</span> <span class="n">pre_y</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">preprocess</span><span class="p">(</span><span class="n">df_iris</span><span class="p">[</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">],</span> <span class="n">df_iris</span><span class="p">[</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Features after PCA : </span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">pre_X</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">pre_X</span><span class="p">,</span> <span class="n">pre_y</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">preprocess</span><span class="p">(</span><span class="n">df_iris</span><span class="p">[</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list"><span class="n">X</span></a><span class="p">],</span> <span class="n">df_iris</span><span class="p">[</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str"><span class="n">y</span></a><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Features after PCA : </span><span class="se">\n</span><span class="s1">'</span><span class="p">,</span> <span class="n">pre_X</span><span class="p">)</span>
 
-<span class="c1"># Let&#39;s plot scatter plots for raw features and the PCA components</span>
+<span class="c1"># Let's plot scatter plots for raw features and the PCA components</span>
 <span class="n">pre_df</span> <span class="o">=</span> <span class="n">pre_X</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pre_y</span><span class="p">)</span>
 <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;sepal_length&#39;</span><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="o">=</span><span class="s1">&#39;sepal_width&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df_iris</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;species&#39;</span><span class="p">,</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">'sepal_length'</span><span class="p">,</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str"><span class="n">y</span></a><span class="o">=</span><span class="s1">'sepal_width'</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df_iris</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">'species'</span><span class="p">,</span>
                 <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Raw features&#39;</span><span class="p">)</span>
-<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">&#39;pca_component_0&#39;</span><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="o">=</span><span class="s1">&#39;pca_component_1&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">pre_df</span><span class="p">,</span>
-                <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;species&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;PCA components&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">'Raw features'</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s1">'pca_component_0'</span><span class="p">,</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str"><span class="n">y</span></a><span class="o">=</span><span class="s1">'pca_component_1'</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">pre_df</span><span class="p">,</span>
+                <span class="n">hue</span><span class="o">=</span><span class="s1">'species'</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">'PCA components'</span><span class="p">)</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_transform_until_001.png" srcset="../../_images/sphx_glr_plot_transform_until_001.png" alt="Raw features, PCA components" class = "sphx-glr-single-img"/><p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Features after PCA :
+<img alt="Raw features, PCA components" class="sphx-glr-single-img" src="../../_images/sphx_glr_plot_transform_until_001.png" srcset="../../_images/sphx_glr_plot_transform_until_001.png"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Features after PCA :
       pca_component_0  pca_component_1
 50          0.107487        -1.249219
 51         -0.418588        -0.440114
@@ -269,7 +234,7 @@ Notice that the column names have changed in this new dataframe.</p>
 
 [100 rows x 2 columns]
 
-Text(0.5, 1.0, &#39;PCA components&#39;)
+Text(0.5, 1.0, 'PCA components')
 </pre></div>
 </div>
 <p>But let’s say we want to look at features after applying only one or more
@@ -277,16 +242,15 @@ preprocessing steps eg: only variance thresholding or till zscore.
 To do so we can set the argument <cite>until</cite> to the desired preprocessing step.
 Note that the name of the preprocessing step is the same as used in the
 <cite>run_cross_validation</cite> function in <cite>preprocess_X</cite>.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Let&#39;s look at features after variance thresholding. We see that now we have</span>
-<span class="c1"># one feature less as the variance for this feature (&#39;sepal_width&#39;) was below</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Let's look at features after variance thresholding. We see that now we have</span>
+<span class="c1"># one feature less as the variance for this feature ('sepal_width') was below</span>
 <span class="c1"># the set threshold.</span>
 
-<span class="n">var_th_X</span><span class="p">,</span> <span class="n">var_th_y</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">preprocess</span><span class="p">(</span><span class="n">df_iris</span><span class="p">[</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">],</span> <span class="n">df_iris</span><span class="p">[</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">],</span>
-                                      <span class="n">until</span><span class="o">=</span><span class="s1">&#39;select_variance&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Features after variance thresholding: </span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">var_th_X</span><span class="p">)</span>
+<span class="n">var_th_X</span><span class="p">,</span> <span class="n">var_th_y</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">preprocess</span><span class="p">(</span><span class="n">df_iris</span><span class="p">[</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list"><span class="n">X</span></a><span class="p">],</span> <span class="n">df_iris</span><span class="p">[</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str"><span class="n">y</span></a><span class="p">],</span>
+                                      <span class="n">until</span><span class="o">=</span><span class="s1">'select_variance'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Features after variance thresholding: </span><span class="se">\n</span><span class="s1">'</span><span class="p">,</span> <span class="n">var_th_X</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Features after variance thresholding:
       sepal_length  petal_length  petal_width
 50            7.0           4.7          1.4
@@ -306,16 +270,15 @@ Note that the name of the preprocessing step is the same as used in the
 </div>
 <p>Now let’s see features after variance thresholding and zscoring. We can now
 set the <cite>until</cite> argument to <cite>‘zscore’</cite></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">zscored_X</span><span class="p">,</span> <span class="n">zscored_y</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">preprocess</span><span class="p">(</span><span class="n">df_iris</span><span class="p">[</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">],</span> <span class="n">df_iris</span><span class="p">[</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">],</span> <span class="n">until</span><span class="o">=</span><span class="s1">&#39;zscore&#39;</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">zscored_X</span><span class="p">,</span> <span class="n">zscored_y</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">preprocess</span><span class="p">(</span><span class="n">df_iris</span><span class="p">[</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list"><span class="n">X</span></a><span class="p">],</span> <span class="n">df_iris</span><span class="p">[</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str"><span class="n">y</span></a><span class="p">],</span> <span class="n">until</span><span class="o">=</span><span class="s1">'zscore'</span><span class="p">)</span>
 <span class="n">zscored_df</span> <span class="o">=</span> <span class="n">zscored_X</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">zscored_y</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Let’s look at the summary statistics of the zscored features. We see here
 that the mean of all the features is zero and standard deviation is one.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Summary Statistics of the zscored features : </span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">zscored_df</span><span class="o">.</span><span class="n">describe</span><span class="p">())</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">'Summary Statistics of the zscored features : </span><span class="se">\n</span><span class="s1">'</span><span class="p">,</span> <span class="n">zscored_df</span><span class="o">.</span><span class="n">describe</span><span class="p">())</span>
 </pre></div>
 </div>
-<p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Summary Statistics of the zscored features :
         sepal_length  petal_length   petal_width
 count  1.000000e+02  1.000000e+02  1.000000e+02
@@ -331,11 +294,10 @@ max    2.483655e+00  2.427444e+00  1.949653e+00
 <p>We can also look at the features pre-processed till PCA. Since <cite>‘pca’</cite> is the
 last preprocessing step we don’t really need the <cite>until</cite> argument
 (as shown above).</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pre_X</span><span class="p">,</span> <span class="n">pre_y</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">preprocess</span><span class="p">(</span><span class="n">df_iris</span><span class="p">[</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">X</span></a><span class="p">],</span> <span class="n">df_iris</span><span class="p">[</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">],</span> <span class="n">until</span><span class="o">=</span><span class="s1">&#39;pca&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Features after PCA : </span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">pre_X</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">pre_X</span><span class="p">,</span> <span class="n">pre_y</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">preprocess</span><span class="p">(</span><span class="n">df_iris</span><span class="p">[</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list"><span class="n">X</span></a><span class="p">],</span> <span class="n">df_iris</span><span class="p">[</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str"><span class="n">y</span></a><span class="p">],</span> <span class="n">until</span><span class="o">=</span><span class="s1">'pca'</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">'Features after PCA : </span><span class="se">\n</span><span class="s1">'</span><span class="p">,</span> <span class="n">pre_X</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Features after PCA :
       pca_component_0  pca_component_1
 50          0.107487        -1.249219
@@ -353,31 +315,30 @@ last preprocessing step we don’t really need the <cite>until</cite> argument
 [100 rows x 2 columns]
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  6.835 seconds)</p>
-<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-basic-plot-transform-until-py">
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 9.999 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-basic-plot-transform-until-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/a6ad77181db2c667269bfc91169b97a5/plot_transform_until.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_transform_until.ipynb</span></code></a></p>
+</div>
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/4284419cd0632120517626f0a3f0b78a/plot_transform_until.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_transform_until.py</span></code></a></p>
 </div>
-<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/a6ad77181db2c667269bfc91169b97a5/plot_transform_until.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_transform_until.ipynb</span></code></a></p>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/913398fd1277c6b6109c12908c58f2e3/plot_transform_until.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">plot_transform_until.zip</span></code></a></p>
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
 </section>
-
-
-           </div>
-          </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="plot_stratified_kfold_reg.html" class="btn btn-neutral float-left" title="Stratified K-fold CV for regression analysis" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="plot_example_regression.html" class="btn btn-neutral float-right" title="Regression Analysis" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p>&#169; Copyright 2020, Authors of julearn.</p>
-  </div>
+</div>
+</div>
+<footer><div aria-label="Footer" class="rst-footer-buttons" role="navigation">
+<a accesskey="p" class="btn btn-neutral float-left" href="plot_stratified_kfold_reg.html" rel="prev" title="Stratified K-fold CV for regression analysis"><span aria-hidden="true" class="fa fa-arrow-circle-left"></span> Previous</a>
+<a accesskey="n" class="btn btn-neutral float-right" href="plot_example_regression.html" rel="next" title="Regression Analysis">Next <span aria-hidden="true" class="fa fa-arrow-circle-right"></span></a>
+</div>
+<hr/>
+<div role="contentinfo">
+<p>© Copyright 2020, Authors of julearn.</p>
+</div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
@@ -385,34 +346,45 @@ last preprocessing step we don’t really need the <cite>until</cite> argument
    
 
 </footer>
-        </div>
-      </div>
-    </section>
-  </div>
-  
-<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
-  <span class="rst-current-version" data-toggle="rst-current-version">
-    <span class="fa fa-book"> Other Versions</span>
+</div>
+</div>
+</section>
+</div>
+<div aria-label="versions" class="rst-versions" data-toggle="rst-versions" role="note">
+<span class="rst-current-version" data-toggle="rst-current-version">
+<span class="fa fa-book"> Other Versions</span>
     v: v0.2.5
     <span class="fa fa-caret-down"></span>
-  </span>
-  <div class="rst-other-versions">
-    <dl>
-      <dt>Tags</dt>
-      <dd><a href="../../../v0.2.2/index.html">v0.2.2</a></dd>
-      <dd><a href="../../../v0.2.3/index.html">v0.2.3</a></dd>
-      <dd><a href="../../../v0.2.4/index.html">v0.2.4</a></dd>
-      <dd><a href="plot_transform_until.html">v0.2.5</a></dd>
-    </dl>
-  </div>
-</div><script>
+</span>
+<div class="rst-other-versions">
+<dl>
+<dt>Tags</dt>
+<dd><a href="../../../v0.2.2/index.html">v0.2.2</a></dd>
+<dd><a href="../../../v0.2.3/index.html">v0.2.3</a></dd>
+<dd><a href="../../../v0.2.4/index.html">v0.2.4</a></dd>
+<dd><a href="../../../v0.2.5/index.html">v0.2.5</a></dd>
+<dd><a href="../../../v0.2.7/index.html">v0.2.7</a></dd>
+<dd><a href="../../../v0.3.0/index.html">v0.3.0</a></dd>
+<dd><a href="../../../v0.3.1/index.html">v0.3.1</a></dd>
+<dd><a href="../../../v0.3.2/index.html">v0.3.2</a></dd>
+<dd><a href="../../../v0.3.3/index.html">v0.3.3</a></dd>
+<dd><a href="../../../v0.3.4/index.html">v0.3.4</a></dd>
+<dd><a href="../../../v0.3.5/index.html">v0.3.5</a></dd>
+</dl>
+<dl>
+<dt>Branches</dt>
+<dd><a href="../../../main/index.html">main</a></dd>
+</dl>
+</div>
+</div>
+<script>
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
-    <!-- Theme Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CB4ETK4DBG"></script>
-    <script>
+<!-- Theme Analytics -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-CB4ETK4DBG"></script>
+<script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
@@ -420,7 +392,6 @@ last preprocessing step we don’t really need the <cite>until</cite> argument
       gtag('config', 'G-CB4ETK4DBG', {
           'anonymize_ip': false,
       });
-    </script> 
-
+    </script>
 </body>
 </html>

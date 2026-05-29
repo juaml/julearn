@@ -11,7 +11,7 @@
         :class: sphx-glr-download-link-note
 
         :ref:`Go to the end <sphx_glr_download_auto_examples_02_inspection_run_binary_inspect_folds.py>`
-        to download the full example code
+        to download the full example code.
 
 .. rst-class:: sphx-glr-example-title
 
@@ -30,7 +30,7 @@ We later inspect the predictions of the model for each fold.
 
 .. GENERATED FROM PYTHON SOURCE LINES 12-23
 
-.. code-block:: default
+.. code-block:: Python
 
     # Authors: Federico Raimondo <f.raimondo@fz-juelich.de>
     # License: AGPL
@@ -56,7 +56,7 @@ Set the logging level to info to see extra information.
 
 .. GENERATED FROM PYTHON SOURCE LINES 25-27
 
-.. code-block:: default
+.. code-block:: Python
 
     configure_logging(level="INFO")
 
@@ -68,22 +68,20 @@ Set the logging level to info to see extra information.
 
  .. code-block:: none
 
-    /home/runner/work/julearn/julearn/julearn/utils/logging.py:66: UserWarning: The '__version__' attribute is deprecated and will be removed in MarkupSafe 3.1. Use feature detection, or `importlib.metadata.version("markupsafe")`, instead.
-      vstring = str(getattr(module, "__version__", None))
-    2025-07-07 11:53:00,965 - julearn - INFO - ===== Lib Versions =====
-    2025-07-07 11:53:00,965 - julearn - INFO - numpy: 1.26.4
-    2025-07-07 11:53:00,965 - julearn - INFO - scipy: 1.15.3
-    2025-07-07 11:53:00,965 - julearn - INFO - sklearn: 1.5.2
-    2025-07-07 11:53:00,965 - julearn - INFO - pandas: 2.2.3
-    2025-07-07 11:53:00,965 - julearn - INFO - julearn: 0.3.5.dev28
-    2025-07-07 11:53:00,965 - julearn - INFO - ========================
+    2026-05-29 20:45:52,843 - julearn - INFO - ===== Lib Versions =====
+    2026-05-29 20:45:52,843 - julearn - INFO - numpy: 2.4.6
+    2026-05-29 20:45:52,843 - julearn - INFO - scipy: 1.17.1
+    2026-05-29 20:45:52,843 - julearn - INFO - sklearn: 1.8.0
+    2026-05-29 20:45:52,844 - julearn - INFO - pandas: 3.0.3
+    2026-05-29 20:45:52,844 - julearn - INFO - julearn: 0.3.6.dev47
+    2026-05-29 20:45:52,844 - julearn - INFO - ========================
 
 
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 28-30
 
-.. code-block:: default
+.. code-block:: Python
 
     df_iris = load_dataset("iris")
 
@@ -101,7 +99,7 @@ classification.
 
 .. GENERATED FROM PYTHON SOURCE LINES 33-35
 
-.. code-block:: default
+.. code-block:: Python
 
     df_iris = df_iris[df_iris["species"].isin(["versicolor", "virginica"])]
 
@@ -119,7 +117,7 @@ We will try to predict the species.
 
 .. GENERATED FROM PYTHON SOURCE LINES 38-60
 
-.. code-block:: default
+.. code-block:: Python
 
 
     X = ["sepal_length", "sepal_width", "petal_length"]
@@ -151,61 +149,62 @@ We will try to predict the species.
 
  .. code-block:: none
 
-    2025-07-07 11:53:00,968 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2025-07-07 11:53:00,968 - julearn - INFO - Step added
-    2025-07-07 11:53:00,968 - julearn - INFO - Adding step svm that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
-    2025-07-07 11:53:00,968 - julearn - INFO - Step added
-    2025-07-07 11:53:00,968 - julearn - INFO - ==== Input Data ====
-    2025-07-07 11:53:00,968 - julearn - INFO - Using dataframe as input
-    2025-07-07 11:53:00,968 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length']
-    2025-07-07 11:53:00,968 - julearn - INFO -      Target: species
-    2025-07-07 11:53:00,968 - julearn - INFO -      Expanded features: ['sepal_length', 'sepal_width', 'petal_length']
-    2025-07-07 11:53:00,968 - julearn - INFO -      X_types:{}
-    2025-07-07 11:53:00,968 - julearn - WARNING - The following columns are not defined in X_types: ['sepal_length', 'sepal_width', 'petal_length']. They will be treated as continuous.
-    /home/runner/work/julearn/julearn/julearn/prepare.py:509: RuntimeWarning: The following columns are not defined in X_types: ['sepal_length', 'sepal_width', 'petal_length']. They will be treated as continuous.
+    2026-05-29 20:45:52,848 - julearn - INFO - Adding step zscore that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2026-05-29 20:45:52,848 - julearn - INFO - Step added
+    2026-05-29 20:45:52,848 - julearn - INFO - Adding step svm that applies to ColumnTypes<types={'continuous'}; pattern=(?:__:type:__continuous)>
+    2026-05-29 20:45:52,848 - julearn - INFO - Step added
+    2026-05-29 20:45:52,849 - julearn - INFO - ==== Input Data ====
+    2026-05-29 20:45:52,849 - julearn - INFO - Using dataframe as input
+    2026-05-29 20:45:52,849 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length']
+    2026-05-29 20:45:52,849 - julearn - INFO -      Target: species
+    2026-05-29 20:45:52,849 - julearn - INFO -      Expanded features: ['sepal_length', 'sepal_width', 'petal_length']
+    2026-05-29 20:45:52,849 - julearn - INFO -      X_types:{}
+    2026-05-29 20:45:52,850 - julearn - WARNING - The following columns are not defined in X_types: ['sepal_length', 'sepal_width', 'petal_length']. They will be treated as continuous.
+    /private/var/folders/09/t22x2_p106j7p24khr0jdxrw0000gn/T/tmpj3nzjtlc/julearn/prepare.py:609: RuntimeWarning: The following columns are not defined in X_types: ['sepal_length', 'sepal_width', 'petal_length']. They will be treated as continuous.
       warn_with_log(
-    2025-07-07 11:53:00,969 - julearn - INFO - ====================
-    2025-07-07 11:53:00,969 - julearn - INFO - 
-    2025-07-07 11:53:00,970 - julearn - INFO - = Model Parameters =
-    2025-07-07 11:53:00,970 - julearn - INFO - ====================
-    2025-07-07 11:53:00,970 - julearn - INFO - 
-    2025-07-07 11:53:00,970 - julearn - INFO - = Data Information =
-    2025-07-07 11:53:00,970 - julearn - INFO -      Problem type: classification
-    2025-07-07 11:53:00,970 - julearn - INFO -      Number of samples: 100
-    2025-07-07 11:53:00,970 - julearn - INFO -      Number of features: 3
-    2025-07-07 11:53:00,970 - julearn - INFO - ====================
-    2025-07-07 11:53:00,970 - julearn - INFO - 
-    2025-07-07 11:53:00,970 - julearn - INFO -      Number of classes: 2
-    2025-07-07 11:53:00,970 - julearn - INFO -      Target type: object
-    2025-07-07 11:53:00,971 - julearn - INFO -      Class distributions: species
+    2026-05-29 20:45:52,851 - julearn - INFO - ====================
+    2026-05-29 20:45:52,851 - julearn - INFO - 
+    2026-05-29 20:45:52,851 - julearn - INFO - = Model Parameters =
+    2026-05-29 20:45:52,851 - julearn - INFO - ====================
+    2026-05-29 20:45:52,852 - julearn - INFO - 
+    2026-05-29 20:45:52,852 - julearn - INFO - = Data Information =
+    2026-05-29 20:45:52,852 - julearn - INFO -      Problem type: classification
+    2026-05-29 20:45:52,852 - julearn - INFO -      Number of samples: 100
+    2026-05-29 20:45:52,852 - julearn - INFO -      Number of features: 3
+    2026-05-29 20:45:52,852 - julearn - INFO - ====================
+    2026-05-29 20:45:52,852 - julearn - INFO - 
+    2026-05-29 20:45:52,853 - julearn - INFO -      Number of classes: 2
+    2026-05-29 20:45:52,853 - julearn - INFO -      Target type: str
+    2026-05-29 20:45:52,853 - julearn - INFO -      Class distributions: species
     versicolor    50
     virginica     50
     Name: count, dtype: int64
-    2025-07-07 11:53:00,971 - julearn - INFO - Using outer CV scheme RepeatedStratifiedKFold(n_repeats=4, n_splits=5, random_state=200) (incl. final model)
-    2025-07-07 11:53:00,971 - julearn - INFO - Binary classification problem detected.
-        fit_time  score_time  ... fold                          cv_mdsum
-    0   0.004618    0.002561  ...    0  42489ff0163b2f12752440a6b7ef74c7
-    1   0.004540    0.002602  ...    1  42489ff0163b2f12752440a6b7ef74c7
-    2   0.004569    0.002560  ...    2  42489ff0163b2f12752440a6b7ef74c7
-    3   0.004561    0.002580  ...    3  42489ff0163b2f12752440a6b7ef74c7
-    4   0.004488    0.002526  ...    4  42489ff0163b2f12752440a6b7ef74c7
-    5   0.004506    0.002546  ...    0  42489ff0163b2f12752440a6b7ef74c7
-    6   0.004491    0.002560  ...    1  42489ff0163b2f12752440a6b7ef74c7
-    7   0.004543    0.002568  ...    2  42489ff0163b2f12752440a6b7ef74c7
-    8   0.004689    0.002568  ...    3  42489ff0163b2f12752440a6b7ef74c7
-    9   0.004697    0.002624  ...    4  42489ff0163b2f12752440a6b7ef74c7
-    10  0.004518    0.002618  ...    0  42489ff0163b2f12752440a6b7ef74c7
-    11  0.004695    0.002547  ...    1  42489ff0163b2f12752440a6b7ef74c7
-    12  0.004481    0.002547  ...    2  42489ff0163b2f12752440a6b7ef74c7
-    13  0.004496    0.002588  ...    3  42489ff0163b2f12752440a6b7ef74c7
-    14  0.004570    0.002555  ...    4  42489ff0163b2f12752440a6b7ef74c7
-    15  0.004514    0.002563  ...    0  42489ff0163b2f12752440a6b7ef74c7
-    16  0.004502    0.002534  ...    1  42489ff0163b2f12752440a6b7ef74c7
-    17  0.004486    0.002556  ...    2  42489ff0163b2f12752440a6b7ef74c7
-    18  0.004507    0.002524  ...    3  42489ff0163b2f12752440a6b7ef74c7
-    19  0.004594    0.002552  ...    4  42489ff0163b2f12752440a6b7ef74c7
-
-    [20 rows x 9 columns]
+    2026-05-29 20:45:52,854 - julearn - INFO - Using outer CV scheme RepeatedStratifiedKFold(n_repeats=4, n_splits=5, random_state=200) (incl. final model)
+    2026-05-29 20:45:52,854 - julearn - WARNING - The kind of values in y (str) is not suitable for a classification. Values should be numeric.
+    /private/var/folders/09/t22x2_p106j7p24khr0jdxrw0000gn/T/tmpj3nzjtlc/julearn/prepare.py:422: RuntimeWarning: The kind of values in y (str) is not suitable for a classification. Values should be numeric.
+      warn_with_log(
+    2026-05-29 20:45:52,855 - julearn - INFO - Binary classification problem detected.
+        fit_time  score_time                                          estimator  test_score  n_train  n_test  repeat  fold                          cv_mdsum
+    0   0.007246    0.006958  (SetColumnTypes(X_types={}), StandardScaler(),...        0.90       80      20       0     0  42489ff0163b2f12752440a6b7ef74c7
+    1   0.008196    0.007605  (SetColumnTypes(X_types={}), StandardScaler(),...        1.00       80      20       0     1  42489ff0163b2f12752440a6b7ef74c7
+    2   0.008661    0.006888  (SetColumnTypes(X_types={}), StandardScaler(),...        0.90       80      20       0     2  42489ff0163b2f12752440a6b7ef74c7
+    3   0.009845    0.005522  (SetColumnTypes(X_types={}), StandardScaler(),...        0.95       80      20       0     3  42489ff0163b2f12752440a6b7ef74c7
+    4   0.006704    0.007220  (SetColumnTypes(X_types={}), StandardScaler(),...        0.85       80      20       0     4  42489ff0163b2f12752440a6b7ef74c7
+    5   0.006512    0.005535  (SetColumnTypes(X_types={}), StandardScaler(),...        0.80       80      20       1     0  42489ff0163b2f12752440a6b7ef74c7
+    6   0.005728    0.005031  (SetColumnTypes(X_types={}), StandardScaler(),...        0.95       80      20       1     1  42489ff0163b2f12752440a6b7ef74c7
+    7   0.006716    0.005797  (SetColumnTypes(X_types={}), StandardScaler(),...        0.90       80      20       1     2  42489ff0163b2f12752440a6b7ef74c7
+    8   0.006897    0.007046  (SetColumnTypes(X_types={}), StandardScaler(),...        0.95       80      20       1     3  42489ff0163b2f12752440a6b7ef74c7
+    9   0.005832    0.005318  (SetColumnTypes(X_types={}), StandardScaler(),...        0.90       80      20       1     4  42489ff0163b2f12752440a6b7ef74c7
+    10  0.005986    0.005974  (SetColumnTypes(X_types={}), StandardScaler(),...        0.90       80      20       2     0  42489ff0163b2f12752440a6b7ef74c7
+    11  0.006945    0.005191  (SetColumnTypes(X_types={}), StandardScaler(),...        0.90       80      20       2     1  42489ff0163b2f12752440a6b7ef74c7
+    12  0.007725    0.007435  (SetColumnTypes(X_types={}), StandardScaler(),...        0.85       80      20       2     2  42489ff0163b2f12752440a6b7ef74c7
+    13  0.007354    0.005772  (SetColumnTypes(X_types={}), StandardScaler(),...        1.00       80      20       2     3  42489ff0163b2f12752440a6b7ef74c7
+    14  0.006383    0.007435  (SetColumnTypes(X_types={}), StandardScaler(),...        0.90       80      20       2     4  42489ff0163b2f12752440a6b7ef74c7
+    15  0.006551    0.005543  (SetColumnTypes(X_types={}), StandardScaler(),...        0.85       80      20       3     0  42489ff0163b2f12752440a6b7ef74c7
+    16  0.006189    0.006719  (SetColumnTypes(X_types={}), StandardScaler(),...        0.95       80      20       3     1  42489ff0163b2f12752440a6b7ef74c7
+    17  0.005963    0.005932  (SetColumnTypes(X_types={}), StandardScaler(),...        0.90       80      20       3     2  42489ff0163b2f12752440a6b7ef74c7
+    18  0.006144    0.006324  (SetColumnTypes(X_types={}), StandardScaler(),...        1.00       80      20       3     3  42489ff0163b2f12752440a6b7ef74c7
+    19  0.006037    0.005286  (SetColumnTypes(X_types={}), StandardScaler(),...        0.85       80      20       3     4  42489ff0163b2f12752440a6b7ef74c7
 
 
 
@@ -216,7 +215,7 @@ We can now inspect the predictions of the model for each fold.
 
 .. GENERATED FROM PYTHON SOURCE LINES 62-67
 
-.. code-block:: default
+.. code-block:: Python
 
 
     cv_predictions = inspector.folds.predict()
@@ -231,27 +230,27 @@ We can now inspect the predictions of the model for each fold.
 
  .. code-block:: none
 
-        repeat0_p0  repeat1_p0  repeat2_p0  repeat3_p0      target
-    0   versicolor  versicolor  versicolor  versicolor  versicolor
-    1   versicolor  versicolor  versicolor  versicolor  versicolor
-    2   versicolor  versicolor  versicolor  versicolor  versicolor
-    3   versicolor  versicolor  versicolor  versicolor  versicolor
-    4   versicolor  versicolor  versicolor  versicolor  versicolor
-    ..         ...         ...         ...         ...         ...
-    95   virginica   virginica   virginica   virginica   virginica
-    96   virginica   virginica   virginica   virginica   virginica
-    97   virginica   virginica   virginica   virginica   virginica
-    98   virginica   virginica   virginica   virginica   virginica
-    99   virginica   virginica   virginica   virginica   virginica
+        index      target  repeat0_p0  repeat1_p0  repeat2_p0  repeat3_p0
+    0      50  versicolor  versicolor  versicolor  versicolor  versicolor
+    1      51  versicolor  versicolor  versicolor  versicolor  versicolor
+    2      52  versicolor  versicolor  versicolor  versicolor  versicolor
+    3      53  versicolor  versicolor  versicolor  versicolor  versicolor
+    4      54  versicolor  versicolor  versicolor  versicolor  versicolor
+    ..    ...         ...         ...         ...         ...         ...
+    95    145   virginica   virginica   virginica   virginica   virginica
+    96    146   virginica   virginica   virginica   virginica   virginica
+    97    147   virginica   virginica   virginica   virginica   virginica
+    98    148   virginica   virginica   virginica   virginica   virginica
+    99    149   virginica   virginica   virginica   virginica   virginica
 
-    [100 rows x 5 columns]
+    [100 rows x 6 columns]
 
 
 
 
 .. GENERATED FROM PYTHON SOURCE LINES 68-69
 
-.. code-block:: default
+.. code-block:: Python
 
     inspector.folds[0].model
 
@@ -263,14 +262,14 @@ We can now inspect the predictions of the model for each fold.
  .. code-block:: none
 
 
-    <julearn.inspect._pipeline.PipelineInspector object at 0x7f86fe445240>
+    <julearn.inspect._pipeline.PipelineInspector object at 0x117c97b60>
 
 
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.248 seconds)
+   **Total running time of the script:** (0 minutes 0.417 seconds)
 
 
 .. _sphx_glr_download_auto_examples_02_inspection_run_binary_inspect_folds.py:
@@ -279,16 +278,17 @@ We can now inspect the predictions of the model for each fold.
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: run_binary_inspect_folds.ipynb <run_binary_inspect_folds.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: run_binary_inspect_folds.py <run_binary_inspect_folds.py>`
 
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
+    .. container:: sphx-glr-download sphx-glr-download-zip
 
-      :download:`Download Jupyter notebook: run_binary_inspect_folds.ipynb <run_binary_inspect_folds.ipynb>`
+      :download:`Download zipped: run_binary_inspect_folds.zip <run_binary_inspect_folds.zip>`
 
 
 .. only:: html

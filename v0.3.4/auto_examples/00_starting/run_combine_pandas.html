@@ -1,25 +1,21 @@
-<!doctype html>
-<html class="no-js" lang="en" data-content_root="../../">
-  <head><meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" /><link rel="next" title="Simple Binary Classification" href="run_simple_binary_classification.html" /><link rel="prev" title="8.1. Starting with julearn" href="index.html" />
+<!DOCTYPE html>
 
-    <!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
-        <title>Working with pandas - julearn documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?v=135e06be" />
-    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=61a4c737" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?v=36a5483c" />
-    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=38fa36eb" />
-    
-    
-
-
+<html class="no-js" data-content_root="../../" lang="en">
+<head><meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="light dark" name="color-scheme"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="../../genindex.html" rel="index" title="Index"/><link href="../../search.html" rel="search" title="Search"/><link href="run_simple_binary_classification.html" rel="next" title="Simple Binary Classification"/><link href="index.html" rel="prev" title="8.1. Starting with julearn"/>
+<!-- Generated with Sphinx 7.2.6 and Furo 2023.09.10 -->
+<title>Working with pandas - julearn documentation</title>
+<link href="../../_static/pygments.css?v=8f2a1f02" rel="stylesheet" type="text/css"/>
+<link href="../../_static/styles/furo.css?v=135e06be" rel="stylesheet" type="text/css"/>
+<link href="../../_static/copybutton.css?v=76b2166b" rel="stylesheet" type="text/css"/>
+<link href="../../_static/sg_gallery.css?v=61a4c737" rel="stylesheet" type="text/css"/>
+<link href="../../_static/sg_gallery-binder.css?v=f4aeca0c" rel="stylesheet" type="text/css"/>
+<link href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" rel="stylesheet" type="text/css"/>
+<link href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" rel="stylesheet" type="text/css"/>
+<link href="../../_static/styles/furo-extensions.css?v=36a5483c" rel="stylesheet" type="text/css"/>
+<link href="../../_static/css/custom.css?v=38fa36eb" rel="stylesheet" type="text/css"/>
 <style>
   body {
     --color-code-background: #f8f8f8;
@@ -40,130 +36,114 @@
       }
     }
   }
-</style></head>
-  <body>
-    
-    <script>
+</style><link href="../../_static/css/version_selector.css" rel="stylesheet"/></head>
+<body>
+<script>
       document.body.dataset.theme = localStorage.getItem("theme") || "auto";
     </script>
-    
-
-<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-  <symbol id="svg-toc" viewBox="0 0 24 24">
-    <title>Contents</title>
-    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
-      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
-    </svg>
-  </symbol>
-  <symbol id="svg-menu" viewBox="0 0 24 24">
-    <title>Menu</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
-      <line x1="3" y1="12" x2="21" y2="12"></line>
-      <line x1="3" y1="6" x2="21" y2="6"></line>
-      <line x1="3" y1="18" x2="21" y2="18"></line>
-    </svg>
-  </symbol>
-  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
-    <title>Expand</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
-      <polyline points="9 18 15 12 9 6"></polyline>
-    </svg>
-  </symbol>
-  <symbol id="svg-sun" viewBox="0 0 24 24">
-    <title>Light mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
-      <circle cx="12" cy="12" r="5"></circle>
-      <line x1="12" y1="1" x2="12" y2="3"></line>
-      <line x1="12" y1="21" x2="12" y2="23"></line>
-      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-      <line x1="1" y1="12" x2="3" y2="12"></line>
-      <line x1="21" y1="12" x2="23" y2="12"></line>
-      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-    </svg>
-  </symbol>
-  <symbol id="svg-moon" viewBox="0 0 24 24">
-    <title>Dark mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
-      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
-    </svg>
-  </symbol>
-  <symbol id="svg-sun-half" viewBox="0 0 24 24">
-    <title>Auto light/dark mode</title>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
-      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-      <circle cx="12" cy="12" r="9" />
-      <path d="M13 12h5" />
-      <path d="M13 15h4" />
-      <path d="M13 18h1" />
-      <path d="M13 9h4" />
-      <path d="M13 6h1" />
-    </svg>
-  </symbol>
+<svg style="display: none;" xmlns="http://www.w3.org/2000/svg">
+<symbol id="svg-toc" viewbox="0 0 24 24">
+<title>Contents</title>
+<svg fill="currentColor" stroke="currentColor" stroke-width="0" viewbox="0 0 1024 1024">
+<path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"></path>
 </svg>
-
-<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
-<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+</symbol>
+<symbol id="svg-menu" viewbox="0 0 24 24">
+<title>Menu</title>
+<svg class="feather-menu" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<line x1="3" x2="21" y1="12" y2="12"></line>
+<line x1="3" x2="21" y1="6" y2="6"></line>
+<line x1="3" x2="21" y1="18" y2="18"></line>
+</svg>
+</symbol>
+<symbol id="svg-arrow-right" viewbox="0 0 24 24">
+<title>Expand</title>
+<svg class="feather-chevron-right" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<polyline points="9 18 15 12 9 6"></polyline>
+</svg>
+</symbol>
+<symbol id="svg-sun" viewbox="0 0 24 24">
+<title>Light mode</title>
+<svg class="feather-sun" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<circle cx="12" cy="12" r="5"></circle>
+<line x1="12" x2="12" y1="1" y2="3"></line>
+<line x1="12" x2="12" y1="21" y2="23"></line>
+<line x1="4.22" x2="5.64" y1="4.22" y2="5.64"></line>
+<line x1="18.36" x2="19.78" y1="18.36" y2="19.78"></line>
+<line x1="1" x2="3" y1="12" y2="12"></line>
+<line x1="21" x2="23" y1="12" y2="12"></line>
+<line x1="4.22" x2="5.64" y1="19.78" y2="18.36"></line>
+<line x1="18.36" x2="19.78" y1="5.64" y2="4.22"></line>
+</svg>
+</symbol>
+<symbol id="svg-moon" viewbox="0 0 24 24">
+<title>Dark mode</title>
+<svg class="icon-tabler-moon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 0h24v24H0z" fill="none" stroke="none"></path>
+<path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z"></path>
+</svg>
+</symbol>
+<symbol id="svg-sun-half" viewbox="0 0 24 24">
+<title>Auto light/dark mode</title>
+<svg class="icon-tabler-shadow" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 0h24v24H0z" fill="none" stroke="none"></path>
+<circle cx="12" cy="12" r="9"></circle>
+<path d="M13 12h5"></path>
+<path d="M13 15h4"></path>
+<path d="M13 18h1"></path>
+<path d="M13 9h4"></path>
+<path d="M13 6h1"></path>
+</svg>
+</symbol>
+</svg>
+<input class="sidebar-toggle" id="__navigation" name="__navigation" type="checkbox"/>
+<input class="sidebar-toggle" id="__toc" name="__toc" type="checkbox"/>
 <label class="overlay sidebar-overlay" for="__navigation">
-  <div class="visually-hidden">Hide navigation sidebar</div>
+<div class="visually-hidden">Hide navigation sidebar</div>
 </label>
 <label class="overlay toc-overlay" for="__toc">
-  <div class="visually-hidden">Hide table of contents sidebar</div>
+<div class="visually-hidden">Hide table of contents sidebar</div>
 </label>
-
-
-
 <div class="page">
-  <header class="mobile-header">
-    <div class="header-left">
-      <label class="nav-overlay-icon" for="__navigation">
-        <div class="visually-hidden">Toggle site navigation sidebar</div>
-        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
-      </label>
-    </div>
-    <div class="header-center">
-      <a href="../../index.html"><div class="brand">julearn  documentation</div></a>
-    </div>
-    <div class="header-right">
-      <div class="theme-toggle-container theme-toggle-header">
-        <button class="theme-toggle">
-          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
-          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
-          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
-          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
-        </button>
-      </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
-        <div class="visually-hidden">Toggle table of contents sidebar</div>
-        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
-      </label>
-    </div>
-  </header>
-  <aside class="sidebar-drawer">
-    <div class="sidebar-container">
-      
-      <div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand" href="../../index.html">
-  
-  <div class="sidebar-logo-container">
-    <img class="sidebar-logo" src="../../_static/julearn_logo_it.png" alt="Logo"/>
-  </div>
-  
-  <span class="sidebar-brand-text">julearn  documentation</span>
-  
-</a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
-  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
-  <input type="hidden" name="check_keywords" value="yes">
-  <input type="hidden" name="area" value="default">
+<header class="mobile-header">
+<div class="header-left">
+<label class="nav-overlay-icon" for="__navigation">
+<div class="visually-hidden">Toggle site navigation sidebar</div>
+<i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+</label>
+</div>
+<div class="header-center">
+<a href="../../index.html"><div class="brand">julearn  documentation</div></a>
+</div>
+<div class="header-right">
+<div class="theme-toggle-container theme-toggle-header">
+<button class="theme-toggle">
+<div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+<svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+<svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+<svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+</button>
+</div>
+<label class="toc-overlay-icon toc-header-icon" for="__toc">
+<div class="visually-hidden">Toggle table of contents sidebar</div>
+<i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+</label>
+</div>
+</header>
+<aside class="sidebar-drawer">
+<div class="sidebar-container">
+<div class="sidebar-sticky"><div class="sidebar-scroll"><a class="sidebar-brand" href="../../index.html">
+<div class="sidebar-logo-container">
+<img alt="Logo" class="sidebar-logo" src="../../_static/julearn_logo_it.png"/>
+</div>
+<span class="sidebar-brand-text">julearn  documentation</span>
+</a><form action="../../search.html" class="sidebar-search-container" method="get" role="search">
+<input aria-label="Search" class="sidebar-search" name="q" placeholder="Search"/>
+<input name="check_keywords" type="hidden" value="yes"/>
+<input name="area" type="hidden" value="default"/>
 </form>
 <div id="searchbox"></div><div class="sidebar-tree">
-  <ul class="current">
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">1. Getting started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../getting_started.html#setup-suggestion">2. Setup suggestion</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../getting_started.html#installing">3. Installing</a></li>
@@ -356,61 +336,104 @@
 <li class="toctree-l1"><a class="reference internal" href="../../faq.html">13. FAQs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../whats_new.html">14. What’s new</a></li>
 </ul>
-
 </div>
-<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
-  <span class="rst-current-version" data-toggle="rst-current-version">
-    <span class="fa fa-book"> Other Versions</span>
-    v: v0.3.4
-    <span class="fa fa-caret-down"></span>
-  </span>
-  <div class="rst-other-versions">
-    <dl>
-      <dt>Tags</dt>
-      <dd><a href="../../../v0.2.2/index.html">v0.2.2</a></dd>
-      <dd><a href="../../../v0.2.3/index.html">v0.2.3</a></dd>
-      <dd><a href="../../../v0.2.4/index.html">v0.2.4</a></dd>
-      <dd><a href="../../../v0.2.5/index.html">v0.2.5</a></dd>
-      <dd><a href="../../../v0.2.7/index.html">v0.2.7</a></dd>
-      <dd><a href="../../../v0.3.0/index.html">v0.3.0</a></dd>
-      <dd><a href="../../../v0.3.1/index.html">v0.3.1</a></dd>
-      <dd><a href="../../../v0.3.2/index.html">v0.3.2</a></dd>
-      <dd><a href="../../../v0.3.3/index.html">v0.3.3</a></dd>
-      <dd><a href="run_combine_pandas.html">v0.3.4</a></dd>
-    </dl>
-  </div>
-</div>
-</div>
-      </div>
-      
-    </div>
-  </aside>
-  <div class="main">
-    <div class="content">
-      <div class="article-container">
-        <a href="#" class="back-to-top muted-link">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
-          </svg>
-          <span>Back to top</span>
+<div class="sidebar-tree version-selector" id="version-selector">
+<details class="version-details" open="">
+<summary class="version-summary">
+<span class="version-status-dot version-status-dot--old"></span>
+<span class="caption-text">v0.3.4</span>
+</summary>
+<ul>
+<li class="toctree-l1">
+<a class="reference external" href="../../../v0.3.5/index.html">
+          v0.3.5 <em>(latest)</em>
+</a>
+</li>
+<li class="toctree-l1 current">
+<a class="reference external" href="../../../v0.3.4/index.html">
+          v0.3.4
         </a>
-        <div class="content-icon-container">
-          
+</li>
+<li class="toctree-l1">
+<a class="reference external" href="../../../v0.3.3/index.html">
+          v0.3.3
+        </a>
+</li>
+<li class="toctree-l1">
+<a class="reference external" href="../../../v0.3.2/index.html">
+          v0.3.2
+        </a>
+</li>
+<li class="toctree-l1">
+<a class="reference external" href="../../../v0.3.1/index.html">
+          v0.3.1
+        </a>
+</li>
+<li class="toctree-l1">
+<a class="reference external" href="../../../v0.3.0/index.html">
+          v0.3.0
+        </a>
+</li>
+<li class="toctree-l1">
+<a class="reference external" href="../../../v0.2.7/index.html">
+          v0.2.7
+        </a>
+</li>
+<li class="toctree-l1">
+<a class="reference external" href="../../../v0.2.5/index.html">
+          v0.2.5
+        </a>
+</li>
+<li class="toctree-l1">
+<a class="reference external" href="../../../v0.2.4/index.html">
+          v0.2.4
+        </a>
+</li>
+<li class="toctree-l1">
+<a class="reference external" href="../../../v0.2.3/index.html">
+          v0.2.3
+        </a>
+</li>
+<li class="toctree-l1">
+<a class="reference external" href="../../../v0.2.2/index.html">
+          v0.2.2
+        </a>
+</li>
+<li class="toctree-l1">
+<a class="reference external" href="../../../main/index.html">main (dev)</a>
+</li>
+</ul>
+</details>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<div class="main">
+<div class="content">
+<div class="article-container">
+<a class="back-to-top muted-link" href="#">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+</svg>
+<span>Back to top</span>
+</a>
+<div class="content-icon-container">
 <div class="theme-toggle-container theme-toggle-content">
-            <button class="theme-toggle">
-              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
-              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
-              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
-              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
-            </button>
-          </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
-            <div class="visually-hidden">Toggle table of contents sidebar</div>
-            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
-          </label>
-        </div>
-        <article role="main">
-          <div class="sphx-glr-download-link-note admonition note">
+<button class="theme-toggle">
+<div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+<svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+<svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+<svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+</button>
+</div>
+<label class="toc-overlay-icon toc-content-icon" for="__toc">
+<div class="visually-hidden">Toggle table of contents sidebar</div>
+<i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+</label>
+</div>
+<article role="main">
+<div class="sphx-glr-download-link-note admonition note">
 <p class="admonition-title">Note</p>
 <p><a class="reference internal" href="#sphx-glr-download-auto-examples-00-starting-run-combine-pandas-py"><span class="std std-ref">Go to the end</span></a>
 to download the full example code</p>
@@ -429,8 +452,8 @@ cognitive control in context-dependent decision-making. Cerebral Cortex.</p>
 <span class="c1">#</span>
 <span class="c1"># License: AGPL</span>
 
-<span class="kn">from</span> <span class="nn">seaborn</span> <span class="kn">import</span> <span class="n">load_dataset</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dataset</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 </pre></div>
 </div>
 <p>One of the key elements that make <code class="docutils literal notranslate"><span class="pre">julearn</span></code> easy to use, is the possibility
@@ -446,16 +469,16 @@ ready to do some machine-learning. However, this is error-prone.</p>
 <p>Fortunately, <a class="reference external" href="https://pandas.pydata.org">pandas</a> provides several tools to deal with this task.</p>
 <p>This example is a collection of some of these useful methods.</p>
 <p>Let’s start with the <code class="docutils literal notranslate"><span class="pre">fmri</span></code> dataset.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_fmri</span></a> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">&quot;fmri&quot;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_fmri</span></a> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">"fmri"</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Let’s see what this dataset has.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.head.html#pandas.DataFrame.head" title="pandas.DataFrame.head" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method"><span class="n">df_fmri</span><span class="o">.</span><span class="n">head</span></a><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.head.html#pandas.DataFrame.head" title="pandas.DataFrame.head"><span class="n">df_fmri</span><span class="o">.</span><span class="n">head</span></a><span class="p">()</span>
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
 <div>
-<style scoped>
+<style scoped="">
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -469,71 +492,71 @@ ready to do some machine-learning. However, this is error-prone.</p>
     }
 </style>
 <table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>subject</th>
-      <th>timepoint</th>
-      <th>event</th>
-      <th>region</th>
-      <th>signal</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>s13</td>
-      <td>18</td>
-      <td>stim</td>
-      <td>parietal</td>
-      <td>-0.017552</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>s5</td>
-      <td>14</td>
-      <td>stim</td>
-      <td>parietal</td>
-      <td>-0.080883</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>s12</td>
-      <td>18</td>
-      <td>stim</td>
-      <td>parietal</td>
-      <td>-0.081033</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>s11</td>
-      <td>18</td>
-      <td>stim</td>
-      <td>parietal</td>
-      <td>-0.046134</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>s10</td>
-      <td>18</td>
-      <td>stim</td>
-      <td>parietal</td>
-      <td>-0.037970</td>
-    </tr>
-  </tbody>
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>subject</th>
+<th>timepoint</th>
+<th>event</th>
+<th>region</th>
+<th>signal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>0</th>
+<td>s13</td>
+<td>18</td>
+<td>stim</td>
+<td>parietal</td>
+<td>-0.017552</td>
+</tr>
+<tr>
+<th>1</th>
+<td>s5</td>
+<td>14</td>
+<td>stim</td>
+<td>parietal</td>
+<td>-0.080883</td>
+</tr>
+<tr>
+<th>2</th>
+<td>s12</td>
+<td>18</td>
+<td>stim</td>
+<td>parietal</td>
+<td>-0.081033</td>
+</tr>
+<tr>
+<th>3</th>
+<td>s11</td>
+<td>18</td>
+<td>stim</td>
+<td>parietal</td>
+<td>-0.046134</td>
+</tr>
+<tr>
+<th>4</th>
+<td>s10</td>
+<td>18</td>
+<td>stim</td>
+<td>parietal</td>
+<td>-0.037970</td>
+</tr>
+</tbody>
 </table>
 </div>
 </div>
-<br />
-<br /><p>From long to wide format
+<br/>
+<br/><p>From long to wide format
 We have seen this in other examples. If we want to use julearn, each feature
 must be a columns. In order to use the signals from different regions as
 ~~~~~~~~~~~~~~~~~~~~~~~~
 features, we need to convert this dataframe from the long format to the wide
 format.</p>
 <p>We will use the <code class="docutils literal notranslate"><span class="pre">pivot</span></code> method.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_fmri</span></a> <span class="o">=</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.pivot.html#pandas.DataFrame.pivot" title="pandas.DataFrame.pivot" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method"><span class="n">df_fmri</span><span class="o">.</span><span class="n">pivot</span></a><span class="p">(</span>
-    <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;subject&quot;</span><span class="p">,</span> <span class="s2">&quot;timepoint&quot;</span><span class="p">,</span> <span class="s2">&quot;event&quot;</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="s2">&quot;region&quot;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s2">&quot;signal&quot;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_fmri</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.pivot.html#pandas.DataFrame.pivot" title="pandas.DataFrame.pivot"><span class="n">df_fmri</span><span class="o">.</span><span class="n">pivot</span></a><span class="p">(</span>
+    <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">"subject"</span><span class="p">,</span> <span class="s2">"timepoint"</span><span class="p">,</span> <span class="s2">"event"</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="s2">"region"</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s2">"signal"</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -546,12 +569,12 @@ index.</p>
 duplicated. If each subject has more than one timepoint, and each timepoint
 has more than one event, then these 3 elements are needed as the index.</p>
 <p>Let’s see what we have here:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.head.html#pandas.DataFrame.head" title="pandas.DataFrame.head" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method"><span class="n">df_fmri</span><span class="o">.</span><span class="n">head</span></a><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.head.html#pandas.DataFrame.head" title="pandas.DataFrame.head"><span class="n">df_fmri</span><span class="o">.</span><span class="n">head</span></a><span class="p">()</span>
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
 <div>
-<style scoped>
+<style scoped="">
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -565,67 +588,67 @@ has more than one event, then these 3 elements are needed as the index.</p>
     }
 </style>
 <table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th></th>
-      <th>region</th>
-      <th>frontal</th>
-      <th>parietal</th>
-    </tr>
-    <tr>
-      <th>subject</th>
-      <th>timepoint</th>
-      <th>event</th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th rowspan="5" valign="top">s0</th>
-      <th rowspan="2" valign="top">0</th>
-      <th>cue</th>
-      <td>0.007766</td>
-      <td>-0.006899</td>
-    </tr>
-    <tr>
-      <th>stim</th>
-      <td>-0.021452</td>
-      <td>-0.039327</td>
-    </tr>
-    <tr>
-      <th rowspan="2" valign="top">1</th>
-      <th>cue</th>
-      <td>0.016440</td>
-      <td>0.000300</td>
-    </tr>
-    <tr>
-      <th>stim</th>
-      <td>-0.021054</td>
-      <td>-0.035735</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <th>cue</th>
-      <td>0.024296</td>
-      <td>0.033220</td>
-    </tr>
-  </tbody>
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th></th>
+<th>region</th>
+<th>frontal</th>
+<th>parietal</th>
+</tr>
+<tr>
+<th>subject</th>
+<th>timepoint</th>
+<th>event</th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th rowspan="5" valign="top">s0</th>
+<th rowspan="2" valign="top">0</th>
+<th>cue</th>
+<td>0.007766</td>
+<td>-0.006899</td>
+</tr>
+<tr>
+<th>stim</th>
+<td>-0.021452</td>
+<td>-0.039327</td>
+</tr>
+<tr>
+<th rowspan="2" valign="top">1</th>
+<th>cue</th>
+<td>0.016440</td>
+<td>0.000300</td>
+</tr>
+<tr>
+<th>stim</th>
+<td>-0.021054</td>
+<td>-0.035735</td>
+</tr>
+<tr>
+<th>2</th>
+<th>cue</th>
+<td>0.024296</td>
+<td>0.033220</td>
+</tr>
+</tbody>
 </table>
 </div>
 </div>
-<br />
-<br /><p>Now this is in the format we want. However, in order to access the index
-as columns <code class="docutils literal notranslate"><span class="pre">df_fmri[&quot;subject&quot;]</span></code> we need to reset the index.</p>
+<br/>
+<br/><p>Now this is in the format we want. However, in order to access the index
+as columns <code class="docutils literal notranslate"><span class="pre">df_fmri["subject"]</span></code> we need to reset the index.</p>
 <p>Check the subtle but important difference:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_fmri</span></a> <span class="o">=</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.reset_index.html#pandas.DataFrame.reset_index" title="pandas.DataFrame.reset_index" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method"><span class="n">df_fmri</span><span class="o">.</span><span class="n">reset_index</span></a><span class="p">()</span>
-<a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.head.html#pandas.DataFrame.head" title="pandas.DataFrame.head" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method"><span class="n">df_fmri</span><span class="o">.</span><span class="n">head</span></a><span class="p">()</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_fmri</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.reset_index.html#pandas.DataFrame.reset_index" title="pandas.DataFrame.reset_index"><span class="n">df_fmri</span><span class="o">.</span><span class="n">reset_index</span></a><span class="p">()</span>
+<a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.head.html#pandas.DataFrame.head" title="pandas.DataFrame.head"><span class="n">df_fmri</span><span class="o">.</span><span class="n">head</span></a><span class="p">()</span>
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
 <div>
-<style scoped>
+<style scoped="">
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -639,80 +662,80 @@ as columns <code class="docutils literal notranslate"><span class="pre">df_fmri[
     }
 </style>
 <table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th>region</th>
-      <th>subject</th>
-      <th>timepoint</th>
-      <th>event</th>
-      <th>frontal</th>
-      <th>parietal</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>s0</td>
-      <td>0</td>
-      <td>cue</td>
-      <td>0.007766</td>
-      <td>-0.006899</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>s0</td>
-      <td>0</td>
-      <td>stim</td>
-      <td>-0.021452</td>
-      <td>-0.039327</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>s0</td>
-      <td>1</td>
-      <td>cue</td>
-      <td>0.016440</td>
-      <td>0.000300</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>s0</td>
-      <td>1</td>
-      <td>stim</td>
-      <td>-0.021054</td>
-      <td>-0.035735</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>s0</td>
-      <td>2</td>
-      <td>cue</td>
-      <td>0.024296</td>
-      <td>0.033220</td>
-    </tr>
-  </tbody>
+<thead>
+<tr style="text-align: right;">
+<th>region</th>
+<th>subject</th>
+<th>timepoint</th>
+<th>event</th>
+<th>frontal</th>
+<th>parietal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>0</th>
+<td>s0</td>
+<td>0</td>
+<td>cue</td>
+<td>0.007766</td>
+<td>-0.006899</td>
+</tr>
+<tr>
+<th>1</th>
+<td>s0</td>
+<td>0</td>
+<td>stim</td>
+<td>-0.021452</td>
+<td>-0.039327</td>
+</tr>
+<tr>
+<th>2</th>
+<td>s0</td>
+<td>1</td>
+<td>cue</td>
+<td>0.016440</td>
+<td>0.000300</td>
+</tr>
+<tr>
+<th>3</th>
+<td>s0</td>
+<td>1</td>
+<td>stim</td>
+<td>-0.021054</td>
+<td>-0.035735</td>
+</tr>
+<tr>
+<th>4</th>
+<td>s0</td>
+<td>2</td>
+<td>cue</td>
+<td>0.024296</td>
+<td>0.033220</td>
+</tr>
+</tbody>
 </table>
 </div>
 </div>
-<br />
-<br /><section id="merging-or-joining-dataframe">
+<br/>
+<br/><section id="merging-or-joining-dataframe">
 <h3>Merging or joining <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code><a class="headerlink" href="#merging-or-joining-dataframe" title="Link to this heading">#</a></h3>
 <p>So now we have our fMRI data tabulated for <code class="docutils literal notranslate"><span class="pre">julearn</span></code>. However, it might be
 the case that we have some important information in another file. For example,
 the subjects’ age and the place where they were scanned.</p>
 <p>For the purpose of the example, we’ll create the dataframe here.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">metadata</span></a> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;subject&quot;</span><span class="p">:</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;s</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">14</span><span class="p">)],</span>
-    <span class="s2">&quot;age&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mi">23</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="mi">29</span><span class="p">,</span> <span class="mi">43</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">43</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">48</span><span class="p">,</span> <span class="mi">29</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">34</span><span class="p">,</span> <span class="mi">25</span><span class="p">],</span>
-    <span class="s2">&quot;scanner&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">6</span> <span class="o">+</span> <span class="p">[</span><span class="s2">&quot;b&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">8</span><span class="p">,</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict"><span class="n">metadata</span></a> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"subject"</span><span class="p">:</span> <span class="p">[</span><span class="sa">f</span><span class="s2">"s</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">14</span><span class="p">)],</span>
+    <span class="s2">"age"</span><span class="p">:</span> <span class="p">[</span><span class="mi">23</span><span class="p">,</span> <span class="mi">21</span><span class="p">,</span> <span class="mi">31</span><span class="p">,</span> <span class="mi">29</span><span class="p">,</span> <span class="mi">43</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">43</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">48</span><span class="p">,</span> <span class="mi">29</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">34</span><span class="p">,</span> <span class="mi">25</span><span class="p">],</span>
+    <span class="s2">"scanner"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"a"</span><span class="p">]</span> <span class="o">*</span> <span class="mi">6</span> <span class="o">+</span> <span class="p">[</span><span class="s2">"b"</span><span class="p">]</span> <span class="o">*</span> <span class="mi">8</span><span class="p">,</span>
 <span class="p">}</span>
-<a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_meta</span></a> <span class="o">=</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class"><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">metadata</span></a><span class="p">)</span>
-<a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_meta</span></a>
+<a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_meta</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span></a><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict"><span class="n">metadata</span></a><span class="p">)</span>
+<a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_meta</span></a>
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
 <div>
-<style scoped>
+<style scoped="">
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -726,117 +749,117 @@ the subjects’ age and the place where they were scanned.</p>
     }
 </style>
 <table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>subject</th>
-      <th>age</th>
-      <th>scanner</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>s0</td>
-      <td>23</td>
-      <td>a</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>s1</td>
-      <td>21</td>
-      <td>a</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>s2</td>
-      <td>31</td>
-      <td>a</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>s3</td>
-      <td>29</td>
-      <td>a</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>s4</td>
-      <td>43</td>
-      <td>a</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>s5</td>
-      <td>23</td>
-      <td>a</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>s6</td>
-      <td>43</td>
-      <td>b</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>s7</td>
-      <td>28</td>
-      <td>b</td>
-    </tr>
-    <tr>
-      <th>8</th>
-      <td>s8</td>
-      <td>48</td>
-      <td>b</td>
-    </tr>
-    <tr>
-      <th>9</th>
-      <td>s9</td>
-      <td>29</td>
-      <td>b</td>
-    </tr>
-    <tr>
-      <th>10</th>
-      <td>s10</td>
-      <td>35</td>
-      <td>b</td>
-    </tr>
-    <tr>
-      <th>11</th>
-      <td>s11</td>
-      <td>23</td>
-      <td>b</td>
-    </tr>
-    <tr>
-      <th>12</th>
-      <td>s12</td>
-      <td>34</td>
-      <td>b</td>
-    </tr>
-    <tr>
-      <th>13</th>
-      <td>s13</td>
-      <td>25</td>
-      <td>b</td>
-    </tr>
-  </tbody>
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>subject</th>
+<th>age</th>
+<th>scanner</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>0</th>
+<td>s0</td>
+<td>23</td>
+<td>a</td>
+</tr>
+<tr>
+<th>1</th>
+<td>s1</td>
+<td>21</td>
+<td>a</td>
+</tr>
+<tr>
+<th>2</th>
+<td>s2</td>
+<td>31</td>
+<td>a</td>
+</tr>
+<tr>
+<th>3</th>
+<td>s3</td>
+<td>29</td>
+<td>a</td>
+</tr>
+<tr>
+<th>4</th>
+<td>s4</td>
+<td>43</td>
+<td>a</td>
+</tr>
+<tr>
+<th>5</th>
+<td>s5</td>
+<td>23</td>
+<td>a</td>
+</tr>
+<tr>
+<th>6</th>
+<td>s6</td>
+<td>43</td>
+<td>b</td>
+</tr>
+<tr>
+<th>7</th>
+<td>s7</td>
+<td>28</td>
+<td>b</td>
+</tr>
+<tr>
+<th>8</th>
+<td>s8</td>
+<td>48</td>
+<td>b</td>
+</tr>
+<tr>
+<th>9</th>
+<td>s9</td>
+<td>29</td>
+<td>b</td>
+</tr>
+<tr>
+<th>10</th>
+<td>s10</td>
+<td>35</td>
+<td>b</td>
+</tr>
+<tr>
+<th>11</th>
+<td>s11</td>
+<td>23</td>
+<td>b</td>
+</tr>
+<tr>
+<th>12</th>
+<td>s12</td>
+<td>34</td>
+<td>b</td>
+</tr>
+<tr>
+<th>13</th>
+<td>s13</td>
+<td>25</td>
+<td>b</td>
+</tr>
+</tbody>
 </table>
 </div>
 </div>
-<br />
-<br /><p>We will use the <code class="docutils literal notranslate"><span class="pre">join</span></code> method. This method will join the two dataframes,
+<br/>
+<br/><p>We will use the <code class="docutils literal notranslate"><span class="pre">join</span></code> method. This method will join the two dataframes,
 matching elements by the <em>index</em>.</p>
 <p>In this case, the matching element (or index) will be the column <code class="docutils literal notranslate"><span class="pre">subject</span></code>.
 We need to set the index in each dataframe before join.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_fmri</span></a> <span class="o">=</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.set_index.html#pandas.DataFrame.set_index" title="pandas.DataFrame.set_index" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method"><span class="n">df_fmri</span><span class="o">.</span><span class="n">set_index</span></a><span class="p">(</span><span class="s2">&quot;subject&quot;</span><span class="p">)</span>
-<a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_meta</span></a> <span class="o">=</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.set_index.html#pandas.DataFrame.set_index" title="pandas.DataFrame.set_index" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method"><span class="n">df_meta</span><span class="o">.</span><span class="n">set_index</span></a><span class="p">(</span><span class="s2">&quot;subject&quot;</span><span class="p">)</span>
-<a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_fmri</span></a> <span class="o">=</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.join.html#pandas.DataFrame.join" title="pandas.DataFrame.join" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method"><span class="n">df_fmri</span><span class="o">.</span><span class="n">join</span></a><span class="p">(</span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_meta</span></a><span class="p">)</span>
-<a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_fmri</span></a>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_fmri</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.set_index.html#pandas.DataFrame.set_index" title="pandas.DataFrame.set_index"><span class="n">df_fmri</span><span class="o">.</span><span class="n">set_index</span></a><span class="p">(</span><span class="s2">"subject"</span><span class="p">)</span>
+<a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_meta</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.set_index.html#pandas.DataFrame.set_index" title="pandas.DataFrame.set_index"><span class="n">df_meta</span><span class="o">.</span><span class="n">set_index</span></a><span class="p">(</span><span class="s2">"subject"</span><span class="p">)</span>
+<a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_fmri</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.join.html#pandas.DataFrame.join" title="pandas.DataFrame.join"><span class="n">df_fmri</span><span class="o">.</span><span class="n">join</span></a><span class="p">(</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_meta</span></a><span class="p">)</span>
+<a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_fmri</span></a>
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
 <div>
-<style scoped>
+<style scoped="">
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -850,134 +873,134 @@ We need to set the index in each dataframe before join.</p>
     }
 </style>
 <table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>timepoint</th>
-      <th>event</th>
-      <th>frontal</th>
-      <th>parietal</th>
-      <th>age</th>
-      <th>scanner</th>
-    </tr>
-    <tr>
-      <th>subject</th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>s0</th>
-      <td>0</td>
-      <td>cue</td>
-      <td>0.007766</td>
-      <td>-0.006899</td>
-      <td>23</td>
-      <td>a</td>
-    </tr>
-    <tr>
-      <th>s0</th>
-      <td>0</td>
-      <td>stim</td>
-      <td>-0.021452</td>
-      <td>-0.039327</td>
-      <td>23</td>
-      <td>a</td>
-    </tr>
-    <tr>
-      <th>s0</th>
-      <td>1</td>
-      <td>cue</td>
-      <td>0.016440</td>
-      <td>0.000300</td>
-      <td>23</td>
-      <td>a</td>
-    </tr>
-    <tr>
-      <th>s0</th>
-      <td>1</td>
-      <td>stim</td>
-      <td>-0.021054</td>
-      <td>-0.035735</td>
-      <td>23</td>
-      <td>a</td>
-    </tr>
-    <tr>
-      <th>s0</th>
-      <td>2</td>
-      <td>cue</td>
-      <td>0.024296</td>
-      <td>0.033220</td>
-      <td>23</td>
-      <td>a</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th>s9</th>
-      <td>16</td>
-      <td>stim</td>
-      <td>-0.036739</td>
-      <td>-0.131641</td>
-      <td>29</td>
-      <td>b</td>
-    </tr>
-    <tr>
-      <th>s9</th>
-      <td>17</td>
-      <td>cue</td>
-      <td>-0.004900</td>
-      <td>-0.036362</td>
-      <td>29</td>
-      <td>b</td>
-    </tr>
-    <tr>
-      <th>s9</th>
-      <td>17</td>
-      <td>stim</td>
-      <td>-0.030099</td>
-      <td>-0.121574</td>
-      <td>29</td>
-      <td>b</td>
-    </tr>
-    <tr>
-      <th>s9</th>
-      <td>18</td>
-      <td>cue</td>
-      <td>-0.000643</td>
-      <td>-0.051040</td>
-      <td>29</td>
-      <td>b</td>
-    </tr>
-    <tr>
-      <th>s9</th>
-      <td>18</td>
-      <td>stim</td>
-      <td>-0.009959</td>
-      <td>-0.103513</td>
-      <td>29</td>
-      <td>b</td>
-    </tr>
-  </tbody>
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th>timepoint</th>
+<th>event</th>
+<th>frontal</th>
+<th>parietal</th>
+<th>age</th>
+<th>scanner</th>
+</tr>
+<tr>
+<th>subject</th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>s0</th>
+<td>0</td>
+<td>cue</td>
+<td>0.007766</td>
+<td>-0.006899</td>
+<td>23</td>
+<td>a</td>
+</tr>
+<tr>
+<th>s0</th>
+<td>0</td>
+<td>stim</td>
+<td>-0.021452</td>
+<td>-0.039327</td>
+<td>23</td>
+<td>a</td>
+</tr>
+<tr>
+<th>s0</th>
+<td>1</td>
+<td>cue</td>
+<td>0.016440</td>
+<td>0.000300</td>
+<td>23</td>
+<td>a</td>
+</tr>
+<tr>
+<th>s0</th>
+<td>1</td>
+<td>stim</td>
+<td>-0.021054</td>
+<td>-0.035735</td>
+<td>23</td>
+<td>a</td>
+</tr>
+<tr>
+<th>s0</th>
+<td>2</td>
+<td>cue</td>
+<td>0.024296</td>
+<td>0.033220</td>
+<td>23</td>
+<td>a</td>
+</tr>
+<tr>
+<th>...</th>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr>
+<th>s9</th>
+<td>16</td>
+<td>stim</td>
+<td>-0.036739</td>
+<td>-0.131641</td>
+<td>29</td>
+<td>b</td>
+</tr>
+<tr>
+<th>s9</th>
+<td>17</td>
+<td>cue</td>
+<td>-0.004900</td>
+<td>-0.036362</td>
+<td>29</td>
+<td>b</td>
+</tr>
+<tr>
+<th>s9</th>
+<td>17</td>
+<td>stim</td>
+<td>-0.030099</td>
+<td>-0.121574</td>
+<td>29</td>
+<td>b</td>
+</tr>
+<tr>
+<th>s9</th>
+<td>18</td>
+<td>cue</td>
+<td>-0.000643</td>
+<td>-0.051040</td>
+<td>29</td>
+<td>b</td>
+</tr>
+<tr>
+<th>s9</th>
+<td>18</td>
+<td>stim</td>
+<td>-0.009959</td>
+<td>-0.103513</td>
+<td>29</td>
+<td>b</td>
+</tr>
+</tbody>
 </table>
 <p>532 rows × 6 columns</p>
 </div>
 </div>
-<br />
-<br /><p>Finally, let’s reset the index and have it ready for <code class="docutils literal notranslate"><span class="pre">julearn</span></code>.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_fmri</span></a> <span class="o">=</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.reset_index.html#pandas.DataFrame.reset_index" title="pandas.DataFrame.reset_index" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method"><span class="n">df_fmri</span><span class="o">.</span><span class="n">reset_index</span></a><span class="p">()</span>
+<br/>
+<br/><p>Finally, let’s reset the index and have it ready for <code class="docutils literal notranslate"><span class="pre">julearn</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_fmri</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.reset_index.html#pandas.DataFrame.reset_index" title="pandas.DataFrame.reset_index"><span class="n">df_fmri</span><span class="o">.</span><span class="n">reset_index</span></a><span class="p">()</span>
 </pre></div>
 </div>
 <p>Now we can use, for example, <em>age</em> and <em>scanner</em> as confounds.</p>
@@ -988,17 +1011,17 @@ as features the frontal and parietal value during each event. For this
 purpose, we need to convert the event values into columns. There are two
 events: <em>cue</em> and <em>stim</em>. So this will result in 4 columns.</p>
 <p>We will still use the pivot, but in this case, we will have two values:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_fmri</span></a> <span class="o">=</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.pivot.html#pandas.DataFrame.pivot" title="pandas.DataFrame.pivot" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method"><span class="n">df_fmri</span><span class="o">.</span><span class="n">pivot</span></a><span class="p">(</span>
-    <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;subject&quot;</span><span class="p">,</span> <span class="s2">&quot;timepoint&quot;</span><span class="p">,</span> <span class="s2">&quot;age&quot;</span><span class="p">,</span> <span class="s2">&quot;scanner&quot;</span><span class="p">],</span>
-    <span class="n">columns</span><span class="o">=</span><span class="s2">&quot;event&quot;</span><span class="p">,</span>
-    <span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;frontal&quot;</span><span class="p">,</span> <span class="s2">&quot;parietal&quot;</span><span class="p">],</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_fmri</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.pivot.html#pandas.DataFrame.pivot" title="pandas.DataFrame.pivot"><span class="n">df_fmri</span><span class="o">.</span><span class="n">pivot</span></a><span class="p">(</span>
+    <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">"subject"</span><span class="p">,</span> <span class="s2">"timepoint"</span><span class="p">,</span> <span class="s2">"age"</span><span class="p">,</span> <span class="s2">"scanner"</span><span class="p">],</span>
+    <span class="n">columns</span><span class="o">=</span><span class="s2">"event"</span><span class="p">,</span>
+    <span class="n">values</span><span class="o">=</span><span class="p">[</span><span class="s2">"frontal"</span><span class="p">,</span> <span class="s2">"parietal"</span><span class="p">],</span>
 <span class="p">)</span>
-<a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_fmri</span></a>
+<a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_fmri</span></a>
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
 <div>
-<style scoped>
+<style scoped="">
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -1016,166 +1039,166 @@ events: <em>cue</em> and <em>stim</em>. So this will result in 4 columns.</p>
     }
 </style>
 <table border="1" class="dataframe">
-  <thead>
-    <tr>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th colspan="2" halign="left">frontal</th>
-      <th colspan="2" halign="left">parietal</th>
-    </tr>
-    <tr>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th>event</th>
-      <th>cue</th>
-      <th>stim</th>
-      <th>cue</th>
-      <th>stim</th>
-    </tr>
-    <tr>
-      <th>subject</th>
-      <th>timepoint</th>
-      <th>age</th>
-      <th>scanner</th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th rowspan="5" valign="top">s0</th>
-      <th>0</th>
-      <th>23</th>
-      <th>a</th>
-      <td>0.007766</td>
-      <td>-0.021452</td>
-      <td>-0.006899</td>
-      <td>-0.039327</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <th>23</th>
-      <th>a</th>
-      <td>0.016440</td>
-      <td>-0.021054</td>
-      <td>0.000300</td>
-      <td>-0.035735</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <th>23</th>
-      <th>a</th>
-      <td>0.024296</td>
-      <td>-0.009038</td>
-      <td>0.033220</td>
-      <td>0.009642</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <th>23</th>
-      <th>a</th>
-      <td>0.047859</td>
-      <td>0.026727</td>
-      <td>0.085040</td>
-      <td>0.086399</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <th>23</th>
-      <th>a</th>
-      <td>0.069775</td>
-      <td>0.070558</td>
-      <td>0.115321</td>
-      <td>0.154058</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <th>...</th>
-      <th>...</th>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th rowspan="5" valign="top">s9</th>
-      <th>14</th>
-      <th>29</th>
-      <th>b</th>
-      <td>0.010535</td>
-      <td>-0.061817</td>
-      <td>-0.034386</td>
-      <td>-0.130267</td>
-    </tr>
-    <tr>
-      <th>15</th>
-      <th>29</th>
-      <th>b</th>
-      <td>0.002170</td>
-      <td>-0.048007</td>
-      <td>-0.038257</td>
-      <td>-0.134828</td>
-    </tr>
-    <tr>
-      <th>16</th>
-      <th>29</th>
-      <th>b</th>
-      <td>-0.004290</td>
-      <td>-0.036739</td>
-      <td>-0.035395</td>
-      <td>-0.131641</td>
-    </tr>
-    <tr>
-      <th>17</th>
-      <th>29</th>
-      <th>b</th>
-      <td>-0.004900</td>
-      <td>-0.030099</td>
-      <td>-0.036362</td>
-      <td>-0.121574</td>
-    </tr>
-    <tr>
-      <th>18</th>
-      <th>29</th>
-      <th>b</th>
-      <td>-0.000643</td>
-      <td>-0.009959</td>
-      <td>-0.051040</td>
-      <td>-0.103513</td>
-    </tr>
-  </tbody>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th colspan="2" halign="left">frontal</th>
+<th colspan="2" halign="left">parietal</th>
+</tr>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th>event</th>
+<th>cue</th>
+<th>stim</th>
+<th>cue</th>
+<th>stim</th>
+</tr>
+<tr>
+<th>subject</th>
+<th>timepoint</th>
+<th>age</th>
+<th>scanner</th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th rowspan="5" valign="top">s0</th>
+<th>0</th>
+<th>23</th>
+<th>a</th>
+<td>0.007766</td>
+<td>-0.021452</td>
+<td>-0.006899</td>
+<td>-0.039327</td>
+</tr>
+<tr>
+<th>1</th>
+<th>23</th>
+<th>a</th>
+<td>0.016440</td>
+<td>-0.021054</td>
+<td>0.000300</td>
+<td>-0.035735</td>
+</tr>
+<tr>
+<th>2</th>
+<th>23</th>
+<th>a</th>
+<td>0.024296</td>
+<td>-0.009038</td>
+<td>0.033220</td>
+<td>0.009642</td>
+</tr>
+<tr>
+<th>3</th>
+<th>23</th>
+<th>a</th>
+<td>0.047859</td>
+<td>0.026727</td>
+<td>0.085040</td>
+<td>0.086399</td>
+</tr>
+<tr>
+<th>4</th>
+<th>23</th>
+<th>a</th>
+<td>0.069775</td>
+<td>0.070558</td>
+<td>0.115321</td>
+<td>0.154058</td>
+</tr>
+<tr>
+<th>...</th>
+<th>...</th>
+<th>...</th>
+<th>...</th>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr>
+<th rowspan="5" valign="top">s9</th>
+<th>14</th>
+<th>29</th>
+<th>b</th>
+<td>0.010535</td>
+<td>-0.061817</td>
+<td>-0.034386</td>
+<td>-0.130267</td>
+</tr>
+<tr>
+<th>15</th>
+<th>29</th>
+<th>b</th>
+<td>0.002170</td>
+<td>-0.048007</td>
+<td>-0.038257</td>
+<td>-0.134828</td>
+</tr>
+<tr>
+<th>16</th>
+<th>29</th>
+<th>b</th>
+<td>-0.004290</td>
+<td>-0.036739</td>
+<td>-0.035395</td>
+<td>-0.131641</td>
+</tr>
+<tr>
+<th>17</th>
+<th>29</th>
+<th>b</th>
+<td>-0.004900</td>
+<td>-0.030099</td>
+<td>-0.036362</td>
+<td>-0.121574</td>
+</tr>
+<tr>
+<th>18</th>
+<th>29</th>
+<th>b</th>
+<td>-0.000643</td>
+<td>-0.009959</td>
+<td>-0.051040</td>
+<td>-0.103513</td>
+</tr>
+</tbody>
 </table>
 <p>266 rows × 4 columns</p>
 </div>
 </div>
-<br />
-<br /><p>Since the column names are combinations of the values in the <em>event</em> column
+<br/>
+<br/><p>Since the column names are combinations of the values in the <em>event</em> column
 and the previous <em>frontal</em> and <em>parietal</em> columns, it is now a multi-level
 column name.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.Index.html#pandas.Index" title="pandas.core.indexes.base.Index" class="sphx-glr-backref-module-pandas-core-indexes-base sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_fmri</span><span class="o">.</span><span class="n">columns</span></a>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.Index.html#pandas.Index" title="pandas.Index"><span class="n">df_fmri</span><span class="o">.</span><span class="n">columns</span></a>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>MultiIndex([( &#39;frontal&#39;,  &#39;cue&#39;),
-            ( &#39;frontal&#39;, &#39;stim&#39;),
-            (&#39;parietal&#39;,  &#39;cue&#39;),
-            (&#39;parietal&#39;, &#39;stim&#39;)],
-           names=[None, &#39;event&#39;])
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>MultiIndex([( 'frontal',  'cue'),
+            ( 'frontal', 'stim'),
+            ('parietal',  'cue'),
+            ('parietal', 'stim')],
+           names=[None, 'event'])
 </pre></div>
 </div>
 <p>The following trick will join the different levels using an underscore (<em>_</em>)</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.Index.html#pandas.Index" title="pandas.core.indexes.base.Index" class="sphx-glr-backref-module-pandas-core-indexes-base sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_fmri</span><span class="o">.</span><span class="n">columns</span></a> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;_&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.Index.html#pandas.Index" title="pandas.core.indexes.base.Index" class="sphx-glr-backref-module-pandas-core-indexes-base sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_fmri</span><span class="o">.</span><span class="n">columns</span></a><span class="p">]</span>
-<a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_fmri</span></a>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.Index.html#pandas.Index" title="pandas.Index"><span class="n">df_fmri</span><span class="o">.</span><span class="n">columns</span></a> <span class="o">=</span> <span class="p">[</span><span class="s2">"_"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.Index.html#pandas.Index" title="pandas.Index"><span class="n">df_fmri</span><span class="o">.</span><span class="n">columns</span></a><span class="p">]</span>
+<a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_fmri</span></a>
 </pre></div>
 </div>
 <div class="output_subarea output_html rendered_html output_result">
 <div>
-<style scoped>
+<style scoped="">
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
     }
@@ -1189,142 +1212,142 @@ column name.</p>
     }
 </style>
 <table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th>frontal_cue</th>
-      <th>frontal_stim</th>
-      <th>parietal_cue</th>
-      <th>parietal_stim</th>
-    </tr>
-    <tr>
-      <th>subject</th>
-      <th>timepoint</th>
-      <th>age</th>
-      <th>scanner</th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th rowspan="5" valign="top">s0</th>
-      <th>0</th>
-      <th>23</th>
-      <th>a</th>
-      <td>0.007766</td>
-      <td>-0.021452</td>
-      <td>-0.006899</td>
-      <td>-0.039327</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <th>23</th>
-      <th>a</th>
-      <td>0.016440</td>
-      <td>-0.021054</td>
-      <td>0.000300</td>
-      <td>-0.035735</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <th>23</th>
-      <th>a</th>
-      <td>0.024296</td>
-      <td>-0.009038</td>
-      <td>0.033220</td>
-      <td>0.009642</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <th>23</th>
-      <th>a</th>
-      <td>0.047859</td>
-      <td>0.026727</td>
-      <td>0.085040</td>
-      <td>0.086399</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <th>23</th>
-      <th>a</th>
-      <td>0.069775</td>
-      <td>0.070558</td>
-      <td>0.115321</td>
-      <td>0.154058</td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <th>...</th>
-      <th>...</th>
-      <th>...</th>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-      <td>...</td>
-    </tr>
-    <tr>
-      <th rowspan="5" valign="top">s9</th>
-      <th>14</th>
-      <th>29</th>
-      <th>b</th>
-      <td>0.010535</td>
-      <td>-0.061817</td>
-      <td>-0.034386</td>
-      <td>-0.130267</td>
-    </tr>
-    <tr>
-      <th>15</th>
-      <th>29</th>
-      <th>b</th>
-      <td>0.002170</td>
-      <td>-0.048007</td>
-      <td>-0.038257</td>
-      <td>-0.134828</td>
-    </tr>
-    <tr>
-      <th>16</th>
-      <th>29</th>
-      <th>b</th>
-      <td>-0.004290</td>
-      <td>-0.036739</td>
-      <td>-0.035395</td>
-      <td>-0.131641</td>
-    </tr>
-    <tr>
-      <th>17</th>
-      <th>29</th>
-      <th>b</th>
-      <td>-0.004900</td>
-      <td>-0.030099</td>
-      <td>-0.036362</td>
-      <td>-0.121574</td>
-    </tr>
-    <tr>
-      <th>18</th>
-      <th>29</th>
-      <th>b</th>
-      <td>-0.000643</td>
-      <td>-0.009959</td>
-      <td>-0.051040</td>
-      <td>-0.103513</td>
-    </tr>
-  </tbody>
+<thead>
+<tr style="text-align: right;">
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th>frontal_cue</th>
+<th>frontal_stim</th>
+<th>parietal_cue</th>
+<th>parietal_stim</th>
+</tr>
+<tr>
+<th>subject</th>
+<th>timepoint</th>
+<th>age</th>
+<th>scanner</th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th rowspan="5" valign="top">s0</th>
+<th>0</th>
+<th>23</th>
+<th>a</th>
+<td>0.007766</td>
+<td>-0.021452</td>
+<td>-0.006899</td>
+<td>-0.039327</td>
+</tr>
+<tr>
+<th>1</th>
+<th>23</th>
+<th>a</th>
+<td>0.016440</td>
+<td>-0.021054</td>
+<td>0.000300</td>
+<td>-0.035735</td>
+</tr>
+<tr>
+<th>2</th>
+<th>23</th>
+<th>a</th>
+<td>0.024296</td>
+<td>-0.009038</td>
+<td>0.033220</td>
+<td>0.009642</td>
+</tr>
+<tr>
+<th>3</th>
+<th>23</th>
+<th>a</th>
+<td>0.047859</td>
+<td>0.026727</td>
+<td>0.085040</td>
+<td>0.086399</td>
+</tr>
+<tr>
+<th>4</th>
+<th>23</th>
+<th>a</th>
+<td>0.069775</td>
+<td>0.070558</td>
+<td>0.115321</td>
+<td>0.154058</td>
+</tr>
+<tr>
+<th>...</th>
+<th>...</th>
+<th>...</th>
+<th>...</th>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr>
+<th rowspan="5" valign="top">s9</th>
+<th>14</th>
+<th>29</th>
+<th>b</th>
+<td>0.010535</td>
+<td>-0.061817</td>
+<td>-0.034386</td>
+<td>-0.130267</td>
+</tr>
+<tr>
+<th>15</th>
+<th>29</th>
+<th>b</th>
+<td>0.002170</td>
+<td>-0.048007</td>
+<td>-0.038257</td>
+<td>-0.134828</td>
+</tr>
+<tr>
+<th>16</th>
+<th>29</th>
+<th>b</th>
+<td>-0.004290</td>
+<td>-0.036739</td>
+<td>-0.035395</td>
+<td>-0.131641</td>
+</tr>
+<tr>
+<th>17</th>
+<th>29</th>
+<th>b</th>
+<td>-0.004900</td>
+<td>-0.030099</td>
+<td>-0.036362</td>
+<td>-0.121574</td>
+</tr>
+<tr>
+<th>18</th>
+<th>29</th>
+<th>b</th>
+<td>-0.000643</td>
+<td>-0.009959</td>
+<td>-0.051040</td>
+<td>-0.103513</td>
+</tr>
+</tbody>
 </table>
 <p>266 rows × 4 columns</p>
 </div>
 </div>
-<br />
-<br /><p>We have finally the information we want. We can now reset the index.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">df_fmri</span></a> <span class="o">=</span> <a href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.reset_index.html#pandas.DataFrame.reset_index" title="pandas.DataFrame.reset_index" class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method"><span class="n">df_fmri</span><span class="o">.</span><span class="n">reset_index</span></a><span class="p">()</span>
+<br/>
+<br/><p>We have finally the information we want. We can now reset the index.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_fmri</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.reset_index.html#pandas.DataFrame.reset_index" title="pandas.DataFrame.reset_index"><span class="n">df_fmri</span><span class="o">.</span><span class="n">reset_index</span></a><span class="p">()</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.862 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 4.972 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-00-starting-run-combine-pandas-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/66cade0ddde300a7ce7f71599fd4d9a9/run_combine_pandas.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">run_combine_pandas.py</span></code></a></p>
@@ -1337,62 +1360,58 @@ column name.</p>
 </section>
 </section>
 </section>
-
-        </article>
-      </div>
-      <footer>
-        
-        <div class="related-pages">
-          <a class="next-page" href="run_simple_binary_classification.html">
-              <div class="page-info">
-                <div class="context">
-                  <span>Next</span>
-                </div>
-                <div class="title">Simple Binary Classification</div>
-              </div>
-              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
-            </a>
-          <a class="prev-page" href="index.html">
-              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
-              <div class="page-info">
-                <div class="context">
-                  <span>Previous</span>
-                </div>
-                
-                <div class="title"><span class="section-number">8.1. </span>Starting with <code class="docutils literal notranslate"><span class="pre">julearn</span></code></div>
-                
-              </div>
-            </a>
-        </div>
-        <div class="bottom-of-page">
-          <div class="left-details">
-            <div class="copyright">
-                Copyright &#169; 2023, Authors of julearn
+</article>
+</div>
+<footer>
+<div class="related-pages">
+<a class="next-page" href="run_simple_binary_classification.html">
+<div class="page-info">
+<div class="context">
+<span>Next</span>
+</div>
+<div class="title">Simple Binary Classification</div>
+</div>
+<svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+</a>
+<a class="prev-page" href="index.html">
+<svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+<div class="page-info">
+<div class="context">
+<span>Previous</span>
+</div>
+<div class="title"><span class="section-number">8.1. </span>Starting with <code class="docutils literal notranslate"><span class="pre">julearn</span></code></div>
+</div>
+</a>
+</div>
+<div class="bottom-of-page">
+<div class="left-details">
+<div class="copyright">
+                Copyright © 2023, Authors of julearn
             </div>
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             
             <a href="https://github.com/pradyunsg/furo">Furo</a>
-            
-          </div>
-          <div class="right-details">
-            
-          </div>
-        </div>
-        
-      </footer>
-    </div>
-    <aside class="toc-drawer">
-      
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
+</div>
+<div class="right-details">
+</div>
+</div>
+</footer>
+</div>
+<aside class="toc-drawer">
+<div class="version-banner version-banner--old" role="note">
+<strong>⚠ Old version</strong> — You are viewing an old version of julearn
+  (v0.3.4). Switch to the
+  <a href="../../../v0.3.5/index.html">latest stable release (v0.3.5)</a>.
+</div>
+<div class="toc-sticky toc-scroll">
+<div class="toc-title-container">
+<span class="toc-title">
             On this page
           </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
+</div>
+<div class="toc-tree-container">
+<div class="toc-tree">
+<ul>
 <li><a class="reference internal" href="#">Working with <code class="docutils literal notranslate"><span class="pre">pandas</span></code></a><ul>
 <li><a class="reference internal" href="#references">References</a><ul>
 <li><a class="reference internal" href="#merging-or-joining-dataframe">Merging or joining <code class="docutils literal notranslate"><span class="pre">DataFrame</span></code></a></li>
@@ -1401,20 +1420,17 @@ column name.</p>
 </ul>
 </li>
 </ul>
-
-          </div>
-        </div>
-      </div>
-      
-      
-    </aside>
-  </div>
+</div>
+</div>
+</div>
+</aside>
+</div>
 </div><script src="../../_static/documentation_options.js?v=5929fcd5"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
-    <script src="../../_static/scripts/furo.js?v=32e29ea5"></script>
-    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
-    <script src="../../_static/copybutton.js?v=f281be69"></script>
-    <script src="../../_static/js/custom.js?v=9868c0c7"></script>
-    </body>
+<script src="../../_static/doctools.js?v=888ff710"></script>
+<script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+<script src="../../_static/scripts/furo.js?v=32e29ea5"></script>
+<script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+<script src="../../_static/copybutton.js?v=f281be69"></script>
+<script src="../../_static/js/custom.js?v=9868c0c7"></script>
+</body>
 </html>
