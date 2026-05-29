@@ -7,30 +7,61 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
 import datetime
-from functools import partial
-from pathlib import Path
+import os
 import sys
+import types
+from pathlib import Path
+from typing import TypeAliasType
 
 from setuptools_scm import get_version
-
-import types
-from typing import TypeAliasType
 from sphinx_autodoc_typehints import format_annotation
+from sphinx_polyversion.api import load
+from sphinx_polyversion.git import GitRefType
 
-# Check if sphinx-multiversion is installed
-use_multiversion = False
-try:
-    import sphinx_multiversion  # noqa: F401
 
-    use_multiversion = True
-except ImportError:
-    pass
+if os.getenv("POLYVERSION_DATA") is None:
+    # If POLYVERSION_DATA is not set, we are likely building the docs locally.
+    # In this case, we can use setuptools_scm to get the version information.
+    release = get_version(root=Path(__file__).parents[1].resolve())
+else:
+    load(globals())
+    # This adds the following to the global scope
+    # html_context = {
+    #     "revisions": [GitRef('main', ...), GitRef('v6.8.9', ...), ...],
+    #     "current": GitRef('v1.4.6', ...),
+    # }
 
+    # process the loaded version information as you wish
+    html_context = globals().get("html_context", {})
+
+    tag_revisions = [
+        rev
+        for rev in html_context["revisions"]
+        if rev.type_ == GitRefType.TAG and rev.name.startswith("v")
+    ]
+
+    latest = sorted(tag_revisions, key=lambda x: x.name)[
+        -1
+    ]  # latest by version
+
+    if (
+        html_context["currrent"].type_ == GitRefType.BRANCH
+        and html_context["current"].name == "main"
+    ):
+        major, minor, revision = latest.name.split("v")[-1].split(
+            "."
+        )  # get version number from tag name
+        next_dev_version = f"{major}.{minor}.{int(revision) + 1}.dev0"
+        release = next_dev_version
+    else:
+        release = html_context["current"].name
+
+version = release
 
 # -- Path setup --------------------------------------------------------------
 
 PROJECT_ROOT_DIR = Path(__file__).parents[1].resolve()
-get_scm_version = partial(get_version, root=PROJECT_ROOT_DIR)
+# get_scm_version = partial(get_version, root=PROJECT_ROOT_DIR)
 
 # -- Project information -----------------------------------------------------
 
@@ -44,11 +75,6 @@ project = github_repo_name
 author = f"{project} Contributors"
 copyright = f"{datetime.date.today().year}, {author}"
 
-# The version along with dev tag
-release = get_scm_version(
-    version_scheme="guess-next-dev",
-    local_scheme="no-local-version",
-)
 
 # -- General configuration ---------------------------------------------------
 
@@ -71,12 +97,6 @@ extensions = [
     "bokeh.sphinxext.bokeh_plot",  # bokeh plot support
     "sphinx_autodoc_typehints",  # automatically document type hints
 ]
-
-if use_multiversion:
-    print("using sphinx-multiversion for documentation")
-    extensions.append("sphinx_multiversion")
-else:
-    print("sphinx-multiversion not found, building documentation without it")
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = [
@@ -111,9 +131,20 @@ nitpick_ignore_regex = [
     ("py:class", "sklearn.metrics._scorer.*"),
 ]
 
-to_ignore = ["array-like", "shape", "optional", "or", "the", "options",
-             "n_samples", "default=.*", "n_features", "n_outputs", "True",
-             "False"]
+to_ignore = [
+    "array-like",
+    "shape",
+    "optional",
+    "or",
+    "the",
+    "options",
+    "n_samples",
+    "default=.*",
+    "n_features",
+    "n_outputs",
+    "True",
+    "False",
+]
 
 for i in to_ignore:
     nitpick_ignore_regex.append(("py:class", i))
@@ -134,6 +165,7 @@ html_logo = "images/julearn_logo_it.png"
 # or fully qualified paths (eg. https://...)
 html_css_files = [
     "css/custom.css",
+    "css/version_selector.css",
 ]
 
 html_js_files = [
@@ -168,15 +200,15 @@ autodoc_type_aliases = {
     "ColumnTypes": "julearn.base.column_types.ColumnTypes",
     "Pipeline": "sklearn.pipeline.Pipeline",
     "RandomState": "numpy.random.RandomState",
-#     "ColumnTypesLike": "julearn.utils.typing.ColumnTypesLike",
-#     "DataLike": "julearn.utils.typing.DataLike",
-#     "ScorerLike": "julearn.utils.typing.ScorerLike",
-#     "EstimatorLike": "julearn.utils.typing.EstimatorLike",
-#     "ModelLike": "julearn.utils.typing.ModelLike",
-#     "TransformerLike": "julearn.utils.typing.TransformerLike",
-#     "JuModelLike": "julearn.utils.typing.JuModelLike",
-#     "JuTransformerLike": "julearn.utils.typing.JuTransformerLike",
-#     "CVLike": "julearn.utils.typing.CVLike",
+    #     "ColumnTypesLike": "julearn.utils.typing.ColumnTypesLike",
+    #     "DataLike": "julearn.utils.typing.DataLike",
+    #     "ScorerLike": "julearn.utils.typing.ScorerLike",
+    #     "EstimatorLike": "julearn.utils.typing.EstimatorLike",
+    #     "ModelLike": "julearn.utils.typing.ModelLike",
+    #     "TransformerLike": "julearn.utils.typing.TransformerLike",
+    #     "JuModelLike": "julearn.utils.typing.JuModelLike",
+    #     "JuTransformerLike": "julearn.utils.typing.JuTransformerLike",
+    #     "CVLike": "julearn.utils.typing.CVLike",
 }
 
 
@@ -288,12 +320,6 @@ sphinx_gallery_conf = {
     "download_all_examples": False,
 }
 
-# -- sphinx-multiversion configuration ---------------------------------------
-
-smv_rebuild_tags = False
-smv_tag_whitelist = r"^v\d+\.\d+.\d+$"
-smv_branch_whitelist = r"main"
-smv_released_pattern = r"^tags/v.*$"
 
 # -- sphinxcontrib-towncrier configuration -----------------------------------
 
@@ -301,7 +327,7 @@ towncrier_draft_autoversion_mode = "draft"
 towncrier_draft_include_empty = True
 towncrier_draft_working_directory = PROJECT_ROOT_DIR
 
-# -- sphinx_autodoc_typehints configuration ---------------------------------------
+# -- sphinx_autodoc_typehints configuration ----------------------------------
 always_use_bars_union = True
 simplify_optional_unions = True
 typehints_defaults = "comma"
@@ -315,9 +341,9 @@ typehints_document_rtype_none = False
 # instead of as a separate block
 typehints_use_rtype = False
 
+
 def _get_canonical_type_alias_name(annotation: TypeAliasType) -> str:
-    """
-    Get canonical public qualified name for a TypeAliasType.
+    """Get canonical public qualified name for a TypeAliasType.
 
     For types defined in private modules (e.g. ``numpy._typing.ArrayLike``),
     search ``sys.modules`` for a public re-export
