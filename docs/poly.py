@@ -362,7 +362,7 @@ SetuptoolsScmDriver(
     # static_dir=static_dir,
     data_factory=data,
     root_data_factory=root_data,
-).run()
+).run(sequential=SEQUENTIAL)
 
 if NO_PATCH:
     logger.info("NO_PATCH is set, skipping HTML patching.")
