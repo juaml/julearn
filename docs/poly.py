@@ -341,7 +341,6 @@ def root_data(driver):
 
     """
     revisions = driver.builds
-    _, tags = refs_by_type(revisions)
     latest = latest_tag
     return {"revisions": revisions, "latest": latest}
 
