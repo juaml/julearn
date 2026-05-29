@@ -45,7 +45,7 @@ else:
     ]  # latest by version
 
     if (
-        html_context["currrent"].type_ == GitRefType.BRANCH
+        html_context["current"].type_ == GitRefType.BRANCH
         and html_context["current"].name == "main"
     ):
         major, minor, revision = latest.name.split("v")[-1].split(

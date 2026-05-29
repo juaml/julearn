@@ -28,7 +28,7 @@ BRANCH_REGEX = r"main"
 TAG_REGEX = r"v\d+\.\d+\.\d+"
 
 #: Output dir relative to project root
-#: !!! This name has to be choosen !!!
+#: !!! This name has to be chosen !!!
 OUTPUT_DIR = "docs/_build"
 
 #: Source directory relative to project root
