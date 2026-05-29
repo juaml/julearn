@@ -1,0 +1,126 @@
+/* Furo-native version selector styles.
+   Uses furo CSS variables for full light/dark mode compatibility. */
+
+/* ── Sidebar version selector ────────────────────────────────────────────── */
+
+#version-selector {
+    border-top: 1px solid var(--color-sidebar-search-border);
+    padding-top: calc(var(--sidebar-item-spacing-vertical) / 2);
+}
+
+/* Remove default browser <details> marker */
+.version-details > summary {
+    list-style: none;
+}
+.version-details > summary::-webkit-details-marker {
+    display: none;
+}
+
+/* Summary row: looks like a furo sidebar caption */
+.version-summary {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.4em;
+    padding: var(--sidebar-item-spacing-vertical)
+        var(--sidebar-item-spacing-horizontal);
+    font-size: var(--font-size--small--2);
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--color-sidebar-caption-text);
+    user-select: none;
+}
+
+.version-summary:hover {
+    background-color: var(--color-sidebar-item-background--hover);
+}
+
+/* Chevron: points right when closed, down when open */
+.version-summary::after {
+    content: "▶";
+    font-size: 0.6em;
+    margin-left: auto;
+    transition: transform 0.15s ease;
+    color: var(--color-sidebar-caption-text);
+}
+
+.version-details[open] > .version-summary::after {
+    transform: rotate(90deg);
+}
+
+/* Colored status dot */
+.version-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+.version-status-dot--latest { background-color: #28a745; }
+.version-status-dot--old    { background-color: #dc3545; }
+.version-status-dot--dev    { background-color: #e67e00; }
+
+/* Version list */
+.version-details ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.version-details .toctree-l1 > a {
+    display: block;
+    padding: var(--sidebar-item-spacing-vertical)
+        var(--sidebar-item-spacing-horizontal);
+    color: var(--color-sidebar-link-text);
+    font-size: var(--sidebar-item-font-size);
+    text-decoration: none;
+}
+
+.version-details .toctree-l1 > a:hover {
+    background-color: var(--color-sidebar-item-background--hover);
+    color: var(--color-sidebar-link-text--top-level);
+}
+
+.version-details .toctree-l1.current > a {
+    background-color: var(--color-sidebar-item-background--current, transparent);
+    color: var(--color-sidebar-link-text--top-level);
+    font-weight: bold;
+}
+
+.version-details .toctree-l1 > a em {
+    font-size: 0.85em;
+    opacity: 0.75;
+}
+
+/* ── Version banner (toc-drawer / right sidebar) ─────────────────────────── */
+
+.version-banner {
+    padding: 0.6rem 0.75rem;
+    margin: 0.75rem 0.5rem 0;
+    border-radius: 0.2rem;
+    border-left: 3px solid;
+    font-size: var(--font-size--small--2);
+    line-height: 1.4;
+}
+
+.version-banner a {
+    font-weight: bold;
+    color: inherit;
+}
+
+.version-banner--latest {
+    background-color: rgba(40, 167, 69, 0.12);
+    border-left-color: #28a745;
+}
+
+.version-banner--old {
+    background-color: rgba(220, 53, 69, 0.12);
+    border-left-color: #dc3545;
+}
+
+.version-banner--dev {
+    background-color: rgba(230, 126, 0, 0.12);
+    border-left-color: #e67e00;
+}
