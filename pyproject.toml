@@ -48,25 +48,23 @@ Homepage = "https://juaml.github.io/julearn"
 Source = "https://github.com/juaml/julearn"
 
 [project.optional-dependencies]
+
 dev = [
     "tox",
     "pre-commit",
-    "ruff",
-    "towncrier",
+    "ruff>=0.15.14,<0.16.0",
+    "towncrier>=25.8.0",
 ]
-docs = [
+sphinx = [
     "furo>=2025.7.19",
     "numpydoc>=1.9.0",
-    "optuna>=4.0.0,<5.0.0",
-    "optuna-integration>=4.0.0,<5.0.0",
-    "scikit-optimize>=0.10.2,<0.11.0",
     "seaborn>=0.13.0,<0.14.0",
     "setuptools-scm>=10.0.0,<11.0.0",
     "sphinx>=8.2.3,<10.0.0",
     "sphinx-copybutton>=0.5.2",
     "sphinx-gallery>=0.21.0",
-    "sphinx-multiversion>=0.2.4",
     "sphinx-autodoc-typehints>=3.6.1",
+    "sphinx-polyversion>=2.0.0",
     "sphinxcontrib-towncrier>=0.5.0a0",
     "towncrier>=25.8.0",
 ]
@@ -81,6 +79,10 @@ optuna = [
     "optuna>=4.0.0,<5.0.0",
     "optuna_integration>=4.0.0,<5.0.0",
 ]
+
+# Everything we need for docs is here
+docs = ["julearn[sphinx,viz,optuna,skopt]"]
+
 # Add all optional functional dependencies (skip deslib until its fixed)
 # This does not include dev/docs building dependencies
 all = ["julearn[viz,skopt,optuna]"]
@@ -109,7 +111,6 @@ builtin = "clear,rare,informal,names,usage,code"
 line-length = 79
 extend-exclude = [
     "__init__.py",
-    "docs",
     "examples",
     "external",
 ]
@@ -292,7 +293,7 @@ docs = [
     "sphinx-autodoc-typehints>=3.6.1",
     "sphinx-copybutton>=0.5.2",
     "sphinx-gallery>=0.21.0",
-    "sphinx-multiversion>=0.2.4",
+    "sphinx-polyversion>=2.0.0",
     "sphinxcontrib-towncrier>=0.5.0a0",
     "towncrier>=25.8.0",
 ]

@@ -1,0 +1,35 @@
+{% if current_version %}
+  {% if current_version.name == latest.name %}
+    {% set status = "latest" %}
+  {% else %}
+    {% set status = "old" %}
+  {% endif %}
+{% else %}
+  {% set status = "dev" %}
+{% endif %}
+<div id="version-selector" class="sidebar-tree version-selector">
+  <details class="version-details"{% if status != "latest" %} open{% endif %}>
+    <summary class="version-summary">
+      <span class="version-status-dot version-status-dot--{{ status }}"></span>
+      <span class="caption-text">
+        {%- if current_version %}{{ current_version.name }}{% else %}main (dev){% endif -%}
+      </span>
+    </summary>
+    {% if versions %}
+    <ul>
+      {%- for item in versions.tags | sort(attribute='name') | reverse %}
+      <li class="toctree-l1{% if current_version and current_version.name == item.name %} current{% endif %}">
+        <a class="reference external" href="{VERSIONROOT}{{ item.name }}/index.html">
+          {{ item.name }}{% if latest and item.name == latest.name %} <em>(latest)</em>{% endif %}
+        </a>
+      </li>
+      {%- endfor %}
+      {%- if versions.branches %}
+      <li class="toctree-l1{% if not current_version %} current{% endif %}">
+        <a class="reference external" href="{VERSIONROOT}main/index.html">main (dev)</a>
+      </li>
+      {%- endif %}
+    </ul>
+    {% endif %}
+  </details>
+</div>

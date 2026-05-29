@@ -24,15 +24,20 @@ jobs:
         fetch-depth: 0
     - uses: actions/setup-python@v6
       with:
-          python-version: "3.x"
+        python-version-file: "pyproject.toml"
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+
     - name: Install Python dependencies
       run: |
-        python -m pip install --upgrade pip setuptools wheel
-        python -m pip install -e .[docs,viz]
+        uv sync --locked --extra docs
+
     - name: Test build docs
       run: |
-        BUILDDIR=_build/main make -C docs/ local
+        uv run make -C docs/ local
+
     - uses: rossjrw/pr-preview-action@v1
       with:
-        source-dir: docs/_build/main
+        source-dir: docs/_build/dev
       if: github.event_name == 'pull_request'

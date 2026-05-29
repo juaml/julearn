@@ -1,0 +1,24 @@
+{% if current_version %}
+  {% if current_version.name == latest.name %}
+    {% set status = "latest" %}
+  {% else %}
+    {% set status = "old" %}
+  {% endif %}
+{% else %}
+  {% set status = "dev" %}
+{% endif %}
+<div class="version-banner version-banner--{{ status }}" role="note">
+  {%- if status == "latest" %}
+  <strong>✓ Latest release</strong> — You are viewing the documentation for the latest
+  stable release of julearn ({{ current_version.name }}).
+  {%- elif status == "old" %}
+  <strong>⚠ Old version</strong> — You are viewing an old version of julearn
+  ({{ current_version.name }}). Switch to the
+  <a href="{VERSIONROOT}{{ latest.name }}/index.html">latest stable release ({{ latest.name }})</a>.
+  {%- else %}
+  <strong>🚧 Development version</strong> — You are viewing the development (unstable)
+  version of julearn. This may contain unreleased features or breaking changes.
+  For the latest stable release, see
+  <a href="{VERSIONROOT}{{ latest.name }}/index.html">{{ latest.name }}</a>.
+  {%- endif %}
+</div>
