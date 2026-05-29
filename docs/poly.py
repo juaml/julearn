@@ -538,13 +538,11 @@ for built_dir in out_dir.iterdir():
     if built_dir.is_dir():
         if built_dir.name.startswith("v"):
             logger.info(f"Patching built version directory: {built_dir.name}")
-            current_version = next(
-                [
-                    tag
-                    for tag in built_versions["tags"]
-                    if tag.name == built_dir.name
-                ]
-            )
+            current_version = [  # noqa: RUF015
+                tag
+                for tag in built_versions["tags"]
+                if tag.name == built_dir.name
+            ][0]
             if int(built_dir.name.split(".")[1]) < 3:
                 # Old read_the_docs template
                 version_rtd_html = versions_rtd_template.render(
