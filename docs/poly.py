@@ -18,7 +18,7 @@ from sphinx_polyversion.git import (
 )
 from sphinx_polyversion.pyvenv import Pip
 from sphinx_polyversion.setuptools_scm import SetuptoolsScmDriver
-from sphinx_polyversion.sphinx import SphinxBuilder
+from sphinx_polyversion.sphinx import Placeholder, SphinxBuilder
 
 
 #: Regex matching the branches to build docs for
@@ -69,9 +69,16 @@ out_dir = root / OUTPUT_DIR
 logger.info(f"Docs Source directory: {docs_src}")
 logger.info(f"Output directory: {out_dir}")
 
+
+# Command to ensure that the output directory is clean before building
+# (otherswise old files may remain if they were removed in the new version).
+pre_cmd = ["rm", "-r", Placeholder.OUTPUT_DIR]
+
 # Builders by version:
 BUILDER = {
-    None: SphinxBuilder(docs_src, args=SPHINX_ARGS.split()),  # default
+    None: SphinxBuilder(
+        docs_src, args=SPHINX_ARGS.split(), pre_cmd=pre_cmd
+    ),  # default
 }
 
 
@@ -311,6 +318,7 @@ if not BUILD_ALL:
     logger.info(f"Updated TAG_REGEX to: {TAG_REGEX}")
 
 
+#
 #: Data passed to templates
 def data(driver, rev, env):
     """Create a factory for data passed to templates.
@@ -362,7 +370,7 @@ SetuptoolsScmDriver(
     # static_dir=static_dir,
     data_factory=data,
     root_data_factory=root_data,
-).run()
+).run(sequential=SEQUENTIAL)
 
 if NO_PATCH:
     logger.info("NO_PATCH is set, skipping HTML patching.")
@@ -538,13 +546,11 @@ for built_dir in out_dir.iterdir():
     if built_dir.is_dir():
         if built_dir.name.startswith("v"):
             logger.info(f"Patching built version directory: {built_dir.name}")
-            current_version = next(
-                [
-                    tag
-                    for tag in built_versions["tags"]
-                    if tag.name == built_dir.name
-                ]
-            )
+            current_version = [  # noqa: RUF015
+                tag
+                for tag in built_versions["tags"]
+                if tag.name == built_dir.name
+            ][0]
             if int(built_dir.name.split(".")[1]) < 3:
                 # Old read_the_docs template
                 version_rtd_html = versions_rtd_template.render(

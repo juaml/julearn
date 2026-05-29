@@ -3,7 +3,7 @@ name: Build and preview docs
 on:
   push:
     branches-ignore:
-      - 'main'
+      - "main"
     tags-ignore:
       - v*
   pull_request:
@@ -19,25 +19,30 @@ jobs:
   build-docs:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v6
-      with:
-        fetch-depth: 0
-    - uses: actions/setup-python@v6
-      with:
-        python-version-file: "pyproject.toml"
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
-    - name: Install uv
-      uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+      - uses: actions/setup-python@v6
+        if: github.event.action != 'closed' # We don't need the build if we know the preview will be removed
+        with:
+          python-version-file: "pyproject.toml"
 
-    - name: Install Python dependencies
-      run: |
-        uv sync --locked --extra docs
+      - name: Install uv
+        if: github.event.action != 'closed' # We don't need the build if we know the preview will be removed
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
 
-    - name: Test build docs
-      run: |
-        uv run make -C docs/ local
+      - name: Install Python dependencies
+        if: github.event.action != 'closed' # We don't need the build if we know the preview will be removed
+        run: |
+          uv sync --locked --extra docs
 
-    - uses: rossjrw/pr-preview-action@v1
-      with:
-        source-dir: docs/_build/dev
-      if: github.event_name == 'pull_request'
+      - name: Test build docs
+        if: github.event.action != 'closed' # We don't need the build if we know the preview will be removed
+        run: |
+          uv run make -C docs/ local
+
+      - uses: rossjrw/pr-preview-action@v1
+        with:
+          source-dir: docs/_build/dev
+        if: github.event_name == 'pull_request'

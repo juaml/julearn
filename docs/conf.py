@@ -34,25 +34,11 @@ else:
     # process the loaded version information as you wish
     html_context = globals().get("html_context", {})
 
-    tag_revisions = [
-        rev
-        for rev in html_context["revisions"]
-        if rev.type_ == GitRefType.TAG and rev.name.startswith("v")
-    ]
-
-    latest = sorted(tag_revisions, key=lambda x: x.name)[
-        -1
-    ]  # latest by version
-
     if (
         html_context["current"].type_ == GitRefType.BRANCH
         and html_context["current"].name == "main"
     ):
-        major, minor, revision = latest.name.split("v")[-1].split(
-            "."
-        )  # get version number from tag name
-        next_dev_version = f"{major}.{minor}.{int(revision) + 1}.dev0"
-        release = next_dev_version
+        release = os.getenv("SETUPTOOLS_SCM_PRETEND_VERSION_FOR_JULEARN")
     else:
         release = html_context["current"].name
 
