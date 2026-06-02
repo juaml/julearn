@@ -231,6 +231,7 @@ intersphinx_mapping = {
         None,
     ),
     "panel": ("https://panel.holoviz.org/", None),
+    "xgboost": ("https://xgboost.readthedocs.io/en/stable/", None),
 }
 
 # -- sphinx.ext.extlinks configuration ---------------------------------------

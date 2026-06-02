@@ -597,6 +597,7 @@ all = [
     { name = "panel" },
     { name = "param" },
     { name = "scikit-optimize" },
+    { name = "xgboost" },
 ]
 deslib = [
     { name = "deslib" },
@@ -625,6 +626,7 @@ docs = [
     { name = "sphinx-polyversion" },
     { name = "sphinxcontrib-towncrier" },
     { name = "towncrier" },
+    { name = "xgboost" },
 ]
 optuna = [
     { name = "optuna" },
@@ -651,6 +653,9 @@ viz = [
     { name = "panel" },
     { name = "param" },
 ]
+xgboost = [
+    { name = "xgboost" },
+]
 
 [package.dev-dependencies]
 dev = [
@@ -676,11 +681,13 @@ docs = [
     { name = "sphinx-polyversion" },
     { name = "sphinxcontrib-towncrier" },
     { name = "towncrier" },
+    { name = "xgboost" },
 ]
 optional = [
     { name = "optuna" },
     { name = "optuna-integration" },
     { name = "scikit-optimize" },
+    { name = "xgboost" },
 ]
 viz = [
     { name = "bokeh" },
@@ -693,8 +700,8 @@ requires-dist = [
     { name = "bokeh", marker = "extra == 'viz'", specifier = ">=3.0.0" },
     { name = "deslib", marker = "extra == 'deslib'", specifier = ">=0.3.5,<0.4.0" },
     { name = "furo", marker = "extra == 'sphinx'", specifier = ">=2025.7.19" },
-    { name = "julearn", extras = ["optuna", "skopt", "sphinx", "viz"], marker = "extra == 'docs'" },
-    { name = "julearn", extras = ["optuna", "skopt", "viz"], marker = "extra == 'all'" },
+    { name = "julearn", extras = ["optuna", "skopt", "sphinx", "viz", "xgboost"], marker = "extra == 'docs'" },
+    { name = "julearn", extras = ["optuna", "skopt", "viz", "xgboost"], marker = "extra == 'all'" },
     { name = "looseversion", marker = "python_full_version >= '3.12'", specifier = "==1.3.0" },
     { name = "numpy", specifier = ">=2.3.0,<3.0.0" },
     { name = "numpydoc", marker = "extra == 'sphinx'", specifier = ">=1.9.0" },
@@ -719,8 +726,9 @@ requires-dist = [
     { name = "towncrier", marker = "extra == 'dev'", specifier = ">=25.8.0" },
     { name = "towncrier", marker = "extra == 'sphinx'", specifier = ">=25.8.0" },
     { name = "tox", marker = "extra == 'dev'" },
+    { name = "xgboost", marker = "extra == 'xgboost'", specifier = ">=3.0.0,<4.0.0" },
 ]
-provides-extras = ["dev", "sphinx", "deslib", "viz", "skopt", "optuna", "docs", "all"]
+provides-extras = ["dev", "sphinx", "deslib", "viz", "skopt", "optuna", "xgboost", "docs", "all"]
 
 [package.metadata.requires-dev]
 dev = [
@@ -746,11 +754,13 @@ docs = [
     { name = "sphinx-polyversion", specifier = ">=2.0.0" },
     { name = "sphinxcontrib-towncrier", specifier = ">=0.5.0a0" },
     { name = "towncrier", specifier = ">=25.8.0" },
+    { name = "xgboost", specifier = ">=3.0.0,<4.0.0" },
 ]
 optional = [
     { name = "optuna", specifier = ">=4.0.0,<5.0.0" },
     { name = "optuna-integration", specifier = ">=4.0.0,<5.0.0" },
     { name = "scikit-optimize", specifier = ">=0.10.2,<0.11.0" },
+    { name = "xgboost", specifier = ">=3.0.0,<4.0.0" },
 ]
 viz = [
     { name = "bokeh", specifier = ">=3.4.3" },
@@ -1171,6 +1181,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/e9/3c/dfccc9e7dee357fb2aa13c3890d952a370dd0ed071e0f7ed62ed0df567c1/numpydoc-1.10.0.tar.gz", hash = "sha256:3f7970f6eee30912260a6b31ac72bba2432830cd6722569ec17ee8d3ef5ffa01", size = 94027, upload-time = "2025-12-02T16:39:12.937Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/62/5e/3a6a3e90f35cea3853c45e5d5fb9b7192ce4384616f932cf7591298ab6e1/numpydoc-1.10.0-py3-none-any.whl", hash = "sha256:3149da9874af890bcc2a82ef7aae5484e5aa81cb2778f08e3c307ba6d963721b", size = 69255, upload-time = "2025-12-02T16:39:11.561Z" },
+]
+
+[[package]]
+name = "nvidia-nccl-cu12"
+version = "2.30.4"
+source = { registry = "https://pypi.org/simple" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/bc/2b/1757b6b74ee241de5efee3f35487dcb33e09c07605254809c6ce36aeb783/nvidia_nccl_cu12-2.30.4-py3-none-manylinux_2_18_aarch64.whl", hash = "sha256:606fa9aa9215c00367d060188eb1a5bbd28396aff5e11b9200d99d1a6ab79a71", size = 300091935, upload-time = "2026-04-23T03:22:58.024Z" },
+    { url = "https://files.pythonhosted.org/packages/6b/c3/0e45ff4dce8401f6ea7c25d80d75738813a47f5ae2691e2478f2fd1e5e93/nvidia_nccl_cu12-2.30.4-py3-none-manylinux_2_18_x86_64.whl", hash = "sha256:040974b261edec4b8b793e59e92ab7176fe4ab4bc61b800f9f3bfaeec2d436f3", size = 300164158, upload-time = "2026-04-23T03:23:19.589Z" },
 ]
 
 [[package]]
@@ -2284,6 +2303,24 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/2c/ee/afaf0f85a9a18fe47a67f1e4422ed6cf1fe642f0ae0a2f81166231303c52/wcwidth-0.7.0.tar.gz", hash = "sha256:90e3a7ea092341c44b99562e75d09e4d5160fe7a3974c6fb842a101a95e7eed0", size = 182132, upload-time = "2026-05-02T16:04:12.653Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/41/52/e465037f5375f43533d1a80b6923955201596a99142ed524d77b571a1418/wcwidth-0.7.0-py3-none-any.whl", hash = "sha256:5d69154c429a82910e241c738cd0e2976fac8a2dd47a1a805f4afed1c0f136f2", size = 110825, upload-time = "2026-05-02T16:04:11.033Z" },
+]
+
+[[package]]
+name = "xgboost"
+version = "3.2.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "numpy" },
+    { name = "nvidia-nccl-cu12", marker = "sys_platform == 'linux'" },
+    { name = "scipy" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/91/bb/1eb0242409d22db725d7a88088e6cfd6556829fb0736f9ff69aa9f1e9455/xgboost-3.2.0.tar.gz", hash = "sha256:99b0e9a2a64896cdaf509c5e46372d336c692406646d20f2af505003c0c5d70d", size = 1263936, upload-time = "2026-02-10T11:03:05.542Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/2d/49/6e4cdd877c24adf56cb3586bc96d93d4dcd780b5ea1efb32e1ee0de08bae/xgboost-3.2.0-py3-none-macosx_10_15_x86_64.whl", hash = "sha256:2f661966d3e322536d9c448090a870fcba1e32ee5760c10b7c46bac7a342079a", size = 2507014, upload-time = "2026-02-10T10:50:57.44Z" },
+    { url = "https://files.pythonhosted.org/packages/93/f1/c09ef1add609453aa3ba5bafcd0d1c1a805c1263c0b60138ec968f8ec296/xgboost-3.2.0-py3-none-macosx_12_0_arm64.whl", hash = "sha256:eabbd40d474b8dbf6cb3536325f9150b9e6f0db32d18de9914fb3227d0bef5b7", size = 2328527, upload-time = "2026-02-10T10:51:17.502Z" },
+    { url = "https://files.pythonhosted.org/packages/96/9f/d9914a7b8df842832850b1a18e5f47aaa071c217cdd1da2ae9deb291018b/xgboost-3.2.0-py3-none-manylinux_2_28_aarch64.whl", hash = "sha256:852eabc6d3b3702a59bf78dbfdcd1cb9c4d3a3b6e5ed1f8781d8b9512354fdd2", size = 131100954, upload-time = "2026-02-10T11:02:42.704Z" },
+    { url = "https://files.pythonhosted.org/packages/79/98/679de17c2caa4fd3b0b4386ecf7377301702cb0afb22930a07c142fcb1d8/xgboost-3.2.0-py3-none-manylinux_2_28_x86_64.whl", hash = "sha256:99b4a6bbcb47212fec5cf5fbe12347215f073c08967431b0122cfbd1ee70312c", size = 131748579, upload-time = "2026-02-10T10:54:40.424Z" },
+    { url = "https://files.pythonhosted.org/packages/1f/3d/1661dd114a914a67e3f7ab66fa1382e7599c2a8c340f314ad30a3e2b4d08/xgboost-3.2.0-py3-none-win_amd64.whl", hash = "sha256:0d169736fd836fc13646c7ab787167b3a8110351c2c6bc770c755ee1618f0442", size = 101681668, upload-time = "2026-02-10T10:59:31.202Z" },
 ]
 
 [[package]]

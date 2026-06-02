@@ -235,6 +235,20 @@ Ensemble
      - Y
      - Y
      - Y
+   * - ``xgb``
+     - XGBoost
+     - | :class:`~xgboost.XGBClassifier` and
+       | :class:`~xgboost.XGBRegressor`
+     - Y
+     - Y
+     - Y
+   * - ``xgb_cvearlystopping``
+     - XGBoost with Cross-Validation and Early Stopping
+     - | :class:`~julearn.models.xgb_cvearlystopping.XGBClassifierCVEarlyStopping` and
+       | :class:`~julearn.models.xgb_cvearlystopping.XGBRegressorCVEarlyStopping`
+     - Y
+     - Y
+     - Y
 
 Gaussian Processes
 ~~~~~~~~~~~~~~~~~~
