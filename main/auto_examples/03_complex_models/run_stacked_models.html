@@ -291,6 +291,8 @@
 <li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.models.get_model.html">julearn.models.get_model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.models.register_model.html">julearn.models.register_model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.models.reset_model_register.html">julearn.models.reset_model_register</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.models.xgb_cvearlystopping.XGBClassifierCVEarlyStopping.html">julearn.models.xgb_cvearlystopping.XGBClassifierCVEarlyStopping</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.models.xgb_cvearlystopping.XGBRegressorCVEarlyStopping.html">julearn.models.xgb_cvearlystopping.XGBRegressorCVEarlyStopping</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../api/models.html#dynamic-selection-deslib">9.7. Dynamic Selection (DESLib)</a><input aria-label="Toggle navigation of 9.7. Dynamic Selection (DESLib)" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
@@ -509,13 +511,13 @@ classifier will be applied on the predictions of the two classifiers.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">"INFO"</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-05-29 20:46:11,383 - julearn - INFO - ===== Lib Versions =====
-2026-05-29 20:46:11,383 - julearn - INFO - numpy: 2.4.6
-2026-05-29 20:46:11,383 - julearn - INFO - scipy: 1.17.1
-2026-05-29 20:46:11,384 - julearn - INFO - sklearn: 1.8.0
-2026-05-29 20:46:11,384 - julearn - INFO - pandas: 3.0.3
-2026-05-29 20:46:11,384 - julearn - INFO - julearn: 0.3.6.dev47
-2026-05-29 20:46:11,384 - julearn - INFO - ========================
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-06-02 08:30:32,892 - julearn - INFO - ===== Lib Versions =====
+2026-06-02 08:30:32,892 - julearn - INFO - numpy: 2.4.6
+2026-06-02 08:30:32,892 - julearn - INFO - scipy: 1.17.1
+2026-06-02 08:30:32,892 - julearn - INFO - sklearn: 1.8.0
+2026-06-02 08:30:32,892 - julearn - INFO - pandas: 3.0.3
+2026-06-02 08:30:32,892 - julearn - INFO - julearn: 0.3.6.dev72
+2026-06-02 08:30:32,892 - julearn - INFO - ========================
 </pre></div>
 </div>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_iris</span></a> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">"iris"</span><span class="p">)</span>
@@ -564,57 +566,57 @@ We will try to predict the species.</p>
 <span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">scores</span></a><span class="p">[</span><span class="s2">"test_score"</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-05-29 20:46:11,389 - julearn - INFO - Adding step filter_columns that applies to ColumnTypes&lt;types={'*'}; pattern=.*&gt;
-2026-05-29 20:46:11,389 - julearn - INFO - Setting hyperparameter keep = sepal
-2026-05-29 20:46:11,390 - julearn - INFO - Step added
-2026-05-29 20:46:11,390 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={'sepal'}; pattern=(?:__:type:__sepal)&gt;
-2026-05-29 20:46:11,390 - julearn - INFO - Step added
-2026-05-29 20:46:11,391 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={'sepal'}; pattern=(?:__:type:__sepal)&gt;
-2026-05-29 20:46:11,391 - julearn - INFO - Step added
-2026-05-29 20:46:11,391 - julearn - INFO - Adding step filter_columns that applies to ColumnTypes&lt;types={'*'}; pattern=.*&gt;
-2026-05-29 20:46:11,391 - julearn - INFO - Setting hyperparameter keep = petal
-2026-05-29 20:46:11,392 - julearn - INFO - Step added
-2026-05-29 20:46:11,392 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={'petal'}; pattern=(?:__:type:__petal)&gt;
-2026-05-29 20:46:11,392 - julearn - INFO - Step added
-2026-05-29 20:46:11,392 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={'petal'}; pattern=(?:__:type:__petal)&gt;
-2026-05-29 20:46:11,393 - julearn - INFO - Step added
-2026-05-29 20:46:11,393 - julearn - INFO - Adding step stacking that applies to ColumnTypes&lt;types={'*'}; pattern=.*&gt;
-2026-05-29 20:46:11,393 - julearn - INFO - Setting hyperparameter estimators = [('model_sepal', &lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x1182d28d0&gt;), ('model_petal', &lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x118660a50&gt;)]
-2026-05-29 20:46:11,394 - julearn - INFO - Step added
-2026-05-29 20:46:11,394 - julearn - INFO - ==== Input Data ====
-2026-05-29 20:46:11,394 - julearn - INFO - Using dataframe as input
-2026-05-29 20:46:11,394 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length', 'petal_width']
-2026-05-29 20:46:11,394 - julearn - INFO -      Target: species
-2026-05-29 20:46:11,395 - julearn - INFO -      Expanded features: ['sepal_length', 'sepal_width', 'petal_length', 'petal_width']
-2026-05-29 20:46:11,395 - julearn - INFO -      X_types:{'sepal': ['sepal_length', 'sepal_width'], 'petal': ['petal_length', 'petal_width']}
-2026-05-29 20:46:11,396 - julearn - INFO - ====================
-2026-05-29 20:46:11,397 - julearn - INFO -
-2026-05-29 20:46:11,397 - julearn - INFO - = Model Parameters =
-2026-05-29 20:46:11,398 - julearn - INFO - ====================
-2026-05-29 20:46:11,398 - julearn - INFO -
-2026-05-29 20:46:11,398 - julearn - INFO - = Model Parameters =
-2026-05-29 20:46:11,399 - julearn - INFO - ====================
-2026-05-29 20:46:11,399 - julearn - INFO -
-2026-05-29 20:46:11,400 - julearn - INFO - = Model Parameters =
-2026-05-29 20:46:11,400 - julearn - INFO - ====================
-2026-05-29 20:46:11,400 - julearn - INFO -
-2026-05-29 20:46:11,400 - julearn - INFO - = Data Information =
-2026-05-29 20:46:11,400 - julearn - INFO -      Problem type: classification
-2026-05-29 20:46:11,401 - julearn - INFO -      Number of samples: 100
-2026-05-29 20:46:11,401 - julearn - INFO -      Number of features: 4
-2026-05-29 20:46:11,401 - julearn - INFO - ====================
-2026-05-29 20:46:11,401 - julearn - INFO -
-2026-05-29 20:46:11,401 - julearn - INFO -      Number of classes: 2
-2026-05-29 20:46:11,402 - julearn - INFO -      Target type: str
-2026-05-29 20:46:11,402 - julearn - INFO -      Class distributions: species
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-06-02 08:30:32,895 - julearn - INFO - Adding step filter_columns that applies to ColumnTypes&lt;types={'*'}; pattern=.*&gt;
+2026-06-02 08:30:32,896 - julearn - INFO - Setting hyperparameter keep = sepal
+2026-06-02 08:30:32,896 - julearn - INFO - Step added
+2026-06-02 08:30:32,896 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={'sepal'}; pattern=(?:__:type:__sepal)&gt;
+2026-06-02 08:30:32,897 - julearn - INFO - Step added
+2026-06-02 08:30:32,897 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={'sepal'}; pattern=(?:__:type:__sepal)&gt;
+2026-06-02 08:30:32,897 - julearn - INFO - Step added
+2026-06-02 08:30:32,897 - julearn - INFO - Adding step filter_columns that applies to ColumnTypes&lt;types={'*'}; pattern=.*&gt;
+2026-06-02 08:30:32,897 - julearn - INFO - Setting hyperparameter keep = petal
+2026-06-02 08:30:32,897 - julearn - INFO - Step added
+2026-06-02 08:30:32,898 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={'petal'}; pattern=(?:__:type:__petal)&gt;
+2026-06-02 08:30:32,898 - julearn - INFO - Step added
+2026-06-02 08:30:32,898 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={'petal'}; pattern=(?:__:type:__petal)&gt;
+2026-06-02 08:30:32,898 - julearn - INFO - Step added
+2026-06-02 08:30:32,898 - julearn - INFO - Adding step stacking that applies to ColumnTypes&lt;types={'*'}; pattern=.*&gt;
+2026-06-02 08:30:32,898 - julearn - INFO - Setting hyperparameter estimators = [('model_sepal', &lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7f02994ec7d0&gt;), ('model_petal', &lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7f02991c1350&gt;)]
+2026-06-02 08:30:32,899 - julearn - INFO - Step added
+2026-06-02 08:30:32,899 - julearn - INFO - ==== Input Data ====
+2026-06-02 08:30:32,899 - julearn - INFO - Using dataframe as input
+2026-06-02 08:30:32,899 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length', 'petal_width']
+2026-06-02 08:30:32,899 - julearn - INFO -      Target: species
+2026-06-02 08:30:32,899 - julearn - INFO -      Expanded features: ['sepal_length', 'sepal_width', 'petal_length', 'petal_width']
+2026-06-02 08:30:32,899 - julearn - INFO -      X_types:{'sepal': ['sepal_length', 'sepal_width'], 'petal': ['petal_length', 'petal_width']}
+2026-06-02 08:30:32,901 - julearn - INFO - ====================
+2026-06-02 08:30:32,901 - julearn - INFO -
+2026-06-02 08:30:32,901 - julearn - INFO - = Model Parameters =
+2026-06-02 08:30:32,901 - julearn - INFO - ====================
+2026-06-02 08:30:32,901 - julearn - INFO -
+2026-06-02 08:30:32,902 - julearn - INFO - = Model Parameters =
+2026-06-02 08:30:32,902 - julearn - INFO - ====================
+2026-06-02 08:30:32,902 - julearn - INFO -
+2026-06-02 08:30:32,903 - julearn - INFO - = Model Parameters =
+2026-06-02 08:30:32,903 - julearn - INFO - ====================
+2026-06-02 08:30:32,903 - julearn - INFO -
+2026-06-02 08:30:32,903 - julearn - INFO - = Data Information =
+2026-06-02 08:30:32,903 - julearn - INFO -      Problem type: classification
+2026-06-02 08:30:32,903 - julearn - INFO -      Number of samples: 100
+2026-06-02 08:30:32,903 - julearn - INFO -      Number of features: 4
+2026-06-02 08:30:32,903 - julearn - INFO - ====================
+2026-06-02 08:30:32,903 - julearn - INFO -
+2026-06-02 08:30:32,904 - julearn - INFO -      Number of classes: 2
+2026-06-02 08:30:32,904 - julearn - INFO -      Target type: str
+2026-06-02 08:30:32,904 - julearn - INFO -      Class distributions: species
 versicolor    50
 virginica     50
 Name: count, dtype: int64
-2026-05-29 20:46:11,404 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2026-05-29 20:46:11,404 - julearn - WARNING - The kind of values in y (str) is not suitable for a classification. Values should be numeric.
-/private/var/folders/09/t22x2_p106j7p24khr0jdxrw0000gn/T/tmpj3nzjtlc/julearn/prepare.py:422: RuntimeWarning: The kind of values in y (str) is not suitable for a classification. Values should be numeric.
+2026-06-02 08:30:32,905 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2026-06-02 08:30:32,906 - julearn - WARNING - The kind of values in y (str) is not suitable for a classification. Values should be numeric.
+/tmp/tmpe_uj5qr7/julearn/prepare.py:422: RuntimeWarning: The kind of values in y (str) is not suitable for a classification. Values should be numeric.
   warn_with_log(
-2026-05-29 20:46:11,405 - julearn - INFO - Binary classification problem detected.
+2026-06-02 08:30:32,906 - julearn - INFO - Binary classification problem detected.
 0    1.00
 1    0.85
 2    0.95
@@ -623,7 +625,7 @@ Name: count, dtype: int64
 Name: test_score, dtype: float64
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 8.376 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 4.330 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-03-complex-models-run-stacked-models-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/42388118e4d8ea10bc2d3ca431517ea4/run_stacked_models.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">run_stacked_models.ipynb</span></code></a></p>
@@ -683,7 +685,7 @@ Name: test_score, dtype: float64
 </div>
 </aside>
 </div>
-</div><script src="../../_static/documentation_options.js?v=45dec653"></script>
+</div><script src="../../_static/documentation_options.js?v=b0872821"></script>
 <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
 <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
 <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>

@@ -291,6 +291,8 @@
 <li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.models.get_model.html">julearn.models.get_model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.models.register_model.html">julearn.models.register_model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.models.reset_model_register.html">julearn.models.reset_model_register</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.models.xgb_cvearlystopping.XGBClassifierCVEarlyStopping.html">julearn.models.xgb_cvearlystopping.XGBClassifierCVEarlyStopping</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.models.xgb_cvearlystopping.XGBRegressorCVEarlyStopping.html">julearn.models.xgb_cvearlystopping.XGBRegressorCVEarlyStopping</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../api/models.html#dynamic-selection-deslib">9.7. Dynamic Selection (DESLib)</a><input aria-label="Toggle navigation of 9.7. Dynamic Selection (DESLib)" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
@@ -516,13 +518,13 @@ for the test data.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">"INFO"</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-05-29 20:45:32,317 - julearn - INFO - ===== Lib Versions =====
-2026-05-29 20:45:32,318 - julearn - INFO - numpy: 2.4.6
-2026-05-29 20:45:32,318 - julearn - INFO - scipy: 1.17.1
-2026-05-29 20:45:32,318 - julearn - INFO - sklearn: 1.8.0
-2026-05-29 20:45:32,318 - julearn - INFO - pandas: 3.0.3
-2026-05-29 20:45:32,318 - julearn - INFO - julearn: 0.3.6.dev47
-2026-05-29 20:45:32,319 - julearn - INFO - ========================
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-06-02 08:30:15,051 - julearn - INFO - ===== Lib Versions =====
+2026-06-02 08:30:15,051 - julearn - INFO - numpy: 2.4.6
+2026-06-02 08:30:15,051 - julearn - INFO - scipy: 1.17.1
+2026-06-02 08:30:15,051 - julearn - INFO - sklearn: 1.8.0
+2026-06-02 08:30:15,051 - julearn - INFO - pandas: 3.0.3
+2026-06-02 08:30:15,051 - julearn - INFO - julearn: 0.3.6.dev72
+2026-06-02 08:30:15,051 - julearn - INFO - ========================
 </pre></div>
 </div>
 <p>load the iris data from seaborn</p>
@@ -554,42 +556,42 @@ vector machine classifier.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-05-29 20:45:32,324 - julearn - INFO - ==== Input Data ====
-2026-05-29 20:45:32,325 - julearn - INFO - Using dataframe as input
-2026-05-29 20:45:32,325 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length']
-2026-05-29 20:45:32,325 - julearn - INFO -      Target: species
-2026-05-29 20:45:32,325 - julearn - INFO -      Expanded features: ['sepal_length', 'sepal_width', 'petal_length']
-2026-05-29 20:45:32,325 - julearn - INFO -      X_types:{}
-2026-05-29 20:45:32,326 - julearn - WARNING - The following columns are not defined in X_types: ['sepal_length', 'sepal_width', 'petal_length']. They will be treated as continuous.
-/private/var/folders/09/t22x2_p106j7p24khr0jdxrw0000gn/T/tmpj3nzjtlc/julearn/prepare.py:609: RuntimeWarning: The following columns are not defined in X_types: ['sepal_length', 'sepal_width', 'petal_length']. They will be treated as continuous.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-06-02 08:30:15,055 - julearn - INFO - ==== Input Data ====
+2026-06-02 08:30:15,055 - julearn - INFO - Using dataframe as input
+2026-06-02 08:30:15,055 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length']
+2026-06-02 08:30:15,056 - julearn - INFO -      Target: species
+2026-06-02 08:30:15,056 - julearn - INFO -      Expanded features: ['sepal_length', 'sepal_width', 'petal_length']
+2026-06-02 08:30:15,056 - julearn - INFO -      X_types:{}
+2026-06-02 08:30:15,056 - julearn - WARNING - The following columns are not defined in X_types: ['sepal_length', 'sepal_width', 'petal_length']. They will be treated as continuous.
+/tmp/tmpe_uj5qr7/julearn/prepare.py:609: RuntimeWarning: The following columns are not defined in X_types: ['sepal_length', 'sepal_width', 'petal_length']. They will be treated as continuous.
   warn_with_log(
-2026-05-29 20:45:32,327 - julearn - INFO - ====================
-2026-05-29 20:45:32,327 - julearn - INFO -
-2026-05-29 20:45:32,327 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={'continuous'}; pattern=(?:__:type:__continuous)&gt;
-2026-05-29 20:45:32,328 - julearn - INFO - Step added
-2026-05-29 20:45:32,328 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={'continuous'}; pattern=(?:__:type:__continuous)&gt;
-2026-05-29 20:45:32,328 - julearn - INFO - Step added
-2026-05-29 20:45:32,329 - julearn - INFO - = Model Parameters =
-2026-05-29 20:45:32,329 - julearn - INFO - ====================
-2026-05-29 20:45:32,329 - julearn - INFO -
-2026-05-29 20:45:32,329 - julearn - INFO - = Data Information =
-2026-05-29 20:45:32,329 - julearn - INFO -      Problem type: classification
-2026-05-29 20:45:32,329 - julearn - INFO -      Number of samples: 120
-2026-05-29 20:45:32,329 - julearn - INFO -      Number of features: 3
-2026-05-29 20:45:32,330 - julearn - INFO - ====================
-2026-05-29 20:45:32,330 - julearn - INFO -
-2026-05-29 20:45:32,330 - julearn - INFO -      Number of classes: 3
-2026-05-29 20:45:32,330 - julearn - INFO -      Target type: str
-2026-05-29 20:45:32,331 - julearn - INFO -      Class distributions: species
+2026-06-02 08:30:15,057 - julearn - INFO - ====================
+2026-06-02 08:30:15,057 - julearn - INFO -
+2026-06-02 08:30:15,057 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={'continuous'}; pattern=(?:__:type:__continuous)&gt;
+2026-06-02 08:30:15,057 - julearn - INFO - Step added
+2026-06-02 08:30:15,058 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={'continuous'}; pattern=(?:__:type:__continuous)&gt;
+2026-06-02 08:30:15,058 - julearn - INFO - Step added
+2026-06-02 08:30:15,058 - julearn - INFO - = Model Parameters =
+2026-06-02 08:30:15,058 - julearn - INFO - ====================
+2026-06-02 08:30:15,058 - julearn - INFO -
+2026-06-02 08:30:15,058 - julearn - INFO - = Data Information =
+2026-06-02 08:30:15,058 - julearn - INFO -      Problem type: classification
+2026-06-02 08:30:15,059 - julearn - INFO -      Number of samples: 120
+2026-06-02 08:30:15,059 - julearn - INFO -      Number of features: 3
+2026-06-02 08:30:15,059 - julearn - INFO - ====================
+2026-06-02 08:30:15,059 - julearn - INFO -
+2026-06-02 08:30:15,059 - julearn - INFO -      Number of classes: 3
+2026-06-02 08:30:15,059 - julearn - INFO -      Target type: str
+2026-06-02 08:30:15,060 - julearn - INFO -      Class distributions: species
 versicolor    40
 virginica     40
 setosa        40
 Name: count, dtype: int64
-2026-05-29 20:45:32,332 - julearn - INFO - Using outer CV scheme RepeatedKFold(n_repeats=5, n_splits=5, random_state=200) (incl. final model)
-2026-05-29 20:45:32,333 - julearn - WARNING - The kind of values in y (str) is not suitable for a classification. Values should be numeric.
-/private/var/folders/09/t22x2_p106j7p24khr0jdxrw0000gn/T/tmpj3nzjtlc/julearn/prepare.py:422: RuntimeWarning: The kind of values in y (str) is not suitable for a classification. Values should be numeric.
+2026-06-02 08:30:15,061 - julearn - INFO - Using outer CV scheme RepeatedKFold(n_repeats=5, n_splits=5, random_state=200) (incl. final model)
+2026-06-02 08:30:15,061 - julearn - WARNING - The kind of values in y (str) is not suitable for a classification. Values should be numeric.
+/tmp/tmpe_uj5qr7/julearn/prepare.py:422: RuntimeWarning: The kind of values in y (str) is not suitable for a classification. Values should be numeric.
   warn_with_log(
-2026-05-29 20:45:32,333 - julearn - INFO - Multi-class classification problem detected #classes = 3.
+2026-06-02 08:30:15,061 - julearn - INFO - Multi-class classification problem detected #classes = 3.
 </pre></div>
 </div>
 <p>The scores dataframe has all the values for each CV split.</p>
@@ -628,8 +630,8 @@ Name: count, dtype: int64
 <tbody>
 <tr>
 <th>0</th>
-<td>0.009878</td>
-<td>0.005745</td>
+<td>0.005009</td>
+<td>0.002879</td>
 <td>0.916667</td>
 <td>96</td>
 <td>24</td>
@@ -639,8 +641,8 @@ Name: count, dtype: int64
 </tr>
 <tr>
 <th>1</th>
-<td>0.006750</td>
-<td>0.006007</td>
+<td>0.004788</td>
+<td>0.002855</td>
 <td>0.833333</td>
 <td>96</td>
 <td>24</td>
@@ -650,8 +652,8 @@ Name: count, dtype: int64
 </tr>
 <tr>
 <th>2</th>
-<td>0.008954</td>
-<td>0.009373</td>
+<td>0.004891</td>
+<td>0.002900</td>
 <td>0.958333</td>
 <td>96</td>
 <td>24</td>
@@ -661,8 +663,8 @@ Name: count, dtype: int64
 </tr>
 <tr>
 <th>3</th>
-<td>0.010633</td>
-<td>0.005502</td>
+<td>0.004899</td>
+<td>0.002861</td>
 <td>0.916667</td>
 <td>96</td>
 <td>24</td>
@@ -672,8 +674,8 @@ Name: count, dtype: int64
 </tr>
 <tr>
 <th>4</th>
-<td>0.011386</td>
-<td>0.005515</td>
+<td>0.004823</td>
+<td>0.002894</td>
 <td>0.833333</td>
 <td>96</td>
 <td>24</td>
@@ -828,7 +830,7 @@ the heatmap with annotations.</p>
 <img alt="Confusion matrix" class="sphx-glr-single-img" src="../../_images/sphx_glr_plot_cm_acc_multiclass_002.png" srcset="../../_images/sphx_glr_plot_cm_acc_multiclass_002.png"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, 'Confusion matrix')
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 2.949 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.461 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-00-starting-plot-cm-acc-multiclass-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/e2d40aaa5cca65f87881373fea370df4/plot_cm_acc_multiclass.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_cm_acc_multiclass.ipynb</span></code></a></p>
@@ -888,7 +890,7 @@ the heatmap with annotations.</p>
 </div>
 </aside>
 </div>
-</div><script src="../../_static/documentation_options.js?v=45dec653"></script>
+</div><script src="../../_static/documentation_options.js?v=b0872821"></script>
 <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
 <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
 <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>

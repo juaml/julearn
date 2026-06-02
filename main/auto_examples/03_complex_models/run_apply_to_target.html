@@ -291,6 +291,8 @@
 <li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.models.get_model.html">julearn.models.get_model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.models.register_model.html">julearn.models.register_model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.models.reset_model_register.html">julearn.models.reset_model_register</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.models.xgb_cvearlystopping.XGBClassifierCVEarlyStopping.html">julearn.models.xgb_cvearlystopping.XGBClassifierCVEarlyStopping</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.models.xgb_cvearlystopping.XGBRegressorCVEarlyStopping.html">julearn.models.xgb_cvearlystopping.XGBRegressorCVEarlyStopping</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../api/models.html#dynamic-selection-deslib">9.7. Dynamic Selection (DESLib)</a><input aria-label="Toggle navigation of 9.7. Dynamic Selection (DESLib)" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
@@ -514,13 +516,13 @@ analysis using Ridge Regression model.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">"INFO"</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-05-29 20:46:00,744 - julearn - INFO - ===== Lib Versions =====
-2026-05-29 20:46:00,745 - julearn - INFO - numpy: 2.4.6
-2026-05-29 20:46:00,745 - julearn - INFO - scipy: 1.17.1
-2026-05-29 20:46:00,745 - julearn - INFO - sklearn: 1.8.0
-2026-05-29 20:46:00,745 - julearn - INFO - pandas: 3.0.3
-2026-05-29 20:46:00,745 - julearn - INFO - julearn: 0.3.6.dev47
-2026-05-29 20:46:00,746 - julearn - INFO - ========================
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-06-02 08:30:26,676 - julearn - INFO - ===== Lib Versions =====
+2026-06-02 08:30:26,677 - julearn - INFO - numpy: 2.4.6
+2026-06-02 08:30:26,677 - julearn - INFO - scipy: 1.17.1
+2026-06-02 08:30:26,677 - julearn - INFO - sklearn: 1.8.0
+2026-06-02 08:30:26,677 - julearn - INFO - pandas: 3.0.3
+2026-06-02 08:30:26,677 - julearn - INFO - julearn: 0.3.6.dev72
+2026-06-02 08:30:26,677 - julearn - INFO - ========================
 </pre></div>
 </div>
 <p>Load the diabetes dataset from <code class="docutils literal notranslate"><span class="pre">sklearn</span></code> as a <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code>.</p>
@@ -536,12 +538,14 @@ is the target we are interested in predicting.</p>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Features:
-         age       sex       bmi        bp        s1        s2        s3        s4        s5        s6
-0  0.038076  0.050680  0.061696  0.021872 -0.044223 -0.034821 -0.043401 -0.002592  0.019907 -0.017646
-1 -0.001882 -0.044642 -0.051474 -0.026328 -0.008449 -0.019163  0.074412 -0.039493 -0.068332 -0.092204
-2  0.085299  0.050680  0.044451 -0.005670 -0.045599 -0.034194 -0.032356 -0.002592  0.002861 -0.025930
-3 -0.089063 -0.044642 -0.011595 -0.036656  0.012191  0.024991 -0.036038  0.034309  0.022688 -0.009362
-4  0.005383 -0.044642 -0.036385  0.021872  0.003935  0.015596  0.008142 -0.002592 -0.031988 -0.046641
+         age       sex       bmi  ...        s4        s5        s6
+0  0.038076  0.050680  0.061696  ... -0.002592  0.019907 -0.017646
+1 -0.001882 -0.044642 -0.051474  ... -0.039493 -0.068332 -0.092204
+2  0.085299  0.050680  0.044451  ... -0.002592  0.002861 -0.025930
+3 -0.089063 -0.044642 -0.011595  ...  0.034309  0.022688 -0.009362
+4  0.005383 -0.044642 -0.036385  ... -0.002592 -0.031988 -0.046641
+
+[5 rows x 10 columns]
 Target:
  count    442.000000
 mean     152.133484
@@ -572,7 +576,7 @@ we will first need to create a TargetPipelineCreator for this.</p>
 <span class="n">target_creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"zscore"</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;julearn.pipeline.target_pipeline_creator.TargetPipelineCreator object at 0x11604d550&gt;
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;julearn.pipeline.target_pipeline_creator.TargetPipelineCreator object at 0x7f02c16e7e00&gt;
 </pre></div>
 </div>
 <p>Now we can create the pipeline using a PipelineCreator.</p>
@@ -592,48 +596,50 @@ we will first need to create a TargetPipelineCreator for this.</p>
 <span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.head.html#pandas.DataFrame.head" title="pandas.DataFrame.head"><span class="n">scores</span><span class="o">.</span><span class="n">head</span></a><span class="p">(</span><span class="mi">5</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-05-29 20:46:00,776 - julearn - INFO - Adding step jutargetpipeline that applies to ColumnTypes&lt;types={'target'}; pattern=(?:target)&gt;
-2026-05-29 20:46:00,777 - julearn - INFO - Step added
-2026-05-29 20:46:00,777 - julearn - INFO - Adding step ridge that applies to ColumnTypes&lt;types={'continuous'}; pattern=(?:__:type:__continuous)&gt;
-2026-05-29 20:46:00,777 - julearn - INFO - Step added
-2026-05-29 20:46:00,777 - julearn - INFO - ==== Input Data ====
-2026-05-29 20:46:00,777 - julearn - INFO - Using dataframe as input
-2026-05-29 20:46:00,778 - julearn - INFO -      Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-2026-05-29 20:46:00,778 - julearn - INFO -      Target: target
-2026-05-29 20:46:00,778 - julearn - INFO -      Expanded features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-2026-05-29 20:46:00,778 - julearn - INFO -      X_types:{}
-2026-05-29 20:46:00,779 - julearn - WARNING - The following columns are not defined in X_types: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']. They will be treated as continuous.
-/private/var/folders/09/t22x2_p106j7p24khr0jdxrw0000gn/T/tmpj3nzjtlc/julearn/prepare.py:609: RuntimeWarning: The following columns are not defined in X_types: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']. They will be treated as continuous.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-06-02 08:30:26,693 - julearn - INFO - Adding step jutargetpipeline that applies to ColumnTypes&lt;types={'target'}; pattern=(?:target)&gt;
+2026-06-02 08:30:26,694 - julearn - INFO - Step added
+2026-06-02 08:30:26,694 - julearn - INFO - Adding step ridge that applies to ColumnTypes&lt;types={'continuous'}; pattern=(?:__:type:__continuous)&gt;
+2026-06-02 08:30:26,694 - julearn - INFO - Step added
+2026-06-02 08:30:26,694 - julearn - INFO - ==== Input Data ====
+2026-06-02 08:30:26,694 - julearn - INFO - Using dataframe as input
+2026-06-02 08:30:26,694 - julearn - INFO -      Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+2026-06-02 08:30:26,695 - julearn - INFO -      Target: target
+2026-06-02 08:30:26,695 - julearn - INFO -      Expanded features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+2026-06-02 08:30:26,695 - julearn - INFO -      X_types:{}
+2026-06-02 08:30:26,695 - julearn - WARNING - The following columns are not defined in X_types: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']. They will be treated as continuous.
+/tmp/tmpe_uj5qr7/julearn/prepare.py:609: RuntimeWarning: The following columns are not defined in X_types: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']. They will be treated as continuous.
   warn_with_log(
-2026-05-29 20:46:00,780 - julearn - INFO - ====================
-2026-05-29 20:46:00,780 - julearn - INFO -
-2026-05-29 20:46:00,781 - julearn - INFO - = Model Parameters =
-2026-05-29 20:46:00,781 - julearn - INFO - ====================
-2026-05-29 20:46:00,781 - julearn - INFO -
-2026-05-29 20:46:00,781 - julearn - INFO - = Data Information =
-2026-05-29 20:46:00,781 - julearn - INFO -      Problem type: regression
-2026-05-29 20:46:00,781 - julearn - INFO -      Number of samples: 309
-2026-05-29 20:46:00,782 - julearn - INFO -      Number of features: 10
-2026-05-29 20:46:00,782 - julearn - INFO - ====================
-2026-05-29 20:46:00,782 - julearn - INFO -
-2026-05-29 20:46:00,782 - julearn - INFO -      Target type: float64
-2026-05-29 20:46:00,782 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
-   fit_time  score_time  test_score  n_train  n_test  repeat  fold                          cv_mdsum
-0  0.005142    0.002407  -46.841131      247      62       0     0  b10eef89b4192178d482d7a1587a248a
-1  0.004870    0.002323  -51.472092      247      62       0     1  b10eef89b4192178d482d7a1587a248a
-2  0.006201    0.003561  -53.857139      247      62       0     2  b10eef89b4192178d482d7a1587a248a
-3  0.005721    0.004111  -52.551950      247      62       0     3  b10eef89b4192178d482d7a1587a248a
-4  0.007716    0.003634  -52.845546      248      61       0     4  b10eef89b4192178d482d7a1587a248a
+2026-06-02 08:30:26,696 - julearn - INFO - ====================
+2026-06-02 08:30:26,696 - julearn - INFO -
+2026-06-02 08:30:26,697 - julearn - INFO - = Model Parameters =
+2026-06-02 08:30:26,697 - julearn - INFO - ====================
+2026-06-02 08:30:26,697 - julearn - INFO -
+2026-06-02 08:30:26,697 - julearn - INFO - = Data Information =
+2026-06-02 08:30:26,697 - julearn - INFO -      Problem type: regression
+2026-06-02 08:30:26,697 - julearn - INFO -      Number of samples: 309
+2026-06-02 08:30:26,697 - julearn - INFO -      Number of features: 10
+2026-06-02 08:30:26,697 - julearn - INFO - ====================
+2026-06-02 08:30:26,697 - julearn - INFO -
+2026-06-02 08:30:26,698 - julearn - INFO -      Target type: float64
+2026-06-02 08:30:26,698 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
+   fit_time  score_time  ...  fold                          cv_mdsum
+0  0.003526    0.001665  ...     0  b10eef89b4192178d482d7a1587a248a
+1  0.003522    0.001693  ...     1  b10eef89b4192178d482d7a1587a248a
+2  0.003519    0.001654  ...     2  b10eef89b4192178d482d7a1587a248a
+3  0.003476    0.001687  ...     3  b10eef89b4192178d482d7a1587a248a
+4  0.003527    0.001764  ...     4  b10eef89b4192178d482d7a1587a248a
+
+[5 rows x 8 columns]
 </pre></div>
 </div>
 <p>Mean value of mean absolute error across CV</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">scores</span></a><span class="p">[</span><span class="s2">"test_score"</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">*</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>51.513571519143696
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>51.51357151914368
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.122 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.071 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-03-complex-models-run-apply-to-target-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/8f1fb433f30609bc682628827dedb66e/run_apply_to_target.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">run_apply_to_target.ipynb</span></code></a></p>
@@ -693,7 +699,7 @@ we will first need to create a TargetPipelineCreator for this.</p>
 </div>
 </aside>
 </div>
-</div><script src="../../_static/documentation_options.js?v=45dec653"></script>
+</div><script src="../../_static/documentation_options.js?v=b0872821"></script>
 <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
 <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
 <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>

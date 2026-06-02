@@ -291,6 +291,8 @@
 <li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.models.get_model.html">julearn.models.get_model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.models.register_model.html">julearn.models.register_model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.models.reset_model_register.html">julearn.models.reset_model_register</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.models.xgb_cvearlystopping.XGBClassifierCVEarlyStopping.html">julearn.models.xgb_cvearlystopping.XGBClassifierCVEarlyStopping</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/generated/julearn.models.xgb_cvearlystopping.XGBRegressorCVEarlyStopping.html">julearn.models.xgb_cvearlystopping.XGBRegressorCVEarlyStopping</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../api/models.html#dynamic-selection-deslib">9.7. Dynamic Selection (DESLib)</a><input aria-label="Toggle navigation of 9.7. Dynamic Selection (DESLib)" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
@@ -516,13 +518,13 @@ We will check the features after each preprocessing step.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">"INFO"</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-05-29 20:45:57,500 - julearn - INFO - ===== Lib Versions =====
-2026-05-29 20:45:57,501 - julearn - INFO - numpy: 2.4.6
-2026-05-29 20:45:57,501 - julearn - INFO - scipy: 1.17.1
-2026-05-29 20:45:57,501 - julearn - INFO - sklearn: 1.8.0
-2026-05-29 20:45:57,501 - julearn - INFO - pandas: 3.0.3
-2026-05-29 20:45:57,501 - julearn - INFO - julearn: 0.3.6.dev47
-2026-05-29 20:45:57,501 - julearn - INFO - ========================
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-06-02 08:30:24,759 - julearn - INFO - ===== Lib Versions =====
+2026-06-02 08:30:24,759 - julearn - INFO - numpy: 2.4.6
+2026-06-02 08:30:24,759 - julearn - INFO - scipy: 1.17.1
+2026-06-02 08:30:24,759 - julearn - INFO - sklearn: 1.8.0
+2026-06-02 08:30:24,759 - julearn - INFO - pandas: 3.0.3
+2026-06-02 08:30:24,759 - julearn - INFO - julearn: 0.3.6.dev72
+2026-06-02 08:30:24,759 - julearn - INFO - ========================
 </pre></div>
 </div>
 <p>Create a dataset using <code class="docutils literal notranslate"><span class="pre">sklearn</span></code> <code class="docutils literal notranslate"><span class="pre">make_regression</span></code>.</p>
@@ -634,40 +636,40 @@ to be used in the regression to the <code class="docutils literal notranslate"><
 <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">axes</span></a><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">"PCA components"</span><span class="p">)</span>
 </pre></div>
 </div>
-<img alt="Raw features, PCA components" class="sphx-glr-single-img" src="../../_images/sphx_glr_plot_preprocess_001.png" srcset="../../_images/sphx_glr_plot_preprocess_001.png"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-05-29 20:45:57,523 - julearn - INFO - Adding step select_variance that applies to ColumnTypes&lt;types={'*'}; pattern=.*&gt;
-2026-05-29 20:45:57,523 - julearn - INFO - Setting hyperparameter threshold = 0.15
-2026-05-29 20:45:57,524 - julearn - INFO - Step added
-2026-05-29 20:45:57,524 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={'X_to_zscore'}; pattern=(?:__:type:__X_to_zscore)&gt;
-2026-05-29 20:45:57,524 - julearn - INFO - Step added
-2026-05-29 20:45:57,524 - julearn - INFO - Adding step pca that applies to ColumnTypes&lt;types={'*'}; pattern=.*&gt;
-2026-05-29 20:45:57,525 - julearn - INFO - Setting hyperparameter n_components = 2
-2026-05-29 20:45:57,525 - julearn - INFO - Step added
-2026-05-29 20:45:57,525 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={'*'}; pattern=.*&gt;
-2026-05-29 20:45:57,525 - julearn - INFO - Setting hyperparameter n_estimators = 200
-2026-05-29 20:45:57,526 - julearn - INFO - Step added
-2026-05-29 20:45:57,526 - julearn - INFO - Setting random seed to 200
-2026-05-29 20:45:57,526 - julearn - INFO - ==== Input Data ====
-2026-05-29 20:45:57,526 - julearn - INFO - Using dataframe as input
-2026-05-29 20:45:57,526 - julearn - INFO -      Features: ['Feature 1', 'Feature 2', 'Feature 3', 'Feature 4']
-2026-05-29 20:45:57,527 - julearn - INFO -      Target: y
-2026-05-29 20:45:57,527 - julearn - INFO -      Expanded features: ['Feature 1', 'Feature 2', 'Feature 3', 'Feature 4']
-2026-05-29 20:45:57,527 - julearn - INFO -      X_types:{'X_to_zscore': ['Feature 1', 'Feature 2']}
-2026-05-29 20:45:57,527 - julearn - WARNING - The following columns are not defined in X_types: ['Feature 3', 'Feature 4']. They will be treated as continuous.
-/private/var/folders/09/t22x2_p106j7p24khr0jdxrw0000gn/T/tmpj3nzjtlc/julearn/prepare.py:609: RuntimeWarning: The following columns are not defined in X_types: ['Feature 3', 'Feature 4']. They will be treated as continuous.
+<img alt="Raw features, PCA components" class="sphx-glr-single-img" src="../../_images/sphx_glr_plot_preprocess_001.png" srcset="../../_images/sphx_glr_plot_preprocess_001.png"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-06-02 08:30:24,774 - julearn - INFO - Adding step select_variance that applies to ColumnTypes&lt;types={'*'}; pattern=.*&gt;
+2026-06-02 08:30:24,775 - julearn - INFO - Setting hyperparameter threshold = 0.15
+2026-06-02 08:30:24,775 - julearn - INFO - Step added
+2026-06-02 08:30:24,775 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={'X_to_zscore'}; pattern=(?:__:type:__X_to_zscore)&gt;
+2026-06-02 08:30:24,775 - julearn - INFO - Step added
+2026-06-02 08:30:24,775 - julearn - INFO - Adding step pca that applies to ColumnTypes&lt;types={'*'}; pattern=.*&gt;
+2026-06-02 08:30:24,775 - julearn - INFO - Setting hyperparameter n_components = 2
+2026-06-02 08:30:24,776 - julearn - INFO - Step added
+2026-06-02 08:30:24,776 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={'*'}; pattern=.*&gt;
+2026-06-02 08:30:24,776 - julearn - INFO - Setting hyperparameter n_estimators = 200
+2026-06-02 08:30:24,776 - julearn - INFO - Step added
+2026-06-02 08:30:24,776 - julearn - INFO - Setting random seed to 200
+2026-06-02 08:30:24,776 - julearn - INFO - ==== Input Data ====
+2026-06-02 08:30:24,776 - julearn - INFO - Using dataframe as input
+2026-06-02 08:30:24,776 - julearn - INFO -      Features: ['Feature 1', 'Feature 2', 'Feature 3', 'Feature 4']
+2026-06-02 08:30:24,777 - julearn - INFO -      Target: y
+2026-06-02 08:30:24,777 - julearn - INFO -      Expanded features: ['Feature 1', 'Feature 2', 'Feature 3', 'Feature 4']
+2026-06-02 08:30:24,777 - julearn - INFO -      X_types:{'X_to_zscore': ['Feature 1', 'Feature 2']}
+2026-06-02 08:30:24,777 - julearn - WARNING - The following columns are not defined in X_types: ['Feature 3', 'Feature 4']. They will be treated as continuous.
+/tmp/tmpe_uj5qr7/julearn/prepare.py:609: RuntimeWarning: The following columns are not defined in X_types: ['Feature 3', 'Feature 4']. They will be treated as continuous.
   warn_with_log(
-2026-05-29 20:45:57,528 - julearn - INFO - ====================
-2026-05-29 20:45:57,529 - julearn - INFO -
-2026-05-29 20:45:57,529 - julearn - INFO - = Model Parameters =
-2026-05-29 20:45:57,529 - julearn - INFO - ====================
-2026-05-29 20:45:57,529 - julearn - INFO -
-2026-05-29 20:45:57,529 - julearn - INFO - = Data Information =
-2026-05-29 20:45:57,530 - julearn - INFO -      Problem type: regression
-2026-05-29 20:45:57,530 - julearn - INFO -      Number of samples: 100
-2026-05-29 20:45:57,530 - julearn - INFO -      Number of features: 4
-2026-05-29 20:45:57,530 - julearn - INFO - ====================
-2026-05-29 20:45:57,530 - julearn - INFO -
-2026-05-29 20:45:57,530 - julearn - INFO -      Target type: float64
-2026-05-29 20:45:57,531 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
+2026-06-02 08:30:24,778 - julearn - INFO - ====================
+2026-06-02 08:30:24,779 - julearn - INFO -
+2026-06-02 08:30:24,779 - julearn - INFO - = Model Parameters =
+2026-06-02 08:30:24,779 - julearn - INFO - ====================
+2026-06-02 08:30:24,779 - julearn - INFO -
+2026-06-02 08:30:24,779 - julearn - INFO - = Data Information =
+2026-06-02 08:30:24,779 - julearn - INFO -      Problem type: regression
+2026-06-02 08:30:24,780 - julearn - INFO -      Number of samples: 100
+2026-06-02 08:30:24,780 - julearn - INFO -      Number of features: 4
+2026-06-02 08:30:24,780 - julearn - INFO - ====================
+2026-06-02 08:30:24,780 - julearn - INFO -
+2026-06-02 08:30:24,780 - julearn - INFO -      Target type: float64
+2026-06-02 08:30:24,780 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
 X after PCA:
 ===============================================================================
         pca0      pca1
@@ -686,18 +688,18 @@ X after PCA:
 [100 rows x 2 columns]
 X after zscore:
 ===============================================================================
-    Feature 1__:type:__X_to_zscore  Feature 2__:type:__X_to_zscore  Feature 3__:type:__continuous  Feature 4__:type:__continuous
-0                        -2.013728                        0.552923                       1.358719                       0.666996
-1                        -0.364686                       -0.569839                       0.704528                      -0.872214
-2                         0.118838                        0.204881                       0.623353                       1.234740
-3                        -0.004437                        1.986213                       0.434238                      -2.091986
-4                         0.309092                       -0.054948                      -1.810602                       0.776631
-..                             ...                             ...                            ...                            ...
-95                       -0.206189                        2.184776                      -1.091036                       0.011287
-96                       -1.099154                        0.296158                      -0.493756                       0.156690
-97                       -0.335538                        0.656818                      -0.492691                      -1.218469
-98                       -0.049139                        0.966962                       0.619026                       0.038198
-99                        0.240085                        0.198383                       0.681165                       0.686765
+    Feature 1__:type:__X_to_zscore  ...  Feature 4__:type:__continuous
+0                        -2.013728  ...                       0.666996
+1                        -0.364686  ...                      -0.872214
+2                         0.118838  ...                       1.234740
+3                        -0.004437  ...                      -2.091986
+4                         0.309092  ...                       0.776631
+..                             ...  ...                            ...
+95                       -0.206189  ...                       0.011287
+96                       -1.099154  ...                       0.156690
+97                       -0.335538  ...                      -1.218469
+98                       -0.049139  ...                       0.038198
+99                        0.240085  ...                       0.686765
 
 [100 rows x 4 columns]
 
@@ -724,7 +726,7 @@ min   -2.013728e+00 -3.010202e+00 -2.380315e+00 -2.797736e+00
 max    2.113700e+00  2.184776e+00  2.179658e+00  2.725389e+00
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 2.646 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 1.345 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-02-inspection-plot-preprocess-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/fc4804a4f78788e476ed705a2c0a5cb0/plot_preprocess.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_preprocess.ipynb</span></code></a></p>
@@ -784,7 +786,7 @@ max    2.113700e+00  2.184776e+00  2.179658e+00  2.725389e+00
 </div>
 </aside>
 </div>
-</div><script src="../../_static/documentation_options.js?v=45dec653"></script>
+</div><script src="../../_static/documentation_options.js?v=b0872821"></script>
 <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
 <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
 <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>

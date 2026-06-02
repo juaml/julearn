@@ -291,6 +291,8 @@
 <li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.models.get_model.html">julearn.models.get_model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.models.register_model.html">julearn.models.register_model</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.models.reset_model_register.html">julearn.models.reset_model_register</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.models.xgb_cvearlystopping.XGBClassifierCVEarlyStopping.html">julearn.models.xgb_cvearlystopping.XGBClassifierCVEarlyStopping</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api/generated/julearn.models.xgb_cvearlystopping.XGBRegressorCVEarlyStopping.html">julearn.models.xgb_cvearlystopping.XGBRegressorCVEarlyStopping</a></li>
 </ul>
 </li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../api/models.html#dynamic-selection-deslib">9.7. Dynamic Selection (DESLib)</a><input aria-label="Toggle navigation of 9.7. Dynamic Selection (DESLib)" class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" role="switch" type="checkbox"/><label for="toctree-checkbox-17"><span class="icon"><svg><use href="#svg-arrow-right"></use></svg></span></label><ul>
@@ -519,12 +521,14 @@ as a step in the general pipeline.</p>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Features:
-         age       sex       bmi        bp        s1        s2        s3        s4        s5        s6
-0  0.038076  0.050680  0.061696  0.021872 -0.044223 -0.034821 -0.043401 -0.002592  0.019907 -0.017646
-1 -0.001882 -0.044642 -0.051474 -0.026328 -0.008449 -0.019163  0.074412 -0.039493 -0.068332 -0.092204
-2  0.085299  0.050680  0.044451 -0.005670 -0.045599 -0.034194 -0.032356 -0.002592  0.002861 -0.025930
-3 -0.089063 -0.044642 -0.011595 -0.036656  0.012191  0.024991 -0.036038  0.034309  0.022688 -0.009362
-4  0.005383 -0.044642 -0.036385  0.021872  0.003935  0.015596  0.008142 -0.002592 -0.031988 -0.046641
+         age       sex       bmi  ...        s4        s5        s6
+0  0.038076  0.050680  0.061696  ... -0.002592  0.019907 -0.017646
+1 -0.001882 -0.044642 -0.051474  ... -0.039493 -0.068332 -0.092204
+2  0.085299  0.050680  0.044451  ... -0.002592  0.002861 -0.025930
+3 -0.089063 -0.044642 -0.011595  ...  0.034309  0.022688 -0.009362
+4  0.005383 -0.044642 -0.036385  ... -0.002592 -0.031988 -0.046641
+
+[5 rows x 10 columns]
 Target:
  count    442.000000
 mean     152.133484
@@ -561,20 +565,20 @@ to only apply it to <code class="docutils literal notranslate"><span class="pre"
 <span class="nb">print</span><span class="p">(</span><span class="n">creator</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-05-29 20:46:41,668 - julearn - INFO - Adding step jutargetpipeline that applies to ColumnTypes&lt;types={'target'}; pattern=(?:target)&gt;
-2026-05-29 20:46:41,669 - julearn - INFO - Step added
-2026-05-29 20:46:41,669 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={'continuous', 'categorical'}; pattern=(?:__:type:__continuous|__:type:__categorical)&gt;
-2026-05-29 20:46:41,669 - julearn - INFO - Step added
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-06-02 08:30:49,553 - julearn - INFO - Adding step jutargetpipeline that applies to ColumnTypes&lt;types={'target'}; pattern=(?:target)&gt;
+2026-06-02 08:30:49,553 - julearn - INFO - Step added
+2026-06-02 08:30:49,553 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={'categorical', 'continuous'}; pattern=(?:__:type:__categorical|__:type:__continuous)&gt;
+2026-06-02 08:30:49,554 - julearn - INFO - Step added
 PipelineCreator:
   Step 0: target_jutargetpipeline
-    estimator:     &lt;julearn.pipeline.target_pipeline.JuTargetPipeline object at 0x117e656d0&gt;
+    estimator:     &lt;julearn.pipeline.target_pipeline.JuTargetPipeline object at 0x7f0299584b90&gt;
     apply to:      ColumnTypes&lt;types={'target'}; pattern=(?:target)&gt;
     needed types:  ColumnTypes&lt;types={'target'}; pattern=(?:target)&gt;
     tuning params: {}
   Step 1: svm
     estimator:     SVR()
-    apply to:      ColumnTypes&lt;types={'continuous', 'categorical'}; pattern=(?:__:type:__continuous|__:type:__categorical)&gt;
-    needed types:  ColumnTypes&lt;types={'continuous', 'categorical'}; pattern=(?:__:type:__continuous|__:type:__categorical)&gt;
+    apply to:      ColumnTypes&lt;types={'categorical', 'continuous'}; pattern=(?:__:type:__categorical|__:type:__continuous)&gt;
+    needed types:  ColumnTypes&lt;types={'categorical', 'continuous'}; pattern=(?:__:type:__categorical|__:type:__continuous)&gt;
     tuning params: {}
 </pre></div>
 </div>
@@ -586,31 +590,33 @@ PipelineCreator:
 <span class="nb">print</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-05-29 20:46:41,671 - julearn - INFO - ==== Input Data ====
-2026-05-29 20:46:41,672 - julearn - INFO - Using dataframe as input
-2026-05-29 20:46:41,672 - julearn - INFO -      Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-2026-05-29 20:46:41,672 - julearn - INFO -      Target: target
-2026-05-29 20:46:41,673 - julearn - INFO -      Expanded features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-2026-05-29 20:46:41,673 - julearn - INFO -      X_types:{'continuous': ['age', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6'], 'categorical': ['sex']}
-2026-05-29 20:46:41,674 - julearn - INFO - ====================
-2026-05-29 20:46:41,675 - julearn - INFO -
-2026-05-29 20:46:41,675 - julearn - INFO - = Model Parameters =
-2026-05-29 20:46:41,675 - julearn - INFO - ====================
-2026-05-29 20:46:41,675 - julearn - INFO -
-2026-05-29 20:46:41,676 - julearn - INFO - = Data Information =
-2026-05-29 20:46:41,676 - julearn - INFO -      Problem type: regression
-2026-05-29 20:46:41,676 - julearn - INFO -      Number of samples: 442
-2026-05-29 20:46:41,676 - julearn - INFO -      Number of features: 10
-2026-05-29 20:46:41,676 - julearn - INFO - ====================
-2026-05-29 20:46:41,676 - julearn - INFO -
-2026-05-29 20:46:41,677 - julearn - INFO -      Target type: float64
-2026-05-29 20:46:41,677 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-   fit_time  score_time  test_score  n_train  n_test  repeat  fold                          cv_mdsum
-0  0.017550    0.007733    0.340037      353      89       0     0  b10eef89b4192178d482d7a1587a248a
-1  0.014463    0.007572    0.571525      353      89       0     1  b10eef89b4192178d482d7a1587a248a
-2  0.017614    0.005350    0.444764      354      88       0     2  b10eef89b4192178d482d7a1587a248a
-3  0.015231    0.009436    0.388669      354      88       0     3  b10eef89b4192178d482d7a1587a248a
-4  0.018253    0.007552    0.520210      354      88       0     4  b10eef89b4192178d482d7a1587a248a
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-06-02 08:30:49,555 - julearn - INFO - ==== Input Data ====
+2026-06-02 08:30:49,555 - julearn - INFO - Using dataframe as input
+2026-06-02 08:30:49,555 - julearn - INFO -      Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+2026-06-02 08:30:49,555 - julearn - INFO -      Target: target
+2026-06-02 08:30:49,555 - julearn - INFO -      Expanded features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+2026-06-02 08:30:49,556 - julearn - INFO -      X_types:{'continuous': ['age', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6'], 'categorical': ['sex']}
+2026-06-02 08:30:49,557 - julearn - INFO - ====================
+2026-06-02 08:30:49,557 - julearn - INFO -
+2026-06-02 08:30:49,557 - julearn - INFO - = Model Parameters =
+2026-06-02 08:30:49,557 - julearn - INFO - ====================
+2026-06-02 08:30:49,557 - julearn - INFO -
+2026-06-02 08:30:49,557 - julearn - INFO - = Data Information =
+2026-06-02 08:30:49,557 - julearn - INFO -      Problem type: regression
+2026-06-02 08:30:49,558 - julearn - INFO -      Number of samples: 442
+2026-06-02 08:30:49,558 - julearn - INFO -      Number of features: 10
+2026-06-02 08:30:49,558 - julearn - INFO - ====================
+2026-06-02 08:30:49,558 - julearn - INFO -
+2026-06-02 08:30:49,558 - julearn - INFO -      Target type: float64
+2026-06-02 08:30:49,558 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+   fit_time  score_time  ...  fold                          cv_mdsum
+0  0.009080    0.003226  ...     0  b10eef89b4192178d482d7a1587a248a
+1  0.008066    0.003129  ...     1  b10eef89b4192178d482d7a1587a248a
+2  0.008426    0.003116  ...     2  b10eef89b4192178d482d7a1587a248a
+3  0.008353    0.003376  ...     3  b10eef89b4192178d482d7a1587a248a
+4  0.008397    0.003074  ...     4  b10eef89b4192178d482d7a1587a248a
+
+[5 rows x 8 columns]
 </pre></div>
 </div>
 <p>All transformers in (<a class="reference internal" href="../available_pipeline_steps.html#available-transformers"><span class="std std-ref">Transformers</span></a>) can be used for both,
@@ -619,7 +625,7 @@ directly specified as step in the <a class="reference internal" href="../api/gen
 transformations have to be specified using the
 <a class="reference internal" href="../api/generated/julearn.TargetPipelineCreator.html#julearn.TargetPipelineCreator" title="julearn.TargetPipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">TargetPipelineCreator</span></code></a>, which is then passed to the overall
 <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> as an extra step.</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.179 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.093 seconds)</p>
 </section>
 </article>
 </div>
@@ -667,7 +673,7 @@ transformations have to be specified using the
 </div>
 </aside>
 </div>
-</div><script src="../_static/documentation_options.js?v=45dec653"></script>
+</div><script src="../_static/documentation_options.js?v=b0872821"></script>
 <script src="../_static/doctools.js?v=fd6eb6e6"></script>
 <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
 <script src="../_static/scripts/furo.js?v=46bd48cc"></script>
