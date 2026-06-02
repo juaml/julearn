@@ -35,9 +35,17 @@ class _BaseXGBCVEarlyStopping(BaseEstimator):
     base_estimator : class
         The base XGBoost estimator class to use (e.g. XGBRegressor or
         XGBClassifier).
-    test_size : float
+    test_size : float or int or None
         The proportion of the data to use as the validation set for early
-        stopping.
+        stopping. If groups is used on `fit`, this parameter refers to the
+        number of groups, otherwise it refers to the number of samples. If
+        float, should be between 0.0 and 1.0 and represent the
+        proportion of the dataset to include in the test split. If int,
+        represents the absolute number. If None, the value is
+        set to the complement of the train size. If train_size is also None,
+        it will be set to 0.25 in the case of non-grouped data or 0.2 for
+        grouped data (scikit-learn's defaults for `train_test_split` and
+        `GroupShuffleSplit`).
     early_stopping_rounds : int
         The number of rounds to use for early stopping.
     **kwargs : dict
@@ -48,7 +56,7 @@ class _BaseXGBCVEarlyStopping(BaseEstimator):
     def __init__(
         self,
         base_estimator: XGBRegressor | XGBClassifier,
-        test_size: float | None,
+        test_size: float | int | None,
         early_stopping_rounds: int,
         **kwargs,
     ):
@@ -81,7 +89,7 @@ class _BaseXGBCVEarlyStopping(BaseEstimator):
             The data to fit the model on.
         y : DataLike
             The target data.
-        groups : DataLike, optional
+        groups : DataLike or None
             The group labels for the samples used while splitting the dataset
             into train/test set for early stopping. If None, standard
             train/test split is used, by default None.
@@ -226,9 +234,17 @@ class XGBRegressorCVEarlyStopping(_BaseXGBCVEarlyStopping, RegressorMixin):
 
     Parameters
     ----------
-    test_size : float
+    test_size : float or int or None
         The proportion of the data to use as the validation set for early
-        stopping.
+        stopping. If groups is used on `fit`, this parameter refers to the
+        number of groups, otherwise it refers to the number of samples. If
+        float, should be between 0.0 and 1.0 and represent the
+        proportion of the dataset to include in the test split. If int,
+        represents the absolute number. If None, the value is
+        set to the complement of the train size. If train_size is also None,
+        it will be set to 0.25 in the case of non-grouped data or 0.2 for
+        grouped data (scikit-learn's defaults for `train_test_split` and
+        `GroupShuffleSplit`).
     early_stopping_rounds : int
         The number of rounds to use for early stopping.
     **kwargs : dict
@@ -238,7 +254,7 @@ class XGBRegressorCVEarlyStopping(_BaseXGBCVEarlyStopping, RegressorMixin):
 
     def __init__(
         self,
-        test_size: float | None,
+        test_size: float | int | None,
         early_stopping_rounds: int,
         **kwargs: Any,
     ):
@@ -260,9 +276,17 @@ class XGBClassifierCVEarlyStopping(_BaseXGBCVEarlyStopping, ClassifierMixin):
 
     Parameters
     ----------
-    test_size : float
+    test_size : float or int or None
         The proportion of the data to use as the validation set for early
-        stopping.
+        stopping. If groups is used on `fit`, this parameter refers to the
+        number of groups, otherwise it refers to the number of samples. If
+        float, should be between 0.0 and 1.0 and represent the
+        proportion of the dataset to include in the test split. If int,
+        represents the absolute number. If None, the value is
+        set to the complement of the train size. If train_size is also None,
+        it will be set to 0.25 in the case of non-grouped data or 0.2 for
+        grouped data (scikit-learn's defaults for `train_test_split` and
+        `GroupShuffleSplit`).
     early_stopping_rounds : int
         The number of rounds to use for early stopping.
     **kwargs : dict
@@ -272,7 +296,7 @@ class XGBClassifierCVEarlyStopping(_BaseXGBCVEarlyStopping, ClassifierMixin):
 
     def __init__(
         self,
-        test_size: float | None,
+        test_size: float | int | None,
         early_stopping_rounds: int,
         **kwargs: Any,
     ):
@@ -297,7 +321,7 @@ class XGBClassifierCVEarlyStopping(_BaseXGBCVEarlyStopping, ClassifierMixin):
             The data to fit the model on.
         y : DataLike
             The target data.
-        groups : DataLike, optional
+        groups : DataLike or None
             The group labels for the samples used while splitting the dataset
             into train/test set for early stopping. If None, standard
             train/test split is used, by default None.
