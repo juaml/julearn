@@ -14,18 +14,18 @@ jobs:
   build-docs:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
       with:
         # require all of history to see all tagged versions' docs
         fetch-depth: 0
 
     - name: Set up Python
-      uses: actions/setup-python@v6
+      uses: actions/setup-python@v7
       with:
         python-version-file: "pyproject.toml"
 
     - name: Install uv
-      uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+      uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
 
     - name: Install Python dependencies
       run: |
@@ -34,7 +34,7 @@ jobs:
     - name: Checkout gh-pages
       # As we already did a deploy of gh-pages above, it is guaranteed to be there
       # so check it out so we can selectively build docs below
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
       with:
           ref: gh-pages
           path: docs/_build
