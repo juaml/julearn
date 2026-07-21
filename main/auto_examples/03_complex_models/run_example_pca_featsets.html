@@ -523,13 +523,13 @@ subset of features.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">"INFO"</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-06-02 08:30:40,313 - julearn - INFO - ===== Lib Versions =====
-2026-06-02 08:30:40,314 - julearn - INFO - numpy: 2.4.6
-2026-06-02 08:30:40,314 - julearn - INFO - scipy: 1.17.1
-2026-06-02 08:30:40,314 - julearn - INFO - sklearn: 1.8.0
-2026-06-02 08:30:40,314 - julearn - INFO - pandas: 3.0.3
-2026-06-02 08:30:40,314 - julearn - INFO - julearn: 0.3.6.dev72
-2026-06-02 08:30:40,314 - julearn - INFO - ========================
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-07-21 10:58:44,175 - julearn - INFO - ===== Lib Versions =====
+2026-07-21 10:58:44,175 - julearn - INFO - numpy: 2.5.1
+2026-07-21 10:58:44,175 - julearn - INFO - scipy: 1.18.0
+2026-07-21 10:58:44,175 - julearn - INFO - sklearn: 1.8.0
+2026-07-21 10:58:44,175 - julearn - INFO - pandas: 3.0.3
+2026-07-21 10:58:44,176 - julearn - INFO - julearn: 0.3.6.dev75
+2026-07-21 10:58:44,176 - julearn - INFO - ========================
 </pre></div>
 </div>
 <p>Load the diabetes data from <code class="docutils literal notranslate"><span class="pre">sklearn</span></code> as a <code class="docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code>.</p>
@@ -592,16 +592,16 @@ know what to do with the categorical features.</p>
 <span class="n">creator</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"ridge"</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="p">[</span><span class="s2">"continuous"</span><span class="p">,</span> <span class="s2">"categorical"</span><span class="p">])</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-06-02 08:30:40,330 - julearn - INFO - Adding step pca_feats1 that applies to ColumnTypes&lt;types={'pca1'}; pattern=(?:__:type:__pca1)&gt;
-2026-06-02 08:30:40,330 - julearn - INFO - Setting hyperparameter n_components = 1
-2026-06-02 08:30:40,330 - julearn - INFO - Step added
-2026-06-02 08:30:40,331 - julearn - INFO - Adding step pca_feats2 that applies to ColumnTypes&lt;types={'pca2'}; pattern=(?:__:type:__pca2)&gt;
-2026-06-02 08:30:40,331 - julearn - INFO - Setting hyperparameter n_components = 1
-2026-06-02 08:30:40,331 - julearn - INFO - Step added
-2026-06-02 08:30:40,331 - julearn - INFO - Adding step ridge that applies to ColumnTypes&lt;types={'categorical', 'continuous'}; pattern=(?:__:type:__categorical|__:type:__continuous)&gt;
-2026-06-02 08:30:40,331 - julearn - INFO - Step added
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-07-21 10:58:44,193 - julearn - INFO - Adding step pca_feats1 that applies to ColumnTypes&lt;types={'pca1'}; pattern=(?:__:type:__pca1)&gt;
+2026-07-21 10:58:44,193 - julearn - INFO - Setting hyperparameter n_components = 1
+2026-07-21 10:58:44,193 - julearn - INFO - Step added
+2026-07-21 10:58:44,193 - julearn - INFO - Adding step pca_feats2 that applies to ColumnTypes&lt;types={'pca2'}; pattern=(?:__:type:__pca2)&gt;
+2026-07-21 10:58:44,194 - julearn - INFO - Setting hyperparameter n_components = 1
+2026-07-21 10:58:44,194 - julearn - INFO - Step added
+2026-07-21 10:58:44,194 - julearn - INFO - Adding step ridge that applies to ColumnTypes&lt;types={'continuous', 'categorical'}; pattern=(?:__:type:__continuous|__:type:__categorical)&gt;
+2026-07-21 10:58:44,194 - julearn - INFO - Step added
 
-&lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7f029957e250&gt;
+&lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fe3ee11e050&gt;
 </pre></div>
 </div>
 <p>Split the dataset into train and test.</p>
@@ -621,25 +621,25 @@ for scoring.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-06-02 08:30:40,333 - julearn - INFO - ==== Input Data ====
-2026-06-02 08:30:40,333 - julearn - INFO - Using dataframe as input
-2026-06-02 08:30:40,333 - julearn - INFO -      Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-2026-06-02 08:30:40,333 - julearn - INFO -      Target: target
-2026-06-02 08:30:40,333 - julearn - INFO -      Expanded features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
-2026-06-02 08:30:40,334 - julearn - INFO -      X_types:{'pca1': ['age', 'bmi', 'bp'], 'pca2': ['s1', 's2', 's3', 's4', 's5', 's6'], 'categorical': ['sex']}
-2026-06-02 08:30:40,335 - julearn - INFO - ====================
-2026-06-02 08:30:40,335 - julearn - INFO -
-2026-06-02 08:30:40,335 - julearn - INFO - = Model Parameters =
-2026-06-02 08:30:40,336 - julearn - INFO - ====================
-2026-06-02 08:30:40,336 - julearn - INFO -
-2026-06-02 08:30:40,336 - julearn - INFO - = Data Information =
-2026-06-02 08:30:40,336 - julearn - INFO -      Problem type: regression
-2026-06-02 08:30:40,336 - julearn - INFO -      Number of samples: 309
-2026-06-02 08:30:40,336 - julearn - INFO -      Number of features: 10
-2026-06-02 08:30:40,336 - julearn - INFO - ====================
-2026-06-02 08:30:40,336 - julearn - INFO -
-2026-06-02 08:30:40,336 - julearn - INFO -      Target type: float64
-2026-06-02 08:30:40,336 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-07-21 10:58:44,196 - julearn - INFO - ==== Input Data ====
+2026-07-21 10:58:44,196 - julearn - INFO - Using dataframe as input
+2026-07-21 10:58:44,196 - julearn - INFO -      Features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+2026-07-21 10:58:44,196 - julearn - INFO -      Target: target
+2026-07-21 10:58:44,197 - julearn - INFO -      Expanded features: ['age', 'sex', 'bmi', 'bp', 's1', 's2', 's3', 's4', 's5', 's6']
+2026-07-21 10:58:44,197 - julearn - INFO -      X_types:{'pca1': ['age', 'bmi', 'bp'], 'pca2': ['s1', 's2', 's3', 's4', 's5', 's6'], 'categorical': ['sex']}
+2026-07-21 10:58:44,198 - julearn - INFO - ====================
+2026-07-21 10:58:44,198 - julearn - INFO -
+2026-07-21 10:58:44,199 - julearn - INFO - = Model Parameters =
+2026-07-21 10:58:44,199 - julearn - INFO - ====================
+2026-07-21 10:58:44,199 - julearn - INFO -
+2026-07-21 10:58:44,199 - julearn - INFO - = Data Information =
+2026-07-21 10:58:44,199 - julearn - INFO -      Problem type: regression
+2026-07-21 10:58:44,199 - julearn - INFO -      Number of samples: 309
+2026-07-21 10:58:44,199 - julearn - INFO -      Number of features: 10
+2026-07-21 10:58:44,200 - julearn - INFO - ====================
+2026-07-21 10:58:44,200 - julearn - INFO -
+2026-07-21 10:58:44,200 - julearn - INFO -      Target type: float64
+2026-07-21 10:58:44,200 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
 </pre></div>
 </div>
 <p>The scores dataframe has all the values for each CV split.</p>
@@ -647,11 +647,11 @@ for scoring.</p>
 </pre></div>
 </div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>   fit_time  score_time  ...  fold                          cv_mdsum
-0  0.014539    0.006609  ...     0  b10eef89b4192178d482d7a1587a248a
-1  0.014362    0.006688  ...     1  b10eef89b4192178d482d7a1587a248a
-2  0.014797    0.006634  ...     2  b10eef89b4192178d482d7a1587a248a
-3  0.014224    0.006632  ...     3  b10eef89b4192178d482d7a1587a248a
-4  0.014547    0.006708  ...     4  b10eef89b4192178d482d7a1587a248a
+0  0.016571    0.007764  ...     0  b10eef89b4192178d482d7a1587a248a
+1  0.016213    0.007690  ...     1  b10eef89b4192178d482d7a1587a248a
+2  0.016762    0.007663  ...     2  b10eef89b4192178d482d7a1587a248a
+3  0.016001    0.007464  ...     3  b10eef89b4192178d482d7a1587a248a
+4  0.015941    0.007554  ...     4  b10eef89b4192178d482d7a1587a248a
 
 [5 rows x 8 columns]
 </pre></div>
@@ -886,7 +886,7 @@ of true values vs predicted values.</p>
 <img alt="Actual vs Predicted" class="sphx-glr-single-img" src="../../_images/sphx_glr_run_example_pca_featsets_002.png" srcset="../../_images/sphx_glr_run_example_pca_featsets_002.png"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>(np.float64(8.95), np.float64(362.05), np.float64(8.95), np.float64(362.05))
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.366 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.440 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-03-complex-models-run-example-pca-featsets-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/d7e247dae7dd8764398372ebe6109e27/run_example_pca_featsets.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">run_example_pca_featsets.ipynb</span></code></a></p>
@@ -946,7 +946,7 @@ of true values vs predicted values.</p>
 </div>
 </aside>
 </div>
-</div><script src="../../_static/documentation_options.js?v=b0872821"></script>
+</div><script src="../../_static/documentation_options.js?v=7b0eb8ec"></script>
 <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
 <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
 <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
