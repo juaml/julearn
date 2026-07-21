@@ -57,7 +57,7 @@ def get_config(key: str) -> Any:
 
 
 def _joblib_htcondor_context_func(current_func=None) -> None:
-    """Create a function to seet the config variables.
+    """Create a function to set the config variables.
 
     Parameters
     ----------
