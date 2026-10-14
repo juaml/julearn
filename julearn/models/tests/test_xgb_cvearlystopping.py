@@ -7,6 +7,9 @@ import pandas as pd
 import pytest
 from sklearn.utils.validation import _is_fitted
 
+
+pytest.importorskip("xgboost")
+
 from julearn.models.xgb_cvearlystopping import (
     XGBClassifierCVEarlyStopping,
     XGBRegressorCVEarlyStopping,

@@ -24,13 +24,11 @@ jobs:
     - uses: actions/setup-python@v7
       with:
         python-version: "3.x"
-    - name: Install build
-      run: |
-        python -m pip install --upgrade pip
-        python -m pip install build
+    - name: Set up uv
+      uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
     - name: Build package
       run:
-        python -m build
+        uv build
     - uses: pypa/gh-action-pypi-publish@release/v1
     - uses: softprops/action-gh-release@v3
       with:

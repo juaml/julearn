@@ -2,20 +2,44 @@ name: Run Tests
 
 on:
   push:
-    paths:
-      - 'julearn/**'
-      - '.github/workflows/**'
-      - 'tox.ini'
-      - 'pyproject.toml'
   pull_request:
-    paths:
-      - 'julearn/**'
-      - '.github/workflows/**'
-      - 'tox.ini'
-      - 'pyproject.toml'
+  workflow_dispatch: {}
+
+# Cancel superseded runs of the same branch / PR, except on main
+concurrency:
+  group: tests-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 jobs:
-  build:
+  # Check whether the library changed, to skip the tests otherwise
+  # (e.g. on docs-only changes)
+  changes:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      code: ${{ steps.filter.outputs.code }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        if: github.event_name != 'pull_request'
+      - name: Check for library changes
+        uses: dorny/paths-filter@v4
+        id: filter
+        with:
+          filters: |
+            code:
+              - 'julearn/**'
+              - '.github/workflows/ci.yml'
+              - 'tox.ini'
+              - 'pyproject.toml'
+              - 'uv.lock'
+              - 'codecov.yml'
+
+  run-tests:
+    needs: changes
+    if: needs.changes.outputs.code == 'true' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -24,29 +48,42 @@ jobs:
           - '3.12'
           - '3.13'
           - '3.14'
-
     steps:
-    - uses: actions/checkout@v7
+      - name: Checkout repository
+        uses: actions/checkout@v7
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Set up uv
+        uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
+      - name: Install tox
+        # tox-uv makes tox create the test environments with uv
+        run: |
+          uv tool install tox --with tox-uv --with tox-gh-actions
+      - name: Test with tox
+        run: |
+          tox
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v7
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
+          flags: julearn
+        if: success() && matrix.python-version == '3.13'
 
-    - uses: actions/setup-python@v7
-      with:
-        python-version: ${{ matrix.python-version }}
-
-    - name: Install uv
-      uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
-
-    - name: Install Python dependencies
-      run: |
-        uv sync --locked --extra dev
-        uv pip install tox-gh-actions
-
-    - name: Test with tox
-      run: |
-        uv run tox
-
-    - uses: codecov/codecov-action@v7
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        fail_ci_if_error: true
-        flags: julearn
-      if: success() && matrix.python-version == 3.13
+  # Single status to require in branch protection: passes when the tests
+  # passed or were skipped because the library did not change
+  tests:
+    needs: [changes, run-tests]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check test results
+        if: >-
+          contains(needs.*.result, 'failure') ||
+          contains(needs.*.result, 'cancelled')
+        run: |
+          echo "Some test jobs failed or were cancelled"
+          exit 1
+      - run: echo "Tests passed or were not needed"
