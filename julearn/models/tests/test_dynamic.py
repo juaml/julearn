@@ -11,18 +11,20 @@ from typing import Any
 import numpy as np
 import pandas as pd
 import pytest
+from looseversion import LooseVersion
 from pytest import FixtureRequest, fixture
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import ShuffleSplit, train_test_split
 
-from julearn.models.dynamic import DynamicSelection
+from julearn.models.dynamic import DynamicSelection, _last_incompatible_deslib
 
 
-# Check if the test is running on juseless
-try:
-    import deslib  # type: ignore # noqa: F401
-except ImportError:
-    pytest.skip("Need deslib to test", allow_module_level=True)
+deslib = pytest.importorskip("deslib")
+if LooseVersion(deslib.__version__) <= LooseVersion(_last_incompatible_deslib):
+    pytest.skip(
+        f"DESlib {deslib.__version__} is not compatible with scikit-learn",
+        allow_module_level=True,
+    )
 
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
@@ -80,7 +82,6 @@ def algo_name(request: FixtureRequest) -> str:
     return request.param
 
 
-@pytest.mark.skip("Deslib is not compatible with new python. Waiting for PR.")
 def test_algorithms(
     df_iris: pd.DataFrame,
     algo_name: str,
@@ -175,7 +176,6 @@ def test_wrong_algo(df_iris: pd.DataFrame) -> None:
         ShuffleSplit(n_splits=1),
     ],
 )
-@pytest.mark.skip("Deslib is not compatible with new python. Waiting for PR.")
 def test_ds_split_parameter(ds_split: Any, df_iris: pd.DataFrame) -> None:
     """Test ds_split parameter.
 
@@ -202,7 +202,6 @@ def test_ds_split_parameter(ds_split: Any, df_iris: pd.DataFrame) -> None:
 
 
 @pytest.mark.parametrize("ds_split", [4, ShuffleSplit(n_splits=2)])
-@pytest.mark.skip("Deslib is not compatible with new python. Waiting for PR.")
 def test_ds_split_error(ds_split: Any, df_iris: pd.DataFrame) -> None:
     """Test ds_split errors.
 
