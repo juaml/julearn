@@ -11,7 +11,7 @@
 <link href="../../_static/pygments.css?v=d111a655" rel="stylesheet" type="text/css"/>
 <link href="../../_static/styles/furo.css?v=7bdb33bb" rel="stylesheet" type="text/css"/>
 <link href="../../_static/copybutton.css?v=76b2166b" rel="stylesheet" type="text/css"/>
-<link href="../../_static/sg_gallery.css?v=fd6457a4" rel="stylesheet" type="text/css"/>
+<link href="../../_static/sg_gallery.css?v=c83e6b79" rel="stylesheet" type="text/css"/>
 <link href="../../_static/sg_gallery-binder.css?v=f4aeca0c" rel="stylesheet" type="text/css"/>
 <link href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" rel="stylesheet" type="text/css"/>
 <link href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" rel="stylesheet" type="text/css"/>
@@ -502,44 +502,39 @@ using a Support Vector Machine classifier and analyzes the model.</p>
 <div><p>Waskom, M.L., Frank, M.C., Wagner, A.D. (2016). Adaptive engagement of
 cognitive control in context-dependent decision-making. Cerebral Cortex.</p>
 </div></blockquote>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Authors: Federico Raimondo &lt;f.raimondo@fz-juelich.de&gt;</span>
-<span class="c1"># License: AGPL</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dataset</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">sklearn</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">julearn</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_cross_validation</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">julearn.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">configure_logging</span><span class="p">,</span> <span class="n">logger</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">julearn.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">PipelineCreator</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="c1"># Authors: Federico Raimondo &lt;f.raimondo@fz-juelich.de&gt;</span><span class="w">
+</span><span class="c1"># License: AGPL</span><span class="w">
+</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span><span class="w">
+</span><span class="kn">from</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dataset</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">sklearn</span><span class="w">
+</span><span class="w">
+</span><span class="kn">from</span><span class="w"> </span><span class="nn">julearn</span><span class="w"> </span><span class="kn">import</span> <a class="sphx-glr-backref-module-julearn sphx-glr-backref-type-py-function reference internal" href="../../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><span class="n">run_cross_validation</span></a><span class="w">
+</span><span class="kn">from</span><span class="w"> </span><span class="nn">julearn</span><span class="nn">.</span><span class="nn">utils</span><span class="w"> </span><span class="kn">import</span> <a class="sphx-glr-backref-module-julearn-utils sphx-glr-backref-type-py-function reference internal" href="../../api/generated/julearn.utils.configure_logging.html#julearn.utils.configure_logging" title="julearn.utils.configure_logging"><span class="n">configure_logging</span></a><span class="p">,</span> <span class="n">logger</span><span class="w">
+</span><span class="kn">from</span><span class="w"> </span><span class="nn">julearn</span><span class="nn">.</span><span class="nn">pipeline</span><span class="w"> </span><span class="kn">import</span> <a class="sphx-glr-backref-module-julearn sphx-glr-backref-type-py-class reference internal" href="../../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><span class="n">PipelineCreator</span></a><span class="w">
+</span></pre></div></div>
 <p>Set the logging level to info to see extra information.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">"INFO"</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-07-21 10:58:31,658 - julearn - INFO - ===== Lib Versions =====
-2026-07-21 10:58:31,659 - julearn - INFO - numpy: 2.5.1
-2026-07-21 10:58:31,659 - julearn - INFO - scipy: 1.18.0
-2026-07-21 10:58:31,659 - julearn - INFO - sklearn: 1.8.0
-2026-07-21 10:58:31,659 - julearn - INFO - pandas: 3.0.3
-2026-07-21 10:58:31,659 - julearn - INFO - julearn: 0.3.6.dev75
-2026-07-21 10:58:31,659 - julearn - INFO - ========================
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-julearn-utils sphx-glr-backref-type-py-function reference internal" href="../../api/generated/julearn.utils.configure_logging.html#julearn.utils.configure_logging" title="julearn.utils.configure_logging"><span class="n">configure_logging</span></a><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">"</span><span class="s2">INFO</span><span class="s2">"</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-10-14 16:56:52,074 - julearn - INFO - ===== Lib Versions =====
+2026-10-14 16:56:52,074 - julearn - INFO - numpy: 2.5.4
+2026-10-14 16:56:52,074 - julearn - INFO - scipy: 1.18.1
+2026-10-14 16:56:52,074 - julearn - INFO - sklearn: 1.8.0
+2026-10-14 16:56:52,074 - julearn - INFO - pandas: 3.0.6
+2026-10-14 16:56:52,075 - julearn - INFO - julearn: 0.3.6.dev77
+2026-10-14 16:56:52,075 - julearn - INFO - ========================
 </pre></div>
 </div>
 <p>Disable metadata routing to avoid errors due to BayesSearchCV being used.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a class="sphx-glr-backref-module-sklearn sphx-glr-backref-type-py-function" href="https://scikit-learn.org/stable/modules/generated/sklearn.set_config.html#sklearn.set_config" title="sklearn.set_config"><span class="n">sklearn</span><span class="o">.</span><span class="n">set_config</span></a><span class="p">(</span><span class="n">enable_metadata_routing</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-sklearn sphx-glr-backref-type-py-function reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.set_config.html#sklearn.set_config" title="sklearn.set_config"><span class="n">sklearn</span><span class="o">.</span><span class="n">set_config</span></a><span class="p">(</span><span class="n">enable_metadata_routing</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <p>Set the random seed to always have the same example.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-function" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.seed.html#numpy.random.seed" title="numpy.random.seed"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span></a><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-numpy-random sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/random/generated/numpy.random.seed.html#numpy.random.seed" title="numpy.random.seed"><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span></a><span class="p">(</span><span class="mi">42</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <p>Load the dataset.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_fmri</span></a> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">"fmri"</span><span class="p">)</span>
-<a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.head.html#pandas.DataFrame.head" title="pandas.DataFrame.head"><span class="n">df_fmri</span><span class="o">.</span><span class="n">head</span></a><span class="p">()</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_fmri</span></a> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">"</span><span class="s2">fmri</span><span class="s2">"</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.head.html#pandas.DataFrame.head" title="pandas.DataFrame.head"><span class="n">df_fmri</span><span class="o">.</span><span class="n">head</span></a><span class="p">(</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <div class="output_subarea output_html rendered_html output_result">
 <div>
 <style scoped="">
@@ -613,14 +608,13 @@ cognitive control in context-dependent decision-making. Cerebral Cortex.</p>
 </div>
 <br/>
 <br/><p>Set the dataframe in the right format.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_fmri</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.pivot.html#pandas.DataFrame.pivot" title="pandas.DataFrame.pivot"><span class="n">df_fmri</span><span class="o">.</span><span class="n">pivot</span></a><span class="p">(</span>
-    <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">"subject"</span><span class="p">,</span> <span class="s2">"timepoint"</span><span class="p">,</span> <span class="s2">"event"</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="s2">"region"</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s2">"signal"</span>
-<span class="p">)</span>
-
-<a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_fmri</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.reset_index.html#pandas.DataFrame.reset_index" title="pandas.DataFrame.reset_index"><span class="n">df_fmri</span><span class="o">.</span><span class="n">reset_index</span></a><span class="p">()</span>
-<a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.head.html#pandas.DataFrame.head" title="pandas.DataFrame.head"><span class="n">df_fmri</span><span class="o">.</span><span class="n">head</span></a><span class="p">()</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_fmri</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.pivot.html#pandas.DataFrame.pivot" title="pandas.DataFrame.pivot"><span class="n">df_fmri</span><span class="o">.</span><span class="n">pivot</span></a><span class="p">(</span><span class="w">
+</span>    <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">"</span><span class="s2">subject</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"</span><span class="s2">timepoint</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"</span><span class="s2">event</span><span class="s2">"</span><span class="p">]</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s2">"</span><span class="s2">region</span><span class="s2">"</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s2">"</span><span class="s2">signal</span><span class="s2">"</span><span class="w">
+</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_fmri</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.reset_index.html#pandas.DataFrame.reset_index" title="pandas.DataFrame.reset_index"><span class="n">df_fmri</span><span class="o">.</span><span class="n">reset_index</span></a><span class="p">(</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.head.html#pandas.DataFrame.head" title="pandas.DataFrame.head"><span class="n">df_fmri</span><span class="o">.</span><span class="n">head</span></a><span class="p">(</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <div class="output_subarea output_html rendered_html output_result">
 <div>
 <style scoped="">
@@ -695,151 +689,149 @@ cognitive control in context-dependent decision-making. Cerebral Cortex.</p>
 <br/>
 <br/><p>Following the hyperparamter tuning example, we will now use a Bayesian
 search to find the best hyperparameters for the SVM model.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list"><span class="n">X</span></a> <span class="o">=</span> <span class="p">[</span><span class="s2">"frontal"</span><span class="p">,</span> <span class="s2">"parietal"</span><span class="p">]</span>
-<a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str"><span class="n">y</span></a> <span class="o">=</span> <span class="s2">"event"</span>
-
-<span class="n">creator1</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">"classification"</span><span class="p">)</span>
-<span class="n">creator1</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"zscore"</span><span class="p">)</span>
-<span class="n">creator1</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
-    <span class="s2">"svm"</span><span class="p">,</span>
-    <span class="n">kernel</span><span class="o">=</span><span class="p">[</span><span class="s2">"linear"</span><span class="p">],</span>
-    <span class="n">C</span><span class="o">=</span><span class="p">(</span><span class="mf">1e-6</span><span class="p">,</span> <span class="mf">1e3</span><span class="p">,</span> <span class="s2">"log-uniform"</span><span class="p">),</span>
-<span class="p">)</span>
-
-<span class="n">creator2</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">"classification"</span><span class="p">)</span>
-<span class="n">creator2</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"zscore"</span><span class="p">)</span>
-<span class="n">creator2</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
-    <span class="s2">"svm"</span><span class="p">,</span>
-    <span class="n">kernel</span><span class="o">=</span><span class="p">[</span><span class="s2">"rbf"</span><span class="p">],</span>
-    <span class="n">C</span><span class="o">=</span><span class="p">(</span><span class="mf">1e-6</span><span class="p">,</span> <span class="mf">1e3</span><span class="p">,</span> <span class="s2">"log-uniform"</span><span class="p">),</span>
-    <span class="n">gamma</span><span class="o">=</span><span class="p">(</span><span class="mf">1e-6</span><span class="p">,</span> <span class="mf">1e1</span><span class="p">,</span> <span class="s2">"log-uniform"</span><span class="p">),</span>
-<span class="p">)</span>
-
-<a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict"><span class="n">search_params</span></a> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">"kind"</span><span class="p">:</span> <span class="s2">"bayes"</span><span class="p">,</span>
-    <span class="s2">"cv"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>  <span class="c1"># to speed up the example</span>
-    <span class="s2">"n_iter"</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>  <span class="c1"># 10 iterations of bayesian search to speed up example</span>
-<span class="p">}</span>
-
-
-<a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">scores</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-skopt sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://scikit-optimize.readthedocs.io/en/latest/modules/generated/skopt.BayesSearchCV.html#skopt.BayesSearchCV" title="skopt.BayesSearchCV"><span class="n">estimator</span></a> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
-    <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list"><span class="n">X</span></a><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list"><span class="n">X</span></a><span class="p">,</span>
-    <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str"><span class="n">y</span></a><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str"><span class="n">y</span></a><span class="p">,</span>
-    <span class="n">data</span><span class="o">=</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_fmri</span></a><span class="p">,</span>
-    <span class="n">model</span><span class="o">=</span><span class="p">[</span><span class="n">creator1</span><span class="p">,</span> <span class="n">creator2</span><span class="p">],</span>
-    <span class="n">cv</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>  <span class="c1"># to speed up the example</span>
-    <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict"><span class="n">search_params</span></a><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict"><span class="n">search_params</span></a><span class="p">,</span>
-    <span class="n">return_estimator</span><span class="o">=</span><span class="s2">"final"</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">scores</span></a><span class="p">[</span><span class="s2">"test_score"</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
-</pre></div>
-</div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-07-21 10:58:31,669 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={'continuous'}; pattern=(?:__:type:__continuous)&gt;
-2026-07-21 10:58:31,669 - julearn - INFO - Step added
-2026-07-21 10:58:31,669 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={'continuous'}; pattern=(?:__:type:__continuous)&gt;
-2026-07-21 10:58:31,669 - julearn - INFO - Setting hyperparameter kernel = linear
-2026-07-21 10:58:31,670 - julearn - INFO - Tuning hyperparameter C = (1e-06, 1000.0, 'log-uniform')
-2026-07-21 10:58:31,670 - julearn - INFO - Step added
-2026-07-21 10:58:31,670 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={'continuous'}; pattern=(?:__:type:__continuous)&gt;
-2026-07-21 10:58:31,670 - julearn - INFO - Step added
-2026-07-21 10:58:31,670 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={'continuous'}; pattern=(?:__:type:__continuous)&gt;
-2026-07-21 10:58:31,670 - julearn - INFO - Setting hyperparameter kernel = rbf
-2026-07-21 10:58:31,671 - julearn - INFO - Tuning hyperparameter C = (1e-06, 1000.0, 'log-uniform')
-2026-07-21 10:58:31,671 - julearn - INFO - Tuning hyperparameter gamma = (1e-06, 10.0, 'log-uniform')
-2026-07-21 10:58:31,671 - julearn - INFO - Step added
-2026-07-21 10:58:31,671 - julearn - INFO - ==== Input Data ====
-2026-07-21 10:58:31,671 - julearn - INFO - Using dataframe as input
-2026-07-21 10:58:31,671 - julearn - INFO -      Features: ['frontal', 'parietal']
-2026-07-21 10:58:31,671 - julearn - INFO -      Target: event
-2026-07-21 10:58:31,672 - julearn - INFO -      Expanded features: ['frontal', 'parietal']
-2026-07-21 10:58:31,672 - julearn - INFO -      X_types:{}
-2026-07-21 10:58:31,672 - julearn - WARNING - The following columns are not defined in X_types: ['frontal', 'parietal']. They will be treated as continuous.
-/tmp/tmpp8_t5ngz/julearn/prepare.py:609: RuntimeWarning: The following columns are not defined in X_types: ['frontal', 'parietal']. They will be treated as continuous.
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="list"><span class="n">X</span></a> <span class="o">=</span> <span class="p">[</span><span class="s2">"</span><span class="s2">frontal</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"</span><span class="s2">parietal</span><span class="s2">"</span><span class="p">]</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">y</span></a> <span class="o">=</span> <span class="s2">"</span><span class="s2">event</span><span class="s2">"</span><span class="w">
+</span><span class="w">
+</span><a class="sphx-glr-backref-module-julearn sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><span class="n">creator1</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-julearn sphx-glr-backref-type-py-class reference internal" href="../../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><span class="n">PipelineCreator</span></a><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">"</span><span class="s2">classification</span><span class="s2">"</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-julearn sphx-glr-backref-type-py-method reference internal" href="../../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator.add" title="julearn.PipelineCreator.add"><span class="n">creator1</span><span class="o">.</span><span class="n">add</span></a><span class="p">(</span><span class="s2">"</span><span class="s2">zscore</span><span class="s2">"</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-julearn sphx-glr-backref-type-py-method reference internal" href="../../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator.add" title="julearn.PipelineCreator.add"><span class="n">creator1</span><span class="o">.</span><span class="n">add</span></a><span class="p">(</span><span class="w">
+</span>    <span class="s2">"</span><span class="s2">svm</span><span class="s2">"</span><span class="p">,</span><span class="w">
+</span>    <span class="n">kernel</span><span class="o">=</span><span class="p">[</span><span class="s2">"</span><span class="s2">linear</span><span class="s2">"</span><span class="p">]</span><span class="p">,</span><span class="w">
+</span>    <span class="n">C</span><span class="o">=</span><span class="p">(</span><span class="mf">1e-6</span><span class="p">,</span> <span class="mf">1e3</span><span class="p">,</span> <span class="s2">"</span><span class="s2">log-uniform</span><span class="s2">"</span><span class="p">)</span><span class="p">,</span><span class="w">
+</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><a class="sphx-glr-backref-module-julearn sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><span class="n">creator2</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-julearn sphx-glr-backref-type-py-class reference internal" href="../../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><span class="n">PipelineCreator</span></a><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">"</span><span class="s2">classification</span><span class="s2">"</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-julearn sphx-glr-backref-type-py-method reference internal" href="../../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator.add" title="julearn.PipelineCreator.add"><span class="n">creator2</span><span class="o">.</span><span class="n">add</span></a><span class="p">(</span><span class="s2">"</span><span class="s2">zscore</span><span class="s2">"</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-julearn sphx-glr-backref-type-py-method reference internal" href="../../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator.add" title="julearn.PipelineCreator.add"><span class="n">creator2</span><span class="o">.</span><span class="n">add</span></a><span class="p">(</span><span class="w">
+</span>    <span class="s2">"</span><span class="s2">svm</span><span class="s2">"</span><span class="p">,</span><span class="w">
+</span>    <span class="n">kernel</span><span class="o">=</span><span class="p">[</span><span class="s2">"</span><span class="s2">rbf</span><span class="s2">"</span><span class="p">]</span><span class="p">,</span><span class="w">
+</span>    <span class="n">C</span><span class="o">=</span><span class="p">(</span><span class="mf">1e-6</span><span class="p">,</span> <span class="mf">1e3</span><span class="p">,</span> <span class="s2">"</span><span class="s2">log-uniform</span><span class="s2">"</span><span class="p">)</span><span class="p">,</span><span class="w">
+</span>    <span class="n">gamma</span><span class="o">=</span><span class="p">(</span><span class="mf">1e-6</span><span class="p">,</span> <span class="mf">1e1</span><span class="p">,</span> <span class="s2">"</span><span class="s2">log-uniform</span><span class="s2">"</span><span class="p">)</span><span class="p">,</span><span class="w">
+</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="dict"><span class="n">search_params</span></a> <span class="o">=</span> <span class="p">{</span><span class="w">
+</span>    <span class="s2">"</span><span class="s2">kind</span><span class="s2">"</span><span class="p">:</span> <span class="s2">"</span><span class="s2">bayes</span><span class="s2">"</span><span class="p">,</span><span class="w">
+</span>    <span class="s2">"</span><span class="s2">cv</span><span class="s2">"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>  <span class="c1"># to speed up the example</span><span class="w">
+</span>    <span class="s2">"</span><span class="s2">n_iter</span><span class="s2">"</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>  <span class="c1"># 10 iterations of bayesian search to speed up example</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span><span class="w">
+</span><span class="w">
+</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">scores</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-skopt sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://scikit-optimize.readthedocs.io/en/latest/modules/generated/skopt.BayesSearchCV.html#skopt.BayesSearchCV" title="skopt.BayesSearchCV"><span class="n">estimator</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-julearn sphx-glr-backref-type-py-function reference internal" href="../../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><span class="n">run_cross_validation</span></a><span class="p">(</span><span class="w">
+</span>    <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="list"><span class="n">X</span></a><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="list"><span class="n">X</span></a><span class="p">,</span><span class="w">
+</span>    <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">y</span></a><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">y</span></a><span class="p">,</span><span class="w">
+</span>    <span class="n">data</span><span class="o">=</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_fmri</span></a><span class="p">,</span><span class="w">
+</span>    <span class="n">model</span><span class="o">=</span><span class="p">[</span><a class="sphx-glr-backref-module-julearn sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><span class="n">creator1</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-julearn sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><span class="n">creator2</span></a><span class="p">]</span><span class="p">,</span><span class="w">
+</span>    <span class="n">cv</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>  <span class="c1"># to speed up the example</span><span class="w">
+</span>    <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="dict"><span class="n">search_params</span></a><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="dict"><span class="n">search_params</span></a><span class="p">,</span><span class="w">
+</span>    <span class="n">return_estimator</span><span class="o">=</span><span class="s2">"</span><span class="s2">final</span><span class="s2">"</span><span class="p">,</span><span class="w">
+</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">scores</span></a><span class="p">[</span><span class="s2">"</span><span class="s2">test_score</span><span class="s2">"</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-10-14 16:56:52,084 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={'continuous'}; pattern=(?:__:type:__continuous)&gt;
+2026-10-14 16:56:52,084 - julearn - INFO - Step added
+2026-10-14 16:56:52,084 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={'continuous'}; pattern=(?:__:type:__continuous)&gt;
+2026-10-14 16:56:52,084 - julearn - INFO - Setting hyperparameter kernel = linear
+2026-10-14 16:56:52,084 - julearn - INFO - Tuning hyperparameter C = (1e-06, 1000.0, 'log-uniform')
+2026-10-14 16:56:52,085 - julearn - INFO - Step added
+2026-10-14 16:56:52,085 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={'continuous'}; pattern=(?:__:type:__continuous)&gt;
+2026-10-14 16:56:52,085 - julearn - INFO - Step added
+2026-10-14 16:56:52,085 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={'continuous'}; pattern=(?:__:type:__continuous)&gt;
+2026-10-14 16:56:52,085 - julearn - INFO - Setting hyperparameter kernel = rbf
+2026-10-14 16:56:52,085 - julearn - INFO - Tuning hyperparameter C = (1e-06, 1000.0, 'log-uniform')
+2026-10-14 16:56:52,086 - julearn - INFO - Tuning hyperparameter gamma = (1e-06, 10.0, 'log-uniform')
+2026-10-14 16:56:52,086 - julearn - INFO - Step added
+2026-10-14 16:56:52,086 - julearn - INFO - ==== Input Data ====
+2026-10-14 16:56:52,086 - julearn - INFO - Using dataframe as input
+2026-10-14 16:56:52,086 - julearn - INFO -      Features: ['frontal', 'parietal']
+2026-10-14 16:56:52,086 - julearn - INFO -      Target: event
+2026-10-14 16:56:52,087 - julearn - INFO -      Expanded features: ['frontal', 'parietal']
+2026-10-14 16:56:52,087 - julearn - INFO -      X_types:{}
+2026-10-14 16:56:52,087 - julearn - WARNING - The following columns are not defined in X_types: ['frontal', 'parietal']. They will be treated as continuous.
+/tmp/tmpwiadl47l/julearn/prepare.py:609: RuntimeWarning: The following columns are not defined in X_types: ['frontal', 'parietal']. They will be treated as continuous.
   warn_with_log(
-2026-07-21 10:58:31,673 - julearn - INFO - ====================
-2026-07-21 10:58:31,673 - julearn - INFO -
-2026-07-21 10:58:31,674 - julearn - INFO - = Model Parameters =
-2026-07-21 10:58:31,674 - julearn - INFO - Tuning hyperparameters using bayes
-2026-07-21 10:58:31,674 - julearn - INFO - Hyperparameters:
-2026-07-21 10:58:31,674 - julearn - INFO -      svm__C: (1e-06, 1000.0, 'log-uniform')
-2026-07-21 10:58:31,674 - julearn - INFO - Hyperparameter svm__C is log-uniform float [1e-06, 1000.0]
-2026-07-21 10:58:31,675 - julearn - INFO - Using inner CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
-2026-07-21 10:58:31,676 - julearn - INFO - Search Parameters:
-2026-07-21 10:58:31,676 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
-2026-07-21 10:58:31,676 - julearn - INFO -      n_iter: 10
-2026-07-21 10:58:31,677 - julearn - INFO - ====================
-2026-07-21 10:58:31,677 - julearn - INFO -
-2026-07-21 10:58:31,677 - julearn - INFO - = Model Parameters =
-2026-07-21 10:58:31,677 - julearn - INFO - Tuning hyperparameters using bayes
-2026-07-21 10:58:31,678 - julearn - INFO - Hyperparameters:
-2026-07-21 10:58:31,678 - julearn - INFO -      svm__C: (1e-06, 1000.0, 'log-uniform')
-2026-07-21 10:58:31,678 - julearn - INFO -      svm__gamma: (1e-06, 10.0, 'log-uniform')
-2026-07-21 10:58:31,678 - julearn - INFO - Hyperparameter svm__C is log-uniform float [1e-06, 1000.0]
-2026-07-21 10:58:31,679 - julearn - INFO - Hyperparameter svm__gamma is log-uniform float [1e-06, 10.0]
-2026-07-21 10:58:31,680 - julearn - INFO - Using inner CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
-2026-07-21 10:58:31,680 - julearn - INFO - Search Parameters:
-2026-07-21 10:58:31,681 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
-2026-07-21 10:58:31,681 - julearn - INFO -      n_iter: 10
-2026-07-21 10:58:31,681 - julearn - INFO - ====================
-2026-07-21 10:58:31,681 - julearn - INFO -
-2026-07-21 10:58:31,682 - julearn - INFO - = Model Parameters =
-2026-07-21 10:58:31,682 - julearn - INFO - Tuning hyperparameters using bayes
-2026-07-21 10:58:31,682 - julearn - INFO - Hyperparameters list:
-2026-07-21 10:58:31,682 - julearn - INFO -      Set 0
-2026-07-21 10:58:31,682 - julearn - INFO -              svm__C: Real(low=1e-06, high=1000.0, prior='log-uniform', transform='identity')
-2026-07-21 10:58:31,682 - julearn - INFO -              set_column_types: [SetColumnTypes(X_types={})]
-2026-07-21 10:58:31,683 - julearn - INFO -              zscore: [StandardScaler()]
-2026-07-21 10:58:31,683 - julearn - INFO -              svm: [SVC(kernel='linear')]
-2026-07-21 10:58:31,684 - julearn - INFO -      Set 1
-2026-07-21 10:58:31,684 - julearn - INFO -              svm__C: Real(low=1e-06, high=1000.0, prior='log-uniform', transform='identity')
-2026-07-21 10:58:31,684 - julearn - INFO -              svm__gamma: Real(low=1e-06, high=10.0, prior='log-uniform', transform='identity')
-2026-07-21 10:58:31,684 - julearn - INFO -              set_column_types: [SetColumnTypes(X_types={})]
-2026-07-21 10:58:31,685 - julearn - INFO -              zscore: [StandardScaler()]
-2026-07-21 10:58:31,685 - julearn - INFO -              svm: [SVC()]
-2026-07-21 10:58:31,686 - julearn - INFO - Hyperparameter svm__C as is Real(low=1e-06, high=1000.0, prior='log-uniform', transform='identity')
-2026-07-21 10:58:31,686 - julearn - INFO - Hyperparameter set_column_types as is [SetColumnTypes(X_types={})]
-2026-07-21 10:58:31,686 - julearn - INFO - Hyperparameter zscore as is [StandardScaler()]
-2026-07-21 10:58:31,686 - julearn - INFO - Hyperparameter svm as is [SVC(kernel='linear')]
-2026-07-21 10:58:31,687 - julearn - INFO - Hyperparameter svm__C as is Real(low=1e-06, high=1000.0, prior='log-uniform', transform='identity')
-2026-07-21 10:58:31,687 - julearn - INFO - Hyperparameter svm__gamma as is Real(low=1e-06, high=10.0, prior='log-uniform', transform='identity')
-2026-07-21 10:58:31,687 - julearn - INFO - Hyperparameter set_column_types as is [SetColumnTypes(X_types={})]
-2026-07-21 10:58:31,687 - julearn - INFO - Hyperparameter zscore as is [StandardScaler()]
-2026-07-21 10:58:31,688 - julearn - INFO - Hyperparameter svm as is [SVC()]
-2026-07-21 10:58:31,688 - julearn - INFO - Using inner CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
-2026-07-21 10:58:31,689 - julearn - INFO - Search Parameters:
-2026-07-21 10:58:31,689 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
-2026-07-21 10:58:31,689 - julearn - INFO -      n_iter: 10
-2026-07-21 10:58:31,699 - julearn - INFO - ====================
-2026-07-21 10:58:31,699 - julearn - INFO -
-2026-07-21 10:58:31,699 - julearn - INFO - = Data Information =
-2026-07-21 10:58:31,699 - julearn - INFO -      Problem type: classification
-2026-07-21 10:58:31,700 - julearn - INFO -      Number of samples: 532
-2026-07-21 10:58:31,700 - julearn - INFO -      Number of features: 2
-2026-07-21 10:58:31,700 - julearn - INFO - ====================
-2026-07-21 10:58:31,700 - julearn - INFO -
-2026-07-21 10:58:31,700 - julearn - INFO -      Number of classes: 2
-2026-07-21 10:58:31,700 - julearn - INFO -      Target type: str
-2026-07-21 10:58:31,701 - julearn - INFO -      Class distributions: event
+2026-10-14 16:56:52,088 - julearn - INFO - ====================
+2026-10-14 16:56:52,088 - julearn - INFO -
+2026-10-14 16:56:52,088 - julearn - INFO - = Model Parameters =
+2026-10-14 16:56:52,088 - julearn - INFO - Tuning hyperparameters using bayes
+2026-10-14 16:56:52,089 - julearn - INFO - Hyperparameters:
+2026-10-14 16:56:52,089 - julearn - INFO -      svm__C: (1e-06, 1000.0, 'log-uniform')
+2026-10-14 16:56:52,089 - julearn - INFO - Hyperparameter svm__C is log-uniform float [1e-06, 1000.0]
+2026-10-14 16:56:52,090 - julearn - INFO - Using inner CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
+2026-10-14 16:56:52,090 - julearn - INFO - Search Parameters:
+2026-10-14 16:56:52,090 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
+2026-10-14 16:56:52,091 - julearn - INFO -      n_iter: 10
+2026-10-14 16:56:52,091 - julearn - INFO - ====================
+2026-10-14 16:56:52,091 - julearn - INFO -
+2026-10-14 16:56:52,091 - julearn - INFO - = Model Parameters =
+2026-10-14 16:56:52,092 - julearn - INFO - Tuning hyperparameters using bayes
+2026-10-14 16:56:52,092 - julearn - INFO - Hyperparameters:
+2026-10-14 16:56:52,092 - julearn - INFO -      svm__C: (1e-06, 1000.0, 'log-uniform')
+2026-10-14 16:56:52,092 - julearn - INFO -      svm__gamma: (1e-06, 10.0, 'log-uniform')
+2026-10-14 16:56:52,092 - julearn - INFO - Hyperparameter svm__C is log-uniform float [1e-06, 1000.0]
+2026-10-14 16:56:52,093 - julearn - INFO - Hyperparameter svm__gamma is log-uniform float [1e-06, 10.0]
+2026-10-14 16:56:52,093 - julearn - INFO - Using inner CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
+2026-10-14 16:56:52,094 - julearn - INFO - Search Parameters:
+2026-10-14 16:56:52,094 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
+2026-10-14 16:56:52,094 - julearn - INFO -      n_iter: 10
+2026-10-14 16:56:52,095 - julearn - INFO - ====================
+2026-10-14 16:56:52,095 - julearn - INFO -
+2026-10-14 16:56:52,095 - julearn - INFO - = Model Parameters =
+2026-10-14 16:56:52,095 - julearn - INFO - Tuning hyperparameters using bayes
+2026-10-14 16:56:52,095 - julearn - INFO - Hyperparameters list:
+2026-10-14 16:56:52,096 - julearn - INFO -      Set 0
+2026-10-14 16:56:52,096 - julearn - INFO -              svm__C: Real(low=1e-06, high=1000.0, prior='log-uniform', transform='identity')
+2026-10-14 16:56:52,096 - julearn - INFO -              set_column_types: [SetColumnTypes(X_types={})]
+2026-10-14 16:56:52,096 - julearn - INFO -              zscore: [StandardScaler()]
+2026-10-14 16:56:52,097 - julearn - INFO -              svm: [SVC(kernel='linear')]
+2026-10-14 16:56:52,097 - julearn - INFO -      Set 1
+2026-10-14 16:56:52,097 - julearn - INFO -              svm__C: Real(low=1e-06, high=1000.0, prior='log-uniform', transform='identity')
+2026-10-14 16:56:52,097 - julearn - INFO -              svm__gamma: Real(low=1e-06, high=10.0, prior='log-uniform', transform='identity')
+2026-10-14 16:56:52,098 - julearn - INFO -              set_column_types: [SetColumnTypes(X_types={})]
+2026-10-14 16:56:52,098 - julearn - INFO -              zscore: [StandardScaler()]
+2026-10-14 16:56:52,098 - julearn - INFO -              svm: [SVC()]
+2026-10-14 16:56:52,099 - julearn - INFO - Hyperparameter svm__C as is Real(low=1e-06, high=1000.0, prior='log-uniform', transform='identity')
+2026-10-14 16:56:52,099 - julearn - INFO - Hyperparameter set_column_types as is [SetColumnTypes(X_types={})]
+2026-10-14 16:56:52,099 - julearn - INFO - Hyperparameter zscore as is [StandardScaler()]
+2026-10-14 16:56:52,100 - julearn - INFO - Hyperparameter svm as is [SVC(kernel='linear')]
+2026-10-14 16:56:52,100 - julearn - INFO - Hyperparameter svm__C as is Real(low=1e-06, high=1000.0, prior='log-uniform', transform='identity')
+2026-10-14 16:56:52,100 - julearn - INFO - Hyperparameter svm__gamma as is Real(low=1e-06, high=10.0, prior='log-uniform', transform='identity')
+2026-10-14 16:56:52,100 - julearn - INFO - Hyperparameter set_column_types as is [SetColumnTypes(X_types={})]
+2026-10-14 16:56:52,101 - julearn - INFO - Hyperparameter zscore as is [StandardScaler()]
+2026-10-14 16:56:52,101 - julearn - INFO - Hyperparameter svm as is [SVC()]
+2026-10-14 16:56:52,101 - julearn - INFO - Using inner CV scheme KFold(n_splits=2, random_state=None, shuffle=False)
+2026-10-14 16:56:52,102 - julearn - INFO - Search Parameters:
+2026-10-14 16:56:52,102 - julearn - INFO -      cv: KFold(n_splits=2, random_state=None, shuffle=False)
+2026-10-14 16:56:52,102 - julearn - INFO -      n_iter: 10
+2026-10-14 16:56:52,112 - julearn - INFO - ====================
+2026-10-14 16:56:52,112 - julearn - INFO -
+2026-10-14 16:56:52,112 - julearn - INFO - = Data Information =
+2026-10-14 16:56:52,112 - julearn - INFO -      Problem type: classification
+2026-10-14 16:56:52,112 - julearn - INFO -      Number of samples: 532
+2026-10-14 16:56:52,113 - julearn - INFO -      Number of features: 2
+2026-10-14 16:56:52,113 - julearn - INFO - ====================
+2026-10-14 16:56:52,113 - julearn - INFO -
+2026-10-14 16:56:52,113 - julearn - INFO -      Number of classes: 2
+2026-10-14 16:56:52,113 - julearn - INFO -      Target type: str
+2026-10-14 16:56:52,114 - julearn - INFO -      Class distributions: event
 cue     266
 stim    266
 Name: count, dtype: int64
-2026-07-21 10:58:31,702 - julearn - INFO - Using outer CV scheme KFold(n_splits=2, random_state=None, shuffle=False) (incl. final model)
-2026-07-21 10:58:31,703 - julearn - WARNING - The kind of values in y (str) is not suitable for a classification. Values should be numeric.
-/tmp/tmpp8_t5ngz/julearn/prepare.py:422: RuntimeWarning: The kind of values in y (str) is not suitable for a classification. Values should be numeric.
+2026-10-14 16:56:52,115 - julearn - INFO - Using outer CV scheme KFold(n_splits=2, random_state=None, shuffle=False) (incl. final model)
+2026-10-14 16:56:52,115 - julearn - WARNING - The kind of values in y (str) is not suitable for a classification. Values should be numeric.
+/tmp/tmpwiadl47l/julearn/prepare.py:422: RuntimeWarning: The kind of values in y (str) is not suitable for a classification. Values should be numeric.
   warn_with_log(
-2026-07-21 10:58:31,703 - julearn - INFO - Binary classification problem detected.
+2026-10-14 16:56:52,116 - julearn - INFO - Binary classification problem detected.
 0.656015037593985
 </pre></div>
 </div>
 <p>It seems that we might have found a better model, but which one is it?</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-collections sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/collections.html#collections.OrderedDict" title="collections.OrderedDict"><span class="n">estimator</span><span class="o">.</span><span class="n">best_params_</span></a><span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-collections sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/library/collections.html#collections.OrderedDict" title="collections.OrderedDict"><span class="n">estimator</span><span class="o">.</span><span class="n">best_params_</span></a><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>OrderedDict({'set_column_types': SetColumnTypes(X_types={}), 'svm': SVC(), 'svm__C': 0.0018082604408073564, 'svm__gamma': 1.6437581151471767, 'zscore': StandardScaler()})
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 4.205 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 4.093 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-03-complex-models-run-hyperparameter-tuning-bayessearch-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/ba53d606479a3cb55560049f69488102/run_hyperparameter_tuning_bayessearch.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">run_hyperparameter_tuning_bayessearch.ipynb</span></code></a></p>
@@ -917,7 +909,7 @@ Name: count, dtype: int64
 </div>
 </aside>
 </div>
-</div><script src="../../_static/documentation_options.js?v=7b0eb8ec"></script>
+</div><script src="../../_static/documentation_options.js?v=e88eb69f"></script>
 <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
 <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
 <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>

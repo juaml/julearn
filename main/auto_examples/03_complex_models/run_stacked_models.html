@@ -11,7 +11,7 @@
 <link href="../../_static/pygments.css?v=d111a655" rel="stylesheet" type="text/css"/>
 <link href="../../_static/styles/furo.css?v=7bdb33bb" rel="stylesheet" type="text/css"/>
 <link href="../../_static/copybutton.css?v=76b2166b" rel="stylesheet" type="text/css"/>
-<link href="../../_static/sg_gallery.css?v=fd6457a4" rel="stylesheet" type="text/css"/>
+<link href="../../_static/sg_gallery.css?v=c83e6b79" rel="stylesheet" type="text/css"/>
 <link href="../../_static/sg_gallery-binder.css?v=f4aeca0c" rel="stylesheet" type="text/css"/>
 <link href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" rel="stylesheet" type="text/css"/>
 <link href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" rel="stylesheet" type="text/css"/>
@@ -498,125 +498,120 @@ to download the full example code.</p>
 classification. We will use two different classifiers, one applied to petal
 features and one applied to sepal features. A final logistic regression
 classifier will be applied on the predictions of the two classifiers.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Authors: Federico Raimondo &lt;f.raimondo@fz-juelich.de&gt;</span>
-<span class="c1"># License: AGPL</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dataset</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">julearn</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_cross_validation</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">julearn.pipeline</span><span class="w"> </span><span class="kn">import</span> <span class="n">PipelineCreator</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">julearn.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">configure_logging</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="c1"># Authors: Federico Raimondo &lt;f.raimondo@fz-juelich.de&gt;</span><span class="w">
+</span><span class="c1"># License: AGPL</span><span class="w">
+</span><span class="w">
+</span><span class="kn">from</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dataset</span><span class="w">
+</span><span class="kn">from</span><span class="w"> </span><span class="nn">julearn</span><span class="w"> </span><span class="kn">import</span> <a class="sphx-glr-backref-module-julearn sphx-glr-backref-type-py-function reference internal" href="../../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><span class="n">run_cross_validation</span></a><span class="w">
+</span><span class="kn">from</span><span class="w"> </span><span class="nn">julearn</span><span class="nn">.</span><span class="nn">pipeline</span><span class="w"> </span><span class="kn">import</span> <a class="sphx-glr-backref-module-julearn sphx-glr-backref-type-py-class reference internal" href="../../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><span class="n">PipelineCreator</span></a><span class="w">
+</span><span class="kn">from</span><span class="w"> </span><span class="nn">julearn</span><span class="nn">.</span><span class="nn">utils</span><span class="w"> </span><span class="kn">import</span> <a class="sphx-glr-backref-module-julearn-utils sphx-glr-backref-type-py-function reference internal" href="../../api/generated/julearn.utils.configure_logging.html#julearn.utils.configure_logging" title="julearn.utils.configure_logging"><span class="n">configure_logging</span></a><span class="w">
+</span></pre></div></div>
 <p>Set the logging level to info to see extra information.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">"INFO"</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-julearn-utils sphx-glr-backref-type-py-function reference internal" href="../../api/generated/julearn.utils.configure_logging.html#julearn.utils.configure_logging" title="julearn.utils.configure_logging"><span class="n">configure_logging</span></a><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">"</span><span class="s2">INFO</span><span class="s2">"</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-10-14 16:56:56,355 - julearn - INFO - ===== Lib Versions =====
+2026-10-14 16:56:56,355 - julearn - INFO - numpy: 2.5.4
+2026-10-14 16:56:56,355 - julearn - INFO - scipy: 1.18.1
+2026-10-14 16:56:56,355 - julearn - INFO - sklearn: 1.8.0
+2026-10-14 16:56:56,356 - julearn - INFO - pandas: 3.0.6
+2026-10-14 16:56:56,356 - julearn - INFO - julearn: 0.3.6.dev77
+2026-10-14 16:56:56,356 - julearn - INFO - ========================
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-07-21 10:58:36,054 - julearn - INFO - ===== Lib Versions =====
-2026-07-21 10:58:36,054 - julearn - INFO - numpy: 2.5.1
-2026-07-21 10:58:36,054 - julearn - INFO - scipy: 1.18.0
-2026-07-21 10:58:36,055 - julearn - INFO - sklearn: 1.8.0
-2026-07-21 10:58:36,055 - julearn - INFO - pandas: 3.0.3
-2026-07-21 10:58:36,055 - julearn - INFO - julearn: 0.3.6.dev75
-2026-07-21 10:58:36,055 - julearn - INFO - ========================
-</pre></div>
-</div>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_iris</span></a> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">"iris"</span><span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_iris</span></a> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">"</span><span class="s2">iris</span><span class="s2">"</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <p>The dataset has three kind of species. We will keep two to perform a binary
 classification.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_iris</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_iris</span></a><span class="p">[</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_iris</span></a><span class="p">[</span><span class="s2">"species"</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s2">"versicolor"</span><span class="p">,</span> <span class="s2">"virginica"</span><span class="p">])]</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_iris</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_iris</span></a><span class="p">[</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_iris</span></a><span class="p">[</span><span class="s2">"</span><span class="s2">species</span><span class="s2">"</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="p">[</span><span class="s2">"</span><span class="s2">versicolor</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"</span><span class="s2">virginica</span><span class="s2">"</span><span class="p">]</span><span class="p">)</span><span class="p">]</span><span class="w">
+</span></pre></div></div>
 <p>As features, we will use the sepal length, width and petal length.
 We will try to predict the species.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list"><span class="n">X</span></a> <span class="o">=</span> <span class="p">[</span><span class="s2">"sepal_length"</span><span class="p">,</span> <span class="s2">"sepal_width"</span><span class="p">,</span> <span class="s2">"petal_length"</span><span class="p">,</span> <span class="s2">"petal_width"</span><span class="p">]</span>
-<a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str"><span class="n">y</span></a> <span class="o">=</span> <span class="s2">"species"</span>
-
-<span class="c1"># Define our feature types</span>
-<a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict"><span class="n">X_types</span></a> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">"sepal"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"sepal_length"</span><span class="p">,</span> <span class="s2">"sepal_width"</span><span class="p">],</span>
-    <span class="s2">"petal"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"petal_length"</span><span class="p">,</span> <span class="s2">"petal_width"</span><span class="p">],</span>
-<span class="p">}</span>
-
-<span class="c1"># Create the pipeline for the sepal features, by default will apply to "sepal"</span>
-<span class="n">model_sepal</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">"classification"</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">"sepal"</span><span class="p">)</span>
-<span class="n">model_sepal</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"filter_columns"</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">"*"</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="s2">"sepal"</span><span class="p">)</span>
-<span class="n">model_sepal</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"zscore"</span><span class="p">)</span>
-<span class="n">model_sepal</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"svm"</span><span class="p">)</span>
-
-<span class="c1"># Create the pipeline for the petal features, by default will apply to "petal"</span>
-<span class="n">model_petal</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">"classification"</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">"petal"</span><span class="p">)</span>
-<span class="n">model_petal</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"filter_columns"</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">"*"</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="s2">"petal"</span><span class="p">)</span>
-<span class="n">model_petal</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"zscore"</span><span class="p">)</span>
-<span class="n">model_petal</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"rf"</span><span class="p">)</span>
-
-<span class="c1"># Create the stacking model</span>
-<span class="n">model</span> <span class="o">=</span> <span class="n">PipelineCreator</span><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">"classification"</span><span class="p">)</span>
-<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
-    <span class="s2">"stacking"</span><span class="p">,</span>
-    <span class="n">estimators</span><span class="o">=</span><span class="p">[[(</span><span class="s2">"model_sepal"</span><span class="p">,</span> <span class="n">model_sepal</span><span class="p">),</span> <span class="p">(</span><span class="s2">"model_petal"</span><span class="p">,</span> <span class="n">model_petal</span><span class="p">)]],</span>
-    <span class="n">apply_to</span><span class="o">=</span><span class="s2">"*"</span><span class="p">,</span>
-<span class="p">)</span>
-
-<a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">scores</span></a> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
-    <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list"><span class="n">X</span></a><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list"><span class="n">X</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str"><span class="n">y</span></a><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str"><span class="n">y</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict"><span class="n">X_types</span></a><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict"><span class="n">X_types</span></a><span class="p">,</span> <span class="n">data</span><span class="o">=</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_iris</span></a><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">model</span>
-<span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">scores</span></a><span class="p">[</span><span class="s2">"test_score"</span><span class="p">])</span>
-</pre></div>
-</div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-07-21 10:58:36,058 - julearn - INFO - Adding step filter_columns that applies to ColumnTypes&lt;types={'*'}; pattern=.*&gt;
-2026-07-21 10:58:36,058 - julearn - INFO - Setting hyperparameter keep = sepal
-2026-07-21 10:58:36,059 - julearn - INFO - Step added
-2026-07-21 10:58:36,059 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={'sepal'}; pattern=(?:__:type:__sepal)&gt;
-2026-07-21 10:58:36,059 - julearn - INFO - Step added
-2026-07-21 10:58:36,059 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={'sepal'}; pattern=(?:__:type:__sepal)&gt;
-2026-07-21 10:58:36,059 - julearn - INFO - Step added
-2026-07-21 10:58:36,060 - julearn - INFO - Adding step filter_columns that applies to ColumnTypes&lt;types={'*'}; pattern=.*&gt;
-2026-07-21 10:58:36,060 - julearn - INFO - Setting hyperparameter keep = petal
-2026-07-21 10:58:36,060 - julearn - INFO - Step added
-2026-07-21 10:58:36,060 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={'petal'}; pattern=(?:__:type:__petal)&gt;
-2026-07-21 10:58:36,060 - julearn - INFO - Step added
-2026-07-21 10:58:36,060 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={'petal'}; pattern=(?:__:type:__petal)&gt;
-2026-07-21 10:58:36,061 - julearn - INFO - Step added
-2026-07-21 10:58:36,061 - julearn - INFO - Adding step stacking that applies to ColumnTypes&lt;types={'*'}; pattern=.*&gt;
-2026-07-21 10:58:36,061 - julearn - INFO - Setting hyperparameter estimators = [('model_sepal', &lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fe3edd5f350&gt;), ('model_petal', &lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fe3edd5e750&gt;)]
-2026-07-21 10:58:36,061 - julearn - INFO - Step added
-2026-07-21 10:58:36,061 - julearn - INFO - ==== Input Data ====
-2026-07-21 10:58:36,062 - julearn - INFO - Using dataframe as input
-2026-07-21 10:58:36,062 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length', 'petal_width']
-2026-07-21 10:58:36,062 - julearn - INFO -      Target: species
-2026-07-21 10:58:36,062 - julearn - INFO -      Expanded features: ['sepal_length', 'sepal_width', 'petal_length', 'petal_width']
-2026-07-21 10:58:36,062 - julearn - INFO -      X_types:{'sepal': ['sepal_length', 'sepal_width'], 'petal': ['petal_length', 'petal_width']}
-2026-07-21 10:58:36,063 - julearn - INFO - ====================
-2026-07-21 10:58:36,064 - julearn - INFO -
-2026-07-21 10:58:36,064 - julearn - INFO - = Model Parameters =
-2026-07-21 10:58:36,064 - julearn - INFO - ====================
-2026-07-21 10:58:36,064 - julearn - INFO -
-2026-07-21 10:58:36,065 - julearn - INFO - = Model Parameters =
-2026-07-21 10:58:36,065 - julearn - INFO - ====================
-2026-07-21 10:58:36,065 - julearn - INFO -
-2026-07-21 10:58:36,066 - julearn - INFO - = Model Parameters =
-2026-07-21 10:58:36,066 - julearn - INFO - ====================
-2026-07-21 10:58:36,066 - julearn - INFO -
-2026-07-21 10:58:36,066 - julearn - INFO - = Data Information =
-2026-07-21 10:58:36,067 - julearn - INFO -      Problem type: classification
-2026-07-21 10:58:36,067 - julearn - INFO -      Number of samples: 100
-2026-07-21 10:58:36,067 - julearn - INFO -      Number of features: 4
-2026-07-21 10:58:36,067 - julearn - INFO - ====================
-2026-07-21 10:58:36,067 - julearn - INFO -
-2026-07-21 10:58:36,067 - julearn - INFO -      Number of classes: 2
-2026-07-21 10:58:36,067 - julearn - INFO -      Target type: str
-2026-07-21 10:58:36,068 - julearn - INFO -      Class distributions: species
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="list"><span class="n">X</span></a> <span class="o">=</span> <span class="p">[</span><span class="s2">"</span><span class="s2">sepal_length</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"</span><span class="s2">sepal_width</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"</span><span class="s2">petal_length</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"</span><span class="s2">petal_width</span><span class="s2">"</span><span class="p">]</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">y</span></a> <span class="o">=</span> <span class="s2">"</span><span class="s2">species</span><span class="s2">"</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># Define our feature types</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="dict"><span class="n">X_types</span></a> <span class="o">=</span> <span class="p">{</span><span class="w">
+</span>    <span class="s2">"</span><span class="s2">sepal</span><span class="s2">"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"</span><span class="s2">sepal_length</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"</span><span class="s2">sepal_width</span><span class="s2">"</span><span class="p">]</span><span class="p">,</span><span class="w">
+</span>    <span class="s2">"</span><span class="s2">petal</span><span class="s2">"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"</span><span class="s2">petal_length</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"</span><span class="s2">petal_width</span><span class="s2">"</span><span class="p">]</span><span class="p">,</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># Create the pipeline for the sepal features, by default will apply to "sepal"</span><span class="w">
+</span><a class="sphx-glr-backref-module-julearn sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><span class="n">model_sepal</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-julearn sphx-glr-backref-type-py-class reference internal" href="../../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><span class="n">PipelineCreator</span></a><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">"</span><span class="s2">classification</span><span class="s2">"</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">"</span><span class="s2">sepal</span><span class="s2">"</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-julearn sphx-glr-backref-type-py-method reference internal" href="../../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator.add" title="julearn.PipelineCreator.add"><span class="n">model_sepal</span><span class="o">.</span><span class="n">add</span></a><span class="p">(</span><span class="s2">"</span><span class="s2">filter_columns</span><span class="s2">"</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">"</span><span class="s2">*</span><span class="s2">"</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="s2">"</span><span class="s2">sepal</span><span class="s2">"</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-julearn sphx-glr-backref-type-py-method reference internal" href="../../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator.add" title="julearn.PipelineCreator.add"><span class="n">model_sepal</span><span class="o">.</span><span class="n">add</span></a><span class="p">(</span><span class="s2">"</span><span class="s2">zscore</span><span class="s2">"</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-julearn sphx-glr-backref-type-py-method reference internal" href="../../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator.add" title="julearn.PipelineCreator.add"><span class="n">model_sepal</span><span class="o">.</span><span class="n">add</span></a><span class="p">(</span><span class="s2">"</span><span class="s2">svm</span><span class="s2">"</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># Create the pipeline for the petal features, by default will apply to "petal"</span><span class="w">
+</span><a class="sphx-glr-backref-module-julearn sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><span class="n">model_petal</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-julearn sphx-glr-backref-type-py-class reference internal" href="../../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><span class="n">PipelineCreator</span></a><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">"</span><span class="s2">classification</span><span class="s2">"</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">"</span><span class="s2">petal</span><span class="s2">"</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-julearn sphx-glr-backref-type-py-method reference internal" href="../../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator.add" title="julearn.PipelineCreator.add"><span class="n">model_petal</span><span class="o">.</span><span class="n">add</span></a><span class="p">(</span><span class="s2">"</span><span class="s2">filter_columns</span><span class="s2">"</span><span class="p">,</span> <span class="n">apply_to</span><span class="o">=</span><span class="s2">"</span><span class="s2">*</span><span class="s2">"</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="s2">"</span><span class="s2">petal</span><span class="s2">"</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-julearn sphx-glr-backref-type-py-method reference internal" href="../../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator.add" title="julearn.PipelineCreator.add"><span class="n">model_petal</span><span class="o">.</span><span class="n">add</span></a><span class="p">(</span><span class="s2">"</span><span class="s2">zscore</span><span class="s2">"</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-julearn sphx-glr-backref-type-py-method reference internal" href="../../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator.add" title="julearn.PipelineCreator.add"><span class="n">model_petal</span><span class="o">.</span><span class="n">add</span></a><span class="p">(</span><span class="s2">"</span><span class="s2">rf</span><span class="s2">"</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># Create the stacking model</span><span class="w">
+</span><a class="sphx-glr-backref-module-julearn sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><span class="n">model</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-julearn sphx-glr-backref-type-py-class reference internal" href="../../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><span class="n">PipelineCreator</span></a><span class="p">(</span><span class="n">problem_type</span><span class="o">=</span><span class="s2">"</span><span class="s2">classification</span><span class="s2">"</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-julearn sphx-glr-backref-type-py-method reference internal" href="../../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator.add" title="julearn.PipelineCreator.add"><span class="n">model</span><span class="o">.</span><span class="n">add</span></a><span class="p">(</span><span class="w">
+</span>    <span class="s2">"</span><span class="s2">stacking</span><span class="s2">"</span><span class="p">,</span><span class="w">
+</span>    <span class="n">estimators</span><span class="o">=</span><span class="p">[</span><span class="p">[</span><span class="p">(</span><span class="s2">"</span><span class="s2">model_sepal</span><span class="s2">"</span><span class="p">,</span> <a class="sphx-glr-backref-module-julearn sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><span class="n">model_sepal</span></a><span class="p">)</span><span class="p">,</span> <span class="p">(</span><span class="s2">"</span><span class="s2">model_petal</span><span class="s2">"</span><span class="p">,</span> <a class="sphx-glr-backref-module-julearn sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><span class="n">model_petal</span></a><span class="p">)</span><span class="p">]</span><span class="p">]</span><span class="p">,</span><span class="w">
+</span>    <span class="n">apply_to</span><span class="o">=</span><span class="s2">"</span><span class="s2">*</span><span class="s2">"</span><span class="p">,</span><span class="w">
+</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">scores</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-julearn sphx-glr-backref-type-py-function reference internal" href="../../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><span class="n">run_cross_validation</span></a><span class="p">(</span><span class="w">
+</span>    <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="list"><span class="n">X</span></a><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="list"><span class="n">X</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">y</span></a><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">y</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="dict"><span class="n">X_types</span></a><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="dict"><span class="n">X_types</span></a><span class="p">,</span> <span class="n">data</span><span class="o">=</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_iris</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-julearn sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><span class="n">model</span></a><span class="o">=</span><a class="sphx-glr-backref-module-julearn sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><span class="n">model</span></a><span class="w">
+</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">scores</span></a><span class="p">[</span><span class="s2">"</span><span class="s2">test_score</span><span class="s2">"</span><span class="p">]</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-10-14 16:56:56,358 - julearn - INFO - Adding step filter_columns that applies to ColumnTypes&lt;types={'*'}; pattern=.*&gt;
+2026-10-14 16:56:56,359 - julearn - INFO - Setting hyperparameter keep = sepal
+2026-10-14 16:56:56,359 - julearn - INFO - Step added
+2026-10-14 16:56:56,359 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={'sepal'}; pattern=(?:__:type:__sepal)&gt;
+2026-10-14 16:56:56,360 - julearn - INFO - Step added
+2026-10-14 16:56:56,360 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={'sepal'}; pattern=(?:__:type:__sepal)&gt;
+2026-10-14 16:56:56,360 - julearn - INFO - Step added
+2026-10-14 16:56:56,360 - julearn - INFO - Adding step filter_columns that applies to ColumnTypes&lt;types={'*'}; pattern=.*&gt;
+2026-10-14 16:56:56,360 - julearn - INFO - Setting hyperparameter keep = petal
+2026-10-14 16:56:56,361 - julearn - INFO - Step added
+2026-10-14 16:56:56,361 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={'petal'}; pattern=(?:__:type:__petal)&gt;
+2026-10-14 16:56:56,361 - julearn - INFO - Step added
+2026-10-14 16:56:56,361 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={'petal'}; pattern=(?:__:type:__petal)&gt;
+2026-10-14 16:56:56,361 - julearn - INFO - Step added
+2026-10-14 16:56:56,362 - julearn - INFO - Adding step stacking that applies to ColumnTypes&lt;types={'*'}; pattern=.*&gt;
+2026-10-14 16:56:56,362 - julearn - INFO - Setting hyperparameter estimators = [('model_sepal', &lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7f67009b5a50&gt;), ('model_petal', &lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7f671378ba50&gt;)]
+2026-10-14 16:56:56,362 - julearn - INFO - Step added
+2026-10-14 16:56:56,362 - julearn - INFO - ==== Input Data ====
+2026-10-14 16:56:56,362 - julearn - INFO - Using dataframe as input
+2026-10-14 16:56:56,362 - julearn - INFO -      Features: ['sepal_length', 'sepal_width', 'petal_length', 'petal_width']
+2026-10-14 16:56:56,363 - julearn - INFO -      Target: species
+2026-10-14 16:56:56,363 - julearn - INFO -      Expanded features: ['sepal_length', 'sepal_width', 'petal_length', 'petal_width']
+2026-10-14 16:56:56,363 - julearn - INFO -      X_types:{'sepal': ['sepal_length', 'sepal_width'], 'petal': ['petal_length', 'petal_width']}
+2026-10-14 16:56:56,364 - julearn - INFO - ====================
+2026-10-14 16:56:56,364 - julearn - INFO -
+2026-10-14 16:56:56,365 - julearn - INFO - = Model Parameters =
+2026-10-14 16:56:56,365 - julearn - INFO - ====================
+2026-10-14 16:56:56,365 - julearn - INFO -
+2026-10-14 16:56:56,365 - julearn - INFO - = Model Parameters =
+2026-10-14 16:56:56,365 - julearn - INFO - ====================
+2026-10-14 16:56:56,366 - julearn - INFO -
+2026-10-14 16:56:56,366 - julearn - INFO - = Model Parameters =
+2026-10-14 16:56:56,366 - julearn - INFO - ====================
+2026-10-14 16:56:56,367 - julearn - INFO -
+2026-10-14 16:56:56,367 - julearn - INFO - = Data Information =
+2026-10-14 16:56:56,367 - julearn - INFO -      Problem type: classification
+2026-10-14 16:56:56,367 - julearn - INFO -      Number of samples: 100
+2026-10-14 16:56:56,367 - julearn - INFO -      Number of features: 4
+2026-10-14 16:56:56,367 - julearn - INFO - ====================
+2026-10-14 16:56:56,367 - julearn - INFO -
+2026-10-14 16:56:56,368 - julearn - INFO -      Number of classes: 2
+2026-10-14 16:56:56,368 - julearn - INFO -      Target type: str
+2026-10-14 16:56:56,368 - julearn - INFO -      Class distributions: species
 versicolor    50
 virginica     50
 Name: count, dtype: int64
-2026-07-21 10:58:36,069 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2026-07-21 10:58:36,070 - julearn - WARNING - The kind of values in y (str) is not suitable for a classification. Values should be numeric.
-/tmp/tmpp8_t5ngz/julearn/prepare.py:422: RuntimeWarning: The kind of values in y (str) is not suitable for a classification. Values should be numeric.
+2026-10-14 16:56:56,369 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2026-10-14 16:56:56,370 - julearn - WARNING - The kind of values in y (str) is not suitable for a classification. Values should be numeric.
+/tmp/tmpwiadl47l/julearn/prepare.py:422: RuntimeWarning: The kind of values in y (str) is not suitable for a classification. Values should be numeric.
   warn_with_log(
-2026-07-21 10:58:36,070 - julearn - INFO - Binary classification problem detected.
+2026-10-14 16:56:56,370 - julearn - INFO - Binary classification problem detected.
 0    1.00
 1    0.85
 2    0.95
@@ -625,7 +620,7 @@ Name: count, dtype: int64
 Name: test_score, dtype: float64
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 4.775 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 4.527 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-03-complex-models-run-stacked-models-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/42388118e4d8ea10bc2d3ca431517ea4/run_stacked_models.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">run_stacked_models.ipynb</span></code></a></p>
@@ -685,7 +680,7 @@ Name: test_score, dtype: float64
 </div>
 </aside>
 </div>
-</div><script src="../../_static/documentation_options.js?v=7b0eb8ec"></script>
+</div><script src="../../_static/documentation_options.js?v=e88eb69f"></script>
 <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
 <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
 <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>

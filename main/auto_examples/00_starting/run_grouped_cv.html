@@ -11,7 +11,7 @@
 <link href="../../_static/pygments.css?v=d111a655" rel="stylesheet" type="text/css"/>
 <link href="../../_static/styles/furo.css?v=7bdb33bb" rel="stylesheet" type="text/css"/>
 <link href="../../_static/copybutton.css?v=76b2166b" rel="stylesheet" type="text/css"/>
-<link href="../../_static/sg_gallery.css?v=fd6457a4" rel="stylesheet" type="text/css"/>
+<link href="../../_static/sg_gallery.css?v=c83e6b79" rel="stylesheet" type="text/css"/>
 <link href="../../_static/sg_gallery-binder.css?v=f4aeca0c" rel="stylesheet" type="text/css"/>
 <link href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" rel="stylesheet" type="text/css"/>
 <link href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" rel="stylesheet" type="text/css"/>
@@ -502,43 +502,39 @@ Cross-Validation for classification using Random Forest Classifier.</p>
 <div><p>Waskom, M.L., Frank, M.C., Wagner, A.D. (2016). Adaptive engagement of
 cognitive control in context-dependent decision-making. Cerebral Cortex.</p>
 </div></blockquote>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Authors: Federico Raimondo &lt;f.raimondo@fz-juelich.de&gt;</span>
-<span class="c1">#          Shammi More &lt;s.more@fz-juelich.de&gt;</span>
-<span class="c1">#          Kimia Nazarzadeh &lt;k.nazarzadeh@fz-juelich.de&gt;</span>
-<span class="c1"># License: AGPL</span>
-
-<span class="c1"># Importing the necessary Python libraries</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dataset</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.model_selection</span><span class="w"> </span><span class="kn">import</span> <a class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GroupKFold.html#sklearn.model_selection.GroupKFold" title="sklearn.model_selection.GroupKFold"><span class="n">GroupKFold</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.StratifiedGroupKFold.html#sklearn.model_selection.StratifiedGroupKFold" title="sklearn.model_selection.StratifiedGroupKFold"><span class="n">StratifiedGroupKFold</span></a>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">julearn.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">configure_logging</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">julearn</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_cross_validation</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="c1"># Authors: Federico Raimondo &lt;f.raimondo@fz-juelich.de&gt;</span><span class="w">
+</span><span class="c1">#          Shammi More &lt;s.more@fz-juelich.de&gt;</span><span class="w">
+</span><span class="c1">#          Kimia Nazarzadeh &lt;k.nazarzadeh@fz-juelich.de&gt;</span><span class="w">
+</span><span class="c1"># License: AGPL</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># Importing the necessary Python libraries</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span><span class="w">
+</span><span class="w">
+</span><span class="kn">from</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dataset</span><span class="w">
+</span><span class="kn">from</span><span class="w"> </span><span class="nn">sklearn</span><span class="nn">.</span><span class="nn">model_selection</span><span class="w"> </span><span class="kn">import</span> <a class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GroupKFold.html#sklearn.model_selection.GroupKFold" title="sklearn.model_selection.GroupKFold"><span class="n">GroupKFold</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.StratifiedGroupKFold.html#sklearn.model_selection.StratifiedGroupKFold" title="sklearn.model_selection.StratifiedGroupKFold"><span class="n">StratifiedGroupKFold</span></a><span class="w">
+</span><span class="w">
+</span><span class="kn">from</span><span class="w"> </span><span class="nn">julearn</span><span class="nn">.</span><span class="nn">utils</span><span class="w"> </span><span class="kn">import</span> <a class="sphx-glr-backref-module-julearn-utils sphx-glr-backref-type-py-function reference internal" href="../../api/generated/julearn.utils.configure_logging.html#julearn.utils.configure_logging" title="julearn.utils.configure_logging"><span class="n">configure_logging</span></a><span class="w">
+</span><span class="kn">from</span><span class="w"> </span><span class="nn">julearn</span><span class="w"> </span><span class="kn">import</span> <a class="sphx-glr-backref-module-julearn sphx-glr-backref-type-py-function reference internal" href="../../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><span class="n">run_cross_validation</span></a><span class="w">
+</span></pre></div></div>
 <p>Set the logging level to info to see extra information</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">"INFO"</span><span class="p">)</span>
-</pre></div>
-</div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-07-21 10:58:14,587 - julearn - INFO - ===== Lib Versions =====
-2026-07-21 10:58:14,588 - julearn - INFO - numpy: 2.5.1
-2026-07-21 10:58:14,588 - julearn - INFO - scipy: 1.18.0
-2026-07-21 10:58:14,588 - julearn - INFO - sklearn: 1.8.0
-2026-07-21 10:58:14,588 - julearn - INFO - pandas: 3.0.3
-2026-07-21 10:58:14,588 - julearn - INFO - julearn: 0.3.6.dev75
-2026-07-21 10:58:14,588 - julearn - INFO - ========================
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-julearn-utils sphx-glr-backref-type-py-function reference internal" href="../../api/generated/julearn.utils.configure_logging.html#julearn.utils.configure_logging" title="julearn.utils.configure_logging"><span class="n">configure_logging</span></a><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">"</span><span class="s2">INFO</span><span class="s2">"</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-10-14 16:56:35,579 - julearn - INFO - ===== Lib Versions =====
+2026-10-14 16:56:35,580 - julearn - INFO - numpy: 2.5.4
+2026-10-14 16:56:35,580 - julearn - INFO - scipy: 1.18.1
+2026-10-14 16:56:35,580 - julearn - INFO - sklearn: 1.8.0
+2026-10-14 16:56:35,580 - julearn - INFO - pandas: 3.0.6
+2026-10-14 16:56:35,580 - julearn - INFO - julearn: 0.3.6.dev77
+2026-10-14 16:56:35,580 - julearn - INFO - ========================
 </pre></div>
 </div>
 <section id="dealing-with-cross-validation-techniques">
 <h3>Dealing with Cross-Validation techniques<a class="headerlink" href="#dealing-with-cross-validation-techniques" title="Link to this heading">¶</a></h3>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_fmri</span></a> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">"fmri"</span><span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_fmri</span></a> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="s2">"</span><span class="s2">fmri</span><span class="s2">"</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <p>First, let’s get some information on what the dataset has:</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.head.html#pandas.DataFrame.head" title="pandas.DataFrame.head"><span class="n">df_fmri</span><span class="o">.</span><span class="n">head</span></a><span class="p">())</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.head.html#pandas.DataFrame.head" title="pandas.DataFrame.head"><span class="n">df_fmri</span><span class="o">.</span><span class="n">head</span></a><span class="p">(</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>  subject  timepoint event    region    signal
 0     s13         18  stim  parietal -0.017552
 1      s5         14  stim  parietal -0.080883
@@ -551,12 +547,11 @@ cognitive control in context-dependent decision-making. Cerebral Cortex.</p>
 were several subjects, timepoints, events and signal extracted from several
 brain regions.</p>
 <p>Let’s check how many kinds of each we have.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_fmri</span></a><span class="p">[</span><span class="s2">"event"</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_fmri</span></a><span class="p">[</span><span class="s2">"region"</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_fmri</span></a><span class="p">[</span><span class="s2">"timepoint"</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()))</span>
-<span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_fmri</span></a><span class="p">[</span><span class="s2">"subject"</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_fmri</span></a><span class="p">[</span><span class="s2">"</span><span class="s2">event</span><span class="s2">"</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span><span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_fmri</span></a><span class="p">[</span><span class="s2">"</span><span class="s2">region</span><span class="s2">"</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span><span class="nb">print</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_fmri</span></a><span class="p">[</span><span class="s2">"</span><span class="s2">timepoint</span><span class="s2">"</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="p">)</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span><span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_fmri</span></a><span class="p">[</span><span class="s2">"</span><span class="s2">subject</span><span class="s2">"</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;StringArray&gt;
 ['stim', 'cue']
 Length: 2, dtype: str
@@ -573,16 +568,15 @@ Length: 14, dtype: str
 <p>We have data from parietal and frontal regions during 2 types of events
 (<em>cue</em> and <em>stim</em>) during 18 timepoints and for 14 subjects.
 Let’s see how many samples we have for each condition</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.groupby.html#pandas.DataFrame.groupby" title="pandas.DataFrame.groupby"><span class="n">df_fmri</span><span class="o">.</span><span class="n">groupby</span></a><span class="p">([</span><span class="s2">"subject"</span><span class="p">,</span> <span class="s2">"timepoint"</span><span class="p">,</span> <span class="s2">"event"</span><span class="p">,</span> <span class="s2">"region"</span><span class="p">])</span><span class="o">.</span><span class="n">count</span><span class="p">())</span>
-<span class="nb">print</span><span class="p">(</span>
-    <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function" href="https://numpy.org/doc/stable/reference/generated/numpy.unique.html#numpy.unique" title="numpy.unique"><span class="n">np</span><span class="o">.</span><span class="n">unique</span></a><span class="p">(</span>
-        <a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.groupby.html#pandas.DataFrame.groupby" title="pandas.DataFrame.groupby"><span class="n">df_fmri</span><span class="o">.</span><span class="n">groupby</span></a><span class="p">([</span><span class="s2">"subject"</span><span class="p">,</span> <span class="s2">"timepoint"</span><span class="p">,</span> <span class="s2">"event"</span><span class="p">,</span> <span class="s2">"region"</span><span class="p">])</span>
-        <span class="o">.</span><span class="n">count</span><span class="p">()</span>
-        <span class="o">.</span><span class="n">values</span>
-    <span class="p">)</span>
-<span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.groupby.html#pandas.DataFrame.groupby" title="pandas.DataFrame.groupby"><span class="n">df_fmri</span><span class="o">.</span><span class="n">groupby</span></a><span class="p">(</span><span class="p">[</span><span class="s2">"</span><span class="s2">subject</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"</span><span class="s2">timepoint</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"</span><span class="s2">event</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"</span><span class="s2">region</span><span class="s2">"</span><span class="p">]</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span><span class="nb">print</span><span class="p">(</span><span class="w">
+</span>    <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.unique.html#numpy.unique" title="numpy.unique"><span class="n">np</span><span class="o">.</span><span class="n">unique</span></a><span class="p">(</span><span class="w">
+</span>        <a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.groupby.html#pandas.DataFrame.groupby" title="pandas.DataFrame.groupby"><span class="n">df_fmri</span><span class="o">.</span><span class="n">groupby</span></a><span class="p">(</span><span class="p">[</span><span class="s2">"</span><span class="s2">subject</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"</span><span class="s2">timepoint</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"</span><span class="s2">event</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"</span><span class="s2">region</span><span class="s2">"</span><span class="p">]</span><span class="p">)</span><span class="w">
+</span>        <span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="p">)</span><span class="w">
+</span>        <span class="o">.</span><span class="n">values</span><span class="w">
+</span>    <span class="p">)</span><span class="w">
+</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>                                  signal
 subject timepoint event region
 s0      0         cue   frontal        1
@@ -605,180 +599,175 @@ s9      17        stim  parietal       1
 <p>Let’s try to build a model, that uses parietal and frontal signal to predicts
 whether the event was a <em>cue</em> or a <em>stim</em>.</p>
 <p>First we define our X and y variables.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list"><span class="n">X</span></a> <span class="o">=</span> <span class="p">[</span><span class="s2">"parietal"</span><span class="p">,</span> <span class="s2">"frontal"</span><span class="p">]</span>
-<a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str"><span class="n">y</span></a> <span class="o">=</span> <span class="s2">"event"</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="list"><span class="n">X</span></a> <span class="o">=</span> <span class="p">[</span><span class="s2">"</span><span class="s2">parietal</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"</span><span class="s2">frontal</span><span class="s2">"</span><span class="p">]</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">y</span></a> <span class="o">=</span> <span class="s2">"</span><span class="s2">event</span><span class="s2">"</span><span class="w">
+</span></pre></div></div>
 <p>In order for this to work, both <em>parietal</em> and <em>frontal</em> must be columns.
 We need to <em>pivot</em> the table.</p>
 <p>The values of <em>region</em> will be the columns. The column <em>signal</em> will be the
 values. And the columns <em>subject</em>, <em>timepoint</em> and <em>event</em> will be the index</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_fmri</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.pivot.html#pandas.DataFrame.pivot" title="pandas.DataFrame.pivot"><span class="n">df_fmri</span><span class="o">.</span><span class="n">pivot</span></a><span class="p">(</span>
-    <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">"subject"</span><span class="p">,</span> <span class="s2">"timepoint"</span><span class="p">,</span> <span class="s2">"event"</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="s2">"region"</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s2">"signal"</span>
-<span class="p">)</span>
-
-<a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_fmri</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.reset_index.html#pandas.DataFrame.reset_index" title="pandas.DataFrame.reset_index"><span class="n">df_fmri</span><span class="o">.</span><span class="n">reset_index</span></a><span class="p">()</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_fmri</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.pivot.html#pandas.DataFrame.pivot" title="pandas.DataFrame.pivot"><span class="n">df_fmri</span><span class="o">.</span><span class="n">pivot</span></a><span class="p">(</span><span class="w">
+</span>    <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s2">"</span><span class="s2">subject</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"</span><span class="s2">timepoint</span><span class="s2">"</span><span class="p">,</span> <span class="s2">"</span><span class="s2">event</span><span class="s2">"</span><span class="p">]</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s2">"</span><span class="s2">region</span><span class="s2">"</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s2">"</span><span class="s2">signal</span><span class="s2">"</span><span class="w">
+</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_fmri</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-method reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.reset_index.html#pandas.DataFrame.reset_index" title="pandas.DataFrame.reset_index"><span class="n">df_fmri</span><span class="o">.</span><span class="n">reset_index</span></a><span class="p">(</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <p>Here we want to zscore all the features and then train a Support Vector
 Machine classifier.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">scores</span></a> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
-    <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list"><span class="n">X</span></a><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list"><span class="n">X</span></a><span class="p">,</span>
-    <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str"><span class="n">y</span></a><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str"><span class="n">y</span></a><span class="p">,</span>
-    <span class="n">data</span><span class="o">=</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_fmri</span></a><span class="p">,</span>
-    <span class="n">preprocess</span><span class="o">=</span><span class="s2">"zscore"</span><span class="p">,</span>
-    <a class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline"><span class="n">model</span></a><span class="o">=</span><span class="s2">"rf"</span><span class="p">,</span>
-    <span class="n">problem_type</span><span class="o">=</span><span class="s2">"classification"</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">scores</span></a><span class="p">[</span><span class="s2">"test_score"</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
-</pre></div>
-</div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-07-21 10:58:14,612 - julearn - INFO - ==== Input Data ====
-2026-07-21 10:58:14,612 - julearn - INFO - Using dataframe as input
-2026-07-21 10:58:14,612 - julearn - INFO -      Features: ['parietal', 'frontal']
-2026-07-21 10:58:14,612 - julearn - INFO -      Target: event
-2026-07-21 10:58:14,613 - julearn - INFO -      Expanded features: ['parietal', 'frontal']
-2026-07-21 10:58:14,613 - julearn - INFO -      X_types:{}
-2026-07-21 10:58:14,613 - julearn - WARNING - The following columns are not defined in X_types: ['parietal', 'frontal']. They will be treated as continuous.
-/tmp/tmpp8_t5ngz/julearn/prepare.py:609: RuntimeWarning: The following columns are not defined in X_types: ['parietal', 'frontal']. They will be treated as continuous.
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">scores</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-julearn sphx-glr-backref-type-py-function reference internal" href="../../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><span class="n">run_cross_validation</span></a><span class="p">(</span><span class="w">
+</span>    <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="list"><span class="n">X</span></a><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="list"><span class="n">X</span></a><span class="p">,</span><span class="w">
+</span>    <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">y</span></a><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">y</span></a><span class="p">,</span><span class="w">
+</span>    <span class="n">data</span><span class="o">=</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_fmri</span></a><span class="p">,</span><span class="w">
+</span>    <span class="n">preprocess</span><span class="o">=</span><span class="s2">"</span><span class="s2">zscore</span><span class="s2">"</span><span class="p">,</span><span class="w">
+</span>    <a class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline"><span class="n">model</span></a><span class="o">=</span><span class="s2">"</span><span class="s2">rf</span><span class="s2">"</span><span class="p">,</span><span class="w">
+</span>    <span class="n">problem_type</span><span class="o">=</span><span class="s2">"</span><span class="s2">classification</span><span class="s2">"</span><span class="p">,</span><span class="w">
+</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">scores</span></a><span class="p">[</span><span class="s2">"</span><span class="s2">test_score</span><span class="s2">"</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-10-14 16:56:35,603 - julearn - INFO - ==== Input Data ====
+2026-10-14 16:56:35,603 - julearn - INFO - Using dataframe as input
+2026-10-14 16:56:35,603 - julearn - INFO -      Features: ['parietal', 'frontal']
+2026-10-14 16:56:35,603 - julearn - INFO -      Target: event
+2026-10-14 16:56:35,603 - julearn - INFO -      Expanded features: ['parietal', 'frontal']
+2026-10-14 16:56:35,604 - julearn - INFO -      X_types:{}
+2026-10-14 16:56:35,604 - julearn - WARNING - The following columns are not defined in X_types: ['parietal', 'frontal']. They will be treated as continuous.
+/tmp/tmpwiadl47l/julearn/prepare.py:609: RuntimeWarning: The following columns are not defined in X_types: ['parietal', 'frontal']. They will be treated as continuous.
   warn_with_log(
-2026-07-21 10:58:14,614 - julearn - INFO - ====================
-2026-07-21 10:58:14,614 - julearn - INFO -
-2026-07-21 10:58:14,614 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={'continuous'}; pattern=(?:__:type:__continuous)&gt;
-2026-07-21 10:58:14,615 - julearn - INFO - Step added
-2026-07-21 10:58:14,615 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={'continuous'}; pattern=(?:__:type:__continuous)&gt;
-2026-07-21 10:58:14,615 - julearn - INFO - Step added
-2026-07-21 10:58:14,615 - julearn - INFO - = Model Parameters =
-2026-07-21 10:58:14,616 - julearn - INFO - ====================
-2026-07-21 10:58:14,616 - julearn - INFO -
-2026-07-21 10:58:14,616 - julearn - INFO - = Data Information =
-2026-07-21 10:58:14,616 - julearn - INFO -      Problem type: classification
-2026-07-21 10:58:14,616 - julearn - INFO -      Number of samples: 532
-2026-07-21 10:58:14,616 - julearn - INFO -      Number of features: 2
-2026-07-21 10:58:14,616 - julearn - INFO - ====================
-2026-07-21 10:58:14,616 - julearn - INFO -
-2026-07-21 10:58:14,617 - julearn - INFO -      Number of classes: 2
-2026-07-21 10:58:14,617 - julearn - INFO -      Target type: str
-2026-07-21 10:58:14,617 - julearn - INFO -      Class distributions: event
+2026-10-14 16:56:35,605 - julearn - INFO - ====================
+2026-10-14 16:56:35,605 - julearn - INFO -
+2026-10-14 16:56:35,605 - julearn - INFO - Adding step zscore that applies to ColumnTypes&lt;types={'continuous'}; pattern=(?:__:type:__continuous)&gt;
+2026-10-14 16:56:35,605 - julearn - INFO - Step added
+2026-10-14 16:56:35,605 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={'continuous'}; pattern=(?:__:type:__continuous)&gt;
+2026-10-14 16:56:35,606 - julearn - INFO - Step added
+2026-10-14 16:56:35,606 - julearn - INFO - = Model Parameters =
+2026-10-14 16:56:35,606 - julearn - INFO - ====================
+2026-10-14 16:56:35,607 - julearn - INFO -
+2026-10-14 16:56:35,607 - julearn - INFO - = Data Information =
+2026-10-14 16:56:35,607 - julearn - INFO -      Problem type: classification
+2026-10-14 16:56:35,607 - julearn - INFO -      Number of samples: 532
+2026-10-14 16:56:35,607 - julearn - INFO -      Number of features: 2
+2026-10-14 16:56:35,607 - julearn - INFO - ====================
+2026-10-14 16:56:35,607 - julearn - INFO -
+2026-10-14 16:56:35,608 - julearn - INFO -      Number of classes: 2
+2026-10-14 16:56:35,608 - julearn - INFO -      Target type: str
+2026-10-14 16:56:35,608 - julearn - INFO -      Class distributions: event
 cue     266
 stim    266
 Name: count, dtype: int64
-2026-07-21 10:58:14,618 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2026-07-21 10:58:14,619 - julearn - WARNING - The kind of values in y (str) is not suitable for a classification. Values should be numeric.
-/tmp/tmpp8_t5ngz/julearn/prepare.py:422: RuntimeWarning: The kind of values in y (str) is not suitable for a classification. Values should be numeric.
+2026-10-14 16:56:35,609 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2026-10-14 16:56:35,610 - julearn - WARNING - The kind of values in y (str) is not suitable for a classification. Values should be numeric.
+/tmp/tmpwiadl47l/julearn/prepare.py:422: RuntimeWarning: The kind of values in y (str) is not suitable for a classification. Values should be numeric.
   warn_with_log(
-2026-07-21 10:58:14,619 - julearn - INFO - Binary classification problem detected.
+2026-10-14 16:56:35,610 - julearn - INFO - Binary classification problem detected.
 0.6841826838300122
 </pre></div>
 </div>
 <p>Train classification model with stratification on data</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.StratifiedGroupKFold.html#sklearn.model_selection.StratifiedGroupKFold" title="sklearn.model_selection.StratifiedGroupKFold"><span class="n">cv_stratified</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.StratifiedGroupKFold.html#sklearn.model_selection.StratifiedGroupKFold" title="sklearn.model_selection.StratifiedGroupKFold"><span class="n">StratifiedGroupKFold</span></a><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">scores</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline"><span class="n">model</span></a> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
-    <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list"><span class="n">X</span></a><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list"><span class="n">X</span></a><span class="p">,</span>
-    <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str"><span class="n">y</span></a><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str"><span class="n">y</span></a><span class="p">,</span>
-    <span class="n">data</span><span class="o">=</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_fmri</span></a><span class="p">,</span>
-    <span class="n">groups</span><span class="o">=</span><span class="s2">"subject"</span><span class="p">,</span>
-    <a class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline"><span class="n">model</span></a><span class="o">=</span><span class="s2">"rf"</span><span class="p">,</span>
-    <span class="n">problem_type</span><span class="o">=</span><span class="s2">"classification"</span><span class="p">,</span>
-    <a class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GroupKFold.html#sklearn.model_selection.GroupKFold" title="sklearn.model_selection.GroupKFold"><span class="n">cv</span></a><span class="o">=</span><a class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.StratifiedGroupKFold.html#sklearn.model_selection.StratifiedGroupKFold" title="sklearn.model_selection.StratifiedGroupKFold"><span class="n">cv_stratified</span></a><span class="p">,</span>
-    <span class="n">return_estimator</span><span class="o">=</span><span class="s2">"final"</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">scores</span></a><span class="p">[</span><span class="s2">"test_score"</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
-</pre></div>
-</div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-07-21 10:58:15,460 - julearn - INFO - ==== Input Data ====
-2026-07-21 10:58:15,461 - julearn - INFO - Using dataframe as input
-2026-07-21 10:58:15,461 - julearn - INFO -      Features: ['parietal', 'frontal']
-2026-07-21 10:58:15,461 - julearn - INFO -      Target: event
-2026-07-21 10:58:15,461 - julearn - INFO -      Expanded features: ['parietal', 'frontal']
-2026-07-21 10:58:15,461 - julearn - INFO -      X_types:{}
-2026-07-21 10:58:15,462 - julearn - WARNING - The following columns are not defined in X_types: ['parietal', 'frontal']. They will be treated as continuous.
-/tmp/tmpp8_t5ngz/julearn/prepare.py:609: RuntimeWarning: The following columns are not defined in X_types: ['parietal', 'frontal']. They will be treated as continuous.
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.StratifiedGroupKFold.html#sklearn.model_selection.StratifiedGroupKFold" title="sklearn.model_selection.StratifiedGroupKFold"><span class="n">cv_stratified</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.StratifiedGroupKFold.html#sklearn.model_selection.StratifiedGroupKFold" title="sklearn.model_selection.StratifiedGroupKFold"><span class="n">StratifiedGroupKFold</span></a><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">scores</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline"><span class="n">model</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-julearn sphx-glr-backref-type-py-function reference internal" href="../../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><span class="n">run_cross_validation</span></a><span class="p">(</span><span class="w">
+</span>    <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="list"><span class="n">X</span></a><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="list"><span class="n">X</span></a><span class="p">,</span><span class="w">
+</span>    <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">y</span></a><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">y</span></a><span class="p">,</span><span class="w">
+</span>    <span class="n">data</span><span class="o">=</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_fmri</span></a><span class="p">,</span><span class="w">
+</span>    <span class="n">groups</span><span class="o">=</span><span class="s2">"</span><span class="s2">subject</span><span class="s2">"</span><span class="p">,</span><span class="w">
+</span>    <a class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline"><span class="n">model</span></a><span class="o">=</span><span class="s2">"</span><span class="s2">rf</span><span class="s2">"</span><span class="p">,</span><span class="w">
+</span>    <span class="n">problem_type</span><span class="o">=</span><span class="s2">"</span><span class="s2">classification</span><span class="s2">"</span><span class="p">,</span><span class="w">
+</span>    <a class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GroupKFold.html#sklearn.model_selection.GroupKFold" title="sklearn.model_selection.GroupKFold"><span class="n">cv</span></a><span class="o">=</span><a class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.StratifiedGroupKFold.html#sklearn.model_selection.StratifiedGroupKFold" title="sklearn.model_selection.StratifiedGroupKFold"><span class="n">cv_stratified</span></a><span class="p">,</span><span class="w">
+</span>    <span class="n">return_estimator</span><span class="o">=</span><span class="s2">"</span><span class="s2">final</span><span class="s2">"</span><span class="p">,</span><span class="w">
+</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">scores</span></a><span class="p">[</span><span class="s2">"</span><span class="s2">test_score</span><span class="s2">"</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-10-14 16:56:36,417 - julearn - INFO - ==== Input Data ====
+2026-10-14 16:56:36,418 - julearn - INFO - Using dataframe as input
+2026-10-14 16:56:36,418 - julearn - INFO -      Features: ['parietal', 'frontal']
+2026-10-14 16:56:36,418 - julearn - INFO -      Target: event
+2026-10-14 16:56:36,418 - julearn - INFO -      Expanded features: ['parietal', 'frontal']
+2026-10-14 16:56:36,418 - julearn - INFO -      X_types:{}
+2026-10-14 16:56:36,418 - julearn - WARNING - The following columns are not defined in X_types: ['parietal', 'frontal']. They will be treated as continuous.
+/tmp/tmpwiadl47l/julearn/prepare.py:609: RuntimeWarning: The following columns are not defined in X_types: ['parietal', 'frontal']. They will be treated as continuous.
   warn_with_log(
-2026-07-21 10:58:15,463 - julearn - INFO - Using subject as groups
-2026-07-21 10:58:15,463 - julearn - INFO - ====================
-2026-07-21 10:58:15,463 - julearn - INFO -
-2026-07-21 10:58:15,463 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={'continuous'}; pattern=(?:__:type:__continuous)&gt;
-2026-07-21 10:58:15,463 - julearn - INFO - Step added
-2026-07-21 10:58:15,464 - julearn - INFO - = Model Parameters =
-2026-07-21 10:58:15,464 - julearn - INFO - ====================
-2026-07-21 10:58:15,464 - julearn - INFO -
-2026-07-21 10:58:15,464 - julearn - INFO - = Data Information =
-2026-07-21 10:58:15,464 - julearn - INFO -      Problem type: classification
-2026-07-21 10:58:15,465 - julearn - INFO -      Number of samples: 532
-2026-07-21 10:58:15,465 - julearn - INFO -      Number of features: 2
-2026-07-21 10:58:15,465 - julearn - INFO - ====================
-2026-07-21 10:58:15,465 - julearn - INFO -
-2026-07-21 10:58:15,465 - julearn - INFO -      Number of classes: 2
-2026-07-21 10:58:15,465 - julearn - INFO -      Target type: str
-2026-07-21 10:58:15,466 - julearn - INFO -      Class distributions: event
+2026-10-14 16:56:36,419 - julearn - INFO - Using subject as groups
+2026-10-14 16:56:36,420 - julearn - INFO - ====================
+2026-10-14 16:56:36,420 - julearn - INFO -
+2026-10-14 16:56:36,420 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={'continuous'}; pattern=(?:__:type:__continuous)&gt;
+2026-10-14 16:56:36,420 - julearn - INFO - Step added
+2026-10-14 16:56:36,421 - julearn - INFO - = Model Parameters =
+2026-10-14 16:56:36,421 - julearn - INFO - ====================
+2026-10-14 16:56:36,421 - julearn - INFO -
+2026-10-14 16:56:36,421 - julearn - INFO - = Data Information =
+2026-10-14 16:56:36,421 - julearn - INFO -      Problem type: classification
+2026-10-14 16:56:36,421 - julearn - INFO -      Number of samples: 532
+2026-10-14 16:56:36,421 - julearn - INFO -      Number of features: 2
+2026-10-14 16:56:36,422 - julearn - INFO - ====================
+2026-10-14 16:56:36,422 - julearn - INFO -
+2026-10-14 16:56:36,422 - julearn - INFO -      Number of classes: 2
+2026-10-14 16:56:36,422 - julearn - INFO -      Target type: str
+2026-10-14 16:56:36,423 - julearn - INFO -      Class distributions: event
 cue     266
 stim    266
 Name: count, dtype: int64
-2026-07-21 10:58:15,467 - julearn - INFO - Using outer CV scheme StratifiedGroupKFold(n_splits=2, random_state=None, shuffle=False) (incl. final model)
-2026-07-21 10:58:15,467 - julearn - WARNING - The kind of values in y (str) is not suitable for a classification. Values should be numeric.
-/tmp/tmpp8_t5ngz/julearn/prepare.py:422: RuntimeWarning: The kind of values in y (str) is not suitable for a classification. Values should be numeric.
+2026-10-14 16:56:36,424 - julearn - INFO - Using outer CV scheme StratifiedGroupKFold(n_splits=2, random_state=None, shuffle=False) (incl. final model)
+2026-10-14 16:56:36,425 - julearn - WARNING - The kind of values in y (str) is not suitable for a classification. Values should be numeric.
+/tmp/tmpwiadl47l/julearn/prepare.py:422: RuntimeWarning: The kind of values in y (str) is not suitable for a classification. Values should be numeric.
   warn_with_log(
-2026-07-21 10:58:15,468 - julearn - INFO - Binary classification problem detected.
+2026-10-14 16:56:36,425 - julearn - INFO - Binary classification problem detected.
 0.6710526315789473
 </pre></div>
 </div>
 <p>Train classification model without stratification on data</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GroupKFold.html#sklearn.model_selection.GroupKFold" title="sklearn.model_selection.GroupKFold"><span class="n">cv</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GroupKFold.html#sklearn.model_selection.GroupKFold" title="sklearn.model_selection.GroupKFold"><span class="n">GroupKFold</span></a><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">scores</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline"><span class="n">model</span></a> <span class="o">=</span> <span class="n">run_cross_validation</span><span class="p">(</span>
-    <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list"><span class="n">X</span></a><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list"><span class="n">X</span></a><span class="p">,</span>
-    <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str"><span class="n">y</span></a><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str"><span class="n">y</span></a><span class="p">,</span>
-    <span class="n">data</span><span class="o">=</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_fmri</span></a><span class="p">,</span>
-    <span class="n">groups</span><span class="o">=</span><span class="s2">"subject"</span><span class="p">,</span>
-    <a class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline"><span class="n">model</span></a><span class="o">=</span><span class="s2">"rf"</span><span class="p">,</span>
-    <span class="n">problem_type</span><span class="o">=</span><span class="s2">"classification"</span><span class="p">,</span>
-    <a class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GroupKFold.html#sklearn.model_selection.GroupKFold" title="sklearn.model_selection.GroupKFold"><span class="n">cv</span></a><span class="o">=</span><a class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GroupKFold.html#sklearn.model_selection.GroupKFold" title="sklearn.model_selection.GroupKFold"><span class="n">cv</span></a><span class="p">,</span>
-    <span class="n">return_estimator</span><span class="o">=</span><span class="s2">"final"</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">scores</span></a><span class="p">[</span><span class="s2">"test_score"</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
-</pre></div>
-</div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-07-21 10:58:15,953 - julearn - INFO - ==== Input Data ====
-2026-07-21 10:58:15,954 - julearn - INFO - Using dataframe as input
-2026-07-21 10:58:15,954 - julearn - INFO -      Features: ['parietal', 'frontal']
-2026-07-21 10:58:15,954 - julearn - INFO -      Target: event
-2026-07-21 10:58:15,954 - julearn - INFO -      Expanded features: ['parietal', 'frontal']
-2026-07-21 10:58:15,954 - julearn - INFO -      X_types:{}
-2026-07-21 10:58:15,955 - julearn - WARNING - The following columns are not defined in X_types: ['parietal', 'frontal']. They will be treated as continuous.
-/tmp/tmpp8_t5ngz/julearn/prepare.py:609: RuntimeWarning: The following columns are not defined in X_types: ['parietal', 'frontal']. They will be treated as continuous.
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GroupKFold.html#sklearn.model_selection.GroupKFold" title="sklearn.model_selection.GroupKFold"><span class="n">cv</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GroupKFold.html#sklearn.model_selection.GroupKFold" title="sklearn.model_selection.GroupKFold"><span class="n">GroupKFold</span></a><span class="p">(</span><span class="n">n_splits</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">scores</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline"><span class="n">model</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-julearn sphx-glr-backref-type-py-function reference internal" href="../../api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><span class="n">run_cross_validation</span></a><span class="p">(</span><span class="w">
+</span>    <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="list"><span class="n">X</span></a><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="list"><span class="n">X</span></a><span class="p">,</span><span class="w">
+</span>    <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">y</span></a><span class="o">=</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">y</span></a><span class="p">,</span><span class="w">
+</span>    <span class="n">data</span><span class="o">=</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">df_fmri</span></a><span class="p">,</span><span class="w">
+</span>    <span class="n">groups</span><span class="o">=</span><span class="s2">"</span><span class="s2">subject</span><span class="s2">"</span><span class="p">,</span><span class="w">
+</span>    <a class="sphx-glr-backref-module-sklearn-pipeline sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.pipeline.Pipeline.html#sklearn.pipeline.Pipeline" title="sklearn.pipeline.Pipeline"><span class="n">model</span></a><span class="o">=</span><span class="s2">"</span><span class="s2">rf</span><span class="s2">"</span><span class="p">,</span><span class="w">
+</span>    <span class="n">problem_type</span><span class="o">=</span><span class="s2">"</span><span class="s2">classification</span><span class="s2">"</span><span class="p">,</span><span class="w">
+</span>    <a class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GroupKFold.html#sklearn.model_selection.GroupKFold" title="sklearn.model_selection.GroupKFold"><span class="n">cv</span></a><span class="o">=</span><a class="sphx-glr-backref-module-sklearn-model_selection sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GroupKFold.html#sklearn.model_selection.GroupKFold" title="sklearn.model_selection.GroupKFold"><span class="n">cv</span></a><span class="p">,</span><span class="w">
+</span>    <span class="n">return_estimator</span><span class="o">=</span><span class="s2">"</span><span class="s2">final</span><span class="s2">"</span><span class="p">,</span><span class="w">
+</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-pandas sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://pandas.pydata.org/pandas-docs/dev/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="pandas.DataFrame"><span class="n">scores</span></a><span class="p">[</span><span class="s2">"</span><span class="s2">test_score</span><span class="s2">"</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-10-14 16:56:36,930 - julearn - INFO - ==== Input Data ====
+2026-10-14 16:56:36,931 - julearn - INFO - Using dataframe as input
+2026-10-14 16:56:36,931 - julearn - INFO -      Features: ['parietal', 'frontal']
+2026-10-14 16:56:36,931 - julearn - INFO -      Target: event
+2026-10-14 16:56:36,931 - julearn - INFO -      Expanded features: ['parietal', 'frontal']
+2026-10-14 16:56:36,931 - julearn - INFO -      X_types:{}
+2026-10-14 16:56:36,931 - julearn - WARNING - The following columns are not defined in X_types: ['parietal', 'frontal']. They will be treated as continuous.
+/tmp/tmpwiadl47l/julearn/prepare.py:609: RuntimeWarning: The following columns are not defined in X_types: ['parietal', 'frontal']. They will be treated as continuous.
   warn_with_log(
-2026-07-21 10:58:15,956 - julearn - INFO - Using subject as groups
-2026-07-21 10:58:15,956 - julearn - INFO - ====================
-2026-07-21 10:58:15,956 - julearn - INFO -
-2026-07-21 10:58:15,956 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={'continuous'}; pattern=(?:__:type:__continuous)&gt;
-2026-07-21 10:58:15,957 - julearn - INFO - Step added
-2026-07-21 10:58:15,957 - julearn - INFO - = Model Parameters =
-2026-07-21 10:58:15,957 - julearn - INFO - ====================
-2026-07-21 10:58:15,957 - julearn - INFO -
-2026-07-21 10:58:15,957 - julearn - INFO - = Data Information =
-2026-07-21 10:58:15,958 - julearn - INFO -      Problem type: classification
-2026-07-21 10:58:15,958 - julearn - INFO -      Number of samples: 532
-2026-07-21 10:58:15,958 - julearn - INFO -      Number of features: 2
-2026-07-21 10:58:15,958 - julearn - INFO - ====================
-2026-07-21 10:58:15,958 - julearn - INFO -
-2026-07-21 10:58:15,958 - julearn - INFO -      Number of classes: 2
-2026-07-21 10:58:15,959 - julearn - INFO -      Target type: str
-2026-07-21 10:58:15,959 - julearn - INFO -      Class distributions: event
+2026-10-14 16:56:36,932 - julearn - INFO - Using subject as groups
+2026-10-14 16:56:36,933 - julearn - INFO - ====================
+2026-10-14 16:56:36,933 - julearn - INFO -
+2026-10-14 16:56:36,933 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={'continuous'}; pattern=(?:__:type:__continuous)&gt;
+2026-10-14 16:56:36,933 - julearn - INFO - Step added
+2026-10-14 16:56:36,934 - julearn - INFO - = Model Parameters =
+2026-10-14 16:56:36,934 - julearn - INFO - ====================
+2026-10-14 16:56:36,934 - julearn - INFO -
+2026-10-14 16:56:36,934 - julearn - INFO - = Data Information =
+2026-10-14 16:56:36,934 - julearn - INFO -      Problem type: classification
+2026-10-14 16:56:36,934 - julearn - INFO -      Number of samples: 532
+2026-10-14 16:56:36,934 - julearn - INFO -      Number of features: 2
+2026-10-14 16:56:36,935 - julearn - INFO - ====================
+2026-10-14 16:56:36,935 - julearn - INFO -
+2026-10-14 16:56:36,935 - julearn - INFO -      Number of classes: 2
+2026-10-14 16:56:36,935 - julearn - INFO -      Target type: str
+2026-10-14 16:56:36,936 - julearn - INFO -      Class distributions: event
 cue     266
 stim    266
 Name: count, dtype: int64
-2026-07-21 10:58:15,960 - julearn - INFO - Using outer CV scheme GroupKFold(n_splits=2, random_state=None, shuffle=False) (incl. final model)
-2026-07-21 10:58:15,961 - julearn - WARNING - The kind of values in y (str) is not suitable for a classification. Values should be numeric.
-/tmp/tmpp8_t5ngz/julearn/prepare.py:422: RuntimeWarning: The kind of values in y (str) is not suitable for a classification. Values should be numeric.
+2026-10-14 16:56:36,937 - julearn - INFO - Using outer CV scheme GroupKFold(n_splits=2, random_state=None, shuffle=False) (incl. final model)
+2026-10-14 16:56:36,937 - julearn - WARNING - The kind of values in y (str) is not suitable for a classification. Values should be numeric.
+/tmp/tmpwiadl47l/julearn/prepare.py:422: RuntimeWarning: The kind of values in y (str) is not suitable for a classification. Values should be numeric.
   warn_with_log(
-2026-07-21 10:58:15,961 - julearn - INFO - Binary classification problem detected.
+2026-10-14 16:56:36,938 - julearn - INFO - Binary classification problem detected.
 0.6672932330827068
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 1.860 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 1.835 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-00-starting-run-grouped-cv-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/b04556cf71bbccfddd9a00ccfa5c2c20/run_grouped_cv.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">run_grouped_cv.ipynb</span></code></a></p>
@@ -860,7 +849,7 @@ Name: count, dtype: int64
 </div>
 </aside>
 </div>
-</div><script src="../../_static/documentation_options.js?v=7b0eb8ec"></script>
+</div><script src="../../_static/documentation_options.js?v=e88eb69f"></script>
 <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
 <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
 <script src="../../_static/scripts/furo.js?v=46bd48cc"></script>
