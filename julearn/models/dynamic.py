@@ -9,6 +9,7 @@ from typing import Any
 
 import numpy as np
 import pandas as pd
+from looseversion import LooseVersion
 from sklearn.base import BaseEstimator
 from sklearn.model_selection import check_cv, train_test_split
 
@@ -28,6 +29,42 @@ _deslib_algorithms = {
     "StaticSelection": "static",
     "StackedClassifier": "static",
 }
+
+# DESlib releases up to this one are not compatible with scikit-learn >= 1.6.
+# The fix is in DESlib's main branch, but it reports this same version, so
+# DynamicSelection is disabled until a newer DESlib version is released.
+_last_incompatible_deslib = "0.3.7"
+
+
+def _check_deslib() -> None:
+    """Check that a compatible version of DESlib is installed.
+
+    Raises
+    ------
+    ImportError
+        If DESlib is not installed.
+    RuntimeError
+        If the installed DESlib version is not compatible with scikit-learn.
+
+    """
+    try:
+        import deslib  # type: ignore
+    except ImportError:
+        raise_error(
+            "DynamicSelection requires deslib library: "
+            "https://deslib.readthedocs.io/en/latest/index.html",
+            klass=ImportError,
+        )
+    if LooseVersion(deslib.__version__) <= LooseVersion(
+        _last_incompatible_deslib
+    ):
+        raise_error(
+            "DynamicSelection is temporarily unavailable: DESlib "
+            f"{deslib.__version__} is not compatible with scikit-learn >= "
+            "1.6. It will be available again once a newer DESlib version "
+            "is released.",
+            klass=RuntimeError,
+        )
 
 
 class DynamicSelection(BaseEstimator):
@@ -105,6 +142,8 @@ class DynamicSelection(BaseEstimator):
             The fitted model.
 
         """
+        _check_deslib()
+
         # create the splits to train ensemble and dynamic model
         if isinstance(self.ds_split, float):
             X_train, X_dsel, y_train, y_dsel = train_test_split(
@@ -210,14 +249,6 @@ class DynamicSelection(BaseEstimator):
             The deslib algorithm object.
 
         """
-        try:
-            import deslib  # type: ignore # noqa: F401
-        except ImportError:
-            raise_error(
-                "DynamicSelection requires deslib library: "
-                "https://deslib.readthedocs.io/en/latest/index.html"
-            )
-
         import_algorithm = _deslib_algorithms.get(self.algorithm)
         if import_algorithm is None:
             raise_error(

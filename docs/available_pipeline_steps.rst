@@ -371,6 +371,11 @@ Naive Bayes
 Dynamic Selection
 ~~~~~~~~~~~~~~~~~
 
+.. warning::
+   Dynamic Selection is temporarily unavailable: the latest `DESlib`_
+   release (0.3.7) is not compatible with scikit-learn >= 1.6. It will be
+   available again once a newer DESlib version is released.
+
 .. list-table::
    :widths: auto
    :header-rows: 1
