@@ -693,6 +693,31 @@ def test_added_repeated_transformers() -> None:
     assert pipeline_creator._steps[1].name == "zscore_1"
 
 
+@pytest.mark.parametrize(
+    "step",
+    [
+        "pca",
+        PCA(n_components=0.9),
+    ],
+)
+def test_added_many_repeated_transformers(step: str | PCA) -> None:
+    """Test that a transformer repeated more than twice gets unique names.
+
+    Parameters
+    ----------
+    step : str or PCA
+        The step to add repeatedly.
+
+    """
+    pipeline_creator = PipelineCreator(problem_type="classification")
+    pipeline_creator.add("zscore")
+    for feature in ["A", "B", "C", "D"]:
+        pipeline_creator.add(step, apply_to=feature)
+    pipeline_creator.add("rf")
+    names = [x.name for x in pipeline_creator._steps]
+    assert names == ["zscore", "pca", "pca_1", "pca_2", "pca_3", "rf"]
+
+
 # TODO: Identify what are we testing here
 # def test_hyperparameter_ter() -> None:
 #     PipelineCreator(problem_type="classification").add(
