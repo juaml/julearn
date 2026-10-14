@@ -353,3 +353,39 @@ def test_CBPM_set_output_neg(
     trans_man_neg = X_iris[X_neg].values.mean(axis=1)
     df_trans_man = pd.DataFrame(trans_man_neg, columns=["negative"])
     assert_frame_equal(trans_neg, df_trans_man)
+
+
+def test_CBPM_set_output_posneg_no_sig(
+    X_iris: pd.DataFrame,  # noqa: N803
+    y_iris: pd.DataFrame,
+) -> None:
+    """Test the CBPM transformer output with posneg and no significance.
+
+    Parameters
+    ----------
+    X_iris : pd.DataFrame
+        The iris dataset features.
+    y_iris : pd.Series
+        The iris dataset target.
+
+    """
+
+    # I have checked before there are no under 1e-100
+    with pytest.warns(
+        RuntimeWarning,
+        match="No feature with significant negative or positive",
+    ):
+        trans_posneg = (
+            CBPM(
+                corr_sign="posneg",
+                significance_threshold=1e-100,
+                agg_method=np.mean,
+            )
+            .set_output(transform="pandas")
+            .fit_transform(X_iris, y_iris)  # type: ignore
+        )
+
+    df_trans_man = pd.DataFrame(
+        np.full(len(y_iris), y_iris.values.mean()), columns=["posneg"]
+    )
+    assert_frame_equal(trans_posneg, df_trans_man)

@@ -33,6 +33,13 @@ from julearn.transformers import get_transformer
 from julearn.utils.typing import ColumnTypesLike
 
 
+# Only models can be tuned, so tuning tests exclude the transformer
+# problem type
+tunable_problem_types = pytest.mark.parametrize(
+    "problem_type", ["classification", "regression"]
+)
+
+
 def test_construction_working_wrapping(
     model: str, preprocess: str | list[str], problem_type: str
 ) -> None:
@@ -203,8 +210,6 @@ def _hyperparam_tuning_base_test(
         convention.
 
     """
-    if problem_type == "transformer":
-        pytest.skip("Transformers can't be tuned")
     if isinstance(preprocess, str):
         preprocess = [preprocess]
 
@@ -237,6 +242,7 @@ def _hyperparam_tuning_base_test(
     return pipeline, param_grid
 
 
+@tunable_problem_types
 def test_hyperparameter_tuning(
     X_types_iris: dict[str, list[str]],  # noqa: N803
     model: str,
@@ -264,8 +270,6 @@ def test_hyperparameter_tuning(
 
 
     """
-    if problem_type == "transformer":
-        pytest.skip("Transformers can't be tuned")
     pipeline, param_grid = _hyperparam_tuning_base_test(
         X_types_iris,
         model,
@@ -287,6 +291,7 @@ def test_hyperparameter_tuning(
         assert pipeline.param_distributions == param_grid  # type: ignore
 
 
+@tunable_problem_types
 def test_hyperparameter_tuning_bayes(
     X_types_iris: dict[str, list[str]],  # noqa: N803
     model: str,
@@ -313,8 +318,6 @@ def test_hyperparameter_tuning_bayes(
         The parameters for the search.
 
     """
-    if problem_type == "transformer":
-        pytest.skip("Transformers can't be tuned")
     skopt = pytest.importorskip("skopt")
     BayesSearchCV = skopt.BayesSearchCV
 
@@ -330,6 +333,7 @@ def test_hyperparameter_tuning_bayes(
     assert pipeline.search_spaces == param_grid  # type: ignore
 
 
+@tunable_problem_types
 def test_hyperparameter_tuning_optuna(
     X_types_iris: dict[str, list[str]],  # noqa: N803
     model: str,
@@ -364,8 +368,6 @@ def test_hyperparameter_tuning_optuna(
     pytest.importorskip("optuna")
     from julearn.external.optuna_searchcv import OptunaSearchCV
 
-    if problem_type == "transformer":
-        pytest.skip("Transformers can't be tuned")
     pipeline, param_grid = _hyperparam_tuning_base_test(
         X_types_iris,
         model,
@@ -417,6 +419,14 @@ def _compare_param_grids(a: dict, b: dict) -> None:
             assert val == b[key]
 
 
+@tunable_problem_types
+@pytest.mark.parametrize(
+    "search_params",
+    [
+        {"kind": "random", "n_iter": 2},
+        {"kind": "random", "n_iter": 2, "cv": 3},
+    ],
+)
 def test_hyperparameter_tuning_distributions(
     X_types_iris: dict[str, list[str]],  # noqa: N803
     model: str,
@@ -443,14 +453,6 @@ def test_hyperparameter_tuning_distributions(
         The parameters for the search.
 
     """
-    if problem_type == "transformer":
-        pytest.skip("Transformers can't be tuned")
-    kind = "grid"
-    if search_params is not None:
-        kind = search_params.get("kind", "grid")
-    if kind != "random":
-        return  # No sense to test distributions for other than gridsearch
-
     pipeline, param_grid = _hyperparam_tuning_base_test(
         X_types_iris,
         model,
@@ -467,6 +469,7 @@ def test_hyperparameter_tuning_distributions(
     )
 
 
+@tunable_problem_types
 def test_hyperparameter_tuning_distributions_bayes(
     X_types_iris: dict[str, list[str]],  # noqa: N803
     model: str,
@@ -493,8 +496,6 @@ def test_hyperparameter_tuning_distributions_bayes(
         The parameters for the search.
 
     """
-    if problem_type == "transformer":
-        pytest.skip("Transformers can't be tuned")
     skopt = pytest.importorskip("skopt")
     BayesSearchCV = skopt.BayesSearchCV
 
@@ -695,6 +696,31 @@ def test_added_repeated_transformers() -> None:
     assert len(pipeline_creator._steps) == 3
     assert pipeline_creator._steps[0].name == "zscore"
     assert pipeline_creator._steps[1].name == "zscore_1"
+
+
+@pytest.mark.parametrize(
+    "step",
+    [
+        "pca",
+        PCA(n_components=0.9),
+    ],
+)
+def test_added_many_repeated_transformers(step: str | PCA) -> None:
+    """Test that a transformer repeated more than twice gets unique names.
+
+    Parameters
+    ----------
+    step : str or PCA
+        The step to add repeatedly.
+
+    """
+    pipeline_creator = PipelineCreator(problem_type="classification")
+    pipeline_creator.add("zscore")
+    for feature in ["A", "B", "C", "D"]:
+        pipeline_creator.add(step, apply_to=feature)
+    pipeline_creator.add("rf")
+    names = [x.name for x in pipeline_creator._steps]
+    assert names == ["zscore", "pca", "pca_1", "pca_2", "pca_3", "rf"]
 
 
 # TODO: Identify what are we testing here

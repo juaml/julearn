@@ -4,8 +4,6 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-import numpy as np
-
 from ..transformers import get_transformer
 from ..transformers.target import (
     get_target_transformer,
@@ -93,8 +91,13 @@ class TargetPipelineCreator:
                 if isinstance(step, str)
                 else step.__class__.__name__.lower()
             )
-        count = np.array([_step[0] == name for _step in self._steps]).sum()
-        return f"{name}_{count}" if count > 0 else name
+        used_names = {_step[0] for _step in self._steps}
+        out = name
+        count = 0
+        while out in used_names:
+            count += 1
+            out = f"{name}_{count}"
+        return out
 
     def __str__(self) -> str:
         """Get a string representation of the TargetPipelineCreator."""

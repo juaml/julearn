@@ -278,13 +278,13 @@ class CBPM(BaseEstimator, TransformerMixin):
     def get_feature_names_out(self, input_features=None):
         """Get output feature names."""
         check_is_fitted(self)
-        cols = (
-            ["positive"]
-            if self.used_corr_sign_ == "pos"
-            else (
-                ["negative"]
-                if self.used_corr_sign_ == "neg"
-                else ["positive", "negative"]
-            )
-        )
+        if self.used_corr_sign_ == "pos":
+            cols = ["positive"]
+        elif self.used_corr_sign_ == "neg":
+            cols = ["negative"]
+        elif not any(self.used_significant_mask_):
+            # No significant features: the target mean is the only feature
+            cols = ["posneg"]
+        else:
+            cols = ["positive", "negative"]
         return np.array(cols, dtype=object)

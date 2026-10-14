@@ -8,7 +8,6 @@ import typing
 from dataclasses import dataclass, field
 from typing import Any
 
-import numpy as np
 import sklearn
 from scipy import stats
 from sklearn.ensemble import AdaBoostClassifier, AdaBoostRegressor
@@ -929,10 +928,12 @@ class PipelineCreator:
                 if isinstance(step, str)
                 else step.__class__.__name__.lower()
             )
-            count = np.array(
-                [_step.name == name for _step in self._steps]
-            ).sum()
-            out = f"{name}_{count}" if count > 0 else name
+            used_names = {_step.name for _step in self._steps}
+            out = name
+            count = 0
+            while out in used_names:
+                count += 1
+                out = f"{name}_{count}"
         return out
 
     def _validate_step(
