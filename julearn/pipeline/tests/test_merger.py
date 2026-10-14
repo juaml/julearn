@@ -112,11 +112,24 @@ def test_merger_errors() -> None:
     ):
         merge_pipelines(pipe1, pipe4, search_params=None)  # type: ignore
 
+
+def test_merger_errors_bayes() -> None:
+    """Test that the merger raises errors with BayesSearchCV."""
+    pytest.importorskip("skopt")
+    creator1 = PipelineCreator(problem_type="classification")
+    creator1.add("zscore", name="scaler", apply_to="continuous")
+    creator1.add("rf")
+
+    creator2 = PipelineCreator(problem_type="classification")
+    creator2.add("scaler_robust", name="scaler", apply_to="continuous")
+    creator2.add("rf", n_estimators=[10, 100])
+
+    pipe1 = creator1.to_pipeline()
     search_params = {"kind": "grid"}
-    pipe5 = creator2.to_pipeline(search_params={"kind": "bayes"})
+    pipe2 = creator2.to_pipeline(search_params={"kind": "bayes"})
 
     with pytest.raises(
         ValueError,
         match="One of the pipelines to merge is a BayesSearchCV",
     ):
-        merge_pipelines(pipe1, pipe5, search_params=search_params)
+        merge_pipelines(pipe1, pipe2, search_params=search_params)

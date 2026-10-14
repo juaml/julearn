@@ -361,6 +361,7 @@ def test_hyperparameter_tuning_optuna(
     # implementation
     # optuna_integration = pytest.importorskip("optuna_integration")
     # OptunaSearchCV = optuna_integration.OptunaSearchCV
+    pytest.importorskip("optuna")
     from julearn.external.optuna_searchcv import OptunaSearchCV
 
     if problem_type == "transformer":
@@ -678,6 +679,10 @@ def test_stacking(
 
     with warnings.catch_warnings():
         warnings.simplefilter("error")
+        # scikit-learn < 1.8 passes the deprecated iprint option to scipy
+        warnings.filterwarnings(
+            "ignore", message="Unknown solver options: iprint"
+        )
         model.fit(X_iris, y_iris)
 
 

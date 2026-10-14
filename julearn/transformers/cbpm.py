@@ -8,14 +8,12 @@
 from collections.abc import Callable
 
 import numpy as np
-import sklearn
 from joblib import Parallel, delayed
 from scipy.stats import pearsonr
 from sklearn.base import BaseEstimator, TransformerMixin
-from sklearn.utils.validation import check_is_fitted
+from sklearn.utils.validation import check_is_fitted, validate_data
 
 from ..utils import warn_with_log
-from ..utils.versions import _joblib_parallel_args
 
 
 class CBPM(BaseEstimator, TransformerMixin):
@@ -136,18 +134,13 @@ class CBPM(BaseEstimator, TransformerMixin):
             The fitted transformer.
 
         """
-        # check sklearn changelog
-        if sklearn.__version__ < "1.6.0":  # pragma: no cover
-            X, y = self._validate_data(X, y)
-        else:
-            X, y = sklearn.utils.validation.validate_data(self, X=X, y=y)
+        X, y = validate_data(self, X=X, y=y)
 
         # compute correlations using joblib
         self.X_y_correlations_ = np.array(
             Parallel(
                 n_jobs=self.n_jobs,
                 verbose=self.verbose,
-                **_joblib_parallel_args(),
             )(
                 delayed(self.corr_method)(X[:, X_idx], y)
                 for X_idx in range(X.shape[1])
@@ -180,11 +173,7 @@ class CBPM(BaseEstimator, TransformerMixin):
             The transformed features.
 
         """
-        # check sklearn changelog
-        if sklearn.__version__ < "1.6.0":  # pragma: no cover
-            X = self._validate_data(X)
-        else:
-            X = sklearn.utils.validation.validate_data(self, X=X)
+        X = validate_data(self, X=X)
 
         if not any(self.used_significant_mask_):
             out = np.ones(X.shape[0]) * self.y_mean_

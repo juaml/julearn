@@ -1,6 +1,7 @@
 name: Build and preview docs
 
 on:
+  # Docs for main and tags are built by docs.yml
   push:
     branches-ignore:
       - "main"
@@ -13,36 +14,45 @@ on:
       - synchronize
       - closed
 
-concurrency: preview-${{ github.ref }}
+concurrency:
+  group: preview-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build-docs:
     runs-on: ubuntu-latest
+    permissions:
+      # Needed for preview deploy
+      pull-requests: write
+      contents: write
     steps:
-      - uses: actions/checkout@v7
+      - name: Checkout repository
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-python@v7
-        if: github.event.action != 'closed' # We don't need the build if we know the preview will be removed
+      - name: Set up Python
+        if: github.event.action != 'closed' # The build is not needed when the preview is removed
+        uses: actions/setup-python@v7
         with:
           python-version-file: "pyproject.toml"
 
-      - name: Install uv
-        if: github.event.action != 'closed' # We don't need the build if we know the preview will be removed
-        uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
+      - name: Set up uv
+        if: github.event.action != 'closed' # The build is not needed when the preview is removed
+        uses: astral-sh/setup-uv@v10.3.0
 
       - name: Install Python dependencies
-        if: github.event.action != 'closed' # We don't need the build if we know the preview will be removed
+        if: github.event.action != 'closed' # The build is not needed when the preview is removed
         run: |
           uv sync --locked --extra docs
 
       - name: Test build docs
-        if: github.event.action != 'closed' # We don't need the build if we know the preview will be removed
+        if: github.event.action != 'closed' # The build is not needed when the preview is removed
         run: |
           uv run make -C docs/ local
 
-      - uses: rossjrw/pr-preview-action@v1
+      - name: Deploy preview
+        uses: rossjrw/pr-preview-action@v1
         with:
           source-dir: docs/_build/dev
         if: github.event_name == 'pull_request'

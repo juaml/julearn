@@ -7,6 +7,9 @@ import pandas as pd
 import pytest
 from sklearn.utils.validation import _is_fitted
 
+
+pytest.importorskip("xgboost")
+
 from julearn.models.xgb_cvearlystopping import (
     XGBClassifierCVEarlyStopping,
     XGBRegressorCVEarlyStopping,
@@ -288,7 +291,7 @@ def test_XGBClassifierCVEarlyStopping_grouped_numpy(df_iris) -> None:
     assert not hasattr(model, "_grouped_cv")
     model.fit(
         df_iris[X].values,
-        df_iris[y].values.to_numpy(),
+        df_iris[y].to_numpy(),
         groups=df_iris["group"].values,
     )
     assert _is_fitted(model)
@@ -375,7 +378,7 @@ def test_XGBClassifierCVEarlyStopping_numpy(df_iris) -> None:
         == (model._best_iteration + 1) * 3
     )
 
-    y_nostring = df_iris[y].values.to_numpy() == "setosa"
+    y_nostring = df_iris[y].to_numpy() == "setosa"
 
     model.fit(df_iris[X].values, y_nostring)
     assert _is_fitted(model)
