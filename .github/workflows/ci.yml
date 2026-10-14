@@ -72,10 +72,33 @@ jobs:
           flags: julearn
         if: success() && matrix.python-version == '3.13'
 
+  # Tests with the minimum supported versions of the dependencies
+  run-tests-mindeps:
+    needs: changes
+    if: needs.changes.outputs.code == 'true' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          # The minimum supported Python version
+          python-version: '3.12'
+      - name: Set up uv
+        uses: astral-sh/setup-uv@11f9893b081a58869d3b5fccaea48c9e9e46f990 # v8.3.2
+      - name: Install tox
+        # tox-uv makes tox create the test environments with uv
+        run: |
+          uv tool install tox --with tox-uv
+      - name: Test with tox
+        run: |
+          tox -e mindeps
+
   # Single status to require in branch protection: passes when the tests
   # passed or were skipped because the library did not change
   tests:
-    needs: [changes, run-tests]
+    needs: [changes, run-tests, run-tests-mindeps]
     if: always()
     runs-on: ubuntu-latest
     steps:
