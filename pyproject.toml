@@ -68,7 +68,8 @@ sphinx = [
     "sphinxcontrib-towncrier>=0.5.0a0",
     "towncrier>=25.8.0",
 ]
-deslib = ["deslib>=0.3.5,<0.4.0"]
+# deslib extra removed until DESlib releases a version newer than 0.3.7,
+# compatible with scikit-learn >= 1.6 (see julearn/models/dynamic.py)
 viz = [
     "panel>=1.3.0",
     "bokeh>=3.0.0",
@@ -85,7 +86,7 @@ xgboost = ["xgboost>=3.0.0,<4.0.0"]
 # Everything we need for docs is here
 docs = ["julearn[sphinx,viz,optuna,skopt,xgboost]"]
 
-# Add all optional functional dependencies (skip deslib until its fixed)
+# Add all optional functional dependencies
 # This does not include dev/docs building dependencies
 all = ["julearn[viz,skopt,optuna,xgboost]"]
 

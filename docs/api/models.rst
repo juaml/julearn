@@ -37,10 +37,10 @@ models or novel models.
 Dynamic Selection (DESLib)
 ==========================
 
-.. important::
-   This module requires the ``deslib`` optional dependencies. Please install
-   ``julearn`` with the ``deslib`` extra to use this module
-   (see :ref:`install_optional_dependencies`).
+.. warning::
+   Dynamic Selection is temporarily unavailable: the latest `DESlib`_
+   release (0.3.7) is not compatible with scikit-learn >= 1.6. It will be
+   available again once a newer DESlib version is released.
 
 .. automodule:: julearn.models.dynamic
    :no-members:
