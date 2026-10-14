@@ -4,6 +4,7 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
+import pytest
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
 from julearn.pipeline import JuTargetPipeline, TargetPipelineCreator
@@ -38,3 +39,37 @@ def test_TargetPipelineCreator_repeated_names() -> None:
     assert len(pipeline.steps) == 2
     assert pipeline.steps[0][0] == "zscore"
     assert pipeline.steps[1][0] == "zscore_1"
+
+
+@pytest.mark.parametrize(
+    "name,expected",
+    [
+        (None, "zscore"),
+        ("scale", "scale"),
+    ],
+)
+def test_TargetPipelineCreator_many_repeated_names(
+    name: str | None, expected: str
+) -> None:
+    """Test that a step repeated more than twice gets unique names.
+
+    Parameters
+    ----------
+    name : str or None
+        The name to give to the step.
+    expected : str
+        The expected name of the first step.
+
+    """
+    creator = TargetPipelineCreator()
+    for _ in range(4):
+        creator.add("zscore", name=name)
+    pipeline = creator.to_pipeline()
+
+    names = [x[0] for x in pipeline.steps]
+    assert names == [
+        expected,
+        f"{expected}_1",
+        f"{expected}_2",
+        f"{expected}_3",
+    ]
