@@ -33,6 +33,13 @@ from julearn.transformers import get_transformer
 from julearn.utils.typing import ColumnTypesLike
 
 
+# Only models can be tuned, so tuning tests exclude the transformer
+# problem type
+tunable_problem_types = pytest.mark.parametrize(
+    "problem_type", ["classification", "regression"]
+)
+
+
 def test_construction_working_wrapping(
     model: str, preprocess: str | list[str], problem_type: str
 ) -> None:
@@ -203,8 +210,6 @@ def _hyperparam_tuning_base_test(
         convention.
 
     """
-    if problem_type == "transformer":
-        pytest.skip("Transformers can't be tuned")
     if isinstance(preprocess, str):
         preprocess = [preprocess]
 
@@ -237,6 +242,7 @@ def _hyperparam_tuning_base_test(
     return pipeline, param_grid
 
 
+@tunable_problem_types
 def test_hyperparameter_tuning(
     X_types_iris: dict[str, list[str]],  # noqa: N803
     model: str,
@@ -264,8 +270,6 @@ def test_hyperparameter_tuning(
 
 
     """
-    if problem_type == "transformer":
-        pytest.skip("Transformers can't be tuned")
     pipeline, param_grid = _hyperparam_tuning_base_test(
         X_types_iris,
         model,
@@ -287,6 +291,7 @@ def test_hyperparameter_tuning(
         assert pipeline.param_distributions == param_grid  # type: ignore
 
 
+@tunable_problem_types
 def test_hyperparameter_tuning_bayes(
     X_types_iris: dict[str, list[str]],  # noqa: N803
     model: str,
@@ -313,8 +318,6 @@ def test_hyperparameter_tuning_bayes(
         The parameters for the search.
 
     """
-    if problem_type == "transformer":
-        pytest.skip("Transformers can't be tuned")
     skopt = pytest.importorskip("skopt")
     BayesSearchCV = skopt.BayesSearchCV
 
@@ -330,6 +333,7 @@ def test_hyperparameter_tuning_bayes(
     assert pipeline.search_spaces == param_grid  # type: ignore
 
 
+@tunable_problem_types
 def test_hyperparameter_tuning_optuna(
     X_types_iris: dict[str, list[str]],  # noqa: N803
     model: str,
@@ -363,8 +367,6 @@ def test_hyperparameter_tuning_optuna(
     # OptunaSearchCV = optuna_integration.OptunaSearchCV
     from julearn.external.optuna_searchcv import OptunaSearchCV
 
-    if problem_type == "transformer":
-        pytest.skip("Transformers can't be tuned")
     pipeline, param_grid = _hyperparam_tuning_base_test(
         X_types_iris,
         model,
@@ -416,6 +418,14 @@ def _compare_param_grids(a: dict, b: dict) -> None:
             assert val == b[key]
 
 
+@tunable_problem_types
+@pytest.mark.parametrize(
+    "search_params",
+    [
+        {"kind": "random", "n_iter": 2},
+        {"kind": "random", "n_iter": 2, "cv": 3},
+    ],
+)
 def test_hyperparameter_tuning_distributions(
     X_types_iris: dict[str, list[str]],  # noqa: N803
     model: str,
@@ -442,14 +452,6 @@ def test_hyperparameter_tuning_distributions(
         The parameters for the search.
 
     """
-    if problem_type == "transformer":
-        pytest.skip("Transformers can't be tuned")
-    kind = "grid"
-    if search_params is not None:
-        kind = search_params.get("kind", "grid")
-    if kind != "random":
-        return  # No sense to test distributions for other than gridsearch
-
     pipeline, param_grid = _hyperparam_tuning_base_test(
         X_types_iris,
         model,
@@ -466,6 +468,7 @@ def test_hyperparameter_tuning_distributions(
     )
 
 
+@tunable_problem_types
 def test_hyperparameter_tuning_distributions_bayes(
     X_types_iris: dict[str, list[str]],  # noqa: N803
     model: str,
@@ -492,8 +495,6 @@ def test_hyperparameter_tuning_distributions_bayes(
         The parameters for the search.
 
     """
-    if problem_type == "transformer":
-        pytest.skip("Transformers can't be tuned")
     skopt = pytest.importorskip("skopt")
     BayesSearchCV = skopt.BayesSearchCV
 
