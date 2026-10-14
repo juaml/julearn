@@ -361,6 +361,7 @@ def test_hyperparameter_tuning_optuna(
     # implementation
     # optuna_integration = pytest.importorskip("optuna_integration")
     # OptunaSearchCV = optuna_integration.OptunaSearchCV
+    pytest.importorskip("optuna")
     from julearn.external.optuna_searchcv import OptunaSearchCV
 
     if problem_type == "transformer":
