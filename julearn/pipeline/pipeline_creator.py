@@ -44,6 +44,7 @@ from ..utils.typing import (
     JuModelLike,
     ModelLike,
 )
+from .ju_pipeline import JuPipeline, check_pipelines_can_score
 from .target_pipeline import JuTargetPipeline
 from .target_pipeline_creator import TargetPipelineCreator
 
@@ -818,12 +819,16 @@ class PipelineCreator:
                 # if not, just add a model as the last step
                 params_to_tune.update(step_params_to_tune)
                 pipeline_steps.append((model_name, model_estimator))
-        pipeline = Pipeline(pipeline_steps).set_output(transform="pandas")
+        # TODO: Use Pipeline again once julearn only supports scikit-learn
+        # versions with the fix for scikit-learn/scikit-learn#35195 (see
+        # julearn/pipeline/ju_pipeline.py).
+        pipeline = JuPipeline(pipeline_steps).set_output(transform="pandas")
         pipeline = typing.cast("Pipeline", pipeline)  # damn typing..
         # Deal with the Hyperparameter tuning
         out = _prepare_hyperparameter_tuning(
             params_to_tune, search_params, pipeline
         )
+        check_pipelines_can_score(out)
         logger.debug("Pipeline created")
         return out
 
