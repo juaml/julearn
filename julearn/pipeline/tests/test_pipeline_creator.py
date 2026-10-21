@@ -7,6 +7,7 @@
 import warnings
 from collections.abc import Callable
 
+import numpy as np
 import pandas as pd
 import pytest
 from numpy.testing import assert_array_equal
@@ -748,6 +749,80 @@ def test_target_pipe(X_iris, y_iris) -> None:  # noqa: N803
         X_types, search_params={"kind": "random"}
     )
     pipe.fit(X_iris, y_iris)
+
+
+@pytest.mark.parametrize(
+    "X_types,target_step,target_params,wrapped",
+    [
+        (
+            {
+                "continuous": [
+                    "sepal_length",
+                    "sepal_width",
+                    "petal_length",
+                    "petal_width",
+                ]
+            },
+            "zscore",
+            {},
+            False,
+        ),
+        (
+            {
+                "continuous": ["sepal_length", "sepal_width", "petal_length"],
+                "confounds": ["petal_width"],
+            },
+            "confound_removal",
+            {"confounds": "confounds"},
+            True,
+        ),
+    ],
+)
+def test_target_pipe_tuning(
+    X_iris: pd.DataFrame,  # noqa: N803
+    y_iris: pd.Series,
+    X_types: dict[str, list[str]],  # noqa: N803
+    target_step: str,
+    target_params: dict,
+    wrapped: bool,
+) -> None:
+    """Test tuning the model with a target pipeline.
+
+    Parameters
+    ----------
+    X_iris : pd.DataFrame
+        The iris dataset features.
+    y_iris : pd.Series
+        The iris dataset target.
+    X_types : dict
+        The types of the features.
+    target_step : str
+        The step to add to the target pipeline.
+    target_params : dict
+        The parameters of the target step.
+    wrapped : bool
+        Whether the model is expected to be wrapped in a WrapModel.
+
+    """
+    target_pipeline = TargetPipelineCreator().add(target_step, **target_params)
+    pipeline_creator = (
+        PipelineCreator(problem_type="regression")
+        .add(target_pipeline, apply_to="target")
+        .add("svm", C=[0.001, 1, 1000])
+    )
+    # Use the default scoring of the searcher (the model's score method)
+    pipe = pipeline_creator.to_pipeline(X_types)
+    pipe.fit(X_iris, y_iris)
+
+    model = pipe.best_estimator_.steps[-1][1].model  # type: ignore
+    assert isinstance(model, WrapModel) == wrapped
+    scores = pipe.cv_results_["mean_test_score"]  # type: ignore
+    assert not np.any(np.isnan(scores))
+    # The tuned parameter must reach the model, so the scores differ
+    assert len(set(scores)) == len(scores)
+    svm = model.model if wrapped else model
+    best_c = pipe.best_params_["svm_target_transform__model__C"]  # type: ignore
+    assert svm.C == best_c
 
 
 def test_raise_wrong_problem_type() -> None:

@@ -136,3 +136,46 @@ def test_JuGeneratedTargetModel_no_fit(
 
     with pytest.raises(ValueError, match="Model not fitted yet"):
         ju_generated_target_model.decision_function(X_iris)
+
+
+def test_JuGeneratedTargetModel_score_sample_weight(
+    X_iris: pd.DataFrame,  # noqa: N803
+) -> None:
+    """Test that JuGeneratedTargetModel.score supports sample_weight.
+
+    Parameters
+    ----------
+    X_iris : pd.DataFrame
+        The iris dataset features.
+
+    """
+    weights = np.linspace(0.1, 1, len(X_iris))
+    fake_y = pd.Series(np.zeros(X_iris.shape[0]))
+
+    def _get_model() -> JuGeneratedTargetModel:
+        transformer = PCA(n_components=1, random_state=42)
+        transformer.set_output(transform="pandas")
+        return JuGeneratedTargetModel(
+            model=SVR(),  # type: ignore
+            transformer=transformer,  # type: ignore
+        )
+
+    model_ju = _get_model().fit(X_iris, y=fake_y)
+
+    # The model is scored on the generated target
+    transformer = PCA(n_components=1, random_state=42)
+    transformer.set_output(transform="pandas")
+    y_gen = transformer.fit(X_iris).transform(X_iris)
+    model_sk = SVR().fit(X_iris, y_gen)
+    score_sk = model_sk.score(X_iris, y_gen)
+    score_sk_weighted = model_sk.score(X_iris, y_gen, sample_weight=weights)
+    assert score_sk != score_sk_weighted
+    assert model_ju.score(X_iris, fake_y) == score_sk
+    assert (
+        model_ju.score(X_iris, fake_y, sample_weight=weights)
+        == score_sk_weighted
+    )
+
+    # With metadata routing, Pipeline.score always passes sample_weight
+    pipeline = Pipeline([("model", _get_model())]).fit(X_iris, fake_y)
+    assert pipeline.score(X_iris, fake_y) == score_sk

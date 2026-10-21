@@ -4,9 +4,11 @@
 #          Federico Raimondo <f.raimondo@fz-juelich.de>
 # License: AGPL
 
+import numpy as np
 import pandas as pd
 import pytest
 from numpy.testing import assert_array_equal
+from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import Normalizer, StandardScaler
 from sklearn.svm import SVC, SVR
 
@@ -96,3 +98,45 @@ def test_JuTransformedTargetModel_not_fitted(X_iris, y_iris):  # noqa: N803
         target_model.decision_function(X_iris)
     with pytest.raises(ValueError, match="Model not fitted "):
         _ = target_model.classes_
+
+
+def test_JuTransformedTargetModel_score_sample_weight(
+    X_iris: pd.DataFrame,  # noqa: N803
+    y_iris: pd.Series,
+) -> None:
+    """Test that JuTransformedTargetModel.score supports sample_weight.
+
+    Parameters
+    ----------
+    X_iris : pd.DataFrame
+        The iris dataset features.
+    y_iris : pd.Series
+        The iris dataset target.
+
+    """
+    weights = np.linspace(0.1, 1, len(y_iris))
+
+    def _get_model() -> JuTransformedTargetModel:
+        transformer = JuTargetPipeline([("scaler", StandardScaler())])
+        return JuTransformedTargetModel(
+            transformer=transformer,
+            model=SVR(),  # type: ignore
+        )
+
+    model_ju = _get_model().fit(X_iris, y_iris)
+
+    # The model is scored on the transformed target
+    y_scaled = StandardScaler().fit_transform(y_iris.values[:, None])[:, 0]
+    model_sk = SVR().fit(X_iris, y_scaled)
+    score_sk = model_sk.score(X_iris, y_scaled)
+    score_sk_weighted = model_sk.score(X_iris, y_scaled, sample_weight=weights)
+    assert score_sk != score_sk_weighted
+    assert model_ju.score(X_iris, y_iris) == score_sk
+    assert (
+        model_ju.score(X_iris, y_iris, sample_weight=weights)
+        == score_sk_weighted
+    )
+
+    # With metadata routing, Pipeline.score always passes sample_weight
+    pipeline = Pipeline([("model", _get_model())]).fit(X_iris, y_iris)
+    assert pipeline.score(X_iris, y_iris) == score_sk
