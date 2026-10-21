@@ -283,7 +283,15 @@ def test_classificationestimators(
         ),
         ("et", ExtraTreesRegressor, {"n_estimators": 10, "random_state": 42}),
         ("dummy", DummyRegressor, {"strategy": "mean"}),
-        ("gauss", GaussianProcessRegressor, {"random_state": 42}),
+        # Fixed kernel hyperparameters: optimizing them on this data is
+        # ill-conditioned. The reference scales a C-ordered array while julearn
+        # scales a DataFrame (Fortran-ordered), so the scaled data differ by
+        # ~1e-16, which is enough for the optimizer to find different optima
+        (
+            "gauss",
+            GaussianProcessRegressor,
+            {"random_state": 42, "optimizer": None},
+        ),
         ("linreg", LinearRegression, {}),
         ("ridge", Ridge, {}),
         ("ridgecv", RidgeCV, {}),

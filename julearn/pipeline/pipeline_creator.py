@@ -13,6 +13,7 @@ from scipy import stats
 from sklearn.ensemble import AdaBoostClassifier, AdaBoostRegressor
 from sklearn.model_selection import RandomizedSearchCV, check_cv
 from sklearn.pipeline import Pipeline
+from sklearn.svm import SVC
 
 from ..base import ColumnTypes, JuTransformer, WrapModel
 from ..model_selection._optuna_searcher import (
@@ -168,6 +169,31 @@ class Step:
         )
 
 
+def _warn_svm_probability(probability: Any) -> None:
+    """Warn if the deprecated `probability` of the SVC is used.
+
+    Parameters
+    ----------
+    probability : Any
+        The value (or values to tune) of the `probability` parameter.
+
+    """
+    # scikit-learn >= 1.9 deprecates `probability`, with a sentinel default
+    if SVC().probability != "deprecated":
+        return
+    values = (
+        probability if isinstance(probability, list | tuple) else [probability]
+    )
+    if any(v is True for v in values):
+        warn_with_log(
+            "The `probability` parameter of the SVC is deprecated since "
+            "scikit-learn 1.9 and will be removed in scikit-learn 1.11. To "
+            "get probabilities from a Support Vector Classifier, use the "
+            "'svm_calibrated' model instead of the 'svm' model.",
+            category=FutureWarning,
+        )
+
+
 class PipelineCreator:
     """PipelineCreator class.
 
@@ -319,6 +345,9 @@ class PipelineCreator:
 
         # Validate the step
         self._validate_step(step, apply_to)
+
+        if step == "svm" and "probability" in params:
+            _warn_svm_probability(params["probability"])
 
         # Check that if the name is already in the steps, we are adding them
         # at the same place.
@@ -1207,7 +1236,7 @@ def _prepare_hyperparameter_tuning(
         A dictionary with the parameters to tune. The keys of the
         dictionary should be named 'STEP__PARAMETER', to be used as
         PARAMETER for STEP in the pipeline. Example:
-        'svm__probability': True will set the parameter 'probability' of
+        'svm__kernel': 'linear' will set the parameter 'kernel' of
         the 'svm' step. The value of the parameter must be a list of
         values to test.
 

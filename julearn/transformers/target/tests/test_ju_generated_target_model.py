@@ -8,9 +8,10 @@ import pandas as pd
 import pytest
 from numpy.testing import assert_array_equal
 from sklearn.decomposition import PCA
+from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import Binarizer
-from sklearn.svm import SVC, SVR
+from sklearn.svm import SVR
 
 from julearn.transformers.target.ju_generated_target_model import (
     GeneratedTargetWarning,
@@ -60,7 +61,7 @@ def test_JuGeneratedTargetModel_classification(
     X_iris: pd.DataFrame,  # noqa: N803
 ) -> None:
     """Test JuGeneratedTargetModel."""
-    model = SVC(probability=True, random_state=42)
+    model = LogisticRegression()
     transformer = Pipeline(
         steps=[
             ("pca", PCA(n_components=1, random_state=42)),
@@ -83,7 +84,7 @@ def test_JuGeneratedTargetModel_classification(
     ):
         y_pred = ju_generated_target_model.predict(X_iris)
 
-    model_sk = SVC(probability=True, random_state=42)
+    model_sk = LogisticRegression()
     y_iris = transformer.fit(X_iris).transform(X_iris)
     model_sk.fit(X_iris, y_iris)
     y_pred_sk = model_sk.predict(X_iris)
@@ -116,7 +117,7 @@ def test_JuGeneratedTargetModel_no_fit(
     X_iris: pd.DataFrame,  # noqa: N803
 ) -> None:
     """Test JuGeneratedTargetModel without fit."""
-    model = SVC(probability=True)
+    model = LogisticRegression()
     transformer = PCA(n_components=1, random_state=42)
     transformer.set_output(transform="pandas")
 
