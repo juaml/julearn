@@ -28,7 +28,7 @@ def enable_metadata_routing() -> None:
 
 
 def pytest_configure(config: pytest.Config) -> None:
-    """Add a new marker to pytest.
+    """Add a new marker to pytest and cache the datasets.
 
     Parameters
     ----------
@@ -39,6 +39,13 @@ def pytest_configure(config: pytest.Config) -> None:
     # register your new marker to avoid warnings
     for k, v in _filter_keys.items():
         config.addinivalue_line("markers", f"{k}: {v}")
+
+    # Download the datasets to seaborn's cache before running the tests.
+    # Otherwise, parallel pytest-xdist workers can create the cache directory
+    # or download the same file at the same time and fail. Workers have a
+    # `workerinput` attribute and start after this runs in the main process.
+    if not hasattr(config, "workerinput"):
+        load_dataset("iris")
 
 
 def pytest_addoption(parser: pytest.Parser) -> None:

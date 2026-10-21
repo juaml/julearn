@@ -10,6 +10,11 @@ concurrency:
   group: tests-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
+env:
+  # Run the tests without pytest-xdist: with the few CPUs of the GitHub
+  # runners, running in parallel is not faster
+  PYTEST_XDIST_WORKERS: 0
+
 jobs:
   # Check whether the library changed, to skip the tests otherwise
   # (e.g. on docs-only changes)
