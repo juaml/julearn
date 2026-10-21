@@ -146,7 +146,7 @@ def check_scoring(
     estimator: EstimatorLike,
     scoring: ScorerLike | str | Callable | list[str] | None,  # type: ignore
     wrap_score: bool,
-) -> None | ScorerLike | Callable | dict[str, ScorerLike]:  # type: ignore
+) -> ScorerLike | Callable | dict[str, ScorerLike] | None:  # type: ignore
     """Check the scoring.
 
     Parameters

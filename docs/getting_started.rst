@@ -7,17 +7,18 @@ Getting started
 Requirements
 ------------
 
-``julearn`` is compatible with `Python`_ >= 3.8 and requires the following
+``julearn`` is compatible with `Python`_ >= 3.12 and requires the following
 packages:
 
-* ``numpy>=1.24,<1.27``
-* ``pandas>=1.5.0,<2.2``
-* ``scikit-learn>=1.2.0,<1.5.0``
-* ``statsmodels>=0.13,<0.15``
+* ``numpy>=2.3.0,<3.0.0``
+* ``pandas>=2.2.2,<4.0.0``
+* ``scikit-learn>=1.6.1,<1.10.0``
+* ``statsmodels>=0.14.0,<0.16``
+* ``looseversion==1.3.0``
 
 Running the examples require:
 
-* ``seaborn>=0.12.2,<0.13``
+* ``seaborn>=0.13.0,<0.14.0``
 * ``bokeh>=3.0.0``
 * ``panel>=1.3.0``
 * ``param>=2.0.0``

@@ -1,3 +1,5 @@
+.. include:: ../links.inc
+
 Models
 ======
 
