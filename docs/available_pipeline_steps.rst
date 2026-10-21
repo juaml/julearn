@@ -179,6 +179,22 @@ Support Vector Machines
      - Y
      - Y
      - Y
+   * - ``svm_calibrated``
+     - Support Vector Machine with calibrated probabilities
+     - | :class:`~sklearn.calibration.CalibratedClassifierCV` with
+       | :class:`~sklearn.svm.SVC` and ``ensemble=False``
+     - Y
+     - Y
+     - N
+
+.. note::
+   To get probabilities (``predict_proba``) from a Support Vector Machine, for
+   example to use the ``roc_auc`` scorer, use the ``svm_calibrated`` model.
+   The ``probability`` parameter of :class:`~sklearn.svm.SVC` is deprecated
+   since scikit-learn 1.9. The parameters of the calibration (``method``,
+   ``cv`` and ``n_jobs``) and of the SVC (e.g. ``C``) can be set directly,
+   but the parameters of the SVC must be tuned with the ``estimator__``
+   prefix, e.g. ``svm_calibrated__estimator__C``.
 
 Ensemble
 ~~~~~~~~

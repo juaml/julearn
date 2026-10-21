@@ -13,6 +13,7 @@ import pandas as pd
 import pytest
 import sklearn
 from sklearn.base import clone
+from sklearn.calibration import CalibratedClassifierCV
 from sklearn.datasets import make_regression
 from sklearn.model_selection import (
     GridSearchCV,
@@ -107,12 +108,11 @@ def test_run_cv_simple_binary(
     sk_y = (df_iris[y].values == "virginica").astype(int)  # type: ignore
     with pytest.warns(RuntimeWarning, match="treated as continuous"):
         api_params = {
-            "model": "svm",
+            "model": "svm_calibrated",
             "pos_labels": "virginica",
             "problem_type": "classification",
-            "model_params": {"svm__probability": True},
         }
-        sklearn_model = SVC(probability=True)
+        sklearn_model = CalibratedClassifierCV(SVC(), ensemble=False)
         do_scoring_test(
             X,
             y,
@@ -134,7 +134,7 @@ def test_run_cv_simple_binary(
             "pos_labels": "virginica",
             "problem_type": "classification",
         }
-        sklearn_model = SVC(probability=False)
+        sklearn_model = SVC()
         do_scoring_test(
             X,
             y,
@@ -351,7 +351,7 @@ def test_run_cv_errors(df_iris: pd.DataFrame) -> None:
         )
 
     model = "svm"
-    model_params = {"probability": True, "svm__C": 1}
+    model_params = {"kernel": "linear", "svm__C": 1}
     with pytest.raises(ValueError, match="model_params are incorrect"):
         run_cross_validation(
             X=X,
