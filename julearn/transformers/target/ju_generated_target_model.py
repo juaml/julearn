@@ -9,6 +9,7 @@ from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import pandas as pd
+from numpy.typing import ArrayLike
 from sklearn.base import clone
 from sklearn.utils.metaestimators import available_if
 
@@ -144,7 +145,12 @@ class JuGeneratedTargetModel(JuBaseEstimator):
         )
         return y_pred
 
-    def score(self, X: pd.DataFrame, y: DataLike) -> float:  # noqa: N803
+    def score(
+        self,
+        X: pd.DataFrame,  # noqa: N803
+        y: DataLike,
+        sample_weight: ArrayLike | None = None,
+    ) -> float:
         """Score the model.
 
         Parameters
@@ -153,6 +159,9 @@ class JuGeneratedTargetModel(JuBaseEstimator):
             The input data.
         y : DataLike
             The target.
+        sample_weight : array-like of shape (n_samples,), optional
+            Sample weights to pass to the model's ``score`` method
+            (default None).
 
         Returns
         -------
@@ -171,7 +180,10 @@ class JuGeneratedTargetModel(JuBaseEstimator):
         self.model_ = typing.cast("ModelLike", self.model_)
         y_gen = self.generate_target(X, y)
         logger.debug("Scoring model using generated target")
-        return self.model_.score(X, y_gen)
+        score_params = {}
+        if sample_weight is not None:
+            score_params["sample_weight"] = sample_weight
+        return self.model_.score(X, y_gen, **score_params)
 
     @available_if(_wrapped_model_has("predict_proba"))
     def predict_proba(self, X: pd.DataFrame) -> np.ndarray:  # noqa: N803

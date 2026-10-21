@@ -4,10 +4,11 @@
 #          Sami Hamdan <s.hamdan@fz-juelich.de>
 # License: AGPL
 
-from typing import Any, cast
+from typing import Any
 
 import numpy as np
 import pandas as pd
+from numpy.typing import ArrayLike
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.utils.metaestimators import available_if
 from sklearn.utils.validation import _check_method_params  # type: ignore
@@ -363,7 +364,12 @@ class WrapModel(JuBaseEstimator):
         Xt = self.filter_columns(X)
         return self.model_.predict(Xt)
 
-    def score(self, X: pd.DataFrame, y: DataLike) -> float:  # noqa: N803
+    def score(
+        self,
+        X: pd.DataFrame,  # noqa: N803
+        y: DataLike,
+        sample_weight: ArrayLike | None = None,
+    ) -> float:
         """Score the model.
 
         Parameters
@@ -372,6 +378,9 @@ class WrapModel(JuBaseEstimator):
             The data to predict on.
         y : DataLike
             The true target values.
+        sample_weight : array-like of shape (n_samples,), optional
+            Sample weights to pass to the model's ``score`` method
+            (default None).
 
         Returns
         -------
@@ -380,7 +389,10 @@ class WrapModel(JuBaseEstimator):
 
         """
         Xt = self.filter_columns(X)
-        return self.model_.score(Xt, y)
+        score_params = {}
+        if sample_weight is not None:
+            score_params["sample_weight"] = sample_weight
+        return self.model_.score(Xt, y, **score_params)
 
     @available_if(_wrapped_model_has("predict_proba"))
     def predict_proba(self, X: pd.DataFrame) -> np.ndarray:  # noqa: N803
@@ -484,14 +496,37 @@ class WrapModel(JuBaseEstimator):
         WrapModel
             WrapModel instance.
 
+        Raises
+        ------
+        ValueError
+            If a parameter is not a parameter of this model or of the
+            wrapped model.
+
         """
-        model_params = list(self.model.get_params(True).keys())
-        kwargs = cast("dict[str, Any]", kwargs)
+        if not kwargs:
+            return self
+        own_params = super().get_params(deep=False)
+        # Set the parameters of the WrapModel first, so the parameters of the
+        # wrapped model are set on the new model if it is replaced.
+        model_params = {}
         for param, val in kwargs.items():
-            if param in model_params:
-                self.model.set_params(**{param: val})
-            else:
+            if param in own_params:
                 setattr(self, param, val)
+            else:
+                model_params[param] = val
+
+        valid_params = self.get_params(deep=True)
+        for param, val in model_params.items():
+            if param in valid_params:
+                self.model.set_params(**{param: val})
+            elif param.startswith("model__"):
+                # Nested parameter of the model, as in scikit-learn
+                self.model.set_params(**{param[len("model__") :]: val})
+            else:
+                raise_error(
+                    f"Invalid parameter {param!r} for estimator {self}. "
+                    f"Valid parameters are: {sorted(valid_params)!r}."
+                )
         return self
 
     @property

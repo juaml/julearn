@@ -803,8 +803,12 @@ class PipelineCreator:
                         target_trans_step.params_to_tune.items()
                     )
                 }
+                # The keys are prefixed with the model name, which is now the
+                # "model" parameter of the target model step.
+                model_prefix = f"{model_name}__"
                 step_params_to_tune = {
-                    f"{model_name}_{kind}__model__{param}": val
+                    f"{model_name}_{kind}__model__"
+                    f"{param.removeprefix(model_prefix)}": val
                     for param, val in step_params_to_tune.items()
                 }
                 pipeline_steps.append(target_model_step)
