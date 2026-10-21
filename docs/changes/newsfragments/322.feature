@@ -1,0 +1,1 @@
+Add the ``svm_calibrated`` model, a Support Vector Classifier with calibrated probabilities, to replace the ``probability`` parameter of :class:`~sklearn.svm.SVC`, deprecated in scikit-learn 1.9. Using ``probability=True`` with the ``svm`` model now warns `Fede Raimondo`_
