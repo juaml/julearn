@@ -6,7 +6,7 @@
 <meta content="light dark" name="color-scheme"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
 <link href="../genindex.html" rel="index" title="Index"/><link href="../search.html" rel="search" title="Search"/><link href="CBPM.html" rel="next" title="6.7. Connectome-based Predictive Modeling (CBPM)"/><link href="cross_validation_splitter.html" rel="prev" title="6.5. Cross-validation splitters"/>
 <link as="image" href="../_static/julearn_logo_it.png" rel="prefetch"/>
-<!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
+<!-- Generated with Sphinx 9.2.0 and Furo 2025.12.19 -->
 <title>6.6. Stacking Models - julearn documentation</title>
 <link href="../_static/pygments.css?v=d111a655" rel="stylesheet" type="text/css"/>
 <link href="../_static/styles/furo.css?v=7bdb33bb" rel="stylesheet" type="text/css"/>
@@ -516,13 +516,13 @@ some target in a bit of toy data.</p>
 <span class="n">configure_logging</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="s2">"INFO"</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-10-14 19:45:27,223 - julearn - INFO - ===== Lib Versions =====
-2026-10-14 19:45:27,223 - julearn - INFO - numpy: 2.5.4
-2026-10-14 19:45:27,223 - julearn - INFO - scipy: 1.18.1
-2026-10-14 19:45:27,223 - julearn - INFO - sklearn: 1.8.0
-2026-10-14 19:45:27,223 - julearn - INFO - pandas: 3.0.6
-2026-10-14 19:45:27,223 - julearn - INFO - julearn: 0.3.6.dev92
-2026-10-14 19:45:27,223 - julearn - INFO - ========================
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-10-27 10:43:26,308 - julearn - INFO - ===== Lib Versions =====
+2026-10-27 10:43:26,308 - julearn - INFO - numpy: 2.5.4
+2026-10-27 10:43:26,308 - julearn - INFO - scipy: 1.18.1
+2026-10-27 10:43:26,308 - julearn - INFO - sklearn: 1.9.1
+2026-10-27 10:43:26,309 - julearn - INFO - pandas: 3.1.0
+2026-10-27 10:43:26,309 - julearn - INFO - julearn: 0.3.6.dev106
+2026-10-27 10:43:26,309 - julearn - INFO - ========================
 </pre></div>
 </div>
 <p>Now, that we have these out of the way, we can create some artificial toy
@@ -547,14 +547,14 @@ the hyperparameter grids we use here are somewhat arbitrary:</p>
 <span class="n">model_1</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"svm"</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s2">"linear"</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">geomspace</span><span class="p">(</span><span class="mf">1e-2</span><span class="p">,</span> <span class="mf">1e2</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-10-14 19:45:27,225 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={'*'}; pattern=.*&gt;
-2026-10-14 19:45:27,225 - julearn - INFO - Setting hyperparameter kernel = linear
-2026-10-14 19:45:27,225 - julearn - INFO - Tuning hyperparameter C = [1.00000000e-02 2.78255940e-02 7.74263683e-02 2.15443469e-01
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-10-27 10:43:26,310 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={'*'}; pattern=.*&gt;
+2026-10-27 10:43:26,311 - julearn - INFO - Setting hyperparameter kernel = linear
+2026-10-27 10:43:26,311 - julearn - INFO - Tuning hyperparameter C = [1.00000000e-02 2.78255940e-02 7.74263683e-02 2.15443469e-01
  5.99484250e-01 1.66810054e+00 4.64158883e+00 1.29154967e+01
  3.59381366e+01 1.00000000e+02]
-2026-10-14 19:45:27,226 - julearn - INFO - Step added
+2026-10-27 10:43:26,311 - julearn - INFO - Step added
 
-&lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fe625ff1250&gt;
+&lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x73674619fed0&gt;
 </pre></div>
 </div>
 <p>Note, that we specify applying the model to all of the features using
@@ -570,14 +570,14 @@ forest estimator:</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-10-14 19:45:27,226 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={'*'}; pattern=.*&gt;
-2026-10-14 19:45:27,226 - julearn - INFO - Setting hyperparameter n_estimators = 20
-2026-10-14 19:45:27,227 - julearn - INFO - Tuning hyperparameter max_depth = [10, 50]
-2026-10-14 19:45:27,227 - julearn - INFO - Tuning hyperparameter min_samples_leaf = [1, 3, 4]
-2026-10-14 19:45:27,227 - julearn - INFO - Tuning hyperparameter min_samples_split = [2, 10]
-2026-10-14 19:45:27,227 - julearn - INFO - Step added
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-10-27 10:43:26,312 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={'*'}; pattern=.*&gt;
+2026-10-27 10:43:26,312 - julearn - INFO - Setting hyperparameter n_estimators = 20
+2026-10-27 10:43:26,312 - julearn - INFO - Tuning hyperparameter max_depth = [10, 50]
+2026-10-27 10:43:26,312 - julearn - INFO - Tuning hyperparameter min_samples_leaf = [1, 3, 4]
+2026-10-27 10:43:26,312 - julearn - INFO - Tuning hyperparameter min_samples_split = [2, 10]
+2026-10-27 10:43:26,312 - julearn - INFO - Step added
 
-&lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fe625a3a0d0&gt;
+&lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x736745f1f2d0&gt;
 </pre></div>
 </div>
 <p>We can now provide these two models to a <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> to
@@ -592,11 +592,11 @@ initialize a stacking model. The interface for this is very similar to a
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-10-14 19:45:27,227 - julearn - INFO - Adding step stacking that applies to ColumnTypes&lt;types={'*'}; pattern=.*&gt;
-2026-10-14 19:45:27,227 - julearn - INFO - Setting hyperparameter estimators = [('model_1', &lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fe625ff1250&gt;), ('model_2', &lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fe625a3a0d0&gt;)]
-2026-10-14 19:45:27,228 - julearn - INFO - Step added
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-10-27 10:43:26,313 - julearn - INFO - Adding step stacking that applies to ColumnTypes&lt;types={'*'}; pattern=.*&gt;
+2026-10-27 10:43:26,313 - julearn - INFO - Setting hyperparameter estimators = [('model_1', &lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x73674619fed0&gt;), ('model_2', &lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x736745f1f2d0&gt;)]
+2026-10-27 10:43:26,313 - julearn - INFO - Step added
 
-&lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fe625eaf650&gt;
+&lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x736746007750&gt;
 </pre></div>
 </div>
 <p>This final stacking <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> can now simply be handed over
@@ -611,51 +611,321 @@ to <code class="docutils literal notranslate"><span class="pre">julearn</span></
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-10-14 19:45:27,228 - julearn - INFO - Setting random seed to 200
-2026-10-14 19:45:27,228 - julearn - INFO - ==== Input Data ====
-2026-10-14 19:45:27,228 - julearn - INFO - Using dataframe as input
-2026-10-14 19:45:27,228 - julearn - INFO -      Features: ['feature_1', 'feature_2', 'feature_3', 'feature_4', 'feature_5', 'feature_6', 'feature_7', 'feature_8', 'feature_9', 'feature_10', 'feature_11', 'feature_12', 'feature_13', 'feature_14', 'feature_15', 'feature_16', 'feature_17', 'feature_18', 'feature_19', 'feature_20']
-2026-10-14 19:45:27,228 - julearn - INFO -      Target: target
-2026-10-14 19:45:27,229 - julearn - INFO -      Expanded features: ['feature_1', 'feature_2', 'feature_3', 'feature_4', 'feature_5', 'feature_6', 'feature_7', 'feature_8', 'feature_9', 'feature_10', 'feature_11', 'feature_12', 'feature_13', 'feature_14', 'feature_15', 'feature_16', 'feature_17', 'feature_18', 'feature_19', 'feature_20']
-2026-10-14 19:45:27,229 - julearn - INFO -      X_types:{}
-2026-10-14 19:45:27,229 - julearn - WARNING - The following columns are not defined in X_types: ['feature_1', 'feature_2', 'feature_3', 'feature_4', 'feature_5', 'feature_6', 'feature_7', 'feature_8', 'feature_9', 'feature_10', 'feature_11', 'feature_12', 'feature_13', 'feature_14', 'feature_15', 'feature_16', 'feature_17', 'feature_18', 'feature_19', 'feature_20']. They will be treated as continuous.
-/tmp/tmp2t3nt_2s/julearn/prepare.py:609: RuntimeWarning: The following columns are not defined in X_types: ['feature_1', 'feature_2', 'feature_3', 'feature_4', 'feature_5', 'feature_6', 'feature_7', 'feature_8', 'feature_9', 'feature_10', 'feature_11', 'feature_12', 'feature_13', 'feature_14', 'feature_15', 'feature_16', 'feature_17', 'feature_18', 'feature_19', 'feature_20']. They will be treated as continuous.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-10-27 10:43:26,313 - julearn - INFO - Setting random seed to 200
+2026-10-27 10:43:26,314 - julearn - INFO - ==== Input Data ====
+2026-10-27 10:43:26,314 - julearn - INFO - Using dataframe as input
+2026-10-27 10:43:26,314 - julearn - INFO -      Features: ['feature_1', 'feature_2', 'feature_3', 'feature_4', 'feature_5', 'feature_6', 'feature_7', 'feature_8', 'feature_9', 'feature_10', 'feature_11', 'feature_12', 'feature_13', 'feature_14', 'feature_15', 'feature_16', 'feature_17', 'feature_18', 'feature_19', 'feature_20']
+2026-10-27 10:43:26,314 - julearn - INFO -      Target: target
+2026-10-27 10:43:26,314 - julearn - INFO -      Expanded features: ['feature_1', 'feature_2', 'feature_3', 'feature_4', 'feature_5', 'feature_6', 'feature_7', 'feature_8', 'feature_9', 'feature_10', 'feature_11', 'feature_12', 'feature_13', 'feature_14', 'feature_15', 'feature_16', 'feature_17', 'feature_18', 'feature_19', 'feature_20']
+2026-10-27 10:43:26,315 - julearn - INFO -      X_types:{}
+2026-10-27 10:43:26,315 - julearn - WARNING - The following columns are not defined in X_types: ['feature_1', 'feature_2', 'feature_3', 'feature_4', 'feature_5', 'feature_6', 'feature_7', 'feature_8', 'feature_9', 'feature_10', 'feature_11', 'feature_12', 'feature_13', 'feature_14', 'feature_15', 'feature_16', 'feature_17', 'feature_18', 'feature_19', 'feature_20']. They will be treated as continuous.
+/tmp/tmpe1kz7sab/julearn/prepare.py:609: RuntimeWarning: The following columns are not defined in X_types: ['feature_1', 'feature_2', 'feature_3', 'feature_4', 'feature_5', 'feature_6', 'feature_7', 'feature_8', 'feature_9', 'feature_10', 'feature_11', 'feature_12', 'feature_13', 'feature_14', 'feature_15', 'feature_16', 'feature_17', 'feature_18', 'feature_19', 'feature_20']. They will be treated as continuous.
   warn_with_log(
-2026-10-14 19:45:27,230 - julearn - INFO - ====================
-2026-10-14 19:45:27,230 - julearn - INFO -
-2026-10-14 19:45:27,230 - julearn - INFO - = Model Parameters =
-2026-10-14 19:45:27,230 - julearn - INFO - Tuning hyperparameters using grid
-2026-10-14 19:45:27,231 - julearn - INFO - Hyperparameters:
-2026-10-14 19:45:27,231 - julearn - INFO -      svm__C: [1.00000000e-02 2.78255940e-02 7.74263683e-02 2.15443469e-01
+2026-10-27 10:43:26,316 - julearn - INFO - ====================
+2026-10-27 10:43:26,316 - julearn - INFO -
+2026-10-27 10:43:26,316 - julearn - INFO - = Model Parameters =
+2026-10-27 10:43:26,316 - julearn - INFO - Tuning hyperparameters using grid
+2026-10-27 10:43:26,316 - julearn - INFO - Hyperparameters:
+2026-10-27 10:43:26,316 - julearn - INFO -      svm__C: [1.00000000e-02 2.78255940e-02 7.74263683e-02 2.15443469e-01
  5.99484250e-01 1.66810054e+00 4.64158883e+00 1.29154967e+01
  3.59381366e+01 1.00000000e+02]
-2026-10-14 19:45:27,231 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2026-10-14 19:45:27,231 - julearn - INFO - Search Parameters:
-2026-10-14 19:45:27,231 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
-2026-10-14 19:45:27,232 - julearn - INFO - ====================
-2026-10-14 19:45:27,232 - julearn - INFO -
-2026-10-14 19:45:27,232 - julearn - INFO - = Model Parameters =
-2026-10-14 19:45:27,232 - julearn - INFO - Tuning hyperparameters using grid
-2026-10-14 19:45:27,232 - julearn - INFO - Hyperparameters:
-2026-10-14 19:45:27,232 - julearn - INFO -      rf__max_depth: [10, 50]
-2026-10-14 19:45:27,232 - julearn - INFO -      rf__min_samples_leaf: [1, 3, 4]
-2026-10-14 19:45:27,232 - julearn - INFO -      rf__min_samples_split: [2, 10]
-2026-10-14 19:45:27,232 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2026-10-14 19:45:27,233 - julearn - INFO - Search Parameters:
-2026-10-14 19:45:27,233 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
-2026-10-14 19:45:27,233 - julearn - INFO - ====================
-2026-10-14 19:45:27,233 - julearn - INFO -
-2026-10-14 19:45:27,234 - julearn - INFO - = Model Parameters =
-2026-10-14 19:45:27,234 - julearn - INFO - ====================
-2026-10-14 19:45:27,234 - julearn - INFO -
-2026-10-14 19:45:27,234 - julearn - INFO - = Data Information =
-2026-10-14 19:45:27,234 - julearn - INFO -      Problem type: regression
-2026-10-14 19:45:27,234 - julearn - INFO -      Number of samples: 200
-2026-10-14 19:45:27,234 - julearn - INFO -      Number of features: 20
-2026-10-14 19:45:27,234 - julearn - INFO - ====================
-2026-10-14 19:45:27,234 - julearn - INFO -
-2026-10-14 19:45:27,234 - julearn - INFO -      Target type: float64
-2026-10-14 19:45:27,234 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
+2026-10-27 10:43:26,317 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2026-10-27 10:43:26,317 - julearn - INFO - Search Parameters:
+2026-10-27 10:43:26,317 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
+2026-10-27 10:43:26,317 - julearn - INFO - ====================
+2026-10-27 10:43:26,317 - julearn - INFO -
+2026-10-27 10:43:26,318 - julearn - INFO - = Model Parameters =
+2026-10-27 10:43:26,318 - julearn - INFO - Tuning hyperparameters using grid
+2026-10-27 10:43:26,318 - julearn - INFO - Hyperparameters:
+2026-10-27 10:43:26,318 - julearn - INFO -      rf__max_depth: [10, 50]
+2026-10-27 10:43:26,318 - julearn - INFO -      rf__min_samples_leaf: [1, 3, 4]
+2026-10-27 10:43:26,318 - julearn - INFO -      rf__min_samples_split: [2, 10]
+2026-10-27 10:43:26,318 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2026-10-27 10:43:26,318 - julearn - INFO - Search Parameters:
+2026-10-27 10:43:26,319 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
+2026-10-27 10:43:26,319 - julearn - INFO - ====================
+2026-10-27 10:43:26,319 - julearn - INFO -
+2026-10-27 10:43:26,319 - julearn - INFO - = Model Parameters =
+2026-10-27 10:43:26,319 - julearn - INFO - ====================
+2026-10-27 10:43:26,320 - julearn - INFO -
+2026-10-27 10:43:26,320 - julearn - INFO - = Data Information =
+2026-10-27 10:43:26,320 - julearn - INFO -      Problem type: regression
+2026-10-27 10:43:26,320 - julearn - INFO -      Number of samples: 200
+2026-10-27 10:43:26,320 - julearn - INFO -      Number of features: 20
+2026-10-27 10:43:26,320 - julearn - INFO - ====================
+2026-10-27 10:43:26,320 - julearn - INFO -
+2026-10-27 10:43:26,320 - julearn - INFO -      Target type: float64
+2026-10-27 10:43:26,320 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
+/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/model_selection/_validation.py:960: UserWarning: Scoring failed. The score on this train-test partition for these parameters will be set to nan. Details:
+Traceback (most recent call last):
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/model_selection/_validation.py", line 949, in _score
+    scores = scorer(estimator, X_test, y_test, **score_params)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/metrics/_scorer.py", line 537, in __call__
+    return estimator.score(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/julearn/pipeline/ju_pipeline.py", line 72, in score
+    return super().score(X, y, sample_weight=sample_weight, **params)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/pipeline.py", line 1202, in score
+    return self.steps[-1][1].score(Xt, y, **score_params)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/base.py", line 715, in score
+    y_pred = self.predict(X)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/ensemble/_stacking.py", line 1134, in predict
+    y_pred = super().predict(X, **routed_params.final_estimator_["predict"])
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/ensemble/_stacking.py", line 373, in predict
+    return self.final_estimator_.predict(self.transform(X), **predict_params)
+                                         ~~~~~~~~~~~~~~^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 340, in wrapped
+    return _wrap_data_with_container(method, data_to_wrap, X, self)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 315, in _wrap_data_with_container
+    return adapter.create_container(
+           ~~~~~~~~~~~~~~~~~~~~~~~~^
+        data_to_wrap,
+        ^^^^^^^^^^^^^
+        original_input,
+        ^^^^^^^^^^^^^^^
+        columns=estimator.get_feature_names_out,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 122, in create_container
+    columns = get_columns(columns)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 30, in get_columns
+    return columns()
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/ensemble/_stacking.py", line 325, in get_feature_names_out
+    check_is_fitted(self, "n_features_in_")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/validation.py", line 1721, in check_is_fitted
+    raise NotFittedError(msg % {"name": type(estimator).__name__})
+sklearn.exceptions.NotFittedError: This StackingRegressor instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+
+  warnings.warn(
+/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/model_selection/_validation.py:960: UserWarning: Scoring failed. The score on this train-test partition for these parameters will be set to nan. Details:
+Traceback (most recent call last):
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/model_selection/_validation.py", line 949, in _score
+    scores = scorer(estimator, X_test, y_test, **score_params)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/metrics/_scorer.py", line 537, in __call__
+    return estimator.score(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/julearn/pipeline/ju_pipeline.py", line 72, in score
+    return super().score(X, y, sample_weight=sample_weight, **params)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/pipeline.py", line 1202, in score
+    return self.steps[-1][1].score(Xt, y, **score_params)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/base.py", line 715, in score
+    y_pred = self.predict(X)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/ensemble/_stacking.py", line 1134, in predict
+    y_pred = super().predict(X, **routed_params.final_estimator_["predict"])
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/ensemble/_stacking.py", line 373, in predict
+    return self.final_estimator_.predict(self.transform(X), **predict_params)
+                                         ~~~~~~~~~~~~~~^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 340, in wrapped
+    return _wrap_data_with_container(method, data_to_wrap, X, self)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 315, in _wrap_data_with_container
+    return adapter.create_container(
+           ~~~~~~~~~~~~~~~~~~~~~~~~^
+        data_to_wrap,
+        ^^^^^^^^^^^^^
+        original_input,
+        ^^^^^^^^^^^^^^^
+        columns=estimator.get_feature_names_out,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 122, in create_container
+    columns = get_columns(columns)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 30, in get_columns
+    return columns()
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/ensemble/_stacking.py", line 325, in get_feature_names_out
+    check_is_fitted(self, "n_features_in_")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/validation.py", line 1721, in check_is_fitted
+    raise NotFittedError(msg % {"name": type(estimator).__name__})
+sklearn.exceptions.NotFittedError: This StackingRegressor instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+
+  warnings.warn(
+/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/model_selection/_validation.py:960: UserWarning: Scoring failed. The score on this train-test partition for these parameters will be set to nan. Details:
+Traceback (most recent call last):
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/model_selection/_validation.py", line 949, in _score
+    scores = scorer(estimator, X_test, y_test, **score_params)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/metrics/_scorer.py", line 537, in __call__
+    return estimator.score(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/julearn/pipeline/ju_pipeline.py", line 72, in score
+    return super().score(X, y, sample_weight=sample_weight, **params)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/pipeline.py", line 1202, in score
+    return self.steps[-1][1].score(Xt, y, **score_params)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/base.py", line 715, in score
+    y_pred = self.predict(X)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/ensemble/_stacking.py", line 1134, in predict
+    y_pred = super().predict(X, **routed_params.final_estimator_["predict"])
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/ensemble/_stacking.py", line 373, in predict
+    return self.final_estimator_.predict(self.transform(X), **predict_params)
+                                         ~~~~~~~~~~~~~~^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 340, in wrapped
+    return _wrap_data_with_container(method, data_to_wrap, X, self)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 315, in _wrap_data_with_container
+    return adapter.create_container(
+           ~~~~~~~~~~~~~~~~~~~~~~~~^
+        data_to_wrap,
+        ^^^^^^^^^^^^^
+        original_input,
+        ^^^^^^^^^^^^^^^
+        columns=estimator.get_feature_names_out,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 122, in create_container
+    columns = get_columns(columns)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 30, in get_columns
+    return columns()
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/ensemble/_stacking.py", line 325, in get_feature_names_out
+    check_is_fitted(self, "n_features_in_")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/validation.py", line 1721, in check_is_fitted
+    raise NotFittedError(msg % {"name": type(estimator).__name__})
+sklearn.exceptions.NotFittedError: This StackingRegressor instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+
+  warnings.warn(
+/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/model_selection/_validation.py:960: UserWarning: Scoring failed. The score on this train-test partition for these parameters will be set to nan. Details:
+Traceback (most recent call last):
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/model_selection/_validation.py", line 949, in _score
+    scores = scorer(estimator, X_test, y_test, **score_params)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/metrics/_scorer.py", line 537, in __call__
+    return estimator.score(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/julearn/pipeline/ju_pipeline.py", line 72, in score
+    return super().score(X, y, sample_weight=sample_weight, **params)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/pipeline.py", line 1202, in score
+    return self.steps[-1][1].score(Xt, y, **score_params)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/base.py", line 715, in score
+    y_pred = self.predict(X)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/ensemble/_stacking.py", line 1134, in predict
+    y_pred = super().predict(X, **routed_params.final_estimator_["predict"])
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/ensemble/_stacking.py", line 373, in predict
+    return self.final_estimator_.predict(self.transform(X), **predict_params)
+                                         ~~~~~~~~~~~~~~^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 340, in wrapped
+    return _wrap_data_with_container(method, data_to_wrap, X, self)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 315, in _wrap_data_with_container
+    return adapter.create_container(
+           ~~~~~~~~~~~~~~~~~~~~~~~~^
+        data_to_wrap,
+        ^^^^^^^^^^^^^
+        original_input,
+        ^^^^^^^^^^^^^^^
+        columns=estimator.get_feature_names_out,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 122, in create_container
+    columns = get_columns(columns)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 30, in get_columns
+    return columns()
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/ensemble/_stacking.py", line 325, in get_feature_names_out
+    check_is_fitted(self, "n_features_in_")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/validation.py", line 1721, in check_is_fitted
+    raise NotFittedError(msg % {"name": type(estimator).__name__})
+sklearn.exceptions.NotFittedError: This StackingRegressor instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+
+  warnings.warn(
+/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/model_selection/_validation.py:960: UserWarning: Scoring failed. The score on this train-test partition for these parameters will be set to nan. Details:
+Traceback (most recent call last):
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/model_selection/_validation.py", line 949, in _score
+    scores = scorer(estimator, X_test, y_test, **score_params)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/metrics/_scorer.py", line 537, in __call__
+    return estimator.score(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/julearn/pipeline/ju_pipeline.py", line 72, in score
+    return super().score(X, y, sample_weight=sample_weight, **params)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/pipeline.py", line 1202, in score
+    return self.steps[-1][1].score(Xt, y, **score_params)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/base.py", line 715, in score
+    y_pred = self.predict(X)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/ensemble/_stacking.py", line 1134, in predict
+    y_pred = super().predict(X, **routed_params.final_estimator_["predict"])
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/ensemble/_stacking.py", line 373, in predict
+    return self.final_estimator_.predict(self.transform(X), **predict_params)
+                                         ~~~~~~~~~~~~~~^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 340, in wrapped
+    return _wrap_data_with_container(method, data_to_wrap, X, self)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 315, in _wrap_data_with_container
+    return adapter.create_container(
+           ~~~~~~~~~~~~~~~~~~~~~~~~^
+        data_to_wrap,
+        ^^^^^^^^^^^^^
+        original_input,
+        ^^^^^^^^^^^^^^^
+        columns=estimator.get_feature_names_out,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 122, in create_container
+    columns = get_columns(columns)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 30, in get_columns
+    return columns()
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/ensemble/_stacking.py", line 325, in get_feature_names_out
+    check_is_fitted(self, "n_features_in_")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/validation.py", line 1721, in check_is_fitted
+    raise NotFittedError(msg % {"name": type(estimator).__name__})
+sklearn.exceptions.NotFittedError: This StackingRegressor instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+
+  warnings.warn(
+/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/model_selection/_validation.py:960: UserWarning: Scoring failed. The score on this train-test partition for these parameters will be set to nan. Details:
+Traceback (most recent call last):
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/model_selection/_validation.py", line 949, in _score
+    scores = scorer(estimator, X_test, y_test, **score_params)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/metrics/_scorer.py", line 537, in __call__
+    return estimator.score(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/julearn/pipeline/ju_pipeline.py", line 72, in score
+    return super().score(X, y, sample_weight=sample_weight, **params)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/pipeline.py", line 1202, in score
+    return self.steps[-1][1].score(Xt, y, **score_params)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/base.py", line 715, in score
+    y_pred = self.predict(X)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/ensemble/_stacking.py", line 1134, in predict
+    y_pred = super().predict(X, **routed_params.final_estimator_["predict"])
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/ensemble/_stacking.py", line 373, in predict
+    return self.final_estimator_.predict(self.transform(X), **predict_params)
+                                         ~~~~~~~~~~~~~~^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 340, in wrapped
+    return _wrap_data_with_container(method, data_to_wrap, X, self)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 315, in _wrap_data_with_container
+    return adapter.create_container(
+           ~~~~~~~~~~~~~~~~~~~~~~~~^
+        data_to_wrap,
+        ^^^^^^^^^^^^^
+        original_input,
+        ^^^^^^^^^^^^^^^
+        columns=estimator.get_feature_names_out,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 122, in create_container
+    columns = get_columns(columns)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 30, in get_columns
+    return columns()
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/ensemble/_stacking.py", line 325, in get_feature_names_out
+    check_is_fitted(self, "n_features_in_")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/validation.py", line 1721, in check_is_fitted
+    raise NotFittedError(msg % {"name": type(estimator).__name__})
+sklearn.exceptions.NotFittedError: This StackingRegressor instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+
+  warnings.warn(
 </pre></div>
 </div>
 </section>
@@ -694,17 +964,17 @@ features of <code class="docutils literal notranslate"><span class="pre">"type1"
 <span class="n">model_1</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s2">"svm"</span><span class="p">,</span> <span class="n">kernel</span><span class="o">=</span><span class="s2">"linear"</span><span class="p">,</span> <span class="n">C</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">geomspace</span><span class="p">(</span><span class="mf">1e-2</span><span class="p">,</span> <span class="mf">1e2</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-10-14 19:46:59,375 - julearn - INFO - Adding step filter_columns that applies to ColumnTypes&lt;types={'*'}; pattern=.*&gt;
-2026-10-14 19:46:59,375 - julearn - INFO - Setting hyperparameter keep = type1
-2026-10-14 19:46:59,375 - julearn - INFO - Step added
-2026-10-14 19:46:59,375 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={'type1'}; pattern=(?:__:type:__type1)&gt;
-2026-10-14 19:46:59,375 - julearn - INFO - Setting hyperparameter kernel = linear
-2026-10-14 19:46:59,375 - julearn - INFO - Tuning hyperparameter C = [1.00000000e-02 2.78255940e-02 7.74263683e-02 2.15443469e-01
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-10-27 10:45:03,838 - julearn - INFO - Adding step filter_columns that applies to ColumnTypes&lt;types={'*'}; pattern=.*&gt;
+2026-10-27 10:45:03,839 - julearn - INFO - Setting hyperparameter keep = type1
+2026-10-27 10:45:03,839 - julearn - INFO - Step added
+2026-10-27 10:45:03,839 - julearn - INFO - Adding step svm that applies to ColumnTypes&lt;types={'type1'}; pattern=(?:__:type:__type1)&gt;
+2026-10-27 10:45:03,839 - julearn - INFO - Setting hyperparameter kernel = linear
+2026-10-27 10:45:03,839 - julearn - INFO - Tuning hyperparameter C = [1.00000000e-02 2.78255940e-02 7.74263683e-02 2.15443469e-01
  5.99484250e-01 1.66810054e+00 4.64158883e+00 1.29154967e+01
  3.59381366e+01 1.00000000e+02]
-2026-10-14 19:46:59,376 - julearn - INFO - Step added
+2026-10-27 10:45:03,840 - julearn - INFO - Step added
 
-&lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fe6258ad050&gt;
+&lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x736745f1c650&gt;
 </pre></div>
 </div>
 <p>Afterwards, let’s configure a <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> to fit a RF on the
@@ -720,17 +990,17 @@ features of <code class="docutils literal notranslate"><span class="pre">"type2"
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-10-14 19:46:59,376 - julearn - INFO - Adding step filter_columns that applies to ColumnTypes&lt;types={'*'}; pattern=.*&gt;
-2026-10-14 19:46:59,377 - julearn - INFO - Setting hyperparameter keep = type2
-2026-10-14 19:46:59,377 - julearn - INFO - Step added
-2026-10-14 19:46:59,377 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={'type2'}; pattern=(?:__:type:__type2)&gt;
-2026-10-14 19:46:59,377 - julearn - INFO - Setting hyperparameter n_estimators = 20
-2026-10-14 19:46:59,377 - julearn - INFO - Tuning hyperparameter max_depth = [10, 50]
-2026-10-14 19:46:59,377 - julearn - INFO - Tuning hyperparameter min_samples_leaf = [1, 3, 4]
-2026-10-14 19:46:59,377 - julearn - INFO - Tuning hyperparameter min_samples_split = [2, 10]
-2026-10-14 19:46:59,378 - julearn - INFO - Step added
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-10-27 10:45:03,840 - julearn - INFO - Adding step filter_columns that applies to ColumnTypes&lt;types={'*'}; pattern=.*&gt;
+2026-10-27 10:45:03,840 - julearn - INFO - Setting hyperparameter keep = type2
+2026-10-27 10:45:03,841 - julearn - INFO - Step added
+2026-10-27 10:45:03,841 - julearn - INFO - Adding step rf that applies to ColumnTypes&lt;types={'type2'}; pattern=(?:__:type:__type2)&gt;
+2026-10-27 10:45:03,841 - julearn - INFO - Setting hyperparameter n_estimators = 20
+2026-10-27 10:45:03,841 - julearn - INFO - Tuning hyperparameter max_depth = [10, 50]
+2026-10-27 10:45:03,841 - julearn - INFO - Tuning hyperparameter min_samples_leaf = [1, 3, 4]
+2026-10-27 10:45:03,841 - julearn - INFO - Tuning hyperparameter min_samples_split = [2, 10]
+2026-10-27 10:45:03,841 - julearn - INFO - Step added
 
-&lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fe6145a9ed0&gt;
+&lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7367643f8b50&gt;
 </pre></div>
 </div>
 <p>Now, as in the previous example, we only have to create a stacking estimator
@@ -756,51 +1026,321 @@ stacking estimator in a <a class="reference internal" href="../api/generated/jul
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-10-14 19:46:59,378 - julearn - INFO - Adding step stacking that applies to ColumnTypes&lt;types={'*'}; pattern=.*&gt;
-2026-10-14 19:46:59,378 - julearn - INFO - Setting hyperparameter estimators = [('model_1', &lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fe6258ad050&gt;), ('model_2', &lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7fe6145a9ed0&gt;)]
-2026-10-14 19:46:59,378 - julearn - INFO - Step added
-2026-10-14 19:46:59,378 - julearn - INFO - Setting random seed to 200
-2026-10-14 19:46:59,378 - julearn - INFO - ==== Input Data ====
-2026-10-14 19:46:59,379 - julearn - INFO - Using dataframe as input
-2026-10-14 19:46:59,379 - julearn - INFO -      Features: ['type1_1', 'type1_2', 'type1_3', 'type1_4', 'type1_5', 'type1_6', 'type1_7', 'type1_8', 'type1_9', 'type1_10', 'type2_1', 'type2_2', 'type2_3', 'type2_4', 'type2_5', 'type2_6', 'type2_7', 'type2_8', 'type2_9', 'type2_10']
-2026-10-14 19:46:59,379 - julearn - INFO -      Target: target
-2026-10-14 19:46:59,380 - julearn - INFO -      Expanded features: ['type1_1', 'type1_2', 'type1_3', 'type1_4', 'type1_5', 'type1_6', 'type1_7', 'type1_8', 'type1_9', 'type1_10', 'type2_1', 'type2_2', 'type2_3', 'type2_4', 'type2_5', 'type2_6', 'type2_7', 'type2_8', 'type2_9', 'type2_10']
-2026-10-14 19:46:59,380 - julearn - INFO -      X_types:{'type1': ['type1_1', 'type1_2', 'type1_3', 'type1_4', 'type1_5', 'type1_6', 'type1_7', 'type1_8', 'type1_9', 'type1_10'], 'type2': ['type2_1', 'type2_2', 'type2_3', 'type2_4', 'type2_5', 'type2_6', 'type2_7', 'type2_8', 'type2_9', 'type2_10']}
-2026-10-14 19:46:59,381 - julearn - INFO - ====================
-2026-10-14 19:46:59,381 - julearn - INFO -
-2026-10-14 19:46:59,382 - julearn - INFO - = Model Parameters =
-2026-10-14 19:46:59,382 - julearn - INFO - Tuning hyperparameters using grid
-2026-10-14 19:46:59,382 - julearn - INFO - Hyperparameters:
-2026-10-14 19:46:59,382 - julearn - INFO -      svm__C: [1.00000000e-02 2.78255940e-02 7.74263683e-02 2.15443469e-01
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>2026-10-27 10:45:03,842 - julearn - INFO - Adding step stacking that applies to ColumnTypes&lt;types={'*'}; pattern=.*&gt;
+2026-10-27 10:45:03,842 - julearn - INFO - Setting hyperparameter estimators = [('model_1', &lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x736745f1c650&gt;), ('model_2', &lt;julearn.pipeline.pipeline_creator.PipelineCreator object at 0x7367643f8b50&gt;)]
+2026-10-27 10:45:03,842 - julearn - INFO - Step added
+2026-10-27 10:45:03,842 - julearn - INFO - Setting random seed to 200
+2026-10-27 10:45:03,842 - julearn - INFO - ==== Input Data ====
+2026-10-27 10:45:03,842 - julearn - INFO - Using dataframe as input
+2026-10-27 10:45:03,842 - julearn - INFO -      Features: ['type1_1', 'type1_2', 'type1_3', 'type1_4', 'type1_5', 'type1_6', 'type1_7', 'type1_8', 'type1_9', 'type1_10', 'type2_1', 'type2_2', 'type2_3', 'type2_4', 'type2_5', 'type2_6', 'type2_7', 'type2_8', 'type2_9', 'type2_10']
+2026-10-27 10:45:03,842 - julearn - INFO -      Target: target
+2026-10-27 10:45:03,843 - julearn - INFO -      Expanded features: ['type1_1', 'type1_2', 'type1_3', 'type1_4', 'type1_5', 'type1_6', 'type1_7', 'type1_8', 'type1_9', 'type1_10', 'type2_1', 'type2_2', 'type2_3', 'type2_4', 'type2_5', 'type2_6', 'type2_7', 'type2_8', 'type2_9', 'type2_10']
+2026-10-27 10:45:03,843 - julearn - INFO -      X_types:{'type1': ['type1_1', 'type1_2', 'type1_3', 'type1_4', 'type1_5', 'type1_6', 'type1_7', 'type1_8', 'type1_9', 'type1_10'], 'type2': ['type2_1', 'type2_2', 'type2_3', 'type2_4', 'type2_5', 'type2_6', 'type2_7', 'type2_8', 'type2_9', 'type2_10']}
+2026-10-27 10:45:03,845 - julearn - INFO - ====================
+2026-10-27 10:45:03,845 - julearn - INFO -
+2026-10-27 10:45:03,845 - julearn - INFO - = Model Parameters =
+2026-10-27 10:45:03,845 - julearn - INFO - Tuning hyperparameters using grid
+2026-10-27 10:45:03,845 - julearn - INFO - Hyperparameters:
+2026-10-27 10:45:03,845 - julearn - INFO -      svm__C: [1.00000000e-02 2.78255940e-02 7.74263683e-02 2.15443469e-01
  5.99484250e-01 1.66810054e+00 4.64158883e+00 1.29154967e+01
  3.59381366e+01 1.00000000e+02]
-2026-10-14 19:46:59,382 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2026-10-14 19:46:59,383 - julearn - INFO - Search Parameters:
-2026-10-14 19:46:59,383 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
-2026-10-14 19:46:59,383 - julearn - INFO - ====================
-2026-10-14 19:46:59,383 - julearn - INFO -
-2026-10-14 19:46:59,383 - julearn - INFO - = Model Parameters =
-2026-10-14 19:46:59,384 - julearn - INFO - Tuning hyperparameters using grid
-2026-10-14 19:46:59,384 - julearn - INFO - Hyperparameters:
-2026-10-14 19:46:59,384 - julearn - INFO -      rf__max_depth: [10, 50]
-2026-10-14 19:46:59,384 - julearn - INFO -      rf__min_samples_leaf: [1, 3, 4]
-2026-10-14 19:46:59,384 - julearn - INFO -      rf__min_samples_split: [2, 10]
-2026-10-14 19:46:59,384 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
-2026-10-14 19:46:59,384 - julearn - INFO - Search Parameters:
-2026-10-14 19:46:59,384 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
-2026-10-14 19:46:59,384 - julearn - INFO - ====================
-2026-10-14 19:46:59,385 - julearn - INFO -
-2026-10-14 19:46:59,385 - julearn - INFO - = Model Parameters =
-2026-10-14 19:46:59,385 - julearn - INFO - ====================
-2026-10-14 19:46:59,385 - julearn - INFO -
-2026-10-14 19:46:59,385 - julearn - INFO - = Data Information =
-2026-10-14 19:46:59,385 - julearn - INFO -      Problem type: regression
-2026-10-14 19:46:59,385 - julearn - INFO -      Number of samples: 200
-2026-10-14 19:46:59,386 - julearn - INFO -      Number of features: 20
-2026-10-14 19:46:59,386 - julearn - INFO - ====================
-2026-10-14 19:46:59,386 - julearn - INFO -
-2026-10-14 19:46:59,386 - julearn - INFO -      Target type: float64
-2026-10-14 19:46:59,386 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
+2026-10-27 10:45:03,846 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2026-10-27 10:45:03,846 - julearn - INFO - Search Parameters:
+2026-10-27 10:45:03,846 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
+2026-10-27 10:45:03,847 - julearn - INFO - ====================
+2026-10-27 10:45:03,847 - julearn - INFO -
+2026-10-27 10:45:03,847 - julearn - INFO - = Model Parameters =
+2026-10-27 10:45:03,847 - julearn - INFO - Tuning hyperparameters using grid
+2026-10-27 10:45:03,847 - julearn - INFO - Hyperparameters:
+2026-10-27 10:45:03,847 - julearn - INFO -      rf__max_depth: [10, 50]
+2026-10-27 10:45:03,847 - julearn - INFO -      rf__min_samples_leaf: [1, 3, 4]
+2026-10-27 10:45:03,847 - julearn - INFO -      rf__min_samples_split: [2, 10]
+2026-10-27 10:45:03,847 - julearn - INFO - Using inner CV scheme KFold(n_splits=5, random_state=None, shuffle=False)
+2026-10-27 10:45:03,848 - julearn - INFO - Search Parameters:
+2026-10-27 10:45:03,848 - julearn - INFO -      cv: KFold(n_splits=5, random_state=None, shuffle=False)
+2026-10-27 10:45:03,848 - julearn - INFO - ====================
+2026-10-27 10:45:03,848 - julearn - INFO -
+2026-10-27 10:45:03,849 - julearn - INFO - = Model Parameters =
+2026-10-27 10:45:03,849 - julearn - INFO - ====================
+2026-10-27 10:45:03,849 - julearn - INFO -
+2026-10-27 10:45:03,849 - julearn - INFO - = Data Information =
+2026-10-27 10:45:03,849 - julearn - INFO -      Problem type: regression
+2026-10-27 10:45:03,849 - julearn - INFO -      Number of samples: 200
+2026-10-27 10:45:03,849 - julearn - INFO -      Number of features: 20
+2026-10-27 10:45:03,849 - julearn - INFO - ====================
+2026-10-27 10:45:03,849 - julearn - INFO -
+2026-10-27 10:45:03,849 - julearn - INFO -      Target type: float64
+2026-10-27 10:45:03,850 - julearn - INFO - Using outer CV scheme KFold(n_splits=5, random_state=None, shuffle=False) (incl. final model)
+/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/model_selection/_validation.py:960: UserWarning: Scoring failed. The score on this train-test partition for these parameters will be set to nan. Details:
+Traceback (most recent call last):
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/model_selection/_validation.py", line 949, in _score
+    scores = scorer(estimator, X_test, y_test, **score_params)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/metrics/_scorer.py", line 537, in __call__
+    return estimator.score(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/julearn/pipeline/ju_pipeline.py", line 72, in score
+    return super().score(X, y, sample_weight=sample_weight, **params)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/pipeline.py", line 1202, in score
+    return self.steps[-1][1].score(Xt, y, **score_params)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/base.py", line 715, in score
+    y_pred = self.predict(X)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/ensemble/_stacking.py", line 1134, in predict
+    y_pred = super().predict(X, **routed_params.final_estimator_["predict"])
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/ensemble/_stacking.py", line 373, in predict
+    return self.final_estimator_.predict(self.transform(X), **predict_params)
+                                         ~~~~~~~~~~~~~~^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 340, in wrapped
+    return _wrap_data_with_container(method, data_to_wrap, X, self)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 315, in _wrap_data_with_container
+    return adapter.create_container(
+           ~~~~~~~~~~~~~~~~~~~~~~~~^
+        data_to_wrap,
+        ^^^^^^^^^^^^^
+        original_input,
+        ^^^^^^^^^^^^^^^
+        columns=estimator.get_feature_names_out,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 122, in create_container
+    columns = get_columns(columns)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 30, in get_columns
+    return columns()
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/ensemble/_stacking.py", line 325, in get_feature_names_out
+    check_is_fitted(self, "n_features_in_")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/validation.py", line 1721, in check_is_fitted
+    raise NotFittedError(msg % {"name": type(estimator).__name__})
+sklearn.exceptions.NotFittedError: This StackingRegressor instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+
+  warnings.warn(
+/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/model_selection/_validation.py:960: UserWarning: Scoring failed. The score on this train-test partition for these parameters will be set to nan. Details:
+Traceback (most recent call last):
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/model_selection/_validation.py", line 949, in _score
+    scores = scorer(estimator, X_test, y_test, **score_params)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/metrics/_scorer.py", line 537, in __call__
+    return estimator.score(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/julearn/pipeline/ju_pipeline.py", line 72, in score
+    return super().score(X, y, sample_weight=sample_weight, **params)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/pipeline.py", line 1202, in score
+    return self.steps[-1][1].score(Xt, y, **score_params)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/base.py", line 715, in score
+    y_pred = self.predict(X)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/ensemble/_stacking.py", line 1134, in predict
+    y_pred = super().predict(X, **routed_params.final_estimator_["predict"])
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/ensemble/_stacking.py", line 373, in predict
+    return self.final_estimator_.predict(self.transform(X), **predict_params)
+                                         ~~~~~~~~~~~~~~^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 340, in wrapped
+    return _wrap_data_with_container(method, data_to_wrap, X, self)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 315, in _wrap_data_with_container
+    return adapter.create_container(
+           ~~~~~~~~~~~~~~~~~~~~~~~~^
+        data_to_wrap,
+        ^^^^^^^^^^^^^
+        original_input,
+        ^^^^^^^^^^^^^^^
+        columns=estimator.get_feature_names_out,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 122, in create_container
+    columns = get_columns(columns)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 30, in get_columns
+    return columns()
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/ensemble/_stacking.py", line 325, in get_feature_names_out
+    check_is_fitted(self, "n_features_in_")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/validation.py", line 1721, in check_is_fitted
+    raise NotFittedError(msg % {"name": type(estimator).__name__})
+sklearn.exceptions.NotFittedError: This StackingRegressor instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+
+  warnings.warn(
+/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/model_selection/_validation.py:960: UserWarning: Scoring failed. The score on this train-test partition for these parameters will be set to nan. Details:
+Traceback (most recent call last):
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/model_selection/_validation.py", line 949, in _score
+    scores = scorer(estimator, X_test, y_test, **score_params)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/metrics/_scorer.py", line 537, in __call__
+    return estimator.score(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/julearn/pipeline/ju_pipeline.py", line 72, in score
+    return super().score(X, y, sample_weight=sample_weight, **params)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/pipeline.py", line 1202, in score
+    return self.steps[-1][1].score(Xt, y, **score_params)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/base.py", line 715, in score
+    y_pred = self.predict(X)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/ensemble/_stacking.py", line 1134, in predict
+    y_pred = super().predict(X, **routed_params.final_estimator_["predict"])
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/ensemble/_stacking.py", line 373, in predict
+    return self.final_estimator_.predict(self.transform(X), **predict_params)
+                                         ~~~~~~~~~~~~~~^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 340, in wrapped
+    return _wrap_data_with_container(method, data_to_wrap, X, self)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 315, in _wrap_data_with_container
+    return adapter.create_container(
+           ~~~~~~~~~~~~~~~~~~~~~~~~^
+        data_to_wrap,
+        ^^^^^^^^^^^^^
+        original_input,
+        ^^^^^^^^^^^^^^^
+        columns=estimator.get_feature_names_out,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 122, in create_container
+    columns = get_columns(columns)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 30, in get_columns
+    return columns()
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/ensemble/_stacking.py", line 325, in get_feature_names_out
+    check_is_fitted(self, "n_features_in_")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/validation.py", line 1721, in check_is_fitted
+    raise NotFittedError(msg % {"name": type(estimator).__name__})
+sklearn.exceptions.NotFittedError: This StackingRegressor instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+
+  warnings.warn(
+/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/model_selection/_validation.py:960: UserWarning: Scoring failed. The score on this train-test partition for these parameters will be set to nan. Details:
+Traceback (most recent call last):
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/model_selection/_validation.py", line 949, in _score
+    scores = scorer(estimator, X_test, y_test, **score_params)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/metrics/_scorer.py", line 537, in __call__
+    return estimator.score(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/julearn/pipeline/ju_pipeline.py", line 72, in score
+    return super().score(X, y, sample_weight=sample_weight, **params)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/pipeline.py", line 1202, in score
+    return self.steps[-1][1].score(Xt, y, **score_params)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/base.py", line 715, in score
+    y_pred = self.predict(X)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/ensemble/_stacking.py", line 1134, in predict
+    y_pred = super().predict(X, **routed_params.final_estimator_["predict"])
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/ensemble/_stacking.py", line 373, in predict
+    return self.final_estimator_.predict(self.transform(X), **predict_params)
+                                         ~~~~~~~~~~~~~~^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 340, in wrapped
+    return _wrap_data_with_container(method, data_to_wrap, X, self)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 315, in _wrap_data_with_container
+    return adapter.create_container(
+           ~~~~~~~~~~~~~~~~~~~~~~~~^
+        data_to_wrap,
+        ^^^^^^^^^^^^^
+        original_input,
+        ^^^^^^^^^^^^^^^
+        columns=estimator.get_feature_names_out,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 122, in create_container
+    columns = get_columns(columns)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 30, in get_columns
+    return columns()
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/ensemble/_stacking.py", line 325, in get_feature_names_out
+    check_is_fitted(self, "n_features_in_")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/validation.py", line 1721, in check_is_fitted
+    raise NotFittedError(msg % {"name": type(estimator).__name__})
+sklearn.exceptions.NotFittedError: This StackingRegressor instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+
+  warnings.warn(
+/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/model_selection/_validation.py:960: UserWarning: Scoring failed. The score on this train-test partition for these parameters will be set to nan. Details:
+Traceback (most recent call last):
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/model_selection/_validation.py", line 949, in _score
+    scores = scorer(estimator, X_test, y_test, **score_params)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/metrics/_scorer.py", line 537, in __call__
+    return estimator.score(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/julearn/pipeline/ju_pipeline.py", line 72, in score
+    return super().score(X, y, sample_weight=sample_weight, **params)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/pipeline.py", line 1202, in score
+    return self.steps[-1][1].score(Xt, y, **score_params)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/base.py", line 715, in score
+    y_pred = self.predict(X)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/ensemble/_stacking.py", line 1134, in predict
+    y_pred = super().predict(X, **routed_params.final_estimator_["predict"])
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/ensemble/_stacking.py", line 373, in predict
+    return self.final_estimator_.predict(self.transform(X), **predict_params)
+                                         ~~~~~~~~~~~~~~^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 340, in wrapped
+    return _wrap_data_with_container(method, data_to_wrap, X, self)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 315, in _wrap_data_with_container
+    return adapter.create_container(
+           ~~~~~~~~~~~~~~~~~~~~~~~~^
+        data_to_wrap,
+        ^^^^^^^^^^^^^
+        original_input,
+        ^^^^^^^^^^^^^^^
+        columns=estimator.get_feature_names_out,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 122, in create_container
+    columns = get_columns(columns)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 30, in get_columns
+    return columns()
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/ensemble/_stacking.py", line 325, in get_feature_names_out
+    check_is_fitted(self, "n_features_in_")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/validation.py", line 1721, in check_is_fitted
+    raise NotFittedError(msg % {"name": type(estimator).__name__})
+sklearn.exceptions.NotFittedError: This StackingRegressor instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+
+  warnings.warn(
+/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/model_selection/_validation.py:960: UserWarning: Scoring failed. The score on this train-test partition for these parameters will be set to nan. Details:
+Traceback (most recent call last):
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/model_selection/_validation.py", line 949, in _score
+    scores = scorer(estimator, X_test, y_test, **score_params)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/metrics/_scorer.py", line 537, in __call__
+    return estimator.score(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/julearn/pipeline/ju_pipeline.py", line 72, in score
+    return super().score(X, y, sample_weight=sample_weight, **params)
+           ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/pipeline.py", line 1202, in score
+    return self.steps[-1][1].score(Xt, y, **score_params)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/base.py", line 715, in score
+    y_pred = self.predict(X)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/ensemble/_stacking.py", line 1134, in predict
+    y_pred = super().predict(X, **routed_params.final_estimator_["predict"])
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/ensemble/_stacking.py", line 373, in predict
+    return self.final_estimator_.predict(self.transform(X), **predict_params)
+                                         ~~~~~~~~~~~~~~^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 340, in wrapped
+    return _wrap_data_with_container(method, data_to_wrap, X, self)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 315, in _wrap_data_with_container
+    return adapter.create_container(
+           ~~~~~~~~~~~~~~~~~~~~~~~~^
+        data_to_wrap,
+        ^^^^^^^^^^^^^
+        original_input,
+        ^^^^^^^^^^^^^^^
+        columns=estimator.get_feature_names_out,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 122, in create_container
+    columns = get_columns(columns)
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/_set_output.py", line 30, in get_columns
+    return columns()
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/ensemble/_stacking.py", line 325, in get_feature_names_out
+    check_is_fitted(self, "n_features_in_")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/tmpe1kz7sab/.venv/lib/python3.13/site-packages/sklearn/utils/validation.py", line 1721, in check_is_fitted
+    raise NotFittedError(msg % {"name": type(estimator).__name__})
+sklearn.exceptions.NotFittedError: This StackingRegressor instance is not fitted yet. Call 'fit' with appropriate arguments before using this estimator.
+
+  warnings.warn(
 </pre></div>
 </div>
 <p>As you can see, the <a class="reference internal" href="../api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> and the in-built
@@ -808,7 +1348,7 @@ stacking estimator in a <a class="reference internal" href="../api/generated/jul
 build some very powerful stacking pipelines. Of course, you can do the same
 for classification which will use the
 <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.StackingClassifier.html#sklearn.ensemble.StackingClassifier" title="(in scikit-learn v1.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">StackingClassifier</span></code></a> instead.</p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (2 minutes 39.754 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (2 minutes 51.634 seconds)</p>
 </section>
 </section>
 </article>
@@ -875,7 +1415,7 @@ for classification which will use the
 </div>
 </aside>
 </div>
-</div><script src="../_static/documentation_options.js?v=a1ca415a"></script>
+</div><script src="../_static/documentation_options.js?v=6e07d0e0"></script>
 <script src="../_static/doctools.js?v=fd6eb6e6"></script>
 <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
 <script src="../_static/scripts/furo.js?v=46bd48cc"></script>

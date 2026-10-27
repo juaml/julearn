@@ -6,7 +6,7 @@
 <meta content="light dark" name="color-scheme"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
 <link href="genindex.html" rel="index" title="Index"/><link href="search.html" rel="search" title="Search"/><link href="examples.html" rel="next" title="8. Examples"/><link href="selected_deeper_topics/joblib.html" rel="prev" title="6.8. Parallelizing julearn with Joblib"/>
 <link as="image" href="_static/julearn_logo_it.png" rel="prefetch"/>
-<!-- Generated with Sphinx 9.1.0 and Furo 2025.12.19 -->
+<!-- Generated with Sphinx 9.2.0 and Furo 2025.12.19 -->
 <title>7. Overview of available Pipeline Steps - julearn documentation</title>
 <link href="_static/pygments.css?v=d111a655" rel="stylesheet" type="text/css"/>
 <link href="_static/styles/furo.css?v=7bdb33bb" rel="stylesheet" type="text/css"/>
@@ -699,8 +699,29 @@ with the <a class="reference internal" href="api/generated/julearn.PipelineCreat
 <td><p>Y</p></td>
 <td><p>Y</p></td>
 </tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">svm_calibrated</span></code></p></td>
+<td><p>Support Vector Machine with calibrated probabilities</p></td>
+<td><div class="line-block">
+<div class="line"><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.calibration.CalibratedClassifierCV.html#sklearn.calibration.CalibratedClassifierCV" title="(in scikit-learn v1.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">CalibratedClassifierCV</span></code></a> with</div>
+<div class="line"><a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC" title="(in scikit-learn v1.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SVC</span></code></a> and <code class="docutils literal notranslate"><span class="pre">ensemble=False</span></code></div>
+</div>
+</td>
+<td><p>Y</p></td>
+<td><p>Y</p></td>
+<td><p>N</p></td>
+</tr>
 </tbody>
 </table>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To get probabilities (<code class="docutils literal notranslate"><span class="pre">predict_proba</span></code>) from a Support Vector Machine, for
+example to use the <code class="docutils literal notranslate"><span class="pre">roc_auc</span></code> scorer, use the <code class="docutils literal notranslate"><span class="pre">svm_calibrated</span></code> model.
+The <code class="docutils literal notranslate"><span class="pre">probability</span></code> parameter of <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html#sklearn.svm.SVC" title="(in scikit-learn v1.9)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SVC</span></code></a> is deprecated
+since scikit-learn 1.9. The parameters of the calibration (<code class="docutils literal notranslate"><span class="pre">method</span></code>,
+<code class="docutils literal notranslate"><span class="pre">cv</span></code> and <code class="docutils literal notranslate"><span class="pre">n_jobs</span></code>) and of the SVC (e.g. <code class="docutils literal notranslate"><span class="pre">C</span></code>) can be set directly,
+but the parameters of the SVC must be tuned with the <code class="docutils literal notranslate"><span class="pre">estimator__</span></code>
+prefix, e.g. <code class="docutils literal notranslate"><span class="pre">svm_calibrated__estimator__C</span></code>.</p>
 </div>
 </section>
 <section id="ensemble">
@@ -1105,7 +1126,7 @@ available again once a newer DESlib version is released.</p>
 </div>
 </aside>
 </div>
-</div><script src="_static/documentation_options.js?v=a1ca415a"></script>
+</div><script src="_static/documentation_options.js?v=6e07d0e0"></script>
 <script src="_static/doctools.js?v=fd6eb6e6"></script>
 <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
 <script src="_static/scripts/furo.js?v=46bd48cc"></script>
