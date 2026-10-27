@@ -11,6 +11,7 @@ import numpy as np
 import pandas as pd
 from numpy.testing import assert_array_almost_equal, assert_array_equal
 from sklearn.base import BaseEstimator, TransformerMixin, clone
+from sklearn.calibration import CalibratedClassifierCV
 from sklearn.dummy import DummyClassifier, DummyRegressor
 from sklearn.ensemble import (
     AdaBoostClassifier,
@@ -80,6 +81,15 @@ def compare_models(  # noqa: C901, pragma: no cover
         clf2 = clf2.model
     if clf1.__class__ != clf2.__class__:
         raise AssertionError("Different classes")
+    if isinstance(clf1, CalibratedClassifierCV):
+        # Compare the calibrated estimators
+        for t_clf1, t_clf2 in zip(
+            clf1.calibrated_classifiers_,
+            clf2.calibrated_classifiers_,  # type: ignore
+            strict=True,
+        ):
+            compare_models(t_clf1.estimator, t_clf2.estimator)
+        return
     if isinstance(clf1, SVC | SVR):
         idx1 = np.argsort(clf1.support_)
         v1 = clf1.support_vectors_[idx1]

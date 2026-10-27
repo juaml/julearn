@@ -8,9 +8,10 @@ import numpy as np
 import pandas as pd
 import pytest
 from numpy.testing import assert_array_equal
+from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import Normalizer, StandardScaler
-from sklearn.svm import SVC, SVR
+from sklearn.svm import SVR
 
 from julearn.pipeline import JuTargetPipeline
 from julearn.transformers.target import (
@@ -82,7 +83,7 @@ def test_JuTransformedTargetModel_not_fitted(X_iris, y_iris):  # noqa: N803
     """Test unfitted model for JuTransformedTargetModel."""
     steps = [("scaler", StandardScaler())]
     transformer = JuTargetPipeline(steps)  # type: ignore
-    model = SVC(probability=True)
+    model = LogisticRegression()
 
     target_model = JuTransformedTargetModel(
         transformer=transformer,

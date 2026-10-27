@@ -39,7 +39,7 @@ def _validate_api_params(  # noqa: C901
     data: pd.DataFrame,
     X_types: dict | None = None,  # noqa: N803
     problem_type: str | None = None,
-    preprocess: None | str | list[str] = None,
+    preprocess: str | list[str] | None = None,
     return_estimator: str | None = None,
     return_inspector: bool = False,
     groups: str | None = None,
@@ -117,8 +117,8 @@ def _validate_api_params(  # noqa: C901
         The dictionary can define the following keys:
 
         * 'STEP__PARAMETER': A value (or several) to be used as PARAMETER for
-          STEP in the pipeline. Example: 'svm__probability': True will set
-          the parameter 'probability' of the 'svm' model. If more than option
+          STEP in the pipeline. Example: 'svm__kernel': 'linear' will set
+          the parameter 'kernel' of the 'svm' model. If more than option
           is provided for at least one hyperparameter, a search will be
           performed.
 
@@ -412,7 +412,7 @@ def run_cross_validation(
     data: pd.DataFrame,
     X_types: dict | None = None,  # noqa: N803
     problem_type: str | None = None,
-    preprocess: None | str | list[str] = None,
+    preprocess: str | list[str] | None = None,
     return_estimator: str | None = None,
     return_inspector: bool = False,
     return_train_score: bool = False,
@@ -505,8 +505,8 @@ def run_cross_validation(
         The dictionary can define the following keys:
 
         * 'STEP__PARAMETER': A value (or several) to be used as PARAMETER for
-          STEP in the pipeline. Example: 'svm__probability': True will set
-          the parameter 'probability' of the 'svm' model. If more than option
+          STEP in the pipeline. Example: 'svm__kernel': 'linear' will set
+          the parameter 'kernel' of the 'svm' model. If more than option
           is provided for at least one hyperparameter, a search will be
           performed.
 
@@ -703,7 +703,7 @@ def run_fit(
     data: pd.DataFrame,
     X_types: dict | None = None,  # noqa: N803
     problem_type: str | None = None,
-    preprocess: None | str | list[str] = None,
+    preprocess: str | list[str] | None = None,
     groups: str | None = None,
     pos_labels: str | list[str] | None = None,
     model_params: dict | None = None,
@@ -760,8 +760,8 @@ def run_fit(
         The dictionary can define the following keys:
 
         * 'STEP__PARAMETER': A value (or several) to be used as PARAMETER for
-          STEP in the pipeline. Example: 'svm__probability': True will set
-          the parameter 'probability' of the 'svm' model. If more than option
+          STEP in the pipeline. Example: 'svm__kernel': 'linear' will set
+          the parameter 'kernel' of the 'svm' model. If more than option
           is provided for at least one hyperparameter, a search will be
           performed.
 

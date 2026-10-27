@@ -7,6 +7,7 @@
 from copy import deepcopy
 from typing import Any
 
+from sklearn.calibration import CalibratedClassifierCV
 from sklearn.dummy import DummyClassifier, DummyRegressor
 from sklearn.ensemble import (
     AdaBoostClassifier,
@@ -65,11 +66,45 @@ from ..utils.typing import ModelLike
 from .dynamic import DynamicSelection
 
 
+def _calibrated_svc(**params: Any) -> CalibratedClassifierCV:
+    """Create a Support Vector Classifier with calibrated probabilities.
+
+    This replaces ``SVC(probability=True)``, deprecated in scikit-learn 1.9:
+    as recommended by scikit-learn, it is a
+    :class:`sklearn.calibration.CalibratedClassifierCV` with a
+    :class:`sklearn.svm.SVC` and ``ensemble=False``.
+
+    Parameters
+    ----------
+    **params : dict
+        The parameters of the calibration (``method``, ``cv`` and
+        ``n_jobs``) and of the SVC (e.g. ``C`` or ``estimator__C``). To tune
+        the parameters of the SVC, use the ``estimator__`` prefix (e.g.
+        ``svm_calibrated__estimator__C``).
+
+    Returns
+    -------
+    CalibratedClassifierCV
+        The calibrated SVC.
+
+    """
+    calibration_params = {
+        k: params.pop(k) for k in ["method", "cv", "n_jobs"] if k in params
+    }
+    svc_params = {k.removeprefix("estimator__"): v for k, v in params.items()}
+    return CalibratedClassifierCV(
+        SVC(**svc_params), ensemble=False, **calibration_params
+    )
+
+
 _available_models: dict[str, dict[str, Any]] = {
     # SVM
     "svm": {
         "regression": SVR,
         "classification": SVC,
+    },
+    "svm_calibrated": {
+        "classification": _calibrated_svc,
     },
     # Ensemble
     "rf": {
