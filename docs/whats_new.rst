@@ -10,6 +10,84 @@ What's new
 
 .. towncrier release notes start
 
+Julearn 0.3.6 (2026-10-27)
+--------------------------
+
+Bugfixes
+^^^^^^^^
+
+- Fix a bug in which RandomizedSearchCV using uniform distributions
+  specifications used an extended search space `Fede Raimondo`_ (:gh:`307`)
+- Fix a bug in which :class:`.CBPM` with ``corr_sign="posneg"`` and no
+  significant features reported two output feature names for a single output
+  column `Fede Raimondo`_ (:gh:`315`)
+- Fix a bug in which :class:`.PipelineCreator` and
+  :class:`.TargetPipelineCreator` named every repeated step after the second
+  one as ``<name>_1`` instead of ``<name>_1``, ``<name>_2``, ... `Fede
+  Raimondo`_ (:gh:`315`)
+- Fix a bug in which the tuned hyperparameters of a model with a target
+  transformer were not set on the model, failing when the model was not wrapped
+  and being ignored when it was wrapped `Fede Raimondo`_ (:gh:`319`)
+- Fix a bug in which scoring a pipeline ending in a :class:`.WrapModel`,
+  :class:`.JuTransformedTargetModel` or ``JuGeneratedTargetModel`` failed
+  with metadata routing, so hyperparameter tuning with a target transformer and
+  the default scoring got NaN scores and picked the first candidate `Fede
+  Raimondo`_ (:gh:`319`)
+- Fix a bug in which cross-validation and hyperparameter tuning with the
+  default scoring gave NaN scores for some models, such as ``bagging`` and
+  ``stacking``, due to a scikit-learn bug with metadata routing
+  (scikit-learn/scikit-learn#35195). Using a scikit-learn
+  :class:`~sklearn.pipeline.Pipeline` affected by this bug inside julearn now
+  raises an error `Fede Raimondo`_ (:gh:`321`)
+- Fix a bug in which hyperparameter tuning with ``"optuna"`` gave NaN scores,
+  as the predictions of the fitted searcher failed `Fede Raimondo`_ (:gh:`322`)
+
+
+API Changes
+^^^^^^^^^^^
+
+- Raise the minimum supported versions to scikit-learn 1.6.1, statsmodels
+  0.14.0 and pandas 2.2.2 `Fede Raimondo`_ (:gh:`316`)
+- :meth:`.WrapModel.set_params` now follows scikit-learn and raises a
+  ``ValueError`` for invalid parameters, instead of silently setting them as
+  attributes `Fede Raimondo`_ (:gh:`319`)
+- Allow scikit-learn 1.9, statsmodels 0.15 and optuna 5 `Fede Raimondo`_
+  (:gh:`322`)
+
+
+Features
+^^^^^^^^
+
+- Allow setting of ``context_func`` for ``joblib-htcondor`` by `Fede Raimondo`_
+  (:gh:`303`)
+- Add the ``svm_calibrated`` model, a Support Vector Classifier with calibrated
+  probabilities, to replace the ``probability`` parameter of
+  :class:`~sklearn.svm.SVC`, deprecated in scikit-learn 1.9. Using
+  ``probability=True`` with the ``svm`` model now warns `Fede Raimondo`_
+  (:gh:`322`)
+
+
+Misc
+^^^^
+
+- Delay log message formatting by `Fede Raimondo`_ (:gh:`301`)
+- Configure the project to support uv as a package manager and bump minimum
+  Python version to 3.12 `Fede Raimondo`_ (:gh:`307`)
+- Avoid generating and skipping non-applicable test cases and run tests in
+  parallel with pytest-xdist `Fede Raimondo`_ (:gh:`315`)
+- Improve CI: skip the tests when the library did not change, cancel superseded
+  runs, actually run the ``nodeps`` tests and test with the minimum supported
+  dependency versions `Fede Raimondo`_ (:gh:`316`)
+
+
+Deprecations and Removals
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- Temporarily remove the ``deslib`` optional dependency and disable
+  :class:`.DynamicSelection`, as the latest DESlib release is not compatible
+  with scikit-learn >= 1.6 `Fede Raimondo`_ (:gh:`317`)
+
+
 Julearn 0.3.5 (2026-03-06)
 --------------------------
 
