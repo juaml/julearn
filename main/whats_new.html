@@ -17,6 +17,7 @@
 <link href="_static/sg_gallery-rendered-html.css?v=1277b6f3" rel="stylesheet" type="text/css"/>
 <link href="_static/styles/furo-extensions.css?v=8dab3a3b" rel="stylesheet" type="text/css"/>
 <link href="_static/css/custom.css?v=38fa36eb" rel="stylesheet" type="text/css"/>
+
 <style>
   body {
     --color-code-background: #f2f2f2;
@@ -394,8 +395,8 @@
 <ul>
 <li class="toctree-l1">
 <a class="reference external" href="../v0.3.5/index.html">
-          v0.3.5
-        </a>
+          v0.3.5 <em>(latest)</em>
+</a>
 </li>
 <li class="toctree-l1">
 <a class="reference external" href="../v0.3.4/index.html">
@@ -447,6 +448,9 @@
           v0.2.2
         </a>
 </li>
+<li class="toctree-l1 current">
+<a class="reference external" href="../main/index.html">main (dev)</a>
+</li>
 </ul>
 </details>
 </div>
@@ -486,27 +490,31 @@
 <section id="what-s-new">
 <span id="whats-new"></span><h1><span class="section-number">14. </span>What’s new<a class="headerlink" href="#what-s-new" title="Link to this heading">¶</a></h1>
 <section id="julearn-release-2026-10-27">
-<h2><span class="section-number">14.1. </span>julearn 0.3.6.dev106 (2026-10-27)<a class="headerlink" href="#julearn-release-2026-10-27" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">14.1. </span>julearn 0.3.6.dev108 (2026-10-27)<a class="headerlink" href="#julearn-release-2026-10-27" title="Link to this heading">¶</a></h2>
+<p>No significant changes.</p>
+</section>
+<section id="julearn-0-3-6-2026-10-27">
+<h2><span class="section-number">14.2. </span>Julearn 0.3.6 (2026-10-27)<a class="headerlink" href="#julearn-0-3-6-2026-10-27" title="Link to this heading">¶</a></h2>
 <section id="bugfixes">
 <h3>Bugfixes<a class="headerlink" href="#bugfixes" title="Link to this heading">¶</a></h3>
 <ul class="simple">
 <li><p>Fix a bug in which RandomizedSearchCV using uniform distributions
 specifications used an extended search space <a class="reference external" href="https://fraimondo.github.io">Fede Raimondo</a> (<a class="extlink-gh reference external" href="https://github.com/juaml/julearn/issues/307">#307</a>)</p></li>
+<li><p>Fix a bug in which <a class="reference internal" href="api/generated/julearn.transformers.CBPM.html#julearn.transformers.CBPM" title="julearn.transformers.CBPM"><code class="xref py py-class docutils literal notranslate"><span class="pre">CBPM</span></code></a> with <code class="docutils literal notranslate"><span class="pre">corr_sign="posneg"</span></code> and no
+significant features reported two output feature names for a single output
+column <a class="reference external" href="https://fraimondo.github.io">Fede Raimondo</a> (<a class="extlink-gh reference external" href="https://github.com/juaml/julearn/issues/315">#315</a>)</p></li>
 <li><p>Fix a bug in which <a class="reference internal" href="api/generated/julearn.PipelineCreator.html#julearn.PipelineCreator" title="julearn.PipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipelineCreator</span></code></a> and
 <a class="reference internal" href="api/generated/julearn.TargetPipelineCreator.html#julearn.TargetPipelineCreator" title="julearn.TargetPipelineCreator"><code class="xref py py-class docutils literal notranslate"><span class="pre">TargetPipelineCreator</span></code></a> named every repeated step after the second
 one as <code class="docutils literal notranslate"><span class="pre">&lt;name&gt;_1</span></code> instead of <code class="docutils literal notranslate"><span class="pre">&lt;name&gt;_1</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;name&gt;_2</span></code>, … <a class="reference external" href="https://fraimondo.github.io">Fede
 Raimondo</a> (<a class="extlink-gh reference external" href="https://github.com/juaml/julearn/issues/315">#315</a>)</p></li>
-<li><p>Fix a bug in which <a class="reference internal" href="api/generated/julearn.transformers.CBPM.html#julearn.transformers.CBPM" title="julearn.transformers.CBPM"><code class="xref py py-class docutils literal notranslate"><span class="pre">CBPM</span></code></a> with <code class="docutils literal notranslate"><span class="pre">corr_sign="posneg"</span></code> and no
-significant features reported two output feature names for a single output
-column <a class="reference external" href="https://fraimondo.github.io">Fede Raimondo</a> (<a class="extlink-gh reference external" href="https://github.com/juaml/julearn/issues/315">#315</a>)</p></li>
-<li><p>Fix a bug in which scoring a pipeline ending in a <a class="reference internal" href="api/generated/julearn.base.WrapModel.html#julearn.base.WrapModel" title="julearn.base.WrapModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">WrapModel</span></code></a>,
-<a class="reference internal" href="api/generated/julearn.transformers.target.JuTransformedTargetModel.html#julearn.transformers.target.JuTransformedTargetModel" title="julearn.transformers.target.JuTransformedTargetModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">JuTransformedTargetModel</span></code></a> or <code class="xref py py-class docutils literal notranslate"><span class="pre">JuGeneratedTargetModel</span></code> failed
-with metadata routing, so hyperparameter tuning with a target transformer and
-the default scoring got NaN scores and picked the first candidate <a class="reference external" href="https://fraimondo.github.io">Fede
-Raimondo</a> (<a class="extlink-gh reference external" href="https://github.com/juaml/julearn/issues/319">#319</a>)</p></li>
 <li><p>Fix a bug in which the tuned hyperparameters of a model with a target
 transformer were not set on the model, failing when the model was not wrapped
 and being ignored when it was wrapped <a class="reference external" href="https://fraimondo.github.io">Fede Raimondo</a> (<a class="extlink-gh reference external" href="https://github.com/juaml/julearn/issues/319">#319</a>)</p></li>
+<li><p>Fix a bug in which scoring a pipeline ending in a <a class="reference internal" href="api/generated/julearn.base.WrapModel.html#julearn.base.WrapModel" title="julearn.base.WrapModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">WrapModel</span></code></a>,
+<a class="reference internal" href="api/generated/julearn.transformers.target.JuTransformedTargetModel.html#julearn.transformers.target.JuTransformedTargetModel" title="julearn.transformers.target.JuTransformedTargetModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">JuTransformedTargetModel</span></code></a> or <code class="docutils literal notranslate"><span class="pre">JuGeneratedTargetModel</span></code> failed
+with metadata routing, so hyperparameter tuning with a target transformer and
+the default scoring got NaN scores and picked the first candidate <a class="reference external" href="https://fraimondo.github.io">Fede
+Raimondo</a> (<a class="extlink-gh reference external" href="https://github.com/juaml/julearn/issues/319">#319</a>)</p></li>
 <li><p>Fix a bug in which cross-validation and hyperparameter tuning with the
 default scoring gave NaN scores for some models, such as <code class="docutils literal notranslate"><span class="pre">bagging</span></code> and
 <code class="docutils literal notranslate"><span class="pre">stacking</span></code>, due to a scikit-learn bug with metadata routing
@@ -550,9 +558,8 @@ Python version to 3.12 <a class="reference external" href="https://fraimondo.git
 <li><p>Avoid generating and skipping non-applicable test cases and run tests in
 parallel with pytest-xdist <a class="reference external" href="https://fraimondo.github.io">Fede Raimondo</a> (<a class="extlink-gh reference external" href="https://github.com/juaml/julearn/issues/315">#315</a>)</p></li>
 <li><p>Improve CI: skip the tests when the library did not change, cancel superseded
-runs, actually run the <code class="docutils literal notranslate"><span class="pre">nodeps</span></code> tests, test with the minimum supported
-dependency versions and run the tests in parallel <a class="reference external" href="https://fraimondo.github.io">Fede Raimondo</a>
-(<a class="extlink-gh reference external" href="https://github.com/juaml/julearn/issues/316">#316</a>)</p></li>
+runs, actually run the <code class="docutils literal notranslate"><span class="pre">nodeps</span></code> tests and test with the minimum supported
+dependency versions <a class="reference external" href="https://fraimondo.github.io">Fede Raimondo</a> (<a class="extlink-gh reference external" href="https://github.com/juaml/julearn/issues/316">#316</a>)</p></li>
 </ul>
 </section>
 <section id="deprecations-and-removals">
@@ -565,7 +572,7 @@ with scikit-learn &gt;= 1.6 <a class="reference external" href="https://fraimond
 </section>
 </section>
 <section id="julearn-0-3-5-2026-03-06">
-<h2><span class="section-number">14.2. </span>Julearn 0.3.5 (2026-03-06)<a class="headerlink" href="#julearn-0-3-5-2026-03-06" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">14.3. </span>Julearn 0.3.5 (2026-03-06)<a class="headerlink" href="#julearn-0-3-5-2026-03-06" title="Link to this heading">¶</a></h2>
 <section id="id1">
 <h3>Bugfixes<a class="headerlink" href="#id1" title="Link to this heading">¶</a></h3>
 <ul class="simple">
@@ -634,7 +641,7 @@ numpy 2.X.X and scikit-learn 1.8.X by <a class="reference external" href="https:
 </section>
 </section>
 <section id="julearn-0-3-4-2024-10-17">
-<h2><span class="section-number">14.3. </span>Julearn 0.3.4 (2024-10-17)<a class="headerlink" href="#julearn-0-3-4-2024-10-17" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">14.4. </span>Julearn 0.3.4 (2024-10-17)<a class="headerlink" href="#julearn-0-3-4-2024-10-17" title="Link to this heading">¶</a></h2>
 <section id="id5">
 <h3>Bugfixes<a class="headerlink" href="#id5" title="Link to this heading">¶</a></h3>
 <ul class="simple">
@@ -659,7 +666,7 @@ calls by <a class="reference external" href="https://fraimondo.github.io">Fede R
 </section>
 </section>
 <section id="julearn-0-3-3-2024-05-16">
-<h2><span class="section-number">14.4. </span>Julearn 0.3.3 (2024-05-16)<a class="headerlink" href="#julearn-0-3-3-2024-05-16" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">14.5. </span>Julearn 0.3.3 (2024-05-16)<a class="headerlink" href="#julearn-0-3-3-2024-05-16" title="Link to this heading">¶</a></h2>
 <section id="id7">
 <h3>Bugfixes<a class="headerlink" href="#id7" title="Link to this heading">¶</a></h3>
 <ul class="simple">
@@ -677,7 +684,7 @@ Raimondo</a> (<a class="extlink-gh reference external" href="https://github.com/
 </section>
 </section>
 <section id="julearn-0-3-2-2024-05-03">
-<h2><span class="section-number">14.5. </span>Julearn 0.3.2 (2024-05-03)<a class="headerlink" href="#julearn-0-3-2-2024-05-03" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">14.6. </span>Julearn 0.3.2 (2024-05-03)<a class="headerlink" href="#julearn-0-3-2-2024-05-03" title="Link to this heading">¶</a></h2>
 <section id="id9">
 <h3>Bugfixes<a class="headerlink" href="#id9" title="Link to this heading">¶</a></h3>
 <ul class="simple">
@@ -722,7 +729,7 @@ by <a class="reference external" href="https://fraimondo.github.io">Fede Raimond
 </section>
 </section>
 <section id="julearn-0-3-1-2024-01-23">
-<h2><span class="section-number">14.6. </span>Julearn 0.3.1 (2024-01-23)<a class="headerlink" href="#julearn-0-3-1-2024-01-23" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">14.7. </span>Julearn 0.3.1 (2024-01-23)<a class="headerlink" href="#julearn-0-3-1-2024-01-23" title="Link to this heading">¶</a></h2>
 <section id="id14">
 <h3>Bugfixes<a class="headerlink" href="#id14" title="Link to this heading">¶</a></h3>
 <ul class="simple">
@@ -772,7 +779,7 @@ Mandal</a> (<a class="extlink-gh reference external" href="https://github.com/ju
 </section>
 </section>
 <section id="julearn-0-3-0-2023-07-19">
-<h2><span class="section-number">14.7. </span>Julearn 0.3.0 (2023-07-19)<a class="headerlink" href="#julearn-0-3-0-2023-07-19" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">14.8. </span>Julearn 0.3.0 (2023-07-19)<a class="headerlink" href="#julearn-0-3-0-2023-07-19" title="Link to this heading">¶</a></h2>
 <p>The general API and behavior of Julearn has been changed to make it easier to
 define and use pipelines. The documentation has been updated to reflect these
 changes. Basic functionality from the previous API is still
@@ -780,7 +787,7 @@ present. However, it might require setting a few more parameters in the
 <a class="reference internal" href="api/generated/julearn.run_cross_validation.html#julearn.run_cross_validation" title="julearn.run_cross_validation"><code class="xref py py-func docutils literal notranslate"><span class="pre">run_cross_validation()</span></code></a> function.</p>
 </section>
 <section id="julearn-0-2-5-2022-07-21">
-<h2><span class="section-number">14.8. </span>Julearn 0.2.5 (2022-07-21)<a class="headerlink" href="#julearn-0-2-5-2022-07-21" title="Link to this heading">¶</a></h2>
+<h2><span class="section-number">14.9. </span>Julearn 0.2.5 (2022-07-21)<a class="headerlink" href="#julearn-0-2-5-2022-07-21" title="Link to this heading">¶</a></h2>
 <section id="id19">
 <h3>API Changes<a class="headerlink" href="#id19" title="Link to this heading">¶</a></h3>
 <ul class="simple">
@@ -886,7 +893,7 @@ regression problems. Check <a class="reference internal" href="api/generated/jul
 <strong>🚧 Development version</strong> — You are viewing the development (unstable)
   version of julearn. This may contain unreleased features or breaking changes.
   For the latest stable release, see
-  <a href="../v0.3.6/index.html">v0.3.6</a>.
+  <a href="../v0.3.5/index.html">v0.3.5</a>.
 </div>
 <div class="toc-sticky toc-scroll">
 <div class="toc-title-container">
@@ -898,7 +905,8 @@ regression problems. Check <a class="reference internal" href="api/generated/jul
 <div class="toc-tree">
 <ul>
 <li><a class="reference internal" href="#">14. What’s new</a><ul>
-<li><a class="reference internal" href="#julearn-release-2026-10-27">14.1. julearn 0.3.6.dev106 (2026-10-27)</a><ul>
+<li><a class="reference internal" href="#julearn-release-2026-10-27">14.1. julearn 0.3.6.dev108 (2026-10-27)</a></li>
+<li><a class="reference internal" href="#julearn-0-3-6-2026-10-27">14.2. Julearn 0.3.6 (2026-10-27)</a><ul>
 <li><a class="reference internal" href="#bugfixes">Bugfixes</a></li>
 <li><a class="reference internal" href="#api-changes">API Changes</a></li>
 <li><a class="reference internal" href="#features">Features</a></li>
@@ -906,7 +914,7 @@ regression problems. Check <a class="reference internal" href="api/generated/jul
 <li><a class="reference internal" href="#deprecations-and-removals">Deprecations and Removals</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#julearn-0-3-5-2026-03-06">14.2. Julearn 0.3.5 (2026-03-06)</a><ul>
+<li><a class="reference internal" href="#julearn-0-3-5-2026-03-06">14.3. Julearn 0.3.5 (2026-03-06)</a><ul>
 <li><a class="reference internal" href="#id1">Bugfixes</a></li>
 <li><a class="reference internal" href="#id2">API Changes</a></li>
 <li><a class="reference internal" href="#improved-documentation">Improved Documentation</a></li>
@@ -915,17 +923,17 @@ regression problems. Check <a class="reference internal" href="api/generated/jul
 <li><a class="reference internal" href="#id4">Misc</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#julearn-0-3-4-2024-10-17">14.3. Julearn 0.3.4 (2024-10-17)</a><ul>
+<li><a class="reference internal" href="#julearn-0-3-4-2024-10-17">14.4. Julearn 0.3.4 (2024-10-17)</a><ul>
 <li><a class="reference internal" href="#id5">Bugfixes</a></li>
 <li><a class="reference internal" href="#id6">Enhancements</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#julearn-0-3-3-2024-05-16">14.4. Julearn 0.3.3 (2024-05-16)</a><ul>
+<li><a class="reference internal" href="#julearn-0-3-3-2024-05-16">14.5. Julearn 0.3.3 (2024-05-16)</a><ul>
 <li><a class="reference internal" href="#id7">Bugfixes</a></li>
 <li><a class="reference internal" href="#id8">Improved Documentation</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#julearn-0-3-2-2024-05-03">14.5. Julearn 0.3.2 (2024-05-03)</a><ul>
+<li><a class="reference internal" href="#julearn-0-3-2-2024-05-03">14.6. Julearn 0.3.2 (2024-05-03)</a><ul>
 <li><a class="reference internal" href="#id9">Bugfixes</a></li>
 <li><a class="reference internal" href="#id10">Improved Documentation</a></li>
 <li><a class="reference internal" href="#id11">Enhancements</a></li>
@@ -933,7 +941,7 @@ regression problems. Check <a class="reference internal" href="api/generated/jul
 <li><a class="reference internal" href="#id13">Misc</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#julearn-0-3-1-2024-01-23">14.6. Julearn 0.3.1 (2024-01-23)</a><ul>
+<li><a class="reference internal" href="#julearn-0-3-1-2024-01-23">14.7. Julearn 0.3.1 (2024-01-23)</a><ul>
 <li><a class="reference internal" href="#id14">Bugfixes</a></li>
 <li><a class="reference internal" href="#id15">Improved Documentation</a></li>
 <li><a class="reference internal" href="#id16">Enhancements</a></li>
@@ -941,8 +949,8 @@ regression problems. Check <a class="reference internal" href="api/generated/jul
 <li><a class="reference internal" href="#id18">Misc</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#julearn-0-3-0-2023-07-19">14.7. Julearn 0.3.0 (2023-07-19)</a></li>
-<li><a class="reference internal" href="#julearn-0-2-5-2022-07-21">14.8. Julearn 0.2.5 (2022-07-21)</a><ul>
+<li><a class="reference internal" href="#julearn-0-3-0-2023-07-19">14.8. Julearn 0.3.0 (2023-07-19)</a></li>
+<li><a class="reference internal" href="#julearn-0-2-5-2022-07-21">14.9. Julearn 0.2.5 (2022-07-21)</a><ul>
 <li><a class="reference internal" href="#id19">API Changes</a></li>
 <li><a class="reference internal" href="#id20">Bugfixes</a></li>
 <li><a class="reference internal" href="#id21">Improved Documentation</a></li>
@@ -958,7 +966,7 @@ regression problems. Check <a class="reference internal" href="api/generated/jul
 </div>
 </aside>
 </div>
-</div><script src="_static/documentation_options.js?v=6e07d0e0"></script>
+</div><script src="_static/documentation_options.js?v=2265f73b"></script>
 <script src="_static/doctools.js?v=fd6eb6e6"></script>
 <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
 <script src="_static/scripts/furo.js?v=46bd48cc"></script>
