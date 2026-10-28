@@ -153,6 +153,11 @@ stats_df = corrected_ttest(scores1, scores2, scores3)
 print(stats_df)
 
 ###############################################################################
+# .. note::
+#    Why a *corrected* t-test, and not a permutation test? See
+#    :ref:`statistical_tests` for a detailed explanation.
+
+###############################################################################
 # Score visualizations
 # --------------------
 #
