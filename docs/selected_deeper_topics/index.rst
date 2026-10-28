@@ -14,6 +14,7 @@ Selected deeper topics
    hyperparameter_tuning.rst
    model_inspect.rst
    cross_validation_splitter.rst
+   statistical_tests.rst
    stacked_models.rst
    CBPM.rst
    joblib.rst
